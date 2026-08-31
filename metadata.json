@@ -1,0 +1,8 @@
+{
+  "name": "Atelier MTG",
+  "description": "Application d'aide à la construction et à l'optimisation de decks Magic: The Gathering (EDH / Commander, Standard, Limité, Cube).",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

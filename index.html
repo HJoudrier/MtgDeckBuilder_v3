@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier MTG</title>
+  <meta name="description" content="Application d'aide à la construction et à l'optimisation de decks Magic: The Gathering (EDH / Commander, Standard, Limité, Cube)." />
+  <meta property="og:title" content="Atelier MTG" />
+  <meta property="og:description" content="Application d'aide à la construction et à l'optimisation de decks Magic: The Gathering (EDH / Commander, Standard, Limité, Cube)." />
+  <link rel="stylesheet" href="css/atelier.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top-in">
+      <div class="brand">
+        <h1>Atelier MTG</h1>
+        <span class="sub">Constructeur &amp; Optimiseur</span>
+      </div>
+      <div class="top-stats" id="topStats"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Section A : Filtres & Format -->
+    <section class="sec open" id="secA">
+      <button class="sec-head" type="button" aria-expanded="true">
+        <span class="letter">A</span>
+        <h2>Filtres &amp; Format</h2>
+        <span class="hint" id="hintA"></span>
+        <span class="chev">›</span>
+      </button>
+      <div class="sec-body" id="bodyA"></div>
+    </section>
+
+    <!-- Section B : Collection -->
+    <section class="sec open" id="secB">
+      <button class="sec-head" type="button" aria-expanded="true">
+        <span class="letter">B</span>
+        <h2>Collection</h2>
+        <span class="hint" id="hintB"></span>
+        <span class="chev">›</span>
+      </button>
+      <div class="sec-body" id="bodyB"></div>
+    </section>
+
+    <!-- Section C : Statistiques -->
+    <section class="sec open" id="secC">
+      <button class="sec-head" type="button" aria-expanded="true">
+        <span class="letter">C</span>
+        <h2>Statistiques</h2>
+        <span class="hint" id="hintC"></span>
+        <span class="chev">›</span>
+      </button>
+      <div class="sec-body" id="bodyC"></div>
+    </section>
+
+    <!-- Section D : Graphe des capacités -->
+    <section class="sec open" id="secD">
+      <button class="sec-head" type="button" aria-expanded="true">
+        <span class="letter">D</span>
+        <h2>Graphe des capacités</h2>
+        <span class="hint" id="hintD"></span>
+        <span class="chev">›</span>
+      </button>
+      <div class="sec-body" id="bodyD"></div>
+    </section>
+
+    <!-- Section E : Deck -->
+    <section class="sec open" id="secE">
+      <button class="sec-head" type="button" aria-expanded="true">
+        <span class="letter">E</span>
+        <h2>Deck</h2>
+        <span class="hint" id="hintE"></span>
+        <span class="chev">›</span>
+      </button>
+      <div class="sec-body" id="bodyE"></div>
+    </section>
+
+    <!-- Section F : Suggestions -->
+    <section class="sec open" id="secF">
+      <button class="sec-head" type="button" aria-expanded="true">
+        <span class="letter">F</span>
+        <h2>Suggestions d'ajout</h2>
+        <span class="hint" id="hintF"></span>
+        <span class="chev">›</span>
+      </button>
+      <div class="sec-body" id="bodyF"></div>
+    </section>
+  </main>
+
+  <!-- Fenêtre modale commune -->
+  <dialog id="dlg">
+    <div class="dlg-h" id="dlgTitle"></div>
+    <div class="dlg-b" id="dlgBody"></div>
+    <div class="dlg-f" id="dlgFoot"></div>
+  </dialog>
+
+  <!-- Notification toast et aperçu flottant -->
+  <div id="toast"></div>
+  <div id="cardPreview"></div>
+
+  <!-- Modules chargés dans l'ordre strict défini par l'architecture -->
+  <script src="js/effets.js"></script>
+  <script src="js/cartes.js"></script>
+  <script src="js/etat.js"></script>
+  <script src="js/marche.js"></script>
+  <script src="js/scryfall.js"></script>
+  <script src="js/stockage.js"></script>
+  <script src="js/externes.js"></script>
+  <script src="js/graphe.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/suggestions.js"></script>
+  <script src="js/collection.js"></script>
+  <script src="js/deck.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

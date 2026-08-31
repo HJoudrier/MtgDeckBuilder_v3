@@ -1,11 +1,373 @@
-<div align="center">
+# Atelier MTG — architecture du projet
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Application d'aide à la construction de deck Magic. Aucun serveur, aucune dépendance :
+les fichiers s'ouvrent directement dans un navigateur.
 
-  <h1>Built with AI Studio</h2>
+## Organisation
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+```
+index.html          page et structure des six sections
+css/atelier.css     styles
+js/                 modules, chargés dans cet ordre :
+  effets.js        Lecture des effets des cartes
+  cartes.js        Base de cartes
+  etat.js          État et filtrage
+  marche.js        Cardmarket
+  scryfall.js      Accès à Scryfall
+  stockage.js      Sauvegarde locale
+  externes.js      EDHREC et Commander Spellbook
+  graphe.js        Graphe des capacités
+  stats.js         Statistiques
+  suggestions.js   Suggestions d'ajout
+  collection.js    Collection
+  deck.js          Deck
+  ui.js            Interface commune
+  app.js           Démarrage et évènements
+```
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+L'ordre de chargement compte : `effets.js` définit l'analyseur qu'utilise `cartes.js`
+au moment de construire la base livrée. Les modules partagent la portée globale ;
+aucun système de modules n'est employé, afin que l'application reste utilisable
+par simple ouverture du fichier, sans serveur local.
 
-</div>
+## Flux de données
+
+```
+texte oracle ──▶ effets.js (analyse) ──▶ arcs (déclencheur → effet)
+                                          │
+collection ──▶ etat.js (filtrage) ────────┼──▶ graphe.js (visualisation)
+                                          └──▶ suggestions.js (notation) ──▶ deck.js
+scryfall.js ──▶ catalogue, visuels, prix ─────▶ stockage.js (cache local)
+```
+
+## Modules
+
+### `js/effets.js` — Lecture des effets des cartes
+
+Transforme le texte oracle en évènements. C'est le cœur de l'analyse : ontologie des 91 évènements, règles de détection, qualificateurs de déclencheur, table des coûts, et calcul des synergies entre deux cartes.
+
+*20 fonction(s), 37 Ko*
+
+Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES`, `SUJETS`, `DEBUTS_EFFET`, `COUTS`, `CATLABEL`, `EQUIV`
+
+| Fonction | Rôle |
+|---|---|
+| `parseCost(cost)` | Décompose un coût de mana en symboles, valeur de mana et couleurs. |
+| `stripReminder(t)` | Retire le texte de rappel entre parenthèses. |
+| `splitAbilities(text)` | Sépare le texte oracle en capacités distinctes. |
+| `matchAll(rules, s)` | Applique une table de règles à une clause et renvoie les concepts reconnus. |
+| `qualifieDeclencheur(clause,selfNames)` | Extrait le sujet, la portée et les restrictions d'un déclencheur (force ≥ 3, non-jeton, type de sort…). |
+| `qualifieProduction(clause,card)` | Décrit ce qu'une production met en jeu : jeton ou non, force, destination. |
+| `libelleQual(q)` | Traduit un qualificateur en français lisible. |
+| `compat(prod,trig)` | Décide si une production satisfait les restrictions d'un déclencheur ; 0 = incompatible, 1 = certain. |
+| `coupeDeclencheur(body)` | Trouve la virgule qui sépare le déclencheur de l'effet, en ignorant les énumérations. |
+| `coutsDe(cost,selfNames)` | Identifie les coûts d'activation d'une capacité et ce qu'ils produisent. |
+| `refineTriggers(list,clause)` | Écarte le déclencheur général quand un plus précis a été reconnu. |
+| `scopeOf(s)` | Détermine si une clause vise votre côté ou celui de l'adversaire. |
+| `refineEffects(list, clause)` | Arbitre les conflits entre effets détectés (blink contre exil, négations…). |
+| `analyze(card)` | Analyse une carte : capacités, arcs déclencheur → effet, accroches et productions. |
+| `categories(card)` | Classe une carte par rôle : ramp, removal, pioche, jetons, protection… |
+| `feeds(concept)` | Concepts qu'une production peut alimenter, équivalences comprises. |
+| `feedsDe(p)` | Même chose, en tenant compte du détail de la production. |
+| `croise(prods,trigs,dir,out)` | Croise les productions d'une carte avec les accroches d'une autre. |
+| `synergyBetween(a,b)` | Liens entre deux cartes, avec leur concept, leur sens et leur fiabilité. |
+| `partnersFor(card,pool)` | Cartes d'un ensemble qui interagissent avec une carte donnée. |
+
+### `js/cartes.js` — Base de cartes
+
+Catalogue livré avec l'atelier, fabrique de cartes, index de recherche tolérant aux accents, apostrophes et faces multiples.
+
+*15 fonction(s), 24 Ko*
+
+Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
+
+| Fonction | Rôle |
+|---|---|
+| `norm(s)` | Normalise un nom : casse, espaces, apostrophes typographiques. |
+| `loose(s)` | Forme simplifiée d'un nom, sans accents ni ponctuation. |
+| `buildCard(name,cost,type,price,text)` | Fabrique une carte complète à partir de ses champs bruts, analyse comprise. |
+| `indexCard(card)` | Indexe une carte par nom exact, forme simplifiée et face avant. |
+| `unindexCard(card)` | Retire une carte des index. |
+| `registerCard(card)` | Ajoute une carte à la base si elle n'y est pas déjà. |
+| `find(name)` | Retrouve une carte malgré les variantes d'écriture ou une face seule. |
+| `peutCommander(c)` | Vérifie qu'une carte peut être commandant. |
+| `commandantsPossibles()` | Créatures légendaires du deck éligibles au rôle. |
+| `mainType(c)` | Type principal en français, face avant pour les cartes multi-faces. |
+| `seedCollection()` | Collection de démonstration, au premier lancement. |
+| `mergeInto(card,canonical)` | Fusionne deux entrées désignant la même carte. |
+| `renameCard(card,newName)` | Renomme une carte vers son nom canonique en migrant les quantités. |
+| `frontFace(n)` | Nom de la face avant d'une carte recto-verso. |
+| `scryTarget(sc,map)` | Retrouve la carte locale correspondant à une réponse Scryfall. |
+
+### `js/etat.js` — État et filtrage
+
+L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
+
+*11 fonction(s), 4 Ko*
+
+Données : `FORMATS`, `S`, `PAGE`
+
+| Fonction | Rôle |
+|---|---|
+| `fmt()` | Contraintes du format en cours : taille, copies, commandant. |
+| `eur(n)` | Formatage d'un montant en euros. |
+| `esc(s)` | Échappement HTML. |
+| `colorOK(card)` | Applique le filtre de couleur de la section A à une carte. |
+| `collectionCards()` | Collection sous forme de paires carte / quantité. |
+| `filtered()` | Collection filtrée puis triée selon les réglages courants. |
+| `deckEntries()` | Cartes du deck, regroupées par type puis par coût. |
+| `deckSize()` | Nombre de cartes du deck. |
+| `availableFor(card)` | Exemplaires de la collection non encore engagés dans le deck. |
+| `aAcheter()` | Cartes du deck non couvertes par la collection, chiffrées. |
+| `spent()` | Total estimé des cartes à acheter. |
+
+### `js/marche.js` — Cardmarket
+
+Échelle d'état, langues et types de vendeur du site, estimation de prix à partir de la tendance, liens vers les fiches.
+
+*3 fonction(s), 2 Ko*
+
+Données : `CONDITIONS`, `COND_ORDER`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SELLER_TYPES`, `SELLER_MULT`, `CM_COUNTRIES`
+
+| Fonction | Rôle |
+|---|---|
+| `cmLink(card)` | Adresse de la fiche Cardmarket d'une carte. |
+| `cmEstimate(card)` | Estime un prix à partir de la tendance, selon état, langue et vendeur. |
+| `bestOffer(card)` | Meilleure offre compatible avec les filtres et le prix maximum. |
+
+### `js/scryfall.js` — Accès à Scryfall
+
+Symboles de mana, visuels, complétion des cartes importées, recherche en ligne, et catalogue complet : lecture de l'archive JSONL compressée, mise à jour, prix.
+
+*31 fonction(s), 29 Ko*
+
+Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
+
+| Fonction | Rôle |
+|---|---|
+| `loadSymbology()` *(async)* | Récupère les adresses officielles des symboles de mana. |
+| `chercheVerso(card)` *(async)* | Récupère le verso d'une carte recto-verso quand l'archive ne l'a pas. |
+| `compacte(sc)` | Réduit une carte Scryfall aux champs utiles à l'analyse et au classement. |
+| `autoCatalogue()` | Décide si le catalogue peut se charger tout seul. |
+| `estGzip(nom,octets)` | Détecte une archive compressée par son nom ou sa signature. |
+| `fluxTexte(source,nom)` *(async)* | Ouvre un flux de texte, décompression comprise. |
+| `retiens(par,rec)` | Ne garde qu'une entrée par nom, la mieux classée. |
+| `tailleEstimee(cartes)` | Estime le poids de l'archive par échantillonnage. |
+| `lireCatalogueFichier(source,nom)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue. |
+| `chargerCatalogueLocal()` *(async)* | Cherche une archive posée à côté de la page. |
+| `archiveParRecherche(maj)` *(async)* | Reconstitue un catalogue partiel par l'API de recherche. |
+| `verifierMajCatalogue()` *(async)* | Interroge l'index Scryfall : date, adresse et taille de la version publiée. |
+| `catalogueObsolete()` | Compare l'archive locale à la version publiée. |
+| `majPrix(force)` *(async)* | Rafraîchit les prix des seules cartes possédées ou jouées. |
+| `telechargerCatalogue()` *(async)* | Télécharge l'archive et l'extrait sans fichier intermédiaire. |
+| `chargerCatalogueComplet(force)` *(async)* | Charge le catalogue : cache, puis fichier local, puis réseau. |
+| `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus. |
+| `carteDuCatalogue(rec)` | Matérialise une carte du catalogue et l'analyse. |
+| `invaliderCandidats()` | Invalide la sélection mémorisée. |
+| `signatureCandidats()` | Signature des critères, pour ne recalculer qu'en cas de changement. |
+| `appliquePrixCatalogue()` | Reporte les prix de l'archive sur vos cartes. |
+| `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format et le prix. |
+| `requeteCatalogue()` | Construit la requête Scryfall correspondant au format et aux couleurs. |
+| `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
+| `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
+| `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. |
+| `queueImages(cards)` | Met en file les cartes dont le visuel manque. |
+| `runImageQueue()` *(async)* | Vide la file des visuels par lots, sans saturer le réseau. |
+| `completeUnknown(names)` *(async)* | Complète les cartes importées, en trois passes de plus en plus tolérantes. |
+| `chercheScryfall(q,cible)` *(async)* | Recherche en ligne pour la boîte d'ajout. |
+| `importerScryfall(sc)` | Crée ou complète une carte à partir d'un résultat de recherche. |
+
+### `js/stockage.js` — Sauvegarde locale
+
+Instantané de l'état vers localStorage, archive du catalogue en IndexedDB, fenêtre de gestion des données.
+
+*16 fonction(s), 16 Ko*
+
+Données : `STORE_KEY`, `STORE_OFF`
+
+| Fonction | Rôle |
+|---|---|
+| `idb()` | Ouvre la base IndexedDB. |
+| `idbLire(cle)` | Lit une clé de l'archive. |
+| `idbEcrire(cle,val)` | Écrit une clé dans l'archive. |
+| `idbVider()` | Efface l'archive du catalogue. |
+| `snapshot()` | Instantané de l'état à enregistrer. |
+| `ecrire(payload)` | Écriture brute dans localStorage. |
+| `save()` | Enregistre, avec repli allégé si l'espace manque. |
+| `scheduleSave()` | Enregistrement différé après une modification. |
+| `restore(d)` | Restaure un instantané, cartes importées comprises. |
+| `chargerSauvegarde()` | Relit la sauvegarde existante. |
+| `pillSauvegarde()` | Pastille d'état affichée dans l'en-tête. |
+| `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale. |
+| `blocCatalogueSauvegarde()` | Section catalogue de cette fenêtre : état, taille, mises à jour. |
+| `openSaveDialog()` | Ouvre la fenêtre de gestion des données. |
+| `brancherCatalogue()` | Branche les commandes du catalogue. |
+| `brancherRestauration()` | Branche le sélecteur de fichier de restauration. |
+
+### `js/externes.js` — EDHREC et Commander Spellbook
+
+Statistiques d'inclusion et de synergie par commandant, combos répertoriés et combos à une carte près.
+
+*10 fonction(s), 6 Ko*
+
+| Fonction | Rôle |
+|---|---|
+| `edhrecSlug(name)` | Identifiant EDHREC d'un commandant. |
+| `edhrecFor(card)` | Statistiques EDHREC d'une carte, si elles existent. |
+| `loadEdhrec(force)` *(async)* | Charge les statistiques du commandant courant. |
+| `deckSignature()` | Signature du deck, pour éviter les appels inutiles. |
+| `comboDepuisVariante(v)` | Normalise un combo renvoyé par Commander Spellbook. |
+| `scheduleCombos()` | Programme l'interrogation après une modification du deck. |
+| `loadCombos(force)` *(async)* | Récupère les combos assemblés et ceux à une carte près. |
+| `combosDe(card)` | Combos où figure une carte. |
+| `combosCompletesPar(card)` | Combos qu'une carte viendrait compléter. |
+| `libelleCombo(c,carteCourante,liens)` | Description lisible d'un combo. |
+
+### `js/graphe.js` — Graphe des capacités
+
+Construction du graphe à partir des arcs des cartes, rendu SVG circulaire, sélection cumulative de nœuds.
+
+*6 fonction(s), 8 Ko*
+
+| Fonction | Rôle |
+|---|---|
+| `noeudsActifs()` | Nœuds actuellement sélectionnés. |
+| `carteTouche(c,noeuds)` | Vérifie qu'une carte touche tous les nœuds sélectionnés. |
+| `graphCards()` | Cartes alimentant le graphe selon la source choisie. |
+| `buildGraph(cards)` | Agrège les arcs des cartes en un graphe de concepts. |
+| `svgGraph(g)` | Dessine le cercle des nœuds, les arcs et les arcs de règles. |
+| `renderD()` | Rend la section du graphe et le panneau des nœuds sélectionnés. |
+
+### `js/stats.js` — Statistiques
+
+Comptages par couleur et par type, valeur de la collection, histogrammes de courbe de mana.
+
+*3 fonction(s), 4 Ko*
+
+| Fonction | Rôle |
+|---|---|
+| `statsOf(list)` | Compte les cartes par couleur, par type et par coût. |
+| `histogram(dataByCmc, colorSplit)` | Histogramme de courbe de mana, empilé par couleur. |
+| `renderC()` | Rend la section des statistiques. |
+
+### `js/suggestions.js` — Suggestions d'ajout
+
+Notation des cartes — commune aux propositions et aux cartes du deck —, vignettes, pagination et panneaux d'achat.
+
+*15 fonction(s), 25 Ko*
+
+Données : `VISUELS_CHARGES`
+
+| Fonction | Rôle |
+|---|---|
+| `contexteEvaluation()` | Prépare le contexte de notation : graphe du deck, rôles manquants, courbe. |
+| `noteCarte(p,X)` | Note une carte : synergies, boucles, rôles, courbe, EDHREC, combos. |
+| `currentSuggestions()` | Constitue le vivier puis renvoie les propositions classées. |
+| `ligneCatalogue()` | État du catalogue et cartes écartées par le prix. |
+| `panneauEdhrec()` | Panneau EDHREC du commandant. |
+| `sugRow(s)` | Vignette d'une proposition. |
+| `ligneBudget()` | Ligne de budget restant. |
+| `ligneAchats()` | Rappel des cartes à acheter. |
+| `panneauAchats()` | Panneau Cardmarket : budget, état, langue, vendeur. |
+| `listeSuggestions()` | Assemble les groupes par type et le filtre par rôle. |
+| `visuelsSuggestions(byType)` | Demande les visuels des propositions affichées. |
+| `chargeVisuelsClasses()` | Charge les visuels par lots, dans l'ordre du score. |
+| `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
+| `refreshSuggestions()` | Rafraîchit la liste sans toucher aux champs de saisie. |
+| `renderF()` | Rend la section des suggestions. |
+
+### `js/collection.js` — Collection
+
+Affichage en grille ou en liste, import MTGO par fichier ou par collage, recherche et ajout de cartes.
+
+*8 fonction(s), 13 Ko*
+
+| Fonction | Rôle |
+|---|---|
+| `renderB()` | Rend la collection, en grille ou en liste, avec pagination. |
+| `parseMtgoList(txt)` | Lit une liste MTGO : quantités, éditions, réserve, commandant. |
+| `openImport(cible)` | Boîte d'import, par fichier, glisser-déposer ou collage. |
+| `ajouterCarte(c,q,cible,completer)` | Ajoute une carte à la collection ou au deck. |
+| `chercheCartes(q)` | Recherche par nom dans le catalogue local, filtrée par couleur. |
+| `resultatsHTML(q,cible)` | Liste des propositions de la boîte d'ajout. |
+| `majResultats(cible,sansRelancer)` | Met à jour ces propositions à la frappe. |
+| `openAdd(cible)` | Boîte d'ajout avec recherche locale puis en ligne. |
+
+### `js/deck.js` — Deck
+
+Composition, équilibre des rôles, commandant, conformité au format et cartes à acheter.
+
+*12 fonction(s), 13 Ko*
+
+| Fonction | Rôle |
+|---|---|
+| `targets()` | Objectifs par rôle selon le format. |
+| `deckCounts()` | Compte les cartes du deck par rôle. |
+| `gauge(label,val,tgt,role)` | Jauge d'un rôle, cliquable pour filtrer les suggestions. |
+| `legality()` | Contrôles de conformité : taille, copies, identité, jetons, budget. |
+| `blocAchats()` | Bloc des cartes à acheter, avec budget et liens. |
+| `zoneCommandant()` | Encart du commandant : visuel, identité, changement. |
+| `evalueDeck(entries)` | Note les cartes du deck avec le moteur des suggestions. |
+| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, liste. |
+| `addToDeck(name)` | Ajoute un exemplaire depuis l'interface. |
+| `deckAdd(card,qty,opts)` | Ajoute des exemplaires au deck, avec ou sans complément de collection. |
+| `removeFromDeck(name)` | Retire un exemplaire. |
+| `buyCard(name)` | Ajoute une carte en la comptant à l'achat. |
+
+### `js/ui.js` — Interface commune
+
+Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global.
+
+*25 fonction(s), 23 Ko*
+
+Données : `RETOURNEES`
+
+| Fonction | Rôle |
+|---|---|
+| `pipHTML(inner,taille)` | Pastille de repli d'un symbole de mana. |
+| `symBg(inner)` | Symbole peint en fond, pour les boutons de couleur. |
+| `symIcon(inner,taille)` | Symbole de mana officiel, avec repli si l'image manque. |
+| `manaFb(img)` | Remplace un symbole qui n'a pas pu se charger. |
+| `manaHTML(card,sm)` | Coût de mana complet d'une carte. |
+| `stripeColor(card)` | Bande de couleur d'identité d'une carte. |
+| `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. |
+| `cardRow(e,ctx)` | Ligne de carte en mode liste. |
+| `renderA()` | Rend la section des filtres et du format. |
+| `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
+| `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
+| `renderTop()` | Barre d'en-tête : totaux et état de sauvegarde. |
+| `renderAll()` | Rend les six sections et programme la sauvegarde. |
+| `aDeuxFaces(c)` | Détecte une carte recto-verso. |
+| `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
+| `faceVisible(c,grande)` | Face actuellement affichée. |
+| `refCarte(nom)` | Nom de carte survolable et cliquable. |
+| `placerApercu(x,y)` | Place l'aperçu près du curseur sans sortir de l'écran. |
+| `contenuApercu(c)` | Contenu de l'aperçu : visuel, ou texte si absent. |
+| `montrerApercu(nom,x,y)` | Affiche l'aperçu au survol. |
+| `majApercu()` | Met à jour l'aperçu quand le visuel arrive. |
+| `cacherApercu()` | Masque l'aperçu. |
+| `toast(msg)` | Message temporaire en bas d'écran. |
+| `openDialog(title,bodyHTML,footHTML,wide)` | Ouvre une fenêtre modale, sans la rouvrir si elle l'est déjà. |
+| `withFocus(fn)` | Préserve le focus et le curseur pendant un rendu. |
+
+### `js/app.js` — Démarrage et évènements
+
+Écouteurs délégués pour toute l'application, restauration de la sauvegarde et tâches de fond au lancement.
+
+*0 fonction(s), 14 Ko*
+
+| Fonction | Rôle |
+|---|---|
+
+## Repères
+
+- 175 fonctions au total, réparties en 14 modules.
+- L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
+- Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node` et `data-card-name`.
+- Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes.
+
+## Tests
+
+Le fichier `tests/suite.js` rejoue trente vérifications sur un DOM simulé :
+démarrage, rendu des six sections, sélection de nœuds, précision de l'analyse,
+pagination, sauvegarde. Il se lance avec `node tests/suite.js`.

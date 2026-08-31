@@ -1,0 +1,641 @@
+/* =====================================================================
+   js/externes.js — EDHREC, Commander Spellbook & Catalogue complet Scryfall
+   ===================================================================== */
+
+/* 1. EDHREC */
+function edhrecSlug(name) {
+  return frontFace(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/['\u2019]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function edhrecFor(card) {
+  const d = S.edhrec.data;
+  if (!d || !card) return null;
+  return d.map.get(norm(card.name)) || d.map.get('~' + loose(frontFace(card.name))) || null;
+}
+
+async function loadEdhrec(force) {
+  const cmd = S.commander ? find(S.commander) : null;
+  if (!cmd) { toast('Désignez d\'abord un commandant en section E.'); return; }
+  const slug = edhrecSlug(cmd.name);
+  if (!force && S.edhrec.slug === slug && S.edhrec.status !== 'idle') return;
+  S.edhrec = {slug, status:'loading', data:null, error:null};
+  renderF();
+  try {
+    const r = await fetch('https://json.edhrec.com/pages/commanders/' + slug + '.json');
+    if (!r.ok) throw new Error(r.status === 404 ? 'commandant absent d\'EDHREC' : 'HTTP ' + r.status);
+    const j = await r.json();
+    const dict = ((j.container || {}).json_dict) || {};
+    const map = new Map();
+    (dict.cardlists || []).forEach(l => (l.cardviews || []).forEach(cv => {
+      const pot = cv.potential_decks || 0, nd = cv.num_decks || 0;
+      const rec = {name:cv.name, inclusion:pot ? nd/pot : 0, synergy:cv.synergy||0, decks:nd, potentiel:pot, liste:l.header||''};
+      const k = norm(cv.name);
+      if (!map.has(k) || map.get(k).decks < nd) map.set(k, rec);
+      const f = '~' + loose(frontFace(cv.name));
+      if (!map.has(f) || map.get(f).decks < nd) map.set(f, rec);
+    }));
+    if (!map.size) throw new Error('aucune donnée exploitable');
+    S.edhrec = {
+      slug, status:'ok', error:null,
+      data: {map, total:(dict.card || {}).num_decks || 0, commandant:cmd.name, url:'https://edhrec.com/commanders/' + slug}
+    };
+  } catch(err) {
+    S.edhrec = {slug, status:'error', data:null, error:err.message || 'requête refusée'};
+  }
+  renderF();
+}
+
+/* 2. Commander Spellbook */
+function deckSignature() {
+  return deckEntries().map(e => e.card.name + '×' + e.qty).sort().join('|') + '||' + (S.commander || '');
+}
+
+function comboDepuisVariante(v) {
+  const cartes = (v.uses || []).map(u => (u && u.card && (u.card.name || u.card)) || u.cardName || '').filter(Boolean);
+  const produit = (v.produces || []).map(x => (x && x.feature && (x.feature.name || x.feature)) || x.name || '').filter(Boolean);
+  return {
+    id: v.id,
+    cartes,
+    produit,
+    description: v.description || '',
+    prerequis: v.otherPrerequisites || v.other_prerequisites || '',
+    mana: v.manaNeeded || v.mana_needed || '',
+    url: 'https://commanderspellbook.com/combo/' + v.id + '/'
+  };
+}
+
+let csbTimer = null;
+
+function scheduleCombos() {
+  if (typeof fetch !== 'function') return;
+  const sig = deckSignature();
+  if (S.csb.sig === sig || S.csb.status === 'loading') return;
+  clearTimeout(csbTimer);
+  csbTimer = setTimeout(() => loadCombos(), 1200);
+}
+
+async function loadCombos(force) {
+  const sig = deckSignature();
+  if (!force && S.csb.sig === sig) return;
+  const entries = deckEntries();
+  if (entries.length < 2) { S.csb = {sig, status:'idle', data:null, error:null}; return; }
+  S.csb = {sig, status:'loading', data:S.csb.data, error:null};
+  renderE();
+  const cmd = S.commander ? [{card:S.commander, quantity:1}] : [];
+  const main = entries.filter(e => e.card.name !== S.commander).map(e => ({card:e.card.name, quantity:e.qty}));
+  const CIBLE = 'https://backend.commanderspellbook.com/find-my-combos';
+  const adresse = () => S.csbRelay
+    ? S.csbRelay.replace('{url}', encodeURIComponent(CIBLE)) + (S.csbRelay.includes('{url}') ? '' : encodeURIComponent(CIBLE))
+    : CIBLE;
+
+  const envoyer = async(corps, type) => fetch(adresse(), {
+    method: 'POST',
+    headers: {'Content-Type': type || 'application/json'},
+    body: JSON.stringify(corps)
+  });
+
+  try {
+    let r = null, bloque = null;
+    for (const type of ['application/json', 'text/plain;charset=UTF-8']) {
+      try {
+        r = await envoyer({commanders:cmd, main}, type);
+        if (r.status === 400) r = await envoyer({main:[...cmd, ...main]}, type);
+        if (r.status === 415) { r = null; continue; }
+        break;
+      } catch(err) { bloque = err; r = null; }
+    }
+    if (!r) throw bloque || new Error('requête bloquée par le navigateur');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    const res = j.results || j;
+    const dansDeck = new Set(entries.map(e => norm(e.card.name)));
+    const assembles = (res.included || []).map(comboDepuisVariante);
+    const presque = [...(res.almostIncluded || []), ...(res.almostIncludedByAddingColors || [])]
+      .map(comboDepuisVariante)
+      .map(c => ({...c, manquantes:c.cartes.filter(n => !dansDeck.has(norm(n)))}))
+      .filter(c => c.manquantes.length > 0 && c.manquantes.length <= 2);
+
+    const parManquante = new Map(), parCarte = new Map();
+    const ajoute = (m, k, v) => {
+      const key = norm(k);
+      if (!m.has(key)) m.set(key, []);
+      if (m.get(key).length < 6) m.get(key).push(v);
+    };
+    presque.forEach(c => c.manquantes.forEach(n => ajoute(parManquante, n, c)));
+    [...assembles, ...presque].forEach(c => c.cartes.forEach(n => ajoute(parCarte, n, c)));
+    S.csb = {sig, status:'ok', error:null, data:{assembles, presque, parManquante, parCarte}};
+  } catch(err) {
+    const cors = (err instanceof TypeError) || /Failed to fetch|NetworkError|Load failed/i.test(err.message || '');
+    S.csb = {sig, status:cors ? 'cors' : 'error', data:null, error:err.message || 'requête refusée'};
+  }
+  renderE();
+  renderF();
+}
+
+function combosDe(card) {
+  const d = S.csb.data;
+  if (!d || !card) return [];
+  return d.parCarte.get(norm(card.name)) || d.parCarte.get(norm(frontFace(card.name))) || [];
+}
+
+function combosCompletesPar(card) {
+  const d = S.csb.data;
+  if (!d || !card) return [];
+  return d.parManquante.get(norm(card.name)) || d.parManquante.get(norm(frontFace(card.name))) || [];
+}
+
+function libelleCombo(c, carteCourante, liens) {
+  const autres = c.cartes.filter(n => !carteCourante || norm(n) !== norm(carteCourante.name));
+  const noms = liens ? autres.map(refCarte) : autres.map(esc);
+  return `${noms.join(' + ')}${c.produit.length ? ` → ${esc(c.produit.slice(0,3).join(', '))}` : ''}`;
+}
+
+/* 3. Catalogue Scryfall IndexedDB (CAT et CH sont définis dans js/etat.js) */
+const IDB_NOM = 'mtg-atelier', IDB_MAG = 'catalogue';
+
+function idb() {
+  return new Promise((ok, ko) => {
+    if (typeof indexedDB === 'undefined') return ko(new Error('IndexedDB indisponible'));
+    const r = indexedDB.open(IDB_NOM, 1);
+    r.onupgradeneeded = () => { if (!r.result.objectStoreNames.contains(IDB_MAG)) r.result.createObjectStore(IDB_MAG); };
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => ko(r.error);
+  });
+}
+
+function idbLire(cle) {
+  return idb().then(db => new Promise((ok, ko) => {
+    const t = db.transaction(IDB_MAG, 'readonly').objectStore(IDB_MAG).get(cle);
+    t.onsuccess = () => ok(t.result);
+    t.onerror = () => ko(t.error);
+  }));
+}
+
+function idbEcrire(cle, val) {
+  return idb().then(db => new Promise((ok, ko) => {
+    const t = db.transaction(IDB_MAG, 'readwrite').objectStore(IDB_MAG).put(val, cle);
+    t.onsuccess = () => ok(true);
+    t.onerror = () => ko(t.error);
+  }));
+}
+
+function idbVider() {
+  return idb().then(db => new Promise(ok => {
+    const t = db.transaction(IDB_MAG, 'readwrite').objectStore(IDB_MAG).clear();
+    t.onsuccess = () => ok(true);
+    t.onerror = () => ok(false);
+  })).catch(() => false);
+}
+
+function compacte(sc) {
+  const faces = sc.card_faces && sc.card_faces.length ? sc.card_faces : null;
+  const type = sc.type_line || (faces ? faces[0].type_line : '');
+  if (!type || /\btoken\b|\bemblem\b/i.test(type)) return null;
+  if (/^basic land/i.test(type)) return null;
+  if (sc.layout && /token|emblem|art_series|double_faced_token/.test(sc.layout)) return null;
+  const cost = (sc.mana_cost && sc.mana_cost.length ? sc.mana_cost : (faces ? (faces[0].mana_cost||'') : '')) || '';
+  const texte = faces && !sc.oracle_text
+    ? faces.map(f => (f.oracle_text||'').replace(/\n/g, ' // ')).join(' // ')
+    : (sc.oracle_text||'').replace(/\n/g, ' // ');
+  const pw = sc.power || (faces && faces[0] && faces[0].power);
+  const lg = sc.legalities || {};
+  const uris = sc.image_uris || (faces && faces[0] && faces[0].image_uris) || null;
+  const versoUris = faces && faces[1] && faces[1].image_uris || null;
+  const chemin = uris && uris.normal ? String(uris.normal).replace('https://cards.scryfall.io/normal/', '') : '';
+  const verso = versoUris && versoUris.normal ? String(versoUris.normal).replace('https://cards.scryfall.io/normal/', '') : '';
+  return [
+    sc.name, cost, type, texte, sc.cmc||0, (sc.color_identity||[]).join(''),
+    (pw != null && /^\d+$/.test(String(pw))) ? +pw : null,
+    parseFloat((sc.prices && (sc.prices.eur || sc.prices.usd)) || 0) || 0,
+    sc.id || '', (typeof sc.edhrec_rank === 'number') ? sc.edhrec_rank : 999999,
+    (lg.commander === 'legal' ? 'c' : '') + (lg.standard === 'legal' ? 's' : ''), chemin, verso
+  ];
+}
+
+const CDN = 'https://cards.scryfall.io/';
+
+function autoCatalogue() {
+  if (typeof fetch !== 'function' || typeof indexedDB === 'undefined') return false;
+  if (!S.catalogueActif) return false;
+  if (saveState === 'desactive') return false;
+  const co = (typeof navigator !== 'undefined') && navigator.connection;
+  if (co && (co.saveData || /(^|-)2g$/.test(co.effectiveType || ''))) return false;
+  return true;
+}
+
+const FICHIERS_LOCAUX = [
+  'oracle-cards.jsonl.gz', 'oracle-cards.json.gz', 'oracle-cards.jsonl', 'oracle-cards.json',
+  'default-cards.jsonl.gz', 'default-cards.json.gz', 'all-cards.jsonl.gz', 'scryfall.jsonl.gz'
+];
+
+function estGzip(nom, octets) {
+  if (/\.gz$/i.test(nom || '')) return true;
+  return !!(octets && octets[0] === 0x1f && octets[1] === 0x8b);
+}
+
+async function fluxTexte(source, nom) {
+  let flux = source.stream ? source.stream() : source.body;
+  let gz = /\.gz$/i.test(nom || '');
+  if (!gz && source.slice) {
+    const tete = new Uint8Array(await source.slice(0, 2).arrayBuffer());
+    gz = estGzip(nom, tete);
+    flux = source.stream();
+  }
+  if (gz) {
+    if (typeof DecompressionStream === 'undefined')
+      throw new Error('ce navigateur ne sait pas décompresser le .gz ; fournissez le fichier décompressé');
+    flux = flux.pipeThrough(new DecompressionStream('gzip'));
+  }
+  return flux.pipeThrough(new TextDecoderStream());
+}
+
+function retiens(par, rec) {
+  const cle = norm(rec[CH.NOM]);
+  const ancien = par.get(cle);
+  if (!ancien) { par.set(cle, rec); return; }
+  const mieux = (rec[CH.RANG] < ancien[CH.RANG]) ||
+              (rec[CH.RANG] === ancien[CH.RANG] && rec[CH.PRIX] > 0 && ancien[CH.PRIX] <= 0);
+  if (mieux) par.set(cle, rec);
+}
+
+function tailleEstimee(cartes) {
+  if (!cartes.length) return 0;
+  const pas = Math.max(1, Math.floor(cartes.length / 300));
+  let somme = 0, n = 0;
+  for (let i = 0; i < cartes.length; i += pas) { somme += JSON.stringify(cartes[i]).length; n++; }
+  return Math.round(somme / n * cartes.length);
+}
+
+async function lireCatalogueFichier(source, nom) {
+  CAT.etat = 'chargement'; CAT.source = 'fichier'; CAT.detail = ''; CAT.partiel = false; renderF();
+  const par = new Map();
+  const cartes = {get length(){ return par.size; }, push(rec){ retiens(par, rec); }};
+  let impressions = 0, reste = '', tableau = null, lus = 0;
+  const lecteur = (await fluxTexte(source, nom)).getReader();
+  while (true) {
+    const {done, value} = await lecteur.read();
+    if (done) break;
+    reste += value;
+    if (tableau === null) tableau = /^\s*\[/.test(reste.slice(0, 64));
+    if (tableau) continue;
+    let i;
+    while ((i = reste.indexOf('\n')) >= 0) {
+      const ligne = reste.slice(0, i).trim().replace(/,$/, '');
+      reste = reste.slice(i + 1);
+      if (ligne.length < 2 || ligne === '[' || ligne === ']') continue;
+      try { const c = compacte(JSON.parse(ligne)); if (c) { cartes.push(c); impressions++; } } catch(e) {}
+      if (++lus % 25000 === 0) { CAT.cartes = [...par.values()]; renderF(); await new Promise(r => setTimeout(r, 0)); }
+    }
+  }
+  if (tableau) {
+    const brut = JSON.parse(reste);
+    brut.forEach(sc => { const c = compacte(sc); if (c) { cartes.push(c); impressions++; } });
+  } else {
+    const fin = reste.trim().replace(/[,\]]$/, '');
+    if (fin.length > 2) { try { const c = compacte(JSON.parse(fin)); if (c) { cartes.push(c); impressions++; } } catch(e) {} }
+  }
+  if (!par.size) throw new Error('aucune carte lisible dans ce fichier');
+  CAT.cartes = [...par.values()];
+  CAT.etat = 'ok';
+  CAT.date = Date.now();
+  CAT.maj = CAT.maj || null;
+  appliquePrixCatalogue();
+  CAT.octets = tailleEstimee(CAT.cartes);
+  CAT.source = 'fichier';
+  CAT.impressions = impressions;
+  invaliderCandidats();
+  if (saveState !== 'desactive' && S.catalogueActif)
+    idbEcrire('cartes', {v:1, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets}).catch(() => {});
+  renderAll();
+  toast(`${CAT.cartes.length.toLocaleString('fr-FR')} cartes retenues${
+    impressions > CAT.cartes.length ? ` sur ${impressions.toLocaleString('fr-FR')} impressions lues` : ''}.`);
+  return true;
+}
+
+async function chargerCatalogueLocal() {
+  if (typeof fetch !== 'function') return false;
+  for (const nom of FICHIERS_LOCAUX) {
+    try {
+      const r = await fetch(nom);
+      if (!r.ok) continue;
+      await lireCatalogueFichier(r, nom);
+      return true;
+    } catch(err) {}
+  }
+  return false;
+}
+
+async function archiveParRecherche(maj) {
+  CAT.source = 'recherche'; CAT.partiel = true;
+  const q = 'game:paper -is:token -t:basic';
+  let url = 'https://api.scryfall.com/cards/search?order=edhrec&unique=cards&q=' + encodeURIComponent(q);
+  const cartes = [];
+  try {
+    while (url && cartes.length < S.exploreMax) {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      (j.data || []).forEach(sc => { const c = compacte(sc); if (c) cartes.push(c); });
+      CAT.cartes = cartes; CAT.etat = 'chargement'; CAT.octets = 0;
+      if (cartes.length % 1400 < 175) renderF();
+      url = j.has_more ? j.next_page : null;
+      if (url && cartes.length < S.exploreMax) await new Promise(r2 => setTimeout(r2, 110));
+    }
+    CAT.cartes = cartes; CAT.etat = 'ok'; CAT.maj = maj || null; CAT.date = Date.now();
+    CAT.octets = tailleEstimee(cartes);
+    invaliderCandidats();
+    if (saveState !== 'desactive' && S.catalogueActif)
+      idbEcrire('cartes', {v:2, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, partiel:true}).catch(() => {});
+    renderAll();
+  } catch(err) {
+    CAT.etat = (err instanceof TypeError) ? 'hors-ligne' : 'erreur';
+    CAT.detail = (CAT.detail ? CAT.detail + ' ' : '') + `Le repli par recherche a échoué aussi (${err.message||'requête bloquée'}).`;
+    renderAll();
+  }
+}
+
+async function verifierMajCatalogue() {
+  if (typeof fetch !== 'function') return null;
+  try {
+    const r = await fetch('https://api.scryfall.com/bulk-data/oracle-cards');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    CAT.majDispo = j.updated_at || null;
+    CAT.uri = j.jsonl_download_uri || j.download_uri || '';
+    CAT.taille = j.compressed_size || 0;
+    CAT.tailleBrute = j.size || 0;
+    renderF();
+    return j;
+  } catch(err) { return null; }
+}
+
+function catalogueObsolete() {
+  if (!CAT.majDispo) return false;
+  if (!CAT.maj) return CAT.etat === 'ok';
+  return new Date(CAT.majDispo) > new Date(CAT.maj);
+}
+
+async function majPrix(force) {
+  if (typeof fetch !== 'function') return;
+  if (!force && S.prixMaj && Date.now() - S.prixMaj < 20 * 3600e3) return;
+  const noms = [...new Set([...S.collection.keys(), ...S.deck.keys()])].filter(n => find(n));
+  if (!noms.length) return;
+  let maj = 0;
+  for (let i = 0; i < noms.length; i += 75) {
+    const lot = noms.slice(i, i + 75);
+    try {
+      const r = await fetch('https://api.scryfall.com/cards/collection', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({identifiers: lot.map(n => ({name:n}))})
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      (j.data || []).forEach(sc => {
+        const c = scryTarget(sc, null);
+        if (!c) return;
+        const eurVal = parseFloat((sc.prices && (sc.prices.eur || sc.prices.eur_foil)) || 0) || 0;
+        if (eurVal && c.price !== eurVal) { c.price = eurVal; maj++; }
+        if (sc.purchase_uris && sc.purchase_uris.cardmarket) c.cmUrl = sc.purchase_uris.cardmarket;
+      });
+    } catch(err) { return; }
+    await new Promise(r2 => setTimeout(r2, 110));
+  }
+  S.prixMaj = Date.now();
+  renderAll();
+  if (maj) toast(`${maj} prix mis à jour depuis Cardmarket.`);
+}
+
+async function telechargerCatalogue() {
+  if (typeof fetch !== 'function') { toast('Téléchargement impossible dans ce contexte.'); return; }
+  CAT.etat = 'chargement'; CAT.source = 'réseau'; CAT.detail = ''; renderF();
+  const rafraichirFenetre = () => {
+    const corps = document.getElementById('dlgBody');
+    if (corps && corps.innerHTML.includes('Catalogue des cartes Magic')) {
+      corps.innerHTML = corpsSauvegarde();
+      brancherRestauration();
+      brancherCatalogue();
+    }
+  };
+  try {
+    const info = await verifierMajCatalogue();
+    const adresse = (info && (info.jsonl_download_uri || info.download_uri)) || CAT.uri;
+    if (!adresse) throw new Error("adresse de téléchargement inconnue");
+    toast(`Téléchargement de l'archive${CAT.taille ? ` (${(CAT.taille/1048576).toFixed(0)} Mo)` : ''}…`);
+    const rep = await fetch(adresse);
+    if (!rep.ok) throw new Error('HTTP ' + rep.status);
+    CAT.maj = (info && info.updated_at) || null;
+    await lireCatalogueFichier(rep, adresse);
+    rafraichirFenetre();
+  } catch(err) {
+    const bloque = (err instanceof TypeError) || /Failed to fetch|NetworkError|Load failed/i.test(err.message || '');
+    CAT.etat = bloque ? 'hors-ligne' : 'erreur';
+    CAT.detail = bloque
+      ? `le serveur de fichiers de Scryfall (data.scryfall.io) refuse la requête depuis une page tierce. Utilisez le bouton de téléchargement, puis chargez l'archive obtenue — sans la décompresser.`
+      : `échec du téléchargement : ${err.message||'erreur inconnue'}`;
+    renderF();
+    rafraichirFenetre();
+    toast(bloque ? "Téléchargement direct refusé par Scryfall : passez par le lien puis le chargement de fichier."
+                 : `Échec : ${err.message||'erreur inconnue'}.`);
+  }
+}
+
+async function chargerCatalogueComplet(force) {
+  if (CAT.etat === 'chargement' || typeof fetch !== 'function') return;
+  CAT.etat = 'chargement'; CAT.source = 'cache'; renderF();
+  try {
+    if (!force) {
+      const memo = await idbLire('cartes').catch(() => null);
+      if (memo && (memo.v === 1 || memo.v === 2) && Array.isArray(memo.cartes) && memo.cartes.length && Array.isArray(memo.cartes[0])) {
+        CAT.cartes = memo.cartes;
+        CAT.maj = memo.maj;
+        CAT.etat = 'ok';
+        CAT.source = 'cache';
+        CAT.octets = memo.octets || tailleEstimee(CAT.cartes);
+        CAT.date = memo.date || null;
+        CAT.partiel = !!memo.partiel;
+        CAT.impressions = memo.impressions || 0;
+        if (memo.v !== 2) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour obtenir les visuels des cartes.';
+        invaliderCandidats();
+        renderAll();
+        if (Date.now() - (memo.date || 0) > 7 * 864e5) setTimeout(() => chargerCatalogueComplet(true), 4000);
+        return;
+      }
+    }
+    if (await chargerCatalogueLocal()) return;
+    CAT.source = 'réseau'; CAT.detail = ''; CAT.partiel = false; renderF();
+    let info;
+    try {
+      const meta = await fetch('https://api.scryfall.com/bulk-data/oracle-cards');
+      if (!meta.ok) throw new Error('HTTP ' + meta.status);
+      info = await meta.json();
+    } catch(err) {
+      CAT.detail = `l'index des données groupées n'a pas répondu (${err.message||'requête bloquée'})`;
+      throw err;
+    }
+    renderF();
+    let brut;
+    try {
+      const rep = await fetch(info.download_uri);
+      if (!rep.ok) throw new Error('HTTP ' + rep.status);
+      brut = await rep.json();
+    } catch(err) {
+      CAT.detail = `le fichier groupé (data.scryfall.io) a été refusé : ${err.message||'requête bloquée'}. `
+        + `Posez le fichier de données Scryfall à côté de cette page, ou chargez-le depuis la fenêtre de sauvegarde.`;
+      throw err;
+    }
+    const parNom = new Map();
+    brut.forEach(sc => { const c = compacte(sc); if (c) retiens(parNom, c); });
+    CAT.cartes = [...parNom.values()];
+    invaliderCandidats();
+    CAT.maj = info.updated_at || null;
+    CAT.etat = 'ok';
+    CAT.octets = tailleEstimee(CAT.cartes);
+    CAT.date = Date.now();
+    if (saveState !== 'desactive' && S.catalogueActif)
+      idbEcrire('cartes', {v:2, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions:CAT.impressions||0}).catch(() => {});
+    renderAll();
+  } catch(err) {
+    CAT.etat = (err instanceof TypeError) ? 'hors-ligne' : 'erreur';
+    renderF();
+  }
+}
+
+function completeDepuisRec(c, rec) {
+  if (rec[CH.IMG] && !c.imgN) {
+    c.img = CDN + 'small/' + rec[CH.IMG];
+    c.imgN = CDN + 'normal/' + rec[CH.IMG];
+    c.imgL = CDN + 'large/' + rec[CH.IMG];
+    c.imgTried = true;
+  }
+  if (rec[CH.VERSO] && !c.imgB) {
+    c.imgB = CDN + 'normal/' + rec[CH.VERSO];
+    c.imgBL = CDN + 'large/' + rec[CH.VERSO];
+  }
+  if (rec[CH.FORCE] != null && c.force == null) {
+    c.force = rec[CH.FORCE];
+    c.an = analyze(c);
+    c.cats = categories(c);
+  }
+  if (!c.price && rec[CH.PRIX] > 0) c.price = rec[CH.PRIX];
+  return c;
+}
+
+function carteDuCatalogue(rec) {
+  const nom = rec[CH.NOM];
+  let c = find(nom);
+  if (c && !c.unknown) return completeDepuisRec(c, rec);
+  c = registerCard(buildCard(nom, rec[CH.COUT] || '—', rec[CH.TYPE], rec[CH.PRIX], rec[CH.TEXTE]));
+  if (rec[CH.ID_COUL] !== undefined) c.identity = rec[CH.ID_COUL] ? rec[CH.ID_COUL].split('') : [];
+  c.cmc = rec[CH.CMC];
+  if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
+  c.an = analyze(c);
+  c.cats = categories(c);
+  if (rec[CH.IMG]) {
+    c.img = CDN + 'small/' + rec[CH.IMG];
+    c.imgN = CDN + 'normal/' + rec[CH.IMG];
+    c.imgL = CDN + 'large/' + rec[CH.IMG];
+    if (rec[CH.VERSO]) { c.imgB = CDN + 'normal/' + rec[CH.VERSO]; c.imgBL = CDN + 'large/' + rec[CH.VERSO]; }
+    c.imgTried = true;
+  } else if (rec[CH.ID]) {
+    const base = 'https://api.scryfall.com/cards/' + rec[CH.ID] + '?format=image&version=';
+    c.img = base + 'small'; c.imgN = base + 'normal'; c.imgL = base + 'large'; c.imgTried = true;
+  }
+  c.externe = true; c.unknown = false;
+  return c;
+}
+
+let CAND = {sig:null, liste:[]};
+function invaliderCandidats() { CAND = {sig:null, liste:[]}; }
+
+function signatureCandidats() {
+  return [S.format, S.commander, [...S.colors].join(''), S.colorMode, S.budget.perCard,
+          CAT.cartes.length, S.collection.size, S.exploreMax, noeudsActifs().sort().join(',')].join('|');
+}
+
+function appliquePrixCatalogue() {
+  if (!CAT.cartes.length) return;
+  const utiles = new Set([...S.collection.keys(), ...S.deck.keys()].map(norm));
+  if (!utiles.size) return;
+  let n = 0;
+  CAT.cartes.forEach(rec => {
+    if (!utiles.has(norm(rec[CH.NOM]))) return;
+    const c = find(rec[CH.NOM]);
+    if (c && rec[CH.PRIX] > 0 && c.price !== rec[CH.PRIX]) { c.price = rec[CH.PRIX]; n++; }
+  });
+  if (n) scheduleSave();
+}
+
+function candidatsCatalogue() {
+  if (CAT.etat !== 'ok' || !CAT.cartes.length) return [];
+  const sig = signatureCandidats();
+  if (CAND.sig === sig) return CAND.liste;
+  const legal = {edh:'c', standard:'s'}[S.format] || '';
+  const cmd = S.commander ? find(S.commander) : null;
+  const ident = cmd ? cmd.identity : null;
+  const noeuds = noeudsActifs();
+  const retenus = [];
+  for (const rec of CAT.cartes) {
+    if (!rec || rec.length <= CH.LEGAL) continue;
+    if (legal && String(rec[CH.LEGAL] || '').indexOf(legal) < 0) continue;
+    const id = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
+    if (ident && id.some(x => !ident.includes(x))) continue;
+    if (!colorOK({identity:id})) continue;
+    if (S.collection.get(rec[CH.NOM]) > 0) continue;
+    const prix = rec[CH.PRIX];
+    if (prix <= 0 || prix > S.budget.perCard) continue;
+    if (noeuds.length && !recToucheNoeuds(rec, noeuds)) continue;
+    retenus.push(rec);
+  }
+  retenus.sort((a, b) => a[CH.RANG] - b[CH.RANG]);
+  CAND = {sig, liste:retenus.slice(0, S.exploreMax).map(carteDuCatalogue)};
+  return CAND.liste;
+}
+
+function requeteCatalogue() {
+  const cmd = S.commander ? find(S.commander) : null;
+  const ident = (cmd ? cmd.identity : [...S.colors].filter(c => c !== 'C'));
+  const id = ident.length ? ident.join('').toLowerCase() : 'c';
+  const legal = {edh:'commander', standard:'standard', limite:'', perso:''}[S.format] || '';
+  return [legal ? `legal:${legal}` : '', `id<=${id}`, '-is:token', '-t:basic'].filter(Boolean).join(' ');
+}
+
+function signatureCatalogue() { return requeteCatalogue(); }
+
+async function chargerCatalogue() {
+  if (typeof fetch !== 'function') { S.exploreEtat = 'hors-ligne'; return; }
+  const sig = signatureCatalogue();
+  S.exploreSig = sig;
+  S.exploreEtat = 'chargement';
+  renderF();
+  const q = requeteCatalogue();
+  let url = 'https://api.scryfall.com/cards/search?order=edhrec&unique=cards&q=' + encodeURIComponent(q);
+  let charge = 0, ajoutees = 0;
+  try {
+    while (url && charge < S.exploreMax) {
+      const r = await fetch(url);
+      if (r.status === 404) { S.exploreEtat = 'aucune'; S.exploreTotal = 0; renderF(); return; }
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      if (typeof j.total_cards === 'number') S.exploreTotal = j.total_cards;
+      (j.data || []).forEach(sc => {
+        const avant = find(sc.name);
+        applyScryfall(sc, avant && avant.unknown ? avant : (avant || null), !!(avant && !avant.unknown));
+        const c = find(sc.name);
+        if (c && !(S.collection.get(c.name) > 0)) { c.externe = true; ajoutees++; }
+        charge++;
+      });
+      S.exploreCharge = charge;
+      url = j.has_more ? j.next_page : null;
+      S.exploreReste = !!url;
+      if (charge <= 175 || charge % 1400 < 175) renderF();
+      if (url && charge < S.exploreMax) await new Promise(r2 => setTimeout(r2, 110));
+    }
+    S.exploreEtat = 'ok';
+  } catch(err) {
+    S.exploreEtat = (err instanceof TypeError) ? 'hors-ligne' : 'erreur';
+  }
+  renderAll();
+  void ajoutees;
+}
