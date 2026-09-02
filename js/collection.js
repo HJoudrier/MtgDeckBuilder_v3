@@ -27,7 +27,7 @@ function collectionCards() {
 }
 
 function filtered() {
-  let list = collectionCards().filter(e => colorOK(e.card));
+  let list = collectionCards().filter(e => colorOK(e.card) && filtreOK(e.card));
   if (S.search) {
     const s = S.search.toLowerCase();
     list = list.filter(e => e.card.name.toLowerCase().includes(s) || e.card.text.toLowerCase().includes(s) || e.card.type.toLowerCase().includes(s));
@@ -119,6 +119,7 @@ function renderB() {
   const unk = collectionCards().filter(e => e.card.unknown).length;
   const page = list.slice(0, S.limitB);
   const rest = list.length - page.length;
+  const actifs = filtresActifs();
 
   const bodyEl = document.getElementById('bodyB');
   if (bodyEl) {
@@ -144,11 +145,17 @@ function renderB() {
         <button class="btn danger" data-act="wipe">Vider</button>
       </div>
       <div class="small muted" style="margin-bottom:8px">${list.length} cartes différentes après filtrage · ${shown} exemplaires sur ${total} dans la collection${rest>0?` · ${page.length} affichées`:''}</div>
+      ${actifs.length ? `<div class="row" style="margin-bottom:8px;gap:6px">
+        <span class="small muted">Filtres avancés :</span>
+        ${actifs.map(t => `<span class="tag">${esc(t)}</span>`).join('')}
+        <button class="btn sm" data-act="filtres">Modifier</button>
+        <button class="btn sm" data-act="resetFiltres">Effacer</button>
+      </div>` : ''}
       ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
       ${page.length ? (S.view === 'grid'
         ? `<div class="grid">${page.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${page.map(e => cardRow(e, 'collection')).join('')}</div>`)
-        : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs en section A ou effacez la recherche.</div>`}
+        : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs en section A${actifs.length ? ", assouplissez les filtres avancés de l'en-tête" : ''} ou effacez la recherche.</div>`}
       ${rest > 0 ? `<div style="text-align:center;margin-top:10px"><button class="btn" data-act="moreB">Afficher ${Math.min(PAGE, rest)} cartes de plus (${rest} restantes)</button></div>` : ''}`;
   }
 

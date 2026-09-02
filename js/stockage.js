@@ -31,7 +31,7 @@ function snapshot() {
     } else {
       cartes.push({
         n:c.name, c:c.cost||'—', t:c.type, p:c.price, x:c.text,
-        i:(c.identity||[]).join(''), m:c.cmc, f:c.force,
+        i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance,
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
         u:c.cmUrl||'', k:c.unknown?1:0
       });
@@ -49,6 +49,7 @@ function snapshot() {
     format: S.format,
     custom: S.custom,
     sort: S.sort,
+    filtres: S.filtres,
     view: S.view,
     images: S.images,
     graphSource: S.graphSource,
@@ -110,6 +111,7 @@ function restore(d) {
     if (o.i) card.identity = o.i.split('');
     if (typeof o.m === 'number') card.cmc = o.m;
     if (typeof o.f === 'number' && card.force !== o.f) { card.force = o.f; card.an = analyze(card); card.cats = categories(card); }
+    if (typeof o.e === 'number') card.endurance = o.e;
     if (o.g) card.img = o.g;
     if (o.G) card.imgN = o.G;
     if (o.L) card.imgL = o.L;
@@ -139,6 +141,7 @@ function restore(d) {
   if (typeof d.images === 'boolean') S.images = d.images;
   if (typeof d.showImplicit === 'boolean') S.showImplicit = d.showImplicit;
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
+  if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};
   if (d.budget) S.budget = {...S.budget, ...d.budget};
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;

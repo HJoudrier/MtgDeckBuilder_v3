@@ -23,6 +23,7 @@ const S = {
   custom: {size:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
+  filtres: {nom:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -53,6 +54,69 @@ const S = {
 
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});
 
+/* ---------------------------------------------------------------------
+   Filtres avancés de la fenêtre « Filtres » (en-tête) : nom, force,
+   endurance, coût de mana et prix. Chaque champ vide est neutre.
+   --------------------------------------------------------------------- */
+
+const FILTRES_VIDE = {
+  nom:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
+};
+
+/* Bornes numériques : [clé min, clé max, champ de la carte, libellé]. */
+const FILTRES_BORNES = [
+  ['forceMin', 'forceMax', 'force', 'Force'],
+  ['enduranceMin', 'enduranceMax', 'endurance', 'Endurance'],
+  ['cmcMin', 'cmcMax', 'cmc', 'Coût de mana'],
+  ['prixMin', 'prixMax', 'price', 'Prix']
+];
+
+function nombreFiltre(v) {
+  if (v === '' || v === null || v === undefined) return null;
+  const n = parseFloat(String(v).replace(',', '.'));
+  return isNaN(n) ? null : n;
+}
+
+function reinitFiltres() {
+  S.filtres = {...FILTRES_VIDE};
+}
+
+/* Libellés des filtres actifs, pour le compteur et l'infobulle de l'en-tête. */
+function filtresActifs() {
+  const f = S.filtres || FILTRES_VIDE;
+  const actifs = [];
+  if (String(f.nom || '').trim()) actifs.push(`Nom « ${String(f.nom).trim()} »`);
+  FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
+    const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
+    if (min === null && max === null) return;
+    const unite = champ === 'price' ? ' €' : '';
+    if (min !== null && max !== null) actifs.push(`${label} ${min}${unite} → ${max}${unite}`);
+    else if (min !== null) actifs.push(`${label} ≥ ${min}${unite}`);
+    else actifs.push(`${label} ≤ ${max}${unite}`);
+  });
+  return actifs;
+}
+
+/* Applique les filtres avancés à une carte. Une carte dont la valeur est
+   inconnue (créature non renseignée, prix absent) est écartée dès qu'une
+   borne est posée sur ce critère. */
+function filtreOK(card) {
+  if (!card) return false;
+  const f = S.filtres || FILTRES_VIDE;
+  const nom = String(f.nom || '').trim();
+  if (nom && !norm(card.name).includes(norm(nom))) return false;
+  for (const [kMin, kMax, champ] of FILTRES_BORNES) {
+    const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
+    if (min === null && max === null) continue;
+    const val = card[champ];
+    if (typeof val !== 'number' || isNaN(val)) return false;
+    if (min !== null && val < min) return false;
+    if (max !== null && val > max) return false;
+  }
+  return true;
+}
+
 function seedCollection() {
   DB.forEach(c => {
     let q = c.price > 20 ? 1 : (c.price > 6 ? 2 : 3);
@@ -76,7 +140,7 @@ function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12};
+const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13};
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
@@ -111,6 +175,7 @@ function getCardOrAnalyzedRec(rec) {
   if (rec[CH.ID_COUL] !== undefined) card.identity = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
   card.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) card.force = rec[CH.FORCE];
+  if (rec[CH.ENDURANCE] != null) card.endurance = rec[CH.ENDURANCE];
   rec._card = card;
   return card;
 }
