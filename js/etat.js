@@ -45,9 +45,10 @@ const S = {
   enriching: false,
   images: true,
   imagesFailed: false,
-  edhrec: {slug:null, status:'idle', data:null, error:null},
+  edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
   csb: {sig:null, status:'idle', data:null, error:null},
-  csbRelay: ''
+  csbRelay: '',
+  headerCompact: (typeof localStorage !== 'undefined' && localStorage.getItem('mtg_compact_header') === '1') || (typeof window !== 'undefined' && window.innerWidth <= 640)
 };
 
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});

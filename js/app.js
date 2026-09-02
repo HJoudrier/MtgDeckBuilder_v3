@@ -63,6 +63,28 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'toggleHeader') {
+    S.headerCompact = !S.headerCompact;
+    try {
+      localStorage.setItem('mtg_compact_header', S.headerCompact ? '1' : '0');
+    } catch(e) {}
+    renderTop();
+    return;
+  }
+
+  if (act === 'gotoA') {
+    const secA = document.getElementById('secA');
+    if (secA) {
+      if (!secA.classList.contains('open')) {
+        secA.classList.add('open');
+        const head = secA.querySelector('.sec-head');
+        if (head) head.setAttribute('aria-expanded', 'true');
+      }
+      secA.scrollIntoView({behavior:'smooth'});
+    }
+    return;
+  }
+
   if (act === 'filtreRole') {
     const r = b.dataset.role || '';
     S.filtreRole = (S.filtreRole === r) ? '' : r;
@@ -73,10 +95,14 @@ document.addEventListener('click', ev => {
 
   if (act === 'pageType') {
     const t = b.dataset.type, pas = b.dataset.pas;
-    const total = (currentSuggestions().filter(s => mainType(s.card) === t)).length;
+    const all = currentSuggestions();
+    const total = (t === 'edhrec')
+      ? all.filter(s => s.edhrec).length
+      : all.filter(s => mainType(s.card) === t).length;
+    const defaultLim = (t === 'edhrec') ? 8 : 6;
     if (pas === 'tout') S.limiteType[t] = total;
-    else if (pas === 'reduire') S.limiteType[t] = 6;
-    else S.limiteType[t] = Math.min(total, (S.limiteType[t] || 6) + parseInt(pas, 10));
+    else if (pas === 'reduire') S.limiteType[t] = defaultLim;
+    else S.limiteType[t] = Math.min(total, (S.limiteType[t] || defaultLim) + parseInt(pas, 10));
     refreshSuggestions();
     return;
   }

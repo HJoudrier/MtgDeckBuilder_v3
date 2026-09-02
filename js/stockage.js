@@ -57,6 +57,7 @@ function snapshot() {
     csbRelay: S.csbRelay,
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
+    headerCompact: S.headerCompact,
     cartes,
     enrich
   };
@@ -142,6 +143,7 @@ function restore(d) {
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
+  if (typeof d.headerCompact === 'boolean') S.headerCompact = d.headerCompact;
   return true;
 }
 

@@ -171,26 +171,36 @@ function cardTile(e, ctx) {
   const isCmd = S.commander === c.name;
   const img = S.images && (c.imgN || c.img);
   const note = ctx === 'deck' ? NOTES_DECK.get(c.name) : null;
-  const scoreInfo = note ? `<span class="score-deck" title="${esc((note.reasons||[]).slice(0,3).join(' · '))}">★ ${note.score.toFixed(1)}</span>` : '';
   const face = faceVisible(c);
-  const dispoTxt = ctx === 'deck'
-    ? (dispo < 0 ? `<span class="achatbadge">à acheter (${-dispo})</span>` : '')
-    : (dispo <= 0 ? `<span class="small muted" style="font-size:9.5px">(0 dispo)</span>` : '');
+  const isHors = dispo < 0 || (S.collection.get(c.name) || 0) <= 0;
+
+  let tagsHTML = '';
+  if (ctx === 'deck' && note) {
+    const n = (note.partners || []).length;
+    const tags = [
+      n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : '',
+      isHors ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
+      note.combos && note.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
+      note.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''
+    ].filter(Boolean).join('');
+    if (tags) tagsHTML = `<div class="tags">${tags}</div>`;
+  }
+
+  const scoreHTML = (ctx === 'deck' && note)
+    ? `<div class="score-line mono small muted" title="${esc((note.reasons||[]).slice(0,3).join(' · '))}">score ${note.score.toFixed(1)}</div>`
+    : '';
 
   return `<div class="cardT card ${img?'withimg':''} ${dispo<=0?'zero':''} ${isCmd?'cmd':''} ${ctx==='deck'&&dispo<0?'achat':''}" data-card="${esc(c.name)}" data-ctx="${ctx}">
     ${isCmd ? `<span class="cmdbadge">Commandant</span>` : ''}
     ${img ? `<div class="imgwrap">
       <img class="cimg" src="${esc(face)}" alt="${esc(c.name)}" loading="lazy" decoding="async">
       ${aDeuxFaces(c) ? `<button type="button" class="badge" data-act="flip" data-name="${esc(c.name)}" title="Afficher l'autre face">↻ Face</button>` : ''}
-    </div>` : ''}
-    <div class="cname">${esc(c.name)}</div>
-    <div class="costs">${manaHTML(c, true)}</div>
-    <div class="ctype">${esc(c.type)}</div>
+    </div>` : `<div class="cname">${esc(c.name)}</div>`}
+    ${scoreHTML}
+    ${tagsHTML}
     <div class="foot bot">
       <span>${ctx==='deck'?`×${e.qty}`:`${e.qty} ex.`}</span>
       <span class="mono">${eur(c.price)}</span>
-      ${scoreInfo}
-      ${dispoTxt}
       <div class="qty acts" style="margin-left:auto">
         <button class="btn sm" data-act="fiche" data-name="${esc(c.name)}" title="Fiche complète">i</button>
         ${ctx==='collection'
@@ -372,7 +382,10 @@ function statsCatalogue() {
 
 function renderTop() {
   const topStats = document.getElementById('topStats');
+  const topHeader = document.getElementById('topHeader');
+  if (topHeader) topHeader.classList.toggle('compact', !!S.headerCompact);
   if (!topStats) return;
+
   const dCount = deckSize(), f = fmt();
   const allCards = collectionCards();
   const cDistinct = allCards.length;
@@ -393,21 +406,62 @@ function renderTop() {
   const isLegal = leg.length === 0;
 
   const gName = nomCombinaisonCouleurs(S.colors);
-  const manaIcons = activeFilterManaHTML();
+  const COLS = [
+    ['W', 'Blanc ({W})'],
+    ['U', 'Bleu ({U})'],
+    ['B', 'Noir ({B})'],
+    ['R', 'Rouge ({R})'],
+    ['G', 'Vert ({G})'],
+    ['C', 'Incolore ({C})']
+  ];
 
-  topStats.innerHTML = `
-    <span class="pill" id="pillFiltre" title="Filtre couleur actif et guilde/combinaison associée">Filtre <span style="display:inline-flex;align-items:center;gap:2px">${manaIcons}</span> <b>${esc(gName)}</b></span>
-    <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
-    <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>
-    <span class="pill" id="pillDeck" title="Format et cartes dans le deck">Format <b>${f.label}</b> · Deck <b>${dCount}/${f.size}</b>${dCount === f.size ? (isLegal ? ' <span style="color:var(--ok)">✓</span>' : ' <span style="color:var(--warn)" title="Règles non respectées">⚠</span>') : ''}</span>
-    ${S.commander ? `<button type="button" class="pill" data-act="fiche" data-name="${esc(S.commander)}" style="cursor:pointer" title="Commandant désigné (cliquer pour voir la fiche)">Cmd <b>${esc(S.commander)}</b></button>` : ''}
-    <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
-    ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
-    ${S.budget.total > 0 ? `<span class="pill" id="pillBudget" title="Budget restant">Budget <b>${eur(Math.max(0, left))}</b></span>` : ''}
-    ${pillSauvegarde()}
-    <button type="button" class="btn sm" data-act="toggleImages" aria-pressed="${S.images}" title="Afficher ou masquer les visuels Scryfall">Visuels</button>
-    <button type="button" class="btn sm" data-act="exportDeck" title="Exporter le deck au format MTGO, CSV ou JSON">Exporter</button>
+  const manaBarHTML = `
+    <div class="head-colors" title="Filtre couleur actif (cliquer pour activer/désactiver une couleur)">
+      <div class="head-mana-bar">
+        ${COLS.map(([c, title]) => `
+          <button type="button" class="mana-btn sm" data-color="${c}" aria-pressed="${S.colors.has(c)}" title="${title}">
+            ${symBg(c)}
+          </button>`).join('')}
+      </div>
+      <button type="button" class="pill head-combo" data-act="gotoA" title="Combinaison active : ${esc(gName)} (cliquer pour voir la section A)">
+        <b>${esc(gName)}</b>
+      </button>
+    </div>
   `;
+
+  const deckPillHTML = `
+    <span class="pill" id="pillDeck" title="Format et cartes dans le deck">Format <b>${f.label}</b> · Deck <b>${dCount}/${f.size}</b>${dCount === f.size ? (isLegal ? ' <span style="color:var(--ok)">✓</span>' : ' <span style="color:var(--warn)" title="Règles non respectées">⚠</span>') : ''}</span>
+    ${S.commander ? `<button type="button" class="pill head-cmd" data-act="fiche" data-name="${esc(S.commander)}" style="cursor:pointer" title="Commandant désigné (cliquer pour voir la fiche)">Cmd <b>${esc(S.commander)}</b></button>` : ''}
+  `;
+
+  const toggleBtnHTML = `
+    <button type="button" class="btn sm head-toggle ${S.headerCompact ? 'is-compact' : ''}" data-act="toggleHeader" title="${S.headerCompact ? 'Déplier l\'en-tête (afficher toutes les statistiques et actions)' : 'Réduire l\'en-tête (navigation compacte)'}" aria-pressed="${!S.headerCompact}">
+      ${S.headerCompact ? '▾ Stats' : '▴ Réduire'}
+    </button>
+  `;
+
+  if (S.headerCompact) {
+    topStats.innerHTML = `
+      ${manaBarHTML}
+      ${deckPillHTML}
+      ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
+      ${toggleBtnHTML}
+    `;
+  } else {
+    topStats.innerHTML = `
+      ${manaBarHTML}
+      ${deckPillHTML}
+      <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
+      <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>
+      <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
+      ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
+      ${S.budget.total > 0 ? `<span class="pill" id="pillBudget" title="Budget restant">Budget <b>${eur(Math.max(0, left))}</b></span>` : ''}
+      ${pillSauvegarde()}
+      <button type="button" class="btn sm" data-act="toggleImages" aria-pressed="${S.images}" title="Afficher ou masquer les visuels Scryfall">Visuels</button>
+      <button type="button" class="btn sm" data-act="exportDeck" title="Exporter le deck au format MTGO, CSV ou JSON">Exporter</button>
+      ${toggleBtnHTML}
+    `;
+  }
 }
 
 function renderAll() {

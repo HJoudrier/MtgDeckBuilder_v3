@@ -162,10 +162,40 @@ function ficheHTML(card) {
     return `<span class="chip">${l}</span>`;
   });
 
-  const er = edhrecFor(card);
+  const erAll = edhrecAllFor(card);
+  // Tri pour placer le commandant sélectionné en tête de liste, suivi des commandants secondaires
+  erAll.sort((a, b) => {
+    const aSel = a.isSelected || a.role === 'principal' || (S.commander && norm(a.commandant) === norm(S.commander)) ? 1 : 0;
+    const bSel = b.isSelected || b.role === 'principal' || (S.commander && norm(b.commandant) === norm(S.commander)) ? 1 : 0;
+    if (aSel !== bSel) return bSel - aSel;
+    return (b.synergy * 10 + b.inclusion * 8) - (a.synergy * 10 + a.inclusion * 8);
+  });
+
+  const edhrecTags = erAll.map(erItem => {
+    const isSelected = erItem.isSelected || erItem.role === 'principal' || (S.commander && norm(erItem.commandant) === norm(S.commander));
+    const pct = Math.round(erItem.inclusion * 100);
+    const synVal = Math.abs(Math.round(erItem.synergy * 100));
+    const synSign = erItem.synergy >= 0 ? '+' : '−';
+    const tagContent = `${pct} % apparition / ${synSign}${synVal} % synergie`;
+
+    if (isSelected) {
+      return `<span class="tag edhrec-tag selected" style="border-color:#57c9c4;color:#57c9c4;background:rgba(87,201,196,.18);font-weight:600;padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant sélectionné : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">★ ${esc(erItem.commandant)} ${tagContent}</span>`;
+    } else {
+      return `<span class="tag edhrec-tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.08);padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant secondaire : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">${esc(erItem.commandant)} ${tagContent}</span>`;
+    }
+  });
+
   const pourquoi = [];
   if (sug && sug.reasons.length) sug.reasons.forEach(r => pourquoi.push(r));
-  else if (er) pourquoi.push(`EDHREC : jouée dans ${Math.round(er.inclusion*100)} % des decks ${S.commander}, synergie ${er.synergy>=0?'+':'−'}${Math.abs(Math.round(er.synergy*100))} %`);
+  else if (erAll.length) {
+    erAll.forEach(erItem => {
+      const isPrim = erItem.isSelected || erItem.role === 'principal' || (S.commander && norm(erItem.commandant) === norm(S.commander));
+      const cmdLabel = isPrim ? `★ commandant ${erItem.commandant}` : `commandant secondaire ${erItem.commandant}`;
+      const synSign = erItem.synergy >= 0 ? '+' : '−';
+      const synVal = Math.abs(Math.round(erItem.synergy * 100));
+      pourquoi.push(`EDHREC (${cmdLabel}) : ${Math.round(erItem.inclusion*100)} % apparition / ${synSign}${synVal} % synergie`);
+    });
+  }
   else {
     if (partD.length) pourquoi.push(`se branche à ${partD.length} carte(s) déjà présentes dans le deck`);
     card.cats.forEach(c => {
@@ -203,7 +233,8 @@ function ficheHTML(card) {
       <div class="meta">
         <div class="costs" style="margin-bottom:4px">${manaHTML(card)}</div>
         <div class="small muted">${esc(card.type)}${card.cmc?` · CMC ${card.cmc}`:''} · ${eur(card.price)}${card.price?' (tendance Cardmarket)':''}</div>
-        <div class="chips" style="margin-top:8px">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
+        ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
+        <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
         <div class="otext">${esc((card.text||'(texte non disponible)').replace(/ \/\/ /g,'\n'))}</div>
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`

@@ -365,6 +365,10 @@ function commandantsPossibles() {
   return deckEntries().map(e => e.card).filter(peutCommander);
 }
 
+function commandantsSecondaires() {
+  return deckEntries().map(e => e.card).filter(c => peutCommander(c) && (!S.commander || c.name !== S.commander));
+}
+
 function mainType(c) {
   const t = c.type.toLowerCase().split(' // ')[0];
   if (c.isToken || /\btoken\b/.test(t)) return 'Jeton';

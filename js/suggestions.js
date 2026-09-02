@@ -130,10 +130,26 @@ function noteCarte(p, X) {
     reasons.unshift(`combo connu : avec ${c0.cartes.filter(n=>norm(n)!==norm(c.name)).join(' + ')}${c0.produit.length?` → ${c0.produit.slice(0,2).join(', ')}`:''}${combos.length>1?` (et ${combos.length-1} autre${combos.length>2?'s':''})`:''}`);
   }
 
+  const erAll = edhrecAllFor(c);
   const er = edhrecFor(c);
-  if (er) {
-    score += 3 + er.inclusion * 8 + Math.max(0, er.synergy) * 10;
-    reasons.push(`EDHREC : jouée dans ${Math.round(er.inclusion*100)} % des decks ${S.commander}, synergie ${er.synergy>=0?'+':'−'}${Math.abs(Math.round(er.synergy*100))} %`);
+  erAll.sort((a, b) => {
+    const aSel = a.isSelected || a.role === 'principal' || (S.commander && norm(a.commandant) === norm(S.commander)) ? 1 : 0;
+    const bSel = b.isSelected || b.role === 'principal' || (S.commander && norm(b.commandant) === norm(S.commander)) ? 1 : 0;
+    if (aSel !== bSel) return bSel - aSel;
+    return (b.synergy * 10 + b.inclusion * 8) - (a.synergy * 10 + a.inclusion * 8);
+  });
+  if (erAll.length) {
+    erAll.forEach(erItem => {
+      const isPrim = erItem.isSelected || erItem.role === 'principal' || (S.commander && norm(erItem.commandant) === norm(S.commander));
+      const wInclusion = isPrim ? 8 : 5.5;
+      const wSynergy = isPrim ? 10 : 7;
+      const baseBonus = isPrim ? 3 : 1.8;
+      score += baseBonus + erItem.inclusion * wInclusion + Math.max(0, erItem.synergy) * wSynergy;
+      const cmdTag = isPrim ? `EDHREC (★ ${S.commander || erItem.commandant})` : `EDHREC (${erItem.commandant})`;
+      const synSign = erItem.synergy >= 0 ? '+' : '−';
+      const synVal = Math.abs(Math.round(erItem.synergy * 100));
+      reasons.push(`${cmdTag} : ${Math.round(erItem.inclusion*100)} % apparition / ${synSign}${synVal} % synergie`);
+    });
   }
 
   const actifs = noeudsActifs();
@@ -206,6 +222,31 @@ function currentSuggestions() {
     });
   }
 
+  const addRecToPool = (rec) => {
+    const c = find(rec.name);
+    if (!c || c.isToken || !colorOK(c)) return;
+    if ((S.deck.get(c.name) || 0) >= f.maxCopies) return;
+    if (pool.some(x => x.card.name === c.name)) return;
+    const inColl = (S.collection.get(c.name) || 0) > 0 && availableFor(c) > 0;
+    if (inColl) {
+      pool.push({card: c, source: 'collection'});
+    } else if (S.budget.total > 0 && S.budget.perCard > 0 && budgetLeft > 0) {
+      const o = bestOffer(c);
+      if (o && o.price > 0 && o.price <= budgetLeft) {
+        pool.push({card: c, source: 'achat', offer: o});
+      }
+    }
+  };
+
+  if (S.edhrec && S.edhrec.data && S.edhrec.data.map) {
+    S.edhrec.data.map.forEach(addRecToPool);
+  }
+  if (S.edhrec && S.edhrec.secondaires && S.edhrec.secondaires.length) {
+    S.edhrec.secondaires.forEach(sec => {
+      if (sec && sec.map) sec.map.forEach(addRecToPool);
+    });
+  }
+
   const res = [];
   pool.forEach(p => { const n = noteCarte(p, X); if (n) res.push(n); });
   return res.filter(r => r.score > 0).sort((a, b) => b.score - a.score);
@@ -269,62 +310,105 @@ function panneauEdhrec() {
   const f = fmt();
   if (!f.commander) return '';
   const e = S.edhrec, cmd = S.commander ? find(S.commander) : null;
-  if (!cmd) return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Désignez un commandant en section E pour croiser les suggestions avec les statistiques d'EDHREC.</div></div>`;
+  const secCmds = commandantsSecondaires();
+
+  if (!cmd && !secCmds.length) return `<div class="group"><h4>EDHREC</h4>
+    <div class="small muted">Désignez un commandant en section E ou ajoutez des créatures légendaires au deck pour croiser les suggestions avec les statistiques d'EDHREC.</div></div>`;
+
   if (e.status === 'loading') return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Chargement des statistiques de ${esc(cmd.name)}…</div></div>`;
-  if (e.status === 'error') return `<div class="group"><h4>EDHREC</h4>
-    <div class="small">Statistiques indisponibles (${esc(e.error||'')}). Le site n'autorise pas forcément la requête depuis un navigateur tiers, et la page peut ne pas exister pour ce commandant.</div>
+    <div class="small muted">Chargement des statistiques EDHREC${cmd ? ` pour ${esc(cmd.name)}` : ''}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}…</div></div>`;
+
+  if (e.status === 'error' && (!e.data && (!e.secondaires || !e.secondaires.length))) return `<div class="group"><h4>EDHREC</h4>
+    <div class="small">Statistiques indisponibles (${esc(e.error||'')}). Le site n'autorise pas forcément la requête depuis un navigateur tiers, ou la page peut ne pas exister pour ce commandant.</div>
     <div class="row" style="gap:6px;margin-top:6px">
-      <button class="btn sm" data-act="edhrec">Réessayer</button>
-      <a class="btn sm" href="https://edhrec.com/commanders/${esc(e.slug||edhrecSlug(cmd.name))}" target="_blank" rel="noopener">Ouvrir la page EDHREC ↗</a>
+      <button class="btn sm" data-act="edhrec" data-force="1">Réessayer</button>
+      ${cmd ? `<a class="btn sm" href="https://edhrec.com/commanders/${esc(e.slug||edhrecSlug(cmd.name))}" target="_blank" rel="noopener">Ouvrir la page EDHREC ↗</a>` : ''}
     </div></div>`;
-  if (e.status !== 'ok') return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Croiser les suggestions avec les decks recensés pour ${esc(cmd.name)}.</div>
+
+  if (e.status !== 'ok' && !e.data && (!e.secondaires || !e.secondaires.length)) return `<div class="group"><h4>EDHREC</h4>
+    <div class="small muted">Croiser les suggestions avec les decks recensés pour ${cmd ? esc(cmd.name) : 'vos commandants'}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}.</div>
     <div class="row" style="margin-top:6px"><button class="btn sm" data-act="edhrec">Charger les statistiques</button></div></div>`;
 
   const d = e.data;
-  const connues = [...new Set([...d.map.values()])];
-  const absentes = connues
-    .filter(r => { const c = find(r.name); return !c || ((S.collection.get(c.name) || 0) === 0 && !S.deck.has(c.name)); })
-    .sort((a, b) => b.inclusion - a.inclusion).slice(0, 6);
+  let absentes = [];
+  if (d && d.map) {
+    const connues = [...new Set([...d.map.values()])];
+    absentes = connues
+      .filter(r => { const c = find(r.name); return !c || ((S.collection.get(c.name) || 0) === 0 && !S.deck.has(c.name)); })
+      .sort((a, b) => b.inclusion - a.inclusion).slice(0, 6);
+  }
+
+  const secHTML = secCmds.length ? `
+    <div class="small" style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--line2)">
+      <b>Commandants secondaires dans le deck (${secCmds.length}) :</b>
+      <div class="row" style="gap:6px;margin-top:4px;flex-wrap:wrap">
+        ${secCmds.map(sc => {
+          const sd = (e.secondaires || []).find(x => x.commandant === sc.name);
+          if (sd && sd.status === 'ok') {
+            return `<a class="chip on" style="border-color:#57c9c4;color:#57c9c4;text-decoration:none" href="${esc(sd.url)}" target="_blank" rel="noopener" title="Voir sur EDHREC (${sd.total.toLocaleString('fr-FR')} decks)">★ ${esc(sc.name)} <span class="muted">(${sd.total.toLocaleString('fr-FR')} decks) ↗</span></a>`;
+          } else if (sd && sd.status === 'error') {
+            return `<span class="chip" title="${esc(sd.error||'non trouvé')}">★ ${esc(sc.name)} <span class="muted">(absent EDHREC)</span></span>`;
+          } else {
+            return `<span class="chip">★ ${esc(sc.name)} <span class="muted">(en attente)</span></span>`;
+          }
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  const titrePrincipal = d
+    ? `EDHREC — ${esc(d.commandant)} <span class="small muted">${d.total.toLocaleString('fr-FR')} decks recensés</span>`
+    : `EDHREC — Commandants secondaires (${(e.secondaires||[]).length})`;
 
   return `<div class="group" style="border-color:#2f6b68">
-    <h4>EDHREC — ${esc(d.commandant)} <span class="small muted">${d.total.toLocaleString('fr-FR')} decks recensés</span></h4>
-    <div class="small muted">Les cartes de vos suggestions présentes dans ces listes portent l'étiquette <b>edhrec</b> avec leur taux d'inclusion et leur synergie. La synergie compare la présence de la carte chez ce commandant à sa présence dans les autres decks de la même identité couleur.</div>
-    ${absentes.length ? `<div class="small" style="margin-top:8px">Fréquentes chez ce commandant mais absentes de votre collection :
+    <h4>${titrePrincipal}</h4>
+    <div class="small muted">Les cartes de vos suggestions recommandées par EDHREC (pour votre commandant principal ou vos commandants secondaires) portent l'étiquette <b>edhrec</b> avec leur taux d'inclusion et leur synergie.</div>
+    ${absentes.length ? `<div class="small" style="margin-top:8px">Fréquentes chez ${esc(d.commandant)} mais absentes de votre collection :
       ${absentes.map(r => `<span class="chip" title="synergie ${r.synergy>=0?'+':'−'}${Math.abs(Math.round(r.synergy*100))} %">${esc(r.name)} — ${Math.round(r.inclusion*100)} %</span>`).join(' ')}</div>` : ''}
+    ${secHTML}
     <div class="row" style="gap:6px;margin-top:8px">
       <button class="btn sm" data-act="edhrec" data-force="1">Rafraîchir</button>
-      <a class="btn sm" href="${esc(d.url)}" target="_blank" rel="noopener">Page EDHREC ↗</a>
+      ${d ? `<a class="btn sm" href="${esc(d.url)}" target="_blank" rel="noopener">Page EDHREC (${esc(d.commandant)}) ↗</a>` : ''}
     </div></div>`;
 }
 
 function sugRow(s) {
   const c = s.card, n = (s.partners || []).length;
-  const img = S.images && c.img;
+  const inDeck = S.deck.get(c.name) || 0;
+  const img = S.images && (c.imgN || c.img);
+  const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
+
+  const edhrecTag = (() => {
+    if (!s.edhrec) return '';
+    const isPrim = s.edhrec.role === 'principal';
+    const pct = Math.round(s.edhrec.inclusion * 100);
+    const syn = (s.edhrec.synergy >= 0 ? '+' : '−') + Math.abs(Math.round(s.edhrec.synergy * 100)) + ' %';
+    const secCount = (s.edhrec.secondaires || []).length;
+    if (isPrim) {
+      const secTxt = secCount > 0 ? ` (+${secCount} 2nd)` : '';
+      const secTitle = secCount > 0 ? ` · Également recommandé par : ${s.edhrec.secondaires.map(x=>x.commandant).join(', ')}` : '';
+      return `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="EDHREC (${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}${secTitle}">edhrec ${pct} % / ${syn}${secTxt}</span>`;
+    } else {
+      return `<span class="tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.12)" title="EDHREC (Commandant secondaire ${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}">★ ${esc(s.edhrec.commandant)} ${pct} %</span>`;
+    }
+  })();
+
+  const tags = [
+    n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : '',
+    s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
+    s.combos && s.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
+    edhrecTag
+  ].filter(Boolean).join('');
+
   return `<div class="sugT ${n?'lie':''} ${s.source!=='collection'?'hors':''}" data-card="${esc(c.name)}" data-ctx="suggestion"
       title="Cliquez pour la fiche complète">
     ${img ? (VISUELS_CHARGES.has(c.name)
       ? `<img class="cimg" src="${esc(c.imgN||c.img)}" alt="${esc(c.name)}" decoding="async" onerror="this.remove()">`
-      : `<img class="cimg attente" data-src="${esc(c.imgN||c.img)}" data-nom="${esc(c.name)}" alt="${esc(c.name)}" decoding="async" onerror="this.remove()">`) : ''}
-    <div style="display:flex;gap:4px;align-items:flex-start">
-      <div class="titre">${esc(c.name)}</div>
-      <div class="costs" style="margin-left:auto">${manaHTML(c, true)}</div>
-    </div>
-    <div class="tags">
-      ${n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)"
-        title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : ''}
-      ${s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : ''}
-      ${s.combos && s.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : ''}
-      ${s.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4"
-        title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${
-        Math.round(s.edhrec.inclusion*100)} % / ${s.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(s.edhrec.synergy*100))} %</span>` : ''}
-    </div>
-    <div class="why">${esc((s.reasons||[])[0] || 'complète le deck')}</div>
-    <div class="bas">
-      <span class="mono small muted">score ${s.score.toFixed(1)}</span>
-      ${s.source === 'achat' ? `<span class="buy">≈ ${eur(s.offer.price)}</span>` : ''}
+      : `<img class="cimg attente" data-src="${esc(c.imgN||c.img)}" data-nom="${esc(c.name)}" alt="${esc(c.name)}" decoding="async" onerror="this.remove()">`) : `<div class="titre">${esc(c.name)}</div>`}
+    <div class="score-line mono small muted">score ${s.score.toFixed(1)}</div>
+    ${tags ? `<div class="tags">${tags}</div>` : ''}
+    <div class="foot bot">
+      ${inDeck ? `<span title="${inDeck} exemplaire(s) dans le deck">×${inDeck}</span>` : ''}
+      <span class="mono">${s.source==='achat'?'≈ ':''}${eur(prix)}</span>
       <button class="btn sm ${s.source==='achat'?'':'pri'}" style="margin-left:auto"
         data-act="${s.source==='achat'?'buy':'toDeck'}" data-name="${esc(c.name)}">
         ${s.source === 'achat' ? 'Acheter' : 'Ajouter'}</button>
@@ -372,9 +456,43 @@ function listeSuggestions() {
   const toutes = currentSuggestions();
   const sug = S.filtreRole ? toutes.filter(x => x.card.cats.has(S.filtreRole)) : toutes;
   const graphPicks = S.focusNodes.size ? sug.filter(s => s.graph && s.graph.includes('noeud')) : [];
+  const edhrecPicks = sug.filter(s => s.edhrec);
   const byType = {};
   sug.forEach(s => { const t = mainType(s.card); (byType[t] = byType[t] || []).push(s); });
-  visuelsSuggestions(byType);
+  visuelsSuggestions(byType, edhrecPicks);
+
+  const edhrecHTML = (() => {
+    if (!edhrecPicks.length) {
+      if (S.edhrec && S.edhrec.status === 'ok' && (fmt().commander || commandantsSecondaires().length)) {
+        return `<div class="group" style="border-color:#2f6b68">
+          <h4>Suggestions depuis EDHREC</h4>
+          <div class="small muted">Aucune carte recommandée par EDHREC ne correspond à votre budget actuel (${S.budget.total>0?`${eur(S.budget.perCard)} max / carte`:'collection uniquement'}) ou à vos filtres.</div>
+        </div>`;
+      }
+      return '';
+    }
+    const total = edhrecPicks.length, max = Math.min(S.limiteType['edhrec'] || 8, total), reste = total - max;
+    const cmdNom = (S.edhrec && S.edhrec.data && S.edhrec.data.commandant) || S.commander || '';
+    const secList = (S.edhrec.secondaires || []).map(s => s.commandant);
+    const budInfo = S.budget.total > 0
+      ? `budget max ${eur(S.budget.perCard)} / carte`
+      : 'collection uniquement';
+    
+    const titreEDH = cmdNom
+      ? `Suggestions depuis EDHREC — ${esc(cmdNom)}${secList.length ? ` & ${secList.length} cmd 2nd` : ''}`
+      : `Suggestions depuis EDHREC — Commandants secondaires (${secList.map(esc).join(', ')})`;
+
+    return `<div class="group" style="border-color:#2f6b68">
+      <h4>${titreEDH}
+        <span class="small muted">${max} sur ${total} recommandation(s) · ${budInfo}</span></h4>
+      <div class="sugrid">${edhrecPicks.slice(0, max).map(s => sugRow(s)).join('')}</div>
+      ${total > 8 ? `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
+        ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="edhrec" data-pas="30">Afficher ${Math.min(30, reste)} de plus</button>` : ''}
+        ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="edhrec" data-pas="tout">Tout afficher (${total})</button>` : ''}
+        ${max > 8 ? `<button class="btn sm" data-act="pageType" data-type="edhrec" data-pas="reduire">Réduire</button>` : ''}
+      </div>` : ''}
+    </div>`;
+  })();
 
   const html = `
     ${S.filtreRole ? `<div class="warnbox" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -387,6 +505,7 @@ function listeSuggestions() {
           <span class="small muted">${noeudsActifs().map(n=>esc(NODE[n].label)).join(' + ')} — section D</span></h4>
         <div class="sugrid">${graphPicks.slice(0,8).map(s=>sugRow(s)).join('')}</div>
       </div>` : ''}
+    ${edhrecHTML}
     ${sug.length ? TYPE_ORDER.filter(t => byType[t]).map(t => {
       const total = byType[t].length, max = Math.min(S.limiteType[t] || 6, total), reste = total - max;
       return `<div class="group"><h4>${t} <span class="small muted">${max} sur ${total}</span></h4>
@@ -407,12 +526,15 @@ function listeSuggestions() {
       </span></div>` : ''}
     <div class="small muted">Le score combine les branchements avec le deck (un effet produit ici déclenche une capacité là-bas), les rôles manquants, la courbe de mana et la densité de capacités. Les cartes hors collection sont pénalisées et limitées par le budget.
       <br>Pas de connexion à votre compte : Cardmarket n'ouvre plus son API aux nouvelles applications et interdit le partage d'identifiants, et une page web ne peut pas signer les requêtes OAuth sans exposer le secret. L'atelier s'appuie donc sur les prix Cardmarket publiés par Scryfall, et vous renvoie vers la fiche du site pour l'achat.</div>`;
-  return {html, sug, graphPicks};
+  return {html, sug, graphPicks, edhrecPicks};
 }
 
-function visuelsSuggestions(byType) {
+function visuelsSuggestions(byType, edhrecPicks) {
   if (!S.images) return;
   const vus = [];
+  if (edhrecPicks && edhrecPicks.length) {
+    vus.push(...edhrecPicks.slice(0, Math.min(S.limiteType['edhrec'] || 8, edhrecPicks.length)));
+  }
   TYPE_ORDER.forEach(t => { if (byType[t]) vus.push(...byType[t].slice(0, Math.min(S.limiteType[t] || 6, byType[t].length))); });
   setTimeout(() => queueImages(vus.map(x => x.card)), 0);
   setTimeout(chargeVisuelsClasses, 0);
@@ -447,8 +569,8 @@ function chargeVisuelsClasses() {
   suivant();
 }
 
-function majHintF(sug, graphPicks) {
-  const edhrecCount = sug.filter(x => x.edhrec).length;
+function majHintF(sug, graphPicks, edhrecPicks) {
+  const edhrecCount = (edhrecPicks && edhrecPicks.length) !== undefined ? edhrecPicks.length : sug.filter(x => x.edhrec).length;
   const hintEl = document.getElementById('hintF');
   if (hintEl) {
     hintEl.textContent = `${sug.length} pistes${S.filtreRole?` · ${esc(CATLABEL[S.filtreRole]||S.filtreRole)}`:''}${graphPicks.length?` · ${graphPicks.length} via le graphe`:''}${edhrecCount?` · ${edhrecCount} sur EDHREC`:''}`;
@@ -460,7 +582,7 @@ function refreshSuggestions() {
   const liste = document.getElementById('sugList'); if (liste) liste.innerHTML = r.html;
   const bl = document.getElementById('budLine'); if (bl) bl.innerHTML = ligneBudget();
   const bb = document.getElementById('budBuys'); if (bb) bb.innerHTML = ligneAchats();
-  majHintF(r.sug, r.graphPicks);
+  majHintF(r.sug, r.graphPicks, r.edhrecPicks);
   renderTop();
 }
 
@@ -470,9 +592,11 @@ function renderF() {
   if (bodyEl) {
     bodyEl.innerHTML = `${panneauEdhrec()}${panneauAchats()}<div id="sugList">${r.html}</div>`;
   }
-  majHintF(r.sug, r.graphPicks);
-  if (fmt().commander && S.commander && typeof fetch === 'function'
-     && S.edhrec.slug !== edhrecSlug(S.commander) && S.edhrec.status !== 'loading') {
+  majHintF(r.sug, r.graphPicks, r.edhrecPicks);
+  const secCmds = commandantsSecondaires();
+  const cmdSig = (S.commander || '') + '::' + secCmds.map(c => c.name).sort().join('|');
+  if (fmt().commander && (S.commander || secCmds.length) && typeof fetch === 'function'
+     && S.edhrec.cmdSignature !== cmdSig && S.edhrec.status !== 'loading') {
     setTimeout(() => loadEdhrec(), 0);
   }
 }
