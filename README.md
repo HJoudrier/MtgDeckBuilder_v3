@@ -102,9 +102,10 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
 ### `js/etat.js` — État et filtrage
 
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
-C'est aussi ici que vivent les filtres avancés de l'en-tête (`S.filtres` : nom, force, endurance, coût de mana, prix).
+C'est aussi ici que vivent les filtres de l'en-tête : la recherche libre (`S.search`), le type de carte
+(`S.typeFilter`) et les critères chiffrés de `S.filtres` (nom, force, endurance, coût de mana, prix).
 
-*13 fonction(s), 7 Ko*
+*16 fonction(s), 8 Ko*
 
 Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
 
@@ -114,9 +115,12 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la section A à une carte. |
-| `filtreOK(card)` | Applique les filtres avancés (nom, force, endurance, coût, prix) à une carte. |
-| `filtresActifs()` | Libellés des filtres avancés en vigueur, pour le compteur et les puces. |
-| `reinitFiltres()` | Remet tous les filtres avancés à vide. |
+| `filtreOK(card)` | Applique les filtres chiffrés (nom, force, endurance, coût, prix) à une carte. |
+| `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
+| `texteFiltresActifs(sep)` | Ces mêmes libellés mis bout à bout, pour les infobulles et les résumés. |
+| `majFiltre(cle,valeur)` | Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. |
+| `effacerFiltre(cles)` | Retire un filtre depuis la croix de sa puce. |
+| `reinitFiltres()` | Remet tous les filtres à vide, recherche et type compris. |
 | `nombreFiltre(v)` | Lit une borne numérique saisie ; renvoie `null` si le champ est vide. |
 | `collectionCards()` | Collection sous forme de paires carte / quantité. |
 | `filtered()` | Collection filtrée puis triée selon les réglages courants. |
@@ -289,7 +293,7 @@ Affichage en grille ou en liste, import MTGO par fichier ou par collage, recherc
 
 | Fonction | Rôle |
 |---|---|
-| `renderB()` | Rend la collection, en grille ou en liste, avec pagination. |
+| `renderB()` | Rend la collection, en grille ou en liste, avec pagination ; les filtres se règlent dans l'en-tête. |
 | `parseMtgoList(txt)` | Lit une liste MTGO : quantités, éditions, réserve, commandant. |
 | `openImport(cible)` | Boîte d'import, par fichier, glisser-déposer ou collage. |
 | `ajouterCarte(c,q,cible,completer)` | Ajoute une carte à la collection ou au deck. |
@@ -341,9 +345,9 @@ Données : `RETOURNEES`
 | `renderA()` | Rend la section des filtres et du format. |
 | `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
-| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres » et état de sauvegarde. |
+| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
-| `corpsFiltres()` | Contenu de cette fenêtre : nom, force, endurance, coût de mana, prix. |
+| `corpsFiltres()` | Contenu de cette fenêtre : recherche, type, nom, force, endurance, coût de mana, prix. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
 | `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
@@ -374,7 +378,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 186 fonctions au total, réparties en 14 modules.
+- 189 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes.

@@ -404,6 +404,17 @@ function ligneFiltre(kMin, kMax, label, aide, pas, min) {
 function corpsFiltres() {
   const f = S.filtres;
   return `<div class="field">
+      <label class="lab" for="f_search">Recherche</label>
+      <input type="text" id="f_search" data-filtre="search" value="${esc(S.search)}" placeholder="nom, type ou texte de la carte…" autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="lab" for="f_typeFilter">Type de carte</label>
+      <select id="f_typeFilter" data-filtre="typeFilter">
+        <option value="">Tous les types</option>
+        ${TYPE_ORDER.map(t => `<option value="${esc(t)}" ${S.typeFilter === t ? 'selected' : ''}>${esc(t)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field">
       <label class="lab" for="f_nom">Nom de la carte</label>
       <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>
@@ -413,8 +424,8 @@ function corpsFiltres() {
       ${ligneFiltre('cmcMin', 'cmcMax', 'Coût de mana', "Valeur de mana totale de la carte.", '1', 0)}
       ${ligneFiltre('prixMin', 'prixMax', 'Prix (€)', "Prix unitaire estimé, en euros.", 'any', 0)}
     </div>
-    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées.</div>
-    <div class="small muted">Ces filtres s'ajoutent aux couleurs de la section A et à la recherche de la section B ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
+    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. La recherche porte sur le nom, le type et le texte ; le champ « Nom » ne regarde que le nom. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées.</div>
+    <div class="small muted">Ces filtres s'ajoutent aux couleurs de la section A ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }
 
@@ -425,7 +436,7 @@ function resumeFiltres() {
   const total = collectionCards();
   const actifs = filtresActifs();
   return `<b>${list.length}</b> carte(s) différentes retenues sur ${total.length} · ${ex} exemplaire(s)
-    · ${actifs.length ? `${actifs.length} filtre(s) avancé(s) : ${esc(actifs.join(' · '))}` : 'aucun filtre avancé actif'}`;
+    · ${actifs.length ? `${actifs.length} filtre(s) : ${esc(texteFiltresActifs())}` : 'aucun filtre actif'}`;
 }
 
 function majResumeFiltres() {
@@ -516,10 +527,20 @@ function renderTop() {
   const actifs = filtresActifs();
   const filtreBtnHTML = `
     <button type="button" class="btn sm head-filtre ${actifs.length ? 'actif' : ''}" data-act="filtres"
-      title="${actifs.length ? `Filtres actifs : ${esc(actifs.join(' · '))}` : 'Filtrer par nom, force, endurance, coût de mana ou prix'}">
-      ${FILTRE_ICONE} Filtres${actifs.length ? ` <span class="filtre-n">${actifs.length}</span>` : ''}
+      title="${actifs.length ? `Filtres actifs : ${esc(texteFiltresActifs())} (cliquer pour les modifier)` : 'Ajouter un filtre : recherche, type, nom, force, endurance, coût de mana ou prix'}">
+      ${FILTRE_ICONE} ${actifs.length ? `Filtres <span class="filtre-n">${actifs.length}</span>` : 'Filtres'}
     </button>
   `;
+
+  /* Tous les filtres en vigueur restent lisibles et retirables dans l'en-tête. */
+  const filtreChipsHTML = actifs.length ? `
+    <div class="head-filtres" role="group" aria-label="Filtres actifs">
+      ${actifs.map(a => `<span class="filtre-chip" title="${esc(a.texte)}">
+        <button type="button" class="chip-txt" data-act="filtres">${esc(a.texte)}</button>
+        <button type="button" class="chip-x" data-act="dropFiltre" data-cles="${esc(a.cles.join(','))}" title="Retirer ce filtre" aria-label="Retirer le filtre ${esc(a.texte)}">✕</button>
+      </span>`).join('')}
+      <button type="button" class="btn sm" data-act="resetFiltres" title="Retirer tous les filtres">Tout effacer</button>
+    </div>` : '';
 
   const toggleBtnHTML = `
     <button type="button" class="btn sm head-toggle ${S.headerCompact ? 'is-compact' : ''}" data-act="toggleHeader" title="${S.headerCompact ? 'Déplier l\'en-tête (afficher toutes les statistiques et actions)' : 'Réduire l\'en-tête (navigation compacte)'}" aria-pressed="${!S.headerCompact}">
@@ -531,6 +552,7 @@ function renderTop() {
     topStats.innerHTML = `
       ${manaBarHTML}
       ${filtreBtnHTML}
+      ${filtreChipsHTML}
       ${deckPillHTML}
       ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${toggleBtnHTML}
@@ -539,6 +561,7 @@ function renderTop() {
     topStats.innerHTML = `
       ${manaBarHTML}
       ${filtreBtnHTML}
+      ${filtreChipsHTML}
       ${deckPillHTML}
       <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
       <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>

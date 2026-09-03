@@ -55,8 +55,10 @@ const S = {
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});
 
 /* ---------------------------------------------------------------------
-   Filtres avancés de la fenêtre « Filtres » (en-tête) : nom, force,
-   endurance, coût de mana et prix. Chaque champ vide est neutre.
+   Filtres de la fenêtre « Filtres » (en-tête) : recherche libre, type de
+   carte, nom, force, endurance, coût de mana et prix. Chaque champ vide
+   est neutre. La recherche et le type vivent dans `S.search` et
+   `S.typeFilter` ; les autres critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
@@ -80,22 +82,46 @@ function nombreFiltre(v) {
 
 function reinitFiltres() {
   S.filtres = {...FILTRES_VIDE};
+  S.search = '';
+  S.typeFilter = '';
 }
 
-/* Libellés des filtres actifs, pour le compteur et l'infobulle de l'en-tête. */
+/* Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. */
+function majFiltre(cle, valeur) {
+  if (cle === 'search') S.search = valeur;
+  else if (cle === 'typeFilter') S.typeFilter = valeur;
+  else if (cle in FILTRES_VIDE) S.filtres[cle] = valeur;
+}
+
+/* Efface un filtre depuis sa puce dans l'en-tête. */
+function effacerFiltre(cles) {
+  (cles || []).forEach(k => majFiltre(k, ''));
+}
+
+/* Filtres en vigueur : un libellé et les clés à effacer pour chacun.
+   Sert au décompte, aux puces de l'en-tête et aux infobulles. */
 function filtresActifs() {
   const f = S.filtres || FILTRES_VIDE;
   const actifs = [];
-  if (String(f.nom || '').trim()) actifs.push(`Nom « ${String(f.nom).trim()} »`);
+  const recherche = String(S.search || '').trim();
+  if (recherche) actifs.push({cles:['search'], texte:`Recherche « ${recherche} »`});
+  if (S.typeFilter) actifs.push({cles:['typeFilter'], texte:`Type : ${S.typeFilter}`});
+  const nom = String(f.nom || '').trim();
+  if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
     const unite = champ === 'price' ? ' €' : '';
-    if (min !== null && max !== null) actifs.push(`${label} ${min}${unite} → ${max}${unite}`);
-    else if (min !== null) actifs.push(`${label} ≥ ${min}${unite}`);
-    else actifs.push(`${label} ≤ ${max}${unite}`);
+    const texte = (min !== null && max !== null) ? `${label} ${min}${unite} → ${max}${unite}`
+      : (min !== null ? `${label} ≥ ${min}${unite}` : `${label} ≤ ${max}${unite}`);
+    actifs.push({cles:[kMin, kMax], texte});
   });
   return actifs;
+}
+
+/* Libellés seuls, pour les infobulles et les phrases de résumé. */
+function texteFiltresActifs(sep) {
+  return filtresActifs().map(a => a.texte).join(sep || ' · ');
 }
 
 /* Applique les filtres avancés à une carte. Une carte dont la valeur est

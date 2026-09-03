@@ -77,12 +77,20 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'dropFiltre') {
+    effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean));
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    return;
+  }
+
   if (act === 'resetFiltres') {
     reinitFiltres();
     majFenetreFiltres();
     S.limitB = PAGE;
     renderAll();
-    toast('Filtres avancés réinitialisés.');
+    toast('Filtres réinitialisés.');
     return;
   }
 
@@ -481,14 +489,8 @@ document.addEventListener('mouseout', ev => {
 /* Saisie dans les champs de recherche et de filtres. */
 document.addEventListener('input', ev => {
   const t = ev.target;
-  if (t.id === 'q') {
-    S.search = t.value;
-    S.limitB = PAGE;
-    withFocus(() => renderB());
-    return;
-  }
   if (t.dataset.filtre) {
-    S.filtres[t.dataset.filtre] = t.value;
+    majFiltre(t.dataset.filtre, t.value);
     majResumeFiltres();
     planifierRenduFiltres();
     return;
@@ -521,10 +523,10 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
-  if (t.dataset.act === 'typeFilter') {
-    S.typeFilter = t.value;
-    S.limitB = PAGE;
-    renderB();
+  if (t.dataset.filtre) {
+    majFiltre(t.dataset.filtre, t.value);
+    majResumeFiltres();
+    planifierRenduFiltres();
     return;
   }
   if (t.dataset.act === 'sort') {
