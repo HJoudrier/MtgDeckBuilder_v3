@@ -363,6 +363,8 @@ Données : `RETOURNEES`
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `renderA()` | Rend la section des filtres et du format. |
 | `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
+| `ficheTexteHTML(card)` | Carte rendue en texte — coût, type, force/endurance, texte — à la place du visuel absent. |
+| `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
@@ -398,7 +400,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 225 fonctions au total, réparties en 14 modules.
+- 227 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes

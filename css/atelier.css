@@ -290,7 +290,6 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 /* ---------- panneau détail ---------- */
 .detail{border:1px solid var(--brass-d);border-radius:var(--r);background:linear-gradient(180deg,#241f33,#1c1826);padding:12px;margin-top:10px}
 .detail h3{font-size:16px;margin-bottom:2px}
-.otext{white-space:pre-line;font-size:12.5px;color:#cfc7e4;border-left:2px solid var(--line2);padding-left:9px;margin:8px 0}
 .chips{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}
 .chip{font-size:11px;padding:2px 7px;border-radius:99px;border:1px solid var(--line2);background:var(--panel2);color:var(--dim)}
 .chip.on{border-color:var(--brass);color:var(--brass)}
@@ -325,6 +324,19 @@ dialog.wide{max-width:min(760px,96vw)}
 .miniface img{width:100%;border-radius:4px;display:block;background:#191524}
 .miniface span{font-size:9.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:.04em}
 @media (max-width:520px){ .fiche .visuwrap{width:100%;max-width:300px;margin:0 auto} }
+/* carte rendue en texte, quand le visuel manque */
+.carte-texte{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;
+  border:1px solid var(--line2);border-radius:10px;padding:11px 12px;
+  background:linear-gradient(180deg,var(--panel2),var(--bg2));min-height:180px
+}
+.carte-texte .ct-h{display:flex;align-items:flex-start;gap:8px}
+.carte-texte .ct-nom{font-family:var(--display);font-size:15px;line-height:1.2;flex:1;min-width:0}
+.carte-texte .ct-h .costs{display:flex;gap:2px;flex-wrap:wrap;flex:0 0 auto}
+.carte-texte .ct-type{color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:6px}
+.carte-texte .ct-texte{font-size:12.5px;line-height:1.4;white-space:pre-line}
+.carte-texte .ct-pt{margin-top:auto;align-self:flex-end;font-size:14px;color:var(--txt)}
+
 .fiche .meta{flex:1;min-width:200px}
 .bloc{border-top:1px solid var(--line);padding-top:9px}
 .bloc>h4{margin:0 0 6px;font-family:var(--display);font-size:14px}

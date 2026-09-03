@@ -143,6 +143,31 @@ function buyCard(name) {
   toast(`${name} ajoutée au deck, comptée à l'achat : ${eur(o.price)} estimés (${o.condition} ou mieux, ${o.lang}).`);
 }
 
+/* Carte rendue en texte, à la place du visuel : coût, type, force et
+   endurance, coût converti et texte oracle. Sert quand l'image est
+   absente, désactivée, ou qu'elle n'a pas pu se charger. */
+function ficheTexteHTML(card) {
+  const pt = (card.force != null && card.endurance != null) ? `${card.force}/${card.endurance}` : '';
+  return `<div class="visuwrap">
+      <div class="carte-texte">
+        <div class="ct-h">
+          <span class="ct-nom">${esc(card.name)}</span>
+          <span class="costs">${manaHTML(card, true)}</span>
+        </div>
+        <div class="ct-type small">${esc(card.type)}${card.cmc ? ` · CMC ${card.cmc}` : ''}</div>
+        <div class="ct-texte">${esc((card.text || '(texte non disponible)').replace(/ \/\/ /g, '\n'))}</div>
+        ${pt ? `<div class="ct-pt mono">${pt}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+/* Le visuel n'a pas pu se charger : le texte prend sa place. */
+function ficheImageKO(img) {
+  const wrap = img && img.closest('.visuwrap');
+  const c = img && find(img.getAttribute('data-name') || '');
+  if (wrap && c) wrap.outerHTML = ficheTexteHTML(c);
+}
+
 function ficheHTML(card) {
   const deck = deckEntries().map(e => e.card);
   const dansDeck = S.deck.get(card.name) || 0;
@@ -223,16 +248,15 @@ function ficheHTML(card) {
 
   return `<div class="fiche">
       ${S.images && (card.imgL || card.imgN || card.img) ? `<div class="visuwrap">
-        <img class="visu" src="${esc(faceVisible(card,true))}" alt="${esc(card.name)}">
+        <img class="visu" src="${esc(faceVisible(card,true))}" alt="${esc(card.name)}" data-name="${esc(card.name)}" onerror="ficheImageKO(this)">
         ${aDeuxFaces(card) && autreFace(card) ? `<button type="button" class="miniface" data-act="flip" data-name="${esc(card.name)}"
             title="Afficher ${RETOURNEES.has(card.name)?'le recto':'le verso'}">
             <img src="${esc(autreFace(card))}" alt="">
             <span>${RETOURNEES.has(card.name)?'recto':'verso'}</span>
           </button>` : ''}
-      </div>` : ''}
+      </div>` : ficheTexteHTML(card)}
       <div class="meta">
-        <div class="costs" style="margin-bottom:4px">${manaHTML(card)}</div>
-        <div class="small muted">${esc(card.type)}${card.cmc?` · CMC ${card.cmc}`:''}${(card.force != null && card.endurance != null)?` · ${card.force}/${card.endurance}`:''} · ${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
+        <div class="small muted">${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
         <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
         ${(() => {
@@ -243,7 +267,6 @@ function ficheHTML(card) {
           return `<div class="chips" style="margin-top:4px">${det.map(d =>
             `<span class="chip arch${d.base ? ' base' : ''}" title="Archétype relevé : ${source(d)}">${esc(ARCHLABEL[d.id] || d.id)}${d.base ? ' ◆' : ''}</span>`).join(' ')}</div>`;
         })()}
-        <div class="otext">${esc((card.text||'(texte non disponible)').replace(/ \/\/ /g,'\n'))}</div>
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
           : (offre ? `hors collection — ≈ ${eur(offre.price)} sur Cardmarket (${offre.condition} ou mieux)` : 'hors collection et hors budget')}</div>
