@@ -444,25 +444,19 @@ function corpsFiltres() {
       </select>
     </div>
     <div class="field">
-      <label class="lab">Archétype</label>
-      <div class="archetypes">
-        ${ARCHETYPES.map(a => {
-          const th = themesArchetype(a.id);
-          const couvert = ARCH_BASE.index.size && th.length;
-          const infos = !ARCH_BASE.index.size ? ''
-            : (th.length ? ` · EDHREC : ${th.map(t => `${t.slug} (${t.n} cartes)`).join(', ')}`
-                         : ' · aucun thème EDHREC à ce nom : lecture par le texte seulement');
-          return `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${a.id}"
-            aria-pressed="${archetypesFiltre().includes(a.id)}" title="${esc(a.aide + infos)}">${esc(a.label)}${couvert ? ' <span class="arch-src">◆</span>' : ''}</button>`;
-        }).join('')}
-      </div>
+      <label class="lab" for="f_archQ">Archétype</label>
+      ${archetypesFiltre().length ? `<div class="archetypes">${archetypesFiltre().map(slug =>
+        `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(slug)}" aria-pressed="true"
+          title="Retirer cet archétype">${esc(libelleArchetype(slug))} ✕</button>`).join('')}</div>` : ''}
+      <input type="text" id="f_archQ" data-archq placeholder="rechercher un archétype…" value="${esc(archRecherche)}" autocomplete="off">
+      <div class="archetypes">${listeArchetypesHTML()}</div>
       <div class="row" style="gap:6px;align-items:center;margin-top:2px">
         <span class="lab">Source</span>
         <div class="seg">
           ${ARCH_SOURCES.map(([k, l]) => `<button type="button" data-asrc="${k}" aria-pressed="${sourceArchetypes() === k}">${l}</button>`).join('')}
         </div>
         <button type="button" class="btn sm" data-act="chargerArch" ${ARCH_BASE.etat === 'chargement' ? 'disabled' : ''}>
-          ${ARCH_BASE.index.size ? 'Recharger EDHREC' : 'Charger depuis EDHREC'}
+          ${ARCH_BASE.liste.length ? 'Recharger la liste EDHREC' : 'Charger la liste EDHREC'}
         </button>
       </div>
       <div class="small muted">Une carte est retenue si elle relève d'au moins un archétype coché.</div>
@@ -487,6 +481,40 @@ function corpsFiltres() {
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }
 
+let archRecherche = '';
+const ARCH_LISTE_MAX = 30;
+
+/* Boutons proposés : la recherche d'abord, sinon les archétypes lus dans
+   le texte puis les thèmes EDHREC les plus fournis. */
+function listeArchetypesHTML() {
+  const choisis = new Set(archetypesFiltre());
+  const q = loose(archRecherche);
+  let liste = archetypesDisponibles().filter(a => !choisis.has(a.slug));
+  if (q) liste = liste.filter(a => loose(a.label).includes(q) || loose(a.slug).includes(q));
+  else liste = liste.sort((a, b) => (b.texte ? 1 : 0) - (a.texte ? 1 : 0) || (b.n || 0) - (a.n || 0));
+  const total = liste.length;
+  const vus = liste.slice(0, ARCH_LISTE_MAX);
+  const reste = total - vus.length;
+  return vus.map(a => {
+    const charge = ARCH_BASE.themes[a.slug];
+    const infos = [a.aide, a.texte ? 'lu aussi dans le texte des cartes' : '',
+      a.base ? `thème EDHREC${a.n ? ` · ${a.n} decks` : ''}${charge ? ` · ${charge.n} cartes chargées` : ''}` : '']
+      .filter(Boolean).join(' · ');
+    return `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(a.slug)}"
+      aria-pressed="false" title="${esc(infos)}">${esc(a.label)}${a.texte ? ' <span class="arch-src">✎</span>' : ''}</button>`;
+  }).join('') + (reste > 0
+    ? `<span class="small muted" style="align-self:center">+ ${reste} autre(s) — affinez la recherche</span>`
+    : (total ? '' : '<span class="small muted">aucun archétype à ce nom</span>'));
+}
+
+/* Rafraîchit la liste proposée sans réécrire la fenêtre : la frappe
+   dans le champ de recherche garde son curseur. */
+function majListeArchetypes() {
+  const champ = document.getElementById('f_archQ');
+  const zone = champ && champ.nextElementSibling;
+  if (zone && zone.classList.contains('archetypes')) zone.innerHTML = listeArchetypesHTML();
+}
+
 /* État de la base d'archétypes extérieure, sous les boutons. */
 function etatArchetypes() {
   if (ARCH_BASE.etat === 'chargement') return 'Chargement des thèmes EDHREC…';
@@ -496,20 +524,17 @@ function etatArchetypes() {
       : '';
     return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.${essais}`;
   }
-  if (ARCH_BASE.index.size) {
-    const nbThemes = Object.values(ARCH_BASE.themes || {}).reduce((n, l) => n + l.length, 0);
+  if (ARCH_BASE.liste.length) {
     const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';
-    const sans = archetypesSansTheme();
-    const manques = ARCH_BASE.manques || [];
-    return `Deux lectures se complètent : le texte de la carte, lu localement, et ${ARCH_BASE.index.size.toLocaleString('fr-FR')} cartes
-      référencées par ${nbThemes} thème(s) EDHREC${date ? `, relevés le ${date}` : ''}. Les archétypes marqués ◆ sont couverts par les deux.
-      ${manques.length ? `<br>${manques.length} nom(s) de thème sans page chez EDHREC${sans.length
-        ? ` — ${sans.length} archétype(s) en restent au seul texte : ${esc(sans.map(a => a.label).join(', '))}`
-        : ', sans conséquence : chacun de ces archétypes est couvert par un autre thème'}.
-        <span class="mono" style="font-size:10.5px">${esc(manques.join(', '))}</span>` : ''}`;
+    const charges = Object.keys(ARCH_BASE.themes).length;
+    const enCours = ARCH_BASE.enCours.size;
+    return `Liste établie par EDHREC : ${ARCH_BASE.liste.length.toLocaleString('fr-FR')} thème(s)${date ? `, relevés le ${date}` : ''}.
+      Les cartes d'un thème sont cherchées à sa première utilisation${charges ? ` — ${charges} déjà chargé(s), ${ARCH_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${enCours ? ` · ${enCours} en cours…` : ''}.
+      Les archétypes marqués ✎ sont en plus lus dans le texte des cartes, localement.`;
   }
-  return `Seul le texte de la carte est lu pour l'instant. « Charger depuis EDHREC » ajoute les rôles établis par la communauté :
-    une trentaine de requêtes en une fois, puis le résultat reste en cache sur cet appareil.`;
+  return `Seul le texte de la carte est lu pour l'instant : quinze archétypes, marqués ✎, que l'atelier sait reconnaître seul.
+    « Charger la liste EDHREC » remplace cette liste par les thèmes publiés par EDHREC — une requête pour la liste,
+    puis une par thème à sa première utilisation, gardées en cache sur cet appareil.`;
 }
 
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */

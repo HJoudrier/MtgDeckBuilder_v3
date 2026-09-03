@@ -35,7 +35,7 @@ document.addEventListener('click', ev => {
 
   if (b.dataset.asrc) {
     S.filtres.archSource = b.dataset.asrc;
-    if (b.dataset.asrc !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle') chargerArchetypesEdhrec();
+    archetypesAChargerEdhrec().forEach(slug => chargerThemeEdhrec(slug));
     majFenetreFiltres();
     S.limitB = PAGE;
     renderAll();
@@ -95,9 +95,8 @@ document.addEventListener('click', ev => {
 
   if (act === 'toggleArch') {
     basculerArchetype(b.dataset.arch);
-    // premier archétype coché : la base extérieure se charge d'elle-même
-    if (sourceArchetypes() !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle'
-        && archetypesFiltre().length) chargerArchetypesEdhrec();
+    // les cartes du thème coché sont cherchées à la demande
+    archetypesAChargerEdhrec().forEach(slug => chargerThemeEdhrec(slug));
     majFenetreFiltres();
     majResumeFiltres();
     S.limitB = PAGE;
@@ -511,6 +510,11 @@ document.addEventListener('mouseout', ev => {
 /* Saisie dans les champs de recherche et de filtres. */
 document.addEventListener('input', ev => {
   const t = ev.target;
+  if (t.dataset.archq !== undefined) {
+    archRecherche = t.value;
+    majListeArchetypes();
+    return;
+  }
   if (t.dataset.filtre) {
     majFiltre(t.dataset.filtre, t.value);
     majResumeFiltres();

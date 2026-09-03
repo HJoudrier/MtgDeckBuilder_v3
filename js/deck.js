@@ -265,7 +265,7 @@ function ficheHTML(card) {
           const source = d => d.texte && d.base ? 'texte de la carte et thèmes EDHREC'
             : (d.base ? 'thèmes EDHREC' : 'texte de la carte');
           return `<div class="chips" style="margin-top:4px">${det.map(d =>
-            `<span class="chip arch${d.base ? ' base' : ''}" title="Archétype relevé : ${source(d)}">${esc(ARCHLABEL[d.id] || d.id)}${d.base ? ' ◆' : ''}</span>`).join(' ')}</div>`;
+            `<span class="chip arch${d.base ? ' base' : ''}" title="Archétype relevé : ${source(d)}">${esc(libelleArchetype(d.id))}${d.base ? ' ◆' : ''}</span>`).join(' ')}</div>`;
         })()}
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`

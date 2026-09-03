@@ -226,7 +226,6 @@ async function loadEdhrec(force) {
 
 const ARCH_CLE_IDB = 'archetypes';
 const ARCH_PAUSE = 130;   // ms entre deux requêtes, par courtoisie envers EDHREC
-const ARCH_MAX_THEMES = 2; // thèmes retenus au plus par archétype
 
 /* json.edhrec.com est un dépôt de fichiers : une clé absente répond
    « AccessDenied », jamais 404. La forme d'adresse des pages de thème
@@ -356,94 +355,137 @@ function cartesDepuisIndex(index) {
 async function reprendreArchetypesEdhrec() {
   try {
     const memo = await idbLire(ARCH_CLE_IDB);
-    if (!memo || memo.v !== 1 || !memo.cartes) return false;
-    ARCH_BASE.index = indexDepuisCartes(memo.cartes);
+    if (!memo || memo.v !== 2) return false;
+    ARCH_BASE.index = indexDepuisCartes(memo.cartes || {});
     ARCH_BASE.themes = memo.themes || {};
-    ARCH_BASE.manques = memo.manques || [];
+    ARCH_BASE.liste = memo.liste || [];
     ARCH_BASE.maj = memo.maj || null;
-    ARCH_BASE.etat = ARCH_BASE.index.size ? 'ok' : 'idle';
-    return ARCH_BASE.index.size > 0;
+    ARCH_BASE.etat = ARCH_BASE.liste.length ? 'ok' : 'idle';
+    return ARCH_BASE.liste.length > 0;
   } catch(err) {
     return false;
   }
 }
 
-/* Chargement des thèmes : une requête par slug, les échecs sont isolés. */
+/* Index des thèmes publiés par EDHREC : une requête, quelques centaines
+   d'entrées. Les cartes d'un thème ne sont cherchées qu'à la demande. */
+function urlIndexEdhrec(pre) {
+  return `${ARCH_HOTE}${pre}.json`;
+}
+
+/* Noms et libellés des thèmes, quelle que soit la variante de forme. */
+function themesPageEdhrec(j) {
+  const out = new Map();
+  const ajoute = x => {
+    if (!x) return;
+    const href = String(x.href || x.url || x.slug || x.value || '');
+    const slug = href.split('?')[0].replace(/\/+$/, '').split('/').filter(Boolean).pop();
+    if (!slug || /^https?:$/i.test(slug)) return;
+    const label = String(x.value || x.name || x.label || slug);
+    const n = x.count || x.num_decks || x.card_count || 0;
+    if (!out.has(slug)) out.set(slug, {slug, label, n});
+  };
+  const visite = v => {
+    if (Array.isArray(v)) return v.forEach(visite);
+    if (!v || typeof v !== 'object') return;
+    if (v.href || v.url) ajoute(v);
+    Object.values(v).forEach(visite);
+  };
+  visite((j && j.container && j.container.json_dict) || j);
+  return [...out.values()];
+}
+
+/* Cherche l'index, en partant du préfixe déjà validé pour les thèmes. */
+async function chargerListeArchetypesEdhrec(force) {
+  if (!force && ARCH_BASE.liste.length) return ARCH_BASE.liste;
+  const url = await formeThemeEdhrec();
+  if (!url) return [];
+  const pre = url('x').replace(ARCH_HOTE, '').replace(/\/?x(\/all)?\.json$/, '');
+  for (const candidat of [pre, pre + 's', 'themes', 'tags']) {
+    if (!candidat) continue;
+    try {
+      const r = await fetch(urlIndexEdhrec(candidat));
+      if (!r.ok) { ARCH_BASE.essais.push(`index ${candidat} → HTTP ${r.status}`); continue; }
+      const themes = themesPageEdhrec(await r.json())
+        .filter(t => t.slug && !/^(commanders?|cards?|decks?|articles?)$/i.test(t.slug));
+      ARCH_BASE.essais.push(`index ${candidat} → ${themes.length} thème(s)`);
+      if (themes.length >= 5) {
+        ARCH_BASE.liste = themes.sort((a, b) => (b.n || 0) - (a.n || 0) || a.label.localeCompare(b.label));
+        return ARCH_BASE.liste;
+      }
+    } catch(err) {
+      ARCH_BASE.essais.push(`index ${candidat} → ${err.message || 'échec réseau'}`);
+    }
+    await pauseEdhrec();
+  }
+  return [];
+}
+
+/* Cartes d'un thème, cherchées à la première utilisation puis gardées. */
+async function chargerThemeEdhrec(slug) {
+  if (!slug || ARCH_BASE.themes[slug] || ARCH_BASE.enCours.has(slug)) return;
+  const url = await formeThemeEdhrec();
+  if (!url) return;
+  ARCH_BASE.enCours.add(slug);
+  try {
+    const r = await fetch(url(slug));
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const noms = nomsPageEdhrec(await r.json());
+    noms.forEach(n => {
+      const s = ARCH_BASE.index.get(n) || new Set();
+      s.add(slug);
+      ARCH_BASE.index.set(n, s);
+    });
+    ARCH_BASE.themes[slug] = {n:noms.size};
+    ARCH_BASE.maj = Date.now();
+    sauverArchetypesEdhrec();
+  } catch(err) {
+    ARCH_BASE.themes[slug] = {n:0, erreur:err.message || 'échec'};
+  } finally {
+    ARCH_BASE.enCours.delete(slug);
+    if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
+    if (typeof renderAll === 'function') renderAll();
+  }
+}
+
+function sauverArchetypesEdhrec() {
+  idbEcrire(ARCH_CLE_IDB, {
+    v:2, maj:ARCH_BASE.maj, liste:ARCH_BASE.liste, themes:ARCH_BASE.themes,
+    cartes:cartesDepuisIndex(ARCH_BASE.index)
+  }).catch(() => {});
+}
+
+/* Chargement à la demande : l'index, puis les thèmes déjà cochés. */
 async function chargerArchetypesEdhrec(force) {
   if (ARCH_BASE.etat === 'chargement') return;
-  if (!force && ARCH_BASE.index.size) return;
   if (typeof fetch !== 'function') {
     ARCH_BASE.etat = 'erreur';
     ARCH_BASE.erreur = 'ce navigateur ne sait pas interroger EDHREC';
     return;
   }
-
   ARCH_BASE.etat = 'chargement';
   ARCH_BASE.erreur = '';
-  if (force) ARCH_BASE.forme = null;
+  if (force) { ARCH_BASE.forme = null; ARCH_BASE.liste = []; }
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
 
-  const url = await formeThemeEdhrec();
-  if (!url) {
+  const liste = await chargerListeArchetypesEdhrec(force);
+  if (!liste.length) {
     const hoteOK = await temoinEdhrec();
     ARCH_BASE.etat = 'erreur';
     ARCH_BASE.erreur = hoteOK
-      ? "les pages de thème ne sont pas à l'adresse attendue (l'hôte répond pourtant pour les commandants)"
+      ? "la liste des thèmes n'est pas à l'adresse attendue (l'hôte répond pourtant pour les commandants)"
       : 'EDHREC injoignable depuis ce navigateur (hors ligne, CORS ou accès bloqué)';
-    if (typeof console !== 'undefined' && console.info) {
-      console.info('Archétypes EDHREC — adresses essayées :\n' + (ARCH_BASE.essais || []).join('\n'));
-    }
-    if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
-    if (typeof toast === 'function') toast(`Archétypes EDHREC : ${ARCH_BASE.erreur}.`);
-    return;
-  }
-
-  const index = new Map();
-  const themes = {};
-  const manques = [];
-
-  for (const a of ARCHETYPES) {
-    const slugs = a.edhrec || [];
-    let retenus = 0;
-    for (const slug of slugs) {
-      if (retenus >= ARCH_MAX_THEMES) break;
-      try {
-        const r = await fetch(url(slug));
-        if (!r.ok) { manques.push(slug); continue; }
-        const noms = nomsPageEdhrec(await r.json());
-        if (!noms.size) continue;
-        noms.forEach(n => {
-          const s = index.get(n) || new Set();
-          s.add(a.id);
-          index.set(n, s);
-        });
-        themes[a.id] = (themes[a.id] || []).concat([{slug, n:noms.size}]);
-        retenus++;
-      } catch(err) {
-        manques.push(slug);
-      }
-      await pauseEdhrec();
-    }
-  }
-
-  if (!index.size) {
-    ARCH_BASE.etat = 'erreur';
-    ARCH_BASE.erreur = 'aucun thème lisible à cette adresse';
   } else {
-    ARCH_BASE.index = index;
-    ARCH_BASE.themes = themes;
-    ARCH_BASE.manques = manques;
-    ARCH_BASE.maj = Date.now();
     ARCH_BASE.etat = 'ok';
-    ARCH_BASE.erreur = '';
-    idbEcrire(ARCH_CLE_IDB, {v:1, maj:ARCH_BASE.maj, themes, manques, cartes:cartesDepuisIndex(index)}).catch(() => {});
+    ARCH_BASE.maj = Date.now();
+    sauverArchetypesEdhrec();
+    for (const slug of archetypesAChargerEdhrec()) await chargerThemeEdhrec(slug);
   }
-
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
   if (typeof renderAll === 'function') renderAll();
   if (typeof toast === 'function') {
     toast(ARCH_BASE.etat === 'ok'
-      ? `Archétypes EDHREC chargés : ${ARCH_BASE.index.size} cartes référencées.`
+      ? `${ARCH_BASE.liste.length} thèmes EDHREC disponibles.`
       : `Archétypes EDHREC : ${ARCH_BASE.erreur}.`);
   }
 }

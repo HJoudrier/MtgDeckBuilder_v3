@@ -81,24 +81,44 @@ const FILTRES_BORNES = [
    conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
    --------------------------------------------------------------------- */
 
-const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map(), forme:null, essais:[], manques:[]};
-
-/* Thèmes EDHREC retenus pour un archétype ; vide s'il n'en a aucun. */
-function themesArchetype(id) {
-  return ((ARCH_BASE.themes || {})[id]) || [];
-}
-
-/* Archétypes que la base extérieure ne couvre pas. */
-function archetypesSansTheme() {
-  if (!ARCH_BASE.index.size) return [];
-  return ARCHETYPES.filter(a => !themesArchetype(a.id).length);
-}
+const ARCH_BASE = {
+  etat:'idle',        // idle | chargement | ok | erreur
+  maj:null, erreur:'', forme:null, essais:[],
+  liste:[],           // thèmes publiés par EDHREC : {slug, label, n}
+  themes:{},          // thèmes dont la liste de cartes est chargée : slug -> {n}
+  index:new Map(),    // nom normalisé -> Set(slug)
+  enCours:new Set()   // thèmes en cours de chargement
+};
 
 const ARCH_SOURCES = [
   ['deux', 'Les deux'],
   ['texte', 'Texte de la carte'],
   ['base', 'EDHREC']
 ];
+
+/* Libellé d'un thème : le nôtre s'il en existe un, sinon celui d'EDHREC. */
+function libelleArchetype(slug) {
+  if (ARCH_TEXTE[slug]) return ARCH_TEXTE[slug].label;
+  const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
+  return (t && t.label) || slug;
+}
+
+/* Liste proposée dans la fenêtre : celle d'EDHREC dès qu'elle est
+   chargée, complétée par les quinze archétypes lus dans le texte ;
+   à défaut, ces quinze-là seuls. */
+function archetypesDisponibles() {
+  const vus = new Map();
+  (ARCH_BASE.liste || []).forEach(t => vus.set(t.slug, {
+    slug:t.slug, label:libelleArchetype(t.slug), n:t.n || 0,
+    texte:!!ARCH_TEXTE[t.slug], base:true, aide:(ARCH_TEXTE[t.slug] || {}).aide || ''
+  }));
+  ARCHETYPES.forEach(a => {
+    if (vus.has(a.id)) return;
+    vus.set(a.id, {slug:a.id, label:a.label, n:0, texte:true,
+      base:false, aide:a.aide});
+  });
+  return [...vus.values()];
+}
 
 /* Archétypes de la carte selon la base extérieure. */
 function archetypesBase(card) {
@@ -129,6 +149,12 @@ function archetypesDetail(card) {
   const texte = new Set((card && card.archetypes) || []);
   const base = new Set(archetypesBase(card));
   return [...new Set([...texte, ...base])].map(id => ({id, texte:texte.has(id), base:base.has(id)}));
+}
+
+/* Un thème coché dont les cartes ne sont pas encore chargées. */
+function archetypesAChargerEdhrec() {
+  if (sourceArchetypes() === 'texte') return [];
+  return archetypesFiltre().filter(slug => !ARCH_BASE.themes[slug] && !ARCH_BASE.enCours.has(slug));
 }
 
 /* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
@@ -183,7 +209,7 @@ function filtresActifs() {
     const src = sourceArchetypes();
     const suffixe = src === 'texte' ? ' (texte)' : (src === 'base' ? ' (EDHREC)' : '');
     actifs.push({cles:['archetypes'],
-      texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(id => ARCHLABEL[id] || id).join(', ')}${suffixe}`});
+      texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}${suffixe}`});
   }
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
