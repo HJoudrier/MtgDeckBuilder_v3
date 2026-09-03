@@ -210,17 +210,11 @@ function ficheHTML(card) {
     }
   });
 
+  // Les recommandations EDHREC n'apportent rien au deck : elles restent au-dessus,
+  // sous forme de tags, et sont donc écartées de ce bloc.
+  const raisons = sug ? sug.reasons.filter(r => !/^EDHREC\b/.test(r)) : [];
   const pourquoi = [];
-  if (sug && sug.reasons.length) sug.reasons.forEach(r => pourquoi.push(r));
-  else if (erAll.length) {
-    erAll.forEach(erItem => {
-      const isPrim = erItem.isSelected || erItem.role === 'principal' || (S.commander && norm(erItem.commandant) === norm(S.commander));
-      const cmdLabel = isPrim ? `★ commandant ${erItem.commandant}` : `commandant secondaire ${erItem.commandant}`;
-      const synSign = erItem.synergy >= 0 ? '+' : '−';
-      const synVal = Math.abs(Math.round(erItem.synergy * 100));
-      pourquoi.push(`EDHREC (${cmdLabel}) : ${Math.round(erItem.inclusion*100)} % apparition / ${synSign}${synVal} % synergie`);
-    });
-  }
+  if (raisons.length) raisons.forEach(r => pourquoi.push(r));
   else {
     if (partD.length) pourquoi.push(`se branche à ${partD.length} carte(s) déjà présentes dans le deck`);
     card.cats.forEach(c => {
@@ -258,11 +252,10 @@ function ficheHTML(card) {
       <div class="meta">
         <div class="small muted">${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
-        <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
         ${(() => {
           const arch = archetypesCarte(card);
           if (!arch.length) return '';
-          return `<div class="chips" style="margin-top:4px">${arch.map(slug =>
+          return `<div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${arch.map(slug =>
             `<span class="chip arch base" title="${esc(resumeArchetype(slug))}">${esc(libelleArchetype(slug))}</span>`).join(' ')}</div>`;
         })()}
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
@@ -271,6 +264,8 @@ function ficheHTML(card) {
       </div>
     </div>
     <div class="bloc"><h4>Ce qu'elle apporte au deck</h4>
+      <div class="small muted" style="margin-bottom:5px">Rôles dans le deck</div>
+      <div class="chips" style="margin:0 0 8px">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
       ${pourquoi.map(r => `<div class="puce">${esc(r)}</div>`).join('')}</div>
     ${(() => {
       const cs = combosDe(card);
