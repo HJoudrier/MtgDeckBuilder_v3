@@ -145,8 +145,9 @@ const EFFECT_RULES = [
   ['RAMP',       /put a land card from your hand onto the battlefield/],
   ['TUTEUR',     /search your library for/],
   ['PIOCHE',     /draws? (?:a card|two cards|three cards|\w+ additional cards|two additional cards|cards)/],
-  ['IMPULSE',    /\bscry\b|\bsurveil\b|look at the top|exile the top card[^.]{0,60}(?:put that card into your hand|you may play)/],
-  ['IMPULSE',    /play (?:lands and )?(?:cast )?spells from the top of your library|may play them this turn/],
+  ['IMPULSE',    /\bscry\b|\bsurveil\b|look at the top|exile the top (?:card|\w+ cards)? ?of your library/],
+  ['IMPULSE',    /play (?:lands and )?(?:cast )?spells from the top of your library|may (?:play|cast) (?:them|those cards|the exiled cards?|it)\b[^.]{0,30}(?:this turn|until)/],
+  ['IMPULSE',    /exile[^.]{0,60}from among (?:the )?(?:revealed|them)/],
   ['MILL',       /\bmills?\b|puts? the top[^.]{0,40}into (?:their|his or her) graveyard/],
   ['DEFAUSSE',   /discards?/],
   ['SACRIFICE',  /sacrifices?/],
@@ -425,6 +426,13 @@ function scopeOf(s) {
 function refineEffects(list, clause) {
   let out = [...list];
   if (out.includes('BLINK')) out = out.filter(c => c !== 'EXIL' && c !== 'BOUNCE' && c !== 'RECURSION');
+  /* Exiler ses propres cartes pour les jouer ensuite est de l'impulsion,
+     pas de l'interaction : la bibliothèque et les cartes révélées sont à
+     nous, contrairement à un cimetière ou à une permanente adverse. */
+  if (out.includes('EXIL') && /exile[^.]{0,70}(?:from among (?:the )?(?:revealed|them)|the top (?:card|\w+ cards)? ?of your library)|you may (?:cast|play)[^.]{0,40}exiled/.test(clause)) {
+    out = out.filter(c => c !== 'EXIL');
+    if (!out.includes('IMPULSE')) out.push('IMPULSE');
+  }
   if (/(?:doesn't|don't|can't) untap/.test(clause)) out = out.filter(c => c !== 'UNTAP');
   if (out.includes('RECURSION') && /graveyard/.test(clause)) out = out.filter(c => c !== 'BOUNCE');
   if (out.includes('CYCLE')) out = out.filter(c => c !== 'DEFAUSSE');
