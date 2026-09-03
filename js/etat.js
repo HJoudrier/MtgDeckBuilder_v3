@@ -97,9 +97,22 @@ function libelleArchetype(slug) {
   return (t && t.label) || slug;
 }
 
-/* Court résumé du fonctionnement d'un archétype, pour la liste. */
+/* Court résumé du fonctionnement d'un archétype. Chaque thème en a un,
+   sans exception : le nôtre pour les thèmes courants, sinon celui
+   qu'EDHREC publie, sinon une phrase formée sur son nom. */
 function resumeArchetype(slug) {
-  return ARCH_RESUMES[slug] || '';
+  // le nôtre d'abord : il est en français, comme le reste de la liste
+  if (ARCH_RESUMES[slug]) return ARCH_RESUMES[slug];
+  const charge = ARCH_BASE.themes[slug];
+  if (charge && charge.desc) return charge.desc;
+  const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
+  if (t && t.desc) return t.desc;
+
+  const nom = libelleArchetype(slug);
+  const famille = nom.replace(/\s*(tribal|typal|deck[s]?)\s*/ig, '').trim();
+  if (/tribal|typal/i.test(nom) || /-(tribal|typal)$/i.test(slug))
+    return `Decks bâtis autour des créatures ${famille} et de ce qui les renforce.`;
+  return `Les cartes les plus jouées dans les decks ${famille || nom}.`;
 }
 
 /* Les archétypes proposés : ceux qu'EDHREC publie. */

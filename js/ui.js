@@ -447,7 +447,7 @@ function corpsFiltres() {
       <label class="lab">Archétype</label>
       ${archetypesFiltre().length ? `<div class="archetypes">${archetypesFiltre().map(slug =>
         `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(slug)}" aria-pressed="true"
-          title="${esc(resumeArchetype(slug) || 'Retirer cet archétype')}">${esc(libelleArchetype(slug))} ✕</button>`).join('')}</div>` : ''}
+          title="${esc(resumeArchetype(slug))}">${esc(libelleArchetype(slug))} ✕</button>`).join('')}</div>` : ''}
       <button type="button" class="arch-menu-b" data-act="archMenu" aria-expanded="${archOuvert}">
         <span>${archetypesFiltre().length ? `${archetypesFiltre().length} archétype(s) coché(s)` : 'Choisir un archétype…'}</span>
         <span class="chev-b">${archOuvert ? '▴' : '▾'}</span>
@@ -509,7 +509,7 @@ function listeArchetypesHTML() {
       <span class="arch-row-h"><span class="arch-row-t">${esc(a.label)}</span>
         <span class="arch-n">${a.n ? a.n.toLocaleString('fr-FR') + ' decks' : ''}${charge ? ` · ${charge.n} cartes` : ''}</span>
         <span class="arch-row-x">${coche ? '✓' : ''}</span></span>
-      <span class="arch-row-d">${esc(a.aide || 'Thème publié par EDHREC ; ses cartes viennent de sa page.')}</span>
+      <span class="arch-row-d">${esc(a.aide)}</span>
     </button>`;
   }).join('');
 }

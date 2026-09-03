@@ -263,7 +263,7 @@ function ficheHTML(card) {
           const arch = archetypesCarte(card);
           if (!arch.length) return '';
           return `<div class="chips" style="margin-top:4px">${arch.map(slug =>
-            `<span class="chip arch base" title="Thème EDHREC${resumeArchetype(slug) ? ` — ${esc(resumeArchetype(slug))}` : ''}">${esc(libelleArchetype(slug))}</span>`).join(' ')}</div>`;
+            `<span class="chip arch base" title="${esc(resumeArchetype(slug))}">${esc(libelleArchetype(slug))}</span>`).join(' ')}</div>`;
         })()}
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`

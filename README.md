@@ -132,7 +132,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
 | `archetypesDisponibles()` | Les thèmes publiés par EDHREC, avec libellé et résumé. |
-| `resumeArchetype(slug)` | Court résumé du fonctionnement d'un archétype. |
+| `resumeArchetype(slug)` | Résumé d'un archétype : le nôtre, celui d'EDHREC, ou une phrase formée sur son nom. |
 | `libelleArchetype(slug)` | Libellé d'un thème : le nôtre s'il existe, sinon celui d'EDHREC. |
 | `archetypesAChargerEdhrec()` | Thèmes cochés dont les cartes restent à chercher. |
 | `archetypesCarte(card)` | Archétypes d'une carte, d'après les thèmes EDHREC chargés. |
@@ -245,7 +245,8 @@ combos répertoriés et combos à une carte près, plus le catalogue Scryfall co
 | `chargerArchetypesEdhrec(force)` *(async)* | Charge la liste des thèmes EDHREC, puis les thèmes déjà cochés. |
 | `chargerListeArchetypesEdhrec(force)` *(async)* | L'index des thèmes publiés, en une requête. |
 | `chargerThemeEdhrec(slug)` *(async)* | Les cartes d'un thème, à sa première utilisation. |
-| `themesPageEdhrec(j)` | Thèmes et libellés d'une page d'index, quelle que soit sa forme. |
+| `themesPageEdhrec(j)` | Thèmes, libellés et descriptions d'une page d'index, quelle que soit sa forme. |
+| `descriptionPageEdhrec(j)` | Description que la page d'un thème porte parfois en tête. |
 | `formeThemeEdhrec()` *(async)* | Cherche par sondage l'adresse des pages de thème ; note chaque essai. |
 | `formesDeduites()` *(async)* | Déduit cette adresse des liens cités dans une page de commandant. |
 | `temoinEdhrec()` *(async)* | Page de commandant témoin, pour distinguer adresse fausse et hôte injoignable. |
@@ -419,7 +420,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 240 fonctions au total, réparties en 14 modules.
+- 241 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
@@ -430,7 +431,8 @@ Données : `RETOURNEES`
 - Les archétypes viennent entièrement d'EDHREC : « Charger la liste EDHREC » récupère les thèmes qu'il publie, en une
   requête, et la liste déroulante les affiche tous. Les cartes d'un thème ne sont cherchées qu'à sa première
   utilisation, puis gardées en cache. `ARCH_LABELS` et `ARCH_RESUMES` ne servent qu'à l'affichage : un libellé français
-  et une phrase de fonctionnement pour les thèmes les plus courants.
+  et une phrase de fonctionnement pour les thèmes les plus courants. Chaque thème affiche une phrase, sans exception :
+  la nôtre, sinon celle qu'EDHREC publie, sinon une phrase formée sur son nom.
 
 ## Tests
 

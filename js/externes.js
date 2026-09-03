@@ -373,6 +373,14 @@ function urlIndexEdhrec(pre) {
   return `${ARCH_HOTE}${pre}.json`;
 }
 
+/* Description que la page d'un thème porte parfois en tête. */
+function descriptionPageEdhrec(j) {
+  const dict = ((j && j.container) || {}).json_dict || j || {};
+  const brut = dict.description || dict.blurb || (dict.header && dict.header.description) || '';
+  const txt = String(brut).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  return txt.length > 20 && txt.length < 400 ? txt : '';
+}
+
 /* Noms et libellés des thèmes, quelle que soit la variante de forme. */
 function themesPageEdhrec(j) {
   const out = new Map();
@@ -383,7 +391,8 @@ function themesPageEdhrec(j) {
     if (!slug || /^https?:$/i.test(slug)) return;
     const label = String(x.value || x.name || x.label || slug);
     const n = x.count || x.num_decks || x.card_count || 0;
-    if (!out.has(slug)) out.set(slug, {slug, label, n});
+    const desc = String(x.description || x.blurb || x.subtitle || x.text || '').trim();
+    if (!out.has(slug)) out.set(slug, {slug, label, n, desc});
   };
   const visite = v => {
     if (Array.isArray(v)) return v.forEach(visite);
@@ -430,13 +439,14 @@ async function chargerThemeEdhrec(slug) {
   try {
     const r = await fetch(url(slug));
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    const noms = nomsPageEdhrec(await r.json());
+    const j = await r.json();
+    const noms = nomsPageEdhrec(j);
     noms.forEach(n => {
       const s = ARCH_BASE.index.get(n) || new Set();
       s.add(slug);
       ARCH_BASE.index.set(n, s);
     });
-    ARCH_BASE.themes[slug] = {n:noms.size};
+    ARCH_BASE.themes[slug] = {n:noms.size, desc:descriptionPageEdhrec(j)};
     ARCH_BASE.maj = Date.now();
     sauverArchetypesEdhrec();
   } catch(err) {
