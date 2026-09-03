@@ -102,8 +102,9 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
 ### `js/etat.js` — État et filtrage
 
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
-C'est aussi ici que vivent les filtres de l'en-tête : la recherche libre (`S.search`), le type de carte
-(`S.typeFilter`) et les critères chiffrés de `S.filtres` (nom, force, endurance, coût de mana, prix).
+C'est aussi ici que vivent les filtres de l'en-tête : les couleurs (`S.colors`, `S.colorMode`), la recherche
+libre (`S.search`), le type de carte (`S.typeFilter`) et les critères de `S.filtres` (nom, illustrateur,
+force, endurance, coût de mana, prix).
 
 *16 fonction(s), 8 Ko*
 
@@ -115,7 +116,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la section A à une carte. |
-| `filtreOK(card)` | Applique les filtres chiffrés (nom, force, endurance, coût, prix) à une carte. |
+| `filtreOK(card)` | Applique les filtres de la fenêtre (nom, illustrateur, force, endurance, coût, prix) à une carte. |
 | `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
 | `texteFiltresActifs(sep)` | Ces mêmes libellés mis bout à bout, pour les infobulles et les résumés. |
 | `majFiltre(cle,valeur)` | Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. |
@@ -328,7 +329,9 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global,
 dont le bouton « Filtres » de l'en-tête et sa fenêtre modale.
 
-*35 fonction(s), 30 Ko*
+*35 fonction(s), 31 Ko*
+
+Données : `COLS`, `MODES_COULEUR`, `FILTRE_ICONE`
 
 Données : `RETOURNEES`
 
@@ -347,12 +350,12 @@ Données : `RETOURNEES`
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
-| `corpsFiltres()` | Contenu de cette fenêtre : recherche, type, nom, force, endurance, coût de mana, prix. |
+| `corpsFiltres()` | Contenu de cette fenêtre : couleurs, recherche, type, nom, illustrateur, force, endurance, coût de mana, prix. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
 | `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
 | `planifierRenduFiltres()` | Diffère le rendu global pour garder la saisie fluide. |
-| `majFenetreFiltres()` | Réécrit les champs après une réinitialisation. |
+| `majFenetreFiltres()` | Réécrit les champs après une réinitialisation ou un changement de couleur. |
 | `renderAll()` | Rend les six sections et programme la sauvegarde. |
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |

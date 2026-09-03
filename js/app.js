@@ -29,6 +29,7 @@ document.addEventListener('click', ev => {
     if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c);
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 
@@ -36,6 +37,7 @@ document.addEventListener('click', ev => {
     S.colorMode = b.dataset.cmode;
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 
@@ -133,6 +135,7 @@ document.addEventListener('click', ev => {
     S.colors = new Set(['W','U','B','R','G','C']);
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 
@@ -140,6 +143,7 @@ document.addEventListener('click', ev => {
     S.colors = new Set();
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 

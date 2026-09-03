@@ -384,7 +384,8 @@ function compacte(sc) {
     parseFloat((sc.prices && (sc.prices.eur || sc.prices.usd)) || 0) || 0,
     sc.id || '', (typeof sc.edhrec_rank === 'number') ? sc.edhrec_rank : 999999,
     (lg.commander === 'legal' ? 'c' : '') + (lg.standard === 'legal' ? 's' : ''), chemin, verso,
-    (tg != null && /^\d+$/.test(String(tg))) ? +tg : null
+    (tg != null && /^\d+$/.test(String(tg))) ? +tg : null,
+    sc.artist || (faces && faces[0] && faces[0].artist) || ''
   ];
 }
 
@@ -694,6 +695,7 @@ function completeDepuisRec(c, rec) {
     c.cats = categories(c);
   }
   if (rec[CH.ENDURANCE] != null && c.endurance == null) c.endurance = rec[CH.ENDURANCE];
+  if (rec[CH.ARTISTE] && !c.artist) c.artist = rec[CH.ARTISTE];
   if (!c.price && rec[CH.PRIX] > 0) c.price = rec[CH.PRIX];
   return c;
 }
@@ -707,6 +709,7 @@ function carteDuCatalogue(rec) {
   c.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
+  if (rec[CH.ARTISTE]) c.artist = rec[CH.ARTISTE];
   c.an = analyze(c);
   c.cats = categories(c);
   if (rec[CH.IMG]) {

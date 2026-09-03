@@ -232,7 +232,7 @@ function ficheHTML(card) {
       </div>` : ''}
       <div class="meta">
         <div class="costs" style="margin-bottom:4px">${manaHTML(card)}</div>
-        <div class="small muted">${esc(card.type)}${card.cmc?` · CMC ${card.cmc}`:''} · ${eur(card.price)}${card.price?' (tendance Cardmarket)':''}</div>
+        <div class="small muted">${esc(card.type)}${card.cmc?` · CMC ${card.cmc}`:''}${(card.force != null && card.endurance != null)?` · ${card.force}/${card.endurance}`:''} · ${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
         <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
         <div class="otext">${esc((card.text||'(texte non disponible)').replace(/ \/\/ /g,'\n'))}</div>

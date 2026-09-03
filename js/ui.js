@@ -313,16 +313,24 @@ function activeFilterManaHTML() {
   return list.map(c => symIcon(c, 'sm')).join('');
 }
 
+/* Couleurs proposées par la section A, l'en-tête et la fenêtre des filtres. */
+const COLS = [
+  ['W', 'Blanc ({W})'],
+  ['U', 'Bleu ({U})'],
+  ['B', 'Noir ({B})'],
+  ['R', 'Rouge ({R})'],
+  ['G', 'Vert ({G})'],
+  ['C', 'Incolore ({C})']
+];
+
+const MODES_COULEUR = [
+  ['identity', 'Identité couleur (EDH)'],
+  ['atleast', 'Au moins une'],
+  ['exact', 'Exactement']
+];
+
 function renderA() {
   const f = fmt();
-  const COLS = [
-    ['W', 'Blanc ({W})'],
-    ['U', 'Bleu ({U})'],
-    ['B', 'Noir ({B})'],
-    ['R', 'Rouge ({R})'],
-    ['G', 'Vert ({G})'],
-    ['C', 'Incolore ({C})']
-  ];
   const bodyEl = document.getElementById('bodyA');
   if (bodyEl) {
     bodyEl.innerHTML = `
@@ -404,6 +412,21 @@ function ligneFiltre(kMin, kMax, label, aide, pas, min) {
 function corpsFiltres() {
   const f = S.filtres;
   return `<div class="field">
+      <label class="lab">Couleurs considérées</label>
+      <div class="row" style="align-items:center;gap:6px">
+        ${COLS.map(([c, titre]) => `
+          <button type="button" class="mana-btn" data-color="${c}" aria-pressed="${S.colors.has(c)}" title="${titre}">
+            ${symBg(c)}
+          </button>`).join('')}
+        <button type="button" class="btn sm" data-act="allColors" style="margin-left:4px">Toutes</button>
+        <button type="button" class="btn sm" data-act="clearColors">Aucune</button>
+      </div>
+      <div class="seg" style="margin-top:6px">
+        ${MODES_COULEUR.map(([m, l]) => `<button type="button" data-cmode="${m}" aria-pressed="${S.colorMode === m}">${l}</button>`).join('')}
+      </div>
+      <div class="small muted">${esc(nomCombinaisonCouleurs(S.colors))} · même réglage que la section A et que la barre de mana de l'en-tête.</div>
+    </div>
+    <div class="field">
       <label class="lab" for="f_search">Recherche</label>
       <input type="text" id="f_search" data-filtre="search" value="${esc(S.search)}" placeholder="nom, type ou texte de la carte…" autocomplete="off">
     </div>
@@ -418,13 +441,17 @@ function corpsFiltres() {
       <label class="lab" for="f_nom">Nom de la carte</label>
       <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>
+    <div class="field">
+      <label class="lab" for="f_artiste">Illustrateur</label>
+      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(f.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
+    </div>
     <div class="filtres-grille">
       ${ligneFiltre('forceMin', 'forceMax', 'Force', "Force des créatures (le premier chiffre de 3/4).", '1', 0)}
       ${ligneFiltre('enduranceMin', 'enduranceMax', 'Endurance', "Endurance des créatures (le second chiffre de 3/4).", '1', 0)}
       ${ligneFiltre('cmcMin', 'cmcMax', 'Coût de mana', "Valeur de mana totale de la carte.", '1', 0)}
       ${ligneFiltre('prixMin', 'prixMax', 'Prix (€)', "Prix unitaire estimé, en euros.", 'any', 0)}
     </div>
-    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. La recherche porte sur le nom, le type et le texte ; le champ « Nom » ne regarde que le nom. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées.</div>
+    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. La recherche porte sur le nom, le type et le texte ; le champ « Nom » ne regarde que le nom. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs de la section A ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }
@@ -454,19 +481,23 @@ function planifierRenduFiltres() {
   }, 220);
 }
 
-/* Réécrit les champs de la fenêtre après une réinitialisation. */
+/* Réécrit les champs de la fenêtre après une réinitialisation ou un
+   changement de couleur, en conservant la position de défilement. */
 function majFenetreFiltres() {
   const dlg = document.getElementById('dlg');
   if (!dlg || !dlg.open) return;
   const corps = document.getElementById('dlgBody');
-  if (corps && corps.querySelector('[data-filtre]')) corps.innerHTML = corpsFiltres();
+  if (!corps || !corps.querySelector('[data-filtre]')) return;
+  const y = corps.scrollTop;
+  corps.innerHTML = corpsFiltres();
+  corps.scrollTop = y;
 }
 
 function openFiltresModal() {
   openDialog('Filtres de la collection', corpsFiltres(),
     `<button type="button" class="btn" data-act="resetFiltres">Réinitialiser</button>
      <button type="button" class="btn pri" data-act="closeDialog">Fermer</button>`);
-  const champ = document.getElementById('f_nom');
+  const champ = document.getElementById('f_search');
   if (champ) champ.focus();
 }
 
@@ -496,14 +527,6 @@ function renderTop() {
   const isLegal = leg.length === 0;
 
   const gName = nomCombinaisonCouleurs(S.colors);
-  const COLS = [
-    ['W', 'Blanc ({W})'],
-    ['U', 'Bleu ({U})'],
-    ['B', 'Noir ({B})'],
-    ['R', 'Rouge ({R})'],
-    ['G', 'Vert ({G})'],
-    ['C', 'Incolore ({C})']
-  ];
 
   const manaBarHTML = `
     <div class="head-colors" title="Filtre couleur actif (cliquer pour activer/désactiver une couleur)">

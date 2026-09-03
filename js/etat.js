@@ -23,7 +23,7 @@ const S = {
   custom: {size:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -55,14 +55,15 @@ const S = {
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});
 
 /* ---------------------------------------------------------------------
-   Filtres de la fenêtre « Filtres » (en-tête) : recherche libre, type de
-   carte, nom, force, endurance, coût de mana et prix. Chaque champ vide
-   est neutre. La recherche et le type vivent dans `S.search` et
+   Filtres de la fenêtre « Filtres » (en-tête) : couleurs, recherche libre,
+   type de carte, nom, illustrateur, force, endurance, coût de mana et
+   prix. Chaque champ vide est neutre. Les couleurs vivent dans `S.colors`
+   et `S.colorMode`, la recherche et le type dans `S.search` et
    `S.typeFilter` ; les autres critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -108,6 +109,8 @@ function filtresActifs() {
   if (S.typeFilter) actifs.push({cles:['typeFilter'], texte:`Type : ${S.typeFilter}`});
   const nom = String(f.nom || '').trim();
   if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
+  const artiste = String(f.artiste || '').trim();
+  if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
@@ -132,6 +135,8 @@ function filtreOK(card) {
   const f = S.filtres || FILTRES_VIDE;
   const nom = String(f.nom || '').trim();
   if (nom && !norm(card.name).includes(norm(nom))) return false;
+  const artiste = String(f.artiste || '').trim();
+  if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
   for (const [kMin, kMax, champ] of FILTRES_BORNES) {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) continue;
@@ -166,7 +171,7 @@ function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13};
+const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14};
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
@@ -202,6 +207,7 @@ function getCardOrAnalyzedRec(rec) {
   card.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) card.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) card.endurance = rec[CH.ENDURANCE];
+  if (rec[CH.ARTISTE]) card.artist = rec[CH.ARTISTE];
   rec._card = card;
   return card;
 }
