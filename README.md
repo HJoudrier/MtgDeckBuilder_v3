@@ -76,9 +76,10 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 ### `js/cartes.js` — Base de cartes
 
 Catalogue livré avec l'atelier, fabrique de cartes, index de recherche tolérant aux accents, apostrophes et faces multiples,
-rôles et archétypes de deck déduits du texte oracle.
+rôles et archétypes de deck déduits du texte oracle. Chaque archétype porte aussi les thèmes EDHREC correspondants,
+que `js/externes.js` va chercher pour croiser la lecture locale avec une source établie.
 
-*20 fonction(s), 29 Ko*
+*20 fonction(s), 37 Ko*
 
 Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCHLABEL`, `ARCH_MOTIFS`
 
@@ -107,11 +108,12 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCH
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
 C'est aussi ici que vivent les filtres de l'en-tête : les couleurs (`S.colors`, `S.colorMode`), la recherche
 libre (`S.search`), le type de carte (`S.typeFilter`) et les critères de `S.filtres` (archétypes, nom,
-illustrateur, force, endurance, coût de mana, prix).
+illustrateur, force, endurance, coût de mana, prix), ainsi que l'index des archétypes établis par EDHREC
+(`ARCH_BASE`).
 
-*16 fonction(s), 8 Ko*
+*22 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
+Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `ARCH_SOURCES`
 
 | Fonction | Rôle |
 |---|---|
@@ -122,6 +124,10 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
 | `filtreOK(card)` | Applique les filtres de la fenêtre (archétype, nom, illustrateur, force, endurance, coût, prix) à une carte. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
+| `sourceArchetypes()` | Source retenue : texte de la carte, EDHREC, ou les deux. |
+| `archetypesBase(card)` | Archétypes d'une carte d'après les thèmes EDHREC chargés. |
+| `archetypesCarte(card)` | Archétypes retenus pour le filtrage, selon la source. |
+| `archetypesDetail(card)` | Même liste, avec l'origine de chaque étiquette, pour la fiche. |
 | `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
 | `texteFiltresActifs(sep)` | Ces mêmes libellés mis bout à bout, pour les infobulles et les résumés. |
 | `majFiltre(cle,valeur)` | Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. |
@@ -221,12 +227,17 @@ Données : `STORE_KEY`, `STORE_OFF`
 
 ### `js/externes.js` — EDHREC et Commander Spellbook
 
-Statistiques d'inclusion et de synergie par commandant, combos répertoriés et combos à une carte près.
+Statistiques d'inclusion et de synergie par commandant, thèmes de deck servant d'archétypes établis,
+combos répertoriés et combos à une carte près, plus le catalogue Scryfall complet et son archive IndexedDB.
 
-*10 fonction(s), 6 Ko*
+*45 fonction(s), 35 Ko*
 
 | Fonction | Rôle |
 |---|---|
+| `chargerArchetypesEdhrec(force)` *(async)* | Charge les thèmes EDHREC et indexe les cartes par archétype. |
+| `reprendreArchetypesEdhrec()` *(async)* | Reprend cet index depuis IndexedDB au démarrage. |
+| `nomsPageEdhrec(j)` | Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. |
+| `urlThemeEdhrec(slug)` | Adresse de la page JSON d'un thème. |
 | `edhrecSlug(name)` | Identifiant EDHREC d'un commandant. |
 | `edhrecFor(card)` | Statistiques EDHREC d'une carte, si elles existent. |
 | `loadEdhrec(force)` *(async)* | Charge les statistiques du commandant courant. |
@@ -356,6 +367,7 @@ Données : `RETOURNEES`
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
 | `corpsFiltres()` | Contenu de cette fenêtre : couleurs, recherche, type, archétype, nom, illustrateur, force, endurance, coût de mana, prix. |
+| `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
 | `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
@@ -386,10 +398,13 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 193 fonctions au total, réparties en 14 modules.
+- 225 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
-- Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes.
+- Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
+  et pour l'index des archétypes EDHREC.
+- Les archétypes se lisent de deux façons complémentaires : le texte de la carte, analysé localement et toujours disponible,
+  et les thèmes EDHREC, chargés à la demande puis mis en cache. La fenêtre des filtres laisse choisir l'une, l'autre ou les deux.
 
 ## Tests
 

@@ -23,7 +23,7 @@ const S = {
   custom: {size:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -63,7 +63,7 @@ const S = {
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -74,6 +74,51 @@ const FILTRES_BORNES = [
   ['cmcMin', 'cmcMax', 'cmc', 'Coût de mana'],
   ['prixMin', 'prixMax', 'price', 'Prix']
 ];
+
+/* ---------------------------------------------------------------------
+   Archétypes établis par une base extérieure (thèmes EDHREC). L'index
+   est rempli par `chargerArchetypesEdhrec()` dans js/externes.js et
+   conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
+   --------------------------------------------------------------------- */
+
+const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map()};
+
+const ARCH_SOURCES = [
+  ['deux', 'Les deux'],
+  ['texte', 'Texte de la carte'],
+  ['base', 'EDHREC']
+];
+
+/* Archétypes de la carte selon la base extérieure. */
+function archetypesBase(card) {
+  if (!card || !ARCH_BASE.index.size) return [];
+  const avant = typeof frontFace === 'function' ? frontFace(card.name) : card.name;
+  const s = ARCH_BASE.index.get(norm(card.name)) || ARCH_BASE.index.get(norm(avant));
+  return s ? [...s] : [];
+}
+
+/* Source retenue dans la fenêtre des filtres. */
+function sourceArchetypes() {
+  const v = (S.filtres && S.filtres.archSource) || 'deux';
+  return ARCH_SOURCES.some(([k]) => k === v) ? v : 'deux';
+}
+
+/* Archétypes retenus pour le filtrage, selon la source choisie. */
+function archetypesCarte(card) {
+  const src = sourceArchetypes();
+  const texte = (card && card.archetypes) || [];
+  if (src === 'texte') return texte;
+  const base = archetypesBase(card);
+  if (src === 'base') return base;
+  return [...new Set([...texte, ...base])];
+}
+
+/* Détail par archétype : d'où vient l'étiquette. Sert à la fiche. */
+function archetypesDetail(card) {
+  const texte = new Set((card && card.archetypes) || []);
+  const base = new Set(archetypesBase(card));
+  return [...new Set([...texte, ...base])].map(id => ({id, texte:texte.has(id), base:base.has(id)}));
+}
 
 /* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
 function archetypesFiltre() {
@@ -123,8 +168,12 @@ function filtresActifs() {
   const artiste = String(f.artiste || '').trim();
   if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
   const arch = archetypesFiltre();
-  if (arch.length) actifs.push({cles:['archetypes'],
-    texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(id => ARCHLABEL[id] || id).join(', ')}`});
+  if (arch.length) {
+    const src = sourceArchetypes();
+    const suffixe = src === 'texte' ? ' (texte)' : (src === 'base' ? ' (EDHREC)' : '');
+    actifs.push({cles:['archetypes'],
+      texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(id => ARCHLABEL[id] || id).join(', ')}${suffixe}`});
+  }
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
@@ -152,7 +201,10 @@ function filtreOK(card) {
   const artiste = String(f.artiste || '').trim();
   if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
   const arch = archetypesFiltre();
-  if (arch.length && !arch.some(id => (card.archetypes || []).includes(id))) return false;
+  if (arch.length) {
+    const ceux = archetypesCarte(card);
+    if (!arch.some(id => ceux.includes(id))) return false;
+  }
   for (const [kMin, kMax, champ] of FILTRES_BORNES) {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) continue;

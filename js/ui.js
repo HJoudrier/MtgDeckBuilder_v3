@@ -443,7 +443,17 @@ function corpsFiltres() {
         ${ARCHETYPES.map(a => `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${a.id}"
           aria-pressed="${archetypesFiltre().includes(a.id)}" title="${esc(a.aide)}">${esc(a.label)}</button>`).join('')}
       </div>
-      <div class="small muted">Une carte est retenue si elle relève d'au moins un archétype coché. La lecture vient de son texte : elle éclaire une piste, elle ne remplace pas votre jugement.</div>
+      <div class="row" style="gap:6px;align-items:center;margin-top:2px">
+        <span class="lab">Source</span>
+        <div class="seg">
+          ${ARCH_SOURCES.map(([k, l]) => `<button type="button" data-asrc="${k}" aria-pressed="${sourceArchetypes() === k}">${l}</button>`).join('')}
+        </div>
+        <button type="button" class="btn sm" data-act="chargerArch" ${ARCH_BASE.etat === 'chargement' ? 'disabled' : ''}>
+          ${ARCH_BASE.index.size ? 'Recharger EDHREC' : 'Charger depuis EDHREC'}
+        </button>
+      </div>
+      <div class="small muted">Une carte est retenue si elle relève d'au moins un archétype coché.</div>
+      <div class="small muted" id="archEtat">${etatArchetypes()}</div>
     </div>
     <div class="field">
       <label class="lab" for="f_nom">Nom de la carte</label>
@@ -462,6 +472,20 @@ function corpsFiltres() {
     <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. La recherche porte sur le nom, le type et le texte ; le champ « Nom » ne regarde que le nom. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs de la section A ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
+}
+
+/* État de la base d'archétypes extérieure, sous les boutons. */
+function etatArchetypes() {
+  if (ARCH_BASE.etat === 'chargement') return 'Chargement des thèmes EDHREC…';
+  if (ARCH_BASE.etat === 'erreur') return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.`;
+  if (ARCH_BASE.index.size) {
+    const nbThemes = Object.values(ARCH_BASE.themes || {}).reduce((n, l) => n + l.length, 0);
+    const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';
+    return `Deux lectures se complètent : le texte de la carte, lu localement, et ${ARCH_BASE.index.size.toLocaleString('fr-FR')} cartes
+      référencées par ${nbThemes} thème(s) EDHREC${date ? `, relevés le ${date}` : ''}${ARCH_BASE.erreur ? ` (${esc(ARCH_BASE.erreur)})` : ''}.`;
+  }
+  return `Seul le texte de la carte est lu pour l'instant. « Charger depuis EDHREC » ajoute les rôles établis par la communauté :
+    une trentaine de requêtes en une fois, puis le résultat reste en cache sur cet appareil.`;
 }
 
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */

@@ -286,41 +286,44 @@ function categories(card) {
 }
 
 /* =====================================================================
-   Archétypes de deck : lecture d'ensemble d'une carte, à partir des
-   nœuds relevés par l'analyseur et de quelques tournures du texte.
+   Archétypes de deck. Deux sources se complètent :
+   — le texte de la carte, lu ici à partir des nœuds relevés par
+     l'analyseur et de quelques tournures caractéristiques ;
+   — les thèmes d'EDHREC (champ `edhrec` ci-dessous), chargés à la
+     demande par js/externes.js et indexés dans `ARCH_BASE`.
    Une carte peut relever de plusieurs archétypes, ou d'aucun.
    ===================================================================== */
 
 const ARCHETYPES = [
-  {id:'aristocrates', label:'Aristocrates / Sacrifice',
+  {id:'aristocrates', label:'Aristocrates / Sacrifice', edhrec:['aristocrats','sacrifice'],
    aide:'Sacrifices, morts de créatures et drain qui en découle'},
-  {id:'marqueurs', label:'Marqueurs +1/+1',
+  {id:'marqueurs', label:'Marqueurs +1/+1', edhrec:['+1-+1-counters','counters'],
    aide:'Pose de marqueurs, prolifération et cartes qui s\'en soucient'},
-  {id:'jetons', label:'Jetons',
+  {id:'jetons', label:'Jetons', edhrec:['tokens','go-wide'],
    aide:'Création de jetons et cartes qui en tirent parti'},
-  {id:'spellslinger', label:'Spellslinger',
+  {id:'spellslinger', label:'Spellslinger', edhrec:['spellslinger','spells-matter'],
    aide:'Cartes qui se soucient des éphémères et des rituels'},
-  {id:'vol', label:'Vol',
+  {id:'vol', label:'Vol', edhrec:['flying','fliers'],
    aide:'Créatures volantes et effets qui donnent le vol'},
-  {id:'combat', label:'Combat / attaque',
+  {id:'combat', label:'Combat / attaque', edhrec:['combat','extra-combats'],
    aide:'Déclenchements à l\'attaque, phases de combat et percée'},
-  {id:'blink', label:'Blink / ETB',
+  {id:'blink', label:'Blink / ETB', edhrec:['blink','flicker'],
    aide:'Scintillement et déclenchements sur l\'arrivée d\'autres permanents'},
-  {id:'cimetiere', label:'Cimetière / Réanimation',
+  {id:'cimetiere', label:'Cimetière / Réanimation', edhrec:['reanimator','graveyard'],
    aide:'Récursion, meule, défausse et cartes lancées depuis le cimetière'},
-  {id:'landfall', label:'Landfall / terrains',
+  {id:'landfall', label:'Landfall / terrains', edhrec:['landfall','lands-matter'],
    aide:'Terrains qui arrivent, recherche de terrains et déclenchements associés'},
-  {id:'voltron', label:'Voltron / Auras & équipements',
+  {id:'voltron', label:'Voltron / Auras & équipements', edhrec:['voltron','equipment','auras'],
    aide:'Attachements : auras, équipements et créatures équipées'},
-  {id:'gainvie', label:'Gain de vie',
+  {id:'gainvie', label:'Gain de vie', edhrec:['lifegain','life-matters'],
    aide:'Lien de vie, gains de points de vie et récompenses associées'},
-  {id:'artefacts', label:'Artefacts',
+  {id:'artefacts', label:'Artefacts', edhrec:['artifacts','artifact-matters'],
    aide:'Artefacts qui comptent : trésors, affinité, bricolage'},
-  {id:'enchantements', label:'Enchantements',
+  {id:'enchantements', label:'Enchantements', edhrec:['enchantments','enchantress'],
    aide:'Enchantements qui comptent : constellation, aura-matters'},
-  {id:'controle', label:'Contrôle / Stax',
+  {id:'controle', label:'Contrôle / Stax', edhrec:['control','stax'],
    aide:'Contresorts, taxes, effets de blocage et fléaux'},
-  {id:'meule', label:'Meule (mill)',
+  {id:'meule', label:'Meule (mill)', edhrec:['mill','self-mill'],
    aide:'Cartes mises de la bibliothèque au cimetière'}
 ];
 

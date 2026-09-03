@@ -219,6 +219,122 @@ async function loadEdhrec(force) {
   renderF();
 }
 
+/* 1 bis. Archétypes établis : thèmes EDHREC
+   Une page par thème, même hôte et même forme que les pages de
+   commandant déjà exploitées ci-dessus. Les noms retenus alimentent
+   `ARCH_BASE` (js/etat.js) et sont conservés dans IndexedDB. */
+
+const ARCH_CLE_IDB = 'archetypes';
+const ARCH_PAUSE = 130;   // ms entre deux requêtes, par courtoisie envers EDHREC
+const ARCH_MAX_THEMES = 2; // thèmes retenus au plus par archétype
+
+function urlThemeEdhrec(slug) {
+  return 'https://json.edhrec.com/pages/themes/' + encodeURIComponent(slug) + '.json';
+}
+
+/* Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. */
+function nomsPageEdhrec(j) {
+  const noms = new Set();
+  const ajoute = cv => { if (cv && cv.name) noms.add(norm(cv.name)); };
+  const dict = ((j && j.container) || {}).json_dict || {};
+  (dict.cardlists || []).forEach(l => (l.cardviews || []).forEach(ajoute));
+  if (!noms.size) (((j || {}).cardlists) || []).forEach(l => (l.cardviews || []).forEach(ajoute));
+  if (!noms.size && Array.isArray((j || {}).cardviews)) j.cardviews.forEach(ajoute);
+  return noms;
+}
+
+function indexDepuisCartes(cartes) {
+  const index = new Map();
+  Object.keys(cartes || {}).forEach(nom => index.set(nom, new Set(cartes[nom])));
+  return index;
+}
+
+function cartesDepuisIndex(index) {
+  const cartes = {};
+  index.forEach((ids, nom) => cartes[nom] = [...ids]);
+  return cartes;
+}
+
+/* Reprise du cache local, au démarrage. */
+async function reprendreArchetypesEdhrec() {
+  try {
+    const memo = await idbLire(ARCH_CLE_IDB);
+    if (!memo || memo.v !== 1 || !memo.cartes) return false;
+    ARCH_BASE.index = indexDepuisCartes(memo.cartes);
+    ARCH_BASE.themes = memo.themes || {};
+    ARCH_BASE.maj = memo.maj || null;
+    ARCH_BASE.etat = ARCH_BASE.index.size ? 'ok' : 'idle';
+    return ARCH_BASE.index.size > 0;
+  } catch(err) {
+    return false;
+  }
+}
+
+/* Chargement des thèmes : une requête par slug, les échecs sont isolés. */
+async function chargerArchetypesEdhrec(force) {
+  if (ARCH_BASE.etat === 'chargement') return;
+  if (!force && ARCH_BASE.index.size) return;
+  if (typeof fetch !== 'function') {
+    ARCH_BASE.etat = 'erreur';
+    ARCH_BASE.erreur = 'ce navigateur ne sait pas interroger EDHREC';
+    return;
+  }
+
+  ARCH_BASE.etat = 'chargement';
+  ARCH_BASE.erreur = '';
+  if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
+
+  const index = new Map();
+  const themes = {};
+  let echecs = 0;
+
+  for (const a of ARCHETYPES) {
+    const slugs = a.edhrec || [];
+    let retenus = 0;
+    for (const slug of slugs) {
+      if (retenus >= ARCH_MAX_THEMES) break;
+      try {
+        const r = await fetch(urlThemeEdhrec(slug));
+        if (!r.ok) { if (r.status !== 404) echecs++; continue; }
+        const noms = nomsPageEdhrec(await r.json());
+        if (!noms.size) continue;
+        noms.forEach(n => {
+          const s = index.get(n) || new Set();
+          s.add(a.id);
+          index.set(n, s);
+        });
+        themes[a.id] = (themes[a.id] || []).concat([{slug, n:noms.size}]);
+        retenus++;
+      } catch(err) {
+        echecs++;
+      }
+      await new Promise(res => setTimeout(res, ARCH_PAUSE));
+    }
+  }
+
+  if (!index.size) {
+    ARCH_BASE.etat = 'erreur';
+    ARCH_BASE.erreur = echecs
+      ? 'EDHREC injoignable (hors ligne ou accès bloqué)'
+      : 'aucun thème reconnu : les adresses EDHREC ont peut-être changé';
+  } else {
+    ARCH_BASE.index = index;
+    ARCH_BASE.themes = themes;
+    ARCH_BASE.maj = Date.now();
+    ARCH_BASE.etat = 'ok';
+    ARCH_BASE.erreur = echecs ? `${echecs} thème(s) non chargé(s)` : '';
+    idbEcrire(ARCH_CLE_IDB, {v:1, maj:ARCH_BASE.maj, themes, cartes:cartesDepuisIndex(index)}).catch(() => {});
+  }
+
+  if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
+  if (typeof renderAll === 'function') renderAll();
+  if (typeof toast === 'function') {
+    toast(ARCH_BASE.etat === 'ok'
+      ? `Archétypes EDHREC chargés : ${ARCH_BASE.index.size} cartes référencées.`
+      : `Archétypes EDHREC : ${ARCH_BASE.erreur}.`);
+  }
+}
+
 /* 2. Commander Spellbook */
 function deckSignature() {
   return deckEntries().map(e => e.card.name + '×' + e.qty).sort().join('|') + '||' + (S.commander || '');

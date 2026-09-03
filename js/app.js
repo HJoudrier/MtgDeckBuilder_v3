@@ -33,6 +33,15 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (b.dataset.asrc) {
+    S.filtres.archSource = b.dataset.asrc;
+    if (b.dataset.asrc !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle') chargerArchetypesEdhrec();
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    return;
+  }
+
   if (b.dataset.cmode) {
     S.colorMode = b.dataset.cmode;
     invaliderCandidats();
@@ -79,8 +88,16 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'chargerArch') {
+    chargerArchetypesEdhrec(true);
+    return;
+  }
+
   if (act === 'toggleArch') {
     basculerArchetype(b.dataset.arch);
+    // premier archétype coché : la base extérieure se charge d'elle-même
+    if (sourceArchetypes() !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle'
+        && archetypesFiltre().length) chargerArchetypesEdhrec();
     majFenetreFiltres();
     majResumeFiltres();
     S.limitB = PAGE;
@@ -602,6 +619,7 @@ function demarrer() {
   }
   renderAll();
   loadSymbology();
+  reprendreArchetypesEdhrec().then(trouve => { if (trouve) renderAll(); });
   verifierMajCatalogue();
   if (autoCatalogue()) chargerCatalogueComplet();
 }
