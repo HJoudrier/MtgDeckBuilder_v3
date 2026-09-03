@@ -387,7 +387,7 @@ Données : `RETOURNEES`
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
 | `majResumeFormat()` | Rafraîchit ce résumé pendant la saisie du format personnalisé. |
 | `majFenetreFormat()` | Réécrit la fenêtre au changement de format. |
-| `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
+| `ficheHTML(card)` | Fiche détaillée : rôles ligne à ligne, cartes du deck branchées, interactions, capacités, combos. |
 | `ficheTexteHTML(card)` | Carte rendue en texte — coût, type, force/endurance, texte — à la place du visuel absent. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
@@ -409,6 +409,7 @@ Données : `RETOURNEES`
 | `placerApercu(x,y)` | Place l'aperçu près du curseur sans sortir de l'écran. |
 | `contenuApercu(c)` | Contenu de l'aperçu : visuel, ou texte si absent. |
 | `montrerApercu(nom,x,y)` | Affiche l'aperçu au survol. |
+| `placerApercuDansCouche()` | Déplace l'aperçu dans la fenêtre modale ouverte, sans quoi elle le masque. |
 | `majApercu()` | Met à jour l'aperçu quand le visuel arrive. |
 | `cacherApercu()` | Masque l'aperçu. |
 | `toast(msg)` | Message temporaire en bas d'écran. |
@@ -425,7 +426,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 240 fonctions au total, réparties en 14 modules.
+- 241 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes

@@ -93,11 +93,22 @@ function apercuTexte(c) {
   return t.length > 320 ? t.slice(0, 320).replace(/\s+\S*$/, '') + '…' : t;
 }
 
+/* Une fenêtre modale est peinte dans la « top layer », au-dessus de tout
+   z-index : l'aperçu doit y entrer pour rester visible. */
+function placerApercuDansCouche() {
+  const el = initApercu();
+  const dlg = document.getElementById('dlg');
+  if (!el) return;
+  const cible = (dlg && dlg.open) ? dlg : document.body;
+  if (el.parentElement !== cible) cible.appendChild(el);
+}
+
 function montrerApercu(nom, x, y) {
   const el = initApercu();
   if (!el || !nom) return;
   const c = find(nom);
   if (!c) return;
+  placerApercuDansCouche();
   apercuCardName = c.name;
   if (typeof queueScryfall === 'function') queueScryfall([c]);
   const imgUrl = faceVisible(c, true) || faceVisible(c, false);

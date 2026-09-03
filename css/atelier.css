@@ -372,6 +372,8 @@ dialog.wide{max-width:min(760px,96vw)}
 .fiche .meta{flex:1;min-width:200px}
 .bloc{border-top:1px solid var(--line);padding-top:9px}
 .bloc>h4{margin:0 0 6px;font-family:var(--display);font-size:14px}
+.role-l{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin:3px 0}
+.role-l .chip{flex:0 0 auto}
 .puce{font-size:12.5px;margin:2px 0 2px 2px;padding-left:12px;position:relative}
 .puce::before{content:'▸';position:absolute;left:0;color:var(--brass)}
 @media (max-width:520px){ .fiche .visu{width:100%;max-width:260px;margin:0 auto} }

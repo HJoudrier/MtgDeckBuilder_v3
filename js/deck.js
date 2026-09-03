@@ -172,19 +172,25 @@ function ficheHTML(card) {
   const deck = deckEntries().map(e => e.card);
   const dansDeck = S.deck.get(card.name) || 0;
   const tgt = targets(), cnt = deckCounts();
-  const sug = currentSuggestions().find(x => x.card.name === card.name);
   const partD = partnersFor(card, deck).slice(0, 8);
   const partC = partnersFor(card, filtered().map(e => e.card).filter(c => !S.deck.has(c.name)).slice(0, 700)).slice(0, 6);
   const dispo = availableFor(card);
   const offre = dispo > 0 ? null : bestOffer(card);
 
+  /* Un rôle par ligne : l'étiquette, puis ce que ce rôle vaut dans le
+     deck — l'écart à l'objectif du format, ou le nombre de cartes qui le
+     tiennent déjà pour les rôles que le format ne chiffre pas. */
   const roles = [...card.cats].map(c => {
     const l = CATLABEL[c] || c;
     if (c in tgt) {
       const manque = tgt[c] - (cnt[c] || 0);
-      return `<span class="chip on">${l}</span> <span class="small muted">${cnt[c]||0}/${tgt[c]}${manque>0?` — il en manque ${manque}`:' — objectif atteint'}</span>`;
+      return `<div class="role-l"><span class="chip on">${esc(l)}</span>
+        <span class="small muted">${cnt[c]||0} / ${tgt[c]} dans le deck — ${manque > 0
+          ? `il en manque ${manque}` : 'objectif atteint'}</span></div>`;
     }
-    return `<span class="chip">${l}</span>`;
+    const n = deckEntries().reduce((a, e) => a + (e.card.cats.has(c) ? e.qty : 0), 0);
+    return `<div class="role-l"><span class="chip">${esc(l)}</span>
+      <span class="small muted">${n} carte(s) du deck tiennent ce rôle — le format n'en fixe pas d'objectif</span></div>`;
   });
 
   const erAll = edhrecAllFor(card);
@@ -209,24 +215,6 @@ function ficheHTML(card) {
       return `<span class="tag edhrec-tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.08);padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant secondaire : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">${esc(erItem.commandant)} ${tagContent}</span>`;
     }
   });
-
-  // Les recommandations EDHREC n'apportent rien au deck : elles restent au-dessus,
-  // sous forme de tags, et sont donc écartées de ce bloc.
-  const raisons = sug ? sug.reasons.filter(r => !/^EDHREC\b/.test(r)) : [];
-  const pourquoi = [];
-  if (raisons.length) raisons.forEach(r => pourquoi.push(r));
-  else {
-    if (partD.length) pourquoi.push(`se branche à ${partD.length} carte(s) déjà présentes dans le deck`);
-    card.cats.forEach(c => {
-      if (c in tgt && (tgt[c] - (cnt[c]||0)) > 0)
-        pourquoi.push(`comble un manque : ${CATLABEL[c]} (${cnt[c]||0} pour ${tgt[c]} recommandés)`);
-    });
-  }
-  if (!card.isLand && !pourquoi.some(r => /courbe/.test(r))) {
-    const meme = deck.filter(c => !c.isLand && c.cmc === card.cmc).length;
-    pourquoi.push(`courbe de mana : ${meme} carte(s) du deck coûtent déjà ${card.cmc} mana`);
-  }
-  if (!pourquoi.length) pourquoi.push("aucun branchement repéré avec le deck actuel : elle vaut surtout pour son effet propre");
 
   const nomLien = l => NODE[l.concept].label.toLowerCase() + (l.detail ? ` (${l.detail})` : '')
     + (l.k <= 0.4 ? ' — non vérifiable, force ou coût inconnus' : (l.k < 1 ? ' — sous réserve' : ''));
@@ -265,8 +253,9 @@ function ficheHTML(card) {
     </div>
     <div class="bloc"><h4>Ce qu'elle apporte au deck</h4>
       <div class="small muted" style="margin-bottom:5px">Rôles dans le deck</div>
-      <div class="chips" style="margin:0 0 8px">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
-      ${pourquoi.map(r => `<div class="puce">${esc(r)}</div>`).join('')}</div>
+      ${roles.join('') || '<div class="role-l"><span class="chip">Rôle non identifié</span></div>'}
+      ${partD.length ? `<div class="small muted" style="margin:10px 0 5px">Cartes du deck avec lesquelles elle se branche</div>
+        <div class="chips">${partD.map(p => refCarte(p.card.name)).join(' ')}</div>` : ''}</div>
     ${(() => {
       const cs = combosDe(card);
       if (!cs.length) return '';
