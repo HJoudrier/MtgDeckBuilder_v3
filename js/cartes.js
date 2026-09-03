@@ -294,62 +294,49 @@ function categories(card) {
    Une carte peut relever de plusieurs archétypes, ou d'aucun.
    ===================================================================== */
 
-/* Les archétypes que l'atelier sait lire dans le texte d'une carte. Ils
-   portent le nom du thème EDHREC correspondant : la liste affichée vient
-   d'EDHREC (js/externes.js), et ces quinze-là s'y raccrochent pour
-   apporter, en plus, une lecture locale du texte. */
-const ARCHETYPES = [
-  {id:'aristocrats', label:'Aristocrates / Sacrifice',
-   aide:'Sacrifices, morts de créatures et drain qui en découle'},
-  {id:'+1-+1-counters', label:'Marqueurs +1/+1',
-   aide:'Pose de marqueurs, prolifération et cartes qui s\'en soucient'},
-  {id:'tokens', label:'Jetons',
-   aide:'Création de jetons et cartes qui en tirent parti'},
-  {id:'spellslinger', label:'Spellslinger',
-   aide:'Cartes qui se soucient des éphémères et des rituels'},
-  {id:'flying', label:'Vol',
-   aide:'Créatures volantes et effets qui donnent le vol'},
-  {id:'combat', label:'Combat / attaque',
-   aide:'Déclenchements à l\'attaque, phases de combat et percée'},
-  {id:'blink', label:'Blink / ETB',
-   aide:'Scintillement et déclenchements sur l\'arrivée d\'autres permanents'},
-  {id:'reanimator', label:'Cimetière / Réanimation',
-   aide:'Récursion, meule, défausse et cartes lancées depuis le cimetière'},
-  {id:'landfall', label:'Landfall / terrains',
-   aide:'Terrains qui arrivent, recherche de terrains et déclenchements associés'},
-  {id:'voltron', label:'Voltron / Auras & équipements',
-   aide:'Attachements : auras, équipements et créatures équipées'},
-  {id:'lifegain', label:'Gain de vie',
-   aide:'Lien de vie, gains de points de vie et récompenses associées'},
-  {id:'artifacts', label:'Artefacts',
-   aide:'Artefacts qui comptent : trésors, affinité, bricolage'},
-  {id:'enchantments', label:'Enchantements',
-   aide:'Enchantements qui comptent : constellation, aura-matters'},
-  {id:'control', label:'Contrôle / Stax',
-   aide:'Contresorts, taxes, effets de blocage et fléaux'},
-  {id:'mill', label:'Meule (mill)',
-   aide:'Cartes mises de la bibliothèque au cimetière'}
-];
+/* =====================================================================
+   Archétypes de deck. La liste et l'appartenance des cartes viennent
+   d'EDHREC (js/externes.js) ; les tables ci-dessous ne servent qu'à
+   l'affichage : un libellé français pour les thèmes les plus courants,
+   et une phrase disant ce que l'archétype fait.
+   ===================================================================== */
 
-const ARCH_TEXTE = {};
-ARCHETYPES.forEach(a => ARCH_TEXTE[a.id] = a);
-
-/* Anciens identifiants internes, pour relire un filtre enregistré avant
-   le passage aux noms de thèmes EDHREC. */
-const ARCH_ANCIENS = {
-  aristocrats:'aristocrats', marqueurs:'+1-+1-counters', jetons:'tokens',
-  spellslinger:'spellslinger', vol:'flying', combat:'combat', blink:'blink',
-  reanimator:'reanimator', landfall:'landfall', voltron:'voltron',
-  lifegain:'lifegain', artefacts:'artifacts', enchantements:'enchantments',
-  control:'control', meule:'mill'
+const ARCH_LABELS = {
+  'aristocrats':'Aristocrates / Sacrifice', '+1-+1-counters':'Marqueurs +1/+1',
+  'tokens':'Jetons', 'spellslinger':'Spellslinger', 'flying':'Vol',
+  'combat':'Combat / attaque', 'blink':'Blink / ETB', 'reanimator':'Cimetière / Réanimation',
+  'landfall':'Landfall / terrains', 'voltron':'Voltron / Auras & équipements',
+  'lifegain':'Gain de vie', 'artifacts':'Artefacts', 'enchantments':'Enchantements',
+  'control':'Contrôle / Stax', 'mill':'Meule (mill)', 'sacrifice':'Sacrifice',
+  'graveyard':'Cimetière', 'equipment':'Équipements', 'auras':'Auras',
+  'lands-matter':'Terrains', 'counters':'Marqueurs', 'ramp':'Ramp / mana',
+  'card-draw':'Pioche', 'treasure':'Trésors', 'theft':'Vol de permanentes',
+  'extra-turns':'Tours supplémentaires', 'extra-combats':'Combats supplémentaires',
+  'discard':'Défausse', 'burn':'Dégâts directs', 'go-wide':'Nombre'
 };
 
-/* Résumés de fonctionnement affichés dans la liste déroulante. Les
-   quinze archétypes ci-dessus portent le leur ; ceux-ci complètent la
-   liste d'EDHREC pour les thèmes les plus courants. Un thème absent de
-   cette table s'affiche avec le nombre de decks qu'EDHREC lui compte. */
+/* Résumés de fonctionnement affichés dans la liste déroulante. Un thème
+   absent de cette table s'affiche avec le nombre de decks qu'EDHREC lui
+   compte. Ils viennent de ma connaissance du jeu, pas d'une source. */
 const ARCH_RESUMES = {
-  'group-hug':      "Donne cartes et mana à tout le monde, puis tire parti de l'abondance ou gagne par un autre biais.",
+  'aristocrats':    "Sacrifie ses propres créatures et se nourrit de leur mort : drain, jetons, valeur.",
+  '+1-+1-counters': "Pose des marqueurs +1/+1, les démultiplie et récompense les créatures grandies.",
+  'tokens':         "Crée des jetons en nombre, puis les transforme en menace ou en carburant.",
+  'spellslinger':   "Tourne autour des éphémères et des rituels : prouesse, magecraft, copies.",
+  'flying':         "Créatures volantes et effets qui donnent le vol, pour passer au-dessus du sol.",
+  'combat':         "Déclenchements à l'attaque, phases de combat additionnelles et percée.",
+  'blink':          "Scintille ses permanentes pour rejouer leurs arrivées en jeu, encore et encore.",
+  'reanimator':     "Met de grosses cartes au cimetière, puis les ramène en jeu à moindre coût.",
+  'landfall':       "Récompense chaque terrain qui arrive : jetons, marqueurs, dégâts.",
+  'voltron':        "Réunit auras et équipements sur une seule créature, jusqu'à la rendre létale.",
+  'lifegain':       "Gagne des points de vie et convertit ce gain en cartes, en corps ou en dégâts.",
+  'artifacts':      "Artefacts qui comptent : trésors, affinité, bricolage, récursion.",
+  'enchantments':   "Enchantements qui comptent : constellation, auras et récursion associées.",
+  'control':        "Contresorts, removal et taxes : garder la main jusqu'à conclure tranquillement.",
+  'mill':           "Vide les bibliothèques, la sienne pour s'en servir ou celles d'en face pour gagner.",
+  'sacrifice':      "Sacrifie ses propres permanentes pour en tirer valeur, mana ou dégâts.",
+  'graveyard':      "Traite le cimetière comme une seconde main : récursion, flashback, escape.",
+  'group-hug':      "Donne cartes et mana à tout le monde, puis tire parti de l'abondance ou gagne autrement.",
   'wheels':         "Défausse et repioche des mains entières, en tirant profit de chaque cycle.",
   'chaos':          "Effets aléatoires et symétriques qui brouillent la partie au profit de qui s'y est préparé.",
   'infect':         "Créatures à infection : dix marqueurs poison suffisent, sans toucher aux points de vie.",
@@ -364,8 +351,6 @@ const ARCH_RESUMES = {
   'big-mana':       "Beaucoup de mana, peu de cartes, mais chacune décisive.",
   'card-draw':      "Enchaîne les pioches pour garder la main pleine et trouver ses pièces.",
   'lands-matter':   "Fait du terrain une ressource active : récursion, animation, déclenchements.",
-  'graveyard':      "Traite le cimetière comme une seconde main : récursion, flashback, escape.",
-  'sacrifice':      "Sacrifie ses propres permanentes pour en tirer valeur, mana ou dégâts.",
   'counters':       "Marqueurs de toutes sortes, posés puis démultipliés par la prolifération.",
   'equipment':      "Équipements réunis sur peu de créatures, souvent une seule menace.",
   'auras':          "Auras empilées sur une créature clé, avec de quoi la protéger du removal.",
@@ -386,71 +371,24 @@ const ARCH_RESUMES = {
   'populate':       "Recopie ses meilleurs jetons, tour après tour.",
   'proliferate':    "Ajoute un marqueur de chaque sorte, partout où il y en a déjà.",
   'go-wide':        "Beaucoup de petites créatures, puis un effet global qui les rend menaçantes.",
-  'voltron':        "Réunit auras et équipements sur une seule créature, jusqu'à la rendre létale.",
   'aggro':          "Menaces rapides et pression constante dès les premiers tours.",
   'toolbox':        "Tuteurs et réponses à la carte, cherchées selon la situation."
 };
 
-/* Motifs de texte, compilés une seule fois. */
-const ARCH_MOTIFS = {
-  aristocrats: /\bdies\b|\bsacrifice[sd]? (?:a|an|another|one|two|three|x|this|that)\b|whenever [^.]{0,50}\bdies\b|each opponent loses|\bblitz\b|\bexploit\b|\bafterlife\b/,
-  '+1-+1-counters':    /\+1\/\+1 counter|\bproliferate\b|\bevolve\b|\badapt \d|\boutlast\b|\bbolster \d|\bmentor\b|\btraining\b|\bbackup \d|\bmodified\b|\bgraft \d|\bundying\b/,
-  tokens:       /creates? [^.]{0,50}token|\bpopulate\b|token creature|\bamass\b|\bfabricate\b|\bconvoke\b/,
-  spellslinger: /instants? (?:and|or) sorcer|instant or sorcery|\bprowess\b|\bmagecraft\b|\bstorm\b|\bflashback\b|\bjump-start\b|copy target (?:instant|sorcery|spell)|whenever you cast (?:an instant|a sorcery|a noncreature|your (?:first|second))/,
-  flying:          /\bflying\b/,
-  combat:       /whenever [^.]{0,50}attacks|additional combat phase|extra combat|\bdouble strike\b|\bmelee\b|\bbattle cry\b|\bmyriad\b|\bexalted\b|attacks each combat if able|deals combat damage to a player/,
-  blink:        /exile [^.]{0,60}return (?:it|them|those cards|that card)[^.]{0,50}battlefield|return (?:it|them|those cards) to the battlefield|\bflicker/,
-  reanimator:    /from (?:your|a|their) graveyard|\bescape\b|\bdisturb\b|\bunearth\b|\bdelve\b|\bthreshold\b|\bdelirium\b|\bembalm\b|\beternalize\b|into (?:your|their) graveyard/,
-  landfall:     /\blandfall\b|land enters|play an additional land|search your library for a[^.]{0,40}land/,
-  voltron:      /\bequip\b|equipped creature|enchanted creature|\benchant creature\b|\bequipment\b|\bfortify\b|attach(?:ed)? /,
-  lifegain:      /\blifelink\b|gains? \d+ life|gains? life|whenever you gain life|\bextort\b/,
-  artifacts:    /artifacts? you control|artifact spell|whenever an artifact|another artifact|\bmetalcraft\b|\bimprovise\b|affinity for artifacts|\btreasure\b/,
-  enchantments:/enchantments? you control|enchantment spell|whenever an enchantment|another enchantment|\bconstellation\b/,
-  control:     /counter target|can't be cast|players? can't|costs? \{?\d\}? more to cast|destroy all|exile all|\bward\b/,
-  mill:        /\bmills?\b|puts? the top [^.]{0,40}into (?:your|their|his or her) graveyard/
+/* Anciens identifiants internes, pour relire un filtre enregistré avant
+   le passage aux noms de thèmes EDHREC. */
+const ARCH_ANCIENS = {
+  aristocrates:'aristocrats', marqueurs:'+1-+1-counters', jetons:'tokens',
+  spellslinger:'spellslinger', vol:'flying', combat:'combat', blink:'blink',
+  cimetiere:'reanimator', landfall:'landfall', voltron:'voltron',
+  gainvie:'lifegain', artefacts:'artifacts', enchantements:'enchantments',
+  controle:'control', meule:'mill'
 };
-
-/* Archétypes d'une carte : identifiants de `ARCHETYPES`. */
-function archetypesDe(card) {
-  const out = [];
-  if (!card || card.isToken) return out;
-  const a = card.an || {abilities:[], triggers:[]};
-  const tx = (card.text || '').toLowerCase();
-  const ty = (card.type || '').toLowerCase();
-  const vers = id => a.abilities.some(x => x.to.includes(id));
-  const depuis = id => a.abilities.some(x => x.from.includes(id))
-    || (a.triggers || []).some(x => x.c === id);
-  const dit = cle => ARCH_MOTIFS[cle].test(tx);
-
-  const test = {
-    aristocrats: () => vers('SACRIFICE') || depuis('SACRIFICE') || depuis('MORT') || depuis('MORT_SOI'),
-    '+1-+1-counters':    () => vers('MARQUEUR') || vers('PROLIFERATION') || depuis('MARQUEUR'),
-    tokens:       () => vers('JETON'),
-    spellslinger: () => depuis('LANCEMENT') && /instant|sorcery/.test(tx),
-    flying:          () => vers('VOL'),
-    combat:       () => depuis('ATTAQUE') || depuis('DEGATS_COMBAT_JOUEUR'),
-    blink:        () => vers('BLINK') || depuis('ETB'),
-    reanimator:    () => vers('RECURSION') || vers('MILL') || vers('DEFAUSSE') || depuis('MIS_AU_CIMETIERE'),
-    landfall:     () => vers('TERRAIN') || depuis('TERRAIN') || depuis('TERRAIN_JOUE'),
-    voltron:      () => vers('ATTACHEMENT') || /aura|equipment/.test(ty),
-    lifegain:      () => vers('GAIN_VIE') || depuis('GAIN_VIE'),
-    artifacts:    () => vers('TRESOR'),
-    enchantments:() => false,
-    control:     () => vers('CONTRESORT') || vers('STAX') || vers('TAXE'),
-    mill:        () => vers('MILL')
-  };
-
-  ARCHETYPES.forEach(({id}) => {
-    if ((test[id] && test[id]()) || dit(id)) out.push(id);
-  });
-  return out;
-}
 
 /* Une carte dont le texte ou la force changent voit son analyse refaite. */
 function reanalyser(card) {
   card.an = analyze(card);
   card.cats = categories(card);
-  card.archetypes = archetypesDe(card);
   return card;
 }
 

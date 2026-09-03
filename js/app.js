@@ -33,15 +33,6 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (b.dataset.asrc) {
-    S.filtres.archSource = b.dataset.asrc;
-    archetypesAChargerEdhrec().forEach(slug => chargerThemeEdhrec(slug));
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
-    return;
-  }
-
   if (b.dataset.cmode) {
     S.colorMode = b.dataset.cmode;
     invaliderCandidats();

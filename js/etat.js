@@ -23,7 +23,7 @@ const S = {
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -63,7 +63,7 @@ const S = {
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -90,75 +90,35 @@ const ARCH_BASE = {
   enCours:new Set()   // thèmes en cours de chargement
 };
 
-const ARCH_SOURCES = [
-  ['deux', 'Les deux'],
-  ['texte', 'Texte de la carte'],
-  ['base', 'EDHREC']
-];
-
 /* Libellé d'un thème : le nôtre s'il en existe un, sinon celui d'EDHREC. */
 function libelleArchetype(slug) {
-  if (ARCH_TEXTE[slug]) return ARCH_TEXTE[slug].label;
+  if (ARCH_LABELS[slug]) return ARCH_LABELS[slug];
   const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
   return (t && t.label) || slug;
 }
 
 /* Court résumé du fonctionnement d'un archétype, pour la liste. */
 function resumeArchetype(slug) {
-  if (ARCH_TEXTE[slug]) return ARCH_TEXTE[slug].aide;
   return ARCH_RESUMES[slug] || '';
 }
 
-/* Liste proposée dans la fenêtre : celle d'EDHREC dès qu'elle est
-   chargée, complétée par les quinze archétypes lus dans le texte ;
-   à défaut, ces quinze-là seuls. */
+/* Les archétypes proposés : ceux qu'EDHREC publie. */
 function archetypesDisponibles() {
-  const vus = new Map();
-  (ARCH_BASE.liste || []).forEach(t => vus.set(t.slug, {
-    slug:t.slug, label:libelleArchetype(t.slug), n:t.n || 0,
-    texte:!!ARCH_TEXTE[t.slug], base:true, aide:resumeArchetype(t.slug)
+  return (ARCH_BASE.liste || []).map(t => ({
+    slug:t.slug, label:libelleArchetype(t.slug), n:t.n || 0, aide:resumeArchetype(t.slug)
   }));
-  ARCHETYPES.forEach(a => {
-    if (vus.has(a.id)) return;
-    vus.set(a.id, {slug:a.id, label:a.label, n:0, texte:true, base:false, aide:a.aide});
-  });
-  return [...vus.values()];
 }
 
-/* Archétypes de la carte selon la base extérieure. */
-function archetypesBase(card) {
+/* Archétypes d'une carte, d'après les thèmes EDHREC chargés. */
+function archetypesCarte(card) {
   if (!card || !ARCH_BASE.index.size) return [];
   const avant = typeof frontFace === 'function' ? frontFace(card.name) : card.name;
   const s = ARCH_BASE.index.get(norm(card.name)) || ARCH_BASE.index.get(norm(avant));
   return s ? [...s] : [];
 }
 
-/* Source retenue dans la fenêtre des filtres. */
-function sourceArchetypes() {
-  const v = (S.filtres && S.filtres.archSource) || 'deux';
-  return ARCH_SOURCES.some(([k]) => k === v) ? v : 'deux';
-}
-
-/* Archétypes retenus pour le filtrage, selon la source choisie. */
-function archetypesCarte(card) {
-  const src = sourceArchetypes();
-  const texte = (card && card.archetypes) || [];
-  if (src === 'texte') return texte;
-  const base = archetypesBase(card);
-  if (src === 'base') return base;
-  return [...new Set([...texte, ...base])];
-}
-
-/* Détail par archétype : d'où vient l'étiquette. Sert à la fiche. */
-function archetypesDetail(card) {
-  const texte = new Set((card && card.archetypes) || []);
-  const base = new Set(archetypesBase(card));
-  return [...new Set([...texte, ...base])].map(id => ({id, texte:texte.has(id), base:base.has(id)}));
-}
-
 /* Un thème coché dont les cartes ne sont pas encore chargées. */
 function archetypesAChargerEdhrec() {
-  if (sourceArchetypes() === 'texte') return [];
   return archetypesFiltre().filter(slug => !ARCH_BASE.themes[slug] && !ARCH_BASE.enCours.has(slug));
 }
 
@@ -210,12 +170,8 @@ function filtresActifs() {
   const artiste = String(f.artiste || '').trim();
   if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
   const arch = archetypesFiltre();
-  if (arch.length) {
-    const src = sourceArchetypes();
-    const suffixe = src === 'texte' ? ' (texte)' : (src === 'base' ? ' (EDHREC)' : '');
-    actifs.push({cles:['archetypes'],
-      texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}${suffixe}`});
-  }
+  if (arch.length) actifs.push({cles:['archetypes'],
+    texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;

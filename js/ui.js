@@ -457,10 +457,6 @@ function corpsFiltres() {
         <div class="arch-liste">${listeArchetypesHTML()}</div>
       </div>` : ''}
       <div class="row" style="gap:6px;align-items:center;margin-top:2px">
-        <span class="lab">Source</span>
-        <div class="seg">
-          ${ARCH_SOURCES.map(([k, l]) => `<button type="button" data-asrc="${k}" aria-pressed="${sourceArchetypes() === k}">${l}</button>`).join('')}
-        </div>
         <button type="button" class="btn sm" data-act="chargerArch" ${ARCH_BASE.etat === 'chargement' ? 'disabled' : ''}>
           ${ARCH_BASE.liste.length ? 'Recharger la liste EDHREC' : 'Charger la liste EDHREC'}
         </button>
@@ -489,34 +485,33 @@ function corpsFiltres() {
 
 let archRecherche = '';
 let archOuvert = false;
-const ARCH_LISTE_MAX = 60;
 
-/* Lignes de la liste déroulante : le nom, puis ce que fait l'archétype. */
+/* Lignes de la liste déroulante : le nom, puis ce que fait l'archétype.
+   Tous les thèmes publiés par EDHREC y figurent ; la recherche ne fait
+   que resserrer l'affichage. */
 function listeArchetypesHTML() {
+  if (!ARCH_BASE.liste.length) {
+    return `<div class="small muted" style="padding:8px 10px">${ARCH_BASE.etat === 'chargement'
+      ? 'Chargement de la liste EDHREC…'
+      : 'La liste vient d\'EDHREC : utilisez « Charger la liste EDHREC » ci-dessous.'}</div>`;
+  }
   const choisis = new Set(archetypesFiltre());
   const q = loose(archRecherche);
   let liste = archetypesDisponibles();
   if (q) liste = liste.filter(a => loose(a.label).includes(q) || loose(a.slug).includes(q));
-  liste = liste.sort((a, b) => (b.texte ? 1 : 0) - (a.texte ? 1 : 0) || (b.n || 0) - (a.n || 0)
-    || a.label.localeCompare(b.label));
-  const total = liste.length;
-  const vus = liste.slice(0, ARCH_LISTE_MAX);
-  const reste = total - vus.length;
-  if (!total) return '<div class="small muted" style="padding:6px 8px">Aucun archétype à ce nom.</div>';
+  liste = liste.sort((a, b) => (b.n || 0) - (a.n || 0) || a.label.localeCompare(b.label));
+  if (!liste.length) return '<div class="small muted" style="padding:6px 8px">Aucun archétype à ce nom.</div>';
 
-  return vus.map(a => {
+  return liste.map(a => {
     const coche = choisis.has(a.slug);
     const charge = ARCH_BASE.themes[a.slug];
-    const marque = [
-      a.texte ? '<span class="arch-src" title="Lu aussi dans le texte des cartes, sans réseau">✎</span>' : '',
-      a.base ? `<span class="arch-n" title="Thème EDHREC">${a.n ? a.n.toLocaleString('fr-FR') + ' decks' : 'EDHREC'}${charge ? ` · ${charge.n} cartes` : ''}</span>` : ''
-    ].filter(Boolean).join(' ');
     return `<button type="button" class="arch-row" data-act="toggleArch" data-arch="${esc(a.slug)}" aria-pressed="${coche}">
-      <span class="arch-row-h"><span class="arch-row-t">${esc(a.label)}</span> ${marque}<span class="arch-row-x">${coche ? '✓' : ''}</span></span>
-      <span class="arch-row-d">${esc(a.aide || 'Thème EDHREC : les cartes viennent de sa page, sans lecture du texte.')}</span>
+      <span class="arch-row-h"><span class="arch-row-t">${esc(a.label)}</span>
+        <span class="arch-n">${a.n ? a.n.toLocaleString('fr-FR') + ' decks' : ''}${charge ? ` · ${charge.n} cartes` : ''}</span>
+        <span class="arch-row-x">${coche ? '✓' : ''}</span></span>
+      <span class="arch-row-d">${esc(a.aide || 'Thème publié par EDHREC ; ses cartes viennent de sa page.')}</span>
     </button>`;
-  }).join('') + (reste > 0
-    ? `<div class="small muted" style="padding:6px 8px">+ ${reste} autre(s) — précisez la recherche.</div>` : '');
+  }).join('');
 }
 
 /* Rafraîchit la liste proposée sans réécrire la fenêtre : la frappe
@@ -540,12 +535,10 @@ function etatArchetypes() {
     const charges = Object.keys(ARCH_BASE.themes).length;
     const enCours = ARCH_BASE.enCours.size;
     return `Liste établie par EDHREC : ${ARCH_BASE.liste.length.toLocaleString('fr-FR')} thème(s)${date ? `, relevés le ${date}` : ''}.
-      Les cartes d'un thème sont cherchées à sa première utilisation${charges ? ` — ${charges} déjà chargé(s), ${ARCH_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${enCours ? ` · ${enCours} en cours…` : ''}.
-      Les archétypes marqués ✎ sont en plus lus dans le texte des cartes, localement.`;
+      Les cartes d'un thème sont cherchées à sa première utilisation${charges ? ` — ${charges} déjà chargé(s), ${ARCH_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${enCours ? ` · ${enCours} en cours…` : ''}.`;
   }
-  return `Seul le texte de la carte est lu pour l'instant : quinze archétypes, marqués ✎, que l'atelier sait reconnaître seul.
-    « Charger la liste EDHREC » remplace cette liste par les thèmes publiés par EDHREC — une requête pour la liste,
-    puis une par thème à sa première utilisation, gardées en cache sur cet appareil.`;
+  return `Les archétypes viennent d'EDHREC. « Charger la liste EDHREC » récupère les thèmes qu'il publie — une requête
+    pour la liste, puis une par thème à sa première utilisation, gardées en cache sur cet appareil.`;
 }
 
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */

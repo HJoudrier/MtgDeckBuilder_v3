@@ -260,12 +260,10 @@ function ficheHTML(card) {
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
         <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
         ${(() => {
-          const det = archetypesDetail(card);
-          if (!det.length) return '';
-          const source = d => d.texte && d.base ? 'texte de la carte et thèmes EDHREC'
-            : (d.base ? 'thèmes EDHREC' : 'texte de la carte');
-          return `<div class="chips" style="margin-top:4px">${det.map(d =>
-            `<span class="chip arch${d.base ? ' base' : ''}" title="Archétype relevé : ${source(d)}">${esc(libelleArchetype(d.id))}${d.base ? ' ◆' : ''}</span>`).join(' ')}</div>`;
+          const arch = archetypesCarte(card);
+          if (!arch.length) return '';
+          return `<div class="chips" style="margin-top:4px">${arch.map(slug =>
+            `<span class="chip arch base" title="Thème EDHREC${resumeArchetype(slug) ? ` — ${esc(resumeArchetype(slug))}` : ''}">${esc(libelleArchetype(slug))}</span>`).join(' ')}</div>`;
         })()}
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
