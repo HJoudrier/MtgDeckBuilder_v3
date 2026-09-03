@@ -344,6 +344,53 @@ const ARCH_ANCIENS = {
   control:'control', meule:'mill'
 };
 
+/* Résumés de fonctionnement affichés dans la liste déroulante. Les
+   quinze archétypes ci-dessus portent le leur ; ceux-ci complètent la
+   liste d'EDHREC pour les thèmes les plus courants. Un thème absent de
+   cette table s'affiche avec le nombre de decks qu'EDHREC lui compte. */
+const ARCH_RESUMES = {
+  'group-hug':      "Donne cartes et mana à tout le monde, puis tire parti de l'abondance ou gagne par un autre biais.",
+  'wheels':         "Défausse et repioche des mains entières, en tirant profit de chaque cycle.",
+  'chaos':          "Effets aléatoires et symétriques qui brouillent la partie au profit de qui s'y est préparé.",
+  'infect':         "Créatures à infection : dix marqueurs poison suffisent, sans toucher aux points de vie.",
+  'superfriends':   "Accumule les planeswalkers, les protège et prolifère leurs marqueurs de loyauté.",
+  'vehicles':       "Véhicules pilotés par de petites créatures, hors de portée du removal entre deux combats.",
+  'clones':         "Copie les meilleures permanentes, les siennes comme celles d'en face.",
+  'politics':       "Marchandage, dons temporaires et votes, pour diriger les attaques ailleurs.",
+  'storm':          "Enchaîne les sorts dans un même tour pour déclencher un final démultiplié.",
+  'pillowfort':     "Rend les attaques coûteuses ou impossibles, le temps de gagner autrement.",
+  'stax':           "Taxe et verrouille les ressources adverses, en gardant de quoi conclure.",
+  'ramp':           "Accélère la production de mana pour lancer plus tôt de plus grosses cartes.",
+  'big-mana':       "Beaucoup de mana, peu de cartes, mais chacune décisive.",
+  'card-draw':      "Enchaîne les pioches pour garder la main pleine et trouver ses pièces.",
+  'lands-matter':   "Fait du terrain une ressource active : récursion, animation, déclenchements.",
+  'graveyard':      "Traite le cimetière comme une seconde main : récursion, flashback, escape.",
+  'sacrifice':      "Sacrifie ses propres permanentes pour en tirer valeur, mana ou dégâts.",
+  'counters':       "Marqueurs de toutes sortes, posés puis démultipliés par la prolifération.",
+  'equipment':      "Équipements réunis sur peu de créatures, souvent une seule menace.",
+  'auras':          "Auras empilées sur une créature clé, avec de quoi la protéger du removal.",
+  'theft':          "Prend le contrôle des permanentes adverses et les retourne contre elles.",
+  'combo':          "Deux ou trois pièces qui, réunies, referment la partie sur place.",
+  'burn':           "Dégâts directs au visage, sans passer par le combat.",
+  'lifeloss':       "Fait perdre des points de vie à tous les adversaires, souvent en en gagnant.",
+  'discard':        "Vide les mains adverses et se nourrit de leur défausse.",
+  'treasure':       "Jetons Trésor : du mana temporaire, et une ressource à sacrifier.",
+  'energy':         "Compteurs d'énergie accumulés puis dépensés pour des effets répétés.",
+  'monarch':        "Prend la couronne et la garde, pour piocher à chaque fin de tour.",
+  'extra-turns':    "Enchaîne les tours supplémentaires jusqu'à conclure.",
+  'extra-combats':  "Rejoue la phase de combat, en démultipliant une attaque déjà gagnante.",
+  'defenders':      "Murs et grosses endurances, transformés en menace le moment venu.",
+  'power-matters':  "Récompense la force brute des créatures.",
+  'untap':          "Dégage ses permanentes pour réutiliser leurs capacités dans le tour.",
+  'flash':          "Joue à vitesse d'éphémère, en réaction, en gardant ses options ouvertes.",
+  'populate':       "Recopie ses meilleurs jetons, tour après tour.",
+  'proliferate':    "Ajoute un marqueur de chaque sorte, partout où il y en a déjà.",
+  'go-wide':        "Beaucoup de petites créatures, puis un effet global qui les rend menaçantes.",
+  'voltron':        "Réunit auras et équipements sur une seule créature, jusqu'à la rendre létale.",
+  'aggro':          "Menaces rapides et pression constante dès les premiers tours.",
+  'toolbox':        "Tuteurs et réponses à la carte, cherchées selon la situation."
+};
+
 /* Motifs de texte, compilés une seule fois. */
 const ARCH_MOTIFS = {
   aristocrats: /\bdies\b|\bsacrifice[sd]? (?:a|an|another|one|two|three|x|this|that)\b|whenever [^.]{0,50}\bdies\b|each opponent loses|\bblitz\b|\bexploit\b|\bafterlife\b/,

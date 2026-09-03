@@ -444,12 +444,18 @@ function corpsFiltres() {
       </select>
     </div>
     <div class="field">
-      <label class="lab" for="f_archQ">Archétype</label>
+      <label class="lab">Archétype</label>
       ${archetypesFiltre().length ? `<div class="archetypes">${archetypesFiltre().map(slug =>
         `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(slug)}" aria-pressed="true"
-          title="Retirer cet archétype">${esc(libelleArchetype(slug))} ✕</button>`).join('')}</div>` : ''}
-      <input type="text" id="f_archQ" data-archq placeholder="rechercher un archétype…" value="${esc(archRecherche)}" autocomplete="off">
-      <div class="archetypes">${listeArchetypesHTML()}</div>
+          title="${esc(resumeArchetype(slug) || 'Retirer cet archétype')}">${esc(libelleArchetype(slug))} ✕</button>`).join('')}</div>` : ''}
+      <button type="button" class="arch-menu-b" data-act="archMenu" aria-expanded="${archOuvert}">
+        <span>${archetypesFiltre().length ? `${archetypesFiltre().length} archétype(s) coché(s)` : 'Choisir un archétype…'}</span>
+        <span class="chev-b">${archOuvert ? '▴' : '▾'}</span>
+      </button>
+      ${archOuvert ? `<div class="arch-menu" id="archPanel">
+        <input type="text" id="f_archQ" data-archq placeholder="rechercher…" value="${esc(archRecherche)}" autocomplete="off">
+        <div class="arch-liste">${listeArchetypesHTML()}</div>
+      </div>` : ''}
       <div class="row" style="gap:6px;align-items:center;margin-top:2px">
         <span class="lab">Source</span>
         <div class="seg">
@@ -482,37 +488,42 @@ function corpsFiltres() {
 }
 
 let archRecherche = '';
-const ARCH_LISTE_MAX = 30;
+let archOuvert = false;
+const ARCH_LISTE_MAX = 60;
 
-/* Boutons proposés : la recherche d'abord, sinon les archétypes lus dans
-   le texte puis les thèmes EDHREC les plus fournis. */
+/* Lignes de la liste déroulante : le nom, puis ce que fait l'archétype. */
 function listeArchetypesHTML() {
   const choisis = new Set(archetypesFiltre());
   const q = loose(archRecherche);
-  let liste = archetypesDisponibles().filter(a => !choisis.has(a.slug));
+  let liste = archetypesDisponibles();
   if (q) liste = liste.filter(a => loose(a.label).includes(q) || loose(a.slug).includes(q));
-  else liste = liste.sort((a, b) => (b.texte ? 1 : 0) - (a.texte ? 1 : 0) || (b.n || 0) - (a.n || 0));
+  liste = liste.sort((a, b) => (b.texte ? 1 : 0) - (a.texte ? 1 : 0) || (b.n || 0) - (a.n || 0)
+    || a.label.localeCompare(b.label));
   const total = liste.length;
   const vus = liste.slice(0, ARCH_LISTE_MAX);
   const reste = total - vus.length;
+  if (!total) return '<div class="small muted" style="padding:6px 8px">Aucun archétype à ce nom.</div>';
+
   return vus.map(a => {
+    const coche = choisis.has(a.slug);
     const charge = ARCH_BASE.themes[a.slug];
-    const infos = [a.aide, a.texte ? 'lu aussi dans le texte des cartes' : '',
-      a.base ? `thème EDHREC${a.n ? ` · ${a.n} decks` : ''}${charge ? ` · ${charge.n} cartes chargées` : ''}` : '']
-      .filter(Boolean).join(' · ');
-    return `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(a.slug)}"
-      aria-pressed="false" title="${esc(infos)}">${esc(a.label)}${a.texte ? ' <span class="arch-src">✎</span>' : ''}</button>`;
+    const marque = [
+      a.texte ? '<span class="arch-src" title="Lu aussi dans le texte des cartes, sans réseau">✎</span>' : '',
+      a.base ? `<span class="arch-n" title="Thème EDHREC">${a.n ? a.n.toLocaleString('fr-FR') + ' decks' : 'EDHREC'}${charge ? ` · ${charge.n} cartes` : ''}</span>` : ''
+    ].filter(Boolean).join(' ');
+    return `<button type="button" class="arch-row" data-act="toggleArch" data-arch="${esc(a.slug)}" aria-pressed="${coche}">
+      <span class="arch-row-h"><span class="arch-row-t">${esc(a.label)}</span> ${marque}<span class="arch-row-x">${coche ? '✓' : ''}</span></span>
+      <span class="arch-row-d">${esc(a.aide || 'Thème EDHREC : les cartes viennent de sa page, sans lecture du texte.')}</span>
+    </button>`;
   }).join('') + (reste > 0
-    ? `<span class="small muted" style="align-self:center">+ ${reste} autre(s) — affinez la recherche</span>`
-    : (total ? '' : '<span class="small muted">aucun archétype à ce nom</span>'));
+    ? `<div class="small muted" style="padding:6px 8px">+ ${reste} autre(s) — précisez la recherche.</div>` : '');
 }
 
 /* Rafraîchit la liste proposée sans réécrire la fenêtre : la frappe
    dans le champ de recherche garde son curseur. */
 function majListeArchetypes() {
-  const champ = document.getElementById('f_archQ');
-  const zone = champ && champ.nextElementSibling;
-  if (zone && zone.classList.contains('archetypes')) zone.innerHTML = listeArchetypesHTML();
+  const zone = document.querySelector('#archPanel .arch-liste');
+  if (zone) zone.innerHTML = listeArchetypesHTML();
 }
 
 /* État de la base d'archétypes extérieure, sous les boutons. */
@@ -570,8 +581,12 @@ function majFenetreFiltres() {
   const corps = document.getElementById('dlgBody');
   if (!corps || !corps.querySelector('[data-filtre]')) return;
   const y = corps.scrollTop;
+  const panneau = document.getElementById('archPanel');
+  const yArch = panneau ? panneau.scrollTop : 0;
   corps.innerHTML = corpsFiltres();
   corps.scrollTop = y;
+  const nouveau = document.getElementById('archPanel');
+  if (nouveau) nouveau.scrollTop = yArch;
 }
 
 function openFiltresModal() {

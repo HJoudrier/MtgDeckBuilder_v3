@@ -103,6 +103,12 @@ function libelleArchetype(slug) {
   return (t && t.label) || slug;
 }
 
+/* Court résumé du fonctionnement d'un archétype, pour la liste. */
+function resumeArchetype(slug) {
+  if (ARCH_TEXTE[slug]) return ARCH_TEXTE[slug].aide;
+  return ARCH_RESUMES[slug] || '';
+}
+
 /* Liste proposée dans la fenêtre : celle d'EDHREC dès qu'elle est
    chargée, complétée par les quinze archétypes lus dans le texte ;
    à défaut, ces quinze-là seuls. */
@@ -110,12 +116,11 @@ function archetypesDisponibles() {
   const vus = new Map();
   (ARCH_BASE.liste || []).forEach(t => vus.set(t.slug, {
     slug:t.slug, label:libelleArchetype(t.slug), n:t.n || 0,
-    texte:!!ARCH_TEXTE[t.slug], base:true, aide:(ARCH_TEXTE[t.slug] || {}).aide || ''
+    texte:!!ARCH_TEXTE[t.slug], base:true, aide:resumeArchetype(t.slug)
   }));
   ARCHETYPES.forEach(a => {
     if (vus.has(a.id)) return;
-    vus.set(a.id, {slug:a.id, label:a.label, n:0, texte:true,
-      base:false, aide:a.aide});
+    vus.set(a.id, {slug:a.id, label:a.label, n:0, texte:true, base:false, aide:a.aide});
   });
   return [...vus.values()];
 }

@@ -93,6 +93,12 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'archMenu') {
+    archOuvert = !archOuvert;
+    majFenetreFiltres();
+    return;
+  }
+
   if (act === 'toggleArch') {
     basculerArchetype(b.dataset.arch);
     // les cartes du thème coché sont cherchées à la demande

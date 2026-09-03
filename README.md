@@ -86,7 +86,7 @@ la liste affichée vient d'EDHREC, et ces quinze-là s'y raccrochent pour apport
 
 *20 fonction(s), 37 Ko*
 
-Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCHLABEL`, `ARCH_MOTIFS`
+Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCH_MOTIFS`, `ARCH_RESUMES`, `ARCH_ANCIENS`
 
 | Fonction | Rôle |
 |---|---|
@@ -135,6 +135,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `sourceArchetypes()` | Source retenue : texte de la carte, EDHREC, ou les deux. |
 | `archetypesBase(card)` | Archétypes d'une carte d'après les thèmes EDHREC chargés. |
 | `archetypesDisponibles()` | Liste proposée : les thèmes EDHREC, complétés par ceux lus dans le texte. |
+| `resumeArchetype(slug)` | Court résumé du fonctionnement d'un archétype. |
 | `libelleArchetype(slug)` | Libellé d'un thème : le nôtre s'il existe, sinon celui d'EDHREC. |
 | `archetypesAChargerEdhrec()` | Thèmes cochés dont les cartes restent à chercher. |
 | `archetypesCarte(card)` | Archétypes retenus pour le filtrage, selon la source. |
@@ -378,7 +379,7 @@ Données : `RETOURNEES`
 | `stripeColor(card)` | Bande de couleur d'identité d'une carte. |
 | `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. |
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
-| `listeArchetypesHTML()` | Archétypes proposés, filtrés par le champ de recherche. |
+| `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
 | `openFormatModal()` | Ouvre la fenêtre du format, depuis la pastille « Format » de l'en-tête. |
 | `corpsFormat()` | Contenu de cette fenêtre : format de jeu et panneau « Personnalisé ». |
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
@@ -422,7 +423,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 243 fonctions au total, réparties en 14 modules.
+- 244 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
