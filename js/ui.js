@@ -483,7 +483,12 @@ function corpsFiltres() {
 /* État de la base d'archétypes extérieure, sous les boutons. */
 function etatArchetypes() {
   if (ARCH_BASE.etat === 'chargement') return 'Chargement des thèmes EDHREC…';
-  if (ARCH_BASE.etat === 'erreur') return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.`;
+  if (ARCH_BASE.etat === 'erreur') {
+    const essais = (ARCH_BASE.essais || []).length
+      ? `<div class="mono" style="font-size:10.5px;margin-top:4px;white-space:pre-line">${esc(ARCH_BASE.essais.join('\n'))}</div>`
+      : '';
+    return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.${essais}`;
+  }
   if (ARCH_BASE.index.size) {
     const nbThemes = Object.values(ARCH_BASE.themes || {}).reduce((n, l) => n + l.length, 0);
     const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';

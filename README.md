@@ -243,6 +243,9 @@ combos répertoriés et combos à une carte près, plus le catalogue Scryfall co
 | Fonction | Rôle |
 |---|---|
 | `chargerArchetypesEdhrec(force)` *(async)* | Charge les thèmes EDHREC et indexe les cartes par archétype. |
+| `formeThemeEdhrec()` *(async)* | Cherche par sondage l'adresse des pages de thème ; note chaque essai. |
+| `formesDeduites()` *(async)* | Déduit cette adresse des liens cités dans une page de commandant. |
+| `temoinEdhrec()` *(async)* | Page de commandant témoin, pour distinguer adresse fausse et hôte injoignable. |
 | `reprendreArchetypesEdhrec()` *(async)* | Reprend cet index depuis IndexedDB au démarrage. |
 | `nomsPageEdhrec(j)` | Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. |
 | `urlThemeEdhrec(slug)` | Adresse de la page JSON d'un thème. |
@@ -412,7 +415,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 234 fonctions au total, réparties en 14 modules.
+- 237 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes

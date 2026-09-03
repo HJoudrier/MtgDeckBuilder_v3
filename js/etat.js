@@ -81,7 +81,7 @@ const FILTRES_BORNES = [
    conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
    --------------------------------------------------------------------- */
 
-const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map()};
+const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map(), forme:null, essais:[]};
 
 const ARCH_SOURCES = [
   ['deux', 'Les deux'],
