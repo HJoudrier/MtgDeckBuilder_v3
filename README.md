@@ -159,7 +159,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 
 *3 fonction(s), 2 Ko*
 
-Données : `CONDITIONS`, `COND_ORDER`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SELLER_TYPES`, `SELLER_MULT`, `CM_COUNTRIES`
+Données : `CONDITIONS`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SELLER_TYPES`, `SELLER_MULT`, `CM_COUNTRIES`
 
 | Fonction | Rôle |
 |---|---|
@@ -187,7 +187,6 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `tailleEstimee(cartes)` | Estime le poids de l'archive par échantillonnage. |
 | `lireCatalogueFichier(source,nom)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue. |
 | `chargerCatalogueLocal()` *(async)* | Cherche une archive posée à côté de la page. |
-| `archiveParRecherche(maj)` *(async)* | Reconstitue un catalogue partiel par l'API de recherche. |
 | `verifierMajCatalogue()` *(async)* | Interroge l'index Scryfall : date, adresse et taille de la version publiée. |
 | `catalogueObsolete()` | Compare l'archive locale à la version publiée. |
 | `majPrix(force)` *(async)* | Rafraîchit les prix des seules cartes possédées ou jouées. |
@@ -207,7 +206,6 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `runImageQueue()` *(async)* | Vide la file des visuels par lots, sans saturer le réseau. |
 | `completeUnknown(names)` *(async)* | Complète les cartes importées, en trois passes de plus en plus tolérantes. |
 | `chercheScryfall(q,cible)` *(async)* | Recherche en ligne pour la boîte d'ajout. |
-| `importerScryfall(sc)` | Crée ou complète une carte à partir d'un résultat de recherche. |
 
 ### `js/stockage.js` — Sauvegarde locale
 
@@ -422,7 +420,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 243 fonctions au total, réparties en 14 modules.
+- 240 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes

@@ -309,12 +309,6 @@ function nomCombinaisonCouleurs(sel) {
   return hasC ? `${base} (+ Incolore)` : base;
 }
 
-function activeFilterManaHTML() {
-  const list = ['W', 'U', 'B', 'R', 'G', 'C'].filter(c => S.colors.has(c));
-  if (!list.length) return '<span class="muted" style="font-size:11px">∅</span>';
-  return list.map(c => symIcon(c, 'sm')).join('');
-}
-
 /* Couleurs proposées par l'en-tête et par la fenêtre des filtres. */
 const COLS = [
   ['W', 'Blanc ({W})'],

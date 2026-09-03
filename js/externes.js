@@ -783,35 +783,6 @@ async function chargerCatalogueLocal() {
   return false;
 }
 
-async function archiveParRecherche(maj) {
-  CAT.source = 'recherche'; CAT.partiel = true;
-  const q = 'game:paper -is:token -t:basic';
-  let url = 'https://api.scryfall.com/cards/search?order=edhrec&unique=cards&q=' + encodeURIComponent(q);
-  const cartes = [];
-  try {
-    while (url && cartes.length < S.exploreMax) {
-      const r = await fetch(url);
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      const j = await r.json();
-      (j.data || []).forEach(sc => { const c = compacte(sc); if (c) cartes.push(c); });
-      CAT.cartes = cartes; CAT.etat = 'chargement'; CAT.octets = 0;
-      if (cartes.length % 1400 < 175) renderF();
-      url = j.has_more ? j.next_page : null;
-      if (url && cartes.length < S.exploreMax) await new Promise(r2 => setTimeout(r2, 110));
-    }
-    CAT.cartes = cartes; CAT.etat = 'ok'; CAT.maj = maj || null; CAT.date = Date.now();
-    CAT.octets = tailleEstimee(cartes);
-    invaliderCandidats();
-    if (saveState !== 'desactive' && S.catalogueActif)
-      idbEcrire('cartes', {v:2, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, partiel:true}).catch(() => {});
-    renderAll();
-  } catch(err) {
-    CAT.etat = (err instanceof TypeError) ? 'hors-ligne' : 'erreur';
-    CAT.detail = (CAT.detail ? CAT.detail + ' ' : '') + `Le repli par recherche a échoué aussi (${err.message||'requête bloquée'}).`;
-    renderAll();
-  }
-}
-
 async function verifierMajCatalogue() {
   if (typeof fetch !== 'function') return null;
   try {

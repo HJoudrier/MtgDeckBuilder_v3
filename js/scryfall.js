@@ -276,12 +276,6 @@ async function chercheScryfall(q, cible) {
   majResultats(cible, true);
 }
 
-function importerScryfall(sc) {
-  const existante = find(sc.name);
-  applyScryfall(sc, existante && existante.unknown ? existante : (existante ? existante : null), !!(existante && !existante.unknown));
-  return find(sc.name);
-}
-
 async function chercheVerso(card) {
   if (!card || card.imgB || card.versoTried || typeof fetch !== 'function') return false;
   if (!/ \/\/ /.test(card.type||'') && !/ \/\/ /.test(card.name||'')) return false;

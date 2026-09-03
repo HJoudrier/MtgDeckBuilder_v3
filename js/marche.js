@@ -6,7 +6,6 @@ const CONDITIONS = [
   ['MT','Mint'], ['NM','Near Mint'], ['EX','Excellent'], ['GD','Good'],
   ['LP','Light Played'], ['PL','Played'], ['PO','Poor']
 ];
-const COND_ORDER = CONDITIONS.map(c => c[0]);
 const COND_MULT = {MT:1.35, NM:1.15, EX:1.00, GD:0.88, LP:0.78, PL:0.68, PO:0.50};
 
 const CM_LANGS = [
