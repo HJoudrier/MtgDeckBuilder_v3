@@ -163,7 +163,7 @@ const EFFECT_RULES = [
   ['CONTRESORT', /counter target/],
   ['DESTRUCTION',/destroys?\b/],
   ['EXIL',       /exiles?\b/],
-  ['BOUNCE',     /return target[^.]{0,60}to (?:its owner's|their owner's|your) hand|shuffles it into their library/],
+  ['BOUNCE',     /return [^.]{0,70}to (?:its|their) owners?['\u2019]?s? hands?|return [^.]{0,70}to (?:your|their) hands?|shuffles it into their library/],
   ['DEGATS',     /deals? \d+ damage|deals damage equal|deals \w+ damage|\bfights?\b/],
   ['PERTE_VIE',  /(?:each opponent|target player|that player|opponents) loses? \d+ life|loses? \d+ life/],
   ['GAIN_VIE',   /gains? (?:\d+|life equal|4 life) life|you gain \d+ life|\blifelink\b|gains life/],
