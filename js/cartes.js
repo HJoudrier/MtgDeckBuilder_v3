@@ -195,7 +195,7 @@ function analyze(card) {
                  hook:recurring && (granted || !selfRef), q, pq:qualifieProduction(ePart, card)};
           if (src.length || eff.length)
             abilities.push({kind:ctx.kind, from:ctx.from, to:eff, scopeTrig:ctx.scope, scopeEff:scopeOf(ePart),
-                            text:body, hook:ctx.hook, q, pq:ctx.pq});
+                            text:body, textEff:ePart || body, hook:ctx.hook, q, pq:ctx.pq});
           return;
         }
         const act = body.match(/^([^:]{1,70}):\s*(.+)$/);
@@ -210,20 +210,20 @@ function analyze(card) {
           const q = {portee:'vous', sujet:sacOutlet ? 'creature' : (/discard/.test(cost) ? 'card' : ''), filtres:[], mode:'cout'};
           ctx = {from:src, scope:'self', kind:'activee', hook:false, q, pq:qualifieProduction(eff0, card), couts};
           if (eff.length) abilities.push({kind:'activee', from:src, to:eff, scopeTrig:'self', scopeEff:scopeOf(eff0),
-                                         text:body, sacOutlet, selfSac, q, pq:ctx.pq, couts});
+                                         text:body, textEff:eff0, sacOutlet, selfSac, q, pq:ctx.pq, couts});
           return;
         }
         const eff = refineEffects(matchAll(EFFECT_RULES, body), body);
         if (!eff.length) return;
         if (ctx && !/^[a-z ,]*(each|all|creatures you control|equipped|enchanted)/.test(body)) {
           abilities.push({kind:ctx.kind, from:ctx.from, to:eff, scopeTrig:ctx.scope, scopeEff:scopeOf(body),
-                          text:body, hook:ctx.hook, q:ctx.q, pq:qualifieProduction(body, card)});
+                          text:body, textEff:body, hook:ctx.hook, q:ctx.q, pq:qualifieProduction(body, card)});
           return;
         }
         ctx = {from:[isSpell ? 'LANCEMENT' : 'STATIQUE'], scope:'self', kind:isSpell ? 'sort' : 'statique', hook:false,
                q:{portee:'vous', sujet:'', filtres:[], mode:isSpell ? 'sort' : 'statique'}};
         abilities.push({kind:ctx.kind, from:ctx.from, to:eff, scopeTrig:'self', scopeEff:scopeOf(body),
-                        text:body, hook:false, q:ctx.q, pq:qualifieProduction(body, card)});
+                        text:body, textEff:body, hook:false, q:ctx.q, pq:qualifieProduction(body, card)});
       });
     });
   });
@@ -263,26 +263,6 @@ function analyze(card) {
       types:card.sousTypes||[], sujets:card.typesSort||[], force:card.force, creature:!!card.isCreature});
 
   return {abilities, edges, triggers, produces, isSpell, isPermanent};
-}
-
-function categories(card) {
-  const c = new Set(), a = card.an, t = card.type.toLowerCase(), tx = (card.text||'').toLowerCase();
-  const has = id => a.abilities.some(x => x.to.includes(id));
-  if (card.isToken) return c;
-  if (/creature/.test(t)) c.add('creatures');
-  if (/land/.test(t)) c.add('terrains');
-  if (has('MANA') || has('RAMP') || has('TRESOR') || has('REDUCTION')) if (!/^basic land/.test(t)) c.add('ramp');
-  if (has('PIOCHE') || has('IMPULSE') || has('RECURSION')) c.add('pioche');
-  if (has('TUTEUR')) c.add('tuteurs');
-  if (has('DESTRUCTION') || has('EXIL') || has('BOUNCE') || has('DEGATS') || has('CONTRESORT')) c.add('removal');
-  if (/all creatures|each creature|each opponent/.test(tx) && (has('DESTRUCTION') || has('DEGATS'))) c.add('wipe');
-  if (has('INDESTRUCTIBLE') || has('LINCEUL') || has('PROTECTION')) c.add('protection');
-  if (has('JETON')) c.add('jetons');
-  if (has('MARQUEUR')) c.add('marqueurs');
-  if (has('SACRIFICE') || a.abilities.some(x => x.from.includes('SACRIFICE') || x.from.includes('MORT'))) c.add('sacrifice');
-  if (has('BLINK') || a.abilities.some(x => x.from.includes('ETB'))) c.add('blink');
-  if (has('STAX') || has('TAXE')) c.add('stax');
-  return c;
 }
 
 /* =====================================================================
@@ -384,6 +364,88 @@ const ARCH_ANCIENS = {
   gainvie:'lifegain', artefacts:'artifacts', enchantements:'enchantments',
   controle:'control', meule:'mill'
 };
+
+/* Rôles d'une carte. Le type donne le cadre ; tout le reste vient de
+   l'analyse : ce que chaque capacité produit, sur qui, ce que les coûts
+   consomment et ce qui la déclenche. */
+function categories(card) {
+  const c = new Set();
+  if (!card || card.isToken) return c;
+  const a = card.an || {abilities:[], produces:[], triggers:[]};
+  const caps = a.abilities || [];
+  const t = (card.type || '').toLowerCase();
+  const tx = (card.text || '').toLowerCase();
+
+  const effet = x => x.textEff || x.text || '';
+  const vers = (ids, test) => caps.some(x => ids.some(id => x.to.includes(id)) && (!test || test(x)));
+  const depuis = ids => caps.some(x => ids.some(id => x.from.includes(id)));
+  const produit = ids => (a.produces || []).some(p => ids.includes(p.c));
+  /* Les déclencheurs relevés par l'analyse comprennent ce que les coûts
+     consomment ; seuls les vrais déclencheurs nous intéressent ici. */
+  const declenche = ids => (a.triggers || []).some(x => ids.includes(x.c) && (x.q || {}).mode !== 'cout');
+
+  /* Une capacité qui ne vise que nos propres permanentes, ou nous-mêmes :
+     un sacrifice, une perte de vie consentie, un renvoi en main choisi. */
+  const nomCourt = (card.name || '').toLowerCase().split(',')[0].trim();
+  const surLuiMeme = e => (nomCourt && e.includes(nomCourt)) || /\bthis (?:creature|permanent|card)\b/.test(e);
+  const surSoi = x => {
+    const e = effet(x);
+    if (/target opponent|each opponent|opponents|target player/.test(e)) return false;
+    // une carte qui se replace elle-même n'interagit avec personne
+    if (surLuiMeme(e) && /(?:owner's|your) (?:library|hand|graveyard)/.test(e)) return true;
+    return /\byou control\b|\bto you\b|\byourself\b|\byour (?:creatures?|permanents?|lands?|hand|library|graveyard)\b/.test(e);
+  };
+  const enMasse = x => /\b(?:all|each|every)\b/.test(effet(x));
+
+  if (/creature/.test(t)) c.add('creatures');
+  if (/land/.test(t)) c.add('terrains');
+
+  /* Ramp : produire du mana au-delà de ce que fait n'importe quel terrain,
+     chercher un terrain, ou réduire les coûts. Un terrain qui ajoute un
+     seul mana n'accélère rien, quelle que soit sa rareté. */
+  const manaPourSoi = vers(['MANA', 'TRESOR', 'RAMP', 'REDUCTION']) || produit(['TRESOR', 'RAMP']);
+  const terrainAccelere = /add \{[^}]+\}\{|\badd (?:two|three|four)\b|search your library for[^.]{0,50}land/.test(tx);
+  if (manaPourSoi && (!/land/.test(t) || terrainAccelere)) c.add('ramp');
+
+  /* Card advantage : piocher, filtrer ou récupérer, pour soi. */
+  if (vers(['PIOCHE', 'IMPULSE', 'RECURSION'],
+    x => !(x.scopeEff === 'adv' && !/\byou\b/.test(effet(x))))) c.add('pioche');
+  if (vers(['TUTEUR']) || produit(['TUTEUR'])) c.add('tuteurs');
+
+  /* Interaction : ce qui frappe ce qui n'est pas à nous. */
+  if (vers(['DESTRUCTION', 'EXIL', 'BOUNCE', 'DEGATS', 'CONTRESORT', 'MIS_EN_BIBLIO'],
+    x => !surSoi(x))) c.add('removal');
+  if (vers(['DESTRUCTION', 'EXIL', 'DEGATS', 'MIS_EN_BIBLIO', 'BOUNCE'],
+    x => enMasse(x) && !surSoi(x))) c.add('wipe');
+
+  /* Protection : pour nos permanentes, pas pour celles d'en face. */
+  if (vers(['INDESTRUCTIBLE', 'LINCEUL', 'PROTECTION'], x => x.scopeEff !== 'adv')) c.add('protection');
+
+  /* Jetons : les nôtres. Un sort qui en donne un à sa victime n'en fait pas
+     une carte à jetons. */
+  const pourAutrui = x => /its controller|that player|each opponent|target opponent|your opponents/.test(effet(x));
+  if (vers(['JETON'], x => !pourAutrui(x))) c.add('jetons');
+  if (vers(['MARQUEUR']) || produit(['MARQUEUR'])) c.add('marqueurs');
+
+  /* Sacrifice : le provoquer, s'en nourrir, ou offrir l'exutoire — les
+     coûts relevés par l'analyse le disent mieux que le texte. */
+  if (vers(['SACRIFICE']) || depuis(['SACRIFICE', 'MORT', 'MORT_SOI'])
+      || declenche(['MORT', 'SACRIFICE']) || caps.some(x => x.sacOutlet || x.selfSac)) c.add('sacrifice');
+
+  /* Blink : scintiller, ou se déclencher sur l'arrivée d'un autre. */
+  if (vers(['BLINK']) || depuis(['ETB']) || declenche(['ETB'])) c.add('blink');
+
+  /* Stax : une gêne imposée aux autres. Les contraintes qu'une carte
+     s'impose à elle-même, ou que l'on accepte, n'en sont pas. */
+  const gene = x => {
+    const e = effet(x);
+    if (/can't be regenerated|no maximum hand size|skip your|\byou can't\b|\byou don't\b/.test(e)) return false;
+    if (/can't (?:block|attack)/.test(e) && surLuiMeme(e)) return false;
+    return true;
+  };
+  if (vers(['STAX', 'TAXE'], gene)) c.add('stax');
+  return c;
+}
 
 /* Une carte dont le texte ou la force changent voit son analyse refaite. */
 function reanalyser(card) {
