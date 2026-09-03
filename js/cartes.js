@@ -411,8 +411,11 @@ function categories(card) {
      exil, renvoi, dégâts, contresort. */
   if (vers(['DESTRUCTION', 'EXIL', 'BOUNCE', 'DEGATS', 'CONTRESORT', 'MIS_EN_BIBLIO'],
     x => !surSoi(x))) c.add('interaction');
+  /* L'emphase (overload) remplace « target » par « each » : le sort balaie
+     le champ de bataille, quoi qu'en dise la lettre de son texte. */
+  const emphase = /\boverload\b/.test(tx);
   if (vers(['DESTRUCTION', 'EXIL', 'DEGATS', 'MIS_EN_BIBLIO', 'BOUNCE'],
-    x => enMasse(x) && !surSoi(x))) c.add('wipe');
+    x => (enMasse(x) || emphase) && !surSoi(x))) c.add('wipe');
 
   /* Protection : pour nos permanentes, pas pour celles d'en face. */
   if (vers(['INDESTRUCTIBLE', 'LINCEUL', 'PROTECTION'], x => x.scopeEff !== 'adv')) c.add('protection');
