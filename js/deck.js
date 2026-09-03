@@ -410,8 +410,13 @@ function evalueDeck(entries) {
 }
 
 function renderE() {
-  const entries = deckEntries(), n = deckSize(), f = fmt(), cnt = deckCounts(), tgt = targets();
-  evalueDeck(entries);
+  const toutes = deckEntries(), n = deckSize(), f = fmt(), cnt = deckCounts(), tgt = targets();
+  evalueDeck(toutes);
+  // Les filtres de l'en-tête valent aussi pour le deck : liste affichée,
+  // courbe de mana et moyennes. La taille, la conformité et l'équilibre
+  // des rôles restent ceux du deck entier.
+  const entries = toutes.filter(e => carteFiltree(e.card));
+  const masquees = toutes.reduce((a, e) => a + e.qty, 0) - entries.reduce((a, e) => a + e.qty, 0);
   const cmcSplit = {};
   entries.forEach(e => {
     if (e.card.isLand) return;
@@ -430,9 +435,10 @@ function renderE() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        <span class="pill">Cartes <b>${n}/${f.size}</b></span>
-        <span class="pill">CMC moyen <b>${avg.toFixed(2)}</b></span>
-        <span class="pill">Valeur <b>${eur(price)}</b></span>
+        <span class="pill" title="Deck entier, filtres compris">Cartes <b>${n}/${f.size}</b></span>
+        ${masquees ? `<button type="button" class="pill head-format" data-act="filtres" title="Les filtres de l'en-tête masquent une partie du deck (cliquer pour les modifier)" style="border-color:var(--brass-d);color:var(--brass)">Filtrées <b>${n - masquees}</b> · ${masquees} masquée(s)</button>` : ''}
+        <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">CMC moyen <b>${avg.toFixed(2)}</b></span>
+        <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">Valeur <b>${eur(price)}</b></span>
         ${S.commander ? `<span class="pill">Commandant <b>${esc(S.commander)}</b></span>` : ''}
         ${(() => {
           const a = aAcheter();
@@ -456,11 +462,12 @@ function renderE() {
       <h3 style="margin:14px 0 6px;font-size:15px">Équilibre des rôles</h3>
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       <h3 style="margin:14px 0 6px;font-size:15px">Liste</h3>
-      ${n ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
+      ${entries.length ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
         <div class="group"><h4>${t} <span class="small muted">${grouped[t].reduce((a,e)=>a+e.qty,0)}</span></h4>
         ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
                           : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
-        : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>'}`;
+        : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`
+             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>')}`;
   }
 
   const hintEl = document.getElementById('hintE');

@@ -190,6 +190,29 @@ function texteFiltresActifs(sep) {
   return filtresActifs().map(a => a.texte).join(sep || ' · ');
 }
 
+/* La recherche libre : nom, type ou texte de la carte. */
+function rechercheOK(card) {
+  const q = String(S.search || '').trim().toLowerCase();
+  if (!q) return true;
+  if (!card) return false;
+  return String(card.name || '').toLowerCase().includes(q)
+    || String(card.text || '').toLowerCase().includes(q)
+    || String(card.type || '').toLowerCase().includes(q);
+}
+
+/* Le type principal retenu dans la fenêtre des filtres. */
+function typeOK(card) {
+  if (!S.typeFilter) return true;
+  return !!card && mainType(card) === S.typeFilter;
+}
+
+/* Prédicat unique de l'atelier : couleurs, recherche, type et critères de
+   la fenêtre. Il vaut pour la collection, le deck, la courbe de mana et
+   les suggestions, afin qu'un filtre posé une fois vaille partout. */
+function carteFiltree(card) {
+  return !!card && colorOK(card) && typeOK(card) && rechercheOK(card) && filtreOK(card);
+}
+
 /* Applique les filtres avancés à une carte. Une carte dont la valeur est
    inconnue (créature non renseignée, prix absent) est écartée dès qu'une
    borne est posée sur ce critère. */

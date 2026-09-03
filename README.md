@@ -126,6 +126,9 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la fenêtre des filtres à une carte. |
+| `carteFiltree(card)` | Prédicat unique : couleurs, recherche, type et critères de la fenêtre. Vaut pour la collection, le deck, la courbe et les suggestions. |
+| `rechercheOK(card)` | La recherche libre : nom, type ou texte. |
+| `typeOK(card)` | Le type principal retenu dans la fenêtre. |
 | `filtreOK(card)` | Applique les filtres de la fenêtre (archétype, nom, illustrateur, force, endurance, coût, prix) à une carte. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
@@ -409,11 +412,14 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 231 fonctions au total, réparties en 14 modules.
+- 234 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
   et pour l'index des archétypes EDHREC.
+- Un filtre posé une fois vaut partout : `carteFiltree()` filtre la collection, le deck et sa courbe de mana,
+  les statistiques, le graphe et les suggestions d'ajout. La taille du deck, sa conformité au format et
+  l'équilibre des rôles restent calculés sur le deck entier.
 - Les archétypes se lisent de deux façons complémentaires : le texte de la carte, analysé localement et toujours disponible,
   et les thèmes EDHREC, chargés à la demande puis mis en cache. La fenêtre des filtres laisse choisir l'une, l'autre ou les deux.
 

@@ -249,7 +249,8 @@ function currentSuggestions() {
 
   const res = [];
   pool.forEach(p => { const n = noteCarte(p, X); if (n) res.push(n); });
-  return res.filter(r => r.score > 0).sort((a, b) => b.score - a.score);
+  // les filtres de l'en-tête valent aussi pour ce qu'on propose d'ajouter
+  return res.filter(r => r.score > 0 && carteFiltree(r.card)).sort((a, b) => b.score - a.score);
 }
 
 function ligneCatalogue() {

@@ -27,12 +27,7 @@ function collectionCards() {
 }
 
 function filtered() {
-  let list = collectionCards().filter(e => colorOK(e.card) && filtreOK(e.card));
-  if (S.search) {
-    const s = S.search.toLowerCase();
-    list = list.filter(e => e.card.name.toLowerCase().includes(s) || e.card.text.toLowerCase().includes(s) || e.card.type.toLowerCase().includes(s));
-  }
-  if (S.typeFilter) list = list.filter(e => mainType(e.card) === S.typeFilter);
+  const list = collectionCards().filter(e => carteFiltree(e.card));
   const f = fmt();
   list.forEach(e => e.usable = Math.min(e.qty, f.maxCopies));
   const cmp = {
