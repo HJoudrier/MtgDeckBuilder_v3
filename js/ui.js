@@ -380,6 +380,85 @@ function statsCatalogue() {
   return { filtr, total };
 }
 
+/* =====================================================================
+   Fenêtre « Filtres » de l'en-tête : nom, force, endurance, coût de mana
+   et prix. Les champs agissent en direct sur la collection affichée.
+   ===================================================================== */
+
+const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
+
+let filtreTimer = null;
+
+/* Une ligne « critère min → max ». */
+function ligneFiltre(kMin, kMax, label, aide, pas, min) {
+  const f = S.filtres;
+  const champ = (cle, place) => `<input type="number" inputmode="decimal" step="${pas}" ${min !== undefined ? `min="${min}"` : ''}
+      id="f_${cle}" data-filtre="${cle}" value="${esc(f[cle])}" placeholder="${place}" aria-label="${esc(label)} ${place}">`;
+  return `<div class="filtre-ligne">
+    <span class="filtre-nom" title="${esc(aide)}">${esc(label)}</span>
+    <label class="lab" for="f_${kMin}">min</label>${champ(kMin, 'min')}
+    <label class="lab" for="f_${kMax}">max</label>${champ(kMax, 'max')}
+  </div>`;
+}
+
+function corpsFiltres() {
+  const f = S.filtres;
+  return `<div class="field">
+      <label class="lab" for="f_nom">Nom de la carte</label>
+      <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
+    </div>
+    <div class="filtres-grille">
+      ${ligneFiltre('forceMin', 'forceMax', 'Force', "Force des créatures (le premier chiffre de 3/4).", '1', 0)}
+      ${ligneFiltre('enduranceMin', 'enduranceMax', 'Endurance', "Endurance des créatures (le second chiffre de 3/4).", '1', 0)}
+      ${ligneFiltre('cmcMin', 'cmcMax', 'Coût de mana', "Valeur de mana totale de la carte.", '1', 0)}
+      ${ligneFiltre('prixMin', 'prixMax', 'Prix (€)', "Prix unitaire estimé, en euros.", 'any', 0)}
+    </div>
+    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées.</div>
+    <div class="small muted">Ces filtres s'ajoutent aux couleurs de la section A et à la recherche de la section B ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
+    <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
+}
+
+/* Décompte des cartes retenues, rafraîchi à chaque frappe. */
+function resumeFiltres() {
+  const list = filtered();
+  const ex = list.reduce((n, e) => n + e.qty, 0);
+  const total = collectionCards();
+  const actifs = filtresActifs();
+  return `<b>${list.length}</b> carte(s) différentes retenues sur ${total.length} · ${ex} exemplaire(s)
+    · ${actifs.length ? `${actifs.length} filtre(s) avancé(s) : ${esc(actifs.join(' · '))}` : 'aucun filtre avancé actif'}`;
+}
+
+function majResumeFiltres() {
+  const el = document.getElementById('filtreResume');
+  if (el) el.innerHTML = resumeFiltres();
+}
+
+/* Rendu différé : la frappe reste fluide même sur une grande collection. */
+function planifierRenduFiltres() {
+  clearTimeout(filtreTimer);
+  filtreTimer = setTimeout(() => {
+    S.limitB = PAGE;
+    renderAll();
+    majResumeFiltres();
+  }, 220);
+}
+
+/* Réécrit les champs de la fenêtre après une réinitialisation. */
+function majFenetreFiltres() {
+  const dlg = document.getElementById('dlg');
+  if (!dlg || !dlg.open) return;
+  const corps = document.getElementById('dlgBody');
+  if (corps && corps.querySelector('[data-filtre]')) corps.innerHTML = corpsFiltres();
+}
+
+function openFiltresModal() {
+  openDialog('Filtres de la collection', corpsFiltres(),
+    `<button type="button" class="btn" data-act="resetFiltres">Réinitialiser</button>
+     <button type="button" class="btn pri" data-act="closeDialog">Fermer</button>`);
+  const champ = document.getElementById('f_nom');
+  if (champ) champ.focus();
+}
+
 function renderTop() {
   const topStats = document.getElementById('topStats');
   const topHeader = document.getElementById('topHeader');
@@ -434,6 +513,14 @@ function renderTop() {
     ${S.commander ? `<button type="button" class="pill head-cmd" data-act="fiche" data-name="${esc(S.commander)}" style="cursor:pointer" title="Commandant désigné (cliquer pour voir la fiche)">Cmd <b>${esc(S.commander)}</b></button>` : ''}
   `;
 
+  const actifs = filtresActifs();
+  const filtreBtnHTML = `
+    <button type="button" class="btn sm head-filtre ${actifs.length ? 'actif' : ''}" data-act="filtres"
+      title="${actifs.length ? `Filtres actifs : ${esc(actifs.join(' · '))}` : 'Filtrer par nom, force, endurance, coût de mana ou prix'}">
+      ${FILTRE_ICONE} Filtres${actifs.length ? ` <span class="filtre-n">${actifs.length}</span>` : ''}
+    </button>
+  `;
+
   const toggleBtnHTML = `
     <button type="button" class="btn sm head-toggle ${S.headerCompact ? 'is-compact' : ''}" data-act="toggleHeader" title="${S.headerCompact ? 'Déplier l\'en-tête (afficher toutes les statistiques et actions)' : 'Réduire l\'en-tête (navigation compacte)'}" aria-pressed="${!S.headerCompact}">
       ${S.headerCompact ? '▾ Stats' : '▴ Réduire'}
@@ -443,6 +530,7 @@ function renderTop() {
   if (S.headerCompact) {
     topStats.innerHTML = `
       ${manaBarHTML}
+      ${filtreBtnHTML}
       ${deckPillHTML}
       ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${toggleBtnHTML}
@@ -450,6 +538,7 @@ function renderTop() {
   } else {
     topStats.innerHTML = `
       ${manaBarHTML}
+      ${filtreBtnHTML}
       ${deckPillHTML}
       <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
       <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>

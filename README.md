@@ -102,10 +102,11 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
 ### `js/etat.js` — État et filtrage
 
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
+C'est aussi ici que vivent les filtres avancés de l'en-tête (`S.filtres` : nom, force, endurance, coût de mana, prix).
 
-*11 fonction(s), 4 Ko*
+*13 fonction(s), 7 Ko*
 
-Données : `FORMATS`, `S`, `PAGE`
+Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
 
 | Fonction | Rôle |
 |---|---|
@@ -113,6 +114,10 @@ Données : `FORMATS`, `S`, `PAGE`
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la section A à une carte. |
+| `filtreOK(card)` | Applique les filtres avancés (nom, force, endurance, coût, prix) à une carte. |
+| `filtresActifs()` | Libellés des filtres avancés en vigueur, pour le compteur et les puces. |
+| `reinitFiltres()` | Remet tous les filtres avancés à vide. |
+| `nombreFiltre(v)` | Lit une borne numérique saisie ; renvoie `null` si le champ est vide. |
 | `collectionCards()` | Collection sous forme de paires carte / quantité. |
 | `filtered()` | Collection filtrée puis triée selon les réglages courants. |
 | `deckEntries()` | Cartes du deck, regroupées par type puis par coût. |
@@ -316,9 +321,10 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 
 ### `js/ui.js` — Interface commune
 
-Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global.
+Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global,
+dont le bouton « Filtres » de l'en-tête et sa fenêtre modale.
 
-*25 fonction(s), 23 Ko*
+*35 fonction(s), 30 Ko*
 
 Données : `RETOURNEES`
 
@@ -335,7 +341,14 @@ Données : `RETOURNEES`
 | `renderA()` | Rend la section des filtres et du format. |
 | `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
-| `renderTop()` | Barre d'en-tête : totaux et état de sauvegarde. |
+| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres » et état de sauvegarde. |
+| `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
+| `corpsFiltres()` | Contenu de cette fenêtre : nom, force, endurance, coût de mana, prix. |
+| `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
+| `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
+| `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
+| `planifierRenduFiltres()` | Diffère le rendu global pour garder la saisie fluide. |
+| `majFenetreFiltres()` | Réécrit les champs après une réinitialisation. |
 | `renderAll()` | Rend les six sections et programme la sauvegarde. |
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
@@ -361,9 +374,9 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 175 fonctions au total, réparties en 14 modules.
+- 186 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
-- Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node` et `data-card-name`.
+- Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes.
 
 ## Tests

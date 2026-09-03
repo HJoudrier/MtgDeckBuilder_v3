@@ -372,6 +372,7 @@ function compacte(sc) {
     ? faces.map(f => (f.oracle_text||'').replace(/\n/g, ' // ')).join(' // ')
     : (sc.oracle_text||'').replace(/\n/g, ' // ');
   const pw = sc.power || (faces && faces[0] && faces[0].power);
+  const tg = sc.toughness || (faces && faces[0] && faces[0].toughness);
   const lg = sc.legalities || {};
   const uris = sc.image_uris || (faces && faces[0] && faces[0].image_uris) || null;
   const versoUris = faces && faces[1] && faces[1].image_uris || null;
@@ -382,7 +383,8 @@ function compacte(sc) {
     (pw != null && /^\d+$/.test(String(pw))) ? +pw : null,
     parseFloat((sc.prices && (sc.prices.eur || sc.prices.usd)) || 0) || 0,
     sc.id || '', (typeof sc.edhrec_rank === 'number') ? sc.edhrec_rank : 999999,
-    (lg.commander === 'legal' ? 'c' : '') + (lg.standard === 'legal' ? 's' : ''), chemin, verso
+    (lg.commander === 'legal' ? 'c' : '') + (lg.standard === 'legal' ? 's' : ''), chemin, verso,
+    (tg != null && /^\d+$/.test(String(tg))) ? +tg : null
   ];
 }
 
@@ -691,6 +693,7 @@ function completeDepuisRec(c, rec) {
     c.an = analyze(c);
     c.cats = categories(c);
   }
+  if (rec[CH.ENDURANCE] != null && c.endurance == null) c.endurance = rec[CH.ENDURANCE];
   if (!c.price && rec[CH.PRIX] > 0) c.price = rec[CH.PRIX];
   return c;
 }
@@ -703,6 +706,7 @@ function carteDuCatalogue(rec) {
   if (rec[CH.ID_COUL] !== undefined) c.identity = rec[CH.ID_COUL] ? rec[CH.ID_COUL].split('') : [];
   c.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
+  if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
   c.an = analyze(c);
   c.cats = categories(c);
   if (rec[CH.IMG]) {

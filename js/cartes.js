@@ -310,6 +310,7 @@ function buildCard(name, cost, type, price, text) {
   card.identity = [...idc];
   const pt = (card.text||'').match(/(?:^|\s)(\d+)\/(\d+)(?![^.]{0,40}token)/);
   card.force = pt ? +pt[1] : null;
+  card.endurance = pt ? +pt[2] : null;
   card.sousTypes = ((card.type||'').split('—')[1]||'').toLowerCase().split(/\s+/).filter(Boolean);
   const tf = String(card.type).split(' // ')[0];
   card.isToken = /\btoken\b/i.test(tf);

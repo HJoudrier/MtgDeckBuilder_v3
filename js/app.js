@@ -72,6 +72,20 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'filtres') {
+    openFiltresModal();
+    return;
+  }
+
+  if (act === 'resetFiltres') {
+    reinitFiltres();
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    toast('Filtres avancés réinitialisés.');
+    return;
+  }
+
   if (act === 'gotoA') {
     const secA = document.getElementById('secA');
     if (secA) {
@@ -471,6 +485,12 @@ document.addEventListener('input', ev => {
     S.search = t.value;
     S.limitB = PAGE;
     withFocus(() => renderB());
+    return;
+  }
+  if (t.dataset.filtre) {
+    S.filtres[t.dataset.filtre] = t.value;
+    majResumeFiltres();
+    planifierRenduFiltres();
     return;
   }
   if (t.dataset.recherche) {

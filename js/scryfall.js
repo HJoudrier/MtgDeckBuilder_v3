@@ -105,6 +105,8 @@ function applyScryfall(sc, requested, imagesOnly) {
       target.an = analyze(target);
       target.cats = categories(target);
     }
+    const tg = sc.toughness || (faces && faces[0] && faces[0].toughness);
+    if (tg != null && /^\d+$/.test(String(tg))) target.endurance = +tg;
     return true;
   }
 
@@ -113,6 +115,8 @@ function applyScryfall(sc, requested, imagesOnly) {
   if (typeof sc.cmc === 'number') fresh.cmc = sc.cmc;
   const pw = sc.power || (faces && faces[0] && faces[0].power);
   if (pw != null && /^\d+$/.test(String(pw))) fresh.force = +pw;
+  const tg = sc.toughness || (faces && faces[0] && faces[0].toughness);
+  if (tg != null && /^\d+$/.test(String(tg))) fresh.endurance = +tg;
   fresh.an = analyze(fresh);
   fresh.cats = categories(fresh);
 
