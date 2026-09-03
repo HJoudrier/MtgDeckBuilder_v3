@@ -387,7 +387,7 @@ Données : `RETOURNEES`
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
 | `majResumeFormat()` | Rafraîchit ce résumé pendant la saisie du format personnalisé. |
 | `majFenetreFormat()` | Réécrit la fenêtre au changement de format. |
-| `ficheHTML(card)` | Fiche détaillée : rôles ligne à ligne, cartes branchées et ce qu'elles échangent, capacités, combos. |
+| `ficheHTML(card)` | Fiche détaillée : rôles ligne à ligne et cartes du deck branchées, combos, capacités extraites, puis en bas de fiche les branchements possibles avec la collection filtrée. |
 | `ficheTexteHTML(card)` | Carte rendue en texte — coût, type, force/endurance, texte — à la place du visuel absent. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |

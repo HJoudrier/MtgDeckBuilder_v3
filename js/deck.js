@@ -255,9 +255,7 @@ function ficheHTML(card) {
       <div class="small muted" style="margin-bottom:5px">Rôles dans le deck</div>
       ${roles.join('') || '<div class="role-l"><span class="chip">Rôle non identifié</span></div>'}
       <div class="small muted" style="margin:10px 0 5px">Cartes du deck avec lesquelles elle se branche</div>
-      ${partD.length ? partD.map(lien).join('') : '<div class="arc muted">aucune pour le moment</div>'}
-      <div class="small muted" style="margin:10px 0 5px">Cartes de la collection filtrée</div>
-      ${partC.length ? partC.map(lien).join('') : '<div class="arc muted">aucune</div>'}</div>
+      ${partD.length ? partD.map(lien).join('') : '<div class="arc muted">aucune pour le moment</div>'}</div>
     ${(() => {
       const cs = combosDe(card);
       if (!cs.length) return '';
@@ -286,7 +284,10 @@ function ficheHTML(card) {
         }).join('')
         : '<div class="arc muted">aucune capacité reconnue dans le texte</div>'}
       ${noeuds.length ? `<div class="chips" style="margin-top:7px">${noeuds.map(n=>`<button type="button" class="chip" data-act="focusNodeFrom" data-node2="${n}">${esc(NODE[n].label)}</button>`).join('')}</div>
-        <div class="small muted">Touchez un nœud pour l'isoler dans le graphe.</div>` : ''}</div>`;
+        <div class="small muted">Touchez un nœud pour l'isoler dans le graphe.</div>` : ''}</div>
+    <div class="bloc"><h4>Branchements possibles avec la collection</h4>
+      <div class="small muted" style="margin-bottom:5px">Cartes de la collection filtrée qui ne sont pas dans le deck</div>
+      ${partC.length ? partC.map(lien).join('') : '<div class="arc muted">aucune</div>'}</div>`;
 }
 
 function openCardModal(name) {

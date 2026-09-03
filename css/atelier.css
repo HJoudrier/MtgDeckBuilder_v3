@@ -186,7 +186,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{
 input::placeholder,textarea::placeholder{color:var(--dim2);opacity:1}
 input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{
-  background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;font-size:13.5px
+  background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;font-size:13.5px;
+  color:var(--txt);text-decoration:none
 }
 .btn:hover{border-color:var(--brass);color:#fff}
 .btn.pri{background:var(--brass);border-color:var(--brass);color:#1a1526;font-weight:600}
@@ -300,8 +301,15 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .legend{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .lg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim);background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:2px 8px}
 .dot{width:9px;height:9px;border-radius:99px;display:inline-block}
-.cardref{border-bottom:1px dotted var(--brass);cursor:pointer}
-.cardref:hover{color:var(--brass)}
+/* Noms de cartes cliquables : un lien discret, jamais un bouton du
+   navigateur — son fond clair rendait le texte illisible. */
+.cardref, .cref{
+  background:transparent;border:0;border-bottom:1px dotted var(--brass-d);
+  padding:0;margin:0;font:inherit;color:var(--brass);cursor:pointer;
+  border-radius:0;text-align:left
+}
+.cardref:hover, .cref:hover{color:#f0cd77;border-bottom-color:var(--brass)}
+.cref:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 #cardPreview{position:fixed;z-index:120;pointer-events:none;display:none;width:236px;max-width:60vw;
   border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.6);border:1px solid var(--line2);overflow:hidden;background:var(--panel)}
 #cardPreview img{width:100%;display:block}
