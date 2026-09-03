@@ -757,7 +757,7 @@ async function lireCatalogueFichier(source, nom) {
   CAT.etat = 'ok';
   CAT.date = Date.now();
   CAT.maj = CAT.maj || null;
-  appliquePrixCatalogue();
+  appliqueCatalogueAuxCartes();
   CAT.octets = tailleEstimee(CAT.cartes);
   CAT.source = 'fichier';
   CAT.impressions = impressions;
@@ -884,6 +884,7 @@ async function chargerCatalogueComplet(force) {
         CAT.date = memo.date || null;
         CAT.partiel = !!memo.partiel;
         CAT.impressions = memo.impressions || 0;
+        appliqueCatalogueAuxCartes();
         if (memo.v !== 2) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour obtenir les visuels des cartes.';
         invaliderCandidats();
         renderAll();
@@ -921,6 +922,7 @@ async function chargerCatalogueComplet(force) {
     CAT.etat = 'ok';
     CAT.octets = tailleEstimee(CAT.cartes);
     CAT.date = Date.now();
+    appliqueCatalogueAuxCartes();
     if (saveState !== 'desactive' && S.catalogueActif)
       idbEcrire('cartes', {v:2, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions:CAT.impressions||0}).catch(() => {});
     renderAll();
@@ -931,6 +933,12 @@ async function chargerCatalogueComplet(force) {
 }
 
 function completeDepuisRec(c, rec) {
+  if (majTexteOracle(c, rec[CH.TEXTE])) {
+    if (rec[CH.ID_COUL] !== undefined && !/^basic land/i.test(c.type || '')) {
+      c.identity = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
+    }
+    if (typeof rec[CH.CMC] === 'number') c.cmc = rec[CH.CMC];
+  }
   if (rec[CH.IMG] && !c.imgN) {
     c.img = CDN + 'small/' + rec[CH.IMG];
     c.imgN = CDN + 'normal/' + rec[CH.IMG];
@@ -956,6 +964,7 @@ function carteDuCatalogue(rec) {
   let c = find(nom);
   if (c && !c.unknown) return completeDepuisRec(c, rec);
   c = registerCard(buildCard(nom, rec[CH.COUT] || '—', rec[CH.TYPE], rec[CH.PRIX], rec[CH.TEXTE]));
+  c.textFull = !!rec[CH.TEXTE];
   if (rec[CH.ID_COUL] !== undefined) c.identity = rec[CH.ID_COUL] ? rec[CH.ID_COUL].split('') : [];
   c.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
@@ -984,14 +993,26 @@ function signatureCandidats() {
           CAT.cartes.length, S.collection.size, S.exploreMax, noeudsActifs().sort().join(',')].join('|');
 }
 
-function appliquePrixCatalogue() {
+/* Le catalogue local porte le texte oracle complet et les prix à jour : on en
+   profite pour remplacer, sans requête réseau, les résumés de la base
+   intégrée et les prix des cartes possédées ou jouées. */
+function appliqueCatalogueAuxCartes() {
   if (!CAT.cartes.length) return;
   const utiles = new Set([...S.collection.keys(), ...S.deck.keys()].map(norm));
-  if (!utiles.size) return;
+  const aCompleter = new Map();
+  DB.forEach(c => { if (!c.textFull && !c.unknown) aCompleter.set(norm(c.name), c); });
+  if (!utiles.size && !aCompleter.size) return;
   let n = 0;
   CAT.cartes.forEach(rec => {
-    if (!utiles.has(norm(rec[CH.NOM]))) return;
-    const c = find(rec[CH.NOM]);
+    const cle = norm(rec[CH.NOM]);
+    const complete = aCompleter.get(cle);
+    if (complete) {
+      aCompleter.delete(cle);
+      completeDepuisRec(complete, rec);
+      n++;
+    }
+    if (!utiles.has(cle)) return;
+    const c = complete || find(rec[CH.NOM]);
     if (c && rec[CH.PRIX] > 0 && c.price !== rec[CH.PRIX]) { c.price = rec[CH.PRIX]; n++; }
   });
   if (n) scheduleSave();

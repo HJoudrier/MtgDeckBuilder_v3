@@ -86,12 +86,20 @@ function initApercu() {
   return apercuEl;
 }
 
+/* Aperçu volant : le texte y est borné pour ne pas couvrir l'écran, la fiche
+   complète (clic sur la carte) reste la vue de référence. */
+function apercuTexte(c) {
+  const t = String(c.text || '').replace(/ \/\/ /g, '\n');
+  return t.length > 320 ? t.slice(0, 320).replace(/\s+\S*$/, '') + '…' : t;
+}
+
 function montrerApercu(nom, x, y) {
   const el = initApercu();
   if (!el || !nom) return;
   const c = find(nom);
   if (!c) return;
   apercuCardName = c.name;
+  if (typeof queueScryfall === 'function') queueScryfall([c]);
   const imgUrl = faceVisible(c, true) || faceVisible(c, false);
   if (S.images && imgUrl) {
     el.innerHTML = `<img src="${esc(imgUrl)}" alt="${esc(c.name)}" style="width:240px;display:block;border-radius:8px">`;
@@ -100,7 +108,7 @@ function montrerApercu(nom, x, y) {
       <div style="font-weight:bold;margin-bottom:4px">${esc(c.name)}</div>
       <div style="margin-bottom:4px">${manaHTML(c, true)}</div>
       <div class="small muted" style="margin-bottom:6px">${esc(c.type)}</div>
-      <div class="small" style="white-space:pre-line">${esc((c.text||'').slice(0, 160))}</div>
+      <div class="small" style="white-space:pre-line">${esc(apercuTexte(c))}</div>
     </div>`;
   }
   el.style.display = 'block';

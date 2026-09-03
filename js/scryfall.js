@@ -88,6 +88,11 @@ function applyScryfall(sc, requested, imagesOnly) {
     : (BY_NAME[norm(sc.name)] || LOOSE[loose(sc.name)] || (requested ? find(requested) : null));
 
   if (target && (imagesOnly || !target.unknown)) {
+    majTexteOracle(target, text);
+    if (Array.isArray(sc.color_identity) && !/^basic land/i.test(target.type || '')) {
+      target.identity = sc.color_identity.slice();
+    }
+    if (typeof sc.cmc === 'number') target.cmc = sc.cmc;
     if (uris) {
       target.img = uris.small || uris.normal;
       target.imgN = uris.normal || uris.large || target.img;
@@ -112,6 +117,7 @@ function applyScryfall(sc, requested, imagesOnly) {
   }
 
   const fresh = buildCard(sc.name, cost, type, price, text);
+  fresh.textFull = !!text;
   if (Array.isArray(sc.color_identity)) fresh.identity = sc.color_identity.slice();
   if (typeof sc.cmc === 'number') fresh.cmc = sc.cmc;
   const pw = sc.power || (faces && faces[0] && faces[0].power);
@@ -153,19 +159,33 @@ function applyScryfall(sc, requested, imagesOnly) {
   return true;
 }
 
-const imgQueue = [];
-let imgBusy = false;
+const scryQueue = [];
+let scryBusy = false;
 
-function queueImages(cards) {
-  if (!S.images || S.imagesFailed || typeof fetch !== 'function') return;
-  cards.forEach(c => { if (!c.img && !c.imgTried && !c.unknown) { c.imgTried = true; imgQueue.push(c.name); } });
-  if (imgQueue.length && !imgBusy) runImageQueue();
+/* Une carte mérite un aller-retour Scryfall tant qu'il lui manque son visuel
+   (mode images) ou son texte oracle complet : la base intégrée n'en garde
+   qu'un résumé, ce qui coupait par exemple l'alternative d'un sort. */
+function besoinScryfall(c) {
+  if (!c || c.unknown) return false;
+  if (S.images && !c.img && !c.imgTried) return true;
+  return !c.textFull && !c.texteTried;
 }
 
-async function runImageQueue() {
-  imgBusy = true;
-  while (imgQueue.length && !S.imagesFailed) {
-    const chunk = imgQueue.splice(0, 75);
+function queueScryfall(cards) {
+  if (S.scryHS || typeof fetch !== 'function') return;
+  cards.forEach(c => {
+    if (!besoinScryfall(c)) return;
+    c.imgTried = true;
+    c.texteTried = true;
+    scryQueue.push(c.name);
+  });
+  if (scryQueue.length && !scryBusy) runScryQueue();
+}
+
+async function runScryQueue() {
+  scryBusy = true;
+  while (scryQueue.length && !S.scryHS) {
+    const chunk = scryQueue.splice(0, 75);
     try {
       const r = await fetch('https://api.scryfall.com/cards/collection', {
         method: 'POST',
@@ -176,9 +196,14 @@ async function runImageQueue() {
       const j = await r.json();
       (j.data || []).forEach(sc => applyScryfall(sc, scryTarget(sc, null), true));
     } catch(err) {
-      S.imagesFailed = true;
-      imgBusy = false;
-      toast("Visuels indisponibles (hors ligne ou accès bloqué). L'affichage reste en mode texte.");
+      S.scryHS = true;
+      scryBusy = false;
+      if (S.images) {
+        S.imagesFailed = true;
+        toast("Visuels indisponibles (hors ligne ou accès bloqué). L'affichage reste en mode texte.");
+      } else {
+        toast("Textes complets indisponibles (hors ligne ou accès bloqué) : les résumés de la base intégrée restent affichés.");
+      }
       renderB();
       return;
     }
@@ -188,7 +213,7 @@ async function runImageQueue() {
     if (typeof scheduleSave === 'function') scheduleSave();
     await new Promise(res => setTimeout(res, 90));
   }
-  imgBusy = false;
+  scryBusy = false;
 }
 
 async function completeUnknown(names) {
@@ -285,6 +310,22 @@ async function chercheVerso(card) {
     if (!r.ok) return false;
     applyScryfall(await r.json(), card, true);
     if (card.imgB) { scheduleSave(); return true; }
+  } catch(err) {}
+  return false;
+}
+
+/* Complète le texte oracle d'une seule carte, pour la fiche ouverte : sans
+   cela une carte de la base intégrée reste affichée avec son résumé. */
+async function chercheTexte(card) {
+  if (!card || card.unknown || card.textFull || card.texteTried) return false;
+  if (typeof fetch !== 'function' || S.scryHS) return false;
+  card.texteTried = true;
+  try {
+    const r = await fetch('https://api.scryfall.com/cards/named?exact=' + encodeURIComponent(frontFace(card.name)));
+    if (!r.ok) return false;
+    const avant = card.text;
+    applyScryfall(await r.json(), card, true);
+    if (card.text !== avant) { scheduleSave(); return true; }
   } catch(err) {}
   return false;
 }

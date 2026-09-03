@@ -399,6 +399,10 @@ document.addEventListener('click', ev => {
 
   if (act === 'toggleImages') {
     S.images = !S.images;
+    // Nouvelle tentative d'accès à Scryfall : l'échec précédent portait
+    // peut-être sur l'autre mode d'affichage.
+    S.scryHS = false;
+    S.imagesFailed = false;
     b.setAttribute('aria-pressed', String(S.images));
     renderAll();
     return;

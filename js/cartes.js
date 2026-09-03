@@ -30,7 +30,7 @@ Counterspell|{U}{U}|Instant|1|Counter target spell.
 Brainstorm|{U}|Instant|0.5|Draw three cards, then put two cards from your hand on top of your library in any order.
 Preordain|{U}|Sorcery|1|Scry 2, then draw a card.
 Mystical Tutor|{U}|Instant|15|Search your library for an instant or sorcery card, reveal it, shuffle, then put that card on top of your library.
-Cyclonic Rift|{1}{U}|Instant|25|Return target nonland permanent you don't control to its owner's hand.
+Cyclonic Rift|{1}{U}|Instant|25|Return target nonland permanent you don't control to its owner's hand. // Overload {6}{U} (You may cast this spell for its overload cost. If you do, change "target" in its text to "each.")
 Pongify|{U}|Instant|3|Destroy target creature. Its controller creates a 3/3 green Ape creature token.
 Snapcaster Mage|{1}{U}|Creature — Human Wizard|12|Flash // When Snapcaster Mage enters, target instant or sorcery card in your graveyard gains flashback until end of turn.
 Archaeomancer|{2}{U}{U}|Creature — Human Wizard|0.5|When Archaeomancer enters, return target instant or sorcery card from your graveyard to your hand.
@@ -485,6 +485,28 @@ function buildCard(name, cost, type, price, text) {
   card.isLand = /land/i.test(tf) && !card.isToken;
   card.isLegendaryCreature = /legendary creature/i.test(tf) && !card.isToken;
   return reanalyser(card);
+}
+
+/* La base intégrée ne garde qu'un résumé du texte des cartes : dès qu'une
+   source officielle (Scryfall ou catalogue local) fournit le texte oracle
+   complet, il remplace le résumé et l'analyse est refaite. Le drapeau
+   `textFull` évite de redemander un texte déjà complet. */
+function majTexteOracle(card, texte) {
+  if (!card) return false;
+  const t = String(texte == null ? '' : texte).replace(/\n/g, ' // ').trim();
+  if (!t) return false;
+  const identique = card.text === t;
+  card.textFull = true;
+  if (identique) return false;
+  card.text = t;
+  if (!/^basic land/i.test(card.type || '')) {
+    const idc = new Set(card.identity && card.identity.length ? card.identity : (card.colors || []));
+    (t.match(/\{[^}]+\}/g) || []).forEach(x => x.slice(1, -1).split('/')
+      .forEach(pp => { if ('WUBRG'.includes(pp)) idc.add(pp); }));
+    card.identity = [...idc];
+  }
+  reanalyser(card);
+  return true;
 }
 
 function indexCard(card) {

@@ -82,9 +82,10 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 
 Catalogue livré avec l'atelier, fabrique de cartes, index de recherche tolérant aux accents, apostrophes et faces multiples,
 rôles de deck déduits du texte oracle, et tables d'affichage des archétypes — libellés français et résumés de
-fonctionnement — dont la liste et le contenu viennent d'EDHREC.
+fonctionnement — dont la liste et le contenu viennent d'EDHREC. Les textes livrés avec l'atelier sont des résumés :
+ils sont remplacés par le texte oracle complet dès que Scryfall ou le catalogue local répond.
 
-*20 fonction(s), 37 Ko*
+*21 fonction(s), 37 Ko*
 
 Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`
 
@@ -101,6 +102,7 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 | `commandantsPossibles()` | Créatures légendaires du deck éligibles au rôle. |
 | `mainType(c)` | Type principal en français, face avant pour les cartes multi-faces. |
 | `reanalyser(card)` | Refait analyse, rôles et archétypes après un changement de texte ou de force. |
+| `majTexteOracle(card,texte)` | Remplace le résumé de la base intégrée par le texte oracle complet d'une source officielle, puis relance l'analyse. |
 | `seedCollection()` | Collection de démonstration, au premier lancement. |
 | `mergeInto(card,canonical)` | Fusionne deux entrées désignant la même carte. |
 | `renameCard(card,newName)` | Renomme une carte vers son nom canonique en migrant les quantités. |
@@ -171,7 +173,7 @@ Données : `CONDITIONS`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SELLER_TYPES`, `
 
 Symboles de mana, visuels, complétion des cartes importées, recherche en ligne, et catalogue complet : lecture de l'archive JSONL compressée, mise à jour, prix.
 
-*31 fonction(s), 29 Ko*
+*33 fonction(s), 29 Ko*
 
 Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 
@@ -192,18 +194,20 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `majPrix(force)` *(async)* | Rafraîchit les prix des seules cartes possédées ou jouées. |
 | `telechargerCatalogue()` *(async)* | Télécharge l'archive et l'extrait sans fichier intermédiaire. |
 | `chargerCatalogueComplet(force)` *(async)* | Charge le catalogue : cache, puis fichier local, puis réseau. |
-| `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus. |
+| `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus, texte oracle compris. |
 | `carteDuCatalogue(rec)` | Matérialise une carte du catalogue et l'analyse. |
 | `invaliderCandidats()` | Invalide la sélection mémorisée. |
 | `signatureCandidats()` | Signature des critères, pour ne recalculer qu'en cas de changement. |
-| `appliquePrixCatalogue()` | Reporte les prix de l'archive sur vos cartes. |
+| `appliqueCatalogueAuxCartes()` | Reporte les textes oracle complets et les prix de l'archive sur vos cartes. |
 | `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format et le prix. |
 | `requeteCatalogue()` | Construit la requête Scryfall correspondant au format et aux couleurs. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
 | `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. |
-| `queueImages(cards)` | Met en file les cartes dont le visuel manque. |
-| `runImageQueue()` *(async)* | Vide la file des visuels par lots, sans saturer le réseau. |
+| `besoinScryfall(c)` | Dit si une carte attend encore son visuel ou son texte oracle complet. |
+| `queueScryfall(cards)` | Met en file les cartes dont le visuel ou le texte complet manque. |
+| `runScryQueue()` *(async)* | Vide cette file par lots, sans saturer le réseau. |
+| `chercheTexte(card)` *(async)* | Va chercher le texte oracle complet d'une seule carte, pour la fiche ouverte. |
 | `completeUnknown(names)` *(async)* | Complète les cartes importées, en trois passes de plus en plus tolérantes. |
 | `chercheScryfall(q,cible)` *(async)* | Recherche en ligne pour la boîte d'ajout. |
 
@@ -361,7 +365,7 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global,
 dont le bouton « Filtres » de l'en-tête et sa fenêtre modale.
 
-*35 fonction(s), 31 Ko*
+*36 fonction(s), 31 Ko*
 
 Données : `COLS`, `MODES_COULEUR`, `FILTRE_ICONE`
 
@@ -401,6 +405,7 @@ Données : `RETOURNEES`
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
 | `faceVisible(c,grande)` | Face actuellement affichée. |
 | `refCarte(nom)` | Nom de carte survolable et cliquable. |
+| `apercuTexte(c)` | Texte de l'aperçu volant : sauts de ligne rétablis, longueur bornée. |
 | `placerApercu(x,y)` | Place l'aperçu près du curseur sans sortir de l'écran. |
 | `contenuApercu(c)` | Contenu de l'aperçu : visuel, ou texte si absent. |
 | `montrerApercu(nom,x,y)` | Affiche l'aperçu au survol. |

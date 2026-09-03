@@ -145,7 +145,7 @@ function renderB() {
 
   const hintEl = document.getElementById('hintB');
   if (hintEl) hintEl.textContent = `${shown}/${total} ex.`;
-  if (S.view === 'grid') setTimeout(() => queueImages(page.map(e => e.card)), 0);
+  setTimeout(() => queueScryfall(page.map(e => e.card)), 0);
 }
 
 function openImport(cible) {

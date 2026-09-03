@@ -533,7 +533,7 @@ function visuelsSuggestions(byType, edhrecPicks) {
     vus.push(...edhrecPicks.slice(0, Math.min(S.limiteType['edhrec'] || 8, edhrecPicks.length)));
   }
   TYPE_ORDER.forEach(t => { if (byType[t]) vus.push(...byType[t].slice(0, Math.min(S.limiteType[t] || 6, byType[t].length))); });
-  setTimeout(() => queueImages(vus.map(x => x.card)), 0);
+  setTimeout(() => queueScryfall(vus.map(x => x.card)), 0);
   setTimeout(chargeVisuelsClasses, 0);
 }
 

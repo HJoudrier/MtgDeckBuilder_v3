@@ -45,6 +45,7 @@ const S = {
   enriching: false,
   images: true,
   imagesFailed: false,
+  scryHS: false,
   edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
   csb: {sig:null, status:'idle', data:null, error:null},
   csbRelay: '',

@@ -310,7 +310,9 @@ function ficheHTML(card) {
 
 function openCardModal(name) {
   const card = find(name); if (!card) return;
-  chercheVerso(card).then(ok => { if (ok && document.getElementById('dlg') && document.getElementById('dlg').open) openCardModal(name); });
+  const rouvre = ok => { if (ok && document.getElementById('dlg') && document.getElementById('dlg').open) openCardModal(name); };
+  chercheVerso(card).then(rouvre);
+  chercheTexte(card).then(rouvre);
   cacherApercu();
   const dispo = availableFor(card), offre = dispo > 0 ? null : bestOffer(card);
   const actions = [
@@ -470,6 +472,6 @@ function renderE() {
 
   const hintEl = document.getElementById('hintE');
   if (hintEl) hintEl.textContent = `${n}/${f.size}`;
-  if (S.view === 'grid') setTimeout(() => queueImages(entries.map(e => e.card)), 0);
+  setTimeout(() => queueScryfall(entries.map(e => e.card)), 0);
   scheduleCombos();
 }
