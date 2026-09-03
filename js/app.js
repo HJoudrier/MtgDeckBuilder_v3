@@ -79,6 +79,15 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'toggleArch') {
+    basculerArchetype(b.dataset.arch);
+    majFenetreFiltres();
+    majResumeFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    return;
+  }
+
   if (act === 'dropFiltre') {
     effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean));
     majFenetreFiltres();

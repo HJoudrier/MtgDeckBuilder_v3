@@ -75,11 +75,12 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 
 ### `js/cartes.js` — Base de cartes
 
-Catalogue livré avec l'atelier, fabrique de cartes, index de recherche tolérant aux accents, apostrophes et faces multiples.
+Catalogue livré avec l'atelier, fabrique de cartes, index de recherche tolérant aux accents, apostrophes et faces multiples,
+rôles et archétypes de deck déduits du texte oracle.
 
-*15 fonction(s), 24 Ko*
+*20 fonction(s), 29 Ko*
 
-Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
+Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCHLABEL`, `ARCH_MOTIFS`
 
 | Fonction | Rôle |
 |---|---|
@@ -93,6 +94,8 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
 | `peutCommander(c)` | Vérifie qu'une carte peut être commandant. |
 | `commandantsPossibles()` | Créatures légendaires du deck éligibles au rôle. |
 | `mainType(c)` | Type principal en français, face avant pour les cartes multi-faces. |
+| `archetypesDe(card)` | Archétypes de deck relevés dans le texte et l'analyse d'une carte. |
+| `reanalyser(card)` | Refait analyse, rôles et archétypes après un changement de texte ou de force. |
 | `seedCollection()` | Collection de démonstration, au premier lancement. |
 | `mergeInto(card,canonical)` | Fusionne deux entrées désignant la même carte. |
 | `renameCard(card,newName)` | Renomme une carte vers son nom canonique en migrant les quantités. |
@@ -103,8 +106,8 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`
 
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
 C'est aussi ici que vivent les filtres de l'en-tête : les couleurs (`S.colors`, `S.colorMode`), la recherche
-libre (`S.search`), le type de carte (`S.typeFilter`) et les critères de `S.filtres` (nom, illustrateur,
-force, endurance, coût de mana, prix).
+libre (`S.search`), le type de carte (`S.typeFilter`) et les critères de `S.filtres` (archétypes, nom,
+illustrateur, force, endurance, coût de mana, prix).
 
 *16 fonction(s), 8 Ko*
 
@@ -116,7 +119,9 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la section A à une carte. |
-| `filtreOK(card)` | Applique les filtres de la fenêtre (nom, illustrateur, force, endurance, coût, prix) à une carte. |
+| `filtreOK(card)` | Applique les filtres de la fenêtre (archétype, nom, illustrateur, force, endurance, coût, prix) à une carte. |
+| `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
+| `basculerArchetype(id)` | Coche ou décoche un archétype. |
 | `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
 | `texteFiltresActifs(sep)` | Ces mêmes libellés mis bout à bout, pour les infobulles et les résumés. |
 | `majFiltre(cle,valeur)` | Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. |
@@ -350,7 +355,7 @@ Données : `RETOURNEES`
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
-| `corpsFiltres()` | Contenu de cette fenêtre : couleurs, recherche, type, nom, illustrateur, force, endurance, coût de mana, prix. |
+| `corpsFiltres()` | Contenu de cette fenêtre : couleurs, recherche, type, archétype, nom, illustrateur, force, endurance, coût de mana, prix. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
 | `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
@@ -381,7 +386,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 189 fonctions au total, réparties en 14 modules.
+- 193 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes.

@@ -23,7 +23,7 @@ const S = {
   custom: {size:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', artiste:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -56,14 +56,14 @@ const S = {
 
 /* ---------------------------------------------------------------------
    Filtres de la fenêtre « Filtres » (en-tête) : couleurs, recherche libre,
-   type de carte, nom, illustrateur, force, endurance, coût de mana et
-   prix. Chaque champ vide est neutre. Les couleurs vivent dans `S.colors`
+   type de carte, archétype, nom, illustrateur, force, endurance, coût de
+   mana et prix. Chaque champ vide est neutre. Les couleurs vivent dans `S.colors`
    et `S.colorMode`, la recherche et le type dans `S.search` et
    `S.typeFilter` ; les autres critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', artiste:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -74,6 +74,17 @@ const FILTRES_BORNES = [
   ['cmcMin', 'cmcMax', 'cmc', 'Coût de mana'],
   ['prixMin', 'prixMax', 'price', 'Prix']
 ];
+
+/* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
+function archetypesFiltre() {
+  return String((S.filtres && S.filtres.archetypes) || '').split(',').filter(Boolean);
+}
+
+function basculerArchetype(id) {
+  const sel = new Set(archetypesFiltre());
+  if (sel.has(id)) sel.delete(id); else sel.add(id);
+  S.filtres.archetypes = [...sel].join(',');
+}
 
 function nombreFiltre(v) {
   if (v === '' || v === null || v === undefined) return null;
@@ -111,6 +122,9 @@ function filtresActifs() {
   if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
   const artiste = String(f.artiste || '').trim();
   if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
+  const arch = archetypesFiltre();
+  if (arch.length) actifs.push({cles:['archetypes'],
+    texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(id => ARCHLABEL[id] || id).join(', ')}`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
@@ -137,6 +151,8 @@ function filtreOK(card) {
   if (nom && !norm(card.name).includes(norm(nom))) return false;
   const artiste = String(f.artiste || '').trim();
   if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
+  const arch = archetypesFiltre();
+  if (arch.length && !arch.some(id => (card.archetypes || []).includes(id))) return false;
   for (const [kMin, kMax, champ] of FILTRES_BORNES) {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) continue;

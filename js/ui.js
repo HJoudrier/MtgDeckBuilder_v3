@@ -438,6 +438,14 @@ function corpsFiltres() {
       </select>
     </div>
     <div class="field">
+      <label class="lab">Archétype</label>
+      <div class="archetypes">
+        ${ARCHETYPES.map(a => `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${a.id}"
+          aria-pressed="${archetypesFiltre().includes(a.id)}" title="${esc(a.aide)}">${esc(a.label)}</button>`).join('')}
+      </div>
+      <div class="small muted">Une carte est retenue si elle relève d'au moins un archétype coché. La lecture vient de son texte : elle éclaire une piste, elle ne remplace pas votre jugement.</div>
+    </div>
+    <div class="field">
       <label class="lab" for="f_nom">Nom de la carte</label>
       <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>

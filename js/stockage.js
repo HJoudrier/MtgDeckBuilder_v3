@@ -110,7 +110,7 @@ function restore(d) {
     if (!card) card = registerCard(buildCard(o.n, o.c || '—', o.t || 'Inconnu', o.p || 0, o.x || ''));
     if (o.i) card.identity = o.i.split('');
     if (typeof o.m === 'number') card.cmc = o.m;
-    if (typeof o.f === 'number' && card.force !== o.f) { card.force = o.f; card.an = analyze(card); card.cats = categories(card); }
+    if (typeof o.f === 'number' && card.force !== o.f) { card.force = o.f; reanalyser(card); }
     if (typeof o.e === 'number') card.endurance = o.e;
     if (o.a) card.artist = o.a;
     if (o.g) card.img = o.g;

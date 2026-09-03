@@ -235,6 +235,8 @@ function ficheHTML(card) {
         <div class="small muted">${esc(card.type)}${card.cmc?` · CMC ${card.cmc}`:''}${(card.force != null && card.endurance != null)?` · ${card.force}/${card.endurance}`:''} · ${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
         <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
+        ${(card.archetypes||[]).length ? `<div class="chips" style="margin-top:4px">${card.archetypes.map(id =>
+          `<span class="chip arch" title="Archétype relevé dans le texte de la carte">${esc(ARCHLABEL[id] || id)}</span>`).join(' ')}</div>` : ''}
         <div class="otext">${esc((card.text||'(texte non disponible)').replace(/ \/\/ /g,'\n'))}</div>
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`

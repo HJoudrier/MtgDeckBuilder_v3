@@ -691,8 +691,7 @@ function completeDepuisRec(c, rec) {
   }
   if (rec[CH.FORCE] != null && c.force == null) {
     c.force = rec[CH.FORCE];
-    c.an = analyze(c);
-    c.cats = categories(c);
+    reanalyser(c);
   }
   if (rec[CH.ENDURANCE] != null && c.endurance == null) c.endurance = rec[CH.ENDURANCE];
   if (rec[CH.ARTISTE] && !c.artist) c.artist = rec[CH.ARTISTE];
@@ -710,8 +709,7 @@ function carteDuCatalogue(rec) {
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
   if (rec[CH.ARTISTE]) c.artist = rec[CH.ARTISTE];
-  c.an = analyze(c);
-  c.cats = categories(c);
+  reanalyser(c);
   if (rec[CH.IMG]) {
     c.img = CDN + 'small/' + rec[CH.IMG];
     c.imgN = CDN + 'normal/' + rec[CH.IMG];
