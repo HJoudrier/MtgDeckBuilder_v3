@@ -81,7 +81,18 @@ const FILTRES_BORNES = [
    conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
    --------------------------------------------------------------------- */
 
-const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map(), forme:null, essais:[]};
+const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map(), forme:null, essais:[], manques:[]};
+
+/* Thèmes EDHREC retenus pour un archétype ; vide s'il n'en a aucun. */
+function themesArchetype(id) {
+  return ((ARCH_BASE.themes || {})[id]) || [];
+}
+
+/* Archétypes que la base extérieure ne couvre pas. */
+function archetypesSansTheme() {
+  if (!ARCH_BASE.index.size) return [];
+  return ARCHETYPES.filter(a => !themesArchetype(a.id).length);
+}
 
 const ARCH_SOURCES = [
   ['deux', 'Les deux'],

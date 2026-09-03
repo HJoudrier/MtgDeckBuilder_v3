@@ -446,8 +446,15 @@ function corpsFiltres() {
     <div class="field">
       <label class="lab">Archétype</label>
       <div class="archetypes">
-        ${ARCHETYPES.map(a => `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${a.id}"
-          aria-pressed="${archetypesFiltre().includes(a.id)}" title="${esc(a.aide)}">${esc(a.label)}</button>`).join('')}
+        ${ARCHETYPES.map(a => {
+          const th = themesArchetype(a.id);
+          const couvert = ARCH_BASE.index.size && th.length;
+          const infos = !ARCH_BASE.index.size ? ''
+            : (th.length ? ` · EDHREC : ${th.map(t => `${t.slug} (${t.n} cartes)`).join(', ')}`
+                         : ' · aucun thème EDHREC à ce nom : lecture par le texte seulement');
+          return `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${a.id}"
+            aria-pressed="${archetypesFiltre().includes(a.id)}" title="${esc(a.aide + infos)}">${esc(a.label)}${couvert ? ' <span class="arch-src">◆</span>' : ''}</button>`;
+        }).join('')}
       </div>
       <div class="row" style="gap:6px;align-items:center;margin-top:2px">
         <span class="lab">Source</span>
@@ -492,8 +499,14 @@ function etatArchetypes() {
   if (ARCH_BASE.index.size) {
     const nbThemes = Object.values(ARCH_BASE.themes || {}).reduce((n, l) => n + l.length, 0);
     const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';
+    const sans = archetypesSansTheme();
+    const manques = ARCH_BASE.manques || [];
     return `Deux lectures se complètent : le texte de la carte, lu localement, et ${ARCH_BASE.index.size.toLocaleString('fr-FR')} cartes
-      référencées par ${nbThemes} thème(s) EDHREC${date ? `, relevés le ${date}` : ''}${ARCH_BASE.erreur ? ` (${esc(ARCH_BASE.erreur)})` : ''}.`;
+      référencées par ${nbThemes} thème(s) EDHREC${date ? `, relevés le ${date}` : ''}. Les archétypes marqués ◆ sont couverts par les deux.
+      ${manques.length ? `<br>${manques.length} nom(s) de thème sans page chez EDHREC${sans.length
+        ? ` — ${sans.length} archétype(s) en restent au seul texte : ${esc(sans.map(a => a.label).join(', '))}`
+        : ', sans conséquence : chacun de ces archétypes est couvert par un autre thème'}.
+        <span class="mono" style="font-size:10.5px">${esc(manques.join(', '))}</span>` : ''}`;
   }
   return `Seul le texte de la carte est lu pour l'instant. « Charger depuis EDHREC » ajoute les rôles établis par la communauté :
     une trentaine de requêtes en une fois, puis le résultat reste en cache sur cet appareil.`;

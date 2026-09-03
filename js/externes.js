@@ -359,6 +359,7 @@ async function reprendreArchetypesEdhrec() {
     if (!memo || memo.v !== 1 || !memo.cartes) return false;
     ARCH_BASE.index = indexDepuisCartes(memo.cartes);
     ARCH_BASE.themes = memo.themes || {};
+    ARCH_BASE.manques = memo.manques || [];
     ARCH_BASE.maj = memo.maj || null;
     ARCH_BASE.etat = ARCH_BASE.index.size ? 'ok' : 'idle';
     return ARCH_BASE.index.size > 0;
@@ -399,7 +400,7 @@ async function chargerArchetypesEdhrec(force) {
 
   const index = new Map();
   const themes = {};
-  let echecs = 0;
+  const manques = [];
 
   for (const a of ARCHETYPES) {
     const slugs = a.edhrec || [];
@@ -408,7 +409,7 @@ async function chargerArchetypesEdhrec(force) {
       if (retenus >= ARCH_MAX_THEMES) break;
       try {
         const r = await fetch(url(slug));
-        if (!r.ok) { echecs++; continue; }
+        if (!r.ok) { manques.push(slug); continue; }
         const noms = nomsPageEdhrec(await r.json());
         if (!noms.size) continue;
         noms.forEach(n => {
@@ -419,7 +420,7 @@ async function chargerArchetypesEdhrec(force) {
         themes[a.id] = (themes[a.id] || []).concat([{slug, n:noms.size}]);
         retenus++;
       } catch(err) {
-        echecs++;
+        manques.push(slug);
       }
       await pauseEdhrec();
     }
@@ -431,10 +432,11 @@ async function chargerArchetypesEdhrec(force) {
   } else {
     ARCH_BASE.index = index;
     ARCH_BASE.themes = themes;
+    ARCH_BASE.manques = manques;
     ARCH_BASE.maj = Date.now();
     ARCH_BASE.etat = 'ok';
-    ARCH_BASE.erreur = echecs ? `${echecs} thème(s) non chargé(s)` : '';
-    idbEcrire(ARCH_CLE_IDB, {v:1, maj:ARCH_BASE.maj, themes, cartes:cartesDepuisIndex(index)}).catch(() => {});
+    ARCH_BASE.erreur = '';
+    idbEcrire(ARCH_CLE_IDB, {v:1, maj:ARCH_BASE.maj, themes, manques, cartes:cartesDepuisIndex(index)}).catch(() => {});
   }
 
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();

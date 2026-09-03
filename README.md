@@ -134,6 +134,8 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
 | `sourceArchetypes()` | Source retenue : texte de la carte, EDHREC, ou les deux. |
 | `archetypesBase(card)` | Archétypes d'une carte d'après les thèmes EDHREC chargés. |
+| `themesArchetype(id)` | Thèmes EDHREC retenus pour un archétype. |
+| `archetypesSansTheme()` | Archétypes qu'EDHREC ne couvre pas, laissés à la lecture du texte. |
 | `archetypesCarte(card)` | Archétypes retenus pour le filtrage, selon la source. |
 | `archetypesDetail(card)` | Même liste, avec l'origine de chaque étiquette, pour la fiche. |
 | `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
@@ -415,7 +417,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 237 fonctions au total, réparties en 14 modules.
+- 239 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
