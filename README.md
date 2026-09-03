@@ -86,7 +86,7 @@ fonctionnement — dont la liste et le contenu viennent d'EDHREC.
 
 *20 fonction(s), 37 Ko*
 
-Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`, `ARCH_ANCIENS`
+Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`
 
 | Fonction | Rôle |
 |---|---|
@@ -410,7 +410,6 @@ Données : `RETOURNEES`
 | `cacherApercu()` | Masque l'aperçu. |
 | `toast(msg)` | Message temporaire en bas d'écran. |
 | `openDialog(title,bodyHTML,footHTML,wide)` | Ouvre une fenêtre modale, sans la rouvrir si elle l'est déjà. |
-| `withFocus(fn)` | Préserve le focus et le curseur pendant un rendu. |
 
 ### `js/app.js` — Démarrage et évènements
 
@@ -423,7 +422,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 244 fonctions au total, réparties en 14 modules.
+- 243 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes

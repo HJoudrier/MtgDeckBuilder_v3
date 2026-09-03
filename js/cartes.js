@@ -355,20 +355,6 @@ const ARCH_RESUMES = {
   'toolbox':        "Tuteurs et réponses à la carte, cherchées selon la situation."
 };
 
-/* Anciens identifiants internes, pour relire un filtre enregistré avant
-   le passage aux noms de thèmes EDHREC. */
-/* Anciens identifiants de rôle, pour relire un filtre enregistré avant
-   que « removal » ne devienne « interaction ». */
-const ROLES_ANCIENS = {removal:'interaction'};
-
-const ARCH_ANCIENS = {
-  aristocrates:'aristocrats', marqueurs:'+1-+1-counters', jetons:'tokens',
-  spellslinger:'spellslinger', vol:'flying', combat:'combat', blink:'blink',
-  cimetiere:'reanimator', landfall:'landfall', voltron:'voltron',
-  gainvie:'lifegain', artefacts:'artifacts', enchantements:'enchantments',
-  controle:'control', meule:'mill'
-};
-
 /* Rôles d'une carte. Le type donne le cadre ; tout le reste vient de
    l'analyse : ce que chaque capacité produit, sur qui, ce que les coûts
    consomment et ce qui la déclenche. */
@@ -467,7 +453,7 @@ function reanalyser(card) {
 const CATLABEL = {
   creatures:'Créatures', terrains:'Terrains', ramp:'Ramp / mana', pioche:'Card advantage',
   tuteurs:'Tuteurs', interaction:'Interaction', wipe:'Board wipes', protection:'Protection', jetons:'Jetons',
-  '+1-+1-counters':'Marqueurs', sacrifice:'Sacrifice', blink:'ETB / blink', stax:'Stax'
+  marqueurs:'Marqueurs', sacrifice:'Sacrifice', blink:'ETB / blink', stax:'Stax'
 };
 
 /* Base de données & indexation */

@@ -143,16 +143,7 @@ function restore(d) {
   if (typeof d.images === 'boolean') S.images = d.images;
   if (typeof d.showImplicit === 'boolean') S.showImplicit = d.showImplicit;
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
-  if (d.filtres) {
-    S.filtres = {...FILTRES_VIDE, ...d.filtres};
-    // les archétypes étaient désignés par un identifiant interne avant de
-    // porter le nom du thème EDHREC correspondant
-    S.filtres.archetypes = String(S.filtres.archetypes || '').split(',').filter(Boolean)
-      .map(id => ARCH_ANCIENS[id] || id).join(',');
-    // « removal » s'appelle désormais « interaction »
-    S.filtres.roles = String(S.filtres.roles || '').split(',').filter(Boolean)
-      .map(r => ROLES_ANCIENS[r] || r).join(',');
-  }
+  if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};
   if (d.budget) S.budget = {...S.budget, ...d.budget};
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;

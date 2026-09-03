@@ -340,20 +340,3 @@ function recToucheNoeuds(rec, noeuds) {
   const card = getCardOrAnalyzedRec(rec);
   return carteTouche(card, noeuds);
 }
-
-function withFocus(fn) {
-  const active = document.activeElement;
-  const selStart = (active && typeof active.selectionStart === 'number') ? active.selectionStart : null;
-  const selEnd = (active && typeof active.selectionEnd === 'number') ? active.selectionEnd : null;
-  const id = active && active.id;
-  fn();
-  if (id) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.focus();
-      if (selStart !== null && selEnd !== null) {
-        try { el.setSelectionRange(selStart, selEnd); } catch(e) {}
-      }
-    }
-  }
-}
