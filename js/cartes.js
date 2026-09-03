@@ -395,7 +395,12 @@ function categories(card) {
     if (surLuiMeme(e) && /(?:owner's|your) (?:library|hand|graveyard)/.test(e)) return true;
     return /\byou control\b|\bto you\b|\byourself\b|\byour (?:creatures?|permanents?|lands?|hand|library|graveyard)\b/.test(e);
   };
-  const enMasse = x => /\b(?:all|each|every)\s+(?:other\s+)?(?:creature|permanent|artifact|enchantment|land|nonland|player|opponent)/.test(effet(x));
+  const enMasse = x => {
+    const e = effet(x);
+    // « le dessus de la bibliothèque de chaque joueur » ne balaie rien
+    if (/(?:player|opponent)['\u2019]s (?:library|hand|graveyard)/.test(e)) return false;
+    return /\b(?:all|each|every)\s+(?:other\s+)?(?:creature|permanent|artifact|enchantment|land|nonland|player|opponent)/.test(e);
+  };
 
   if (/creature/.test(t)) c.add('creatures');
   if (/land/.test(t)) c.add('terrains');

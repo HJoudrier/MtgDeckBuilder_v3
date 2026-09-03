@@ -429,7 +429,21 @@ function refineEffects(list, clause) {
   /* Exiler ses propres cartes pour les jouer ensuite est de l'impulsion,
      pas de l'interaction : la bibliothèque et les cartes révélées sont à
      nous, contrairement à un cimetière ou à une permanente adverse. */
-  if (out.includes('EXIL') && /exile[^.]{0,70}(?:from among (?:the )?(?:revealed|them)|the top (?:card|\w+ cards)? ?of your library)|you may (?:cast|play)[^.]{0,40}exiled/.test(clause)) {
+  /* L'exil est impulsif — donc du card advantage — quand la carte exilée
+     nous revient : prise parmi ce que nous avons révélé, prise du dessus
+     de notre bibliothèque, ou suivie du droit de la lancer. Exiler la
+     bibliothèque d'un adversaire sans rien en faire reste de l'exil. */
+  const peutLancer = /you may (?:cast|play)|may (?:cast|play) (?:it|them|those)/.test(clause);
+  const exilImpulsif =
+       /exile[^.]{0,70}from among/.test(clause)
+    || /exile the top[^.]{0,40}of your librar/.test(clause)
+    || (/exile[^.]{0,70}\blibrar/.test(clause) && peutLancer)
+    || /you may (?:cast|play)[^.]{0,60}exiled/.test(clause)
+    // « puis vous pouvez la lancer sans payer son coût » : sauf si l'exil
+    // visait une permanente en jeu, auquel cas c'est du vol.
+    || (/you may (?:cast|play)[^.]{0,60}without paying/.test(clause)
+        && !/target (?:creature|permanent|artifact|enchantment|land|nonland)/.test(clause));
+  if (out.includes('EXIL') && exilImpulsif) {
     out = out.filter(c => c !== 'EXIL');
     if (!out.includes('IMPULSE')) out.push('IMPULSE');
   }
