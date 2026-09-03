@@ -23,10 +23,10 @@ function availableFor(card) {
 
 function targets() {
   const f = fmt(), k = f.size / 100;
-  if (S.format === 'limite') return {terrains:17, creatures:15, removal:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
-  if (S.format === 'standard') return {terrains:24, creatures:18, removal:8, pioche:6, ramp:2, tuteurs:1, wipe:2, protection:2};
+  if (S.format === 'limite') return {terrains:17, creatures:15, interaction:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
+  if (S.format === 'standard') return {terrains:24, creatures:18, interaction:8, pioche:6, ramp:2, tuteurs:1, wipe:2, protection:2};
   return {
-    terrains:Math.round(36*k), creatures:Math.round(25*k), removal:Math.round(9*k), pioche:Math.round(10*k),
+    terrains:Math.round(36*k), creatures:Math.round(25*k), interaction:Math.round(9*k), pioche:Math.round(10*k),
     ramp:Math.round(10*k), tuteurs:Math.round(3*k), wipe:Math.round(2*k), protection:Math.round(3*k)
   };
 }

@@ -312,7 +312,7 @@ const ARCH_RESUMES = {
   'lifegain':       "Gagne des points de vie et convertit ce gain en cartes, en corps ou en dégâts.",
   'artifacts':      "Artefacts qui comptent : trésors, affinité, bricolage, récursion.",
   'enchantments':   "Enchantements qui comptent : constellation, auras et récursion associées.",
-  'control':        "Contresorts, removal et taxes : garder la main jusqu'à conclure tranquillement.",
+  'control':        "Contresorts, interaction et taxes : garder la main jusqu'à conclure tranquillement.",
   'mill':           "Vide les bibliothèques, la sienne pour s'en servir ou celles d'en face pour gagner.",
   'sacrifice':      "Sacrifie ses propres permanentes pour en tirer valeur, mana ou dégâts.",
   'graveyard':      "Traite le cimetière comme une seconde main : récursion, flashback, escape.",
@@ -321,7 +321,7 @@ const ARCH_RESUMES = {
   'chaos':          "Effets aléatoires et symétriques qui brouillent la partie au profit de qui s'y est préparé.",
   'infect':         "Créatures à infection : dix marqueurs poison suffisent, sans toucher aux points de vie.",
   'superfriends':   "Accumule les planeswalkers, les protège et prolifère leurs marqueurs de loyauté.",
-  'vehicles':       "Véhicules pilotés par de petites créatures, hors de portée du removal entre deux combats.",
+  'vehicles':       "Véhicules pilotés par de petites créatures, hors de portée de l'interaction entre deux combats.",
   'clones':         "Copie les meilleures permanentes, les siennes comme celles d'en face.",
   'politics':       "Marchandage, dons temporaires et votes, pour diriger les attaques ailleurs.",
   'storm':          "Enchaîne les sorts dans un même tour pour déclencher un final démultiplié.",
@@ -333,7 +333,7 @@ const ARCH_RESUMES = {
   'lands-matter':   "Fait du terrain une ressource active : récursion, animation, déclenchements.",
   'counters':       "Marqueurs de toutes sortes, posés puis démultipliés par la prolifération.",
   'equipment':      "Équipements réunis sur peu de créatures, souvent une seule menace.",
-  'auras':          "Auras empilées sur une créature clé, avec de quoi la protéger du removal.",
+  'auras':          "Auras empilées sur une créature clé, avec de quoi la protéger de l'interaction.",
   'theft':          "Prend le contrôle des permanentes adverses et les retourne contre elles.",
   'combo':          "Deux ou trois pièces qui, réunies, referment la partie sur place.",
   'burn':           "Dégâts directs au visage, sans passer par le combat.",
@@ -357,6 +357,10 @@ const ARCH_RESUMES = {
 
 /* Anciens identifiants internes, pour relire un filtre enregistré avant
    le passage aux noms de thèmes EDHREC. */
+/* Anciens identifiants de rôle, pour relire un filtre enregistré avant
+   que « removal » ne devienne « interaction ». */
+const ROLES_ANCIENS = {removal:'interaction'};
+
 const ARCH_ANCIENS = {
   aristocrates:'aristocrats', marqueurs:'+1-+1-counters', jetons:'tokens',
   spellslinger:'spellslinger', vol:'flying', combat:'combat', blink:'blink',
@@ -417,9 +421,10 @@ function categories(card) {
     x => !(x.scopeEff === 'adv' && !/\byou\b/.test(effet(x))))) c.add('pioche');
   if (vers(['TUTEUR']) || produit(['TUTEUR'])) c.add('tuteurs');
 
-  /* Interaction : ce qui frappe ce qui n'est pas à nous. */
+  /* Interaction : ce qui répond à ce qui n'est pas à nous — destruction,
+     exil, renvoi, dégâts, contresort. */
   if (vers(['DESTRUCTION', 'EXIL', 'BOUNCE', 'DEGATS', 'CONTRESORT', 'MIS_EN_BIBLIO'],
-    x => !surSoi(x))) c.add('removal');
+    x => !surSoi(x))) c.add('interaction');
   if (vers(['DESTRUCTION', 'EXIL', 'DEGATS', 'MIS_EN_BIBLIO', 'BOUNCE'],
     x => enMasse(x) && !surSoi(x))) c.add('wipe');
 
@@ -461,7 +466,7 @@ function reanalyser(card) {
 
 const CATLABEL = {
   creatures:'Créatures', terrains:'Terrains', ramp:'Ramp / mana', pioche:'Card advantage',
-  tuteurs:'Tuteurs', removal:'Removal', wipe:'Board wipes', protection:'Protection', jetons:'Jetons',
+  tuteurs:'Tuteurs', interaction:'Interaction', wipe:'Board wipes', protection:'Protection', jetons:'Jetons',
   '+1-+1-counters':'Marqueurs', sacrifice:'Sacrifice', blink:'ETB / blink', stax:'Stax'
 };
 

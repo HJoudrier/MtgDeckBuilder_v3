@@ -71,7 +71,7 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 | `scopeOf(s)` | Détermine si une clause vise votre côté ou celui de l'adversaire. |
 | `refineEffects(list, clause)` | Arbitre les conflits entre effets détectés (blink contre exil, négations…). |
 | `analyze(card)` | Analyse une carte : capacités, arcs déclencheur → effet, accroches et productions. |
-| `categories(card)` | Rôles d'une carte, croisant son type avec les capacités, coûts et déclencheurs relevés par `analyze()`. |
+| `categories(card)` | Rôles d'une carte, croisant son type avec les capacités, coûts et déclencheurs relevés par `analyze()`. Le rôle `interaction` couvre destruction, exil, renvoi, dégâts et contresorts. |
 | `feeds(concept)` | Concepts qu'une production peut alimenter, équivalences comprises. |
 | `feedsDe(p)` | Même chose, en tenant compte du détail de la production. |
 | `croise(prods,trigs,dir,out)` | Croise les productions d'une carte avec les accroches d'une autre. |
@@ -431,7 +431,7 @@ Données : `RETOURNEES`
 - Les rôles ne se lisent pas dans le texte brut : `categories()` croise le type de la carte avec ce que `analyze()` a
   relevé — ce que chaque capacité produit, sur qui porte l'effet (`textEff`), ce que les coûts consomment
   (`sacOutlet`) et ce qui la déclenche. Un terrain qui n'ajoute qu'un mana n'est pas du ramp, une carte qui se blesse
-  elle-même n'est pas du removal, une contrainte qu'on s'impose n'est pas du stax.
+  elle-même ne fait pas de l'interaction, une contrainte qu'on s'impose n'est pas du stax.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
 - Un filtre posé une fois vaut partout : `carteFiltree()` filtre la collection, le deck et sa courbe de mana,
