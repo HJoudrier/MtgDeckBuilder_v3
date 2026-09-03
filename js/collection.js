@@ -211,6 +211,8 @@ function openImport(cible) {
     const remplacer = versDeck && document.getElementById('impReplace').checked;
     const completer = versDeck && document.getElementById('impStock').checked;
     const entries = parseMtgoList(txt);
+    // les champs sont lus : la fenêtre a fait son office
+    closeDialog();
     let known = 0, created = 0, qty = 0, reserve = 0, manquants = 0;
     const fresh = [];
     let cmd = null;

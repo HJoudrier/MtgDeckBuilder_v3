@@ -812,6 +812,7 @@ function openWipeModal() {
     S.deck.clear();
     S.commander = null;
     S.selected = null;
+    closeDialog();
     renderAll();
     toast('Collection et deck effacés.');
   };
