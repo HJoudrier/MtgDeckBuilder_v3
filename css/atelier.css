@@ -63,6 +63,8 @@ header.top.compact .brand .sub{display:none}
   font-size:11px;padding:3px 8px;cursor:pointer;
 }
 .head-combo:hover{background:rgba(211,164,65,.22);border-color:var(--brass)}
+.head-format{cursor:pointer}
+.head-format:hover{border-color:var(--brass);color:var(--txt)}
 /* bouton et fenêtre des filtres avancés */
 .head-filtre{
   display:inline-flex;align-items:center;gap:5px;
@@ -74,6 +76,38 @@ header.top.compact .brand .sub{display:none}
   font-family:var(--mono);font-size:10px;line-height:1;padding:2px 5px;border-radius:99px;
   background:var(--brass);color:#1a1526;font-weight:700
 }
+/* puces des filtres en vigueur, dans l'en-tête */
+.head-filtres{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap;min-width:0}
+.filtre-chip{
+  display:inline-flex;align-items:center;
+  border:1px solid var(--brass-d);border-radius:99px;background:rgba(211,164,65,.12);
+  font-family:var(--mono);font-size:10.5px;color:var(--brass);max-width:230px;overflow:hidden
+}
+.filtre-chip .chip-txt{
+  background:transparent;border:0;padding:3px 3px 3px 9px;color:inherit;font:inherit;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px
+}
+.filtre-chip .chip-x{
+  background:transparent;border:0;padding:3px 8px 3px 4px;color:var(--dim);font-size:11px;line-height:1
+}
+.filtre-chip:hover{border-color:var(--brass)}
+.filtre-chip .chip-x:hover{color:var(--bad)}
+
+/* bloc couleurs de la fenêtre des filtres */
+.dlg-b .mana-btn{width:34px;height:34px;min-width:34px;min-height:34px}
+.dlg-b .seg{flex-wrap:wrap;max-width:100%}
+
+/* archétypes de la fenêtre des filtres */
+.archetypes{display:flex;flex-wrap:wrap;gap:5px}
+.arch-btn{
+  background:var(--bg2);border:1px solid var(--line2);border-radius:99px;
+  padding:4px 10px;font-size:12px;color:var(--dim);line-height:1.2
+}
+.arch-btn:hover{border-color:var(--brass);color:var(--txt)}
+.arch-btn[aria-pressed=true]{background:rgba(211,164,65,.16);border-color:var(--brass);color:var(--brass);font-weight:600}
+.chip.arch{border-color:var(--brass-d);color:var(--brass);background:rgba(211,164,65,.1)}
+.chip.arch.base{border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.1)}
+
 .filtres-grille{display:flex;flex-direction:column;gap:8px}
 .filtre-ligne{display:grid;grid-template-columns:104px auto 1fr auto 1fr;gap:5px 8px;align-items:center}
 .filtre-ligne .filtre-nom{font-size:13px;color:var(--txt)}
@@ -258,7 +292,6 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 /* ---------- panneau détail ---------- */
 .detail{border:1px solid var(--brass-d);border-radius:var(--r);background:linear-gradient(180deg,#241f33,#1c1826);padding:12px;margin-top:10px}
 .detail h3{font-size:16px;margin-bottom:2px}
-.otext{white-space:pre-line;font-size:12.5px;color:#cfc7e4;border-left:2px solid var(--line2);padding-left:9px;margin:8px 0}
 .chips{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}
 .chip{font-size:11px;padding:2px 7px;border-radius:99px;border:1px solid var(--line2);background:var(--panel2);color:var(--dim)}
 .chip.on{border-color:var(--brass);color:var(--brass)}
@@ -293,6 +326,19 @@ dialog.wide{max-width:min(760px,96vw)}
 .miniface img{width:100%;border-radius:4px;display:block;background:#191524}
 .miniface span{font-size:9.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:.04em}
 @media (max-width:520px){ .fiche .visuwrap{width:100%;max-width:300px;margin:0 auto} }
+/* carte rendue en texte, quand le visuel manque */
+.carte-texte{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;
+  border:1px solid var(--line2);border-radius:10px;padding:11px 12px;
+  background:linear-gradient(180deg,var(--panel2),var(--bg2));min-height:180px
+}
+.carte-texte .ct-h{display:flex;align-items:flex-start;gap:8px}
+.carte-texte .ct-nom{font-family:var(--display);font-size:15px;line-height:1.2;flex:1;min-width:0}
+.carte-texte .ct-h .costs{display:flex;gap:2px;flex-wrap:wrap;flex:0 0 auto}
+.carte-texte .ct-type{color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:6px}
+.carte-texte .ct-texte{font-size:12.5px;line-height:1.4;white-space:pre-line}
+.carte-texte .ct-pt{margin-top:auto;align-self:flex-end;font-size:14px;color:var(--txt)}
+
 .fiche .meta{flex:1;min-width:200px}
 .bloc{border-top:1px solid var(--line);padding-top:9px}
 .bloc>h4{margin:0 0 6px;font-family:var(--display);font-size:14px}
@@ -315,6 +361,8 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .pill{font-size:10.5px;padding:3px 7px}
   .head-toggle{font-size:10.5px;padding:2px 8px;margin-left:auto}
   .head-filtre{font-size:10.5px;padding:2px 8px}
+  .filtre-chip{font-size:10px;max-width:170px}
+  .filtre-chip .chip-txt{max-width:135px;padding-left:8px}
 }
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f1a2e;color:var(--txt);border:1px solid var(--brass);padding:9px 18px;border-radius:99px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.6);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}

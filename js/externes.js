@@ -164,7 +164,7 @@ async function loadEdhrec(force) {
   const cmd = S.commander ? find(S.commander) : null;
   const secCmds = commandantsSecondaires();
   if (!cmd && !secCmds.length) {
-    toast("Désignez un commandant en section E ou ajoutez des créatures légendaires au deck.");
+    toast("Désignez un commandant en section D ou ajoutez des créatures légendaires au deck.");
     return;
   }
   const cmdSig = (cmd ? cmd.name : '') + '::' + secCmds.map(c => c.name).sort().join('|');
@@ -217,6 +217,122 @@ async function loadEdhrec(force) {
     S.edhrec.error = err.message || 'requête refusée';
   }
   renderF();
+}
+
+/* 1 bis. Archétypes établis : thèmes EDHREC
+   Une page par thème, même hôte et même forme que les pages de
+   commandant déjà exploitées ci-dessus. Les noms retenus alimentent
+   `ARCH_BASE` (js/etat.js) et sont conservés dans IndexedDB. */
+
+const ARCH_CLE_IDB = 'archetypes';
+const ARCH_PAUSE = 130;   // ms entre deux requêtes, par courtoisie envers EDHREC
+const ARCH_MAX_THEMES = 2; // thèmes retenus au plus par archétype
+
+function urlThemeEdhrec(slug) {
+  return 'https://json.edhrec.com/pages/themes/' + encodeURIComponent(slug) + '.json';
+}
+
+/* Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. */
+function nomsPageEdhrec(j) {
+  const noms = new Set();
+  const ajoute = cv => { if (cv && cv.name) noms.add(norm(cv.name)); };
+  const dict = ((j && j.container) || {}).json_dict || {};
+  (dict.cardlists || []).forEach(l => (l.cardviews || []).forEach(ajoute));
+  if (!noms.size) (((j || {}).cardlists) || []).forEach(l => (l.cardviews || []).forEach(ajoute));
+  if (!noms.size && Array.isArray((j || {}).cardviews)) j.cardviews.forEach(ajoute);
+  return noms;
+}
+
+function indexDepuisCartes(cartes) {
+  const index = new Map();
+  Object.keys(cartes || {}).forEach(nom => index.set(nom, new Set(cartes[nom])));
+  return index;
+}
+
+function cartesDepuisIndex(index) {
+  const cartes = {};
+  index.forEach((ids, nom) => cartes[nom] = [...ids]);
+  return cartes;
+}
+
+/* Reprise du cache local, au démarrage. */
+async function reprendreArchetypesEdhrec() {
+  try {
+    const memo = await idbLire(ARCH_CLE_IDB);
+    if (!memo || memo.v !== 1 || !memo.cartes) return false;
+    ARCH_BASE.index = indexDepuisCartes(memo.cartes);
+    ARCH_BASE.themes = memo.themes || {};
+    ARCH_BASE.maj = memo.maj || null;
+    ARCH_BASE.etat = ARCH_BASE.index.size ? 'ok' : 'idle';
+    return ARCH_BASE.index.size > 0;
+  } catch(err) {
+    return false;
+  }
+}
+
+/* Chargement des thèmes : une requête par slug, les échecs sont isolés. */
+async function chargerArchetypesEdhrec(force) {
+  if (ARCH_BASE.etat === 'chargement') return;
+  if (!force && ARCH_BASE.index.size) return;
+  if (typeof fetch !== 'function') {
+    ARCH_BASE.etat = 'erreur';
+    ARCH_BASE.erreur = 'ce navigateur ne sait pas interroger EDHREC';
+    return;
+  }
+
+  ARCH_BASE.etat = 'chargement';
+  ARCH_BASE.erreur = '';
+  if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
+
+  const index = new Map();
+  const themes = {};
+  let echecs = 0;
+
+  for (const a of ARCHETYPES) {
+    const slugs = a.edhrec || [];
+    let retenus = 0;
+    for (const slug of slugs) {
+      if (retenus >= ARCH_MAX_THEMES) break;
+      try {
+        const r = await fetch(urlThemeEdhrec(slug));
+        if (!r.ok) { if (r.status !== 404) echecs++; continue; }
+        const noms = nomsPageEdhrec(await r.json());
+        if (!noms.size) continue;
+        noms.forEach(n => {
+          const s = index.get(n) || new Set();
+          s.add(a.id);
+          index.set(n, s);
+        });
+        themes[a.id] = (themes[a.id] || []).concat([{slug, n:noms.size}]);
+        retenus++;
+      } catch(err) {
+        echecs++;
+      }
+      await new Promise(res => setTimeout(res, ARCH_PAUSE));
+    }
+  }
+
+  if (!index.size) {
+    ARCH_BASE.etat = 'erreur';
+    ARCH_BASE.erreur = echecs
+      ? 'EDHREC injoignable (hors ligne ou accès bloqué)'
+      : 'aucun thème reconnu : les adresses EDHREC ont peut-être changé';
+  } else {
+    ARCH_BASE.index = index;
+    ARCH_BASE.themes = themes;
+    ARCH_BASE.maj = Date.now();
+    ARCH_BASE.etat = 'ok';
+    ARCH_BASE.erreur = echecs ? `${echecs} thème(s) non chargé(s)` : '';
+    idbEcrire(ARCH_CLE_IDB, {v:1, maj:ARCH_BASE.maj, themes, cartes:cartesDepuisIndex(index)}).catch(() => {});
+  }
+
+  if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
+  if (typeof renderAll === 'function') renderAll();
+  if (typeof toast === 'function') {
+    toast(ARCH_BASE.etat === 'ok'
+      ? `Archétypes EDHREC chargés : ${ARCH_BASE.index.size} cartes référencées.`
+      : `Archétypes EDHREC : ${ARCH_BASE.erreur}.`);
+  }
 }
 
 /* 2. Commander Spellbook */
@@ -384,7 +500,8 @@ function compacte(sc) {
     parseFloat((sc.prices && (sc.prices.eur || sc.prices.usd)) || 0) || 0,
     sc.id || '', (typeof sc.edhrec_rank === 'number') ? sc.edhrec_rank : 999999,
     (lg.commander === 'legal' ? 'c' : '') + (lg.standard === 'legal' ? 's' : ''), chemin, verso,
-    (tg != null && /^\d+$/.test(String(tg))) ? +tg : null
+    (tg != null && /^\d+$/.test(String(tg))) ? +tg : null,
+    sc.artist || (faces && faces[0] && faces[0].artist) || ''
   ];
 }
 
@@ -690,10 +807,10 @@ function completeDepuisRec(c, rec) {
   }
   if (rec[CH.FORCE] != null && c.force == null) {
     c.force = rec[CH.FORCE];
-    c.an = analyze(c);
-    c.cats = categories(c);
+    reanalyser(c);
   }
   if (rec[CH.ENDURANCE] != null && c.endurance == null) c.endurance = rec[CH.ENDURANCE];
+  if (rec[CH.ARTISTE] && !c.artist) c.artist = rec[CH.ARTISTE];
   if (!c.price && rec[CH.PRIX] > 0) c.price = rec[CH.PRIX];
   return c;
 }
@@ -707,8 +824,8 @@ function carteDuCatalogue(rec) {
   c.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
-  c.an = analyze(c);
-  c.cats = categories(c);
+  if (rec[CH.ARTISTE]) c.artist = rec[CH.ARTISTE];
+  reanalyser(c);
   if (rec[CH.IMG]) {
     c.img = CDN + 'small/' + rec[CH.IMG];
     c.imgN = CDN + 'normal/' + rec[CH.IMG];

@@ -25,13 +25,13 @@ function snapshot() {
   DB.forEach(c => {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
-      if (c.img || c.cmUrl) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||''});
+      if (c.img || c.cmUrl || c.artist) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||''});
     } else if (c.externe && !(S.collection.get(c.name) > 0) && !S.deck.has(c.name)) {
       // vivier d'exploration : non conservé
     } else {
       cartes.push({
         n:c.name, c:c.cost||'—', t:c.type, p:c.price, x:c.text,
-        i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance,
+        i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance, a:c.artist||'',
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
         u:c.cmUrl||'', k:c.unknown?1:0
       });
@@ -92,7 +92,7 @@ function save() {
     dernierEtatSignale = saveState;
     toast(saveState === 'partiel'
       ? "Espace de stockage limité : les visuels et les textes des cartes importées ne sont pas conservés, les quantités et le deck le restent."
-      : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la section A pour ne rien perdre.");
+      : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la pastille de sauvegarde de l'en-tête pour ne rien perdre.");
   }
   if (saveState === 'ok') dernierEtatSignale = 'ok';
 }
@@ -110,8 +110,9 @@ function restore(d) {
     if (!card) card = registerCard(buildCard(o.n, o.c || '—', o.t || 'Inconnu', o.p || 0, o.x || ''));
     if (o.i) card.identity = o.i.split('');
     if (typeof o.m === 'number') card.cmc = o.m;
-    if (typeof o.f === 'number' && card.force !== o.f) { card.force = o.f; card.an = analyze(card); card.cats = categories(card); }
+    if (typeof o.f === 'number' && card.force !== o.f) { card.force = o.f; reanalyser(card); }
     if (typeof o.e === 'number') card.endurance = o.e;
+    if (o.a) card.artist = o.a;
     if (o.g) card.img = o.g;
     if (o.G) card.imgN = o.G;
     if (o.L) card.imgL = o.L;
@@ -126,6 +127,7 @@ function restore(d) {
     const card = find(o.n);
     if (!card) return;
     if (o.p) card.price = o.p;
+    if (o.a) card.artist = o.a;
     if (o.g) card.img = o.g;
     if (o.G) card.imgN = o.G;
     if (o.L) card.imgL = o.L;

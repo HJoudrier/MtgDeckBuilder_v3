@@ -29,6 +29,16 @@ document.addEventListener('click', ev => {
     if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c);
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
+    return;
+  }
+
+  if (b.dataset.asrc) {
+    S.filtres.archSource = b.dataset.asrc;
+    if (b.dataset.asrc !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle') chargerArchetypesEdhrec();
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
     return;
   }
 
@@ -36,6 +46,7 @@ document.addEventListener('click', ev => {
     S.colorMode = b.dataset.cmode;
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 
@@ -77,25 +88,42 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'chargerArch') {
+    chargerArchetypesEdhrec(true);
+    return;
+  }
+
+  if (act === 'toggleArch') {
+    basculerArchetype(b.dataset.arch);
+    // premier archétype coché : la base extérieure se charge d'elle-même
+    if (sourceArchetypes() !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle'
+        && archetypesFiltre().length) chargerArchetypesEdhrec();
+    majFenetreFiltres();
+    majResumeFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    return;
+  }
+
+  if (act === 'dropFiltre') {
+    effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean));
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    return;
+  }
+
   if (act === 'resetFiltres') {
     reinitFiltres();
     majFenetreFiltres();
     S.limitB = PAGE;
     renderAll();
-    toast('Filtres avancés réinitialisés.');
+    toast('Filtres réinitialisés.');
     return;
   }
 
-  if (act === 'gotoA') {
-    const secA = document.getElementById('secA');
-    if (secA) {
-      if (!secA.classList.contains('open')) {
-        secA.classList.add('open');
-        const head = secA.querySelector('.sec-head');
-        if (head) head.setAttribute('aria-expanded', 'true');
-      }
-      secA.scrollIntoView({behavior:'smooth'});
-    }
+  if (act === 'formatDialog') {
+    openFormatModal();
     return;
   }
 
@@ -125,6 +153,7 @@ document.addEventListener('click', ev => {
     S.colors = new Set(['W','U','B','R','G','C']);
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 
@@ -132,6 +161,7 @@ document.addEventListener('click', ev => {
     S.colors = new Set();
     invaliderCandidats();
     renderAll();
+    majFenetreFiltres();
     return;
   }
 
@@ -481,14 +511,8 @@ document.addEventListener('mouseout', ev => {
 /* Saisie dans les champs de recherche et de filtres. */
 document.addEventListener('input', ev => {
   const t = ev.target;
-  if (t.id === 'q') {
-    S.search = t.value;
-    S.limitB = PAGE;
-    withFocus(() => renderB());
-    return;
-  }
   if (t.dataset.filtre) {
-    S.filtres[t.dataset.filtre] = t.value;
+    majFiltre(t.dataset.filtre, t.value);
     majResumeFiltres();
     planifierRenduFiltres();
     return;
@@ -501,6 +525,7 @@ document.addEventListener('input', ev => {
     const k = t.dataset.cst || t.dataset.cust;
     S.custom[k] = t.type === 'checkbox' ? t.checked : (t.type === 'number' ? (parseInt(t.value, 10) || 0) : t.value);
     renderAll();
+    majResumeFormat();
     return;
   }
   if (t.dataset.clim || t.dataset.lim) {
@@ -521,10 +546,10 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
-  if (t.dataset.act === 'typeFilter') {
-    S.typeFilter = t.value;
-    S.limitB = PAGE;
-    renderB();
+  if (t.dataset.filtre) {
+    majFiltre(t.dataset.filtre, t.value);
+    majResumeFiltres();
+    planifierRenduFiltres();
     return;
   }
   if (t.dataset.act === 'sort') {
@@ -537,6 +562,7 @@ document.addEventListener('change', ev => {
     if (S.format === 'perso') S.custom.commander = fmt().commander;
     invaliderCandidats();
     renderAll();
+    majFenetreFormat();
     return;
   }
   if (t.dataset.act === 'chooseCmd') {
@@ -587,6 +613,7 @@ function demarrer() {
   }
   renderAll();
   loadSymbology();
+  reprendreArchetypesEdhrec().then(trouve => { if (trouve) renderAll(); });
   verifierMajCatalogue();
   if (autoCatalogue()) chargerCatalogueComplet();
 }

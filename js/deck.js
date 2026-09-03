@@ -131,7 +131,7 @@ function removeFromDeck(name) {
 
 function buyCard(name) {
   if (S.budget.total <= 0 || S.budget.perCard <= 0) {
-    toast('Budget à zéro : aucun achat possible. Augmentez le budget en section F.');
+    toast('Budget à zéro : aucun achat possible. Augmentez le budget en section E.');
     return;
   }
   const c = find(name);
@@ -141,6 +141,31 @@ function buyCard(name) {
   deckAdd(c, 1, {force:true});
   renderAll();
   toast(`${name} ajoutée au deck, comptée à l'achat : ${eur(o.price)} estimés (${o.condition} ou mieux, ${o.lang}).`);
+}
+
+/* Carte rendue en texte, à la place du visuel : coût, type, force et
+   endurance, coût converti et texte oracle. Sert quand l'image est
+   absente, désactivée, ou qu'elle n'a pas pu se charger. */
+function ficheTexteHTML(card) {
+  const pt = (card.force != null && card.endurance != null) ? `${card.force}/${card.endurance}` : '';
+  return `<div class="visuwrap">
+      <div class="carte-texte">
+        <div class="ct-h">
+          <span class="ct-nom">${esc(card.name)}</span>
+          <span class="costs">${manaHTML(card, true)}</span>
+        </div>
+        <div class="ct-type small">${esc(card.type)}${card.cmc ? ` · CMC ${card.cmc}` : ''}</div>
+        <div class="ct-texte">${esc((card.text || '(texte non disponible)').replace(/ \/\/ /g, '\n'))}</div>
+        ${pt ? `<div class="ct-pt mono">${pt}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+/* Le visuel n'a pas pu se charger : le texte prend sa place. */
+function ficheImageKO(img) {
+  const wrap = img && img.closest('.visuwrap');
+  const c = img && find(img.getAttribute('data-name') || '');
+  if (wrap && c) wrap.outerHTML = ficheTexteHTML(c);
 }
 
 function ficheHTML(card) {
@@ -223,19 +248,25 @@ function ficheHTML(card) {
 
   return `<div class="fiche">
       ${S.images && (card.imgL || card.imgN || card.img) ? `<div class="visuwrap">
-        <img class="visu" src="${esc(faceVisible(card,true))}" alt="${esc(card.name)}">
+        <img class="visu" src="${esc(faceVisible(card,true))}" alt="${esc(card.name)}" data-name="${esc(card.name)}" onerror="ficheImageKO(this)">
         ${aDeuxFaces(card) && autreFace(card) ? `<button type="button" class="miniface" data-act="flip" data-name="${esc(card.name)}"
             title="Afficher ${RETOURNEES.has(card.name)?'le recto':'le verso'}">
             <img src="${esc(autreFace(card))}" alt="">
             <span>${RETOURNEES.has(card.name)?'recto':'verso'}</span>
           </button>` : ''}
-      </div>` : ''}
+      </div>` : ficheTexteHTML(card)}
       <div class="meta">
-        <div class="costs" style="margin-bottom:4px">${manaHTML(card)}</div>
-        <div class="small muted">${esc(card.type)}${card.cmc?` · CMC ${card.cmc}`:''} · ${eur(card.price)}${card.price?' (tendance Cardmarket)':''}</div>
+        <div class="small muted">${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
         <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
-        <div class="otext">${esc((card.text||'(texte non disponible)').replace(/ \/\/ /g,'\n'))}</div>
+        ${(() => {
+          const det = archetypesDetail(card);
+          if (!det.length) return '';
+          const source = d => d.texte && d.base ? 'texte de la carte et thèmes EDHREC'
+            : (d.base ? 'thèmes EDHREC' : 'texte de la carte');
+          return `<div class="chips" style="margin-top:4px">${det.map(d =>
+            `<span class="chip arch${d.base ? ' base' : ''}" title="Archétype relevé : ${source(d)}">${esc(ARCHLABEL[d.id] || d.id)}${d.base ? ' ◆' : ''}</span>`).join(' ')}</div>`;
+        })()}
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
           : (offre ? `hors collection — ≈ ${eur(offre.price)} sur Cardmarket (${offre.condition} ou mieux)` : 'hors collection et hors budget')}</div>
@@ -309,7 +340,7 @@ function blocAchats() {
          <div class="small ${depasse?'':'muted'}" style="margin-bottom:6px">${depasse
             ? `Dépassement de ${eur(total-budget)} sur un budget de ${eur(budget)}.`
             : `Budget de ${eur(budget)} · reste ${eur(budget-total)}.`}</div>`
-      : `<div class="small" style="margin-bottom:6px">Aucun budget défini en section F : ces cartes sont dans le deck mais ne sont pas encore chiffrées comme achat autorisé.</div>`}
+      : `<div class="small" style="margin-bottom:6px">Aucun budget défini en section E : ces cartes sont dans le deck mais ne sont pas encore chiffrées comme achat autorisé.</div>`}
     <div class="list">${lignes.slice(0, 12).map(l => `
       <div class="lrow">
         <span class="dot" style="background:${stripeColor(l.card)}"></span>
@@ -339,7 +370,7 @@ function zoneCommandant() {
         <h3 style="font-size:15px">Aucun commandant désigné</h3>
         <div class="small muted" style="margin:4px 0 8px">${eligibles.length
           ? `${eligibles.length} créature(s) légendaire(s) dans le deck peuvent occuper la place. Le bouton ★ sur une carte fait la même chose.`
-          : "Aucune créature légendaire dans le deck. Ajoutez-en une, ou changez de format en section A."}</div>
+          : "Aucune créature légendaire dans le deck. Ajoutez-en une, ou changez de format depuis la pastille « Format » de l'en-tête."}</div>
         ${eligibles.length ? choix : ''}
       </div></div>`;
   }
@@ -429,7 +460,7 @@ function renderE() {
         <div class="group"><h4>${t} <span class="small muted">${grouped[t].reduce((a,e)=>a+e.qty,0)}</span></h4>
         ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
                           : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
-        : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section F.</div>'}`;
+        : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>'}`;
   }
 
   const hintEl = document.getElementById('hintE');

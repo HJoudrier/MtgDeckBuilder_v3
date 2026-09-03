@@ -285,6 +285,114 @@ function categories(card) {
   return c;
 }
 
+/* =====================================================================
+   Archétypes de deck. Deux sources se complètent :
+   — le texte de la carte, lu ici à partir des nœuds relevés par
+     l'analyseur et de quelques tournures caractéristiques ;
+   — les thèmes d'EDHREC (champ `edhrec` ci-dessous), chargés à la
+     demande par js/externes.js et indexés dans `ARCH_BASE`.
+   Une carte peut relever de plusieurs archétypes, ou d'aucun.
+   ===================================================================== */
+
+const ARCHETYPES = [
+  {id:'aristocrates', label:'Aristocrates / Sacrifice', edhrec:['aristocrats','sacrifice'],
+   aide:'Sacrifices, morts de créatures et drain qui en découle'},
+  {id:'marqueurs', label:'Marqueurs +1/+1', edhrec:['+1-+1-counters','counters'],
+   aide:'Pose de marqueurs, prolifération et cartes qui s\'en soucient'},
+  {id:'jetons', label:'Jetons', edhrec:['tokens','go-wide'],
+   aide:'Création de jetons et cartes qui en tirent parti'},
+  {id:'spellslinger', label:'Spellslinger', edhrec:['spellslinger','spells-matter'],
+   aide:'Cartes qui se soucient des éphémères et des rituels'},
+  {id:'vol', label:'Vol', edhrec:['flying','fliers'],
+   aide:'Créatures volantes et effets qui donnent le vol'},
+  {id:'combat', label:'Combat / attaque', edhrec:['combat','extra-combats'],
+   aide:'Déclenchements à l\'attaque, phases de combat et percée'},
+  {id:'blink', label:'Blink / ETB', edhrec:['blink','flicker'],
+   aide:'Scintillement et déclenchements sur l\'arrivée d\'autres permanents'},
+  {id:'cimetiere', label:'Cimetière / Réanimation', edhrec:['reanimator','graveyard'],
+   aide:'Récursion, meule, défausse et cartes lancées depuis le cimetière'},
+  {id:'landfall', label:'Landfall / terrains', edhrec:['landfall','lands-matter'],
+   aide:'Terrains qui arrivent, recherche de terrains et déclenchements associés'},
+  {id:'voltron', label:'Voltron / Auras & équipements', edhrec:['voltron','equipment','auras'],
+   aide:'Attachements : auras, équipements et créatures équipées'},
+  {id:'gainvie', label:'Gain de vie', edhrec:['lifegain','life-matters'],
+   aide:'Lien de vie, gains de points de vie et récompenses associées'},
+  {id:'artefacts', label:'Artefacts', edhrec:['artifacts','artifact-matters'],
+   aide:'Artefacts qui comptent : trésors, affinité, bricolage'},
+  {id:'enchantements', label:'Enchantements', edhrec:['enchantments','enchantress'],
+   aide:'Enchantements qui comptent : constellation, aura-matters'},
+  {id:'controle', label:'Contrôle / Stax', edhrec:['control','stax'],
+   aide:'Contresorts, taxes, effets de blocage et fléaux'},
+  {id:'meule', label:'Meule (mill)', edhrec:['mill','self-mill'],
+   aide:'Cartes mises de la bibliothèque au cimetière'}
+];
+
+const ARCHLABEL = {};
+ARCHETYPES.forEach(a => ARCHLABEL[a.id] = a.label);
+
+/* Motifs de texte, compilés une seule fois. */
+const ARCH_MOTIFS = {
+  aristocrates: /\bdies\b|\bsacrifice[sd]? (?:a|an|another|one|two|three|x|this|that)\b|whenever [^.]{0,50}\bdies\b|each opponent loses|\bblitz\b|\bexploit\b|\bafterlife\b/,
+  marqueurs:    /\+1\/\+1 counter|\bproliferate\b|\bevolve\b|\badapt \d|\boutlast\b|\bbolster \d|\bmentor\b|\btraining\b|\bbackup \d|\bmodified\b|\bgraft \d|\bundying\b/,
+  jetons:       /creates? [^.]{0,50}token|\bpopulate\b|token creature|\bamass\b|\bfabricate\b|\bconvoke\b/,
+  spellslinger: /instants? (?:and|or) sorcer|instant or sorcery|\bprowess\b|\bmagecraft\b|\bstorm\b|\bflashback\b|\bjump-start\b|copy target (?:instant|sorcery|spell)|whenever you cast (?:an instant|a sorcery|a noncreature|your (?:first|second))/,
+  vol:          /\bflying\b/,
+  combat:       /whenever [^.]{0,50}attacks|additional combat phase|extra combat|\bdouble strike\b|\bmelee\b|\bbattle cry\b|\bmyriad\b|\bexalted\b|attacks each combat if able|deals combat damage to a player/,
+  blink:        /exile [^.]{0,60}return (?:it|them|those cards|that card)[^.]{0,50}battlefield|return (?:it|them|those cards) to the battlefield|\bflicker/,
+  cimetiere:    /from (?:your|a|their) graveyard|\bescape\b|\bdisturb\b|\bunearth\b|\bdelve\b|\bthreshold\b|\bdelirium\b|\bembalm\b|\beternalize\b|into (?:your|their) graveyard/,
+  landfall:     /\blandfall\b|land enters|play an additional land|search your library for a[^.]{0,40}land/,
+  voltron:      /\bequip\b|equipped creature|enchanted creature|\benchant creature\b|\bequipment\b|\bfortify\b|attach(?:ed)? /,
+  gainvie:      /\blifelink\b|gains? \d+ life|gains? life|whenever you gain life|\bextort\b/,
+  artefacts:    /artifacts? you control|artifact spell|whenever an artifact|another artifact|\bmetalcraft\b|\bimprovise\b|affinity for artifacts|\btreasure\b/,
+  enchantements:/enchantments? you control|enchantment spell|whenever an enchantment|another enchantment|\bconstellation\b/,
+  controle:     /counter target|can't be cast|players? can't|costs? \{?\d\}? more to cast|destroy all|exile all|\bward\b/,
+  meule:        /\bmills?\b|puts? the top [^.]{0,40}into (?:your|their|his or her) graveyard/
+};
+
+/* Archétypes d'une carte : identifiants de `ARCHETYPES`. */
+function archetypesDe(card) {
+  const out = [];
+  if (!card || card.isToken) return out;
+  const a = card.an || {abilities:[], triggers:[]};
+  const tx = (card.text || '').toLowerCase();
+  const ty = (card.type || '').toLowerCase();
+  const vers = id => a.abilities.some(x => x.to.includes(id));
+  const depuis = id => a.abilities.some(x => x.from.includes(id))
+    || (a.triggers || []).some(x => x.c === id);
+  const dit = cle => ARCH_MOTIFS[cle].test(tx);
+
+  const test = {
+    aristocrates: () => vers('SACRIFICE') || depuis('SACRIFICE') || depuis('MORT') || depuis('MORT_SOI'),
+    marqueurs:    () => vers('MARQUEUR') || vers('PROLIFERATION') || depuis('MARQUEUR'),
+    jetons:       () => vers('JETON'),
+    spellslinger: () => depuis('LANCEMENT') && /instant|sorcery/.test(tx),
+    vol:          () => vers('VOL'),
+    combat:       () => depuis('ATTAQUE') || depuis('DEGATS_COMBAT_JOUEUR'),
+    blink:        () => vers('BLINK') || depuis('ETB'),
+    cimetiere:    () => vers('RECURSION') || vers('MILL') || vers('DEFAUSSE') || depuis('MIS_AU_CIMETIERE'),
+    landfall:     () => vers('TERRAIN') || depuis('TERRAIN') || depuis('TERRAIN_JOUE'),
+    voltron:      () => vers('ATTACHEMENT') || /aura|equipment/.test(ty),
+    gainvie:      () => vers('GAIN_VIE') || depuis('GAIN_VIE'),
+    artefacts:    () => vers('TRESOR'),
+    enchantements:() => false,
+    controle:     () => vers('CONTRESORT') || vers('STAX') || vers('TAXE'),
+    meule:        () => vers('MILL')
+  };
+
+  ARCHETYPES.forEach(({id}) => {
+    if ((test[id] && test[id]()) || dit(id)) out.push(id);
+  });
+  return out;
+}
+
+/* Une carte dont le texte ou la force changent voit son analyse refaite. */
+function reanalyser(card) {
+  card.an = analyze(card);
+  card.cats = categories(card);
+  card.archetypes = archetypesDe(card);
+  return card;
+}
+
 const CATLABEL = {
   creatures:'Créatures', terrains:'Terrains', ramp:'Ramp / mana', pioche:'Card advantage',
   tuteurs:'Tuteurs', removal:'Removal', wipe:'Board wipes', protection:'Protection', jetons:'Jetons',
@@ -319,9 +427,7 @@ function buildCard(name, cost, type, price, text) {
   card.isCreature = /creature/i.test(tf) && !card.isToken;
   card.isLand = /land/i.test(tf) && !card.isToken;
   card.isLegendaryCreature = /legendary creature/i.test(tf) && !card.isToken;
-  card.an = analyze(card);
-  card.cats = categories(card);
-  return card;
+  return reanalyser(card);
 }
 
 function indexCard(card) {

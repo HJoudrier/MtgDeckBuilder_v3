@@ -313,7 +313,7 @@ function panneauEdhrec() {
   const secCmds = commandantsSecondaires();
 
   if (!cmd && !secCmds.length) return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Désignez un commandant en section E ou ajoutez des créatures légendaires au deck pour croiser les suggestions avec les statistiques d'EDHREC.</div></div>`;
+    <div class="small muted">Désignez un commandant en section D ou ajoutez des créatures légendaires au deck pour croiser les suggestions avec les statistiques d'EDHREC.</div></div>`;
 
   if (e.status === 'loading') return `<div class="group"><h4>EDHREC</h4>
     <div class="small muted">Chargement des statistiques EDHREC${cmd ? ` pour ${esc(cmd.name)}` : ''}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}…</div></div>`;
@@ -502,7 +502,7 @@ function listeSuggestions() {
     ${graphPicks.length ? `
       <div class="group" style="border-color:var(--brass-d)">
         <h4>Autour des nœuds sélectionnés
-          <span class="small muted">${noeudsActifs().map(n=>esc(NODE[n].label)).join(' + ')} — section D</span></h4>
+          <span class="small muted">${noeudsActifs().map(n=>esc(NODE[n].label)).join(' + ')} — section C</span></h4>
         <div class="sugrid">${graphPicks.slice(0,8).map(s=>sugRow(s)).join('')}</div>
       </div>` : ''}
     ${edhrecHTML}

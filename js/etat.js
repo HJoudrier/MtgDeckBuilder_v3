@@ -20,10 +20,10 @@ const S = {
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',
   format: 'edh',
-  custom: {size:100, commander:true, maxCopies:1, colorLimits:{}},
+  custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -55,12 +55,15 @@ const S = {
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});
 
 /* ---------------------------------------------------------------------
-   Filtres avancés de la fenêtre « Filtres » (en-tête) : nom, force,
-   endurance, coût de mana et prix. Chaque champ vide est neutre.
+   Filtres de la fenêtre « Filtres » (en-tête) : couleurs, recherche libre,
+   type de carte, archétype, nom, illustrateur, force, endurance, coût de
+   mana et prix. Chaque champ vide est neutre. Les couleurs vivent dans `S.colors`
+   et `S.colorMode`, la recherche et le type dans `S.search` et
+   `S.typeFilter` ; les autres critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -72,6 +75,62 @@ const FILTRES_BORNES = [
   ['prixMin', 'prixMax', 'price', 'Prix']
 ];
 
+/* ---------------------------------------------------------------------
+   Archétypes établis par une base extérieure (thèmes EDHREC). L'index
+   est rempli par `chargerArchetypesEdhrec()` dans js/externes.js et
+   conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
+   --------------------------------------------------------------------- */
+
+const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map()};
+
+const ARCH_SOURCES = [
+  ['deux', 'Les deux'],
+  ['texte', 'Texte de la carte'],
+  ['base', 'EDHREC']
+];
+
+/* Archétypes de la carte selon la base extérieure. */
+function archetypesBase(card) {
+  if (!card || !ARCH_BASE.index.size) return [];
+  const avant = typeof frontFace === 'function' ? frontFace(card.name) : card.name;
+  const s = ARCH_BASE.index.get(norm(card.name)) || ARCH_BASE.index.get(norm(avant));
+  return s ? [...s] : [];
+}
+
+/* Source retenue dans la fenêtre des filtres. */
+function sourceArchetypes() {
+  const v = (S.filtres && S.filtres.archSource) || 'deux';
+  return ARCH_SOURCES.some(([k]) => k === v) ? v : 'deux';
+}
+
+/* Archétypes retenus pour le filtrage, selon la source choisie. */
+function archetypesCarte(card) {
+  const src = sourceArchetypes();
+  const texte = (card && card.archetypes) || [];
+  if (src === 'texte') return texte;
+  const base = archetypesBase(card);
+  if (src === 'base') return base;
+  return [...new Set([...texte, ...base])];
+}
+
+/* Détail par archétype : d'où vient l'étiquette. Sert à la fiche. */
+function archetypesDetail(card) {
+  const texte = new Set((card && card.archetypes) || []);
+  const base = new Set(archetypesBase(card));
+  return [...new Set([...texte, ...base])].map(id => ({id, texte:texte.has(id), base:base.has(id)}));
+}
+
+/* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
+function archetypesFiltre() {
+  return String((S.filtres && S.filtres.archetypes) || '').split(',').filter(Boolean);
+}
+
+function basculerArchetype(id) {
+  const sel = new Set(archetypesFiltre());
+  if (sel.has(id)) sel.delete(id); else sel.add(id);
+  S.filtres.archetypes = [...sel].join(',');
+}
+
 function nombreFiltre(v) {
   if (v === '' || v === null || v === undefined) return null;
   const n = parseFloat(String(v).replace(',', '.'));
@@ -80,22 +139,55 @@ function nombreFiltre(v) {
 
 function reinitFiltres() {
   S.filtres = {...FILTRES_VIDE};
+  S.search = '';
+  S.typeFilter = '';
 }
 
-/* Libellés des filtres actifs, pour le compteur et l'infobulle de l'en-tête. */
+/* Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. */
+function majFiltre(cle, valeur) {
+  if (cle === 'search') S.search = valeur;
+  else if (cle === 'typeFilter') S.typeFilter = valeur;
+  else if (cle in FILTRES_VIDE) S.filtres[cle] = valeur;
+}
+
+/* Efface un filtre depuis sa puce dans l'en-tête. */
+function effacerFiltre(cles) {
+  (cles || []).forEach(k => majFiltre(k, ''));
+}
+
+/* Filtres en vigueur : un libellé et les clés à effacer pour chacun.
+   Sert au décompte, aux puces de l'en-tête et aux infobulles. */
 function filtresActifs() {
   const f = S.filtres || FILTRES_VIDE;
   const actifs = [];
-  if (String(f.nom || '').trim()) actifs.push(`Nom « ${String(f.nom).trim()} »`);
+  const recherche = String(S.search || '').trim();
+  if (recherche) actifs.push({cles:['search'], texte:`Recherche « ${recherche} »`});
+  if (S.typeFilter) actifs.push({cles:['typeFilter'], texte:`Type : ${S.typeFilter}`});
+  const nom = String(f.nom || '').trim();
+  if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
+  const artiste = String(f.artiste || '').trim();
+  if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
+  const arch = archetypesFiltre();
+  if (arch.length) {
+    const src = sourceArchetypes();
+    const suffixe = src === 'texte' ? ' (texte)' : (src === 'base' ? ' (EDHREC)' : '');
+    actifs.push({cles:['archetypes'],
+      texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(id => ARCHLABEL[id] || id).join(', ')}${suffixe}`});
+  }
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
     const unite = champ === 'price' ? ' €' : '';
-    if (min !== null && max !== null) actifs.push(`${label} ${min}${unite} → ${max}${unite}`);
-    else if (min !== null) actifs.push(`${label} ≥ ${min}${unite}`);
-    else actifs.push(`${label} ≤ ${max}${unite}`);
+    const texte = (min !== null && max !== null) ? `${label} ${min}${unite} → ${max}${unite}`
+      : (min !== null ? `${label} ≥ ${min}${unite}` : `${label} ≤ ${max}${unite}`);
+    actifs.push({cles:[kMin, kMax], texte});
   });
   return actifs;
+}
+
+/* Libellés seuls, pour les infobulles et les phrases de résumé. */
+function texteFiltresActifs(sep) {
+  return filtresActifs().map(a => a.texte).join(sep || ' · ');
 }
 
 /* Applique les filtres avancés à une carte. Une carte dont la valeur est
@@ -106,6 +198,13 @@ function filtreOK(card) {
   const f = S.filtres || FILTRES_VIDE;
   const nom = String(f.nom || '').trim();
   if (nom && !norm(card.name).includes(norm(nom))) return false;
+  const artiste = String(f.artiste || '').trim();
+  if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
+  const arch = archetypesFiltre();
+  if (arch.length) {
+    const ceux = archetypesCarte(card);
+    if (!arch.some(id => ceux.includes(id))) return false;
+  }
   for (const [kMin, kMax, champ] of FILTRES_BORNES) {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) continue;
@@ -128,7 +227,7 @@ function seedCollection() {
 function fmt() {
   const f = FORMATS[S.format];
   return S.format === 'perso'
-    ? {label:'Personnalisé', size:S.custom.size, commander:S.custom.commander, maxCopies:S.custom.maxCopies, lands:Math.round(S.custom.size*0.36)}
+    ? {label:'Personnalisé', size:S.custom.deckSize, commander:S.custom.commander, maxCopies:S.custom.maxCopies, lands:Math.round(S.custom.deckSize*0.36)}
     : f;
 }
 
@@ -140,7 +239,7 @@ function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13};
+const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14};
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
@@ -176,6 +275,7 @@ function getCardOrAnalyzedRec(rec) {
   card.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) card.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) card.endurance = rec[CH.ENDURANCE];
+  if (rec[CH.ARTISTE]) card.artist = rec[CH.ARTISTE];
   rec._card = card;
   return card;
 }
