@@ -131,7 +131,7 @@ function removeFromDeck(name) {
 
 function buyCard(name) {
   if (S.budget.total <= 0 || S.budget.perCard <= 0) {
-    toast('Budget à zéro : aucun achat possible. Augmentez le budget en section F.');
+    toast('Budget à zéro : aucun achat possible. Augmentez le budget en section E.');
     return;
   }
   const c = find(name);
@@ -340,7 +340,7 @@ function blocAchats() {
          <div class="small ${depasse?'':'muted'}" style="margin-bottom:6px">${depasse
             ? `Dépassement de ${eur(total-budget)} sur un budget de ${eur(budget)}.`
             : `Budget de ${eur(budget)} · reste ${eur(budget-total)}.`}</div>`
-      : `<div class="small" style="margin-bottom:6px">Aucun budget défini en section F : ces cartes sont dans le deck mais ne sont pas encore chiffrées comme achat autorisé.</div>`}
+      : `<div class="small" style="margin-bottom:6px">Aucun budget défini en section E : ces cartes sont dans le deck mais ne sont pas encore chiffrées comme achat autorisé.</div>`}
     <div class="list">${lignes.slice(0, 12).map(l => `
       <div class="lrow">
         <span class="dot" style="background:${stripeColor(l.card)}"></span>
@@ -370,7 +370,7 @@ function zoneCommandant() {
         <h3 style="font-size:15px">Aucun commandant désigné</h3>
         <div class="small muted" style="margin:4px 0 8px">${eligibles.length
           ? `${eligibles.length} créature(s) légendaire(s) dans le deck peuvent occuper la place. Le bouton ★ sur une carte fait la même chose.`
-          : "Aucune créature légendaire dans le deck. Ajoutez-en une, ou changez de format en section A."}</div>
+          : "Aucune créature légendaire dans le deck. Ajoutez-en une, ou changez de format depuis la pastille « Format » de l'en-tête."}</div>
         ${eligibles.length ? choix : ''}
       </div></div>`;
   }
@@ -460,7 +460,7 @@ function renderE() {
         <div class="group"><h4>${t} <span class="small muted">${grouped[t].reduce((a,e)=>a+e.qty,0)}</span></h4>
         ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
                           : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
-        : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section F.</div>'}`;
+        : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>'}`;
   }
 
   const hintEl = document.getElementById('hintE');

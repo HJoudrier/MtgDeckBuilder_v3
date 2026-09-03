@@ -63,6 +63,8 @@ header.top.compact .brand .sub{display:none}
   font-size:11px;padding:3px 8px;cursor:pointer;
 }
 .head-combo:hover{background:rgba(211,164,65,.22);border-color:var(--brass)}
+.head-format{cursor:pointer}
+.head-format:hover{border-color:var(--brass);color:var(--txt)}
 /* bouton et fenêtre des filtres avancés */
 .head-filtre{
   display:inline-flex;align-items:center;gap:5px;

@@ -6,7 +6,7 @@ les fichiers s'ouvrent directement dans un navigateur.
 ## Organisation
 
 ```
-index.html          page et structure des six sections
+index.html          page et structure des cinq sections
 css/atelier.css     styles
 js/                 modules, chargés dans cet ordre :
   effets.js        Lecture des effets des cartes
@@ -24,6 +24,11 @@ js/                 modules, chargés dans cet ordre :
   ui.js            Interface commune
   app.js           Démarrage et évènements
 ```
+
+Les cinq sections de la page sont Collection, Statistiques, Graphe des capacités, Deck et Suggestions ;
+le format et les filtres se règlent depuis deux fenêtres ouvertes par l'en-tête. Les identifiants internes
+des sections (`secB`…`secF`, `renderB`…`renderF`) ont gardé leur lettre d'origine, seule la lettre affichée
+a été resserrée après le passage de la section « Filtres & Format » en fenêtre.
 
 L'ordre de chargement compte : `effets.js` définit l'analyseur qu'utilise `cartes.js`
 au moment de construire la base livrée. Les modules partagent la portée globale ;
@@ -120,7 +125,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `fmt()` | Contraintes du format en cours : taille, copies, commandant. |
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
-| `colorOK(card)` | Applique le filtre de couleur de la section A à une carte. |
+| `colorOK(card)` | Applique le filtre de couleur de la fenêtre des filtres à une carte. |
 | `filtreOK(card)` | Applique les filtres de la fenêtre (archétype, nom, illustrateur, force, endurance, coût, prix) à une carte. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
@@ -361,7 +366,11 @@ Données : `RETOURNEES`
 | `stripeColor(card)` | Bande de couleur d'identité d'une carte. |
 | `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. |
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
-| `renderA()` | Rend la section des filtres et du format. |
+| `openFormatModal()` | Ouvre la fenêtre du format, depuis la pastille « Format » de l'en-tête. |
+| `corpsFormat()` | Contenu de cette fenêtre : format de jeu et panneau « Personnalisé ». |
+| `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
+| `majResumeFormat()` | Rafraîchit ce résumé pendant la saisie du format personnalisé. |
+| `majFenetreFormat()` | Réécrit la fenêtre au changement de format. |
 | `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
 | `ficheTexteHTML(card)` | Carte rendue en texte — coût, type, force/endurance, texte — à la place du visuel absent. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
@@ -375,7 +384,7 @@ Données : `RETOURNEES`
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
 | `planifierRenduFiltres()` | Diffère le rendu global pour garder la saisie fluide. |
 | `majFenetreFiltres()` | Réécrit les champs après une réinitialisation ou un changement de couleur. |
-| `renderAll()` | Rend les six sections et programme la sauvegarde. |
+| `renderAll()` | Rend les cinq sections et programme la sauvegarde. |
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
 | `faceVisible(c,grande)` | Face actuellement affichée. |
@@ -400,7 +409,7 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 227 fonctions au total, réparties en 14 modules.
+- 231 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
@@ -411,5 +420,5 @@ Données : `RETOURNEES`
 ## Tests
 
 Le fichier `tests/suite.js` rejoue trente vérifications sur un DOM simulé :
-démarrage, rendu des six sections, sélection de nœuds, précision de l'analyse,
+démarrage, rendu des cinq sections, sélection de nœuds, précision de l'analyse,
 pagination, sauvegarde. Il se lance avec `node tests/suite.js`.

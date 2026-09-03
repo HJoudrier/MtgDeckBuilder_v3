@@ -20,7 +20,7 @@ const S = {
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',
   format: 'edh',
-  custom: {size:100, commander:true, maxCopies:1, colorLimits:{}},
+  custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
   filtres: {nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
@@ -227,7 +227,7 @@ function seedCollection() {
 function fmt() {
   const f = FORMATS[S.format];
   return S.format === 'perso'
-    ? {label:'Personnalisé', size:S.custom.size, commander:S.custom.commander, maxCopies:S.custom.maxCopies, lands:Math.round(S.custom.size*0.36)}
+    ? {label:'Personnalisé', size:S.custom.deckSize, commander:S.custom.commander, maxCopies:S.custom.maxCopies, lands:Math.round(S.custom.deckSize*0.36)}
     : f;
 }
 

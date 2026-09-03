@@ -132,8 +132,8 @@ function renderD() {
   })();
 
   const emptyMsg = {
-    collection: 'Aucune carte ne passe les filtres de la section A.',
-    all: 'Votre collection est vide : ajoutez ou importez des cartes en section B.',
+    collection: 'Aucune carte ne passe les filtres en cours.',
+    all: 'Votre collection est vide : ajoutez ou importez des cartes en section A.',
     deck: 'Le deck est vide.',
     suggestions: 'Aucune suggestion pour le moment.'
   }[S.graphSource] || 'Aucune carte.';

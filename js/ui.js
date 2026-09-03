@@ -13,9 +13,11 @@ function refCarte(nom) {
 function fmt() {
   if (S.format === 'perso') {
     return {
+      label: 'Personnalisé',
       size: S.custom.deckSize,
       maxCopies: S.custom.maxCopies,
       commander: S.custom.commander,
+      lands: Math.round(S.custom.deckSize * 0.36),
       legalities: ['custom']
     };
   }
@@ -313,7 +315,7 @@ function activeFilterManaHTML() {
   return list.map(c => symIcon(c, 'sm')).join('');
 }
 
-/* Couleurs proposées par la section A, l'en-tête et la fenêtre des filtres. */
+/* Couleurs proposées par l'en-tête et par la fenêtre des filtres. */
 const COLS = [
   ['W', 'Blanc ({W})'],
   ['U', 'Bleu ({U})'],
@@ -329,44 +331,48 @@ const MODES_COULEUR = [
   ['exact', 'Exactement']
 ];
 
-function renderA() {
-  const f = fmt();
-  const bodyEl = document.getElementById('bodyA');
-  if (bodyEl) {
-    bodyEl.innerHTML = `
-      <div class="field">
-        <label class="lab">Format</label>
-        <div class="row">
-          <select id="fmtSel" data-act="format">
-            ${Object.entries(FORMATS).map(([k,v]) => `<option value="${k}" ${S.format===k?'selected':''}>${v.label}</option>`).join('')}
-          </select>
-          <span class="small muted">${f.size} cartes · max ${f.maxCopies>=99?'illimité':f.maxCopies} ex. · ${f.commander?'commandant obligatoire':'sans commandant'}</span>
-        </div>
-      </div>
-      <div class="field" style="margin-top:12px">
-        <label class="lab">Couleurs considérées</label>
-        <div class="row" style="align-items:center;gap:6px">
-          ${COLS.map(([c, title]) => `
-            <button type="button" class="mana-btn" data-color="${c}" aria-pressed="${S.colors.has(c)}" title="${title}">
-              ${symBg(c)}
-            </button>`).join('')}
-          <button type="button" class="btn sm" data-act="allColors" style="margin-left:4px">Toutes</button>
-          <button type="button" class="btn sm" data-act="clearColors">Aucune</button>
-        </div>
-      </div>
-      <div class="field" style="margin-top:10px">
-        <label class="lab">Mode de filtrage couleur</label>
-        <div class="seg">
-          <button data-cmode="identity" aria-pressed="${S.colorMode==='identity'}">Identité couleur (EDH)</button>
-          <button data-cmode="atleast" aria-pressed="${S.colorMode==='atleast'}">Au moins une</button>
-          <button data-cmode="exact" aria-pressed="${S.colorMode==='exact'}">Exactement</button>
-        </div>
-      </div>
-      ${customPanel()}`;
-  }
+/* =====================================================================
+   Fenêtre « Format », ouverte depuis la pastille de l'en-tête. Les
+   couleurs, elles, se règlent dans la fenêtre des filtres.
+   ===================================================================== */
 
-  const hintEl = document.getElementById('hintA');
-  if (hintEl) hintEl.textContent = `${f.label} · ${nomCombinaisonCouleurs(S.colors)}`;
+function resumeFormat() {
+  const f = fmt();
+  return `${f.size} cartes · max ${f.maxCopies >= 99 ? 'illimité' : f.maxCopies} ex. · ${f.commander ? 'commandant obligatoire' : 'sans commandant'}`;
+}
+
+function majResumeFormat() {
+  const el = document.getElementById('formatResume');
+  if (el) el.textContent = resumeFormat();
+}
+
+function corpsFormat() {
+  return `<div class="field">
+      <label class="lab" for="fmtSel">Format de jeu</label>
+      <select id="fmtSel" data-act="format">
+        ${Object.entries(FORMATS).map(([k, v]) => `<option value="${k}" ${S.format === k ? 'selected' : ''}>${esc(v.label)}</option>`).join('')}
+      </select>
+      <div class="small muted" id="formatResume">${resumeFormat()}</div>
+    </div>
+    ${customPanel()}
+    <div class="small muted">Le format fixe la taille du deck, le nombre d'exemplaires autorisés et la présence d'un commandant ; il sert aussi au contrôle de conformité de la section Deck.</div>`;
+}
+
+/* Réécrit la fenêtre si elle est ouverte : changement de format,
+   apparition ou disparition du panneau « Personnalisé ». */
+function majFenetreFormat() {
+  const dlg = document.getElementById('dlg');
+  if (!dlg || !dlg.open) return;
+  const corps = document.getElementById('dlgBody');
+  if (!corps || !corps.querySelector('#fmtSel')) return;
+  const y = corps.scrollTop;
+  corps.innerHTML = corpsFormat();
+  corps.scrollTop = y;
+}
+
+function openFormatModal() {
+  openDialog('Format de jeu', corpsFormat(),
+    '<button type="button" class="btn pri" data-act="closeDialog">Fermer</button>');
 }
 
 function statsCatalogue() {
@@ -424,7 +430,7 @@ function corpsFiltres() {
       <div class="seg" style="margin-top:6px">
         ${MODES_COULEUR.map(([m, l]) => `<button type="button" data-cmode="${m}" aria-pressed="${S.colorMode === m}">${l}</button>`).join('')}
       </div>
-      <div class="small muted">${esc(nomCombinaisonCouleurs(S.colors))} · même réglage que la section A et que la barre de mana de l'en-tête.</div>
+      <div class="small muted">${esc(nomCombinaisonCouleurs(S.colors))} · même réglage que la barre de mana de l'en-tête.</div>
     </div>
     <div class="field">
       <label class="lab" for="f_search">Recherche</label>
@@ -470,7 +476,7 @@ function corpsFiltres() {
       ${ligneFiltre('prixMin', 'prixMax', 'Prix (€)', "Prix unitaire estimé, en euros.", 'any', 0)}
     </div>
     <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. La recherche porte sur le nom, le type et le texte ; le champ « Nom » ne regarde que le nom. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
-    <div class="small muted">Ces filtres s'ajoutent aux couleurs de la section A ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
+    <div class="small muted">Ces filtres s'ajoutent aux couleurs choisies ci-dessus ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }
 
@@ -568,14 +574,14 @@ function renderTop() {
             ${symBg(c)}
           </button>`).join('')}
       </div>
-      <button type="button" class="pill head-combo" data-act="gotoA" title="Combinaison active : ${esc(gName)} (cliquer pour voir la section A)">
+      <button type="button" class="pill head-combo" data-act="filtres" title="Combinaison active : ${esc(gName)} (cliquer pour ouvrir les filtres)">
         <b>${esc(gName)}</b>
       </button>
     </div>
   `;
 
   const deckPillHTML = `
-    <span class="pill" id="pillDeck" title="Format et cartes dans le deck">Format <b>${f.label}</b> · Deck <b>${dCount}/${f.size}</b>${dCount === f.size ? (isLegal ? ' <span style="color:var(--ok)">✓</span>' : ' <span style="color:var(--warn)" title="Règles non respectées">⚠</span>') : ''}</span>
+    <button type="button" class="pill head-format" id="pillDeck" data-act="formatDialog" title="Format de jeu : ${esc(f.label)} (cliquer pour le changer)">Format <b>${esc(f.label)}</b> · Deck <b>${dCount}/${f.size}</b>${dCount === f.size ? (isLegal ? ' <span style="color:var(--ok)">✓</span>' : ' <span style="color:var(--warn)" title="Règles non respectées">⚠</span>') : ''}</button>
     ${S.commander ? `<button type="button" class="pill head-cmd" data-act="fiche" data-name="${esc(S.commander)}" style="cursor:pointer" title="Commandant désigné (cliquer pour voir la fiche)">Cmd <b>${esc(S.commander)}</b></button>` : ''}
   `;
 
@@ -633,7 +639,6 @@ function renderTop() {
 
 function renderAll() {
   renderTop();
-  renderA();
   renderB();
   renderC();
   renderD();

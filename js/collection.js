@@ -144,7 +144,7 @@ function renderB() {
       ${page.length ? (S.view === 'grid'
         ? `<div class="grid">${page.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${page.map(e => cardRow(e, 'collection')).join('')}</div>`)
-        : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs en section A${actifs.length ? " ou assouplissez les filtres de l'en-tête" : ''}.</div>`}
+        : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs${actifs.length ? " ou assouplissez les filtres" : ''} depuis le bouton « Filtres » de l'en-tête.</div>`}
       ${rest > 0 ? `<div style="text-align:center;margin-top:10px"><button class="btn" data-act="moreB">Afficher ${Math.min(PAGE, rest)} cartes de plus (${rest} restantes)</button></div>` : ''}`;
   }
 
@@ -314,7 +314,7 @@ function resultatsHTML(q, cible) {
   const noeuds = noeudsActifs();
   const effTxt = noeuds.length ? ` et effets (${noeuds.map(n => (typeof NODE !== 'undefined' && NODE[n] && NODE[n].label) || n).join(', ')})` : '';
   if (norm(q).length < 2)
-    return `<div class="small muted">Tapez au moins deux lettres du nom. Seules les cartes compatibles avec les couleurs sélectionnées en section A (${esc(cols)})${effTxt} sont proposées.</div>`;
+    return `<div class="small muted">Tapez au moins deux lettres du nom. Seules les cartes compatibles avec les couleurs choisies dans la fenêtre des filtres (${esc(cols)})${effTxt} sont proposées.</div>`;
   const enLigne = [...scryRes.values()].filter(sc => { const c = find(sc.name); return !c || c.unknown; });
   const blocLigne = (() => {
     if (scryEtat === 'chargement') return `<div class="small muted" style="margin-top:8px">Recherche sur Scryfall…</div>`;

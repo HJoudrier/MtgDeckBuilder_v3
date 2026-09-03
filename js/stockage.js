@@ -92,7 +92,7 @@ function save() {
     dernierEtatSignale = saveState;
     toast(saveState === 'partiel'
       ? "Espace de stockage limité : les visuels et les textes des cartes importées ne sont pas conservés, les quantités et le deck le restent."
-      : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la section A pour ne rien perdre.");
+      : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la pastille de sauvegarde de l'en-tête pour ne rien perdre.");
   }
   if (saveState === 'ok') dernierEtatSignale = 'ok';
 }

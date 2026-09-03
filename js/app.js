@@ -122,16 +122,8 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'gotoA') {
-    const secA = document.getElementById('secA');
-    if (secA) {
-      if (!secA.classList.contains('open')) {
-        secA.classList.add('open');
-        const head = secA.querySelector('.sec-head');
-        if (head) head.setAttribute('aria-expanded', 'true');
-      }
-      secA.scrollIntoView({behavior:'smooth'});
-    }
+  if (act === 'formatDialog') {
+    openFormatModal();
     return;
   }
 
@@ -533,6 +525,7 @@ document.addEventListener('input', ev => {
     const k = t.dataset.cst || t.dataset.cust;
     S.custom[k] = t.type === 'checkbox' ? t.checked : (t.type === 'number' ? (parseInt(t.value, 10) || 0) : t.value);
     renderAll();
+    majResumeFormat();
     return;
   }
   if (t.dataset.clim || t.dataset.lim) {
@@ -569,6 +562,7 @@ document.addEventListener('change', ev => {
     if (S.format === 'perso') S.custom.commander = fmt().commander;
     invaliderCandidats();
     renderAll();
+    majFenetreFormat();
     return;
   }
   if (t.dataset.act === 'chooseCmd') {

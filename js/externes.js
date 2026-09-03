@@ -164,7 +164,7 @@ async function loadEdhrec(force) {
   const cmd = S.commander ? find(S.commander) : null;
   const secCmds = commandantsSecondaires();
   if (!cmd && !secCmds.length) {
-    toast("Désignez un commandant en section E ou ajoutez des créatures légendaires au deck.");
+    toast("Désignez un commandant en section D ou ajoutez des créatures légendaires au deck.");
     return;
   }
   const cmdSig = (cmd ? cmd.name : '') + '::' + secCmds.map(c => c.name).sort().join('|');
