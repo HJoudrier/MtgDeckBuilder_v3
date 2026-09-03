@@ -42,9 +42,9 @@ function gauge(label, val, tgt, role) {
   const pct = Math.min(100, Math.round(val / Math.max(1, tgt) * 100));
   const col = val >= tgt ? 'var(--ok)' : (val >= tgt * 0.6 ? 'var(--warn)' : 'var(--bad)');
   const diff = val - tgt;
-  const actif = S.filtreRole === role;
-  return `<button type="button" class="gauge ${actif?'actif':''}" data-act="filtreRole" data-role="${esc(role||'')}"
-      aria-pressed="${actif}" title="Filtrer les suggestions sur ce rôle">
+  const actif = rolesFiltre().includes(role);
+  return `<button type="button" class="gauge ${actif?'actif':''}" data-act="toggleRole" data-role="${esc(role||'')}"
+      aria-pressed="${actif}" title="${actif ? 'Retirer ce rôle des filtres' : 'Ne garder que les cartes tenant ce rôle, partout'}">
     <div class="top"><span>${label}</span><span class="mono">${val} / ${tgt} ${diff<0?`<span style="color:var(--bad)">${diff}</span>`:'<span style="color:var(--ok)">ok</span>'}</span></div>
     <div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div></button>`;
 }

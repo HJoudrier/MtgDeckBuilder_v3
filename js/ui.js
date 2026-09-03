@@ -465,6 +465,14 @@ function corpsFiltres() {
       <div class="small muted" id="archEtat">${etatArchetypes()}</div>
     </div>
     <div class="field">
+      <label class="lab">Rôle dans le deck</label>
+      <div class="archetypes">
+        ${Object.keys(targets()).map(r => `<button type="button" class="arch-btn" data-act="toggleRole" data-role="${esc(r)}"
+          aria-pressed="${rolesFiltre().includes(r)}" title="Cartes tenant ce rôle, d'après l'analyse de leur texte">${esc(CATLABEL[r] || r)}</button>`).join('')}
+      </div>
+      <div class="small muted">Mêmes rôles que les jauges d'équilibre de la section Deck : les cocher ici ou là revient au même.</div>
+    </div>
+    <div class="field">
       <label class="lab" for="f_nom">Nom de la carte</label>
       <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>

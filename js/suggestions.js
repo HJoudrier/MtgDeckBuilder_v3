@@ -455,7 +455,7 @@ function panneauAchats() {
 
 function listeSuggestions() {
   const toutes = currentSuggestions();
-  const sug = S.filtreRole ? toutes.filter(x => x.card.cats.has(S.filtreRole)) : toutes;
+  const sug = toutes;
   const graphPicks = S.focusNodes.size ? sug.filter(s => s.graph && s.graph.includes('noeud')) : [];
   const edhrecPicks = sug.filter(s => s.edhrec);
   const byType = {};
@@ -496,10 +496,6 @@ function listeSuggestions() {
   })();
 
   const html = `
-    ${S.filtreRole ? `<div class="warnbox" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span>Filtré sur le rôle <b>${esc(CATLABEL[S.filtreRole]||S.filtreRole)}</b> : ${sug.length} proposition(s) sur ${toutes.length}.</span>
-      <button class="btn sm" data-act="filtreRole" data-role="">Retirer le filtre</button>
-    </div>` : ''}
     ${graphPicks.length ? `
       <div class="group" style="border-color:var(--brass-d)">
         <h4>Autour des nœuds sélectionnés
@@ -574,7 +570,7 @@ function majHintF(sug, graphPicks, edhrecPicks) {
   const edhrecCount = (edhrecPicks && edhrecPicks.length) !== undefined ? edhrecPicks.length : sug.filter(x => x.edhrec).length;
   const hintEl = document.getElementById('hintF');
   if (hintEl) {
-    hintEl.textContent = `${sug.length} pistes${S.filtreRole?` · ${esc(CATLABEL[S.filtreRole]||S.filtreRole)}`:''}${graphPicks.length?` · ${graphPicks.length} via le graphe`:''}${edhrecCount?` · ${edhrecCount} sur EDHREC`:''}`;
+    hintEl.textContent = `${sug.length} pistes${graphPicks.length?` · ${graphPicks.length} via le graphe`:''}${edhrecCount?` · ${edhrecCount} sur EDHREC`:''}`;
   }
 }
 

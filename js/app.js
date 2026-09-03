@@ -123,11 +123,11 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'filtreRole') {
-    const r = b.dataset.role || '';
-    S.filtreRole = (S.filtreRole === r) ? '' : r;
-    renderF();
-    renderE();
+  if (act === 'toggleRole') {
+    basculerRole(b.dataset.role || '');
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
     return;
   }
 

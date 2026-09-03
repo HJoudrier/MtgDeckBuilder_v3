@@ -23,7 +23,7 @@ const S = {
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -34,7 +34,6 @@ const S = {
   selectedCtx: 'collection',
   limitB: 200,
   limiteType: {},
-  filtreRole: null,
   exploreEtat: '',
   exploreSig: null,
   exploreMax: 6000,
@@ -63,7 +62,7 @@ const S = {
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', artiste:'', archetypes:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -146,6 +145,25 @@ function basculerArchetype(id) {
   S.filtres.archetypes = [...sel].join(',');
 }
 
+/* Rôles cochés dans la section Deck, conservés comme les archétypes. */
+function rolesFiltre() {
+  return String((S.filtres && S.filtres.roles) || '').split(',').filter(Boolean);
+}
+
+function basculerRole(role) {
+  if (!role) { S.filtres.roles = ''; return; }
+  const sel = new Set(rolesFiltre());
+  if (sel.has(role)) sel.delete(role); else sel.add(role);
+  S.filtres.roles = [...sel].join(',');
+}
+
+/* Une carte tient au moins un des rôles cochés. */
+function roleOK(card) {
+  const roles = rolesFiltre();
+  if (!roles.length) return true;
+  return !!card && !!card.cats && roles.some(r => card.cats.has(r));
+}
+
 function nombreFiltre(v) {
   if (v === '' || v === null || v === undefined) return null;
   const n = parseFloat(String(v).replace(',', '.'));
@@ -185,6 +203,9 @@ function filtresActifs() {
   const arch = archetypesFiltre();
   if (arch.length) actifs.push({cles:['archetypes'],
     texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
+  const roles = rolesFiltre();
+  if (roles.length) actifs.push({cles:['roles'],
+    texte:`Rôle${roles.length > 1 ? 's' : ''} : ${roles.map(r => CATLABEL[r] || r).join(', ')}`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
@@ -221,7 +242,7 @@ function typeOK(card) {
    la fenêtre. Il vaut pour la collection, le deck, la courbe de mana et
    les suggestions, afin qu'un filtre posé une fois vaille partout. */
 function carteFiltree(card) {
-  return !!card && colorOK(card) && typeOK(card) && rechercheOK(card) && filtreOK(card);
+  return !!card && colorOK(card) && typeOK(card) && rechercheOK(card) && roleOK(card) && filtreOK(card);
 }
 
 /* Applique les filtres avancés à une carte. Une carte dont la valeur est
