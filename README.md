@@ -113,8 +113,8 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
 C'est aussi ici que vivent les filtres de l'en-tête : les couleurs (`S.colors`, `S.colorMode`) et, dans
-`S.filtres`, tous les autres critères, dans l'ordre même où la fenêtre les présente — nom, type, archétype,
-rôle, force, endurance, coût de mana, prix, illustrateur. S'y ajoute l'index des archétypes établis par
+`S.filtres`, tous les autres critères, dans l'ordre même où la fenêtre les présente — nom, type, texte de
+règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. S'y ajoute l'index des archétypes établis par
 EDHREC (`ARCH_BASE`).
 
 *20 fonction(s), 11 Ko*
@@ -131,7 +131,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `rolesFiltre()` | Rôles cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerRole(role)` | Coche ou décoche un rôle ; sans argument, les efface tous. |
 | `roleOK(card)` | La carte tient au moins un des rôles cochés. |
-| `filtreOK(card)` | Applique les filtres de la fenêtre (nom, type, archétype, force, endurance, coût, prix, illustrateur) à une carte. |
+| `filtreOK(card)` | Applique les filtres de la fenêtre (nom, type, texte de règles, archétype, force, endurance, coût, prix, illustrateur) à une carte. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
 | `archetypesDisponibles()` | Les thèmes publiés par EDHREC, avec libellé et résumé. |
@@ -391,7 +391,7 @@ Données : `RETOURNEES`
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
-| `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
+| `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
 | `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
 | `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |

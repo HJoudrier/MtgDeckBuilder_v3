@@ -454,6 +454,10 @@ function corpsFiltres() {
       <input type="text" id="f_type" data-filtre="type" value="${esc(f.type)}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
     </div>
     <div class="field">
+      <label class="lab" for="f_texte">Texte de règles</label>
+      <input type="text" id="f_texte" data-filtre="texte" value="${esc(f.texte)}" placeholder="ex. draw a card, sacrifice a creature…" autocomplete="off">
+    </div>
+    <div class="field">
       <label class="lab">Archétype</label>
       ${archetypesFiltre().length ? `<div class="archetypes">${archetypesFiltre().map(slug =>
         `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(slug)}" aria-pressed="true"
@@ -492,7 +496,7 @@ function corpsFiltres() {
       <label class="lab" for="f_artiste">Illustrateur</label>
       <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(f.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
     </div>
-    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier »). Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
+    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier ») ; « Texte de règles » cherche dans le texte d'Oracle de la carte, celui qui décrit ses capacités, et accepte une phrase entière. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs choisies ci-dessus ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }

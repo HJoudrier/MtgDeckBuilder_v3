@@ -21,7 +21,7 @@ const S = {
   colorMode: 'identity',
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
-  filtres: {nom:'', type:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', type:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -54,14 +54,14 @@ const S = {
 
 /* ---------------------------------------------------------------------
    Filtres de la fenêtre « Filtres » (en-tête), dans l'ordre où ils y
-   apparaissent : couleur, nom, type, archétype, rôle, force, endurance,
-   coût de mana, prix, illustrateur. Chaque champ vide est neutre. Les
+   apparaissent : couleur, nom, type, texte de règles, archétype, rôle,
+   force, endurance, coût de mana, prix, illustrateur. Chaque champ vide est neutre. Les
    couleurs vivent dans `S.colors` et `S.colorMode` ; tous les autres
    critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', type:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', type:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -192,6 +192,8 @@ function filtresActifs() {
   if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
   const type = String(f.type || '').trim();
   if (type) actifs.push({cles:['type'], texte:`Type « ${type} »`});
+  const texte = String(f.texte || '').trim();
+  if (texte) actifs.push({cles:['texte'], texte:`Texte « ${texte} »`});
   const arch = archetypesFiltre();
   if (arch.length) actifs.push({cles:['archetypes'],
     texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
@@ -233,6 +235,8 @@ function filtreOK(card) {
   if (nom && !norm(card.name).includes(norm(nom))) return false;
   const type = String(f.type || '').trim();
   if (type && !loose(card.type + ' ' + mainType(card)).includes(loose(type))) return false;
+  const texte = String(f.texte || '').trim();
+  if (texte && !norm(card.text || '').includes(norm(texte))) return false;
   const artiste = String(f.artiste || '').trim();
   if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
   const arch = archetypesFiltre();
