@@ -20,12 +20,35 @@ let saveState = storageOK ? 'ok' : 'off';
 let saveError = '';
 let dernierEtatSignale = 'ok';
 
+/* Éditions relevées à l'import : le code d'édition et le numéro de
+   collection de l'impression possédée, et la liste de celles qui ont été
+   vues. Sans eux, un rechargement rendrait à la carte un visuel et un prix
+   d'une autre impression. */
+function impressionSnap(c) {
+  if (!c.set && !(c.impressions && c.impressions.length)) return {};
+  return {
+    se: c.set || '', nu: c.num || '', sn: c.setName || '',
+    si: c.setImporte ? 1 : 0, ii: c.imgImpression || '',
+    im: (c.impressions || []).map(i => [i.set, i.num, i.qty])
+  };
+}
+
+function impressionRestore(card, o) {
+  if (o.se) card.set = o.se;
+  if (o.nu) card.num = o.nu;
+  if (o.sn) card.setName = o.sn;
+  if (o.si) card.setImporte = true;
+  if (o.ii) card.imgImpression = o.ii;
+  if (Array.isArray(o.im) && o.im.length)
+    card.impressions = o.im.map(([set, num, qty]) => ({set, num, qty}));
+}
+
 function snapshot() {
   const cartes = [], enrich = [];
   DB.forEach(c => {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
-      if (c.img || c.cmUrl || c.artist || c.textFull) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : ''});
+      if (c.img || c.cmUrl || c.artist || c.textFull || c.set) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...impressionSnap(c)});
     } else if (c.externe && !(S.collection.get(c.name) > 0) && !S.deck.has(c.name)) {
       // vivier d'exploration : non conservé
     } else {
@@ -33,7 +56,7 @@ function snapshot() {
         n:c.name, c:c.cost||'—', t:c.type, p:c.price, x:c.text,
         i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance, a:c.artist||'',
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
-        u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0
+        u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0, ...impressionSnap(c)
       });
     }
   });
@@ -122,6 +145,7 @@ function restore(d) {
     card.unknown = !!o.k;
     if (o.X && o.x) card.textFull = true;
     if (card.img) card.imgTried = true;
+    impressionRestore(card, o);
   });
 
   (d.enrich || []).forEach(o => {
@@ -135,6 +159,7 @@ function restore(d) {
     if (o.L) card.imgL = o.L;
     if (o.u) card.cmUrl = o.u;
     if (card.img) card.imgTried = true;
+    impressionRestore(card, o);
   });
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));

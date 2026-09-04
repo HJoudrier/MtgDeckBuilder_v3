@@ -243,6 +243,7 @@ function cardRow(e, ctx) {
     <span class="cname" data-act="fiche" data-name="${esc(c.name)}">${esc(c.name)}</span>
     <span class="costs">${manaHTML(c, true)}</span>
     <span class="small muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${esc(c.type)}</span>
+    ${c.set ? `<span class="mono small muted" title="Édition ${esc(c.setName || c.set)}${c.num?`, carte n°${esc(c.num)}`:''}">${esc(c.set)}${c.num?` ${esc(c.num)}`:''}</span>` : ''}
     <span class="mono small">${eur(c.price)}</span>
     <span class="mono small">${ctx==='deck'?`×${e.qty}`:`${e.qty} ex.`}</span>
     ${dispoBadge}
@@ -716,15 +717,18 @@ function exportDeckModal() {
   const f = fmt();
   const date = new Date().toISOString().slice(0, 10);
   const nomFichier = `deck-${(S.commander || S.format || 'export').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${date}`;
-  const txt = entries.map(e => `${e.qty} ${e.card.name}`).join('\n');
-  const csv = 'Quantity,Name,Mana Cost,Type,Price EUR\n' +
-    entries.map(e => `${e.qty},"${e.card.name.replace(/"/g,'""')}","${e.card.mana}","${e.card.type}",${e.card.price}`).join('\n');
+  // l'édition relevée à l'import repart avec la liste, au format qu'elle avait
+  const edTxt = c => c.set ? ` (${c.set})${c.num ? ' ' + c.num : ''}` : '';
+  const txt = entries.map(e => `${e.qty} ${e.card.name}${edTxt(e.card)}`).join('\n');
+  const csv = 'Quantity,Name,Set,Collector Number,Mana Cost,Type,Price EUR\n' +
+    entries.map(e => `${e.qty},"${e.card.name.replace(/"/g,'""')}","${e.card.set||''}","${e.card.num||''}","${e.card.cost}","${e.card.type}",${e.card.price}`).join('\n');
   const json = JSON.stringify({
     format: S.format,
     commander: S.commander,
     taille: deckSize(),
     date: new Date().toISOString(),
-    deck: entries.map(e => ({name:e.card.name, qty:e.qty, mana:e.card.mana, type:e.card.type, price:e.card.price}))
+    deck: entries.map(e => ({name:e.card.name, qty:e.qty, set:e.card.set||'', num:e.card.num||'',
+      mana:e.card.cost, type:e.card.type, price:e.card.price}))
   }, null, 2);
 
   openDialog('Exporter le deck',

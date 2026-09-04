@@ -85,7 +85,7 @@ rôles de deck déduits du texte oracle, et tables d'affichage des archétypes �
 fonctionnement — dont la liste et le contenu viennent d'EDHREC. Les textes livrés avec l'atelier sont des résumés :
 ils sont remplacés par le texte oracle complet dès que Scryfall ou le catalogue local répond.
 
-*21 fonction(s), 37 Ko*
+*25 fonction(s), 38 Ko*
 
 Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`
 
@@ -107,6 +107,10 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 | `mergeInto(card,canonical)` | Fusionne deux entrées désignant la même carte. |
 | `renameCard(card,newName)` | Renomme une carte vers son nom canonique en migrant les quantités. |
 | `frontFace(n)` | Nom de la face avant d'une carte recto-verso. |
+| `cleImpression(set,num)` | Clé d'une impression : code d'édition et numéro de collection. |
+| `noterImpression(card,set,num,qty)` | Relève l'édition lue dans une liste importée ; la première numérotée devient l'édition de référence. |
+| `completeImpression(card,sc)` | Complète l'édition d'après Scryfall, sans écraser celle relevée à l'import. |
+| `libelleImpression(card)` | Écrit l'édition de référence : « LTC n°344 ». |
 | `scryTarget(sc,map)` | Retrouve la carte locale correspondant à une réponse Scryfall. |
 
 ### `js/etat.js` — État et filtrage
@@ -203,22 +207,27 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
 | `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. |
 | `besoinScryfall(c)` | Dit si une carte attend encore son visuel ou son texte oracle complet. |
-| `queueScryfall(cards)` | Met en file les cartes dont le visuel ou le texte complet manque. |
+| `identScryfall(c)` | Identifiant demandé à Scryfall : l'édition relevée à l'import, ou le nom. |
+| `cibleImpression(sc,parImpression)` | Retrouve la carte visée par une réponse, d'après l'édition demandée. |
+| `indexImpressions(cartes)` | Index des cartes d'un lot par leur impression. |
+| `queueScryfall(cards)` | Met en file les cartes dont le visuel, le texte complet ou l'édition possédée manque. |
 | `runScryQueue()` *(async)* | Vide cette file par lots, sans saturer le réseau. |
 | `chercheTexte(card)` *(async)* | Va chercher le texte oracle complet d'une seule carte, pour la fiche ouverte. |
-| `completeUnknown(names)` *(async)* | Complète les cartes importées, en trois passes de plus en plus tolérantes. |
+| `completeUnknown(names)` *(async)* | Complète les cartes importées : l'édition relevée d'abord, puis trois passes par nom de plus en plus tolérantes. |
 | `chercheScryfall(q,cible)` *(async)* | Recherche en ligne pour la boîte d'ajout. |
 
 ### `js/stockage.js` — Sauvegarde locale
 
 Instantané de l'état vers localStorage, archive du catalogue en IndexedDB, fenêtre de gestion des données.
 
-*16 fonction(s), 16 Ko*
+*18 fonction(s), 17 Ko*
 
 Données : `STORE_KEY`, `STORE_OFF`
 
 | Fonction | Rôle |
 |---|---|
+| `impressionSnap(c)` | Éditions d'une carte à conserver : impression de référence et impressions relevées. |
+| `impressionRestore(card,o)` | Rend ces éditions à la carte au chargement. |
 | `idb()` | Ouvre la base IndexedDB. |
 | `idbLire(cle)` | Lit une clé de l'archive. |
 | `idbEcrire(cle,val)` | Écrit une clé dans l'archive. |
@@ -241,7 +250,7 @@ Données : `STORE_KEY`, `STORE_OFF`
 Statistiques d'inclusion et de synergie par commandant, thèmes de deck servant d'archétypes établis,
 combos répertoriés et combos à une carte près, plus le catalogue Scryfall complet et son archive IndexedDB.
 
-*45 fonction(s), 35 Ko*
+*48 fonction(s), 36 Ko*
 
 | Fonction | Rôle |
 |---|---|
@@ -325,13 +334,19 @@ Données : `VISUELS_CHARGES`
 ### `js/collection.js` — Collection
 
 Affichage en grille ou en liste, import MTGO par fichier ou par collage, recherche et ajout de cartes.
+Le code d'édition entre parenthèses et le numéro de collection qui le suit — « 1 Sol Ring (LTC) 344 »,
+« 1 [ELD#331] Arcane Signet » — sont relevés et conservés sur la carte : l'impression possédée est ensuite
+demandée telle quelle à Scryfall, avec son visuel, son illustrateur et son prix. La collection reste comptée
+par nom ; les éditions relevées s'ajoutent les unes aux autres sur la même carte.
 
-*8 fonction(s), 13 Ko*
+*10 fonction(s), 15 Ko*
 
 | Fonction | Rôle |
 |---|---|
 | `renderB()` | Rend la collection, en grille ou en liste, avec pagination ; les filtres se règlent dans l'en-tête. |
-| `parseMtgoList(txt)` | Lit une liste MTGO : quantités, éditions, réserve, commandant. |
+| `retireExtrait(s,i,n)` | Retire un fragment d'une ligne et recolle le reste. |
+| `extraitEdition(texte)` | Isole le code d'édition et le numéro de collection d'une ligne importée. |
+| `parseMtgoList(txt)` | Lit une liste MTGO : quantités, éditions et numéros de collection, réserve, commandant. |
 | `openImport(cible)` | Boîte d'import, par fichier, glisser-déposer ou collage. |
 | `ajouterCarte(c,q,cible,completer)` | Ajoute une carte à la collection ou au deck. |
 | `chercheCartes(q)` | Recherche par nom dans le catalogue local, filtrée par couleur. |

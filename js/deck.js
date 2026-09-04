@@ -239,6 +239,18 @@ function ficheHTML(card) {
       </div>` : ficheTexteHTML(card)}
       <div class="meta">
         <div class="small muted">${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
+        ${(() => {
+          const ed = libelleImpression(card);
+          if (!ed) return '';
+          const autres = (card.impressions || []).filter(i => i.set !== card.set || i.num !== card.num);
+          const suivie = card.imgImpression === cleImpression(card.set, card.num);
+          return `<div class="small muted" title="${esc(suivie
+            ? "Édition relevée à l'import : le visuel, l'illustrateur et le prix affichés sont ceux de cette impression."
+            : "Édition relevée à l'import. Scryfall ne l'a pas reconnue : le visuel et le prix affichés sont ceux d'une autre impression.")}">Édition ${esc(ed)}${
+            card.setName ? ` — ${esc(card.setName)}` : ''}${
+            card.impressionKO ? ' — inconnue de Scryfall' : ''}${
+            autres.length ? ` · aussi ${autres.map(i => esc(i.set + (i.num ? ' n°' + i.num : ''))).join(', ')}` : ''}</div>`;
+        })()}
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
         ${(() => {
           const arch = archetypesCarte(card);

@@ -89,6 +89,7 @@ function applyScryfall(sc, requested, imagesOnly) {
 
   if (target && (imagesOnly || !target.unknown)) {
     majTexteOracle(target, text);
+    completeImpression(target, sc);
     if (Array.isArray(sc.color_identity) && !/^basic land/i.test(target.type || '')) {
       target.identity = sc.color_identity.slice();
     }
@@ -97,6 +98,7 @@ function applyScryfall(sc, requested, imagesOnly) {
       target.img = uris.small || uris.normal;
       target.imgN = uris.normal || uris.large || target.img;
       target.imgL = uris.large || uris.png || target.imgN;
+      target.imgImpression = cleImpression(sc.set, sc.collector_number);
     }
     if (versoUris) {
       target.imgB = versoUris.normal || versoUris.small;
@@ -129,10 +131,12 @@ function applyScryfall(sc, requested, imagesOnly) {
   reanalyser(fresh);
 
   if (!target) {
+    completeImpression(fresh, sc);
     if (uris) {
       fresh.img = uris.small || uris.normal;
       fresh.imgN = uris.normal || uris.large || fresh.img;
       fresh.imgL = uris.large || uris.png || fresh.imgN;
+      fresh.imgImpression = cleImpression(sc.set, sc.collector_number);
     }
     if (versoUris) {
       fresh.imgB = versoUris.normal || versoUris.small;
@@ -143,12 +147,16 @@ function applyScryfall(sc, requested, imagesOnly) {
     return true;
   }
 
+  const edImportee = target.setImporte ? {set:target.set, num:target.num} : null;
   target = renameCard(target, sc.name);
   Object.assign(target, fresh, {name:target.name});
+  if (edImportee) { target.set = edImportee.set; target.num = edImportee.num; target.setImporte = true; }
+  completeImpression(target, sc);
   if (uris) {
     target.img = uris.small || uris.normal;
     target.imgN = uris.normal || uris.large || target.img;
     target.imgL = uris.large || uris.png || target.imgN;
+    target.imgImpression = cleImpression(sc.set, sc.collector_number);
   }
   if (versoUris) {
     target.imgB = versoUris.normal || versoUris.small;
@@ -162,12 +170,41 @@ function applyScryfall(sc, requested, imagesOnly) {
 const scryQueue = [];
 let scryBusy = false;
 
+/* Identifiant demandé à Scryfall : l'édition relevée à l'import quand la
+   carte en a une, le nom sinon. Le couple code d'édition + numéro de
+   collection ramène l'impression que vous possédez, avec son visuel, son
+   illustrateur et son prix. */
+function identScryfall(c) {
+  return (c.set && c.num && !c.impressionKO)
+    ? {set:String(c.set).toLowerCase(), collector_number:String(c.num).toLowerCase()}
+    : {name:c.name};
+}
+
+/* Retrouve la carte visée par une réponse, d'abord par l'édition demandée. */
+function cibleImpression(sc, parImpression) {
+  const k = cleImpression(sc.set, sc.collector_number);
+  return (k && parImpression && parImpression.get(k)) || null;
+}
+
+function indexImpressions(cartes) {
+  const m = new Map();
+  cartes.forEach(c => {
+    const k = c && cleImpression(c.set, c.num);
+    if (k && !m.has(k)) m.set(k, c);
+  });
+  return m;
+}
+
 /* Une carte mérite un aller-retour Scryfall tant qu'il lui manque son visuel
    (mode images) ou son texte oracle complet : la base intégrée n'en garde
-   qu'un résumé, ce qui coupait par exemple l'alternative d'un sort. */
+   qu'un résumé, ce qui coupait par exemple l'alternative d'un sort. Une
+   édition relevée à l'import justifie elle aussi un aller-retour : le visuel
+   affiché doit être celui de l'impression possédée, pas d'une autre. */
 function besoinScryfall(c) {
   if (!c || c.unknown) return false;
   if (S.images && !c.img && !c.imgTried) return true;
+  if (S.images && c.set && c.num && !c.impressionTried && !c.impressionKO
+      && c.imgImpression !== cleImpression(c.set, c.num)) return true;
   return !c.textFull && !c.texteTried;
 }
 
@@ -177,7 +214,8 @@ function queueScryfall(cards) {
     if (!besoinScryfall(c)) return;
     c.imgTried = true;
     c.texteTried = true;
-    scryQueue.push(c.name);
+    c.impressionTried = true;
+    scryQueue.push(c);
   });
   if (scryQueue.length && !scryBusy) runScryQueue();
 }
@@ -186,15 +224,23 @@ async function runScryQueue() {
   scryBusy = true;
   while (scryQueue.length && !S.scryHS) {
     const chunk = scryQueue.splice(0, 75);
+    const parImpression = indexImpressions(chunk);
     try {
       const r = await fetch('https://api.scryfall.com/cards/collection', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({identifiers: chunk.map(n => ({name: n}))})
+        body: JSON.stringify({identifiers: chunk.map(identScryfall)})
       });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const j = await r.json();
-      (j.data || []).forEach(sc => applyScryfall(sc, scryTarget(sc, null), true));
+      (j.data || []).forEach(sc =>
+        applyScryfall(sc, cibleImpression(sc, parImpression) || scryTarget(sc, null), true));
+      // une édition que Scryfall ne connaît pas (code ou numéro fautif) ne doit
+      // pas priver la carte de son visuel : elle repasse par son nom
+      (j.not_found || []).forEach(id => {
+        const c = id && id.set ? parImpression.get(cleImpression(id.set, id.collector_number)) : null;
+        if (c && !c.impressionKO) { c.impressionKO = true; scryQueue.push(c); }
+      });
     } catch(err) {
       S.scryHS = true;
       scryBusy = false;
@@ -233,16 +279,17 @@ async function completeUnknown(names) {
   async function passe(items, libelle) {
     for (let i = 0; i < items.length && !failed; i += 75) {
       const chunk = items.slice(i, i + 75);
+      const parImpression = indexImpressions(chunk.map(x => x.card));
       try {
         const r = await fetch('https://api.scryfall.com/cards/collection', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({identifiers: chunk.map(x => ({name: x.ident}))})
+          body: JSON.stringify({identifiers: chunk.map(x => x.ident)})
         });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const j = await r.json();
         (j.data || []).forEach(sc => {
-          const t = scryTarget(sc, map);
+          const t = cibleImpression(sc, parImpression) || scryTarget(sc, map);
           if (t && reste.has(t) && applyScryfall(sc, t)) { ok++; reste.delete(t); }
         });
       } catch(err) { failed = err.message || 'réseau indisponible'; return; }
@@ -251,10 +298,22 @@ async function completeUnknown(names) {
     }
   }
 
-  await passe(todo.map(c => ({ident: c.name})), 'Complétion');
+  // l'édition relevée à l'import passe en premier : elle désigne
+  // l'impression exacte, donc le bon visuel et le bon prix
+  const parEdition = todo.filter(c => c.set && c.num);
+  let ok0 = 0;
+  if (parEdition.length) {
+    await passe(parEdition.map(c => ({ident:identScryfall(c), card:c})), 'Éditions');
+    ok0 = ok;
+    // une édition restée sans réponse est fautive, sauf si c'est le réseau
+    // qui a manqué : la carte repassera alors par son nom
+    if (!failed) parEdition.forEach(c => { if (reste.has(c)) c.impressionKO = true; });
+  }
+
+  if (!failed) await passe([...reste].map(c => ({ident:{name:c.name}, card:c})), 'Complétion');
 
   const dfc = [...reste].filter(c => c.name.includes(' // '));
-  if (dfc.length && !failed) await passe(dfc.map(c => ({ident: frontFace(c.name)})), 'Faces avant');
+  if (dfc.length && !failed) await passe(dfc.map(c => ({ident:{name:frontFace(c.name)}, card:c})), 'Faces avant');
 
   const flous = [...reste].slice(0, 60);
   for (const c of flous) {
@@ -273,7 +332,7 @@ async function completeUnknown(names) {
   renderAll();
   const manquantes = [...reste].map(c => c.name);
   if (failed) toast(`Complétion interrompue (${failed}). ${ok} carte(s) complétées, les autres restent importées avec des informations minimales.`);
-  else toast(`${ok} carte(s) complétées${manquantes.length ? ` · ${manquantes.length} introuvable(s) : ${manquantes.slice(0,3).join(', ')}${manquantes.length>3?'…':''}` : ''}.`);
+  else toast(`${ok} carte(s) complétées${ok0 ? ` · dont ${ok0} dans l'édition demandée` : ''}${manquantes.length ? ` · ${manquantes.length} introuvable(s) : ${manquantes.slice(0,3).join(', ')}${manquantes.length>3?'…':''}` : ''}.`);
 }
 
 let scrySeq = 0, scryTimer = null, scryRes = new Map(), scryEtat = '';
