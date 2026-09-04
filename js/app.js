@@ -79,11 +79,6 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'chargerArch') {
-    chargerArchetypesEdhrec(true);
-    return;
-  }
-
   if (act === 'archMenu') {
     archOuvert = !archOuvert;
     majFenetreFiltres();
@@ -612,7 +607,10 @@ function demarrer() {
   }
   renderAll();
   loadSymbology();
-  reprendreArchetypesEdhrec().then(trouve => { if (trouve) renderAll(); });
+  reprendreArchetypesEdhrec().then(trouve => {
+    if (trouve) renderAll();
+    if (archetypesARevoir()) chargerArchetypesEdhrec();
+  });
   verifierMajCatalogue();
   if (autoCatalogue()) chargerCatalogueComplet();
 }

@@ -470,11 +470,6 @@ function corpsFiltres() {
         <input type="text" id="f_archQ" data-archq placeholder="rechercher…" value="${esc(archRecherche)}" autocomplete="off">
         <div class="arch-liste">${listeArchetypesHTML()}</div>
       </div>` : ''}
-      <div class="row" style="gap:6px;align-items:center;margin-top:2px">
-        <button type="button" class="btn sm" data-act="chargerArch" ${ARCH_BASE.etat === 'chargement' ? 'disabled' : ''}>
-          ${ARCH_BASE.liste.length ? 'Recharger la liste EDHREC' : 'Charger la liste EDHREC'}
-        </button>
-      </div>
       <div class="small muted">Une carte est retenue si elle relève d'au moins un archétype coché.</div>
       <div class="small muted" id="archEtat">${etatArchetypes()}</div>
     </div>
@@ -546,17 +541,17 @@ function etatArchetypes() {
     const essais = (ARCH_BASE.essais || []).length
       ? `<div class="mono" style="font-size:10.5px;margin-top:4px;white-space:pre-line">${esc(ARCH_BASE.essais.join('\n'))}</div>`
       : '';
-    return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.${essais}`;
+    return `EDHREC : ${esc(ARCH_BASE.erreur)}. Nouvelle tentative à la prochaine ouverture de l'atelier.${essais}`;
   }
   if (ARCH_BASE.liste.length) {
     const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';
     const charges = Object.keys(ARCH_BASE.themes).length;
     const enCours = ARCH_BASE.enCours.size;
-    return `Liste établie par EDHREC : ${ARCH_BASE.liste.length.toLocaleString('fr-FR')} thème(s)${date ? `, relevés le ${date}` : ''}.
-      Les cartes d'un thème sont cherchées à sa première utilisation${charges ? ` — ${charges} déjà chargé(s), ${ARCH_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${enCours ? ` · ${enCours} en cours…` : ''}.`;
+    return `Liste établie par EDHREC : ${ARCH_BASE.liste.length.toLocaleString('fr-FR')} thème(s)${date ? `, relevés le ${date}` : ''},
+      revus une fois par semaine. Les cartes d'un thème sont cherchées à sa première utilisation${charges ? ` — ${charges} déjà chargé(s), ${ARCH_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${enCours ? ` · ${enCours} en cours…` : ''}.`;
   }
-  return `Les archétypes viennent d'EDHREC. « Charger la liste EDHREC » récupère les thèmes qu'il publie — une requête
-    pour la liste, puis une par thème à sa première utilisation, gardées en cache sur cet appareil.`;
+  return `Les archétypes viennent d'EDHREC : la liste se charge d'elle-même à l'ouverture de l'atelier, puis les cartes
+    d'un thème à sa première utilisation. Le tout est gardé en cache sur cet appareil.`;
 }
 
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */

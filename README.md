@@ -245,8 +245,10 @@ combos répertoriés et combos à une carte près, plus le catalogue Scryfall co
 
 | Fonction | Rôle |
 |---|---|
-| `chargerArchetypesEdhrec(force)` *(async)* | Charge la liste des thèmes EDHREC, puis les thèmes déjà cochés. |
-| `chargerListeArchetypesEdhrec(force)` *(async)* | L'index des thèmes publiés, en une requête. |
+| `chargerArchetypesEdhrec()` *(async)* | Charge la liste des thèmes EDHREC, puis les thèmes déjà cochés. Appelée seule, au démarrage. |
+| `chargerListeArchetypesEdhrec()` *(async)* | L'index des thèmes publiés, en une requête. Renvoie sa trouvaille sans toucher au cache. |
+| `archetypesARevoir()` | Faut-il interroger EDHREC ? Rien en cache, ou liste vieille d'une semaine. |
+| `signatureArchetypes(liste)` | Empreinte d'une liste de thèmes, pour repérer un vrai changement. |
 | `chargerThemeEdhrec(slug)` *(async)* | Les cartes d'un thème, à sa première utilisation. |
 | `themesPageEdhrec(j)` | Thèmes, libellés et descriptions d'une page d'index, quelle que soit sa forme. |
 | `descriptionPageEdhrec(j)` | Description que la page d'un thème porte parfois en tête. |
@@ -438,9 +440,11 @@ Données : `RETOURNEES`
 - Un filtre posé une fois vaut partout : `carteFiltree()` filtre la collection, le deck et sa courbe de mana,
   les statistiques, le graphe et les suggestions d'ajout. La taille du deck, sa conformité au format et
   l'équilibre des rôles restent calculés sur le deck entier.
-- Les archétypes viennent entièrement d'EDHREC : « Charger la liste EDHREC » récupère les thèmes qu'il publie, en une
-  requête, et la liste déroulante les affiche tous. Les cartes d'un thème ne sont cherchées qu'à sa première
-  utilisation, puis gardées en cache. `ARCH_LABELS` et `ARCH_RESUMES` ne servent qu'à l'affichage : un libellé français
+- Les archétypes viennent entièrement d'EDHREC, sans geste de l'utilisateur : la liste des thèmes se charge au
+  démarrage si rien n'est en cache, et se revérifie une fois par semaine. EDHREC ne publiant aucun manifeste daté,
+  cette vérification relit l'index et ne remplace la liste que si elle diffère vraiment ; si EDHREC ne répond pas, la
+  liste déjà connue reste en place et la date n'est pas touchée, si bien que le lancement suivant retente. Les cartes
+  d'un thème ne sont cherchées qu'à sa première utilisation, puis gardées en cache. `ARCH_LABELS` et `ARCH_RESUMES` ne servent qu'à l'affichage : un libellé français
   et une phrase de fonctionnement pour les thèmes les plus courants. Chaque thème affiche une phrase, sans exception :
   la nôtre, sinon celle qu'EDHREC publie, sinon une phrase formée sur son nom.
 

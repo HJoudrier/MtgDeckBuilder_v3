@@ -227,6 +227,12 @@ async function loadEdhrec(force) {
 const ARCH_CLE_IDB = 'archetypes';
 const ARCH_PAUSE = 130;   // ms entre deux requêtes, par courtoisie envers EDHREC
 
+/* EDHREC ne publie aucun manifeste daté : impossible de demander « ta
+   liste a-t-elle changé ? » sans la relire. Elle bouge peu, on la relit
+   donc une fois par semaine et on ne remplace la nôtre que si elle
+   diffère vraiment. */
+const ARCH_FRAICHEUR = 7 * 24 * 3600e3;
+
 /* json.edhrec.com est un dépôt de fichiers : une clé absente répond
    « AccessDenied », jamais 404. La forme d'adresse des pages de thème
    n'est donc pas devinable — on la cherche une fois, par sondage, avant
@@ -404,9 +410,11 @@ function themesPageEdhrec(j) {
   return [...out.values()];
 }
 
-/* Cherche l'index, en partant du préfixe déjà validé pour les thèmes. */
-async function chargerListeArchetypesEdhrec(force) {
-  if (!force && ARCH_BASE.liste.length) return ARCH_BASE.liste;
+/* Cherche l'index, en partant du préfixe déjà validé pour les thèmes.
+   Renvoie ce qu'il trouve sans toucher au cache : c'est l'appelant qui
+   décide de le garder, pour qu'une vérification ratée ne fasse pas
+   perdre la liste déjà en place. */
+async function chargerListeArchetypesEdhrec() {
   const url = await formeThemeEdhrec();
   if (!url) return [];
   const pre = url('x').replace(ARCH_HOTE, '').replace(/\/?x(\/all)?\.json$/, '');
@@ -419,8 +427,7 @@ async function chargerListeArchetypesEdhrec(force) {
         .filter(t => t.slug && !/^(commanders?|cards?|decks?|articles?)$/i.test(t.slug));
       ARCH_BASE.essais.push(`index ${candidat} → ${themes.length} thème(s)`);
       if (themes.length >= 5) {
-        ARCH_BASE.liste = themes.sort((a, b) => (b.n || 0) - (a.n || 0) || a.label.localeCompare(b.label));
-        return ARCH_BASE.liste;
+        return themes.sort((a, b) => (b.n || 0) - (a.n || 0) || a.label.localeCompare(b.label));
       }
     } catch(err) {
       ARCH_BASE.essais.push(`index ${candidat} → ${err.message || 'échec réseau'}`);
@@ -465,39 +472,58 @@ function sauverArchetypesEdhrec() {
   }).catch(() => {});
 }
 
-/* Chargement à la demande : l'index, puis les thèmes déjà cochés. */
-async function chargerArchetypesEdhrec(force) {
+/* Une liste vaut l'autre si elle porte les mêmes thèmes. */
+function signatureArchetypes(liste) {
+  return (liste || []).map(t => t.slug).join('|');
+}
+
+/* Y a-t-il lieu d'interroger EDHREC ? Oui si nous n'avons rien, ou si
+   notre liste a passé la semaine. */
+function archetypesARevoir() {
+  return !ARCH_BASE.liste.length || !ARCH_BASE.maj || Date.now() - ARCH_BASE.maj > ARCH_FRAICHEUR;
+}
+
+/* Chargement automatique, au démarrage : l'index, puis les thèmes déjà
+   cochés. Discret par nature — la fenêtre des filtres porte l'état, et
+   seul un vrai changement de liste se signale. Une vérification ratée
+   laisse en place la liste déjà connue. */
+async function chargerArchetypesEdhrec() {
   if (ARCH_BASE.etat === 'chargement') return;
   if (typeof fetch !== 'function') {
     ARCH_BASE.etat = 'erreur';
     ARCH_BASE.erreur = 'ce navigateur ne sait pas interroger EDHREC';
     return;
   }
+  const avant = signatureArchetypes(ARCH_BASE.liste);
   ARCH_BASE.etat = 'chargement';
   ARCH_BASE.erreur = '';
-  if (force) { ARCH_BASE.forme = null; ARCH_BASE.liste = []; }
+  ARCH_BASE.essais = [];
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
 
-  const liste = await chargerListeArchetypesEdhrec(force);
-  if (!liste.length) {
+  const liste = await chargerListeArchetypesEdhrec();
+  if (liste.length) {
+    const change = signatureArchetypes(liste) !== avant;
+    ARCH_BASE.liste = liste;
+    ARCH_BASE.maj = Date.now();
+    ARCH_BASE.etat = 'ok';
+    sauverArchetypesEdhrec();
+    if (change && avant && typeof toast === 'function') {
+      toast(`Liste EDHREC actualisée : ${liste.length.toLocaleString('fr-FR')} thèmes.`);
+    }
+    for (const slug of archetypesAChargerEdhrec()) await chargerThemeEdhrec(slug);
+  } else if (avant) {
+    /* EDHREC n'a pas répondu, mais notre liste tient toujours : on la
+       garde, sans toucher à sa date, pour retenter au prochain lancement. */
+    ARCH_BASE.etat = 'ok';
+  } else {
     const hoteOK = await temoinEdhrec();
     ARCH_BASE.etat = 'erreur';
     ARCH_BASE.erreur = hoteOK
       ? "la liste des thèmes n'est pas à l'adresse attendue (l'hôte répond pourtant pour les commandants)"
       : 'EDHREC injoignable depuis ce navigateur (hors ligne, CORS ou accès bloqué)';
-  } else {
-    ARCH_BASE.etat = 'ok';
-    ARCH_BASE.maj = Date.now();
-    sauverArchetypesEdhrec();
-    for (const slug of archetypesAChargerEdhrec()) await chargerThemeEdhrec(slug);
   }
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
   if (typeof renderAll === 'function') renderAll();
-  if (typeof toast === 'function') {
-    toast(ARCH_BASE.etat === 'ok'
-      ? `${ARCH_BASE.liste.length} thèmes EDHREC disponibles.`
-      : `Archétypes EDHREC : ${ARCH_BASE.erreur}.`);
-  }
 }
 
 /* 2. Commander Spellbook */
