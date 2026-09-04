@@ -446,15 +446,12 @@ function corpsFiltres() {
       <div class="small muted">${esc(nomCombinaisonCouleurs(S.colors))} · même réglage que la barre de mana de l'en-tête.</div>
     </div>
     <div class="field">
-      <label class="lab" for="f_search">Recherche</label>
-      <input type="text" id="f_search" data-filtre="search" value="${esc(S.search)}" placeholder="nom, type ou texte de la carte…" autocomplete="off">
+      <label class="lab" for="f_nom">Nom</label>
+      <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>
     <div class="field">
-      <label class="lab" for="f_typeFilter">Type de carte</label>
-      <select id="f_typeFilter" data-filtre="typeFilter">
-        <option value="">Tous les types</option>
-        ${TYPE_ORDER.map(t => `<option value="${esc(t)}" ${S.typeFilter === t ? 'selected' : ''}>${esc(t)}</option>`).join('')}
-      </select>
+      <label class="lab" for="f_type">Type</label>
+      <input type="text" id="f_type" data-filtre="type" value="${esc(f.type)}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab">Archétype</label>
@@ -485,21 +482,17 @@ function corpsFiltres() {
       </div>
       <div class="small muted">Mêmes rôles que les jauges d'équilibre de la section Deck : les cocher ici ou là revient au même.</div>
     </div>
-    <div class="field">
-      <label class="lab" for="f_nom">Nom de la carte</label>
-      <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
-    </div>
-    <div class="field">
-      <label class="lab" for="f_artiste">Illustrateur</label>
-      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(f.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
-    </div>
     <div class="filtres-grille">
       ${ligneFiltre('forceMin', 'forceMax', 'Force', "Force des créatures (le premier chiffre de 3/4).", '1', 0)}
       ${ligneFiltre('enduranceMin', 'enduranceMax', 'Endurance', "Endurance des créatures (le second chiffre de 3/4).", '1', 0)}
       ${ligneFiltre('cmcMin', 'cmcMax', 'Coût de mana', "Valeur de mana totale de la carte.", '1', 0)}
       ${ligneFiltre('prixMin', 'prixMax', 'Prix (€)', "Prix unitaire estimé, en euros.", 'any', 0)}
     </div>
-    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. La recherche porte sur le nom, le type et le texte ; le champ « Nom » ne regarde que le nom. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
+    <div class="field">
+      <label class="lab" for="f_artiste">Illustrateur</label>
+      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(f.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
+    </div>
+    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier »). Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs choisies ci-dessus ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }
@@ -607,7 +600,7 @@ function openFiltresModal() {
   openDialog('Filtres de la collection', corpsFiltres(),
     `<button type="button" class="btn" data-act="resetFiltres">Réinitialiser</button>
      <button type="button" class="btn pri" data-act="closeDialog">Fermer</button>`);
-  const champ = document.getElementById('f_search');
+  const champ = document.getElementById('f_nom');
   if (champ) champ.focus();
 }
 

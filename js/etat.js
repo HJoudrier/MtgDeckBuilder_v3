@@ -21,9 +21,7 @@ const S = {
   colorMode: 'identity',
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
-  search: '',
-  typeFilter: '',
-  filtres: {nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', type:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -55,15 +53,15 @@ const S = {
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});
 
 /* ---------------------------------------------------------------------
-   Filtres de la fenêtre « Filtres » (en-tête) : couleurs, recherche libre,
-   type de carte, archétype, nom, illustrateur, force, endurance, coût de
-   mana et prix. Chaque champ vide est neutre. Les couleurs vivent dans `S.colors`
-   et `S.colorMode`, la recherche et le type dans `S.search` et
-   `S.typeFilter` ; les autres critères dans `S.filtres`.
+   Filtres de la fenêtre « Filtres » (en-tête), dans l'ordre où ils y
+   apparaissent : couleur, nom, type, archétype, rôle, force, endurance,
+   coût de mana, prix, illustrateur. Chaque champ vide est neutre. Les
+   couleurs vivent dans `S.colors` et `S.colorMode` ; tous les autres
+   critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', type:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -173,15 +171,11 @@ function nombreFiltre(v) {
 
 function reinitFiltres() {
   S.filtres = {...FILTRES_VIDE};
-  S.search = '';
-  S.typeFilter = '';
 }
 
-/* Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. */
+/* Écrit un champ de la fenêtre dans l'état. */
 function majFiltre(cle, valeur) {
-  if (cle === 'search') S.search = valeur;
-  else if (cle === 'typeFilter') S.typeFilter = valeur;
-  else if (cle in FILTRES_VIDE) S.filtres[cle] = valeur;
+  if (cle in FILTRES_VIDE) S.filtres[cle] = valeur;
 }
 
 /* Efface un filtre depuis sa puce dans l'en-tête. */
@@ -194,13 +188,10 @@ function effacerFiltre(cles) {
 function filtresActifs() {
   const f = S.filtres || FILTRES_VIDE;
   const actifs = [];
-  const recherche = String(S.search || '').trim();
-  if (recherche) actifs.push({cles:['search'], texte:`Recherche « ${recherche} »`});
-  if (S.typeFilter) actifs.push({cles:['typeFilter'], texte:`Type : ${S.typeFilter}`});
   const nom = String(f.nom || '').trim();
   if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
-  const artiste = String(f.artiste || '').trim();
-  if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
+  const type = String(f.type || '').trim();
+  if (type) actifs.push({cles:['type'], texte:`Type « ${type} »`});
   const arch = archetypesFiltre();
   if (arch.length) actifs.push({cles:['archetypes'],
     texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
@@ -215,6 +206,8 @@ function filtresActifs() {
       : (min !== null ? `${label} ≥ ${min}${unite}` : `${label} ≤ ${max}${unite}`);
     actifs.push({cles:[kMin, kMax], texte});
   });
+  const artiste = String(f.artiste || '').trim();
+  if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
   return actifs;
 }
 
@@ -223,27 +216,11 @@ function texteFiltresActifs(sep) {
   return filtresActifs().map(a => a.texte).join(sep || ' · ');
 }
 
-/* La recherche libre : nom, type ou texte de la carte. */
-function rechercheOK(card) {
-  const q = String(S.search || '').trim().toLowerCase();
-  if (!q) return true;
-  if (!card) return false;
-  return String(card.name || '').toLowerCase().includes(q)
-    || String(card.text || '').toLowerCase().includes(q)
-    || String(card.type || '').toLowerCase().includes(q);
-}
-
-/* Le type principal retenu dans la fenêtre des filtres. */
-function typeOK(card) {
-  if (!S.typeFilter) return true;
-  return !!card && mainType(card) === S.typeFilter;
-}
-
-/* Prédicat unique de l'atelier : couleurs, recherche, type et critères de
-   la fenêtre. Il vaut pour la collection, le deck, la courbe de mana et
+/* Prédicat unique de l'atelier : couleurs, rôles et critères de la
+   fenêtre. Il vaut pour la collection, le deck, la courbe de mana et
    les suggestions, afin qu'un filtre posé une fois vaille partout. */
 function carteFiltree(card) {
-  return !!card && colorOK(card) && typeOK(card) && rechercheOK(card) && roleOK(card) && filtreOK(card);
+  return !!card && colorOK(card) && roleOK(card) && filtreOK(card);
 }
 
 /* Applique les filtres avancés à une carte. Une carte dont la valeur est
@@ -254,6 +231,8 @@ function filtreOK(card) {
   const f = S.filtres || FILTRES_VIDE;
   const nom = String(f.nom || '').trim();
   if (nom && !norm(card.name).includes(norm(nom))) return false;
+  const type = String(f.type || '').trim();
+  if (type && !loose(card.type + ' ' + mainType(card)).includes(loose(type))) return false;
   const artiste = String(f.artiste || '').trim();
   if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
   const arch = archetypesFiltre();

@@ -551,12 +551,6 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
-  if (t.dataset.filtre) {
-    majFiltre(t.dataset.filtre, t.value);
-    majResumeFiltres();
-    planifierRenduFiltres();
-    return;
-  }
   if (t.dataset.act === 'sort') {
     S.sort = t.value;
     renderB();
