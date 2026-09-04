@@ -25,7 +25,7 @@ function snapshot() {
   DB.forEach(c => {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
-      if (c.img || c.cmUrl || c.artist) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||''});
+      if (c.img || c.cmUrl || c.artist || c.textFull) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : ''});
     } else if (c.externe && !(S.collection.get(c.name) > 0) && !S.deck.has(c.name)) {
       // vivier d'exploration : non conservé
     } else {
@@ -33,7 +33,7 @@ function snapshot() {
         n:c.name, c:c.cost||'—', t:c.type, p:c.price, x:c.text,
         i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance, a:c.artist||'',
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
-        u:c.cmUrl||'', k:c.unknown?1:0
+        u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0
       });
     }
   });
@@ -77,7 +77,7 @@ function save() {
     saveError = '';
   } catch(err) {
     try {
-      const leger = {...snap, enrich:[], cartes:snap.cartes.map(c => ({...c, x:'', g:'', G:'', L:''}))};
+      const leger = {...snap, enrich:[], cartes:snap.cartes.map(c => ({...c, x:'', X:0, g:'', G:'', L:''}))};
       ecrire(leger);
       saveState = 'partiel';
       saveError = 'visuels et textes importés non conservés (espace insuffisant)';
@@ -120,12 +120,14 @@ function restore(d) {
     if (o.B) card.imgB = o.B;
     if (o.BL) card.imgBL = o.BL;
     card.unknown = !!o.k;
+    if (o.X && o.x) card.textFull = true;
     if (card.img) card.imgTried = true;
   });
 
   (d.enrich || []).forEach(o => {
     const card = find(o.n);
     if (!card) return;
+    if (o.x) majTexteOracle(card, o.x);
     if (o.p) card.price = o.p;
     if (o.a) card.artist = o.a;
     if (o.g) card.img = o.g;

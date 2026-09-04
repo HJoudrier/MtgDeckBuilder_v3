@@ -33,15 +33,6 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (b.dataset.asrc) {
-    S.filtres.archSource = b.dataset.asrc;
-    if (b.dataset.asrc !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle') chargerArchetypesEdhrec();
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
-    return;
-  }
-
   if (b.dataset.cmode) {
     S.colorMode = b.dataset.cmode;
     invaliderCandidats();
@@ -93,11 +84,16 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'archMenu') {
+    archOuvert = !archOuvert;
+    majFenetreFiltres();
+    return;
+  }
+
   if (act === 'toggleArch') {
     basculerArchetype(b.dataset.arch);
-    // premier archétype coché : la base extérieure se charge d'elle-même
-    if (sourceArchetypes() !== 'texte' && !ARCH_BASE.index.size && ARCH_BASE.etat === 'idle'
-        && archetypesFiltre().length) chargerArchetypesEdhrec();
+    // les cartes du thème coché sont cherchées à la demande
+    archetypesAChargerEdhrec().forEach(slug => chargerThemeEdhrec(slug));
     majFenetreFiltres();
     majResumeFiltres();
     S.limitB = PAGE;
@@ -127,11 +123,11 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'filtreRole') {
-    const r = b.dataset.role || '';
-    S.filtreRole = (S.filtreRole === r) ? '' : r;
-    renderF();
-    renderE();
+  if (act === 'toggleRole') {
+    basculerRole(b.dataset.role || '');
+    majFenetreFiltres();
+    S.limitB = PAGE;
+    renderAll();
     return;
   }
 
@@ -403,6 +399,10 @@ document.addEventListener('click', ev => {
 
   if (act === 'toggleImages') {
     S.images = !S.images;
+    // Nouvelle tentative d'accès à Scryfall : l'échec précédent portait
+    // peut-être sur l'autre mode d'affichage.
+    S.scryHS = false;
+    S.imagesFailed = false;
     b.setAttribute('aria-pressed', String(S.images));
     renderAll();
     return;
@@ -511,6 +511,11 @@ document.addEventListener('mouseout', ev => {
 /* Saisie dans les champs de recherche et de filtres. */
 document.addEventListener('input', ev => {
   const t = ev.target;
+  if (t.dataset.archq !== undefined) {
+    archRecherche = t.value;
+    majListeArchetypes();
+    return;
+  }
   if (t.dataset.filtre) {
     majFiltre(t.dataset.filtre, t.value);
     majResumeFiltres();

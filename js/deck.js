@@ -23,10 +23,10 @@ function availableFor(card) {
 
 function targets() {
   const f = fmt(), k = f.size / 100;
-  if (S.format === 'limite') return {terrains:17, creatures:15, removal:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
-  if (S.format === 'standard') return {terrains:24, creatures:18, removal:8, pioche:6, ramp:2, tuteurs:1, wipe:2, protection:2};
+  if (S.format === 'limite') return {terrains:17, creatures:15, interaction:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
+  if (S.format === 'standard') return {terrains:24, creatures:18, interaction:8, pioche:6, ramp:2, tuteurs:1, wipe:2, protection:2};
   return {
-    terrains:Math.round(36*k), creatures:Math.round(25*k), removal:Math.round(9*k), pioche:Math.round(10*k),
+    terrains:Math.round(36*k), creatures:Math.round(25*k), interaction:Math.round(9*k), pioche:Math.round(10*k),
     ramp:Math.round(10*k), tuteurs:Math.round(3*k), wipe:Math.round(2*k), protection:Math.round(3*k)
   };
 }
@@ -42,9 +42,9 @@ function gauge(label, val, tgt, role) {
   const pct = Math.min(100, Math.round(val / Math.max(1, tgt) * 100));
   const col = val >= tgt ? 'var(--ok)' : (val >= tgt * 0.6 ? 'var(--warn)' : 'var(--bad)');
   const diff = val - tgt;
-  const actif = S.filtreRole === role;
-  return `<button type="button" class="gauge ${actif?'actif':''}" data-act="filtreRole" data-role="${esc(role||'')}"
-      aria-pressed="${actif}" title="Filtrer les suggestions sur ce rôle">
+  const actif = rolesFiltre().includes(role);
+  return `<button type="button" class="gauge ${actif?'actif':''}" data-act="toggleRole" data-role="${esc(role||'')}"
+      aria-pressed="${actif}" title="${actif ? 'Retirer ce rôle des filtres' : 'Ne garder que les cartes tenant ce rôle, partout'}">
     <div class="top"><span>${label}</span><span class="mono">${val} / ${tgt} ${diff<0?`<span style="color:var(--bad)">${diff}</span>`:'<span style="color:var(--ok)">ok</span>'}</span></div>
     <div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div></button>`;
 }
@@ -172,19 +172,25 @@ function ficheHTML(card) {
   const deck = deckEntries().map(e => e.card);
   const dansDeck = S.deck.get(card.name) || 0;
   const tgt = targets(), cnt = deckCounts();
-  const sug = currentSuggestions().find(x => x.card.name === card.name);
   const partD = partnersFor(card, deck).slice(0, 8);
   const partC = partnersFor(card, filtered().map(e => e.card).filter(c => !S.deck.has(c.name)).slice(0, 700)).slice(0, 6);
   const dispo = availableFor(card);
   const offre = dispo > 0 ? null : bestOffer(card);
 
+  /* Un rôle par ligne : l'étiquette, puis ce que ce rôle vaut dans le
+     deck — l'écart à l'objectif du format, ou le nombre de cartes qui le
+     tiennent déjà pour les rôles que le format ne chiffre pas. */
   const roles = [...card.cats].map(c => {
     const l = CATLABEL[c] || c;
     if (c in tgt) {
       const manque = tgt[c] - (cnt[c] || 0);
-      return `<span class="chip on">${l}</span> <span class="small muted">${cnt[c]||0}/${tgt[c]}${manque>0?` — il en manque ${manque}`:' — objectif atteint'}</span>`;
+      return `<div class="role-l"><span class="chip on">${esc(l)}</span>
+        <span class="small muted">${cnt[c]||0} / ${tgt[c]} dans le deck — ${manque > 0
+          ? `il en manque ${manque}` : 'objectif atteint'}</span></div>`;
     }
-    return `<span class="chip">${l}</span>`;
+    const n = deckEntries().reduce((a, e) => a + (e.card.cats.has(c) ? e.qty : 0), 0);
+    return `<div class="role-l"><span class="chip">${esc(l)}</span>
+      <span class="small muted">${n} carte(s) du deck tiennent ce rôle — le format n'en fixe pas d'objectif</span></div>`;
   });
 
   const erAll = edhrecAllFor(card);
@@ -210,30 +216,6 @@ function ficheHTML(card) {
     }
   });
 
-  const pourquoi = [];
-  if (sug && sug.reasons.length) sug.reasons.forEach(r => pourquoi.push(r));
-  else if (erAll.length) {
-    erAll.forEach(erItem => {
-      const isPrim = erItem.isSelected || erItem.role === 'principal' || (S.commander && norm(erItem.commandant) === norm(S.commander));
-      const cmdLabel = isPrim ? `★ commandant ${erItem.commandant}` : `commandant secondaire ${erItem.commandant}`;
-      const synSign = erItem.synergy >= 0 ? '+' : '−';
-      const synVal = Math.abs(Math.round(erItem.synergy * 100));
-      pourquoi.push(`EDHREC (${cmdLabel}) : ${Math.round(erItem.inclusion*100)} % apparition / ${synSign}${synVal} % synergie`);
-    });
-  }
-  else {
-    if (partD.length) pourquoi.push(`se branche à ${partD.length} carte(s) déjà présentes dans le deck`);
-    card.cats.forEach(c => {
-      if (c in tgt && (tgt[c] - (cnt[c]||0)) > 0)
-        pourquoi.push(`comble un manque : ${CATLABEL[c]} (${cnt[c]||0} pour ${tgt[c]} recommandés)`);
-    });
-  }
-  if (!card.isLand && !pourquoi.some(r => /courbe/.test(r))) {
-    const meme = deck.filter(c => !c.isLand && c.cmc === card.cmc).length;
-    pourquoi.push(`courbe de mana : ${meme} carte(s) du deck coûtent déjà ${card.cmc} mana`);
-  }
-  if (!pourquoi.length) pourquoi.push("aucun branchement repéré avec le deck actuel : elle vaut surtout pour son effet propre");
-
   const nomLien = l => NODE[l.concept].label.toLowerCase() + (l.detail ? ` (${l.detail})` : '')
     + (l.k <= 0.4 ? ' — non vérifiable, force ou coût inconnus' : (l.k < 1 ? ' — sous réserve' : ''));
   const lien = p => {
@@ -258,14 +240,11 @@ function ficheHTML(card) {
       <div class="meta">
         <div class="small muted">${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${edhrecTags.length ? `<div class="tags edhrec-tags-modal" style="margin:8px 0 4px;gap:5px;flex-wrap:wrap">${edhrecTags.join('')}</div>` : ''}
-        <div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${roles.join(' ')||'<span class="chip">rôle non identifié</span>'}</div>
         ${(() => {
-          const det = archetypesDetail(card);
-          if (!det.length) return '';
-          const source = d => d.texte && d.base ? 'texte de la carte et thèmes EDHREC'
-            : (d.base ? 'thèmes EDHREC' : 'texte de la carte');
-          return `<div class="chips" style="margin-top:4px">${det.map(d =>
-            `<span class="chip arch${d.base ? ' base' : ''}" title="Archétype relevé : ${source(d)}">${esc(ARCHLABEL[d.id] || d.id)}${d.base ? ' ◆' : ''}</span>`).join(' ')}</div>`;
+          const arch = archetypesCarte(card);
+          if (!arch.length) return '';
+          return `<div class="chips" style="margin-top:${edhrecTags.length ? '4px' : '8px'}">${arch.map(slug =>
+            `<span class="chip arch base" title="${esc(resumeArchetype(slug))}">${esc(libelleArchetype(slug))}</span>`).join(' ')}</div>`;
         })()}
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
@@ -273,7 +252,10 @@ function ficheHTML(card) {
       </div>
     </div>
     <div class="bloc"><h4>Ce qu'elle apporte au deck</h4>
-      ${pourquoi.map(r => `<div class="puce">${esc(r)}</div>`).join('')}</div>
+      <div class="small muted" style="margin-bottom:5px">Rôles dans le deck</div>
+      ${roles.join('') || '<div class="role-l"><span class="chip">Rôle non identifié</span></div>'}
+      <div class="small muted" style="margin:10px 0 5px">Cartes du deck avec lesquelles elle se branche</div>
+      ${partD.length ? partD.map(lien).join('') : '<div class="arc muted">aucune pour le moment</div>'}</div>
     ${(() => {
       const cs = combosDe(card);
       if (!cs.length) return '';
@@ -295,11 +277,6 @@ function ficheHTML(card) {
         }).join('')}
       </div>`;
     })()}
-    <div class="bloc"><h4>Interactions dans le graphe</h4>
-      <div class="small muted" style="margin-bottom:5px">Cartes du deck</div>
-      ${partD.length ? partD.map(lien).join('') : '<div class="arc muted">aucune pour le moment</div>'}
-      <div class="small muted" style="margin:8px 0 5px">Cartes de la collection filtrée</div>
-      ${partC.length ? partC.map(lien).join('') : '<div class="arc muted">aucune</div>'}</div>
     <div class="bloc"><h4>Capacités extraites</h4>
       ${card.an.abilities.length ? card.an.abilities.map(a => {
           const ql = libelleQual(a.q);
@@ -307,12 +284,17 @@ function ficheHTML(card) {
         }).join('')
         : '<div class="arc muted">aucune capacité reconnue dans le texte</div>'}
       ${noeuds.length ? `<div class="chips" style="margin-top:7px">${noeuds.map(n=>`<button type="button" class="chip" data-act="focusNodeFrom" data-node2="${n}">${esc(NODE[n].label)}</button>`).join('')}</div>
-        <div class="small muted">Touchez un nœud pour l'isoler dans le graphe.</div>` : ''}</div>`;
+        <div class="small muted">Touchez un nœud pour l'isoler dans le graphe.</div>` : ''}</div>
+    <div class="bloc"><h4>Branchements possibles avec la collection</h4>
+      <div class="small muted" style="margin-bottom:5px">Cartes de la collection filtrée qui ne sont pas dans le deck</div>
+      ${partC.length ? partC.map(lien).join('') : '<div class="arc muted">aucune</div>'}</div>`;
 }
 
 function openCardModal(name) {
   const card = find(name); if (!card) return;
-  chercheVerso(card).then(ok => { if (ok && document.getElementById('dlg') && document.getElementById('dlg').open) openCardModal(name); });
+  const rouvre = ok => { if (ok && document.getElementById('dlg') && document.getElementById('dlg').open) openCardModal(name); };
+  chercheVerso(card).then(rouvre);
+  chercheTexte(card).then(rouvre);
   cacherApercu();
   const dispo = availableFor(card), offre = dispo > 0 ? null : bestOffer(card);
   const actions = [
@@ -410,8 +392,13 @@ function evalueDeck(entries) {
 }
 
 function renderE() {
-  const entries = deckEntries(), n = deckSize(), f = fmt(), cnt = deckCounts(), tgt = targets();
-  evalueDeck(entries);
+  const toutes = deckEntries(), n = deckSize(), f = fmt(), cnt = deckCounts(), tgt = targets();
+  evalueDeck(toutes);
+  // Les filtres de l'en-tête valent aussi pour le deck : liste affichée,
+  // courbe de mana et moyennes. La taille, la conformité et l'équilibre
+  // des rôles restent ceux du deck entier.
+  const entries = toutes.filter(e => carteFiltree(e.card));
+  const masquees = toutes.reduce((a, e) => a + e.qty, 0) - entries.reduce((a, e) => a + e.qty, 0);
   const cmcSplit = {};
   entries.forEach(e => {
     if (e.card.isLand) return;
@@ -430,9 +417,10 @@ function renderE() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        <span class="pill">Cartes <b>${n}/${f.size}</b></span>
-        <span class="pill">CMC moyen <b>${avg.toFixed(2)}</b></span>
-        <span class="pill">Valeur <b>${eur(price)}</b></span>
+        <span class="pill" title="Deck entier, filtres compris">Cartes <b>${n}/${f.size}</b></span>
+        ${masquees ? `<button type="button" class="pill head-format" data-act="filtres" title="Les filtres de l'en-tête masquent une partie du deck (cliquer pour les modifier)" style="border-color:var(--brass-d);color:var(--brass)">Filtrées <b>${n - masquees}</b> · ${masquees} masquée(s)</button>` : ''}
+        <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">CMC moyen <b>${avg.toFixed(2)}</b></span>
+        <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">Valeur <b>${eur(price)}</b></span>
         ${S.commander ? `<span class="pill">Commandant <b>${esc(S.commander)}</b></span>` : ''}
         ${(() => {
           const a = aAcheter();
@@ -456,15 +444,16 @@ function renderE() {
       <h3 style="margin:14px 0 6px;font-size:15px">Équilibre des rôles</h3>
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       <h3 style="margin:14px 0 6px;font-size:15px">Liste</h3>
-      ${n ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
+      ${entries.length ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
         <div class="group"><h4>${t} <span class="small muted">${grouped[t].reduce((a,e)=>a+e.qty,0)}</span></h4>
         ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
                           : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
-        : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>'}`;
+        : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`
+             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>')}`;
   }
 
   const hintEl = document.getElementById('hintE');
   if (hintEl) hintEl.textContent = `${n}/${f.size}`;
-  if (S.view === 'grid') setTimeout(() => queueImages(entries.map(e => e.card)), 0);
+  setTimeout(() => queueScryfall(entries.map(e => e.card)), 0);
   scheduleCombos();
 }

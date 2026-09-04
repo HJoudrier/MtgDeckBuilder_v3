@@ -71,7 +71,7 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 | `scopeOf(s)` | Détermine si une clause vise votre côté ou celui de l'adversaire. |
 | `refineEffects(list, clause)` | Arbitre les conflits entre effets détectés (blink contre exil, négations…). |
 | `analyze(card)` | Analyse une carte : capacités, arcs déclencheur → effet, accroches et productions. |
-| `categories(card)` | Classe une carte par rôle : ramp, removal, pioche, jetons, protection… |
+| `categories(card)` | Rôles d'une carte, croisant son type avec les capacités, coûts et déclencheurs relevés par `analyze()`. Le rôle `interaction` couvre destruction, exil, renvoi, dégâts et contresorts. |
 | `feeds(concept)` | Concepts qu'une production peut alimenter, équivalences comprises. |
 | `feedsDe(p)` | Même chose, en tenant compte du détail de la production. |
 | `croise(prods,trigs,dir,out)` | Croise les productions d'une carte avec les accroches d'une autre. |
@@ -81,12 +81,13 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 ### `js/cartes.js` — Base de cartes
 
 Catalogue livré avec l'atelier, fabrique de cartes, index de recherche tolérant aux accents, apostrophes et faces multiples,
-rôles et archétypes de deck déduits du texte oracle. Chaque archétype porte aussi les thèmes EDHREC correspondants,
-que `js/externes.js` va chercher pour croiser la lecture locale avec une source établie.
+rôles de deck déduits du texte oracle, et tables d'affichage des archétypes — libellés français et résumés de
+fonctionnement — dont la liste et le contenu viennent d'EDHREC. Les textes livrés avec l'atelier sont des résumés :
+ils sont remplacés par le texte oracle complet dès que Scryfall ou le catalogue local répond.
 
-*20 fonction(s), 37 Ko*
+*21 fonction(s), 37 Ko*
 
-Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCHLABEL`, `ARCH_MOTIFS`
+Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`
 
 | Fonction | Rôle |
 |---|---|
@@ -100,8 +101,8 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCHETYPES`, `ARCH
 | `peutCommander(c)` | Vérifie qu'une carte peut être commandant. |
 | `commandantsPossibles()` | Créatures légendaires du deck éligibles au rôle. |
 | `mainType(c)` | Type principal en français, face avant pour les cartes multi-faces. |
-| `archetypesDe(card)` | Archétypes de deck relevés dans le texte et l'analyse d'une carte. |
 | `reanalyser(card)` | Refait analyse, rôles et archétypes après un changement de texte ou de force. |
+| `majTexteOracle(card,texte)` | Remplace le résumé de la base intégrée par le texte oracle complet d'une source officielle, puis relance l'analyse. |
 | `seedCollection()` | Collection de démonstration, au premier lancement. |
 | `mergeInto(card,canonical)` | Fusionne deux entrées désignant la même carte. |
 | `renameCard(card,newName)` | Renomme une carte vers son nom canonique en migrant les quantités. |
@@ -118,7 +119,7 @@ illustrateur, force, endurance, coût de mana, prix), ainsi que l'index des arch
 
 *22 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `ARCH_SOURCES`
+Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 
 | Fonction | Rôle |
 |---|---|
@@ -126,13 +127,20 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la fenêtre des filtres à une carte. |
+| `carteFiltree(card)` | Prédicat unique : couleurs, recherche, type, rôle et critères de la fenêtre. Vaut pour la collection, le deck, la courbe et les suggestions. |
+| `rolesFiltre()` | Rôles cochés, lus depuis la liste conservée dans `S.filtres`. |
+| `basculerRole(role)` | Coche ou décoche un rôle ; sans argument, les efface tous. |
+| `roleOK(card)` | La carte tient au moins un des rôles cochés. |
+| `rechercheOK(card)` | La recherche libre : nom, type ou texte. |
+| `typeOK(card)` | Le type principal retenu dans la fenêtre. |
 | `filtreOK(card)` | Applique les filtres de la fenêtre (archétype, nom, illustrateur, force, endurance, coût, prix) à une carte. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
-| `sourceArchetypes()` | Source retenue : texte de la carte, EDHREC, ou les deux. |
-| `archetypesBase(card)` | Archétypes d'une carte d'après les thèmes EDHREC chargés. |
-| `archetypesCarte(card)` | Archétypes retenus pour le filtrage, selon la source. |
-| `archetypesDetail(card)` | Même liste, avec l'origine de chaque étiquette, pour la fiche. |
+| `archetypesDisponibles()` | Les thèmes publiés par EDHREC, avec libellé et résumé. |
+| `resumeArchetype(slug)` | Résumé d'un archétype : le nôtre, celui d'EDHREC, ou une phrase formée sur son nom. |
+| `libelleArchetype(slug)` | Libellé d'un thème : le nôtre s'il existe, sinon celui d'EDHREC. |
+| `archetypesAChargerEdhrec()` | Thèmes cochés dont les cartes restent à chercher. |
+| `archetypesCarte(card)` | Archétypes d'une carte, d'après les thèmes EDHREC chargés. |
 | `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
 | `texteFiltresActifs(sep)` | Ces mêmes libellés mis bout à bout, pour les infobulles et les résumés. |
 | `majFiltre(cle,valeur)` | Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. |
@@ -153,7 +161,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 
 *3 fonction(s), 2 Ko*
 
-Données : `CONDITIONS`, `COND_ORDER`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SELLER_TYPES`, `SELLER_MULT`, `CM_COUNTRIES`
+Données : `CONDITIONS`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SELLER_TYPES`, `SELLER_MULT`, `CM_COUNTRIES`
 
 | Fonction | Rôle |
 |---|---|
@@ -165,7 +173,7 @@ Données : `CONDITIONS`, `COND_ORDER`, `COND_MULT`, `CM_LANGS`, `LANG_MULT`, `SE
 
 Symboles de mana, visuels, complétion des cartes importées, recherche en ligne, et catalogue complet : lecture de l'archive JSONL compressée, mise à jour, prix.
 
-*31 fonction(s), 29 Ko*
+*33 fonction(s), 29 Ko*
 
 Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 
@@ -181,27 +189,27 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `tailleEstimee(cartes)` | Estime le poids de l'archive par échantillonnage. |
 | `lireCatalogueFichier(source,nom)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue. |
 | `chargerCatalogueLocal()` *(async)* | Cherche une archive posée à côté de la page. |
-| `archiveParRecherche(maj)` *(async)* | Reconstitue un catalogue partiel par l'API de recherche. |
 | `verifierMajCatalogue()` *(async)* | Interroge l'index Scryfall : date, adresse et taille de la version publiée. |
 | `catalogueObsolete()` | Compare l'archive locale à la version publiée. |
 | `majPrix(force)` *(async)* | Rafraîchit les prix des seules cartes possédées ou jouées. |
 | `telechargerCatalogue()` *(async)* | Télécharge l'archive et l'extrait sans fichier intermédiaire. |
 | `chargerCatalogueComplet(force)` *(async)* | Charge le catalogue : cache, puis fichier local, puis réseau. |
-| `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus. |
+| `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus, texte oracle compris. |
 | `carteDuCatalogue(rec)` | Matérialise une carte du catalogue et l'analyse. |
 | `invaliderCandidats()` | Invalide la sélection mémorisée. |
 | `signatureCandidats()` | Signature des critères, pour ne recalculer qu'en cas de changement. |
-| `appliquePrixCatalogue()` | Reporte les prix de l'archive sur vos cartes. |
+| `appliqueCatalogueAuxCartes()` | Reporte les textes oracle complets et les prix de l'archive sur vos cartes. |
 | `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format et le prix. |
 | `requeteCatalogue()` | Construit la requête Scryfall correspondant au format et aux couleurs. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
 | `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. |
-| `queueImages(cards)` | Met en file les cartes dont le visuel manque. |
-| `runImageQueue()` *(async)* | Vide la file des visuels par lots, sans saturer le réseau. |
+| `besoinScryfall(c)` | Dit si une carte attend encore son visuel ou son texte oracle complet. |
+| `queueScryfall(cards)` | Met en file les cartes dont le visuel ou le texte complet manque. |
+| `runScryQueue()` *(async)* | Vide cette file par lots, sans saturer le réseau. |
+| `chercheTexte(card)` *(async)* | Va chercher le texte oracle complet d'une seule carte, pour la fiche ouverte. |
 | `completeUnknown(names)` *(async)* | Complète les cartes importées, en trois passes de plus en plus tolérantes. |
 | `chercheScryfall(q,cible)` *(async)* | Recherche en ligne pour la boîte d'ajout. |
-| `importerScryfall(sc)` | Crée ou complète une carte à partir d'un résultat de recherche. |
 
 ### `js/stockage.js` — Sauvegarde locale
 
@@ -239,7 +247,14 @@ combos répertoriés et combos à une carte près, plus le catalogue Scryfall co
 
 | Fonction | Rôle |
 |---|---|
-| `chargerArchetypesEdhrec(force)` *(async)* | Charge les thèmes EDHREC et indexe les cartes par archétype. |
+| `chargerArchetypesEdhrec(force)` *(async)* | Charge la liste des thèmes EDHREC, puis les thèmes déjà cochés. |
+| `chargerListeArchetypesEdhrec(force)` *(async)* | L'index des thèmes publiés, en une requête. |
+| `chargerThemeEdhrec(slug)` *(async)* | Les cartes d'un thème, à sa première utilisation. |
+| `themesPageEdhrec(j)` | Thèmes, libellés et descriptions d'une page d'index, quelle que soit sa forme. |
+| `descriptionPageEdhrec(j)` | Description que la page d'un thème porte parfois en tête. |
+| `formeThemeEdhrec()` *(async)* | Cherche par sondage l'adresse des pages de thème ; note chaque essai. |
+| `formesDeduites()` *(async)* | Déduit cette adresse des liens cités dans une page de commandant. |
+| `temoinEdhrec()` *(async)* | Page de commandant témoin, pour distinguer adresse fausse et hôte injoignable. |
 | `reprendreArchetypesEdhrec()` *(async)* | Reprend cet index depuis IndexedDB au démarrage. |
 | `nomsPageEdhrec(j)` | Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. |
 | `urlThemeEdhrec(slug)` | Adresse de la page JSON d'un thème. |
@@ -350,7 +365,7 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global,
 dont le bouton « Filtres » de l'en-tête et sa fenêtre modale.
 
-*35 fonction(s), 31 Ko*
+*36 fonction(s), 31 Ko*
 
 Données : `COLS`, `MODES_COULEUR`, `FILTRE_ICONE`
 
@@ -366,12 +381,13 @@ Données : `RETOURNEES`
 | `stripeColor(card)` | Bande de couleur d'identité d'une carte. |
 | `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. |
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
+| `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
 | `openFormatModal()` | Ouvre la fenêtre du format, depuis la pastille « Format » de l'en-tête. |
 | `corpsFormat()` | Contenu de cette fenêtre : format de jeu et panneau « Personnalisé ». |
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
 | `majResumeFormat()` | Rafraîchit ce résumé pendant la saisie du format personnalisé. |
 | `majFenetreFormat()` | Réécrit la fenêtre au changement de format. |
-| `ficheHTML(card)` | Fiche détaillée : rôle, apports, interactions, capacités, combos. |
+| `ficheHTML(card)` | Fiche détaillée : rôles ligne à ligne et cartes du deck branchées, combos, capacités extraites, puis en bas de fiche les branchements possibles avec la collection filtrée. |
 | `ficheTexteHTML(card)` | Carte rendue en texte — coût, type, force/endurance, texte — à la place du visuel absent. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
@@ -389,14 +405,15 @@ Données : `RETOURNEES`
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
 | `faceVisible(c,grande)` | Face actuellement affichée. |
 | `refCarte(nom)` | Nom de carte survolable et cliquable. |
+| `apercuTexte(c)` | Texte de l'aperçu volant : sauts de ligne rétablis, longueur bornée. |
 | `placerApercu(x,y)` | Place l'aperçu près du curseur sans sortir de l'écran. |
 | `contenuApercu(c)` | Contenu de l'aperçu : visuel, ou texte si absent. |
 | `montrerApercu(nom,x,y)` | Affiche l'aperçu au survol. |
+| `placerApercuDansCouche()` | Déplace l'aperçu dans la fenêtre modale ouverte, sans quoi elle le masque. |
 | `majApercu()` | Met à jour l'aperçu quand le visuel arrive. |
 | `cacherApercu()` | Masque l'aperçu. |
 | `toast(msg)` | Message temporaire en bas d'écran. |
 | `openDialog(title,bodyHTML,footHTML,wide)` | Ouvre une fenêtre modale, sans la rouvrir si elle l'est déjà. |
-| `withFocus(fn)` | Préserve le focus et le curseur pendant un rendu. |
 
 ### `js/app.js` — Démarrage et évènements
 
@@ -409,13 +426,25 @@ Données : `RETOURNEES`
 
 ## Repères
 
-- 231 fonctions au total, réparties en 14 modules.
+- 241 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
   et pour l'index des archétypes EDHREC.
-- Les archétypes se lisent de deux façons complémentaires : le texte de la carte, analysé localement et toujours disponible,
-  et les thèmes EDHREC, chargés à la demande puis mis en cache. La fenêtre des filtres laisse choisir l'une, l'autre ou les deux.
+- Les rôles ne se lisent pas dans le texte brut : `categories()` croise le type de la carte avec ce que `analyze()` a
+  relevé — ce que chaque capacité produit, sur qui porte l'effet (`textEff`), ce que les coûts consomment
+  (`sacOutlet`) et ce qui la déclenche. Un terrain qui n'ajoute qu'un mana n'est pas du ramp, une carte qui se blesse
+  elle-même ne fait pas de l'interaction, une contrainte qu'on s'impose n'est pas du stax.
+- Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
+  n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
+- Un filtre posé une fois vaut partout : `carteFiltree()` filtre la collection, le deck et sa courbe de mana,
+  les statistiques, le graphe et les suggestions d'ajout. La taille du deck, sa conformité au format et
+  l'équilibre des rôles restent calculés sur le deck entier.
+- Les archétypes viennent entièrement d'EDHREC : « Charger la liste EDHREC » récupère les thèmes qu'il publie, en une
+  requête, et la liste déroulante les affiche tous. Les cartes d'un thème ne sont cherchées qu'à sa première
+  utilisation, puis gardées en cache. `ARCH_LABELS` et `ARCH_RESUMES` ne servent qu'à l'affichage : un libellé français
+  et une phrase de fonctionnement pour les thèmes les plus courants. Chaque thème affiche une phrase, sans exception :
+  la nôtre, sinon celle qu'EDHREC publie, sinon une phrase formée sur son nom.
 
 ## Tests
 

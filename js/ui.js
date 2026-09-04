@@ -86,12 +86,31 @@ function initApercu() {
   return apercuEl;
 }
 
+/* Aperçu volant : le texte y est borné pour ne pas couvrir l'écran, la fiche
+   complète (clic sur la carte) reste la vue de référence. */
+function apercuTexte(c) {
+  const t = String(c.text || '').replace(/ \/\/ /g, '\n');
+  return t.length > 320 ? t.slice(0, 320).replace(/\s+\S*$/, '') + '…' : t;
+}
+
+/* Une fenêtre modale est peinte dans la « top layer », au-dessus de tout
+   z-index : l'aperçu doit y entrer pour rester visible. */
+function placerApercuDansCouche() {
+  const el = initApercu();
+  const dlg = document.getElementById('dlg');
+  if (!el) return;
+  const cible = (dlg && dlg.open) ? dlg : document.body;
+  if (el.parentElement !== cible) cible.appendChild(el);
+}
+
 function montrerApercu(nom, x, y) {
   const el = initApercu();
   if (!el || !nom) return;
   const c = find(nom);
   if (!c) return;
+  placerApercuDansCouche();
   apercuCardName = c.name;
+  if (typeof queueScryfall === 'function') queueScryfall([c]);
   const imgUrl = faceVisible(c, true) || faceVisible(c, false);
   if (S.images && imgUrl) {
     el.innerHTML = `<img src="${esc(imgUrl)}" alt="${esc(c.name)}" style="width:240px;display:block;border-radius:8px">`;
@@ -100,7 +119,7 @@ function montrerApercu(nom, x, y) {
       <div style="font-weight:bold;margin-bottom:4px">${esc(c.name)}</div>
       <div style="margin-bottom:4px">${manaHTML(c, true)}</div>
       <div class="small muted" style="margin-bottom:6px">${esc(c.type)}</div>
-      <div class="small" style="white-space:pre-line">${esc((c.text||'').slice(0, 160))}</div>
+      <div class="small" style="white-space:pre-line">${esc(apercuTexte(c))}</div>
     </div>`;
   }
   el.style.display = 'block';
@@ -309,12 +328,6 @@ function nomCombinaisonCouleurs(sel) {
   return hasC ? `${base} (+ Incolore)` : base;
 }
 
-function activeFilterManaHTML() {
-  const list = ['W', 'U', 'B', 'R', 'G', 'C'].filter(c => S.colors.has(c));
-  if (!list.length) return '<span class="muted" style="font-size:11px">∅</span>';
-  return list.map(c => symIcon(c, 'sm')).join('');
-}
-
 /* Couleurs proposées par l'en-tête et par la fenêtre des filtres. */
 const COLS = [
   ['W', 'Blanc ({W})'],
@@ -445,21 +458,32 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab">Archétype</label>
-      <div class="archetypes">
-        ${ARCHETYPES.map(a => `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${a.id}"
-          aria-pressed="${archetypesFiltre().includes(a.id)}" title="${esc(a.aide)}">${esc(a.label)}</button>`).join('')}
-      </div>
+      ${archetypesFiltre().length ? `<div class="archetypes">${archetypesFiltre().map(slug =>
+        `<button type="button" class="arch-btn" data-act="toggleArch" data-arch="${esc(slug)}" aria-pressed="true"
+          title="${esc(resumeArchetype(slug))}">${esc(libelleArchetype(slug))} ✕</button>`).join('')}</div>` : ''}
+      <button type="button" class="arch-menu-b" data-act="archMenu" aria-expanded="${archOuvert}">
+        <span>${archetypesFiltre().length ? `${archetypesFiltre().length} archétype(s) coché(s)` : 'Choisir un archétype…'}</span>
+        <span class="chev-b">${archOuvert ? '▴' : '▾'}</span>
+      </button>
+      ${archOuvert ? `<div class="arch-menu" id="archPanel">
+        <input type="text" id="f_archQ" data-archq placeholder="rechercher…" value="${esc(archRecherche)}" autocomplete="off">
+        <div class="arch-liste">${listeArchetypesHTML()}</div>
+      </div>` : ''}
       <div class="row" style="gap:6px;align-items:center;margin-top:2px">
-        <span class="lab">Source</span>
-        <div class="seg">
-          ${ARCH_SOURCES.map(([k, l]) => `<button type="button" data-asrc="${k}" aria-pressed="${sourceArchetypes() === k}">${l}</button>`).join('')}
-        </div>
         <button type="button" class="btn sm" data-act="chargerArch" ${ARCH_BASE.etat === 'chargement' ? 'disabled' : ''}>
-          ${ARCH_BASE.index.size ? 'Recharger EDHREC' : 'Charger depuis EDHREC'}
+          ${ARCH_BASE.liste.length ? 'Recharger la liste EDHREC' : 'Charger la liste EDHREC'}
         </button>
       </div>
       <div class="small muted">Une carte est retenue si elle relève d'au moins un archétype coché.</div>
       <div class="small muted" id="archEtat">${etatArchetypes()}</div>
+    </div>
+    <div class="field">
+      <label class="lab">Rôle dans le deck</label>
+      <div class="archetypes">
+        ${Object.keys(targets()).map(r => `<button type="button" class="arch-btn" data-act="toggleRole" data-role="${esc(r)}"
+          aria-pressed="${rolesFiltre().includes(r)}" title="Cartes tenant ce rôle, d'après l'analyse de leur texte">${esc(CATLABEL[r] || r)}</button>`).join('')}
+      </div>
+      <div class="small muted">Mêmes rôles que les jauges d'équilibre de la section Deck : les cocher ici ou là revient au même.</div>
     </div>
     <div class="field">
       <label class="lab" for="f_nom">Nom de la carte</label>
@@ -480,18 +504,62 @@ function corpsFiltres() {
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
 }
 
+let archRecherche = '';
+let archOuvert = false;
+
+/* Lignes de la liste déroulante : le nom, puis ce que fait l'archétype.
+   Tous les thèmes publiés par EDHREC y figurent ; la recherche ne fait
+   que resserrer l'affichage. */
+function listeArchetypesHTML() {
+  if (!ARCH_BASE.liste.length) {
+    return `<div class="small muted" style="padding:8px 10px">${ARCH_BASE.etat === 'chargement'
+      ? 'Chargement de la liste EDHREC…'
+      : 'La liste vient d\'EDHREC : utilisez « Charger la liste EDHREC » ci-dessous.'}</div>`;
+  }
+  const choisis = new Set(archetypesFiltre());
+  const q = loose(archRecherche);
+  let liste = archetypesDisponibles();
+  if (q) liste = liste.filter(a => loose(a.label).includes(q) || loose(a.slug).includes(q));
+  liste = liste.sort((a, b) => (b.n || 0) - (a.n || 0) || a.label.localeCompare(b.label));
+  if (!liste.length) return '<div class="small muted" style="padding:6px 8px">Aucun archétype à ce nom.</div>';
+
+  return liste.map(a => {
+    const coche = choisis.has(a.slug);
+    const charge = ARCH_BASE.themes[a.slug];
+    return `<button type="button" class="arch-row" data-act="toggleArch" data-arch="${esc(a.slug)}" aria-pressed="${coche}">
+      <span class="arch-row-h"><span class="arch-row-t">${esc(a.label)}</span>
+        <span class="arch-n">${a.n ? a.n.toLocaleString('fr-FR') + ' decks' : ''}${charge ? ` · ${charge.n} cartes` : ''}</span>
+        <span class="arch-row-x">${coche ? '✓' : ''}</span></span>
+      <span class="arch-row-d">${esc(a.aide)}</span>
+    </button>`;
+  }).join('');
+}
+
+/* Rafraîchit la liste proposée sans réécrire la fenêtre : la frappe
+   dans le champ de recherche garde son curseur. */
+function majListeArchetypes() {
+  const zone = document.querySelector('#archPanel .arch-liste');
+  if (zone) zone.innerHTML = listeArchetypesHTML();
+}
+
 /* État de la base d'archétypes extérieure, sous les boutons. */
 function etatArchetypes() {
   if (ARCH_BASE.etat === 'chargement') return 'Chargement des thèmes EDHREC…';
-  if (ARCH_BASE.etat === 'erreur') return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.`;
-  if (ARCH_BASE.index.size) {
-    const nbThemes = Object.values(ARCH_BASE.themes || {}).reduce((n, l) => n + l.length, 0);
-    const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';
-    return `Deux lectures se complètent : le texte de la carte, lu localement, et ${ARCH_BASE.index.size.toLocaleString('fr-FR')} cartes
-      référencées par ${nbThemes} thème(s) EDHREC${date ? `, relevés le ${date}` : ''}${ARCH_BASE.erreur ? ` (${esc(ARCH_BASE.erreur)})` : ''}.`;
+  if (ARCH_BASE.etat === 'erreur') {
+    const essais = (ARCH_BASE.essais || []).length
+      ? `<div class="mono" style="font-size:10.5px;margin-top:4px;white-space:pre-line">${esc(ARCH_BASE.essais.join('\n'))}</div>`
+      : '';
+    return `EDHREC : ${esc(ARCH_BASE.erreur)}. Le texte de la carte reste lu localement.${essais}`;
   }
-  return `Seul le texte de la carte est lu pour l'instant. « Charger depuis EDHREC » ajoute les rôles établis par la communauté :
-    une trentaine de requêtes en une fois, puis le résultat reste en cache sur cet appareil.`;
+  if (ARCH_BASE.liste.length) {
+    const date = ARCH_BASE.maj ? new Date(ARCH_BASE.maj).toLocaleDateString('fr-FR') : '';
+    const charges = Object.keys(ARCH_BASE.themes).length;
+    const enCours = ARCH_BASE.enCours.size;
+    return `Liste établie par EDHREC : ${ARCH_BASE.liste.length.toLocaleString('fr-FR')} thème(s)${date ? `, relevés le ${date}` : ''}.
+      Les cartes d'un thème sont cherchées à sa première utilisation${charges ? ` — ${charges} déjà chargé(s), ${ARCH_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${enCours ? ` · ${enCours} en cours…` : ''}.`;
+  }
+  return `Les archétypes viennent d'EDHREC. « Charger la liste EDHREC » récupère les thèmes qu'il publie — une requête
+    pour la liste, puis une par thème à sa première utilisation, gardées en cache sur cet appareil.`;
 }
 
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */
@@ -527,8 +595,12 @@ function majFenetreFiltres() {
   const corps = document.getElementById('dlgBody');
   if (!corps || !corps.querySelector('[data-filtre]')) return;
   const y = corps.scrollTop;
+  const panneau = document.getElementById('archPanel');
+  const yArch = panneau ? panneau.scrollTop : 0;
   corps.innerHTML = corpsFiltres();
   corps.scrollTop = y;
+  const nouveau = document.getElementById('archPanel');
+  if (nouveau) nouveau.scrollTop = yArch;
 }
 
 function openFiltresModal() {
@@ -751,6 +823,7 @@ function openWipeModal() {
     S.deck.clear();
     S.commander = null;
     S.selected = null;
+    closeDialog();
     renderAll();
     toast('Collection et deck effacés.');
   };

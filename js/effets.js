@@ -145,8 +145,9 @@ const EFFECT_RULES = [
   ['RAMP',       /put a land card from your hand onto the battlefield/],
   ['TUTEUR',     /search your library for/],
   ['PIOCHE',     /draws? (?:a card|two cards|three cards|\w+ additional cards|two additional cards|cards)/],
-  ['IMPULSE',    /\bscry\b|\bsurveil\b|look at the top|exile the top card[^.]{0,60}(?:put that card into your hand|you may play)/],
-  ['IMPULSE',    /play (?:lands and )?(?:cast )?spells from the top of your library|may play them this turn/],
+  ['IMPULSE',    /\bscry\b|\bsurveil\b|look at the top|exile the top (?:card|\w+ cards)? ?of your library/],
+  ['IMPULSE',    /play (?:lands and )?(?:cast )?spells from the top of your library|may (?:play|cast) (?:them|those cards|the exiled cards?|it)\b[^.]{0,30}(?:this turn|until)/],
+  ['IMPULSE',    /exile[^.]{0,60}from among (?:the )?(?:revealed|them)/],
   ['MILL',       /\bmills?\b|puts? the top[^.]{0,40}into (?:their|his or her) graveyard/],
   ['DEFAUSSE',   /discards?/],
   ['SACRIFICE',  /sacrifices?/],
@@ -162,7 +163,7 @@ const EFFECT_RULES = [
   ['CONTRESORT', /counter target/],
   ['DESTRUCTION',/destroys?\b/],
   ['EXIL',       /exiles?\b/],
-  ['BOUNCE',     /return target[^.]{0,60}to (?:its owner's|their owner's|your) hand|shuffles it into their library/],
+  ['BOUNCE',     /return [^.]{0,70}to (?:its|their) owners?['\u2019]?s? hands?|return [^.]{0,70}to (?:your|their) hands?|shuffles it into their library/],
   ['DEGATS',     /deals? \d+ damage|deals damage equal|deals \w+ damage|\bfights?\b/],
   ['PERTE_VIE',  /(?:each opponent|target player|that player|opponents) loses? \d+ life|loses? \d+ life/],
   ['GAIN_VIE',   /gains? (?:\d+|life equal|4 life) life|you gain \d+ life|\blifelink\b|gains life/],
@@ -425,6 +426,27 @@ function scopeOf(s) {
 function refineEffects(list, clause) {
   let out = [...list];
   if (out.includes('BLINK')) out = out.filter(c => c !== 'EXIL' && c !== 'BOUNCE' && c !== 'RECURSION');
+  /* Exiler ses propres cartes pour les jouer ensuite est de l'impulsion,
+     pas de l'interaction : la bibliothèque et les cartes révélées sont à
+     nous, contrairement à un cimetière ou à une permanente adverse. */
+  /* L'exil est impulsif — donc du card advantage — quand la carte exilée
+     nous revient : prise parmi ce que nous avons révélé, prise du dessus
+     de notre bibliothèque, ou suivie du droit de la lancer. Exiler la
+     bibliothèque d'un adversaire sans rien en faire reste de l'exil. */
+  const peutLancer = /you may (?:cast|play)|may (?:cast|play) (?:it|them|those)/.test(clause);
+  const exilImpulsif =
+       /exile[^.]{0,70}from among/.test(clause)
+    || /exile the top[^.]{0,40}of your librar/.test(clause)
+    || (/exile[^.]{0,70}\blibrar/.test(clause) && peutLancer)
+    || /you may (?:cast|play)[^.]{0,60}exiled/.test(clause)
+    // « puis vous pouvez la lancer sans payer son coût » : sauf si l'exil
+    // visait une permanente en jeu, auquel cas c'est du vol.
+    || (/you may (?:cast|play)[^.]{0,60}without paying/.test(clause)
+        && !/target (?:creature|permanent|artifact|enchantment|land|nonland)/.test(clause));
+  if (out.includes('EXIL') && exilImpulsif) {
+    out = out.filter(c => c !== 'EXIL');
+    if (!out.includes('IMPULSE')) out.push('IMPULSE');
+  }
   if (/(?:doesn't|don't|can't) untap/.test(clause)) out = out.filter(c => c !== 'UNTAP');
   if (out.includes('RECURSION') && /graveyard/.test(clause)) out = out.filter(c => c !== 'BOUNCE');
   if (out.includes('CYCLE')) out = out.filter(c => c !== 'DEFAUSSE');

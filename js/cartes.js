@@ -30,7 +30,7 @@ Counterspell|{U}{U}|Instant|1|Counter target spell.
 Brainstorm|{U}|Instant|0.5|Draw three cards, then put two cards from your hand on top of your library in any order.
 Preordain|{U}|Sorcery|1|Scry 2, then draw a card.
 Mystical Tutor|{U}|Instant|15|Search your library for an instant or sorcery card, reveal it, shuffle, then put that card on top of your library.
-Cyclonic Rift|{1}{U}|Instant|25|Return target nonland permanent you don't control to its owner's hand.
+Cyclonic Rift|{1}{U}|Instant|25|Return target nonland permanent you don't control to its owner's hand. // Overload {6}{U} (You may cast this spell for its overload cost. If you do, change "target" in its text to "each.")
 Pongify|{U}|Instant|3|Destroy target creature. Its controller creates a 3/3 green Ape creature token.
 Snapcaster Mage|{1}{U}|Creature — Human Wizard|12|Flash // When Snapcaster Mage enters, target instant or sorcery card in your graveyard gains flashback until end of turn.
 Archaeomancer|{2}{U}{U}|Creature — Human Wizard|0.5|When Archaeomancer enters, return target instant or sorcery card from your graveyard to your hand.
@@ -195,7 +195,7 @@ function analyze(card) {
                  hook:recurring && (granted || !selfRef), q, pq:qualifieProduction(ePart, card)};
           if (src.length || eff.length)
             abilities.push({kind:ctx.kind, from:ctx.from, to:eff, scopeTrig:ctx.scope, scopeEff:scopeOf(ePart),
-                            text:body, hook:ctx.hook, q, pq:ctx.pq});
+                            text:body, textEff:ePart || body, hook:ctx.hook, q, pq:ctx.pq});
           return;
         }
         const act = body.match(/^([^:]{1,70}):\s*(.+)$/);
@@ -210,20 +210,20 @@ function analyze(card) {
           const q = {portee:'vous', sujet:sacOutlet ? 'creature' : (/discard/.test(cost) ? 'card' : ''), filtres:[], mode:'cout'};
           ctx = {from:src, scope:'self', kind:'activee', hook:false, q, pq:qualifieProduction(eff0, card), couts};
           if (eff.length) abilities.push({kind:'activee', from:src, to:eff, scopeTrig:'self', scopeEff:scopeOf(eff0),
-                                         text:body, sacOutlet, selfSac, q, pq:ctx.pq, couts});
+                                         text:body, textEff:eff0, sacOutlet, selfSac, q, pq:ctx.pq, couts});
           return;
         }
         const eff = refineEffects(matchAll(EFFECT_RULES, body), body);
         if (!eff.length) return;
         if (ctx && !/^[a-z ,]*(each|all|creatures you control|equipped|enchanted)/.test(body)) {
           abilities.push({kind:ctx.kind, from:ctx.from, to:eff, scopeTrig:ctx.scope, scopeEff:scopeOf(body),
-                          text:body, hook:ctx.hook, q:ctx.q, pq:qualifieProduction(body, card)});
+                          text:body, textEff:body, hook:ctx.hook, q:ctx.q, pq:qualifieProduction(body, card)});
           return;
         }
         ctx = {from:[isSpell ? 'LANCEMENT' : 'STATIQUE'], scope:'self', kind:isSpell ? 'sort' : 'statique', hook:false,
                q:{portee:'vous', sujet:'', filtres:[], mode:isSpell ? 'sort' : 'statique'}};
         abilities.push({kind:ctx.kind, from:ctx.from, to:eff, scopeTrig:'self', scopeEff:scopeOf(body),
-                        text:body, hook:false, q:ctx.q, pq:qualifieProduction(body, card)});
+                        text:body, textEff:body, hook:false, q:ctx.q, pq:qualifieProduction(body, card)});
       });
     });
   });
@@ -265,26 +265,6 @@ function analyze(card) {
   return {abilities, edges, triggers, produces, isSpell, isPermanent};
 }
 
-function categories(card) {
-  const c = new Set(), a = card.an, t = card.type.toLowerCase(), tx = (card.text||'').toLowerCase();
-  const has = id => a.abilities.some(x => x.to.includes(id));
-  if (card.isToken) return c;
-  if (/creature/.test(t)) c.add('creatures');
-  if (/land/.test(t)) c.add('terrains');
-  if (has('MANA') || has('RAMP') || has('TRESOR') || has('REDUCTION')) if (!/^basic land/.test(t)) c.add('ramp');
-  if (has('PIOCHE') || has('IMPULSE') || has('RECURSION')) c.add('pioche');
-  if (has('TUTEUR')) c.add('tuteurs');
-  if (has('DESTRUCTION') || has('EXIL') || has('BOUNCE') || has('DEGATS') || has('CONTRESORT')) c.add('removal');
-  if (/all creatures|each creature|each opponent/.test(tx) && (has('DESTRUCTION') || has('DEGATS'))) c.add('wipe');
-  if (has('INDESTRUCTIBLE') || has('LINCEUL') || has('PROTECTION')) c.add('protection');
-  if (has('JETON')) c.add('jetons');
-  if (has('MARQUEUR')) c.add('marqueurs');
-  if (has('SACRIFICE') || a.abilities.some(x => x.from.includes('SACRIFICE') || x.from.includes('MORT'))) c.add('sacrifice');
-  if (has('BLINK') || a.abilities.some(x => x.from.includes('ETB'))) c.add('blink');
-  if (has('STAX') || has('TAXE')) c.add('stax');
-  return c;
-}
-
 /* =====================================================================
    Archétypes de deck. Deux sources se complètent :
    — le texte de la carte, lu ici à partir des nœuds relevés par
@@ -294,108 +274,188 @@ function categories(card) {
    Une carte peut relever de plusieurs archétypes, ou d'aucun.
    ===================================================================== */
 
-const ARCHETYPES = [
-  {id:'aristocrates', label:'Aristocrates / Sacrifice', edhrec:['aristocrats','sacrifice'],
-   aide:'Sacrifices, morts de créatures et drain qui en découle'},
-  {id:'marqueurs', label:'Marqueurs +1/+1', edhrec:['+1-+1-counters','counters'],
-   aide:'Pose de marqueurs, prolifération et cartes qui s\'en soucient'},
-  {id:'jetons', label:'Jetons', edhrec:['tokens','go-wide'],
-   aide:'Création de jetons et cartes qui en tirent parti'},
-  {id:'spellslinger', label:'Spellslinger', edhrec:['spellslinger','spells-matter'],
-   aide:'Cartes qui se soucient des éphémères et des rituels'},
-  {id:'vol', label:'Vol', edhrec:['flying','fliers'],
-   aide:'Créatures volantes et effets qui donnent le vol'},
-  {id:'combat', label:'Combat / attaque', edhrec:['combat','extra-combats'],
-   aide:'Déclenchements à l\'attaque, phases de combat et percée'},
-  {id:'blink', label:'Blink / ETB', edhrec:['blink','flicker'],
-   aide:'Scintillement et déclenchements sur l\'arrivée d\'autres permanents'},
-  {id:'cimetiere', label:'Cimetière / Réanimation', edhrec:['reanimator','graveyard'],
-   aide:'Récursion, meule, défausse et cartes lancées depuis le cimetière'},
-  {id:'landfall', label:'Landfall / terrains', edhrec:['landfall','lands-matter'],
-   aide:'Terrains qui arrivent, recherche de terrains et déclenchements associés'},
-  {id:'voltron', label:'Voltron / Auras & équipements', edhrec:['voltron','equipment','auras'],
-   aide:'Attachements : auras, équipements et créatures équipées'},
-  {id:'gainvie', label:'Gain de vie', edhrec:['lifegain','life-matters'],
-   aide:'Lien de vie, gains de points de vie et récompenses associées'},
-  {id:'artefacts', label:'Artefacts', edhrec:['artifacts','artifact-matters'],
-   aide:'Artefacts qui comptent : trésors, affinité, bricolage'},
-  {id:'enchantements', label:'Enchantements', edhrec:['enchantments','enchantress'],
-   aide:'Enchantements qui comptent : constellation, aura-matters'},
-  {id:'controle', label:'Contrôle / Stax', edhrec:['control','stax'],
-   aide:'Contresorts, taxes, effets de blocage et fléaux'},
-  {id:'meule', label:'Meule (mill)', edhrec:['mill','self-mill'],
-   aide:'Cartes mises de la bibliothèque au cimetière'}
-];
+/* =====================================================================
+   Archétypes de deck. La liste et l'appartenance des cartes viennent
+   d'EDHREC (js/externes.js) ; les tables ci-dessous ne servent qu'à
+   l'affichage : un libellé français pour les thèmes les plus courants,
+   et une phrase disant ce que l'archétype fait.
+   ===================================================================== */
 
-const ARCHLABEL = {};
-ARCHETYPES.forEach(a => ARCHLABEL[a.id] = a.label);
-
-/* Motifs de texte, compilés une seule fois. */
-const ARCH_MOTIFS = {
-  aristocrates: /\bdies\b|\bsacrifice[sd]? (?:a|an|another|one|two|three|x|this|that)\b|whenever [^.]{0,50}\bdies\b|each opponent loses|\bblitz\b|\bexploit\b|\bafterlife\b/,
-  marqueurs:    /\+1\/\+1 counter|\bproliferate\b|\bevolve\b|\badapt \d|\boutlast\b|\bbolster \d|\bmentor\b|\btraining\b|\bbackup \d|\bmodified\b|\bgraft \d|\bundying\b/,
-  jetons:       /creates? [^.]{0,50}token|\bpopulate\b|token creature|\bamass\b|\bfabricate\b|\bconvoke\b/,
-  spellslinger: /instants? (?:and|or) sorcer|instant or sorcery|\bprowess\b|\bmagecraft\b|\bstorm\b|\bflashback\b|\bjump-start\b|copy target (?:instant|sorcery|spell)|whenever you cast (?:an instant|a sorcery|a noncreature|your (?:first|second))/,
-  vol:          /\bflying\b/,
-  combat:       /whenever [^.]{0,50}attacks|additional combat phase|extra combat|\bdouble strike\b|\bmelee\b|\bbattle cry\b|\bmyriad\b|\bexalted\b|attacks each combat if able|deals combat damage to a player/,
-  blink:        /exile [^.]{0,60}return (?:it|them|those cards|that card)[^.]{0,50}battlefield|return (?:it|them|those cards) to the battlefield|\bflicker/,
-  cimetiere:    /from (?:your|a|their) graveyard|\bescape\b|\bdisturb\b|\bunearth\b|\bdelve\b|\bthreshold\b|\bdelirium\b|\bembalm\b|\beternalize\b|into (?:your|their) graveyard/,
-  landfall:     /\blandfall\b|land enters|play an additional land|search your library for a[^.]{0,40}land/,
-  voltron:      /\bequip\b|equipped creature|enchanted creature|\benchant creature\b|\bequipment\b|\bfortify\b|attach(?:ed)? /,
-  gainvie:      /\blifelink\b|gains? \d+ life|gains? life|whenever you gain life|\bextort\b/,
-  artefacts:    /artifacts? you control|artifact spell|whenever an artifact|another artifact|\bmetalcraft\b|\bimprovise\b|affinity for artifacts|\btreasure\b/,
-  enchantements:/enchantments? you control|enchantment spell|whenever an enchantment|another enchantment|\bconstellation\b/,
-  controle:     /counter target|can't be cast|players? can't|costs? \{?\d\}? more to cast|destroy all|exile all|\bward\b/,
-  meule:        /\bmills?\b|puts? the top [^.]{0,40}into (?:your|their|his or her) graveyard/
+const ARCH_LABELS = {
+  'aristocrats':'Aristocrates / Sacrifice', '+1-+1-counters':'Marqueurs +1/+1',
+  'tokens':'Jetons', 'spellslinger':'Spellslinger', 'flying':'Vol',
+  'combat':'Combat / attaque', 'blink':'Blink / ETB', 'reanimator':'Cimetière / Réanimation',
+  'landfall':'Landfall / terrains', 'voltron':'Voltron / Auras & équipements',
+  'lifegain':'Gain de vie', 'artifacts':'Artefacts', 'enchantments':'Enchantements',
+  'control':'Contrôle / Stax', 'mill':'Meule (mill)', 'sacrifice':'Sacrifice',
+  'graveyard':'Cimetière', 'equipment':'Équipements', 'auras':'Auras',
+  'lands-matter':'Terrains', 'counters':'Marqueurs', 'ramp':'Ramp / mana',
+  'card-draw':'Pioche', 'treasure':'Trésors', 'theft':'Vol de permanentes',
+  'extra-turns':'Tours supplémentaires', 'extra-combats':'Combats supplémentaires',
+  'discard':'Défausse', 'burn':'Dégâts directs', 'go-wide':'Nombre'
 };
 
-/* Archétypes d'une carte : identifiants de `ARCHETYPES`. */
-function archetypesDe(card) {
-  const out = [];
-  if (!card || card.isToken) return out;
-  const a = card.an || {abilities:[], triggers:[]};
-  const tx = (card.text || '').toLowerCase();
-  const ty = (card.type || '').toLowerCase();
-  const vers = id => a.abilities.some(x => x.to.includes(id));
-  const depuis = id => a.abilities.some(x => x.from.includes(id))
-    || (a.triggers || []).some(x => x.c === id);
-  const dit = cle => ARCH_MOTIFS[cle].test(tx);
+/* Résumés de fonctionnement affichés dans la liste déroulante. Un thème
+   absent de cette table s'affiche avec le nombre de decks qu'EDHREC lui
+   compte. Ils viennent de ma connaissance du jeu, pas d'une source. */
+const ARCH_RESUMES = {
+  'aristocrats':    "Sacrifie ses propres créatures et se nourrit de leur mort : drain, jetons, valeur.",
+  '+1-+1-counters': "Pose des marqueurs +1/+1, les démultiplie et récompense les créatures grandies.",
+  'tokens':         "Crée des jetons en nombre, puis les transforme en menace ou en carburant.",
+  'spellslinger':   "Tourne autour des éphémères et des rituels : prouesse, magecraft, copies.",
+  'flying':         "Créatures volantes et effets qui donnent le vol, pour passer au-dessus du sol.",
+  'combat':         "Déclenchements à l'attaque, phases de combat additionnelles et percée.",
+  'blink':          "Scintille ses permanentes pour rejouer leurs arrivées en jeu, encore et encore.",
+  'reanimator':     "Met de grosses cartes au cimetière, puis les ramène en jeu à moindre coût.",
+  'landfall':       "Récompense chaque terrain qui arrive : jetons, marqueurs, dégâts.",
+  'voltron':        "Réunit auras et équipements sur une seule créature, jusqu'à la rendre létale.",
+  'lifegain':       "Gagne des points de vie et convertit ce gain en cartes, en corps ou en dégâts.",
+  'artifacts':      "Artefacts qui comptent : trésors, affinité, bricolage, récursion.",
+  'enchantments':   "Enchantements qui comptent : constellation, auras et récursion associées.",
+  'control':        "Contresorts, interaction et taxes : garder la main jusqu'à conclure tranquillement.",
+  'mill':           "Vide les bibliothèques, la sienne pour s'en servir ou celles d'en face pour gagner.",
+  'sacrifice':      "Sacrifie ses propres permanentes pour en tirer valeur, mana ou dégâts.",
+  'graveyard':      "Traite le cimetière comme une seconde main : récursion, flashback, escape.",
+  'group-hug':      "Donne cartes et mana à tout le monde, puis tire parti de l'abondance ou gagne autrement.",
+  'wheels':         "Défausse et repioche des mains entières, en tirant profit de chaque cycle.",
+  'chaos':          "Effets aléatoires et symétriques qui brouillent la partie au profit de qui s'y est préparé.",
+  'infect':         "Créatures à infection : dix marqueurs poison suffisent, sans toucher aux points de vie.",
+  'superfriends':   "Accumule les planeswalkers, les protège et prolifère leurs marqueurs de loyauté.",
+  'vehicles':       "Véhicules pilotés par de petites créatures, hors de portée de l'interaction entre deux combats.",
+  'clones':         "Copie les meilleures permanentes, les siennes comme celles d'en face.",
+  'politics':       "Marchandage, dons temporaires et votes, pour diriger les attaques ailleurs.",
+  'storm':          "Enchaîne les sorts dans un même tour pour déclencher un final démultiplié.",
+  'pillowfort':     "Rend les attaques coûteuses ou impossibles, le temps de gagner autrement.",
+  'stax':           "Taxe et verrouille les ressources adverses, en gardant de quoi conclure.",
+  'ramp':           "Accélère la production de mana pour lancer plus tôt de plus grosses cartes.",
+  'big-mana':       "Beaucoup de mana, peu de cartes, mais chacune décisive.",
+  'card-draw':      "Enchaîne les pioches pour garder la main pleine et trouver ses pièces.",
+  'lands-matter':   "Fait du terrain une ressource active : récursion, animation, déclenchements.",
+  'counters':       "Marqueurs de toutes sortes, posés puis démultipliés par la prolifération.",
+  'equipment':      "Équipements réunis sur peu de créatures, souvent une seule menace.",
+  'auras':          "Auras empilées sur une créature clé, avec de quoi la protéger de l'interaction.",
+  'theft':          "Prend le contrôle des permanentes adverses et les retourne contre elles.",
+  'combo':          "Deux ou trois pièces qui, réunies, referment la partie sur place.",
+  'burn':           "Dégâts directs au visage, sans passer par le combat.",
+  'lifeloss':       "Fait perdre des points de vie à tous les adversaires, souvent en en gagnant.",
+  'discard':        "Vide les mains adverses et se nourrit de leur défausse.",
+  'treasure':       "Jetons Trésor : du mana temporaire, et une ressource à sacrifier.",
+  'energy':         "Compteurs d'énergie accumulés puis dépensés pour des effets répétés.",
+  'monarch':        "Prend la couronne et la garde, pour piocher à chaque fin de tour.",
+  'extra-turns':    "Enchaîne les tours supplémentaires jusqu'à conclure.",
+  'extra-combats':  "Rejoue la phase de combat, en démultipliant une attaque déjà gagnante.",
+  'defenders':      "Murs et grosses endurances, transformés en menace le moment venu.",
+  'power-matters':  "Récompense la force brute des créatures.",
+  'untap':          "Dégage ses permanentes pour réutiliser leurs capacités dans le tour.",
+  'flash':          "Joue à vitesse d'éphémère, en réaction, en gardant ses options ouvertes.",
+  'populate':       "Recopie ses meilleurs jetons, tour après tour.",
+  'proliferate':    "Ajoute un marqueur de chaque sorte, partout où il y en a déjà.",
+  'go-wide':        "Beaucoup de petites créatures, puis un effet global qui les rend menaçantes.",
+  'aggro':          "Menaces rapides et pression constante dès les premiers tours.",
+  'toolbox':        "Tuteurs et réponses à la carte, cherchées selon la situation."
+};
 
-  const test = {
-    aristocrates: () => vers('SACRIFICE') || depuis('SACRIFICE') || depuis('MORT') || depuis('MORT_SOI'),
-    marqueurs:    () => vers('MARQUEUR') || vers('PROLIFERATION') || depuis('MARQUEUR'),
-    jetons:       () => vers('JETON'),
-    spellslinger: () => depuis('LANCEMENT') && /instant|sorcery/.test(tx),
-    vol:          () => vers('VOL'),
-    combat:       () => depuis('ATTAQUE') || depuis('DEGATS_COMBAT_JOUEUR'),
-    blink:        () => vers('BLINK') || depuis('ETB'),
-    cimetiere:    () => vers('RECURSION') || vers('MILL') || vers('DEFAUSSE') || depuis('MIS_AU_CIMETIERE'),
-    landfall:     () => vers('TERRAIN') || depuis('TERRAIN') || depuis('TERRAIN_JOUE'),
-    voltron:      () => vers('ATTACHEMENT') || /aura|equipment/.test(ty),
-    gainvie:      () => vers('GAIN_VIE') || depuis('GAIN_VIE'),
-    artefacts:    () => vers('TRESOR'),
-    enchantements:() => false,
-    controle:     () => vers('CONTRESORT') || vers('STAX') || vers('TAXE'),
-    meule:        () => vers('MILL')
+/* Rôles d'une carte. Le type donne le cadre ; tout le reste vient de
+   l'analyse : ce que chaque capacité produit, sur qui, ce que les coûts
+   consomment et ce qui la déclenche. */
+function categories(card) {
+  const c = new Set();
+  if (!card || card.isToken) return c;
+  const a = card.an || {abilities:[], produces:[], triggers:[]};
+  const caps = a.abilities || [];
+  const t = (card.type || '').toLowerCase();
+  const tx = (card.text || '').toLowerCase();
+
+  const effet = x => x.textEff || x.text || '';
+  const vers = (ids, test) => caps.some(x => ids.some(id => x.to.includes(id)) && (!test || test(x)));
+  const depuis = ids => caps.some(x => ids.some(id => x.from.includes(id)));
+  const produit = ids => (a.produces || []).some(p => ids.includes(p.c));
+  /* Les déclencheurs relevés par l'analyse comprennent ce que les coûts
+     consomment ; seuls les vrais déclencheurs nous intéressent ici. */
+  const declenche = ids => (a.triggers || []).some(x => ids.includes(x.c) && (x.q || {}).mode !== 'cout');
+
+  /* Une capacité qui ne vise que nos propres permanentes, ou nous-mêmes :
+     un sacrifice, une perte de vie consentie, un renvoi en main choisi. */
+  const nomCourt = (card.name || '').toLowerCase().split(',')[0].trim();
+  const surLuiMeme = e => (nomCourt && e.includes(nomCourt)) || /\bthis (?:creature|permanent|card)\b/.test(e);
+  const surSoi = x => {
+    const e = effet(x);
+    if (/target opponent|each opponent|opponents|target player/.test(e)) return false;
+    // une carte qui se replace elle-même n'interagit avec personne
+    if (surLuiMeme(e) && /(?:owner's|your) (?:library|hand|graveyard)/.test(e)) return true;
+    return /\byou control\b|\bto you\b|\byourself\b|\byour (?:creatures?|permanents?|lands?|hand|library|graveyard)\b/.test(e);
+  };
+  const enMasse = x => {
+    const e = effet(x);
+    // « le dessus de la bibliothèque de chaque joueur » ne balaie rien
+    if (/(?:player|opponent)['\u2019]s (?:library|hand|graveyard)/.test(e)) return false;
+    return /\b(?:all|each|every)\s+(?:other\s+)?(?:creature|permanent|artifact|enchantment|land|nonland|player|opponent)/.test(e);
   };
 
-  ARCHETYPES.forEach(({id}) => {
-    if ((test[id] && test[id]()) || dit(id)) out.push(id);
-  });
-  return out;
+  if (/creature/.test(t)) c.add('creatures');
+  if (/land/.test(t)) c.add('terrains');
+
+  /* Ramp : produire du mana au-delà de ce que fait n'importe quel terrain,
+     chercher un terrain, ou réduire les coûts. Un terrain qui ajoute un
+     seul mana n'accélère rien, quelle que soit sa rareté. */
+  const manaPourSoi = vers(['MANA', 'TRESOR', 'RAMP', 'REDUCTION']) || produit(['TRESOR', 'RAMP']);
+  const terrainAccelere = /add \{[^}]+\}\{|\badd (?:two|three|four)\b|search your library for[^.]{0,50}land/.test(tx);
+  if (manaPourSoi && (!/land/.test(t) || terrainAccelere)) c.add('ramp');
+
+  /* Card advantage : piocher, filtrer ou récupérer, pour soi. */
+  if (vers(['PIOCHE', 'IMPULSE', 'RECURSION'],
+    x => !(x.scopeEff === 'adv' && !/\byou\b/.test(effet(x))))) c.add('pioche');
+  if (vers(['TUTEUR']) || produit(['TUTEUR'])) c.add('tuteurs');
+
+  /* Interaction : ce qui répond à ce qui n'est pas à nous — destruction,
+     exil, renvoi, dégâts, contresort. */
+  if (vers(['DESTRUCTION', 'EXIL', 'BOUNCE', 'DEGATS', 'CONTRESORT', 'MIS_EN_BIBLIO'],
+    x => !surSoi(x))) c.add('interaction');
+  /* L'emphase (overload) remplace « target » par « each » : le sort balaie
+     le champ de bataille, quoi qu'en dise la lettre de son texte. */
+  const emphase = /\boverload\b/.test(tx);
+  if (vers(['DESTRUCTION', 'EXIL', 'DEGATS', 'MIS_EN_BIBLIO', 'BOUNCE'],
+    x => (enMasse(x) || emphase) && !surSoi(x))) c.add('wipe');
+
+  /* Protection : pour nos permanentes, pas pour celles d'en face. */
+  if (vers(['INDESTRUCTIBLE', 'LINCEUL', 'PROTECTION'], x => x.scopeEff !== 'adv')) c.add('protection');
+
+  /* Jetons : les nôtres. Un sort qui en donne un à sa victime n'en fait pas
+     une carte à jetons. */
+  const pourAutrui = x => /its controller|that player|each opponent|target opponent|your opponents/.test(effet(x));
+  if (vers(['JETON'], x => !pourAutrui(x))) c.add('jetons');
+  if (vers(['MARQUEUR']) || produit(['MARQUEUR'])) c.add('marqueurs');
+
+  /* Sacrifice : le provoquer, s'en nourrir, ou offrir l'exutoire — les
+     coûts relevés par l'analyse le disent mieux que le texte. */
+  if (vers(['SACRIFICE']) || depuis(['SACRIFICE', 'MORT', 'MORT_SOI'])
+      || declenche(['MORT', 'SACRIFICE']) || caps.some(x => x.sacOutlet || x.selfSac)) c.add('sacrifice');
+
+  /* Blink : scintiller, ou se déclencher sur l'arrivée d'un autre. */
+  if (vers(['BLINK']) || depuis(['ETB']) || declenche(['ETB'])) c.add('blink');
+
+  /* Stax : une gêne imposée aux autres. Les contraintes qu'une carte
+     s'impose à elle-même, ou que l'on accepte, n'en sont pas. */
+  const gene = x => {
+    const e = effet(x);
+    if (/can't be regenerated|no maximum hand size|skip your|\byou can't\b|\byou don't\b/.test(e)) return false;
+    if (/can't (?:block|attack)/.test(e) && surLuiMeme(e)) return false;
+    return true;
+  };
+  if (vers(['STAX', 'TAXE'], gene)) c.add('stax');
+  return c;
 }
 
 /* Une carte dont le texte ou la force changent voit son analyse refaite. */
 function reanalyser(card) {
   card.an = analyze(card);
   card.cats = categories(card);
-  card.archetypes = archetypesDe(card);
   return card;
 }
 
 const CATLABEL = {
   creatures:'Créatures', terrains:'Terrains', ramp:'Ramp / mana', pioche:'Card advantage',
-  tuteurs:'Tuteurs', removal:'Removal', wipe:'Board wipes', protection:'Protection', jetons:'Jetons',
+  tuteurs:'Tuteurs', interaction:'Interaction', wipe:'Board wipes', protection:'Protection', jetons:'Jetons',
   marqueurs:'Marqueurs', sacrifice:'Sacrifice', blink:'ETB / blink', stax:'Stax'
 };
 
@@ -428,6 +488,28 @@ function buildCard(name, cost, type, price, text) {
   card.isLand = /land/i.test(tf) && !card.isToken;
   card.isLegendaryCreature = /legendary creature/i.test(tf) && !card.isToken;
   return reanalyser(card);
+}
+
+/* La base intégrée ne garde qu'un résumé du texte des cartes : dès qu'une
+   source officielle (Scryfall ou catalogue local) fournit le texte oracle
+   complet, il remplace le résumé et l'analyse est refaite. Le drapeau
+   `textFull` évite de redemander un texte déjà complet. */
+function majTexteOracle(card, texte) {
+  if (!card) return false;
+  const t = String(texte == null ? '' : texte).replace(/\n/g, ' // ').trim();
+  if (!t) return false;
+  const identique = card.text === t;
+  card.textFull = true;
+  if (identique) return false;
+  card.text = t;
+  if (!/^basic land/i.test(card.type || '')) {
+    const idc = new Set(card.identity && card.identity.length ? card.identity : (card.colors || []));
+    (t.match(/\{[^}]+\}/g) || []).forEach(x => x.slice(1, -1).split('/')
+      .forEach(pp => { if ('WUBRG'.includes(pp)) idc.add(pp); }));
+    card.identity = [...idc];
+  }
+  reanalyser(card);
+  return true;
 }
 
 function indexCard(card) {

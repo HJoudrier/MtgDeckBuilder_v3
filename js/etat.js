@@ -23,7 +23,7 @@ const S = {
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   search: '',
   typeFilter: '',
-  filtres: {nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -34,7 +34,6 @@ const S = {
   selectedCtx: 'collection',
   limitB: 200,
   limiteType: {},
-  filtreRole: null,
   exploreEtat: '',
   exploreSig: null,
   exploreMax: 6000,
@@ -46,6 +45,7 @@ const S = {
   enriching: false,
   images: true,
   imagesFailed: false,
+  scryHS: false,
   edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
   csb: {sig:null, status:'idle', data:null, error:null},
   csbRelay: '',
@@ -63,7 +63,7 @@ const S = {
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', artiste:'', archetypes:'', archSource:'deux', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -81,43 +81,58 @@ const FILTRES_BORNES = [
    conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
    --------------------------------------------------------------------- */
 
-const ARCH_BASE = {etat:'idle', maj:null, erreur:'', themes:{}, index:new Map()};
+const ARCH_BASE = {
+  etat:'idle',        // idle | chargement | ok | erreur
+  maj:null, erreur:'', forme:null, essais:[],
+  liste:[],           // thèmes publiés par EDHREC : {slug, label, n}
+  themes:{},          // thèmes dont la liste de cartes est chargée : slug -> {n}
+  index:new Map(),    // nom normalisé -> Set(slug)
+  enCours:new Set()   // thèmes en cours de chargement
+};
 
-const ARCH_SOURCES = [
-  ['deux', 'Les deux'],
-  ['texte', 'Texte de la carte'],
-  ['base', 'EDHREC']
-];
+/* Libellé d'un thème : le nôtre s'il en existe un, sinon celui d'EDHREC. */
+function libelleArchetype(slug) {
+  if (ARCH_LABELS[slug]) return ARCH_LABELS[slug];
+  const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
+  return (t && t.label) || slug;
+}
 
-/* Archétypes de la carte selon la base extérieure. */
-function archetypesBase(card) {
+/* Court résumé du fonctionnement d'un archétype. Chaque thème en a un,
+   sans exception : le nôtre pour les thèmes courants, sinon celui
+   qu'EDHREC publie, sinon une phrase formée sur son nom. */
+function resumeArchetype(slug) {
+  // le nôtre d'abord : il est en français, comme le reste de la liste
+  if (ARCH_RESUMES[slug]) return ARCH_RESUMES[slug];
+  const charge = ARCH_BASE.themes[slug];
+  if (charge && charge.desc) return charge.desc;
+  const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
+  if (t && t.desc) return t.desc;
+
+  const nom = libelleArchetype(slug);
+  const famille = nom.replace(/\s*(tribal|typal|deck[s]?)\s*/ig, '').trim();
+  if (/tribal|typal/i.test(nom) || /-(tribal|typal)$/i.test(slug))
+    return `Decks bâtis autour des créatures ${famille} et de ce qui les renforce.`;
+  return `Les cartes les plus jouées dans les decks ${famille || nom}.`;
+}
+
+/* Les archétypes proposés : ceux qu'EDHREC publie. */
+function archetypesDisponibles() {
+  return (ARCH_BASE.liste || []).map(t => ({
+    slug:t.slug, label:libelleArchetype(t.slug), n:t.n || 0, aide:resumeArchetype(t.slug)
+  }));
+}
+
+/* Archétypes d'une carte, d'après les thèmes EDHREC chargés. */
+function archetypesCarte(card) {
   if (!card || !ARCH_BASE.index.size) return [];
   const avant = typeof frontFace === 'function' ? frontFace(card.name) : card.name;
   const s = ARCH_BASE.index.get(norm(card.name)) || ARCH_BASE.index.get(norm(avant));
   return s ? [...s] : [];
 }
 
-/* Source retenue dans la fenêtre des filtres. */
-function sourceArchetypes() {
-  const v = (S.filtres && S.filtres.archSource) || 'deux';
-  return ARCH_SOURCES.some(([k]) => k === v) ? v : 'deux';
-}
-
-/* Archétypes retenus pour le filtrage, selon la source choisie. */
-function archetypesCarte(card) {
-  const src = sourceArchetypes();
-  const texte = (card && card.archetypes) || [];
-  if (src === 'texte') return texte;
-  const base = archetypesBase(card);
-  if (src === 'base') return base;
-  return [...new Set([...texte, ...base])];
-}
-
-/* Détail par archétype : d'où vient l'étiquette. Sert à la fiche. */
-function archetypesDetail(card) {
-  const texte = new Set((card && card.archetypes) || []);
-  const base = new Set(archetypesBase(card));
-  return [...new Set([...texte, ...base])].map(id => ({id, texte:texte.has(id), base:base.has(id)}));
+/* Un thème coché dont les cartes ne sont pas encore chargées. */
+function archetypesAChargerEdhrec() {
+  return archetypesFiltre().filter(slug => !ARCH_BASE.themes[slug] && !ARCH_BASE.enCours.has(slug));
 }
 
 /* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
@@ -129,6 +144,25 @@ function basculerArchetype(id) {
   const sel = new Set(archetypesFiltre());
   if (sel.has(id)) sel.delete(id); else sel.add(id);
   S.filtres.archetypes = [...sel].join(',');
+}
+
+/* Rôles cochés dans la section Deck, conservés comme les archétypes. */
+function rolesFiltre() {
+  return String((S.filtres && S.filtres.roles) || '').split(',').filter(Boolean);
+}
+
+function basculerRole(role) {
+  if (!role) { S.filtres.roles = ''; return; }
+  const sel = new Set(rolesFiltre());
+  if (sel.has(role)) sel.delete(role); else sel.add(role);
+  S.filtres.roles = [...sel].join(',');
+}
+
+/* Une carte tient au moins un des rôles cochés. */
+function roleOK(card) {
+  const roles = rolesFiltre();
+  if (!roles.length) return true;
+  return !!card && !!card.cats && roles.some(r => card.cats.has(r));
 }
 
 function nombreFiltre(v) {
@@ -168,12 +202,11 @@ function filtresActifs() {
   const artiste = String(f.artiste || '').trim();
   if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
   const arch = archetypesFiltre();
-  if (arch.length) {
-    const src = sourceArchetypes();
-    const suffixe = src === 'texte' ? ' (texte)' : (src === 'base' ? ' (EDHREC)' : '');
-    actifs.push({cles:['archetypes'],
-      texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(id => ARCHLABEL[id] || id).join(', ')}${suffixe}`});
-  }
+  if (arch.length) actifs.push({cles:['archetypes'],
+    texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
+  const roles = rolesFiltre();
+  if (roles.length) actifs.push({cles:['roles'],
+    texte:`Rôle${roles.length > 1 ? 's' : ''} : ${roles.map(r => CATLABEL[r] || r).join(', ')}`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) return;
@@ -188,6 +221,29 @@ function filtresActifs() {
 /* Libellés seuls, pour les infobulles et les phrases de résumé. */
 function texteFiltresActifs(sep) {
   return filtresActifs().map(a => a.texte).join(sep || ' · ');
+}
+
+/* La recherche libre : nom, type ou texte de la carte. */
+function rechercheOK(card) {
+  const q = String(S.search || '').trim().toLowerCase();
+  if (!q) return true;
+  if (!card) return false;
+  return String(card.name || '').toLowerCase().includes(q)
+    || String(card.text || '').toLowerCase().includes(q)
+    || String(card.type || '').toLowerCase().includes(q);
+}
+
+/* Le type principal retenu dans la fenêtre des filtres. */
+function typeOK(card) {
+  if (!S.typeFilter) return true;
+  return !!card && mainType(card) === S.typeFilter;
+}
+
+/* Prédicat unique de l'atelier : couleurs, recherche, type et critères de
+   la fenêtre. Il vaut pour la collection, le deck, la courbe de mana et
+   les suggestions, afin qu'un filtre posé une fois vaille partout. */
+function carteFiltree(card) {
+  return !!card && colorOK(card) && typeOK(card) && rechercheOK(card) && roleOK(card) && filtreOK(card);
 }
 
 /* Applique les filtres avancés à une carte. Une carte dont la valeur est
@@ -284,21 +340,4 @@ function recToucheNoeuds(rec, noeuds) {
   if (!noeuds || !noeuds.length) return true;
   const card = getCardOrAnalyzedRec(rec);
   return carteTouche(card, noeuds);
-}
-
-function withFocus(fn) {
-  const active = document.activeElement;
-  const selStart = (active && typeof active.selectionStart === 'number') ? active.selectionStart : null;
-  const selEnd = (active && typeof active.selectionEnd === 'number') ? active.selectionEnd : null;
-  const id = active && active.id;
-  fn();
-  if (id) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.focus();
-      if (selStart !== null && selEnd !== null) {
-        try { el.setSelectionRange(selStart, selEnd); } catch(e) {}
-      }
-    }
-  }
 }

@@ -226,10 +226,106 @@ async function loadEdhrec(force) {
 
 const ARCH_CLE_IDB = 'archetypes';
 const ARCH_PAUSE = 130;   // ms entre deux requêtes, par courtoisie envers EDHREC
-const ARCH_MAX_THEMES = 2; // thèmes retenus au plus par archétype
 
-function urlThemeEdhrec(slug) {
-  return 'https://json.edhrec.com/pages/themes/' + encodeURIComponent(slug) + '.json';
+/* json.edhrec.com est un dépôt de fichiers : une clé absente répond
+   « AccessDenied », jamais 404. La forme d'adresse des pages de thème
+   n'est donc pas devinable — on la cherche une fois, par sondage, avant
+   de charger quoi que ce soit. Les pages de commandant, elles, sont
+   connues : elles servent de témoin pour distinguer une adresse fausse
+   d'un hôte injoignable. */
+const ARCH_HOTE = 'https://json.edhrec.com/pages/';
+
+const ARCH_FORMES = [
+  ['themes/<slug>',      slug => `${ARCH_HOTE}themes/${encodeURIComponent(slug)}.json`],
+  ['tags/<slug>',        slug => `${ARCH_HOTE}tags/${encodeURIComponent(slug)}.json`],
+  ['theme/<slug>',       slug => `${ARCH_HOTE}theme/${encodeURIComponent(slug)}.json`],
+  ['themes/<slug>/all',  slug => `${ARCH_HOTE}themes/${encodeURIComponent(slug)}/all.json`],
+  ['tags/<slug>/all',    slug => `${ARCH_HOTE}tags/${encodeURIComponent(slug)}/all.json`]
+];
+
+const ARCH_SONDES = ['aristocrats', 'tokens'];
+const ARCH_TEMOIN = ARCH_HOTE + 'commanders/atraxa-praetors-voice.json';
+
+function pauseEdhrec() {
+  return new Promise(res => setTimeout(res, ARCH_PAUSE));
+}
+
+/* Dernier recours : une page de commandant cite les pages de thème du
+   site. On y cherche le segment qui précède un thème connu, pour en
+   déduire le préfixe des clés plutôt que de continuer à deviner. */
+async function formesDeduites() {
+  try {
+    const r = await fetch(ARCH_TEMOIN);
+    if (!r.ok) return [];
+    const txt = JSON.stringify(await r.json());
+    const re = new RegExp('/([a-z0-9-]+)/(' + ARCH_SONDES.join('|') + ')(?=["/?])', 'gi');
+    const prefixes = new Set();
+    let m;
+    while ((m = re.exec(txt))) prefixes.add(m[1].toLowerCase());
+    return [...prefixes].map(pre => [`${pre}/<slug> (déduit)`,
+      slug => `${ARCH_HOTE}${pre}/${encodeURIComponent(slug)}.json`]);
+  } catch(err) {
+    return [];
+  }
+}
+
+/* Cherche la forme d'adresse qui répond avec des cartes lisibles.
+   Retourne le constructeur d'URL, ou null en notant les essais. */
+async function formeThemeEdhrec() {
+  if (ARCH_BASE.forme) return ARCH_BASE.forme;
+  ARCH_BASE.essais = [];
+  const deduites = [];
+  for (const slug of ARCH_SONDES) {
+    for (const [nom, url] of ARCH_FORMES.concat(deduites)) {
+      const adresse = url(slug);
+      try {
+        const r = await fetch(adresse);
+        if (r.ok) {
+          const noms = nomsPageEdhrec(await r.json());
+          ARCH_BASE.essais.push(`${nom} → ${r.status}, ${noms.size} carte(s)`);
+          if (noms.size) { ARCH_BASE.forme = url; return url; }
+        } else {
+          ARCH_BASE.essais.push(`${nom} → HTTP ${r.status}`);
+        }
+      } catch(err) {
+        ARCH_BASE.essais.push(`${nom} → ${err.message || 'échec réseau'}`);
+      }
+      await pauseEdhrec();
+    }
+    if (!deduites.length) {
+      const trouvees = await formesDeduites();
+      trouvees.forEach(f => {
+        if (!ARCH_FORMES.some(([n]) => n.split(' ')[0] === f[0].split(' ')[0])) deduites.push(f);
+      });
+      for (const [nom, url] of deduites) {
+        const adresse = url(slug);
+        try {
+          const r = await fetch(adresse);
+          if (r.ok) {
+            const noms = nomsPageEdhrec(await r.json());
+            ARCH_BASE.essais.push(`${nom} → ${r.status}, ${noms.size} carte(s)`);
+            if (noms.size) { ARCH_BASE.forme = url; return url; }
+          } else {
+            ARCH_BASE.essais.push(`${nom} → HTTP ${r.status}`);
+          }
+        } catch(err) {
+          ARCH_BASE.essais.push(`${nom} → ${err.message || 'échec réseau'}`);
+        }
+        await pauseEdhrec();
+      }
+    }
+  }
+  return null;
+}
+
+/* Témoin : une page de commandant, dont l'adresse est sûre. */
+async function temoinEdhrec() {
+  try {
+    const r = await fetch(ARCH_TEMOIN);
+    return r.ok;
+  } catch(err) {
+    return false;
+  }
 }
 
 /* Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. */
@@ -259,78 +355,147 @@ function cartesDepuisIndex(index) {
 async function reprendreArchetypesEdhrec() {
   try {
     const memo = await idbLire(ARCH_CLE_IDB);
-    if (!memo || memo.v !== 1 || !memo.cartes) return false;
-    ARCH_BASE.index = indexDepuisCartes(memo.cartes);
+    if (!memo || memo.v !== 2) return false;
+    ARCH_BASE.index = indexDepuisCartes(memo.cartes || {});
     ARCH_BASE.themes = memo.themes || {};
+    ARCH_BASE.liste = memo.liste || [];
     ARCH_BASE.maj = memo.maj || null;
-    ARCH_BASE.etat = ARCH_BASE.index.size ? 'ok' : 'idle';
-    return ARCH_BASE.index.size > 0;
+    ARCH_BASE.etat = ARCH_BASE.liste.length ? 'ok' : 'idle';
+    return ARCH_BASE.liste.length > 0;
   } catch(err) {
     return false;
   }
 }
 
-/* Chargement des thèmes : une requête par slug, les échecs sont isolés. */
+/* Index des thèmes publiés par EDHREC : une requête, quelques centaines
+   d'entrées. Les cartes d'un thème ne sont cherchées qu'à la demande. */
+function urlIndexEdhrec(pre) {
+  return `${ARCH_HOTE}${pre}.json`;
+}
+
+/* Description que la page d'un thème porte parfois en tête. */
+function descriptionPageEdhrec(j) {
+  const dict = ((j && j.container) || {}).json_dict || j || {};
+  const brut = dict.description || dict.blurb || (dict.header && dict.header.description) || '';
+  const txt = String(brut).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  return txt.length > 20 && txt.length < 400 ? txt : '';
+}
+
+/* Noms et libellés des thèmes, quelle que soit la variante de forme. */
+function themesPageEdhrec(j) {
+  const out = new Map();
+  const ajoute = x => {
+    if (!x) return;
+    const href = String(x.href || x.url || x.slug || x.value || '');
+    const slug = href.split('?')[0].replace(/\/+$/, '').split('/').filter(Boolean).pop();
+    if (!slug || /^https?:$/i.test(slug)) return;
+    const label = String(x.value || x.name || x.label || slug);
+    const n = x.count || x.num_decks || x.card_count || 0;
+    const desc = String(x.description || x.blurb || x.subtitle || x.text || '').trim();
+    if (!out.has(slug)) out.set(slug, {slug, label, n, desc});
+  };
+  const visite = v => {
+    if (Array.isArray(v)) return v.forEach(visite);
+    if (!v || typeof v !== 'object') return;
+    if (v.href || v.url) ajoute(v);
+    Object.values(v).forEach(visite);
+  };
+  visite((j && j.container && j.container.json_dict) || j);
+  return [...out.values()];
+}
+
+/* Cherche l'index, en partant du préfixe déjà validé pour les thèmes. */
+async function chargerListeArchetypesEdhrec(force) {
+  if (!force && ARCH_BASE.liste.length) return ARCH_BASE.liste;
+  const url = await formeThemeEdhrec();
+  if (!url) return [];
+  const pre = url('x').replace(ARCH_HOTE, '').replace(/\/?x(\/all)?\.json$/, '');
+  for (const candidat of [pre, pre + 's', 'themes', 'tags']) {
+    if (!candidat) continue;
+    try {
+      const r = await fetch(urlIndexEdhrec(candidat));
+      if (!r.ok) { ARCH_BASE.essais.push(`index ${candidat} → HTTP ${r.status}`); continue; }
+      const themes = themesPageEdhrec(await r.json())
+        .filter(t => t.slug && !/^(commanders?|cards?|decks?|articles?)$/i.test(t.slug));
+      ARCH_BASE.essais.push(`index ${candidat} → ${themes.length} thème(s)`);
+      if (themes.length >= 5) {
+        ARCH_BASE.liste = themes.sort((a, b) => (b.n || 0) - (a.n || 0) || a.label.localeCompare(b.label));
+        return ARCH_BASE.liste;
+      }
+    } catch(err) {
+      ARCH_BASE.essais.push(`index ${candidat} → ${err.message || 'échec réseau'}`);
+    }
+    await pauseEdhrec();
+  }
+  return [];
+}
+
+/* Cartes d'un thème, cherchées à la première utilisation puis gardées. */
+async function chargerThemeEdhrec(slug) {
+  if (!slug || ARCH_BASE.themes[slug] || ARCH_BASE.enCours.has(slug)) return;
+  const url = await formeThemeEdhrec();
+  if (!url) return;
+  ARCH_BASE.enCours.add(slug);
+  try {
+    const r = await fetch(url(slug));
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    const noms = nomsPageEdhrec(j);
+    noms.forEach(n => {
+      const s = ARCH_BASE.index.get(n) || new Set();
+      s.add(slug);
+      ARCH_BASE.index.set(n, s);
+    });
+    ARCH_BASE.themes[slug] = {n:noms.size, desc:descriptionPageEdhrec(j)};
+    ARCH_BASE.maj = Date.now();
+    sauverArchetypesEdhrec();
+  } catch(err) {
+    ARCH_BASE.themes[slug] = {n:0, erreur:err.message || 'échec'};
+  } finally {
+    ARCH_BASE.enCours.delete(slug);
+    if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
+    if (typeof renderAll === 'function') renderAll();
+  }
+}
+
+function sauverArchetypesEdhrec() {
+  idbEcrire(ARCH_CLE_IDB, {
+    v:2, maj:ARCH_BASE.maj, liste:ARCH_BASE.liste, themes:ARCH_BASE.themes,
+    cartes:cartesDepuisIndex(ARCH_BASE.index)
+  }).catch(() => {});
+}
+
+/* Chargement à la demande : l'index, puis les thèmes déjà cochés. */
 async function chargerArchetypesEdhrec(force) {
   if (ARCH_BASE.etat === 'chargement') return;
-  if (!force && ARCH_BASE.index.size) return;
   if (typeof fetch !== 'function') {
     ARCH_BASE.etat = 'erreur';
     ARCH_BASE.erreur = 'ce navigateur ne sait pas interroger EDHREC';
     return;
   }
-
   ARCH_BASE.etat = 'chargement';
   ARCH_BASE.erreur = '';
+  if (force) { ARCH_BASE.forme = null; ARCH_BASE.liste = []; }
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
 
-  const index = new Map();
-  const themes = {};
-  let echecs = 0;
-
-  for (const a of ARCHETYPES) {
-    const slugs = a.edhrec || [];
-    let retenus = 0;
-    for (const slug of slugs) {
-      if (retenus >= ARCH_MAX_THEMES) break;
-      try {
-        const r = await fetch(urlThemeEdhrec(slug));
-        if (!r.ok) { if (r.status !== 404) echecs++; continue; }
-        const noms = nomsPageEdhrec(await r.json());
-        if (!noms.size) continue;
-        noms.forEach(n => {
-          const s = index.get(n) || new Set();
-          s.add(a.id);
-          index.set(n, s);
-        });
-        themes[a.id] = (themes[a.id] || []).concat([{slug, n:noms.size}]);
-        retenus++;
-      } catch(err) {
-        echecs++;
-      }
-      await new Promise(res => setTimeout(res, ARCH_PAUSE));
-    }
-  }
-
-  if (!index.size) {
+  const liste = await chargerListeArchetypesEdhrec(force);
+  if (!liste.length) {
+    const hoteOK = await temoinEdhrec();
     ARCH_BASE.etat = 'erreur';
-    ARCH_BASE.erreur = echecs
-      ? 'EDHREC injoignable (hors ligne ou accès bloqué)'
-      : 'aucun thème reconnu : les adresses EDHREC ont peut-être changé';
+    ARCH_BASE.erreur = hoteOK
+      ? "la liste des thèmes n'est pas à l'adresse attendue (l'hôte répond pourtant pour les commandants)"
+      : 'EDHREC injoignable depuis ce navigateur (hors ligne, CORS ou accès bloqué)';
   } else {
-    ARCH_BASE.index = index;
-    ARCH_BASE.themes = themes;
-    ARCH_BASE.maj = Date.now();
     ARCH_BASE.etat = 'ok';
-    ARCH_BASE.erreur = echecs ? `${echecs} thème(s) non chargé(s)` : '';
-    idbEcrire(ARCH_CLE_IDB, {v:1, maj:ARCH_BASE.maj, themes, cartes:cartesDepuisIndex(index)}).catch(() => {});
+    ARCH_BASE.maj = Date.now();
+    sauverArchetypesEdhrec();
+    for (const slug of archetypesAChargerEdhrec()) await chargerThemeEdhrec(slug);
   }
-
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
   if (typeof renderAll === 'function') renderAll();
   if (typeof toast === 'function') {
     toast(ARCH_BASE.etat === 'ok'
-      ? `Archétypes EDHREC chargés : ${ARCH_BASE.index.size} cartes référencées.`
+      ? `${ARCH_BASE.liste.length} thèmes EDHREC disponibles.`
       : `Archétypes EDHREC : ${ARCH_BASE.erreur}.`);
   }
 }
@@ -592,7 +757,7 @@ async function lireCatalogueFichier(source, nom) {
   CAT.etat = 'ok';
   CAT.date = Date.now();
   CAT.maj = CAT.maj || null;
-  appliquePrixCatalogue();
+  appliqueCatalogueAuxCartes();
   CAT.octets = tailleEstimee(CAT.cartes);
   CAT.source = 'fichier';
   CAT.impressions = impressions;
@@ -616,35 +781,6 @@ async function chargerCatalogueLocal() {
     } catch(err) {}
   }
   return false;
-}
-
-async function archiveParRecherche(maj) {
-  CAT.source = 'recherche'; CAT.partiel = true;
-  const q = 'game:paper -is:token -t:basic';
-  let url = 'https://api.scryfall.com/cards/search?order=edhrec&unique=cards&q=' + encodeURIComponent(q);
-  const cartes = [];
-  try {
-    while (url && cartes.length < S.exploreMax) {
-      const r = await fetch(url);
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      const j = await r.json();
-      (j.data || []).forEach(sc => { const c = compacte(sc); if (c) cartes.push(c); });
-      CAT.cartes = cartes; CAT.etat = 'chargement'; CAT.octets = 0;
-      if (cartes.length % 1400 < 175) renderF();
-      url = j.has_more ? j.next_page : null;
-      if (url && cartes.length < S.exploreMax) await new Promise(r2 => setTimeout(r2, 110));
-    }
-    CAT.cartes = cartes; CAT.etat = 'ok'; CAT.maj = maj || null; CAT.date = Date.now();
-    CAT.octets = tailleEstimee(cartes);
-    invaliderCandidats();
-    if (saveState !== 'desactive' && S.catalogueActif)
-      idbEcrire('cartes', {v:2, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, partiel:true}).catch(() => {});
-    renderAll();
-  } catch(err) {
-    CAT.etat = (err instanceof TypeError) ? 'hors-ligne' : 'erreur';
-    CAT.detail = (CAT.detail ? CAT.detail + ' ' : '') + `Le repli par recherche a échoué aussi (${err.message||'requête bloquée'}).`;
-    renderAll();
-  }
 }
 
 async function verifierMajCatalogue() {
@@ -748,6 +884,7 @@ async function chargerCatalogueComplet(force) {
         CAT.date = memo.date || null;
         CAT.partiel = !!memo.partiel;
         CAT.impressions = memo.impressions || 0;
+        appliqueCatalogueAuxCartes();
         if (memo.v !== 2) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour obtenir les visuels des cartes.';
         invaliderCandidats();
         renderAll();
@@ -785,6 +922,7 @@ async function chargerCatalogueComplet(force) {
     CAT.etat = 'ok';
     CAT.octets = tailleEstimee(CAT.cartes);
     CAT.date = Date.now();
+    appliqueCatalogueAuxCartes();
     if (saveState !== 'desactive' && S.catalogueActif)
       idbEcrire('cartes', {v:2, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions:CAT.impressions||0}).catch(() => {});
     renderAll();
@@ -795,6 +933,12 @@ async function chargerCatalogueComplet(force) {
 }
 
 function completeDepuisRec(c, rec) {
+  if (majTexteOracle(c, rec[CH.TEXTE])) {
+    if (rec[CH.ID_COUL] !== undefined && !/^basic land/i.test(c.type || '')) {
+      c.identity = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
+    }
+    if (typeof rec[CH.CMC] === 'number') c.cmc = rec[CH.CMC];
+  }
   if (rec[CH.IMG] && !c.imgN) {
     c.img = CDN + 'small/' + rec[CH.IMG];
     c.imgN = CDN + 'normal/' + rec[CH.IMG];
@@ -820,6 +964,7 @@ function carteDuCatalogue(rec) {
   let c = find(nom);
   if (c && !c.unknown) return completeDepuisRec(c, rec);
   c = registerCard(buildCard(nom, rec[CH.COUT] || '—', rec[CH.TYPE], rec[CH.PRIX], rec[CH.TEXTE]));
+  c.textFull = !!rec[CH.TEXTE];
   if (rec[CH.ID_COUL] !== undefined) c.identity = rec[CH.ID_COUL] ? rec[CH.ID_COUL].split('') : [];
   c.cmc = rec[CH.CMC];
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
@@ -848,14 +993,26 @@ function signatureCandidats() {
           CAT.cartes.length, S.collection.size, S.exploreMax, noeudsActifs().sort().join(',')].join('|');
 }
 
-function appliquePrixCatalogue() {
+/* Le catalogue local porte le texte oracle complet et les prix à jour : on en
+   profite pour remplacer, sans requête réseau, les résumés de la base
+   intégrée et les prix des cartes possédées ou jouées. */
+function appliqueCatalogueAuxCartes() {
   if (!CAT.cartes.length) return;
   const utiles = new Set([...S.collection.keys(), ...S.deck.keys()].map(norm));
-  if (!utiles.size) return;
+  const aCompleter = new Map();
+  DB.forEach(c => { if (!c.textFull && !c.unknown) aCompleter.set(norm(c.name), c); });
+  if (!utiles.size && !aCompleter.size) return;
   let n = 0;
   CAT.cartes.forEach(rec => {
-    if (!utiles.has(norm(rec[CH.NOM]))) return;
-    const c = find(rec[CH.NOM]);
+    const cle = norm(rec[CH.NOM]);
+    const complete = aCompleter.get(cle);
+    if (complete) {
+      aCompleter.delete(cle);
+      completeDepuisRec(complete, rec);
+      n++;
+    }
+    if (!utiles.has(cle)) return;
+    const c = complete || find(rec[CH.NOM]);
     if (c && rec[CH.PRIX] > 0 && c.price !== rec[CH.PRIX]) { c.price = rec[CH.PRIX]; n++; }
   });
   if (n) scheduleSave();

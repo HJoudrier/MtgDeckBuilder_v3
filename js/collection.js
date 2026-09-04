@@ -27,12 +27,7 @@ function collectionCards() {
 }
 
 function filtered() {
-  let list = collectionCards().filter(e => colorOK(e.card) && filtreOK(e.card));
-  if (S.search) {
-    const s = S.search.toLowerCase();
-    list = list.filter(e => e.card.name.toLowerCase().includes(s) || e.card.text.toLowerCase().includes(s) || e.card.type.toLowerCase().includes(s));
-  }
-  if (S.typeFilter) list = list.filter(e => mainType(e.card) === S.typeFilter);
+  const list = collectionCards().filter(e => carteFiltree(e.card));
   const f = fmt();
   list.forEach(e => e.usable = Math.min(e.qty, f.maxCopies));
   const cmp = {
@@ -150,7 +145,7 @@ function renderB() {
 
   const hintEl = document.getElementById('hintB');
   if (hintEl) hintEl.textContent = `${shown}/${total} ex.`;
-  if (S.view === 'grid') setTimeout(() => queueImages(page.map(e => e.card)), 0);
+  setTimeout(() => queueScryfall(page.map(e => e.card)), 0);
 }
 
 function openImport(cible) {
@@ -216,6 +211,8 @@ function openImport(cible) {
     const remplacer = versDeck && document.getElementById('impReplace').checked;
     const completer = versDeck && document.getElementById('impStock').checked;
     const entries = parseMtgoList(txt);
+    // les champs sont lus : la fenêtre a fait son office
+    closeDialog();
     let known = 0, created = 0, qty = 0, reserve = 0, manquants = 0;
     const fresh = [];
     let cmd = null;
