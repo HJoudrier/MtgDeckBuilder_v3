@@ -594,6 +594,23 @@ function libelleImpression(card) {
   return card.set + (card.num ? ' n°' + card.num : '');
 }
 
+/* Éditions de la carte présentes dans la collection : ce sont celles que la
+   fiche fait défiler. Une carte importée sans code d'édition n'en a aucune,
+   et une seule édition ne se prête pas au défilement. */
+function versionsCarte(card) {
+  return ((card && card.impressions) || []).filter(i => i.set);
+}
+
+function cleVersion(v) {
+  return v ? cleImpression(v.set, v.num) : '';
+}
+
+/* L'édition retenue pour l'affichage : celle que l'utilisateur a choisie,
+   sinon celle relevée à l'import. */
+function versionRetenue(card) {
+  return (card && card.impressionChoisie) || cleImpression(card && card.set, card && card.num);
+}
+
 function find(name) {
   if (!name) return null;
   const n = norm(name);

@@ -104,6 +104,16 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'versionPrec' || act === 'versionSuiv') {
+    faireDefilerVersion(b.dataset.name, act === 'versionSuiv' ? 1 : -1);
+    return;
+  }
+
+  if (act === 'choisirVersion') {
+    choisirVersion(b.dataset.name, b.dataset.cle);
+    return;
+  }
+
   if (act === 'appliquerFiltres') {
     appliquerFiltres();
     return;

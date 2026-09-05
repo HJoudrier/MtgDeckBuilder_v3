@@ -111,6 +111,9 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 | `noterImpression(card,set,num,qty)` | Relève l'édition lue dans une liste importée ; la première numérotée devient l'édition de référence. |
 | `completeImpression(card,sc)` | Complète l'édition d'après Scryfall, sans écraser celle relevée à l'import. |
 | `libelleImpression(card)` | Écrit l'édition de référence : « LTC n°344 ». |
+| `versionsCarte(card)` | Éditions de la carte présentes dans la collection, celles que la fiche fait défiler. |
+| `cleVersion(v)` | Clé « set\|numéro » d'une de ces éditions. |
+| `versionRetenue(card)` | Édition affichée en priorité : celle choisie, sinon celle relevée à l'import. |
 | `scryTarget(sc,map)` | Retrouve la carte locale correspondant à une réponse Scryfall. |
 
 ### `js/etat.js` — État et filtrage
@@ -183,6 +186,9 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 |---|---|
 | `loadSymbology()` *(async)* | Récupère les adresses officielles des symboles de mana. |
 | `chercheVerso(card)` *(async)* | Récupère le verso d'une carte recto-verso quand l'archive ne l'a pas. |
+| `chercheImpressions(card)` *(async)* | Visuels de chaque édition possédée, en une requête, à l'ouverture de la fiche. |
+| `semeVisuelVersion(card)` | Reprend le visuel déjà affiché comme celui de son édition, pour ne pas le redemander. |
+| `visuelDepuisScryfall(sc)` | Visuel, illustrateur, nom du set et prix d'une impression. |
 | `compacte(sc)` | Réduit une carte Scryfall aux champs utiles à l'analyse et au classement. |
 | `autoCatalogue()` | Décide si le catalogue peut se charger tout seul. |
 | `estGzip(nom,octets)` | Détecte une archive compressée par son nom ou sa signature. |
@@ -230,7 +236,7 @@ Données : `STORE_KEY`, `STORE_OFF`
 
 | Fonction | Rôle |
 |---|---|
-| `impressionSnap(c)` | Éditions d'une carte à conserver : impression de référence et impressions relevées. |
+| `impressionSnap(c)` | Éditions d'une carte à conserver : impression de référence, impressions relevées et édition choisie. |
 | `impressionRestore(card,o)` | Rend ces éditions à la carte au chargement. |
 | `idb()` | Ouvre la base IndexedDB. |
 | `idbLire(cle)` | Lit une clé de l'archive. |
@@ -428,6 +434,11 @@ Données : `RETOURNEES`
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
 | `faceVisible(c,grande)` | Face actuellement affichée. |
+| `versionRang(card)` | Rang de l'édition consultée dans la fiche ouverte. |
+| `versionCourante(card)` | L'édition consultée elle-même. |
+| `faireDefilerVersion(nom,pas)` | Passe à l'édition précédente ou suivante, en boucle. |
+| `visuelVersion(card,v,grande)` | Visuel d'une édition donnée. |
+| `choisirVersion(nom,cle)` | Retient une édition : elle devient celle de la carte, partout. |
 | `refCarte(nom)` | Nom de carte survolable et cliquable. |
 | `apercuTexte(c)` | Texte de l'aperçu volant : sauts de ligne rétablis, longueur bornée. |
 | `placerApercu(x,y)` | Place l'aperçu près du curseur sans sortir de l'écran. |
@@ -468,6 +479,12 @@ Données : `RETOURNEES`
   elle-même ne fait pas de l'interaction, une contrainte qu'on s'impose n'est pas du stax.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
+- Une carte présente en plusieurs éditions dans la collection se feuillette depuis sa fiche : `card.impressions`
+  porte les impressions relevées à l'import, `chercheImpressions()` en rapporte les visuels en une requête, et
+  « Afficher cette édition en priorité » écrit `card.impressionChoisie` puis recopie visuel, illustrateur, nom de set,
+  prix et lien d'achat dans la carte. Tout ce qui lit `card.img*` suit donc sans rien changer : vignettes de la
+  collection, aperçu au survol, deck. Seule l'édition choisie est conservée d'une session à l'autre ; les visuels des
+  autres éditions sont redemandés à l'ouverture de la fiche, pour ne pas alourdir la sauvegarde.
 - La fenêtre des filtres applique en direct : le décompte de cartes retenues suit la frappe. « Annuler » ne renonce
   donc pas à appliquer, il revient à l'instantané pris à l'ouverture — critères et couleurs comprises. Seul
   « Appliquer » garde ce qui est en vigueur ; la croix, Échap et l'arrière-plan valent Annuler.

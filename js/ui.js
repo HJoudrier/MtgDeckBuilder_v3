@@ -190,6 +190,78 @@ function faceVisible(card, grand) {
   return card.imgN || card.img || '';
 }
 
+/* ---------------------------------------------------------------------
+   Éditions d'une même carte : la fiche les fait défiler et permet d'en
+   retenir une. Le rang consulté ne vit que le temps de la fiche ouverte —
+   la fiche est reconstruite à chaque réponse de Scryfall, il ne doit donc
+   pas repartir de zéro tant qu'on regarde la même carte.
+   --------------------------------------------------------------------- */
+let versionVue = {nom:'', i:0};
+
+function versionRang(card) {
+  const vs = versionsCarte(card);
+  if (!vs.length) return 0;
+  if (versionVue.nom !== card.name) {
+    const retenue = versionRetenue(card);
+    const i = vs.findIndex(v => cleVersion(v) === retenue);
+    versionVue = {nom: card.name, i: i >= 0 ? i : 0};
+  }
+  return Math.min(Math.max(versionVue.i, 0), vs.length - 1);
+}
+
+function versionCourante(card) {
+  const vs = versionsCarte(card);
+  return vs.length ? vs[versionRang(card)] : null;
+}
+
+function faireDefilerVersion(nom, pas) {
+  const card = find(nom); if (!card) return;
+  const vs = versionsCarte(card);
+  if (vs.length < 2) return;
+  versionVue = {nom: card.name, i: (versionRang(card) + pas + vs.length) % vs.length};
+  openCardModal(card.name);
+}
+
+/* Visuel d'une édition : celui déjà porté par la carte si c'est l'édition
+   affichée, sinon celui rapporté par Scryfall pour cette impression. */
+function visuelVersion(card, v, grand) {
+  if (!v) return faceVisible(card, grand);
+  const cle = cleVersion(v);
+  if (cle === cleImpression(card.set, card.num)) return faceVisible(card, grand);
+  const u = (card.visuels || {})[cle];
+  if (!u || u.ko) return '';
+  return (grand && u.imgL) ? u.imgL : (u.imgN || u.img || '');
+}
+
+/* Retenir une édition : elle devient celle de la carte, partout — vignettes
+   de la collection, aperçu au survol, deck. L'illustrateur, le nom du set et
+   le lien d'achat suivent le visuel ; le prix aussi quand Scryfall en donne
+   un pour cette impression. */
+function choisirVersion(nom, cle) {
+  const card = find(nom); if (!card || !cle) return;
+  const v = versionsCarte(card).find(x => cleVersion(x) === cle);
+  const u = (card.visuels || {})[cle];
+  if (!v || !u || u.ko) return;
+  card.impressionChoisie = cle;
+  card.set = v.set;
+  card.num = v.num;
+  card.setImporte = true;
+  card.impressionKO = false;
+  card.imgImpression = cle;
+  if (u.img) card.img = u.img;
+  if (u.imgN) card.imgN = u.imgN;
+  if (u.imgL) card.imgL = u.imgL;
+  if (u.artist) card.artist = u.artist;
+  card.setName = u.setName || '';
+  if (u.price) card.price = u.price;
+  if (u.cmUrl) card.cmUrl = u.cmUrl;
+  RETOURNEES.delete(card.name);
+  if (typeof scheduleSave === 'function') scheduleSave();
+  renderAll();
+  openCardModal(card.name);
+  toast(`Édition retenue : ${esc(v.set)}${v.num ? ' n°' + v.num : ''}.`);
+}
+
 function cardTile(e, ctx) {
   const c = e.card, dispo = availableFor(c), inDeck = S.deck.get(c.name) || 0;
   const isCmd = S.commander === c.name;

@@ -360,6 +360,74 @@ async function chercheScryfall(q, cible) {
   majResultats(cible, true);
 }
 
+/* Visuels de chaque édition possédée, pour les faire défiler dans la fiche.
+   Une seule requête par carte, à l'ouverture de la fiche, et seulement si la
+   collection en compte plusieurs. L'édition déjà affichée est reprise telle
+   quelle : elle n'a pas à être redemandée. */
+function semeVisuelVersion(card) {
+  card.visuels = card.visuels || {};
+  const cle = cleImpression(card.set, card.num);
+  if (cle && !card.visuels[cle] && card.imgImpression === cle && (card.imgN || card.img)) {
+    card.visuels[cle] = {
+      img: card.img || '', imgN: card.imgN || '', imgL: card.imgL || '',
+      artist: card.artist || '', setName: card.setName || '', price: card.price || 0,
+      cmUrl: card.cmUrl || ''
+    };
+  }
+  return card.visuels;
+}
+
+function visuelDepuisScryfall(sc) {
+  const faces = sc.card_faces && sc.card_faces.length ? sc.card_faces : null;
+  const uris = sc.image_uris || (faces && faces[0] && faces[0].image_uris) || null;
+  if (!uris) return null;
+  const pr = sc.prices || {};
+  return {
+    img: uris.small || uris.normal || '',
+    imgN: uris.normal || uris.large || uris.small || '',
+    imgL: uris.large || uris.png || uris.normal || '',
+    artist: sc.artist || (faces && faces[0] && faces[0].artist) || '',
+    setName: sc.set_name || '',
+    price: parseFloat(pr.eur || pr.eur_foil || 0) || 0,
+    cmUrl: (sc.purchase_uris && sc.purchase_uris.cardmarket) || ''
+  };
+}
+
+async function chercheImpressions(card) {
+  if (!card || S.scryHS || typeof fetch !== 'function') return false;
+  const vs = versionsCarte(card);
+  if (vs.length < 2) return false;
+  const connus = semeVisuelVersion(card);
+  const manquants = vs.filter(v => cleVersion(v) && !connus[cleVersion(v)]).slice(0, 75);
+  if (!manquants.length || card.visuelsTried) return false;
+  card.visuelsTried = true;
+  try {
+    const r = await fetch('https://api.scryfall.com/cards/collection', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({identifiers: manquants.map(v =>
+        ({set: String(v.set).toLowerCase(), collector_number: String(v.num).toLowerCase()}))})
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    (j.data || []).forEach(sc => {
+      const u = visuelDepuisScryfall(sc);
+      const cle = cleImpression(sc.set, sc.collector_number);
+      if (u && cle) card.visuels[cle] = u;
+    });
+    /* Une édition que Scryfall ne connaît pas est retenue comme telle, pour
+       ne pas la redemander à chaque ouverture de la fiche. */
+    (j.not_found || []).forEach(id => {
+      const cle = id && id.set ? cleImpression(id.set, id.collector_number) : '';
+      if (cle && !card.visuels[cle]) card.visuels[cle] = {ko: true};
+    });
+    return true;
+  } catch(err) {
+    card.visuelsTried = false;
+    return false;
+  }
+}
+
 async function chercheVerso(card) {
   if (!card || card.imgB || card.versoTried || typeof fetch !== 'function') return false;
   if (!/ \/\/ /.test(card.type||'') && !/ \/\/ /.test(card.name||'')) return false;

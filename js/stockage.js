@@ -28,7 +28,7 @@ function impressionSnap(c) {
   if (!c.set && !(c.impressions && c.impressions.length)) return {};
   return {
     se: c.set || '', nu: c.num || '', sn: c.setName || '',
-    si: c.setImporte ? 1 : 0, ii: c.imgImpression || '',
+    si: c.setImporte ? 1 : 0, ii: c.imgImpression || '', ch: c.impressionChoisie || '',
     im: (c.impressions || []).map(i => [i.set, i.num, i.qty])
   };
 }
@@ -39,6 +39,7 @@ function impressionRestore(card, o) {
   if (o.sn) card.setName = o.sn;
   if (o.si) card.setImporte = true;
   if (o.ii) card.imgImpression = o.ii;
+  if (o.ch) card.impressionChoisie = o.ch;
   if (Array.isArray(o.im) && o.im.length)
     card.impressions = o.im.map(([set, num, qty]) => ({set, num, qty}));
 }

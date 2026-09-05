@@ -168,6 +168,39 @@ function ficheImageKO(img) {
   if (wrap && c) wrap.outerHTML = ficheTexteHTML(c);
 }
 
+/* Défilement des éditions possédées, sous le visuel de la fiche. N'apparaît
+   qu'à partir de deux éditions : sans quoi il n'y a rien à faire défiler. */
+function blocVersions(card) {
+  const vs = versionsCarte(card);
+  if (vs.length < 2) return '';
+  const i = versionRang(card), v = vs[i], cle = cleVersion(v);
+  const u = (card.visuels || {})[cle];
+  const retenue = versionRetenue(card) === cle;
+  const attente = !u && !card.visuelsTried;
+  return `<div class="vers">
+    <div class="vers-nav">
+      <button type="button" class="vers-b" data-act="versionPrec" data-name="${esc(card.name)}"
+        title="Édition précédente">‹</button>
+      <div class="vers-cap">
+        <b>${esc(v.set)}${v.num ? ` n°${esc(v.num)}` : ''}</b>
+        <span class="muted">${i + 1} / ${vs.length}</span>
+      </div>
+      <button type="button" class="vers-b" data-act="versionSuiv" data-name="${esc(card.name)}"
+        title="Édition suivante">›</button>
+    </div>
+    <div class="small muted vers-det">${
+      u && u.ko ? 'Scryfall ne connaît pas cette édition : son visuel reste indisponible.'
+      : attente ? 'Visuel en cours de recherche…'
+      : `${u && u.setName ? esc(u.setName) : ''}${u && u.artist ? `${u && u.setName ? ' · ' : ''}ill. ${esc(u.artist)}` : ''}${
+          v.qty ? `${(u && (u.setName || u.artist)) ? ' · ' : ''}${v.qty} exemplaire(s)` : ''}`}</div>
+    ${retenue
+      ? '<div class="small vers-ok">Édition affichée en priorité</div>'
+      : `<button type="button" class="btn sm vers-pick" data-act="choisirVersion"
+           data-name="${esc(card.name)}" data-cle="${esc(cle)}" ${(!u || u.ko) ? 'disabled' : ''}>
+           Afficher cette édition en priorité</button>`}
+  </div>`;
+}
+
 function ficheHTML(card) {
   const deck = deckEntries().map(e => e.card);
   const dansDeck = S.deck.get(card.name) || 0;
@@ -228,15 +261,24 @@ function ficheHTML(card) {
   };
   const noeuds = [...new Set(card.an.edges.flatMap(e => [e.from, e.to]))];
 
+  const vers = versionsCarte(card);
+  const vCour = vers.length > 1 ? versionCourante(card) : null;
+  const vCle = vCour ? cleVersion(vCour) : '';
+  const vAffichee = !vCour || vCle === cleImpression(card.set, card.num);
+  const vSrc = vCour ? visuelVersion(card, vCour, true) : faceVisible(card, true);
+
   return `<div class="fiche">
-      ${S.images && (card.imgL || card.imgN || card.img) ? `<div class="visuwrap">
-        <img class="visu" src="${esc(faceVisible(card,true))}" alt="${esc(card.name)}" data-name="${esc(card.name)}" onerror="ficheImageKO(this)">
-        ${aDeuxFaces(card) && autreFace(card) ? `<button type="button" class="miniface" data-act="flip" data-name="${esc(card.name)}"
+      <div class="visucol">
+      ${S.images && (vSrc || card.imgL || card.imgN || card.img) ? `<div class="visuwrap">
+        <img class="visu" src="${esc(vSrc)}" alt="${esc(card.name)}" data-name="${esc(card.name)}" onerror="ficheImageKO(this)">
+        ${vAffichee && aDeuxFaces(card) && autreFace(card) ? `<button type="button" class="miniface" data-act="flip" data-name="${esc(card.name)}"
             title="Afficher ${RETOURNEES.has(card.name)?'le recto':'le verso'}">
             <img src="${esc(autreFace(card))}" alt="">
             <span>${RETOURNEES.has(card.name)?'recto':'verso'}</span>
           </button>` : ''}
       </div>` : ficheTexteHTML(card)}
+      ${blocVersions(card)}
+      </div>
       <div class="meta">
         <div class="small muted">${eur(card.price)}${card.price?' (tendance Cardmarket)':''}${card.artist?` · ill. ${esc(card.artist)}`:''}</div>
         ${(() => {
@@ -307,6 +349,7 @@ function openCardModal(name) {
   const rouvre = ok => { if (ok && document.getElementById('dlg') && document.getElementById('dlg').open) openCardModal(name); };
   chercheVerso(card).then(rouvre);
   chercheTexte(card).then(rouvre);
+  chercheImpressions(card).then(rouvre);
   cacherApercu();
   const dispo = availableFor(card), offre = dispo > 0 ? null : bestOffer(card);
   const actions = [
