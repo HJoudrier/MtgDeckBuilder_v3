@@ -192,10 +192,14 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `lireCatalogueFichier(source,nom)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue. |
 | `chargerCatalogueLocal()` *(async)* | Cherche une archive posée à côté de la page. |
 | `verifierMajCatalogue()` *(async)* | Interroge l'index Scryfall : date, adresse et taille de la version publiée. |
+| `catalogueAbsent()` | Dit si cet appareil n'a pas les cartes existantes. *(défini dans `etat.js`)* |
 | `catalogueObsolete()` | Compare l'archive locale à la version publiée. |
 | `majPrix(force)` *(async)* | Rafraîchit les prix des seules cartes possédées ou jouées. |
 | `telechargerCatalogue()` *(async)* | Télécharge l'archive et l'extrait sans fichier intermédiaire. |
-| `chargerCatalogueComplet(force)` *(async)* | Charge le catalogue : cache, puis fichier local, puis réseau. |
+| `chargerCatalogueComplet(force)` *(async)* | Charge le catalogue : cache, puis fichier local, puis téléchargement. |
+| `demarrerCatalogue()` *(async)* | Au démarrage : archive manquante → téléchargement, archive datée → fenêtre de proposition. |
+| `proposerMajCatalogue()` | Fenêtre modale signalant que les données des cartes ont pu changer. |
+| `majCatalogue()` *(async)* | Bouton « Mettre à jour » : teste la version publiée, retélécharge si besoin, sinon rafraîchit les prix. |
 | `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus, texte oracle compris. |
 | `carteDuCatalogue(rec)` | Matérialise une carte du catalogue et l'analyse. |
 | `invaliderCandidats()` | Invalide la sélection mémorisée. |
@@ -241,6 +245,7 @@ Données : `STORE_KEY`, `STORE_OFF`
 | `pillSauvegarde()` | Pastille d'état affichée dans l'en-tête. |
 | `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale. |
 | `blocCatalogueSauvegarde()` | Section catalogue de cette fenêtre : état, taille, mises à jour. |
+| `rafraichirFenetreSauvegarde()` | Réécrit cette fenêtre sur place quand l'état du catalogue a bougé. |
 | `openSaveDialog()` | Ouvre la fenêtre de gestion des données. |
 | `brancherCatalogue()` | Branche les commandes du catalogue. |
 | `brancherRestauration()` | Branche le sélecteur de fichier de restauration. |
@@ -450,6 +455,13 @@ Données : `RETOURNEES`
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
   et pour l'index des archétypes EDHREC.
+- Le catalogue des cartes existantes se tient à jour tout seul. Au lancement, `demarrerCatalogue()` regarde d'abord ce
+  que l'appareil garde — archive IndexedDB, puis fichier posé à côté de la page. S'il n'a rien, l'archive Scryfall est
+  téléchargée et extraite immédiatement, sans rien demander. S'il a une archive mais que Scryfall en publie une plus
+  récente, une fenêtre modale le signale et propose la mise à jour, qui passe par le même téléchargement ; « Plus tard »
+  retient la version refusée dans `S.majIgnoree`, si bien que la question n'est reposée qu'à la publication suivante.
+  Le même enchaînement est derrière le bouton « Mettre à jour » de la fenêtre de sauvegarde : il teste la version
+  publiée et ne retélécharge que si l'archive manque ou a vieilli, sinon il se contente de rafraîchir les prix.
 - Les rôles ne se lisent pas dans le texte brut : `categories()` croise le type de la carte avec ce que `analyze()` a
   relevé — ce que chaque capacité produit, sur qui porte l'effet (`textEff`), ce que les coûts consomment
   (`sacOutlet`) et ce qui la déclenche. Un terrain qui n'ajoute qu'un mana n'est pas du ramp, une carte qui se blesse

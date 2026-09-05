@@ -81,6 +81,7 @@ function snapshot() {
     csbRelay: S.csbRelay,
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
+    majIgnoree: S.majIgnoree,
     headerCompact: S.headerCompact,
     cartes,
     enrich
@@ -175,6 +176,7 @@ function restore(d) {
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
+  if (typeof d.majIgnoree === 'string') S.majIgnoree = d.majIgnoree;
   if (typeof d.headerCompact === 'boolean') S.headerCompact = d.headerCompact;
   return true;
 }
@@ -287,14 +289,13 @@ function blocCatalogueSauvegarde() {
       Archiver toutes les cartes existantes sur cet appareil
     </label>
     <div class="small muted">${CAT.taille ? `Environ ${(CAT.taille/1048576).toFixed(0)} Mo téléchargés` : 'Un téléchargement'} une seule fois, puis quelques mégaoctets conservés. Sans archive, les suggestions se limitent à votre collection et à une recherche en ligne réduite.</div>
-    <div class="small muted" style="margin-top:6px"><b>Télécharger et extraire</b> récupère l'archive et n'en garde que les données utiles, sans fichier intermédiaire. Si Scryfall refuse la requête directe, passez par le lien de téléchargement puis par le chargement de l'archive obtenue.</div>
+    <div class="small muted" style="margin-top:6px"><b>Mettre à jour</b> compare l'archive de cet appareil à celle que publie Scryfall : elle n'est retéléchargée et réextraite que si elle manque ou si elle a vieilli, sinon seuls les prix sont rafraîchis. <b>Télécharger et extraire</b> force ce téléchargement, sans fichier intermédiaire. Si Scryfall refuse la requête directe, passez par le lien de téléchargement puis par le chargement de l'archive obtenue.</div>
     <div class="row" style="gap:6px;margin-top:6px">
       <label class="btn sm" for="catFile" style="margin:0;cursor:pointer">Charger une archive téléchargée</label>
       <input id="catFile" type="file" accept=".gz,.json,.jsonl,application/json,application/gzip"
              style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
       <button type="button" class="btn sm" data-act="catalogueTelecharger" ${dispo&&S.catalogueActif?'':'disabled'}>Télécharger et extraire</button>
-      <button type="button" class="btn sm" data-act="catalogueVerifier">Vérifier les mises à jour</button>
-      <button type="button" class="btn sm" data-act="prixMaj">Mettre à jour les prix</button>
+      <button type="button" class="btn sm pri" data-act="catalogueMaj">Mettre à jour</button>
       <button type="button" class="btn sm danger" data-act="catalogueEffacer" ${dispo?'':'disabled'}>Effacer l'archive</button>
     </div>
     ${(!CAT.etat || catalogueObsolete()) ? `<div class="warnbox" style="margin:8px 0">
@@ -307,6 +308,16 @@ function blocCatalogueSauvegarde() {
     </div>` : ''}
     <div class="small muted" style="margin-top:4px">L'archive <i>oracle-cards</i> de Scryfall, au format JSONL compressé, est lue telle quelle, sans décompression préalable ni requête réseau. Posé à côté de cette page sous l'un des noms ${esc(FICHIERS_LOCAUX.slice(0,4).join(', '))}, il est même détecté tout seul — à condition d'ouvrir la page par un serveur local, car un navigateur interdit à une page <i>file://</i> de lire ses fichiers voisins.</div>
   </div>`;
+}
+
+/* La fenêtre de sauvegarde reste ouverte pendant qu'une archive se charge :
+   son contenu est réécrit sur place quand l'état du catalogue a bougé. */
+function rafraichirFenetreSauvegarde() {
+  const corps = document.getElementById('dlgBody');
+  if (!corps || !corps.innerHTML.includes('Catalogue des cartes Magic')) return;
+  corps.innerHTML = corpsSauvegarde();
+  brancherRestauration();
+  brancherCatalogue();
 }
 
 function openSaveDialog() {
@@ -340,8 +351,7 @@ function brancherCatalogue() {
     if (!f) return;
     try {
       await lireCatalogueFichier(f, f.name);
-      const corps = document.getElementById('dlgBody');
-      if (corps) { corps.innerHTML = corpsSauvegarde(); brancherRestauration(); brancherCatalogue(); }
+      rafraichirFenetreSauvegarde();
     } catch(err) {
       CAT.etat = 'erreur';
       CAT.detail = `lecture du fichier impossible : ${err.message || 'format inattendu'}`;
@@ -369,8 +379,7 @@ function brancherCatalogue() {
         renderAll();
       });
     }
-    const corps = document.getElementById('dlgBody');
-    if (corps) { corps.innerHTML = corpsSauvegarde(); brancherRestauration(); brancherCatalogue(); }
+    rafraichirFenetreSauvegarde();
   });
 }
 

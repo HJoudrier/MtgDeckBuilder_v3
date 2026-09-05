@@ -40,6 +40,7 @@ const S = {
   exploreReste: false,
   catalogueActif: true,
   prixMaj: null,
+  majIgnoree: null,
   enriching: false,
   images: true,
   imagesFailed: false,
@@ -284,6 +285,12 @@ const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
   majDispo:null, uri:'', taille:0, impressions:0
 };
+
+/* Vrai tant que cet appareil n'a pas les cartes existantes : archive jamais
+   chargée, ou chargée mais vide. C'est ce que le démarrage teste en premier. */
+function catalogueAbsent() {
+  return CAT.etat !== 'ok' || !CAT.cartes.length;
+}
 
 function noeudsActifs() {
   return [...S.focusNodes];

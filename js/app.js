@@ -299,11 +299,25 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'catalogueVerifier') {
-    verifierMajCatalogue().then(j => {
-      if (j) toast(`Dernière mise à jour Scryfall : ${new Date(j.updated_at).toLocaleDateString('fr-FR')}.`);
-      else toast('Vérification Scryfall impossible.');
-    });
+  /* Bouton unique de la fenêtre de sauvegarde : il teste la version publiée
+     et ne retélécharge l'archive que si elle manque ou si elle a vieilli. */
+  if (act === 'catalogueMaj') {
+    majCatalogue();
+    return;
+  }
+
+  /* Fenêtre proposée au démarrage quand les données ont pu changer. */
+  if (act === 'majMaintenant') {
+    closeDialog();
+    telechargerCatalogue();
+    return;
+  }
+
+  if (act === 'majPlusTard') {
+    S.majIgnoree = CAT.majDispo;
+    scheduleSave();
+    closeDialog();
+    toast("Mise à jour reportée : elle reste accessible depuis la pastille de sauvegarde.");
     return;
   }
 
@@ -315,28 +329,9 @@ document.addEventListener('click', ev => {
       CAT.date = null;
       invaliderCandidats();
       renderAll();
-      const corps = document.getElementById('dlgBody');
-      if (corps) {
-        corps.innerHTML = corpsSauvegarde();
-        brancherRestauration();
-        brancherCatalogue();
-      }
+      rafraichirFenetreSauvegarde();
       toast("Archive du catalogue effacée.");
     });
-    return;
-  }
-
-  if (act === 'prixMaj') {
-    toast('Rafraîchissement des prix Cardmarket en cours…');
-    majPrix(true).then(() => {
-      renderAll();
-      const corps = document.getElementById('dlgBody');
-      if (corps) {
-        corps.innerHTML = corpsSauvegarde();
-        brancherRestauration();
-        brancherCatalogue();
-      }
-    }).catch(err => toast(`Échec : ${err.message||'erreur réseau'}.`));
     return;
   }
 
@@ -619,8 +614,7 @@ function demarrer() {
     if (trouve) renderAll();
     if (archetypesARevoir()) chargerArchetypesEdhrec();
   });
-  verifierMajCatalogue();
-  if (autoCatalogue()) chargerCatalogueComplet();
+  demarrerCatalogue();
 }
 
 if (document.readyState === 'loading') {
