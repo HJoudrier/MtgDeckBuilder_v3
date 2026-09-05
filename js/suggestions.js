@@ -540,17 +540,24 @@ function visuelsSuggestions(byType, edhrecPicks) {
 let visuelsEnCours = false;
 const VISUELS_CHARGES = new Set();
 
+/* Les visuels partent par paquets de six, pour ne pas ouvrir cent requêtes
+   d'un coup. Le paquet suivant est relu dans le document à chaque tour,
+   jamais figé au départ : un nouveau rendu remplace les vignettes en place,
+   et une liste figée finirait de remplir des images détachées du document
+   pendant que celles réellement affichées resteraient vides — c'est ce qui
+   arrivait à l'import du catalogue, qui rend à nouveau tous les 25 000
+   enregistrements. Le garde-fou évite qu'un paquet dont les évènements ne
+   reviennent pas (image retirée en vol) n'arrête la file pour de bon. */
 function chargeVisuelsClasses() {
   if (visuelsEnCours || typeof document.querySelectorAll !== 'function') return;
-  const attente = [...document.querySelectorAll('img.cimg[data-src]')];
-  if (!attente.length) return;
   visuelsEnCours = true;
-  let i = 0;
   const suivant = () => {
-    if (i >= attente.length) { visuelsEnCours = false; return; }
-    const lot = attente.slice(i, i + 6); i += 6;
-    let restants = lot.length;
-    const fini = () => { if (--restants <= 0) setTimeout(suivant, 60); };
+    const lot = [...document.querySelectorAll('img.cimg[data-src]')].slice(0, 6);
+    if (!lot.length) { visuelsEnCours = false; return; }
+    let restants = lot.length, clos = false;
+    const passer = () => { if (clos) return; clos = true; clearTimeout(garde); setTimeout(suivant, 60); };
+    const fini = () => { if (--restants <= 0) passer(); };
+    const garde = setTimeout(passer, 8000);
     lot.forEach(img => {
       const src = img.getAttribute('data-src'), nom = img.getAttribute('data-nom');
       img.removeAttribute('data-src');

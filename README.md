@@ -331,7 +331,7 @@ Données : `VISUELS_CHARGES`
 | `panneauAchats()` | Panneau Cardmarket : budget, état, langue, vendeur. |
 | `listeSuggestions()` | Assemble les groupes par type et le filtre par rôle. |
 | `visuelsSuggestions(byType)` | Demande les visuels des propositions affichées. |
-| `chargeVisuelsClasses()` | Charge les visuels par lots, dans l'ordre du score. |
+| `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
 | `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
 | `refreshSuggestions()` | Rafraîchit la liste sans toucher aux champs de saisie. |
 | `renderF()` | Rend la section des suggestions. |
