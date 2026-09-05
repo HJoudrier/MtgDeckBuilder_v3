@@ -256,14 +256,6 @@ function filtreOK(card) {
   return true;
 }
 
-function seedCollection() {
-  DB.forEach(c => {
-    let q = c.price > 20 ? 1 : (c.price > 6 ? 2 : 3);
-    if (/^basic land/i.test(c.type)) q = 12;
-    S.collection.set(c.name, q);
-  });
-}
-
 function fmt() {
   const f = FORMATS[S.format];
   return S.format === 'perso'

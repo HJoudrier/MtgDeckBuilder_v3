@@ -178,7 +178,9 @@ function renderB() {
       ${page.length ? (S.view === 'grid'
         ? `<div class="grid">${page.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${page.map(e => cardRow(e, 'collection')).join('')}</div>`)
-        : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs${actifs.length ? " ou assouplissez les filtres" : ''} depuis le bouton « Filtres » de l'en-tête.</div>`}
+        : (total === 0
+          ? `<div class="empty">Votre collection est vide. Ajoutez une carte, ou importez une liste MTGO, avec les boutons ci-dessus.</div>`
+          : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs${actifs.length ? " ou assouplissez les filtres" : ''} depuis le bouton « Filtres » de l'en-tête.</div>`)}
       ${rest > 0 ? `<div style="text-align:center;margin-top:10px"><button class="btn" data-act="moreB">Afficher ${Math.min(PAGE, rest)} cartes de plus (${rest} restantes)</button></div>` : ''}`;
   }
 

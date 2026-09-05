@@ -663,7 +663,4 @@ function initBuiltin() {
       registerCard(buildCard(name, cost, type, price, text));
     });
   }
-  if (S.collection.size === 0 && S.deck.size === 0) {
-    seedCollection();
-  }
 }
