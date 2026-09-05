@@ -109,6 +109,11 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'versionsPossedees' || act === 'versionsToutes') {
+    basculerSourceVersions(b.dataset.name, act === 'versionsToutes' ? 'toutes' : 'possedees');
+    return;
+  }
+
   if (act === 'choisirVersion') {
     choisirVersion(b.dataset.name, b.dataset.cle);
     return;

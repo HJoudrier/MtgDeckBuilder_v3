@@ -94,11 +94,14 @@ function applyScryfall(sc, requested, imagesOnly) {
       target.identity = sc.color_identity.slice();
     }
     if (typeof sc.cmc === 'number') target.cmc = sc.cmc;
-    if (uris) {
+    /* Une illustration choisie à la main fait autorité : seule une réponse
+       portant sur cette impression-là peut la remplacer. */
+    const cleRep = cleImpression(sc.set, sc.collector_number);
+    if (uris && (!target.impressionChoisie || target.impressionChoisie === cleRep)) {
       target.img = uris.small || uris.normal;
       target.imgN = uris.normal || uris.large || target.img;
       target.imgL = uris.large || uris.png || target.imgN;
-      target.imgImpression = cleImpression(sc.set, sc.collector_number);
+      target.imgImpression = cleRep;
     }
     if (versoUris) {
       target.imgB = versoUris.normal || versoUris.small;
@@ -203,7 +206,7 @@ function indexImpressions(cartes) {
 function besoinScryfall(c) {
   if (!c || c.unknown) return false;
   if (S.images && !c.img && !c.imgTried) return true;
-  if (S.images && c.set && c.num && !c.impressionTried && !c.impressionKO
+  if (S.images && c.set && c.num && !c.impressionTried && !c.impressionKO && !c.impressionChoisie
       && c.imgImpression !== cleImpression(c.set, c.num)) return true;
   return !c.textFull && !c.texteTried;
 }
@@ -426,6 +429,50 @@ async function chercheImpressions(card) {
     card.visuelsTried = false;
     return false;
   }
+}
+
+/* Toutes les éditions publiées d'une carte, à la demande seulement : une
+   recherche « unique=prints », dont on suit les pages jusqu'à trois. Les
+   éditions numériques sont écartées — la collection et les prix affichés
+   sont ceux du papier. */
+async function chercheToutesEditions(card) {
+  if (!card || typeof fetch !== 'function') return false;
+  if (card.editionsEtat === 'chargement' || card.editionsEtat === 'ok') return false;
+  card.editionsEtat = 'chargement';
+  card.editionsErreur = '';
+  const nom = String(card.name || '').replace(/"/g, '');
+  let url = 'https://api.scryfall.com/cards/search?unique=prints&order=released&dir=desc&q='
+          + encodeURIComponent('!"' + nom + '" game:paper');
+  const out = [];
+  try {
+    for (let page = 0; page < 3 && url; page++) {
+      const r = await fetch(url);
+      if (r.status === 404) break;   // recherche sans résultat : liste vide, pas une panne
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      (j.data || []).forEach(sc => {
+        const u = visuelDepuisScryfall(sc);
+        if (!u) return;
+        const faces = sc.card_faces && sc.card_faces.length ? sc.card_faces : null;
+        const verso = (faces && faces[1] && faces[1].image_uris) || null;
+        out.push(Object.assign({
+          set: String(sc.set || '').toUpperCase(),
+          num: sc.collector_number == null ? '' : String(sc.collector_number),
+          sortie: sc.released_at || '',
+          imgB: verso ? (verso.normal || verso.small || '') : '',
+          imgBL: verso ? (verso.large || verso.normal || '') : ''
+        }, u));
+      });
+      url = j.has_more ? j.next_page : '';
+      if (url) await new Promise(res => setTimeout(res, 120));
+    }
+    card.editions = out;
+    card.editionsEtat = 'ok';
+  } catch(err) {
+    card.editionsEtat = 'erreur';
+    card.editionsErreur = err.message || 'échec réseau';
+  }
+  return true;
 }
 
 async function chercheVerso(card) {

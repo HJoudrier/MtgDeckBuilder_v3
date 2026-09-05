@@ -187,6 +187,7 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `loadSymbology()` *(async)* | Récupère les adresses officielles des symboles de mana. |
 | `chercheVerso(card)` *(async)* | Récupère le verso d'une carte recto-verso quand l'archive ne l'a pas. |
 | `chercheImpressions(card)` *(async)* | Visuels de chaque édition possédée, en une requête, à l'ouverture de la fiche. |
+| `chercheToutesEditions(card)` *(async)* | Toutes les éditions papier publiées, en « unique=prints », à la demande seulement. |
 | `semeVisuelVersion(card)` | Reprend le visuel déjà affiché comme celui de son édition, pour ne pas le redemander. |
 | `visuelDepuisScryfall(sc)` | Visuel, illustrateur, nom du set et prix d'une impression. |
 | `compacte(sc)` | Réduit une carte Scryfall aux champs utiles à l'analyse et au classement. |
@@ -434,6 +435,10 @@ Données : `RETOURNEES`
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
 | `faceVisible(c,grande)` | Face actuellement affichée. |
+| `sourceVersions(card)` | Laquelle des deux listes la fiche montre : les éditions possédées ou toutes. |
+| `listeVersions(card)` | La liste correspondante. |
+| `possedeVersion(card,cle)` | Exemplaires possédés d'une édition, quelle que soit la liste montrée. |
+| `basculerSourceVersions(nom,src)` | Passe d'une liste à l'autre ; la première bascule lance la recherche. |
 | `versionRang(card)` | Rang de l'édition consultée dans la fiche ouverte. |
 | `versionCourante(card)` | L'édition consultée elle-même. |
 | `faireDefilerVersion(nom,pas)` | Passe à l'édition précédente ou suivante, en boucle. |
@@ -479,12 +484,19 @@ Données : `RETOURNEES`
   elle-même ne fait pas de l'interaction, une contrainte qu'on s'impose n'est pas du stax.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
-- Une carte présente en plusieurs éditions dans la collection se feuillette depuis sa fiche : `card.impressions`
-  porte les impressions relevées à l'import, `chercheImpressions()` en rapporte les visuels en une requête, et
-  « Afficher cette édition en priorité » écrit `card.impressionChoisie` puis recopie visuel, illustrateur, nom de set,
-  prix et lien d'achat dans la carte. Tout ce qui lit `card.img*` suit donc sans rien changer : vignettes de la
-  collection, aperçu au survol, deck. Seule l'édition choisie est conservée d'une session à l'autre ; les visuels des
-  autres éditions sont redemandés à l'ouverture de la fiche, pour ne pas alourdir la sauvegarde.
+- La fiche d'une carte feuillette ses éditions, sous deux listes. « Mes éditions » vient de `card.impressions`,
+  relevées à l'import, dont `chercheImpressions()` rapporte les visuels en une requête à l'ouverture de la fiche.
+  « Toutes » vient de `chercheToutesEditions()`, une recherche Scryfall en « unique=prints » limitée au papier et
+  lancée seulement si on la demande — une carte peut compter des dizaines d'impressions, il n'y a pas lieu d'aller
+  les chercher à chaque fiche ouverte.
+- « Afficher cette illustration en priorité » écrit `card.impressionChoisie` et recopie visuel et illustrateur dans
+  la carte : tout ce qui lit `card.img*` suit sans rien changer — vignettes de la collection, aperçu au survol, deck.
+  L'édition de référence, le nom de set, le prix et le lien d'achat ne suivent que si l'édition est possédée : choisir
+  une illustration ne doit ni laisser croire qu'on possède l'impression, ni fausser le budget. Un choix explicite fait
+  ensuite autorité — `besoinScryfall()` cesse de vouloir corriger le visuel, et `applyScryfall()` ne le remplace que
+  sur réponse portant sur cette impression.
+- Seule l'édition choisie est conservée d'une session à l'autre ; les visuels des autres sont redemandés à l'ouverture
+  de la fiche, pour ne pas alourdir la sauvegarde.
 - La fenêtre des filtres applique en direct : le décompte de cartes retenues suit la frappe. « Annuler » ne renonce
   donc pas à appliquer, il revient à l'instantané pris à l'ouverture — critères et couleurs comprises. Seul
   « Appliquer » garde ce qui est en vigueur ; la croix, Échap et l'arrière-plan valent Annuler.
