@@ -641,8 +641,6 @@ function openFiltresModal() {
      <button type="button" class="btn" data-act="closeDialog">Annuler</button>
      <button type="button" class="btn pri" data-act="appliquerFiltres">Appliquer</button>`);
   filtresAvant = memo;
-  const champ = document.getElementById('f_nom');
-  if (champ) champ.focus();
 }
 
 function renderTop() {
