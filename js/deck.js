@@ -162,6 +162,23 @@ function ficheTexteHTML(card) {
 }
 
 /* Le visuel n'a pas pu se charger : le texte prend sa place. */
+/* La fiche ouverte se reconstruit quand Scryfall a répondu — ou renoncé —
+   sans quoi l'attente affichée resterait à tourner pour rien. */
+function rafraichirFiche() {
+  const dlg = document.getElementById('dlg');
+  const el = dlg && dlg.open && dlg.querySelector('.fiche[data-fiche]');
+  if (el) openCardModal(el.getAttribute('data-fiche'));
+}
+
+/* Carte vide et son icône de chargement, le temps que le visuel arrive. */
+function visuelAttenteHTML() {
+  return `<div class="visuwrap">
+    <div class="visu-attente" role="status" aria-label="Visuel en cours de chargement">
+      <span class="spin" aria-hidden="true"></span>
+    </div>
+  </div>`;
+}
+
 function ficheImageKO(img) {
   const wrap = img && img.closest('.visuwrap');
   const c = img && find(img.getAttribute('data-name') || '');
@@ -175,13 +192,14 @@ function blocVersions(card) {
   if (!card || card.unknown) return '';
   const possedees = versionsCarte(card);
   const toutes = sourceVersions(card) === 'toutes';
+  const voulue = sourceVoulue(card);
   const vs = listeVersions(card);
   const enCours = card.editionsEtat === 'chargement';
   const bascule = `<div class="vers-src">
     <button type="button" class="vers-s" data-act="versionsPossedees" data-name="${esc(card.name)}"
-      aria-pressed="${!toutes}" ${possedees.length ? '' : 'disabled'}>Mes éditions${possedees.length ? ` (${possedees.length})` : ''}</button>
+      aria-pressed="${voulue !== 'toutes'}" ${possedees.length ? '' : 'disabled'}>Mes éditions${possedees.length ? ` (${possedees.length})` : ''}</button>
     <button type="button" class="vers-s" data-act="versionsToutes" data-name="${esc(card.name)}"
-      aria-pressed="${toutes}">Toutes${card.editionsEtat === 'ok' ? ` (${(card.editions||[]).length})` : ''}</button>
+      aria-pressed="${voulue === 'toutes'}">${enCours ? 'Toutes…' : `Toutes${card.editionsEtat === 'ok' ? ` (${(card.editions||[]).length})` : ''}`}</button>
   </div>`;
 
   if (!vs.length) {
@@ -219,7 +237,8 @@ function blocVersions(card) {
         title="Édition suivante" ${vs.length < 2 ? 'disabled' : ''}>›</button>
     </div>
     <div class="small muted vers-det">${
-      u && u.ko ? 'Scryfall ne connaît pas cette édition : son visuel reste indisponible.'
+      enCours ? 'Recherche des éditions publiées…'
+      : u && u.ko ? 'Scryfall ne connaît pas cette édition : son visuel reste indisponible.'
       : attente ? 'Visuel en cours de recherche…'
       : details}</div>
     ${retenue
@@ -295,17 +314,22 @@ function ficheHTML(card) {
   const vCle = vCour ? cleVersion(vCour) : '';
   const vAffichee = !vCour || vCle === cleImpression(card.set, card.num);
   const vSrc = vCour ? visuelVersion(card, vCour, true) : faceVisible(card, true);
-
-  return `<div class="fiche">
-      <div class="visucol">
-      ${S.images && (vSrc || card.imgL || card.imgN || card.img) ? `<div class="visuwrap">
+  /* Trois états : le visuel est là, il se cherche encore, ou il n'y en a pas. */
+  const blocVisuel = !S.images ? ficheTexteHTML(card)
+    : vSrc ? `<div class="visuwrap">
         <img class="visu" src="${esc(vSrc)}" alt="${esc(card.name)}" data-name="${esc(card.name)}" onerror="ficheImageKO(this)">
         ${vAffichee && aDeuxFaces(card) && autreFace(card) ? `<button type="button" class="miniface" data-act="flip" data-name="${esc(card.name)}"
             title="Afficher ${RETOURNEES.has(card.name)?'le recto':'le verso'}">
             <img src="${esc(autreFace(card))}" alt="">
             <span>${RETOURNEES.has(card.name)?'recto':'verso'}</span>
           </button>` : ''}
-      </div>` : ficheTexteHTML(card)}
+      </div>`
+    : visuelEnRecherche(card, vCour) ? visuelAttenteHTML()
+    : ficheTexteHTML(card);
+
+  return `<div class="fiche" data-fiche="${esc(card.name)}">
+      <div class="visucol">
+      ${blocVisuel}
       ${blocVersions(card)}
       </div>
       <div class="meta">

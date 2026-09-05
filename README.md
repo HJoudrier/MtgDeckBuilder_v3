@@ -415,6 +415,8 @@ Données : `RETOURNEES`
 | `majFenetreFormat()` | Réécrit la fenêtre au changement de format. |
 | `ficheHTML(card)` | Fiche détaillée : rôles ligne à ligne et cartes du deck branchées, combos, capacités extraites, puis en bas de fiche les branchements possibles avec la collection filtrée. |
 | `ficheTexteHTML(card)` | Carte rendue en texte — coût, type, force/endurance, texte — à la place du visuel absent. |
+| `visuelAttenteHTML()` | Carte vide et son icône de chargement, le temps que le visuel arrive. |
+| `rafraichirFiche()` | Reconstruit la fiche ouverte quand Scryfall a répondu ou renoncé. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
@@ -442,6 +444,8 @@ Données : `RETOURNEES`
 | `versionCourante(card)` | L'édition consultée elle-même. |
 | `faireDefilerVersion(nom,pas)` | Passe à l'édition précédente ou suivante, en boucle. |
 | `visuelVersion(card,v,grande)` | Visuel d'une édition donnée. |
+| `visuelEnRecherche(card,v)` | Vrai tant qu'un aller-retour est en vol sans visuel à montrer. |
+| `sourceVoulue(card)` | Source demandée, même avant que sa recherche n'aboutisse. |
 | `choisirVersion(nom,cle)` | Retient une édition : elle devient celle de la carte, partout. |
 | `refCarte(nom)` | Nom de carte survolable et cliquable. |
 | `apercuTexte(c)` | Texte de l'aperçu volant : sauts de ligne rétablis, longueur bornée. |
@@ -494,6 +498,11 @@ Données : `RETOURNEES`
   une illustration ne doit ni laisser croire qu'on possède l'impression, ni fausser le budget. Un choix explicite fait
   ensuite autorité — `besoinScryfall()` cesse de vouloir corriger le visuel, et `applyScryfall()` ne le remplace que
   sur réponse portant sur cette impression.
+- Le visuel d'une fiche a trois états : présent, en cours de recherche — une carte vide à ses proportions et son
+  icône de chargement — ou introuvable, auquel cas le panneau de texte prend sa place. Le second s'appuie sur des
+  drapeaux posés le temps de l'aller-retour (`imgEnCours`, `visuelsEnCours`, `editionsEtat`) : `imgTried`, posé dès la
+  mise en file, dit qu'on a demandé, pas qu'on a reçu. `rafraichirFiche()` reconstruit la fiche ouverte quand la file
+  Scryfall aboutit ou renonce, sans quoi l'attente resterait affichée.
 - Seule l'édition choisie est conservée d'une session à l'autre ; les visuels des autres sont redemandés à l'ouverture
   de la fiche, pour ne pas alourdir la sauvegarde.
 - La fenêtre des filtres applique en direct : le décompte de cartes retenues suit la frappe. « Annuler » ne renonce

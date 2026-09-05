@@ -206,6 +206,12 @@ function sourceVersions(card) {
           && card.editionsEtat === 'ok') ? 'toutes' : 'possedees';
 }
 
+/* La source demandée, qui n'est pas encore la source affichée tant que la
+   recherche n'a pas abouti : c'est elle que la bascule doit montrer pressée. */
+function sourceVoulue(card) {
+  return (versionVue.nom === card.name && versionVue.src === 'toutes') ? 'toutes' : 'possedees';
+}
+
 function listeVersions(card) {
   return sourceVersions(card) === 'toutes' ? (card.editions || []) : versionsCarte(card);
 }
@@ -254,8 +260,11 @@ function basculerSourceVersions(nom, src) {
   };
   if (src === 'toutes' && card.editionsEtat !== 'ok') {
     versionVue = {nom: card.name, i: 0, src: 'toutes'};
+    /* La recherche est lancée avant le rendu : elle pose son drapeau tout de
+       suite, si bien que la fiche s'ouvre en annonçant l'attente. */
+    const enRoute = chercheToutesEditions(card);
     openCardModal(card.name);
-    chercheToutesEditions(card).then(() => {
+    enRoute.then(() => {
       if (document.getElementById('dlg') && document.getElementById('dlg').open) poser();
     });
     return;
@@ -273,6 +282,22 @@ function visuelVersion(card, v, grand) {
     return cleVersion(v) === cleImpression(card.set, card.num) ? faceVisible(card, grand) : '';
   }
   return (grand && u.imgL) ? u.imgL : (u.imgN || u.img || '');
+}
+
+/* Le visuel se cherche encore : rien à montrer pour l'instant, mais un
+   aller-retour est en vol. La fiche affiche alors une carte vide et son
+   icône de chargement, plutôt que de retomber sur le panneau de texte —
+   qui, lui, dit « pas de visuel », ce qui serait prématuré. */
+function visuelEnRecherche(card, v) {
+  if (!card || !S.images) return false;
+  if (card.editionsEtat === 'chargement') return true;
+  if (card.visuelsEnCours) return true;
+  if (v) {
+    const cle = cleVersion(v);
+    if ((card.visuels || {})[cle] || v.imgN || v.img) return false;
+    if (cle !== cleImpression(card.set, card.num)) return false;
+  }
+  return !!card.imgEnCours;
 }
 
 /* Retenir une édition : son illustration devient celle de la carte partout —

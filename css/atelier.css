@@ -378,6 +378,14 @@ dialog.wide{max-width:min(760px,96vw)}
 .vers-ok{color:var(--brass)}
 .vers-pick{align-self:flex-start}
 .fiche .visu{flex:1;min-width:0;border-radius:10px;background:#191524;display:block}
+/* Visuel en cours de recherche : une carte vide, à ses proportions, et son
+   icône de chargement au centre. */
+.visu-attente{flex:1;min-width:0;aspect-ratio:5/7;border-radius:10px;background:#191524;
+  border:1px solid var(--line2);display:flex;align-items:center;justify-content:center}
+.spin{width:26px;height:26px;border-radius:50%;border:2px solid var(--line2);
+  border-top-color:var(--brass);animation:tourne .8s linear infinite}
+@keyframes tourne{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .spin{animation-duration:2.4s} }
 .miniface{flex:0 0 62px;padding:3px;border:1px solid var(--line2);border-radius:7px;background:var(--panel);
   cursor:pointer;display:block;text-align:center;line-height:1}
 .miniface:hover{border-color:var(--brass)}

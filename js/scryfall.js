@@ -218,6 +218,10 @@ function queueScryfall(cards) {
     c.imgTried = true;
     c.texteTried = true;
     c.impressionTried = true;
+    /* `imgTried` est posé dès la mise en file : il dit qu'on a demandé, pas
+       qu'on a reçu. Ce second drapeau, lui, dure le temps de l'aller-retour,
+       et c'est lui que la fiche regarde pour afficher son attente. */
+    c.imgEnCours = true;
     scryQueue.push(c);
   });
   if (scryQueue.length && !scryBusy) runScryQueue();
@@ -247,6 +251,9 @@ async function runScryQueue() {
     } catch(err) {
       S.scryHS = true;
       scryBusy = false;
+      chunk.forEach(c => c.imgEnCours = false);
+      scryQueue.forEach(c => c.imgEnCours = false);
+      if (typeof rafraichirFiche === 'function') rafraichirFiche();
       if (S.images) {
         S.imagesFailed = true;
         toast("Visuels indisponibles (hors ligne ou accès bloqué). L'affichage reste en mode texte.");
@@ -256,8 +263,10 @@ async function runScryQueue() {
       renderB();
       return;
     }
+    chunk.forEach(c => c.imgEnCours = false);
     renderB();
     renderE();
+    if (typeof rafraichirFiche === 'function') rafraichirFiche();
     if (typeof majApercu === 'function') majApercu();
     if (typeof scheduleSave === 'function') scheduleSave();
     await new Promise(res => setTimeout(res, 90));
@@ -404,6 +413,7 @@ async function chercheImpressions(card) {
   const manquants = vs.filter(v => cleVersion(v) && !connus[cleVersion(v)]).slice(0, 75);
   if (!manquants.length || card.visuelsTried) return false;
   card.visuelsTried = true;
+  card.visuelsEnCours = true;
   try {
     const r = await fetch('https://api.scryfall.com/cards/collection', {
       method: 'POST',
@@ -428,6 +438,8 @@ async function chercheImpressions(card) {
   } catch(err) {
     card.visuelsTried = false;
     return false;
+  } finally {
+    card.visuelsEnCours = false;
   }
 }
 
