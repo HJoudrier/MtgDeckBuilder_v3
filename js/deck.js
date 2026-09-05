@@ -309,8 +309,11 @@ function ficheHTML(card) {
   };
   const noeuds = [...new Set(card.an.edges.flatMap(e => [e.from, e.to]))];
 
-  const vers = versionsCarte(card);
-  const vCour = vers.length > 1 ? versionCourante(card) : null;
+  /* La même liste que le sélecteur d'éditions, et non les seules éditions
+     possédées : sans quoi une carte possédée en un seul exemplaire laissait
+     défiler les illustrations publiées sans jamais changer son visuel. */
+  const vers = listeVersions(card);
+  const vCour = vers.length ? versionCourante(card) : null;
   const vCle = vCour ? cleVersion(vCour) : '';
   const vAffichee = !vCour || vCle === cleImpression(card.set, card.num);
   const vSrc = vCour ? visuelVersion(card, vCour, true) : faceVisible(card, true);
