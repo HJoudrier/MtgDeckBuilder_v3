@@ -104,6 +104,11 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'appliquerFiltres') {
+    appliquerFiltres();
+    return;
+  }
+
   if (act === 'resetFiltres') {
     reinitFiltres();
     majFenetreFiltres();
@@ -572,6 +577,9 @@ document.addEventListener('change', ev => {
 // Fermeture au clic sur l'arrière-plan (backdrop)
 const dlgEl = document.getElementById('dlg');
 if (dlgEl) {
+  /* Une fenêtre de filtres fermée autrement que par « Appliquer » revient
+     à l'état d'avant son ouverture, quel qu'ait été le geste. */
+  dlgEl.addEventListener('close', () => fermetureFiltres());
   dlgEl.addEventListener('click', ev => {
     if (ev.target === dlgEl) {
       const rect = dlgEl.getBoundingClientRect();

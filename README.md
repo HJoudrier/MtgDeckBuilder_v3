@@ -407,7 +407,11 @@ Données : `RETOURNEES`
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
-| `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête. |
+| `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et prend l'instantané auquel « Annuler » revient. |
+| `instantaneFiltres()` | Copie des critères et des couleurs, avant modification. |
+| `restaurerFiltres(memo)` | Repose un tel instantané. |
+| `appliquerFiltres()` | « Appliquer » : oublie l'instantané, puis ferme. |
+| `fermetureFiltres()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — revient à l'instantané. |
 | `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
 | `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
@@ -452,6 +456,9 @@ Données : `RETOURNEES`
   elle-même ne fait pas de l'interaction, une contrainte qu'on s'impose n'est pas du stax.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
+- La fenêtre des filtres applique en direct : le décompte de cartes retenues suit la frappe. « Annuler » ne renonce
+  donc pas à appliquer, il revient à l'instantané pris à l'ouverture — critères et couleurs comprises. Seul
+  « Appliquer » garde ce qui est en vigueur ; la croix, Échap et l'arrière-plan valent Annuler.
 - Un filtre posé une fois vaut partout : `carteFiltree()` filtre la collection, le deck et sa courbe de mana,
   les statistiques, le graphe et les suggestions d'ajout. La taille du deck, sa conformité au format et
   l'équilibre des rôles restent calculés sur le deck entier.

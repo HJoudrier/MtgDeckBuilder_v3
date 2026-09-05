@@ -386,6 +386,8 @@ dialog.wide{max-width:min(760px,96vw)}
 .puce::before{content:'▸';position:absolute;left:0;color:var(--brass)}
 @media (max-width:520px){ .fiche .visu{width:100%;max-width:260px;margin:0 auto} }
 .dlg-f{padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+/* Un bouton poussé à gauche, le reste restant groupé à droite. */
+.dlg-f .foot-g{margin-right:auto}
 textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
 @media (max-width:640px){
   .wrap{padding:8px 8px 70px}

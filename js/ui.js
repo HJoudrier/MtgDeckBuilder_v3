@@ -56,6 +56,9 @@ function toast(msg) {
 function openDialog(title, bodyHTML, actionsHTML, grande) {
   const dlg = document.getElementById('dlg');
   if (!dlg) return;
+  /* Une autre fenêtre prend la place : l'instantané des filtres n'a plus
+     lieu d'être, sans quoi sa fermeture ferait reculer les filtres. */
+  filtresAvant = null;
   dlg.classList.toggle('grand', !!grande);
   dlg.classList.toggle('wide', !!grande);
   const headEl = document.getElementById('dlgTitle') || document.getElementById('dlgHead');
@@ -596,10 +599,48 @@ function majFenetreFiltres() {
   if (nouveau) nouveau.scrollTop = yArch;
 }
 
+/* Les critères s'appliquent en direct pendant la saisie : c'est ce qui fait
+   vivre le décompte de cartes retenues. « Annuler » ne renonce donc pas à
+   appliquer, il revient à l'état d'avant l'ouverture — d'où cet instantané.
+   Il couvre tout ce que la fenêtre sait changer, couleurs comprises. */
+let filtresAvant = null;
+
+function instantaneFiltres() {
+  return {filtres: {...S.filtres}, colors: new Set(S.colors), colorMode: S.colorMode};
+}
+
+function restaurerFiltres(memo) {
+  if (!memo) return;
+  S.filtres = {...memo.filtres};
+  S.colors = new Set(memo.colors);
+  S.colorMode = memo.colorMode;
+}
+
+/* « Appliquer » garde ce qui est déjà en vigueur : il suffit d'oublier
+   l'instantané avant de fermer. */
+function appliquerFiltres() {
+  filtresAvant = null;
+  closeDialog();
+}
+
+/* Toute autre façon de fermer — Annuler, la croix, Échap, l'arrière-plan —
+   laisse l'instantané en place : `fermetureFiltres()` s'en sert pour revenir
+   en arrière. */
+function fermetureFiltres() {
+  if (!filtresAvant) return;
+  restaurerFiltres(filtresAvant);
+  filtresAvant = null;
+  S.limitB = PAGE;
+  renderAll();
+}
+
 function openFiltresModal() {
+  const memo = instantaneFiltres();
   openDialog('Filtres de la collection', corpsFiltres(),
-    `<button type="button" class="btn" data-act="resetFiltres">Réinitialiser</button>
-     <button type="button" class="btn pri" data-act="closeDialog">Fermer</button>`);
+    `<button type="button" class="btn foot-g" data-act="resetFiltres">Réinitialiser</button>
+     <button type="button" class="btn" data-act="closeDialog">Annuler</button>
+     <button type="button" class="btn pri" data-act="appliquerFiltres">Appliquer</button>`);
+  filtresAvant = memo;
   const champ = document.getElementById('f_nom');
   if (champ) champ.focus();
 }
