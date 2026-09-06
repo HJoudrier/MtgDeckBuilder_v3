@@ -96,6 +96,23 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'setMenu') {
+    setOuvert = !setOuvert;
+    majFenetreFiltres();
+    return;
+  }
+
+  if (act === 'toggleSet') {
+    basculerSet(b.dataset.set);
+    // les cartes du set coché sont cherchées à la demande
+    setsACharger().forEach(code => chargerSetScryfall(code));
+    majFenetreFiltres();
+    majResumeFiltres();
+    S.limitB = PAGE;
+    renderAll();
+    return;
+  }
+
   if (act === 'dropFiltre') {
     effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean));
     majFenetreFiltres();
@@ -526,6 +543,11 @@ document.addEventListener('input', ev => {
     majListeArchetypes();
     return;
   }
+  if (t.dataset.setq !== undefined) {
+    setRecherche = t.value;
+    majListeSets();
+    return;
+  }
   if (t.dataset.filtre) {
     majFiltre(t.dataset.filtre, t.value);
     majResumeFiltres();
@@ -629,6 +651,9 @@ function demarrer() {
     if (trouve) renderAll();
     if (archetypesARevoir()) chargerArchetypesEdhrec();
   });
+  /* Les sets déjà connus reviennent du cache : un set coché avant le
+     rechargement filtre de nouveau sans attendre Scryfall. */
+  reprendreSets().then(trouve => { if (trouve) renderAll(); });
   demarrerCatalogue();
 }
 

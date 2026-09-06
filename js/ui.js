@@ -604,6 +604,22 @@ function corpsFiltres() {
       <input type="text" id="f_type" data-filtre="type" value="${esc(f.type)}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
     </div>
     <div class="field">
+      <label class="lab">Set</label>
+      ${setsFiltre().length ? `<div class="archetypes">${setsFiltre().map(code =>
+        `<button type="button" class="arch-btn" data-act="toggleSet" data-set="${esc(code)}" aria-pressed="true"
+          title="${esc(libelleSet(code))}">${esc(code)} ✕</button>`).join('')}</div>` : ''}
+      <button type="button" class="arch-menu-b" data-act="setMenu" aria-expanded="${setOuvert}">
+        <span>${setsFiltre().length ? `${setsFiltre().length} set(s) coché(s)` : 'Choisir un set…'}</span>
+        <span class="chev-b">${setOuvert ? '▴' : '▾'}</span>
+      </button>
+      ${setOuvert ? `<div class="arch-menu" id="setPanel">
+        <input type="text" id="f_setQ" data-setq placeholder="rechercher…" value="${esc(setRecherche)}" autocomplete="off">
+        <div class="arch-liste">${listeSetsHTML()}</div>
+      </div>` : ''}
+      <div class="small muted">Une carte est retenue si elle a paru dans au moins un set coché, qu'on la possède ou non dans cette édition.</div>
+      <div class="small muted" id="setEtat">${etatSets()}</div>
+    </div>
+    <div class="field">
       <label class="lab" for="f_texte">Texte de règles</label>
       <input type="text" id="f_texte" data-filtre="texte" value="${esc(f.texte)}" placeholder="ex. draw a card, sacrifice a creature…" autocomplete="off">
     </div>
@@ -648,6 +664,8 @@ function corpsFiltres() {
 
 let archRecherche = '';
 let archOuvert = false;
+let setRecherche = '';
+let setOuvert = false;
 
 /* Lignes de la liste déroulante : le nom, puis ce que fait l'archétype.
    Tous les thèmes publiés par EDHREC y figurent ; la recherche ne fait
@@ -704,6 +722,62 @@ function etatArchetypes() {
     d'un thème à sa première utilisation. Le tout est gardé en cache sur cet appareil.`;
 }
 
+/* Lignes de la liste des sets : le nom, puis son code, son année et sa
+   taille. Tous les sets papier publiés par Scryfall y figurent ; la
+   recherche ne fait que resserrer l'affichage. Le plus récent d'abord,
+   c'est celui qu'on cherche le plus souvent. */
+function listeSetsHTML() {
+  if (!SETS_BASE.liste.length) {
+    return `<div class="small muted" style="padding:8px 10px">${SETS_BASE.etat === 'chargement'
+      ? 'Chargement de la liste des sets…'
+      : 'La liste vient de Scryfall : elle se charge à l\'ouverture de cette fenêtre.'}</div>`;
+  }
+  const choisis = new Set(setsFiltre());
+  const q = loose(setRecherche);
+  let liste = SETS_BASE.liste.slice();
+  if (q) liste = liste.filter(x => loose(x.nom).includes(q) || loose(x.code).includes(q));
+  liste = liste.sort((a, b) => String(b.sortie).localeCompare(String(a.sortie)) || a.nom.localeCompare(b.nom));
+  if (!liste.length) return '<div class="small muted" style="padding:6px 8px">Aucun set à ce nom.</div>';
+
+  return liste.map(x => {
+    const coche = choisis.has(x.code);
+    const charge = SETS_BASE.charges[x.code];
+    const annee = String(x.sortie || '').slice(0, 4);
+    const etat = SETS_BASE.enCours.has(x.code) ? ' · chargement…'
+      : (charge ? (charge.erreur ? ' · ' + charge.erreur : ` · ${charge.n} carte(s) connues`) : '');
+    return `<button type="button" class="arch-row" data-act="toggleSet" data-set="${esc(x.code)}" aria-pressed="${coche}">
+      <span class="arch-row-h"><span class="arch-row-t">${esc(x.nom)}</span>
+        <span class="arch-n">${esc(x.code)}${annee ? ' · ' + annee : ''}${x.n ? ` · ${x.n} cartes` : ''}${etat}</span>
+        <span class="arch-row-x">${coche ? '✓' : ''}</span></span>
+    </button>`;
+  }).join('');
+}
+
+/* Rafraîchit la liste proposée sans réécrire la fenêtre : la frappe dans le
+   champ de recherche garde son curseur. */
+function majListeSets() {
+  const zone = document.querySelector('#setPanel .arch-liste');
+  if (zone) zone.innerHTML = listeSetsHTML();
+}
+
+/* État de la liste des sets, sous le champ. */
+function etatSets() {
+  if (SETS_BASE.etat === 'chargement') return 'Chargement de la liste des sets…';
+  if (SETS_BASE.etat === 'erreur')
+    return `Scryfall : ${esc(SETS_BASE.erreur)}. Nouvelle tentative à la prochaine ouverture des filtres.`;
+  if (SETS_BASE.liste.length) {
+    const date = SETS_BASE.maj ? new Date(SETS_BASE.maj).toLocaleDateString('fr-FR') : '';
+    const charges = Object.keys(SETS_BASE.charges).length;
+    const enCours = SETS_BASE.enCours.size;
+    return `Liste établie par Scryfall : ${SETS_BASE.liste.length.toLocaleString('fr-FR')} set(s) papier${date ? `, relevés le ${date}` : ''},
+      revus une fois par semaine. Les cartes d'un set sont cherchées à sa première utilisation${charges
+        ? ` — ${charges} déjà chargé(s), ${SETS_BASE.index.size.toLocaleString('fr-FR')} carte(s) référencées` : ''}${
+        enCours ? ` · ${enCours} en cours…` : ''}.`;
+  }
+  return `Les sets viennent de Scryfall : la liste se charge à l'ouverture de cette fenêtre, puis les cartes
+    d'un set à sa première utilisation. Le tout est gardé en cache sur cet appareil.`;
+}
+
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */
 function resumeFiltres() {
   const list = filtered();
@@ -739,10 +813,14 @@ function majFenetreFiltres() {
   const y = corps.scrollTop;
   const panneau = document.getElementById('archPanel');
   const yArch = panneau ? panneau.scrollTop : 0;
+  const panneauSet = document.getElementById('setPanel');
+  const ySet = panneauSet ? panneauSet.scrollTop : 0;
   corps.innerHTML = corpsFiltres();
   corps.scrollTop = y;
   const nouveau = document.getElementById('archPanel');
   if (nouveau) nouveau.scrollTop = yArch;
+  const nouveauSet = document.getElementById('setPanel');
+  if (nouveauSet) nouveauSet.scrollTop = ySet;
 }
 
 /* Les critères s'appliquent en direct pendant la saisie : c'est ce qui fait
@@ -782,6 +860,9 @@ function fermetureFiltres() {
 
 function openFiltresModal() {
   const memo = instantaneFiltres();
+  /* La liste des sets vient de Scryfall : on la demande à l'ouverture, elle
+     ne repart en ligne qu'une fois par semaine. */
+  if (typeof chargerListeSets === 'function') chargerListeSets();
   openDialog('Filtres de la collection', corpsFiltres(),
     `<button type="button" class="btn foot-g" data-act="resetFiltres">Réinitialiser</button>
      <button type="button" class="btn" data-act="closeDialog">Annuler</button>

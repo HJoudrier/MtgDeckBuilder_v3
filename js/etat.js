@@ -21,7 +21,7 @@ const S = {
   colorMode: 'identity',
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
-  filtres: {nom:'', type:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   sort: 'cmc',
   view: 'grid',
   graphSource: 'collection',
@@ -55,14 +55,14 @@ const S = {
 
 /* ---------------------------------------------------------------------
    Filtres de la fenêtre « Filtres » (en-tête), dans l'ordre où ils y
-   apparaissent : couleur, nom, type, texte de règles, archétype, rôle,
-   force, endurance, coût de mana, prix, illustrateur. Chaque champ vide est neutre. Les
-   couleurs vivent dans `S.colors` et `S.colorMode` ; tous les autres
-   critères dans `S.filtres`.
+   apparaissent : couleur, nom, type, set, texte de règles, archétype,
+   rôle, force, endurance, coût de mana, prix, illustrateur. Chaque champ
+   vide est neutre. Les couleurs vivent dans `S.colors` et `S.colorMode` ;
+   tous les autres critères dans `S.filtres`.
    --------------------------------------------------------------------- */
 
 const FILTRES_VIDE = {
-  nom:'', type:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
+  nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
   cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
 };
 
@@ -87,6 +87,22 @@ const ARCH_BASE = {
   themes:{},          // thèmes dont la liste de cartes est chargée : slug -> {n}
   index:new Map(),    // nom normalisé -> Set(slug)
   enCours:new Set()   // thèmes en cours de chargement
+};
+
+/* ---------------------------------------------------------------------
+   Sets, sur le même principe que les archétypes : la liste vient de
+   Scryfall et les cartes d'un set ne sont cherchées qu'au moment où on le
+   coche. Le tout est conservé dans IndexedDB par js/externes.js et reste
+   vide tant qu'il n'a pas été chargé.
+   --------------------------------------------------------------------- */
+
+const SETS_BASE = {
+  etat:'idle',        // idle | chargement | ok | erreur
+  maj:null, erreur:'',
+  liste:[],           // sets publiés par Scryfall : {code, nom, sortie, type, n}
+  charges:{},         // sets dont la liste de cartes est chargée : code -> {n}
+  index:new Map(),    // nom normalisé -> Set(code)
+  enCours:new Set()   // sets en cours de chargement
 };
 
 /* Libellé d'un thème : le nôtre s'il en existe un, sinon celui d'EDHREC. */
@@ -145,6 +161,51 @@ function basculerArchetype(id) {
   S.filtres.archetypes = [...sel].join(',');
 }
 
+/* Sets cochés, conservés comme les archétypes : une liste de codes séparés
+   par des virgules. */
+function setsFiltre() {
+  return String((S.filtres && S.filtres.sets) || '').split(',').filter(Boolean);
+}
+
+function basculerSet(code) {
+  if (!code) { S.filtres.sets = ''; return; }
+  const sel = new Set(setsFiltre());
+  const c = String(code).toUpperCase();
+  if (sel.has(c)) sel.delete(c); else sel.add(c);
+  S.filtres.sets = [...sel].join(',');
+}
+
+/* Nom du set, s'il figure dans la liste Scryfall ; sinon son code. */
+function libelleSet(code) {
+  const t = (SETS_BASE.liste || []).find(x => x.code === code);
+  return (t && t.nom) || code;
+}
+
+/* Un set coché dont les cartes ne sont pas encore chargées. */
+function setsACharger() {
+  return setsFiltre().filter(c => !SETS_BASE.charges[c] && !SETS_BASE.enCours.has(c));
+}
+
+/* Sets d'une carte. Scryfall fait autorité pour les sets déjà chargés, mais
+   on y joint ce que l'appareil sait déjà : le set relevé dans l'archive, les
+   éditions possédées et celles que la fiche a rapportées. Un set coché répond
+   ainsi tout de suite sur une liste importée avec ses codes, sans attendre le
+   réseau. */
+function setsCarte(card) {
+  if (!card) return [];
+  const out = new Set();
+  if (SETS_BASE.index.size) {
+    const avant = typeof frontFace === 'function' ? frontFace(card.name) : card.name;
+    const s = SETS_BASE.index.get(norm(card.name)) || SETS_BASE.index.get(norm(avant));
+    if (s) s.forEach(c => out.add(c));
+  }
+  (card.setsArchive || []).forEach(c => c && out.add(c));
+  if (card.set) out.add(String(card.set).toUpperCase());
+  (card.impressions || []).forEach(i => i.set && out.add(String(i.set).toUpperCase()));
+  (card.editions || []).forEach(e => e.set && out.add(String(e.set).toUpperCase()));
+  return [...out];
+}
+
 /* Rôles cochés dans la section Deck, conservés comme les archétypes. */
 function rolesFiltre() {
   return String((S.filtres && S.filtres.roles) || '').split(',').filter(Boolean);
@@ -193,6 +254,9 @@ function filtresActifs() {
   if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
   const type = String(f.type || '').trim();
   if (type) actifs.push({cles:['type'], texte:`Type « ${type} »`});
+  const sets = setsFiltre();
+  if (sets.length) actifs.push({cles:['sets'],
+    texte:`Set${sets.length > 1 ? 's' : ''} : ${sets.map(libelleSet).join(', ')}`});
   const texte = String(f.texte || '').trim();
   if (texte) actifs.push({cles:['texte'], texte:`Texte « ${texte} »`});
   const arch = archetypesFiltre();
@@ -236,6 +300,11 @@ function filtreOK(card) {
   if (nom && !norm(card.name).includes(norm(nom))) return false;
   const type = String(f.type || '').trim();
   if (type && !loose(card.type + ' ' + mainType(card)).includes(loose(type))) return false;
+  const sets = setsFiltre();
+  if (sets.length) {
+    const ceux = setsCarte(card);
+    if (!sets.some(c => ceux.includes(c))) return false;
+  }
   const texte = String(f.texte || '').trim();
   if (texte && !norm(card.text || '').includes(norm(texte))) return false;
   const artiste = String(f.artiste || '').trim();
@@ -271,7 +340,7 @@ function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14};
+const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14, SET:15};
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,

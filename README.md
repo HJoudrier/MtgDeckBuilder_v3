@@ -119,13 +119,13 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 
 L'objet d'état unique, les formats de jeu et les fonctions qui dérivent collection filtrée, deck, disponibilité et liste d'achat.
 C'est aussi ici que vivent les filtres de l'en-tête : les couleurs (`S.colors`, `S.colorMode`) et, dans
-`S.filtres`, tous les autres critères, dans l'ordre même où la fenêtre les présente — nom, type, texte de
-règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. S'y ajoute l'index des archétypes établis par
-EDHREC (`ARCH_BASE`).
+`S.filtres`, tous les autres critères, dans l'ordre même où la fenêtre les présente — nom, type, set, texte de
+règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. S'y ajoutent l'index des archétypes établis par
+EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
 *20 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
+Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`
 
 | Fonction | Rôle |
 |---|---|
@@ -137,7 +137,7 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `rolesFiltre()` | Rôles cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerRole(role)` | Coche ou décoche un rôle ; sans argument, les efface tous. |
 | `roleOK(card)` | La carte tient au moins un des rôles cochés. |
-| `filtreOK(card)` | Applique les filtres de la fenêtre (nom, type, texte de règles, archétype, force, endurance, coût, prix, illustrateur) à une carte. |
+| `filtreOK(card)` | Applique les filtres de la fenêtre (nom, type, set, texte de règles, archétype, force, endurance, coût, prix, illustrateur) à une carte. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
 | `archetypesDisponibles()` | Les thèmes publiés par EDHREC, avec libellé et résumé. |
@@ -145,6 +145,11 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `libelleArchetype(slug)` | Libellé d'un thème : le nôtre s'il existe, sinon celui d'EDHREC. |
 | `archetypesAChargerEdhrec()` | Thèmes cochés dont les cartes restent à chercher. |
 | `archetypesCarte(card)` | Archétypes d'une carte, d'après les thèmes EDHREC chargés. |
+| `setsFiltre()` | Sets cochés, lus depuis la liste conservée dans `S.filtres`. |
+| `basculerSet(code)` | Coche ou décoche un set ; sans argument, les efface tous. |
+| `libelleSet(code)` | Nom du set s'il figure dans la liste Scryfall, sinon son code. |
+| `setsACharger()` | Sets cochés dont les cartes restent à chercher. |
+| `setsCarte(card)` | Sets d'une carte : ce que Scryfall en dit, joint au code de l'archive et aux éditions possédées. |
 | `filtresActifs()` | Filtres en vigueur : libellé et clés à effacer, pour les puces de l'en-tête. |
 | `texteFiltresActifs(sep)` | Ces mêmes libellés mis bout à bout, pour les infobulles et les résumés. |
 | `majFiltre(cle,valeur)` | Écrit un champ de la fenêtre dans `S.filtres`. |
@@ -189,11 +194,12 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `chercheToutesEditions(card)` *(async)* | Toutes les éditions papier publiées, en « unique=prints », à la demande seulement. |
 | `semeVisuelVersion(card)` | Reprend le visuel déjà affiché comme celui de son édition, pour ne pas le redemander. |
 | `visuelDepuisScryfall(sc)` | Visuel, illustrateur, nom du set et prix d'une impression. |
-| `compacte(sc)` | Réduit une carte Scryfall aux champs utiles à l'analyse et au classement. |
+| `compacte(sc)` | Réduit une carte Scryfall aux champs utiles à l'analyse et au classement, code d'édition compris. |
 | `autoCatalogue()` | Décide si le catalogue peut se charger tout seul. |
 | `estGzip(nom,octets)` | Détecte une archive compressée par son nom ou sa signature. |
 | `fluxTexte(source,nom)` *(async)* | Ouvre un flux de texte, décompression comprise. |
-| `retiens(par,rec)` | Ne garde qu'une entrée par nom, la mieux classée. |
+| `retiens(par,rec)` | Ne garde qu'une entrée par nom, la mieux classée, en y accumulant les codes d'édition de toutes les impressions lues. |
+| `fusionneSets(a,b)` | Réunit deux listes de codes d'édition, sans doublon. |
 | `tailleEstimee(cartes)` | Estime le poids de l'archive par échantillonnage. |
 | `lireCatalogueFichier(source,nom)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue. |
 | `chargerCatalogueLocal()` *(async)* | Cherche une archive posée à côté de la page. |
@@ -259,7 +265,8 @@ Données : `STORE_KEY`, `STORE_OFF`
 ### `js/externes.js` — EDHREC et Commander Spellbook
 
 Statistiques d'inclusion et de synergie par commandant, thèmes de deck servant d'archétypes établis,
-combos répertoriés et combos à une carte près, plus le catalogue Scryfall complet et son archive IndexedDB.
+sets publiés par Scryfall et composition de ceux qu'on coche, combos répertoriés et combos à une carte près,
+plus le catalogue Scryfall complet et son archive IndexedDB.
 
 *48 fonction(s), 36 Ko*
 
@@ -276,6 +283,14 @@ combos répertoriés et combos à une carte près, plus le catalogue Scryfall co
 | `formesDeduites()` *(async)* | Déduit cette adresse des liens cités dans une page de commandant. |
 | `temoinEdhrec()` *(async)* | Page de commandant témoin, pour distinguer adresse fausse et hôte injoignable. |
 | `reprendreArchetypesEdhrec()` *(async)* | Reprend cet index depuis IndexedDB au démarrage. |
+| `setRetenu(s)` | Un set à proposer : papier, ni jeton ni objet de collection. |
+| `reprendreSets()` *(async)* | Reprend la liste et l'index des sets depuis IndexedDB au démarrage. |
+| `sauverSets()` | Conserve la liste et l'index des sets dans IndexedDB. |
+| `setsARevoir()` | Faut-il réinterroger Scryfall ? Rien en cache, ou liste vieille d'une semaine. |
+| `chargerListeSets()` *(async)* | La liste des sets papier, en une requête, à l'ouverture des filtres. |
+| `noteSetIndex(nom,code)` | Rattache un nom de carte à un code de set dans l'index. |
+| `chargerSetScryfall(code)` *(async)* | Les cartes d'un set, à sa première utilisation. |
+| `noterSetsArchive(c,rec)` | Reporte sur la carte les codes d'édition que porte l'archive. |
 | `nomsPageEdhrec(j)` | Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. |
 | `urlThemeEdhrec(slug)` | Adresse de la page JSON d'un thème. |
 | `edhrecSlug(name)` | Identifiant EDHREC d'un commandant. |
@@ -425,8 +440,11 @@ Données : `RETOURNEES`
 | `restaurerFiltres(memo)` | Repose un tel instantané. |
 | `appliquerFiltres()` | « Appliquer » : oublie l'instantané, puis ferme. |
 | `fermetureFiltres()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — revient à l'instantané. |
-| `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
+| `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, set, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
 | `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
+| `listeSetsHTML()` | Lignes de la liste des sets : nom, code, année et taille, du plus récent au plus ancien. |
+| `majListeSets()` | Rafraîchit cette liste sans réécrire la fenêtre, pour garder le curseur de saisie. |
+| `etatSets()` | État de la liste des sets Scryfall, sous le champ. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
 | `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
@@ -472,8 +490,14 @@ Données : `RETOURNEES`
 - 241 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
-- Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes
-  et pour l'index des archétypes EDHREC.
+- Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes,
+  pour l'index des archétypes EDHREC et pour celui des sets.
+- Le filtre par set retient une carte dès qu'elle a paru dans un des sets cochés, possédée ou non dans cette édition.
+  Trois sources y concourent, de la plus locale à la plus complète : le code relevé à l'import (`card.impressions`),
+  celui que porte l'archive du catalogue, et la composition du set telle que Scryfall la publie — cherchée à la
+  première utilisation du set, puis gardée en cache. Les deux premières répondent sans réseau ; l'archive
+  `oracle-cards`, qui ne publie qu'une impression par carte, n'en donne qu'une, tandis qu'une archive par
+  impressions (`default-cards`) les donne toutes.
 - Le catalogue des cartes existantes se tient à jour tout seul. Au lancement, `demarrerCatalogue()` regarde d'abord ce
   que l'appareil garde — archive IndexedDB, puis fichier posé à côté de la page. S'il n'a rien, l'archive Scryfall est
   téléchargée et extraite immédiatement, sans rien demander. S'il a une archive mais que Scryfall en publie une plus
