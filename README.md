@@ -106,6 +106,7 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 | `mergeInto(card,canonical)` | Fusionne deux entrées désignant la même carte. |
 | `renameCard(card,newName)` | Renomme une carte vers son nom canonique en migrant les quantités. |
 | `frontFace(n)` | Nom de la face avant d'une carte recto-verso. |
+| `codeLegalite(legalities)` | Légalité réduite aux formats connus : « c » pour Commander, « s » pour Standard. `undefined` quand on l'ignore. |
 | `cleImpression(set,num)` | Clé d'une impression : code d'édition et numéro de collection. |
 | `noterImpression(card,set,num,qty)` | Relève l'édition lue dans une liste importée ; la première numérotée devient l'édition de référence. |
 | `completeImpression(card,sc)` | Complète l'édition d'après Scryfall, sans écraser celle relevée à l'import. |
@@ -126,6 +127,16 @@ EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 *20 fonction(s), 11 Ko*
 
 Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`
+
+Chaque format de `FORMATS` (js/etat.js) dit ce qu'il exige : `legal` est la lettre
+qu'emploie `codeLegalite()`, `scry` le nom que Scryfall donne au format dans ses
+recherches. Limité et Personnalisé n'imposent aucune légalité, et les ont vides. La case
+« écarter les cartes non légales » de la fenêtre Format (`S.filtreLegal`, cochée par
+défaut) décide si les cartes non légales sont retirées de la collection affichée et des
+suggestions, ou seulement marquées d'un tag « illégal ». Une carte déjà posée dans le
+deck reste visible dans les deux cas — la masquer la rendrait impossible à retirer — et
+`legality()` la signale. Une carte dont la légalité est inconnue n'est ni masquée ni
+marquée.
 
 `S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne les cartes du catalogue local examinées par les suggestions et se règle depuis la fenêtre des achats.
 
@@ -150,6 +161,9 @@ fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vie
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la fenêtre des filtres à une carte. |
 | `carteFiltree(card)` | Prédicat unique : couleurs, rôle et critères de la fenêtre. Vaut pour la collection, le deck, la courbe et les suggestions. |
+| `carteLegale(card)` | Légalité dans le format en cours : vrai, faux, ou `null` quand on l'ignore. |
+| `legaliteOK(card)` | Le filtre de légalité, tel que la case de la fenêtre Format le règle. |
+| `carteRetenue(card)` | Ce que retiennent la collection et les suggestions : les critères de la fenêtre, plus la légalité. Le deck s'en tient à `carteFiltree()`. |
 | `rolesFiltre()` | Rôles cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerRole(role)` | Coche ou décoche un rôle ; sans argument, les efface tous. |
 | `roleOK(card)` | La carte tient au moins un des rôles cochés. |
@@ -238,10 +252,10 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `signatureCandidats()` | Signature des critères, filtres de la fenêtre compris, pour ne recalculer qu'en cas de changement. |
 | `appliqueCatalogueAuxCartes()` | Reporte les textes oracle complets et les prix de l'archive sur vos cartes. |
 | `selectionCandidats()` | La boucle qui écarte et le classement par rang EDHREC, communs aux deux façons de bâtir les candidats. |
-| `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format, le prix et les filtres de la fenêtre. Le plafond `S.candidatsMax` ne s'applique qu'ensuite, sur ce qui reste. |
+| `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le prix, les filtres de la fenêtre et — si `S.filtreLegal` — la légalité dans le format. Le plafond `S.candidatsMax` ne s'applique qu'ensuite, sur ce qui reste. |
 | `prechauffeCandidats(onProgress)` *(async)* | La même construction par tranches, en rendant la main, pour la barre de progression d'« Appliquer ». |
 | `statsCandidats()` | Le détail de ce qui a écarté et combien, pour la phrase de la section Suggestions. |
-| `requeteCatalogue()` | Construit la requête Scryfall correspondant au format et aux couleurs. |
+| `requeteCatalogue()` | Construit la requête Scryfall correspondant aux couleurs, et au format si `S.filtreLegal`. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
 | `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. |
@@ -314,6 +328,7 @@ plus le catalogue Scryfall complet et son archive IndexedDB.
 | `noteSetIndex(nom,code)` | Rattache un nom de carte à un code de set dans l'index. |
 | `chargerSetScryfall(code)` *(async)* | Les cartes d'un set, à sa première utilisation. |
 | `noterSetsArchive(c,rec)` | Reporte sur la carte les codes d'édition que porte l'archive. |
+| `noterLegalArchive(c,rec)` | Reporte sur la carte la légalité que porte l'archive. |
 | `nomsPageEdhrec(j)` | Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. |
 | `urlThemeEdhrec(slug)` | Adresse de la page JSON d'un thème. |
 | `edhrecSlug(name)` | Identifiant EDHREC d'un commandant. |
@@ -418,7 +433,7 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 | `targets()` | Objectifs par rôle selon le format. |
 | `deckCounts()` | Compte les cartes du deck par rôle. |
 | `gauge(label,val,tgt,role)` | Jauge d'un rôle, cliquable pour filtrer les suggestions. |
-| `legality()` | Contrôles de conformité : taille, copies, identité, jetons, budget. |
+| `legality()` | Contrôles de conformité : taille, copies, identité, jetons, budget, et cartes non légales dans le format. |
 | `blocAchats()` | Bloc des cartes à acheter, avec budget et liens. |
 | `zoneCommandant()` | Encart du commandant : visuel, identité, changement. |
 | `evalueDeck(entries)` | Note les cartes du deck avec le moteur des suggestions. |
@@ -451,7 +466,8 @@ Données : `RETOURNEES`
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
 | `openFormatModal()` | Ouvre la fenêtre du format, depuis la pastille « Format » de l'en-tête. |
-| `corpsFormat()` | Contenu de cette fenêtre : format de jeu et panneau « Personnalisé ». |
+| `corpsFormat()` | Contenu de cette fenêtre : format de jeu, case « écarter les cartes non légales » et panneau « Personnalisé ». |
+| `tagIllegal(card)` | Le tag « illégal », partout où la carte s'affiche. |
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
 | `majResumeFormat()` | Rafraîchit ce résumé pendant la saisie du format personnalisé. |
 | `majFenetreFormat()` | Réécrit la fenêtre au changement de format. |

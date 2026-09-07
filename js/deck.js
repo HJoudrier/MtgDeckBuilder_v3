@@ -60,6 +60,11 @@ function legality() {
   if (f.commander && !S.commander) msgs.push('Aucun commandant désigné.');
   const jetons = deckEntries().filter(e => e.card.isToken);
   if (jetons.length) msgs.push(`${jetons.length} jeton(s) dans le deck (${jetons.slice(0,3).map(e=>e.card.name).join(', ')}) : un jeton ne se joue pas depuis la main.`);
+  /* Le deck ne masque jamais une carte illégale — elle doit rester retirable —
+     donc c'est ici qu'elle se signale. */
+  const illegales = deckEntries().filter(e => carteLegale(e.card) === false);
+  if (illegales.length) msgs.push(`${illegales.length} carte(s) non légale(s) en ${f.label} : ${
+    illegales.slice(0,3).map(e => e.card.name).join(', ')}${illegales.length > 3 ? '…' : ''}.`);
   deckEntries().forEach(e => {
     const possede = S.collection.get(e.card.name) || 0;
     if (e.qty > possede && S.budget.total <= 0)

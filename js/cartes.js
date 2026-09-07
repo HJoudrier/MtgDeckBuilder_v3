@@ -548,6 +548,16 @@ function registerCard(card) {
    s'ajoutent les unes aux autres sur la même carte.
    --------------------------------------------------------------------- */
 
+/* Légalité d'une carte, réduite aux formats que l'atelier connaît : une
+   chaîne de lettres — « c » pour Commander, « s » pour Standard. La chaîne
+   vide dit « légale dans aucun des deux » ; `undefined` dit « nous l'ignorons »,
+   ce qui n'est pas la même chose et ne doit jamais faire écarter une carte. */
+function codeLegalite(legalities) {
+  if (!legalities || typeof legalities !== 'object') return undefined;
+  return (legalities.commander === 'legal' ? 'c' : '')
+       + (legalities.standard === 'legal' ? 's' : '');
+}
+
 function cleImpression(set, num) {
   const s = String(set == null ? '' : set).trim().toLowerCase();
   const n = String(num == null ? '' : num).trim().toLowerCase();

@@ -27,7 +27,7 @@ function collectionCards() {
 }
 
 function filtered() {
-  const list = collectionCards().filter(e => carteFiltree(e.card));
+  const list = collectionCards().filter(e => carteRetenue(e.card));
   const f = fmt();
   list.forEach(e => e.usable = Math.min(e.qty, f.maxCopies));
   const cmp = {

@@ -2,11 +2,14 @@
    js/etat.js — État global de l'application & utilitaires
    ===================================================================== */
 
+/* `legal` : la lettre que `codeLegalite()` emploie pour ce format, et le nom
+   que Scryfall lui donne dans ses recherches. Limité et Personnalisé
+   n'imposent aucune légalité — leur `legal` est vide. */
 const FORMATS = {
-  edh:      {label:'Commander (EDH)', size:100, commander:true,  maxCopies:1,  lands:36},
-  standard: {label:'Standard',        size:60,  commander:false, maxCopies:4,  lands:24},
-  limite:   {label:'Limité',          size:40,  commander:false, maxCopies:99, lands:17},
-  perso:    {label:'Personnalisé',    size:100, commander:false, maxCopies:1,  lands:36}
+  edh:      {label:'Commander (EDH)', size:100, commander:true,  maxCopies:1,  lands:36, legal:'c', scry:'commander'},
+  standard: {label:'Standard',        size:60,  commander:false, maxCopies:4,  lands:24, legal:'s', scry:'standard'},
+  limite:   {label:'Limité',          size:40,  commander:false, maxCopies:99, lands:17, legal:'',  scry:''},
+  perso:    {label:'Personnalisé',    size:100, commander:false, maxCopies:1,  lands:36, legal:'',  scry:''}
 };
 
 const RETOURNEES = new Set();
@@ -40,6 +43,7 @@ const S = {
   exploreCharge: 0,
   exploreReste: false,
   catalogueActif: true,
+  filtreLegal: true,
   prixMaj: null,
   majIgnoree: null,
   enriching: false,
@@ -332,6 +336,30 @@ function filtresValeursOK(v) {
     if (max !== null && val > max) return false;
   }
   return true;
+}
+
+/* Légalité d'une carte dans le format en cours. Trois réponses, pas deux :
+   `true`, `false`, ou `null` quand nous l'ignorons — carte que ni l'archive ni
+   Scryfall n'ont renseignée. Une carte qu'on ne sait pas juger n'est ni
+   masquée ni accusée. Limité et Personnalisé n'imposent rien : tout y passe. */
+function carteLegale(card) {
+  const cle = fmt().legal;
+  if (!cle) return true;
+  if (!card || typeof card.legal !== 'string') return null;
+  return card.legal.includes(cle);
+}
+
+/* Le filtre de légalité, tel que la case de la fenêtre Format le règle. */
+function legaliteOK(card) {
+  return !S.filtreLegal || carteLegale(card) !== false;
+}
+
+/* Ce que la collection et les suggestions retiennent : les critères de la
+   fenêtre, plus la légalité. Le deck, lui, s'en tient à `carteFiltree()` —
+   une carte déjà posée doit rester visible pour pouvoir être retirée, et
+   `legality()` la signale. */
+function carteRetenue(card) {
+  return carteFiltree(card) && legaliteOK(card);
 }
 
 /* Applique les filtres avancés à une carte. */

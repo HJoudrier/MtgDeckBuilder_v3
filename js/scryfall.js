@@ -83,6 +83,9 @@ function applyScryfall(sc, requested, imagesOnly) {
   const price = parseFloat(pr.eur || pr.eur_foil || pr.usd || 0) || 0;
   const uris = sc.image_uris || (faces && faces[0] && faces[0].image_uris) || null;
   const versoUris = faces && faces[1] && faces[1].image_uris || null;
+  /* La légalité d'une carte que l'archive ne connaît pas — une carte importée,
+     par exemple — ne peut venir que d'ici. */
+  const legal = codeLegalite(sc.legalities);
   let target = (requested && typeof requested === 'object')
     ? requested
     : (BY_NAME[norm(sc.name)] || LOOSE[loose(sc.name)] || (requested ? find(requested) : null));
@@ -118,6 +121,7 @@ function applyScryfall(sc, requested, imagesOnly) {
     if (tg != null && /^\d+$/.test(String(tg))) target.endurance = +tg;
     const art = sc.artist || (faces && faces[0] && faces[0].artist);
     if (art) target.artist = art;
+    if (legal !== undefined) target.legal = legal;
     return true;
   }
 
@@ -131,6 +135,7 @@ function applyScryfall(sc, requested, imagesOnly) {
   if (tg != null && /^\d+$/.test(String(tg))) fresh.endurance = +tg;
   const art = sc.artist || (faces && faces[0] && faces[0].artist);
   if (art) fresh.artist = art;
+  if (legal !== undefined) fresh.legal = legal;
   reanalyser(fresh);
 
   if (!target) {

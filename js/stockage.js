@@ -57,7 +57,8 @@ function snapshot() {
         n:c.name, c:c.cost||'—', t:c.type, p:c.price, x:c.text,
         i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance, a:c.artist||'',
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
-        u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0, ...impressionSnap(c)
+        u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0,
+        ...(typeof c.legal === 'string' ? {lg:c.legal} : {}), ...impressionSnap(c)
       });
     }
   });
@@ -80,6 +81,7 @@ function snapshot() {
     showImplicit: S.showImplicit,
     budget: S.budget,
     candidatsMax: S.candidatsMax,
+    filtreLegal: S.filtreLegal,
     csbRelay: S.csbRelay,
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
@@ -146,6 +148,7 @@ function restore(d) {
     if (o.B) card.imgB = o.B;
     if (o.BL) card.imgBL = o.BL;
     card.unknown = !!o.k;
+    if (typeof o.lg === 'string') card.legal = o.lg;
     if (o.X && o.x) card.textFull = true;
     if (card.img) card.imgTried = true;
     impressionRestore(card, o);
@@ -176,6 +179,7 @@ function restore(d) {
   if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};
   if (d.budget) S.budget = {...S.budget, ...d.budget};
   if (typeof d.candidatsMax === 'number' && d.candidatsMax > 0) S.candidatsMax = d.candidatsMax;
+  if (typeof d.filtreLegal === 'boolean') S.filtreLegal = d.filtreLegal;
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;

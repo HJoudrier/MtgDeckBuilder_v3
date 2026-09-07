@@ -18,6 +18,7 @@ function fmt() {
       maxCopies: S.custom.maxCopies,
       commander: S.custom.commander,
       lands: Math.round(S.custom.deckSize * 0.36),
+      legal: '', scry: '',
       legalities: ['custom']
     };
   }
@@ -336,6 +337,14 @@ function choisirVersion(nom, cle) {
   toast(`Illustration retenue : ${v.set}${v.num ? ' n°' + v.num : ''}${possede ? '' : ' (édition non possédée)'}.`);
 }
 
+/* Le tag « illégal », partout où une carte s'affiche. Vide tant que la carte
+   est légale ou que sa légalité nous échappe. */
+function tagIllegal(card) {
+  if (carteLegale(card) !== false) return '';
+  return `<span class="tag" style="border-color:var(--bad);color:#e39a90"
+    title="Cette carte n'a pas le droit d'être jouée en ${esc(fmt().label)}.">illégal</span>`;
+}
+
 function cardTile(e, ctx) {
   const c = e.card, dispo = availableFor(c), inDeck = S.deck.get(c.name) || 0;
   const isCmd = S.commander === c.name;
@@ -344,17 +353,19 @@ function cardTile(e, ctx) {
   const face = faceVisible(c);
   const isHors = dispo < 0 || (S.collection.get(c.name) || 0) <= 0;
 
-  let tagsHTML = '';
-  if (ctx === 'deck' && note) {
+  /* Le tag d'illégalité vaut dans tous les contextes : la collection comme
+     le deck. Les autres tags restent propres au deck, qui seul les calcule. */
+  const tagsDeck = (ctx === 'deck' && note) ? (() => {
     const n = (note.partners || []).length;
-    const tags = [
+    return [
       n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : '',
       isHors ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
       note.combos && note.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
       note.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''
     ].filter(Boolean).join('');
-    if (tags) tagsHTML = `<div class="tags">${tags}</div>`;
-  }
+  })() : '';
+  const tags = tagIllegal(c) + tagsDeck;
+  const tagsHTML = tags ? `<div class="tags">${tags}</div>` : '';
 
   const scoreHTML = (ctx === 'deck' && note)
     ? `<div class="score-line mono small muted" title="${esc((note.reasons||[]).slice(0,3).join(' · '))}">score ${note.score.toFixed(1)}</div>`
@@ -392,6 +403,7 @@ function cardRow(e, ctx) {
     <span class="cname" data-act="fiche" data-name="${esc(c.name)}">${esc(c.name)}</span>
     <span class="costs">${manaHTML(c, true)}</span>
     <span class="small muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${esc(c.type)}</span>
+    ${tagIllegal(c)}
     ${c.set ? `<span class="mono small muted" title="Édition ${esc(c.setName || c.set)}${c.num?`, carte n°${esc(c.num)}`:''}">${esc(c.set)}${c.num?` ${esc(c.num)}`:''}</span>` : ''}
     <span class="mono small">${eur(c.price)}</span>
     <span class="mono small">${ctx==='deck'?`×${e.qty}`:`${e.qty} ex.`}</span>
@@ -516,6 +528,16 @@ function corpsFormat() {
         ${Object.entries(FORMATS).map(([k, v]) => `<option value="${k}" ${S.format === k ? 'selected' : ''}>${esc(v.label)}</option>`).join('')}
       </select>
       <div class="small muted" id="formatResume">${resumeFormat()}</div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--txt);cursor:${fmt().legal ? 'pointer' : 'default'};opacity:${fmt().legal ? 1 : .5}">
+        <input type="checkbox" data-act="filtreLegal" ${S.filtreLegal ? 'checked' : ''} ${fmt().legal ? '' : 'disabled'}
+          style="width:auto;margin:0">
+        Écarter les cartes non légales dans ce format
+      </label>
+      <div class="small muted">${fmt().legal
+        ? `Cochée, les cartes qui n'ont pas le droit d'être jouées en ${esc(fmt().label)} sont retirées de la collection affichée et ne sont plus proposées. Décochée, elles réapparaissent et portent un tag « illégal ». Une carte déjà posée dans le deck reste visible dans les deux cas, pour que vous puissiez la retirer.`
+        : `${esc(fmt().label)} n'impose aucune légalité de format : ce réglage y reste sans effet.`}</div>
     </div>
     ${customPanel()}
     <div class="small muted">Le format fixe la taille du deck, le nombre d'exemplaires autorisés et la présence d'un commandant ; il sert aussi au contrôle de conformité de la section Deck.</div>`;

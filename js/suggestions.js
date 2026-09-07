@@ -267,7 +267,7 @@ function noterVivier(pool, X, res, debut, fin) {
 
 /* Les filtres de l'en-tête valent aussi pour ce qu'on propose d'ajouter. */
 function ordonneSuggestions(res) {
-  return res.filter(r => r.score > 0 && carteFiltree(r.card)).sort((a, b) => b.score - a.score);
+  return res.filter(r => r.score > 0 && carteRetenue(r.card)).sort((a, b) => b.score - a.score);
 }
 
 /* Une sélection déjà calculée par `prepareSuggestions()`, posée là pour que
@@ -460,6 +460,7 @@ function sugRow(s) {
 
   const tags = [
     n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : '',
+    tagIllegal(s.card),
     s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
     s.combos && s.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
     edhrecTag

@@ -577,6 +577,17 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
+  if (t.dataset.act === 'filtreLegal') {
+    S.filtreLegal = !!t.checked;
+    invaliderCandidats();
+    S.limitB = PAGE;
+    renderAll();
+    majFenetreFormat();
+    toast(S.filtreLegal
+      ? `Cartes non légales en ${fmt().label} écartées.`
+      : `Cartes non légales en ${fmt().label} affichées, marquées « illégal ».`);
+    return;
+  }
   if (t.dataset.act === 'sort') {
     S.sort = t.value;
     renderB();

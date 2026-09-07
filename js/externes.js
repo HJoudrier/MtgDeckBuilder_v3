@@ -828,7 +828,7 @@ function compacte(sc) {
     (pw != null && /^\d+$/.test(String(pw))) ? +pw : null,
     parseFloat((sc.prices && (sc.prices.eur || sc.prices.usd)) || 0) || 0,
     sc.id || '', (typeof sc.edhrec_rank === 'number') ? sc.edhrec_rank : 999999,
-    (lg.commander === 'legal' ? 'c' : '') + (lg.standard === 'legal' ? 's' : ''), chemin, verso,
+    codeLegalite(lg) || '', chemin, verso,
     (tg != null && /^\d+$/.test(String(tg))) ? +tg : null,
     sc.artist || (faces && faces[0] && faces[0].artist) || '',
     String(sc.set || '').toUpperCase()
@@ -1158,7 +1158,14 @@ function completeDepuisRec(c, rec) {
   if (rec[CH.ARTISTE] && !c.artist) c.artist = rec[CH.ARTISTE];
   if (!c.price && rec[CH.PRIX] > 0) c.price = rec[CH.PRIX];
   noterSetsArchive(c, rec);
+  noterLegalArchive(c, rec);
   return c;
+}
+
+/* Ce que l'archive sait de la légalité d'une carte. L'archive n'en publie que
+   pour Commander et Standard : ailleurs, la carte reste « non jugée ». */
+function noterLegalArchive(c, rec) {
+  if (c && rec.length > CH.LEGAL) c.legal = String(rec[CH.LEGAL] || '');
 }
 
 /* Ce que l'archive sait des éditions d'une carte, gardé sur la carte pour que
@@ -1180,6 +1187,7 @@ function carteDuCatalogue(rec) {
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
   if (rec[CH.ARTISTE]) c.artist = rec[CH.ARTISTE];
+  noterLegalArchive(c, rec);
   reanalyser(c);
   if (rec[CH.IMG]) {
     c.img = CDN + 'small/' + rec[CH.IMG];
@@ -1202,7 +1210,7 @@ function invaliderCandidats() { CAND = {sig:null, liste:[], stats:null}; }
    décompte annoncé resservirait celui d'avant le filtre. */
 function signatureCandidats() {
   return [S.format, S.commander, [...S.colors].join(''), S.colorMode, S.budget.perCard,
-          CAT.cartes.length, S.collection.size, S.candidatsMax, noeudsActifs().sort().join(','),
+          CAT.cartes.length, S.collection.size, S.candidatsMax, S.filtreLegal, noeudsActifs().sort().join(','),
           JSON.stringify(S.filtres || {})].join('|');
 }
 
@@ -1226,7 +1234,7 @@ function appliqueCatalogueAuxCartes() {
     }
     if (!utiles.has(cle)) return;
     const c = complete || find(rec[CH.NOM]);
-    if (c && !complete) noterSetsArchive(c, rec);
+    if (c && !complete) { noterSetsArchive(c, rec); noterLegalArchive(c, rec); }
     if (c && rec[CH.PRIX] > 0 && c.price !== rec[CH.PRIX]) { c.price = rec[CH.PRIX]; n++; }
   });
   if (n) scheduleSave();
@@ -1239,7 +1247,7 @@ function appliqueCatalogueAuxCartes() {
    l'enregistrement compact : c'est ce qui permet de chercher dans tout le
    catalogue, et non parmi les seules cartes les mieux classées. */
 function selectionCandidats() {
-  const legal = {edh:'c', standard:'s'}[S.format] || '';
+  const legal = S.filtreLegal ? (fmt().legal || '') : '';
   const cmd = S.commander ? find(S.commander) : null;
   const ident = cmd ? cmd.identity : null;
   const noeuds = noeudsActifs();
@@ -1319,7 +1327,7 @@ function requeteCatalogue() {
   const cmd = S.commander ? find(S.commander) : null;
   const ident = (cmd ? cmd.identity : [...S.colors].filter(c => c !== 'C'));
   const id = ident.length ? ident.join('').toLowerCase() : 'c';
-  const legal = {edh:'commander', standard:'standard', limite:'', perso:''}[S.format] || '';
+  const legal = S.filtreLegal ? (fmt().scry || '') : '';
   return [legal ? `legal:${legal}` : '', `id<=${id}`, '-is:token', '-t:basic'].filter(Boolean).join(' ');
 }
 
