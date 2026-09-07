@@ -30,7 +30,11 @@ const S = {
   graphSource: 'collection',
   showImplicit: true,
   focusNodes: new Set(),
-  budget: {total:30, perCard:12, condition:'GD', lang:'any', sellerType:'any', country:'any'},
+  /* Budget nul au démarrage : l'atelier ne propose alors que les cartes de la
+     collection, et n'engage aucun achat tant qu'un budget n'a pas été fixé
+     dans la fenêtre « Achats sur Cardmarket ». Le prix maximum par carte, lui,
+     est déjà posé : il n'attend que le budget pour valoir. */
+  budget: {total:0, perCard:5, condition:'GD', lang:'any', sellerType:'any', country:'any'},
   selected: null,
   selectedCtx: 'collection',
   limitB: 200,

@@ -179,7 +179,10 @@ cherche par tâtonnements, et chaque chiffre essayé relancerait sinon la notati
 budget restant et le rappel des achats suivent — ils se peignent sous le brouillon et annoncent
 donc ce que « Appliquer » donnerait —, car réécrire la fenêtre volerait le curseur du champ en
 cours. La pastille reste affichée même à budget nul, où elle marque « Budget — » : c'est la
-seule porte vers ce réglage, et un budget remis à zéro doit pouvoir être repris.
+seule porte vers ce réglage, et un budget remis à zéro doit pouvoir être repris. C'est d'ailleurs
+l'état du démarrage — `budget: {total: 0, perCard: 5, …}` —, où l'atelier ne propose que les cartes
+de la collection et n'engage aucun achat : le prix maximum par carte est posé d'avance, il n'attend
+qu'un budget pour valoir.
 
 Le chargement de l'archive Scryfall, lui, ouvre une boîte de progression : deux barres —
 ce qui arrive, ce qui en est extrait — et le décompte des cartes retenues. Les totaux
