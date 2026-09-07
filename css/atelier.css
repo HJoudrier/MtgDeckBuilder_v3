@@ -439,3 +439,9 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
 #cardPreview{position:fixed;z-index:1000;pointer-events:none;display:none;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.7);background:var(--panel);border:1px solid var(--brass-d);max-width:250px;overflow:hidden}
 #cardPreview img{display:block;width:240px;height:auto;border-radius:8px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Barre de progression du filtrage, dans le pied de la fenêtre des filtres :
+   elle occupe sa propre ligne sous les boutons. */
+.dlg-f{flex-wrap:wrap}
+.filtre-progres{flex:1 1 100%;display:flex;flex-direction:column;gap:4px}
+.dlg-f .btn:disabled{opacity:.45;cursor:default}

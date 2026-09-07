@@ -143,6 +143,7 @@ document.addEventListener('click', ev => {
 
   if (act === 'resetFiltres') {
     reinitFiltres();
+    if (brouillonFiltres) ouvreBrouillon();
     majFenetreFiltres();
     S.limitB = PAGE;
     renderAll();
@@ -549,9 +550,10 @@ document.addEventListener('input', ev => {
     return;
   }
   if (t.dataset.filtre) {
-    majFiltre(t.dataset.filtre, t.value);
+    /* La frappe va au brouillon : rien n'est appliqué avant « Appliquer ».
+       Seul le décompte de la fenêtre suit, il ne coûte que la collection. */
+    majBrouillon(t.dataset.filtre, t.value);
     majResumeFiltres();
-    planifierRenduFiltres();
     return;
   }
   if (t.dataset.recherche) {
@@ -639,6 +641,12 @@ document.addEventListener('keydown', ev => {
   if (ev.key === 'Escape') {
     cacherApercu();
     closeDialog();
+  }
+  /* Entrée dans un champ de filtre vaut « Appliquer » : la saisie ne
+     s'appliquant plus d'elle-même, il faut un geste au clavier. */
+  if (ev.key === 'Enter' && ev.target && ev.target.dataset && ev.target.dataset.filtre) {
+    ev.preventDefault();
+    appliquerFiltres();
   }
 });
 

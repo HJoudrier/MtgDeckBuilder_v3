@@ -1232,15 +1232,13 @@ function appliqueCatalogueAuxCartes() {
   if (n) scheduleSave();
 }
 
-/* Les cartes du catalogue qu'il vaut la peine de proposer. Les critères de
-   la fenêtre s'appliquent ici, sur l'enregistrement compact : c'est ce qui
-   permet de chercher dans tout le catalogue, et non parmi les seules cartes
-   les mieux classées. Le plafond ne vient qu'après, sur ce qui reste, et il
-   est compté à part pour que la phrase de la section puisse le dire. */
-function candidatsCatalogue() {
-  if (CAT.etat !== 'ok' || !CAT.cartes.length) return [];
-  const sig = signatureCandidats();
-  if (CAND.sig === sig) return CAND.liste;
+/* Le tri de la sélection : la boucle qui écarte, puis le classement par rang
+   EDHREC. C'est la partie rapide — quelques dizaines de millisecondes sur tout
+   le catalogue — et elle est commune aux deux façons de bâtir les candidats,
+   d'un bloc ou par tranches. Les critères de la fenêtre s'appliquent ici, sur
+   l'enregistrement compact : c'est ce qui permet de chercher dans tout le
+   catalogue, et non parmi les seules cartes les mieux classées. */
+function selectionCandidats() {
   const legal = {edh:'c', standard:'s'}[S.format] || '';
   const cmd = S.commander ? find(S.commander) : null;
   const ident = cmd ? cmd.identity : null;
@@ -1269,8 +1267,44 @@ function candidatsCatalogue() {
   retenus.sort((a, b) => a[CH.RANG] - b[CH.RANG]);
   st.retenus = retenus.length;
   st.coupes = Math.max(0, retenus.length - S.candidatsMax);
-  CAND = {sig, liste:retenus.slice(0, S.candidatsMax).map(carteDuCatalogue), stats:st};
+  return {retenus:retenus.slice(0, S.candidatsMax), st};
+}
+
+/* Les cartes du catalogue qu'il vaut la peine de proposer. Le plafond ne vient
+   qu'après la sélection, sur ce qui reste, et il est compté à part pour que la
+   phrase de la section puisse le dire. */
+function candidatsCatalogue() {
+  if (CAT.etat !== 'ok' || !CAT.cartes.length) return [];
+  const sig = signatureCandidats();
+  if (CAND.sig === sig) return CAND.liste;
+  const {retenus, st} = selectionCandidats();
+  CAND = {sig, liste:retenus.map(carteDuCatalogue), stats:st};
   return CAND.liste;
+}
+
+/* La même construction, mais par tranches : bâtir les objets carte est le
+   gros du travail, et la barre de progression d'« Appliquer » a besoin de
+   rendre la main pour se peindre. Le résultat garnit la même mémo, si bien
+   que l'appel direct qui suit n'a plus rien à recalculer. */
+async function prechauffeCandidats(onProgress) {
+  if (CAT.etat !== 'ok' || !CAT.cartes.length) return 0;
+  const sig = signatureCandidats();
+  if (CAND.sig === sig) { if (onProgress) onProgress(CAND.liste.length, CAND.liste.length); return CAND.liste.length; }
+  const {retenus, st} = selectionCandidats();
+  const liste = [];
+  const LOT = 1500;
+  /* Annoncé même quand il n'y a rien à bâtir : la barre doit montrer que
+     l'étape a bien eu lieu, pas rester muette. */
+  if (onProgress) onProgress(0, retenus.length);
+  for (let i = 0; i < retenus.length; i += LOT) {
+    const fin = Math.min(retenus.length, i + LOT);
+    for (let j = i; j < fin; j++) liste.push(carteDuCatalogue(retenus[j]));
+    if (onProgress) onProgress(fin, retenus.length);
+    await new Promise(r => setTimeout(r, 0));
+  }
+  CAND = {sig, liste, stats:st};
+  if (onProgress) onProgress(retenus.length, retenus.length);
+  return liste.length;
 }
 
 /* Le détail de ce qui a écarté, pour la phrase de la section Suggestions.

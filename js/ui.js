@@ -59,6 +59,7 @@ function openDialog(title, bodyHTML, actionsHTML, grande) {
   /* Une autre fenêtre prend la place : l'instantané des filtres n'a plus
      lieu d'être, sans quoi sa fermeture ferait reculer les filtres. */
   filtresAvant = null;
+  brouillonFiltres = null;
   dlg.classList.toggle('grand', !!grande);
   dlg.classList.toggle('wide', !!grande);
   const headEl = document.getElementById('dlgTitle') || document.getElementById('dlgHead');
@@ -564,13 +565,54 @@ function statsCatalogue() {
 
 const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
 
-let filtreTimer = null;
+/* ---------------------------------------------------------------------
+   Les champs où l'on tape n'agissent qu'au clic sur « Appliquer ». Filtrer
+   coûte près d'une seconde sur un grand catalogue : l'appliquer à chaque
+   lettre arrêtait l'application le temps d'écrire un nom. Les couleurs et
+   les cases, elles, valent tout de suite — un clic ne se répète pas comme
+   une frappe. Le brouillon ne vit que le temps de la fenêtre.
+   --------------------------------------------------------------------- */
+
+const FILTRES_SAISIE = ['nom', 'type', 'texte', 'artiste',
+  'forceMin', 'forceMax', 'enduranceMin', 'enduranceMax',
+  'cmcMin', 'cmcMax', 'prixMin', 'prixMax'];
+
+let brouillonFiltres = null;
+
+function ouvreBrouillon() {
+  brouillonFiltres = {};
+  FILTRES_SAISIE.forEach(k => brouillonFiltres[k] = S.filtres[k]);
+}
+
+/* La valeur à afficher dans un champ : celle qu'on est en train de taper. */
+function valeurChamp(cle) {
+  return brouillonFiltres && (cle in brouillonFiltres) ? brouillonFiltres[cle] : (S.filtres[cle] || '');
+}
+
+function majBrouillon(cle, valeur) {
+  if (brouillonFiltres && (cle in brouillonFiltres)) brouillonFiltres[cle] = valeur;
+  else majFiltre(cle, valeur);
+}
+
+/* La saisie en cours diffère-t-elle de ce qui est appliqué ? */
+function brouillonModifie() {
+  return !!brouillonFiltres &&
+    FILTRES_SAISIE.some(k => String(brouillonFiltres[k] || '') !== String(S.filtres[k] || ''));
+}
+
+/* Exécute `fn` comme si le brouillon était appliqué : c'est ainsi que le
+   décompte de la fenêtre annonce ce que « Appliquer » donnerait. */
+function avecBrouillon(fn) {
+  if (!brouillonFiltres) return fn();
+  const avant = S.filtres;
+  S.filtres = {...S.filtres, ...brouillonFiltres};
+  try { return fn(); } finally { S.filtres = avant; }
+}
 
 /* Une ligne « critère min → max ». */
 function ligneFiltre(kMin, kMax, label, aide, pas, min) {
-  const f = S.filtres;
   const champ = (cle, place) => `<input type="number" inputmode="decimal" step="${pas}" ${min !== undefined ? `min="${min}"` : ''}
-      id="f_${cle}" data-filtre="${cle}" value="${esc(f[cle])}" placeholder="${place}" aria-label="${esc(label)} ${place}">`;
+      id="f_${cle}" data-filtre="${cle}" value="${esc(valeurChamp(cle))}" placeholder="${place}" aria-label="${esc(label)} ${place}">`;
   return `<div class="filtre-ligne">
     <span class="filtre-nom" title="${esc(aide)}">${esc(label)}</span>
     <label class="lab" for="f_${kMin}">min</label>${champ(kMin, 'min')}
@@ -579,7 +621,6 @@ function ligneFiltre(kMin, kMax, label, aide, pas, min) {
 }
 
 function corpsFiltres() {
-  const f = S.filtres;
   return `<div class="field">
       <label class="lab">Couleurs considérées</label>
       <div class="row" style="align-items:center;gap:6px">
@@ -597,11 +638,11 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab" for="f_nom">Nom</label>
-      <input type="text" id="f_nom" data-filtre="nom" value="${esc(f.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
+      <input type="text" id="f_nom" data-filtre="nom" value="${esc(valeurChamp('nom'))}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab" for="f_type">Type</label>
-      <input type="text" id="f_type" data-filtre="type" value="${esc(f.type)}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
+      <input type="text" id="f_type" data-filtre="type" value="${esc(valeurChamp('type'))}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab">Set</label>
@@ -621,7 +662,7 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab" for="f_texte">Texte de règles</label>
-      <input type="text" id="f_texte" data-filtre="texte" value="${esc(f.texte)}" placeholder="ex. draw a card, sacrifice a creature…" autocomplete="off">
+      <input type="text" id="f_texte" data-filtre="texte" value="${esc(valeurChamp('texte'))}" placeholder="ex. draw a card, sacrifice a creature…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab">Archétype</label>
@@ -655,7 +696,7 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab" for="f_artiste">Illustrateur</label>
-      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(f.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
+      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(valeurChamp('artiste'))}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
     </div>
     <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier ») ; « Texte de règles » cherche dans le texte d'Oracle de la carte, celui qui décrit ses capacités, et accepte une phrase entière. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs choisies ci-dessus ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
@@ -780,12 +821,17 @@ function etatSets() {
 
 /* Décompte des cartes retenues, rafraîchi à chaque frappe. */
 function resumeFiltres() {
-  const list = filtered();
-  const ex = list.reduce((n, e) => n + e.qty, 0);
-  const total = collectionCards();
-  const actifs = filtresActifs();
-  return `<b>${list.length}</b> carte(s) différentes retenues sur ${total.length} · ${ex} exemplaire(s)
-    · ${actifs.length ? `${actifs.length} filtre(s) : ${esc(texteFiltresActifs())}` : 'aucun filtre actif'}`;
+  return avecBrouillon(() => {
+    const list = filtered();
+    const ex = list.reduce((n, e) => n + e.qty, 0);
+    const total = collectionCards();
+    const actifs = filtresActifs();
+    /* Le décompte suit la frappe — il ne coûte que la collection — mais rien
+       n'est encore appliqué au reste de l'atelier. */
+    return `<b>${list.length}</b> carte(s) différentes retenues sur ${total.length} · ${ex} exemplaire(s)
+      · ${actifs.length ? `${actifs.length} filtre(s) : ${esc(texteFiltresActifs())}` : 'aucun filtre actif'}
+      ${brouillonModifie() ? '<br><b>Saisie en attente</b> : « Appliquer » la reporte sur l\'atelier.' : ''}`;
+  });
 }
 
 function majResumeFiltres() {
@@ -793,14 +839,46 @@ function majResumeFiltres() {
   if (el) el.innerHTML = resumeFiltres();
 }
 
-/* Rendu différé : la frappe reste fluide même sur une grande collection. */
-function planifierRenduFiltres() {
-  clearTimeout(filtreTimer);
-  filtreTimer = setTimeout(() => {
-    S.limitB = PAGE;
+/* La barre de progression du filtrage, dans le pied de la fenêtre : c'est
+   la seule partie toujours visible, quel que soit le défilement du corps. */
+function zoneProgression() {
+  return `<div id="filtreProgres" class="filtre-progres" hidden>
+    <div class="small muted" id="filtreProgresTxt"></div>
+    <div class="track"><div class="fill" id="filtreProgresBar" style="width:0%;background:var(--brass)"></div></div>
+  </div>`;
+}
+
+function majProgression(txt, fait, total) {
+  const zone = document.getElementById('filtreProgres');
+  if (zone) zone.hidden = false;
+  const pct = total > 0 ? Math.round(fait / total * 100) : 0;
+  const t = document.getElementById('filtreProgresTxt');
+  const b = document.getElementById('filtreProgresBar');
+  if (t) t.textContent = total > 0
+    ? `${txt} — ${fait.toLocaleString('fr-FR')} / ${total.toLocaleString('fr-FR')} (${pct} %)`
+    : `${txt}…`;
+  if (b) b.style.width = pct + '%';
+}
+
+/* Le filtrage lui-même, par tranches, pour que la barre se peigne entre
+   deux lots. Les cartes candidates sont d'abord bâties, puis notées : ce
+   sont les deux temps longs, et le pourcentage porte sur elles. */
+async function filtrerAvecProgression() {
+  const pied = document.getElementById('dlgFoot');
+  if (pied) pied.querySelectorAll('button').forEach(b => b.disabled = true);
+  majProgression('Préparation des cartes', 0, 0);
+  await new Promise(r => setTimeout(r, 0));
+  try {
+    if (typeof prechauffeCandidats === 'function')
+      await prechauffeCandidats((fait, total) => majProgression('Préparation des cartes', fait, total));
+    if (typeof prepareSuggestions === 'function')
+      await prepareSuggestions((fait, total) => majProgression('Notation des candidates', fait, total));
+    majProgression('Affichage', 1, 1);
+    await new Promise(r => setTimeout(r, 0));
     renderAll();
-    majResumeFiltres();
-  }, 220);
+  } finally {
+    if (pied) pied.querySelectorAll('button').forEach(b => b.disabled = false);
+  }
 }
 
 /* Réécrit les champs de la fenêtre après une réinitialisation ou un
@@ -840,10 +918,17 @@ function restaurerFiltres(memo) {
   S.colorMode = memo.colorMode;
 }
 
-/* « Appliquer » garde ce qui est déjà en vigueur : il suffit d'oublier
-   l'instantané avant de fermer. */
-function appliquerFiltres() {
+/* « Appliquer » reporte la saisie en attente sur l'état, puis lance le
+   filtrage. C'est le seul moment où l'atelier entier est recalculé. */
+async function appliquerFiltres() {
+  if (brouillonFiltres) {
+    Object.keys(brouillonFiltres).forEach(k => majFiltre(k, brouillonFiltres[k]));
+    brouillonFiltres = null;
+  }
   filtresAvant = null;
+  S.limitB = PAGE;
+  await filtrerAvecProgression();
+  brouillonFiltres = null;
   closeDialog();
 }
 
@@ -851,6 +936,8 @@ function appliquerFiltres() {
    laisse l'instantané en place : `fermetureFiltres()` s'en sert pour revenir
    en arrière. */
 function fermetureFiltres() {
+  /* La saisie en attente n'a jamais été appliquée : elle se jette. */
+  brouillonFiltres = null;
   if (!filtresAvant) return;
   restaurerFiltres(filtresAvant);
   filtresAvant = null;
@@ -866,7 +953,11 @@ function openFiltresModal() {
   openDialog('Filtres de la collection', corpsFiltres(),
     `<button type="button" class="btn foot-g" data-act="resetFiltres">Réinitialiser</button>
      <button type="button" class="btn" data-act="closeDialog">Annuler</button>
-     <button type="button" class="btn pri" data-act="appliquerFiltres">Appliquer</button>`);
+     <button type="button" class="btn pri" data-act="appliquerFiltres">Appliquer</button>
+     ${zoneProgression()}`);
+  /* Après `openDialog`, qui remet le brouillon à zéro comme tout changement
+     de fenêtre. */
+  ouvreBrouillon();
   filtresAvant = memo;
 }
 

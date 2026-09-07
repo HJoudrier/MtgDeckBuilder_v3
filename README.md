@@ -129,6 +129,13 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 
 `S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne les cartes du catalogue local examinées par les suggestions et se règle depuis la fenêtre des achats.
 
+Les champs de saisie de la fenêtre des filtres (`FILTRES_SAISIE`, js/ui.js) n'agissent
+qu'au clic sur « Appliquer » : filtrer coûte près d'une seconde sur un grand catalogue,
+et l'appliquer à chaque lettre arrêtait l'application le temps d'écrire un nom. La frappe
+va dans un brouillon, seul le décompte de la fenêtre la suit, et « Appliquer » reporte le
+tout puis recalcule par tranches derrière une barre de progression. Les couleurs et les
+cases à cocher, elles, valent tout de suite : un clic ne se répète pas comme une frappe.
+
 | Fonction | Rôle |
 |---|---|
 | `fmt()` | Contraintes du format en cours : taille, copies, commandant. |
@@ -223,7 +230,9 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `invaliderCandidats()` | Invalide la sélection mémorisée. |
 | `signatureCandidats()` | Signature des critères, filtres de la fenêtre compris, pour ne recalculer qu'en cas de changement. |
 | `appliqueCatalogueAuxCartes()` | Reporte les textes oracle complets et les prix de l'archive sur vos cartes. |
+| `selectionCandidats()` | La boucle qui écarte et le classement par rang EDHREC, communs aux deux façons de bâtir les candidats. |
 | `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format, le prix et les filtres de la fenêtre. Le plafond `S.candidatsMax` ne s'applique qu'ensuite, sur ce qui reste. |
+| `prechauffeCandidats(onProgress)` *(async)* | La même construction par tranches, en rendant la main, pour la barre de progression d'« Appliquer ». |
 | `statsCandidats()` | Le détail de ce qui a écarté et combien, pour la phrase de la section Suggestions. |
 | `requeteCatalogue()` | Construit la requête Scryfall correspondant au format et aux couleurs. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
@@ -350,7 +359,11 @@ Données : `VISUELS_CHARGES`
 |---|---|
 | `contexteEvaluation()` | Prépare le contexte de notation : graphe du deck, rôles manquants, courbe. |
 | `noteCarte(p,X)` | Note une carte : synergies, boucles, rôles, courbe, EDHREC, combos. |
-| `currentSuggestions()` | Constitue le vivier puis renvoie les propositions classées. |
+| `vivierSuggestions()` | Constitue le vivier : toutes les cartes qu'on pourrait proposer, avant notation. |
+| `noterVivier(pool,X,res,debut,fin)` | Note une tranche du vivier. |
+| `ordonneSuggestions(res)` | Écarte les scores nuls, applique les filtres de l'en-tête et classe. |
+| `currentSuggestions()` | Vivier puis notation d'un bloc, ou reprise de la sélection déjà préparée. |
+| `prepareSuggestions(onProgress)` *(async)* | La même notation par tranches, mise de côté pour le rendu qui suit. |
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
 | `panneauEdhrec()` | Panneau EDHREC du commandant. |
 | `sugRow(s)` | Vignette d'une proposition. |
@@ -445,7 +458,15 @@ Données : `RETOURNEES`
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et prend l'instantané auquel « Annuler » revient. |
 | `instantaneFiltres()` | Copie des critères et des couleurs, avant modification. |
 | `restaurerFiltres(memo)` | Repose un tel instantané. |
-| `appliquerFiltres()` | « Appliquer » : oublie l'instantané, puis ferme. |
+| `appliquerFiltres()` *(async)* | « Appliquer » : reporte la saisie en attente sur l'état, lance le filtrage avec sa barre, puis ferme. |
+| `ouvreBrouillon()` | Ouvre un brouillon des champs de saisie, à l'ouverture de la fenêtre. |
+| `valeurChamp(cle)` | La valeur à afficher dans un champ : celle qu'on est en train de taper. |
+| `majBrouillon(cle,valeur)` | Écrit une frappe dans le brouillon plutôt que dans l'état. |
+| `brouillonModifie()` | La saisie en cours diffère-t-elle de ce qui est appliqué ? |
+| `avecBrouillon(fn)` | Exécute `fn` comme si le brouillon était appliqué, pour le décompte de la fenêtre. |
+| `zoneProgression()` | La barre de progression, dans le pied de la fenêtre. |
+| `majProgression(txt,fait,total)` | Avance la barre et son libellé. |
+| `filtrerAvecProgression()` *(async)* | Bâtit les candidates puis les note par tranches, barre à l'appui, et rend la main entre chaque lot. |
 | `fermetureFiltres()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — revient à l'instantané. |
 | `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, set, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
 | `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
@@ -453,9 +474,8 @@ Données : `RETOURNEES`
 | `majListeSets()` | Rafraîchit cette liste sans réécrire la fenêtre, pour garder le curseur de saisie. |
 | `etatSets()` | État de la liste des sets Scryfall, sous le champ. |
 | `ligneFiltre(kMin,kMax,label,aide,pas,min)` | Une ligne « critère min → max » de la fenêtre. |
-| `resumeFiltres()` | Décompte des cartes retenues et rappel des filtres actifs. |
+| `resumeFiltres()` | Décompte des cartes retenues, saisie en attente comprise, et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
-| `planifierRenduFiltres()` | Diffère le rendu global pour garder la saisie fluide. |
 | `majFenetreFiltres()` | Réécrit les champs après une réinitialisation ou un changement de couleur. |
 | `renderAll()` | Rend les cinq sections et programme la sauvegarde. |
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |

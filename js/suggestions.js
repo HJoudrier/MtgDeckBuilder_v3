@@ -189,7 +189,10 @@ function noteCarte(p, X) {
   return {card:c, score, reasons, partners, source:p.source, offer:p.offer, graph, edhrec:er, combos};
 }
 
-function currentSuggestions() {
+/* La sélection se fait en deux temps : bâtir le vivier — toutes les cartes
+   qu'on pourrait proposer — puis le noter. Les séparer permet de noter par
+   tranches, ce dont la barre de progression d'« Appliquer » a besoin. */
+function vivierSuggestions() {
   const X = contexteEvaluation();
   const f = X.f;
   const pool = [];
@@ -251,10 +254,51 @@ function currentSuggestions() {
     });
   }
 
-  const res = [];
-  pool.forEach(p => { const n = noteCarte(p, X); if (n) res.push(n); });
-  // les filtres de l'en-tête valent aussi pour ce qu'on propose d'ajouter
+  return {pool, X};
+}
+
+/* Notation d'une tranche du vivier, de `debut` inclus à `fin` exclu. */
+function noterVivier(pool, X, res, debut, fin) {
+  for (let i = debut; i < fin; i++) {
+    const n = noteCarte(pool[i], X);
+    if (n) res.push(n);
+  }
+}
+
+/* Les filtres de l'en-tête valent aussi pour ce qu'on propose d'ajouter. */
+function ordonneSuggestions(res) {
   return res.filter(r => r.score > 0 && carteFiltree(r.card)).sort((a, b) => b.score - a.score);
+}
+
+/* Une sélection déjà calculée par `prepareSuggestions()`, posée là pour que
+   le rendu qui suit la reprenne telle quelle. Elle ne sert qu'une fois : tout
+   appel ultérieur recalcule, faute de quoi un changement d'état passerait
+   inaperçu. */
+let SUG_PRET = null;
+
+function currentSuggestions() {
+  if (SUG_PRET) { const liste = SUG_PRET; SUG_PRET = null; return liste; }
+  const {pool, X} = vivierSuggestions();
+  const res = [];
+  noterVivier(pool, X, res, 0, pool.length);
+  return ordonneSuggestions(res);
+}
+
+/* La même notation, par tranches, en rendant la main entre chacune. Le
+   résultat est mis de côté pour le rendu qui suit. */
+async function prepareSuggestions(onProgress) {
+  const {pool, X} = vivierSuggestions();
+  const res = [];
+  const LOT = 800;
+  if (!pool.length && onProgress) onProgress(0, 0);
+  for (let i = 0; i < pool.length; i += LOT) {
+    const fin = Math.min(pool.length, i + LOT);
+    noterVivier(pool, X, res, i, fin);
+    if (onProgress) onProgress(fin, pool.length);
+    await new Promise(r => setTimeout(r, 0));
+  }
+  SUG_PRET = ordonneSuggestions(res);
+  return SUG_PRET.length;
 }
 
 function ligneCatalogue() {
