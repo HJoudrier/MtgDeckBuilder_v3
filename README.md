@@ -325,7 +325,7 @@ Données : `STORE_KEY`, `STORE_OFF`
 | `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale, le catalogue ayant désormais la sienne. |
 | `blocCatalogue()` | Gestion de l'archive — état, taille, mises à jour — affichée dans la fenêtre du catalogue. |
 | `rafraichirFenetreSauvegarde()` | Réécrit cette fenêtre sur place quand l'état du catalogue a bougé. |
-| `openSaveDialog()` | Ouvre la fenêtre de gestion des données. |
+| `openSaveDialog()` | Ouvre la fenêtre de gestion des données, depuis la pastille « Collection » de l'en-tête. |
 | `rafraichirFenetreSauvegarde()` | Rafraîchit celle des deux fenêtres — sauvegarde ou catalogue — qui est ouverte. |
 | `brancherCatalogue()` | Branche les commandes du catalogue. |
 | `brancherRestauration()` | Branche le sélecteur de fichier de restauration. |

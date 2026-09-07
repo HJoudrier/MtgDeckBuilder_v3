@@ -1262,7 +1262,7 @@ function renderTop() {
       ${filtreBtnHTML}
       ${filtreChipsHTML}
       ${deckPillHTML}
-      <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
+      <button type="button" class="pill" id="pillColFiltr" data-act="saveDialog" style="cursor:pointer" title="Cartes de la collection correspondant aux filtres / Total collection — cliquer pour ouvrir la sauvegarde locale">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></button>
       <button type="button" class="pill" id="pillDbFiltr" data-act="catalogueDialog" style="cursor:pointer" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue — cliquer pour ouvrir la fenêtre du catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></button>
       <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
       ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
