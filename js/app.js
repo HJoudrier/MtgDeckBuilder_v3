@@ -150,6 +150,16 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'budgetDialog') {
+    openBudgetModal();
+    return;
+  }
+
+  if (act === 'appliquerBudget') {
+    appliquerBudget();
+    return;
+  }
+
   if (act === 'resetFiltres') {
     /* « Réinitialiser » dans la fenêtre vide le brouillon ; « Tout effacer »
        dans l'en-tête vide l'état, et s'applique aussitôt. */
@@ -596,7 +606,13 @@ document.addEventListener('input', ev => {
   }
   if (t.dataset.bud) {
     const k = t.dataset.bud;
-    S.budget[k] = t.type === 'number' ? (parseFloat(t.value) || 0) : t.value;
+    modifieBrouillon(() => {
+      S.budget[k] = t.type === 'number' ? (parseFloat(t.value) || 0) : t.value;
+    });
+    /* Dans la fenêtre « Budget », rien n'est appliqué avant le bouton :
+       seul le résumé suit, réécrire le corps volerait le curseur du champ
+       qu'on est en train de régler. */
+    if (brouillon) { majResumeBudget(); return; }
     if (k === 'perCard' || k === 'total') invaliderCandidats();
     refreshSuggestions();
     return;
@@ -669,6 +685,12 @@ document.addEventListener('keydown', ev => {
   if (ev.key === 'Enter' && ev.target && ev.target.dataset && ev.target.dataset.filtre) {
     ev.preventDefault();
     appliquerFiltres();
+  }
+  /* Et de même dans la fenêtre « Budget », dont les deux champs chiffrés
+     attendent aussi « Appliquer ». */
+  if (ev.key === 'Enter' && ev.target && ev.target.dataset && ev.target.dataset.bud) {
+    ev.preventDefault();
+    appliquerBudget();
   }
 });
 

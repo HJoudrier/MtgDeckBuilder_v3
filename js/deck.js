@@ -136,7 +136,7 @@ function removeFromDeck(name) {
 
 function buyCard(name) {
   if (S.budget.total <= 0 || S.budget.perCard <= 0) {
-    toast('Budget à zéro : aucun achat possible. Augmentez le budget en section E.');
+    toast('Budget à zéro : aucun achat possible. Augmentez le budget dans la fenêtre « Achats sur Cardmarket », par la pastille « Budget » de l\'en-tête.');
     return;
   }
   const c = find(name);
@@ -438,7 +438,7 @@ function blocAchats() {
          <div class="small ${depasse?'':'muted'}" style="margin-bottom:6px">${depasse
             ? `Dépassement de ${eur(total-budget)} sur un budget de ${eur(budget)}.`
             : `Budget de ${eur(budget)} · reste ${eur(budget-total)}.`}</div>`
-      : `<div class="small" style="margin-bottom:6px">Aucun budget défini en section E : ces cartes sont dans le deck mais ne sont pas encore chiffrées comme achat autorisé.</div>`}
+      : `<div class="small" style="margin-bottom:6px">Aucun budget défini : ces cartes sont dans le deck mais ne sont pas encore chiffrées comme achat autorisé. La pastille « Budget » de l'en-tête ouvre de quoi en fixer un.</div>`}
     <div class="list">${lignes.slice(0, 12).map(l => `
       <div class="lrow">
         <span class="dot" style="background:${stripeColor(l.card)}"></span>

@@ -26,9 +26,10 @@ js/                 modules, chargés dans cet ordre :
 ```
 
 Les cinq sections de la page sont Collection, Statistiques, Graphe des capacités, Deck et Suggestions ;
-le format et les filtres se règlent depuis deux fenêtres ouvertes par l'en-tête. Les identifiants internes
-des sections (`secB`…`secF`, `renderB`…`renderF`) ont gardé leur lettre d'origine, seule la lettre affichée
-a été resserrée après le passage de la section « Filtres & Format » en fenêtre.
+le format, les filtres, le catalogue et le budget se règlent depuis les fenêtres qu'ouvrent les
+pastilles de l'en-tête. Les identifiants internes des sections (`secB`…`secF`, `renderB`…`renderF`)
+ont gardé leur lettre d'origine, seule la lettre affichée a été resserrée après le passage de la
+section « Filtres & Format » en fenêtre.
 
 L'ordre de chargement compte : `effets.js` définit l'analyseur qu'utilise `cartes.js`
 au moment de construire la base livrée. Les modules partagent la portée globale ;
@@ -168,6 +169,17 @@ une barre de progression ; toute autre fermeture le jette, sans rien à défaire
 La fenêtre Format suit exactement le même principe, sur ses propres champs — `format`,
 `custom`, `filtreLegal` — avec ses boutons « Annuler » et « Appliquer ». Le brouillon est
 donc un mécanisme partagé, ouvert sur les champs que la fenêtre courante règle.
+
+La pastille « Budget » de l'en-tête ouvre de même la fenêtre « Achats sur Cardmarket », qui
+portait jusque-là un panneau de la section Suggestions : budget total, prix maximum par carte
+et les préférences qui font l'estimation — état, langue, type de vendeur, pays (`S.budget`).
+Elle règle un seul champ, `budget`, et l'attend au bouton comme les autres : un budget se
+cherche par tâtonnements, et chaque chiffre essayé relancerait sinon la notation, que
+`S.budget.perCard` périme en entrant dans la signature des candidates. Pendant la saisie, seuls le
+budget restant et le rappel des achats suivent — ils se peignent sous le brouillon et annoncent
+donc ce que « Appliquer » donnerait —, car réécrire la fenêtre volerait le curseur du champ en
+cours. La pastille reste affichée même à budget nul, où elle marque « Budget — » : c'est la
+seule porte vers ce réglage, et un budget remis à zéro doit pouvoir être repris.
 
 Le chargement de l'archive Scryfall, lui, ouvre une boîte de progression : deux barres —
 ce qui arrive, ce qui en est extrait — et le décompte des cartes retenues. Les totaux
@@ -403,7 +415,9 @@ Comptages par couleur et par type, valeur de la collection, histogrammes de cour
 
 ### `js/suggestions.js` — Suggestions d'ajout
 
-Notation des cartes — commune aux propositions et aux cartes du deck —, vignettes, pagination et panneaux d'achat.
+Notation des cartes — commune aux propositions et aux cartes du deck —, vignettes et pagination.
+Le panneau « Achats sur Cardmarket » a quitté la section pour la fenêtre qu'ouvre la pastille « Budget »
+de l'en-tête ; seules en restent les deux lignes de résumé, que cette fenêtre affiche.
 
 *15 fonction(s), 25 Ko*
 
@@ -421,9 +435,8 @@ Données : `VISUELS_CHARGES`
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
 | `panneauEdhrec()` | Panneau EDHREC du commandant. |
 | `sugRow(s)` | Vignette d'une proposition. |
-| `ligneBudget()` | Ligne de budget restant. |
-| `ligneAchats()` | Rappel des cartes à acheter. |
-| `panneauAchats()` | Panneau Cardmarket : budget, état, langue, vendeur. Le plafond des cartes examinées en est parti pour la fenêtre du catalogue. |
+| `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
+| `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |
 | `listeSuggestions()` | Assemble les groupes par type et le filtre par rôle. |
 | `visuelsSuggestions(byType)` | Demande les visuels des propositions affichées. |
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
@@ -478,7 +491,7 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 ### `js/ui.js` — Interface commune
 
 Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global,
-dont le bouton « Filtres » de l'en-tête et sa fenêtre modale.
+dont le bouton « Filtres » de l'en-tête et les fenêtres modales qu'ouvrent ses pastilles.
 
 *36 fonction(s), 31 Ko*
 
@@ -502,6 +515,11 @@ Données : `RETOURNEES`
 | `corpsCatalogue()` | Contenu de cette fenêtre : les deux réglages différés, puis la gestion de l'archive. |
 | `majFenetreCatalogue()` | La réécrit sans perdre le défilement, et rebranche ses commandes. |
 | `appliquerCatalogue()` *(async)* | « Appliquer » : verse le brouillon puis recalcule. |
+| `openBudgetModal()` | Ouvre la fenêtre « Achats sur Cardmarket » depuis la pastille « Budget » de l'en-tête, brouillon compris. |
+| `corpsBudget()` | Contenu de cette fenêtre : budget, prix maximum par carte, état, langue, vendeur et pays, puis le rappel des achats. |
+| `champBudget(id,label,cle,liste)` | Une des listes déroulantes de cette fenêtre. |
+| `majResumeBudget()` | Rafraîchit le budget restant et le rappel des achats pendant la saisie, sans réécrire la fenêtre. |
+| `appliquerBudget()` *(async)* | « Appliquer » : verse le brouillon puis recalcule, le prix maximum entrant dans la signature des candidates. |
 | `corpsFormat()` | Contenu de cette fenêtre : format de jeu, case « écarter les cartes non légales » et panneau « Personnalisé ». |
 | `tagIllegal(card)` | Le tag « illégal », partout où la carte s'affiche. |
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
@@ -513,7 +531,7 @@ Données : `RETOURNEES`
 | `rafraichirFiche()` | Reconstruit la fiche ouverte quand Scryfall a répondu ou renoncé. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
-| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres » et puces des filtres actifs. |
+| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et pastilles qui ouvrent les fenêtres — Format, Collection, Catalogue, Budget. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et y ouvre un brouillon. |
 | `verseBrouillon()` | Verse le brouillon dans l'état : le seul moment où une fenêtre à brouillon touche à ce que l'atelier montre. |
 | `appliquerFiltres()` *(async)* | « Appliquer » : verse le brouillon dans l'état, lance le filtrage avec sa barre, puis ferme. |

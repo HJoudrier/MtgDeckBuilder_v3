@@ -485,6 +485,10 @@ function sugRow(s) {
   </div>`;
 }
 
+/* Le budget et les préférences d'achat se règlent désormais dans la fenêtre
+   « Achats sur Cardmarket », ouverte par la pastille « Budget » de l'en-tête
+   (js/ui.js). Ces deux lignes en peignent le résumé, et la fenêtre les lit
+   sous son brouillon : elles annoncent donc ce que « Appliquer » donnerait. */
 function ligneBudget() {
   const left = S.budget.total - spent();
   return S.budget.total > 0 && S.budget.perCard > 0
@@ -497,28 +501,6 @@ function ligneAchats() {
   if (!buys.length) return '';
   return `<div class="small" style="margin-top:6px">À acheter : ${buys.map(l => `<a href="${esc(cmLink(l.card))}" target="_blank" rel="noopener" style="color:var(--brass)">${esc(l.card.name)}</a> ×${l.qty} (${eur(l.total)})`).join(' · ')}</div>
      <div class="row" style="margin-top:6px"><button class="btn" data-act="wants">Exporter la liste de wants Cardmarket</button></div>`;
-}
-
-function panneauAchats() {
-  return `<div class="group">
-      <h4>Achats sur Cardmarket <a class="small" style="color:var(--brass)" href="https://www.cardmarket.com/fr/Magic" target="_blank" rel="noopener">cardmarket.com ↗</a></h4>
-      <div class="row">
-        <div class="field"><label class="lab" for="bT">Budget total (€)</label><input id="bT" type="number" min="0" step="1" value="${S.budget.total}" data-bud="total" style="width:96px"></div>
-        <div class="field"><label class="lab" for="bP">Prix max / carte (€)</label><input id="bP" type="number" min="0" step="1" value="${S.budget.perCard}" data-bud="perCard" style="width:96px"></div>
-        <div class="field"><label class="lab" for="bQ">État minimum</label>
-          <select id="bQ" data-bud="condition">${CONDITIONS.map(([k,l]) => `<option value="${k}" ${S.budget.condition===k?'selected':''}>${k} — ${l}</option>`).join('')}</select></div>
-        <div class="field"><label class="lab" for="bL">Langue</label>
-          <select id="bL" data-bud="lang">${CM_LANGS.map(([k,l]) => `<option value="${k}" ${S.budget.lang===k?'selected':''}>${l}</option>`).join('')}</select></div>
-        <div class="field"><label class="lab" for="bS">Type de vendeur</label>
-          <select id="bS" data-bud="sellerType">${SELLER_TYPES.map(([k,l]) => `<option value="${k}" ${S.budget.sellerType===k?'selected':''}>${l}</option>`).join('')}</select></div>
-        <div class="field"><label class="lab" for="bC">Pays du vendeur</label>
-          <select id="bC" data-bud="country">${CM_COUNTRIES.map(([k,l]) => `<option value="${k}" ${S.budget.country===k?'selected':''}>${l}</option>`).join('')}</select></div>
-      </div>
-      <div class="small muted" style="margin-top:6px" id="budLine">${ligneBudget()}</div>
-      <div class="small muted" style="margin-top:4px">Prix de référence : tendance Cardmarket, relayée par Scryfall et rafraîchie avec les visuels. L'état, la langue et le type de vendeur ajustent une <b>estimation</b> : les offres réelles se consultent sur la fiche Cardmarket, via le lien de chaque carte.</div>
-      <div id="catLine">${ligneCatalogue()}</div>
-      <div id="budBuys">${ligneAchats()}</div>
-    </div>`;
 }
 
 function listeSuggestions() {
@@ -590,7 +572,9 @@ function listeSuggestions() {
         <button class="btn sm" data-act="combos">Réessayer</button>
       </span></div>` : ''}
     <div class="small muted">Le score combine les branchements avec le deck (un effet produit ici déclenche une capacité là-bas), les rôles manquants, la courbe de mana et la densité de capacités. Les cartes hors collection sont pénalisées et limitées par le budget.
-      <br>Pas de connexion à votre compte : Cardmarket n'ouvre plus son API aux nouvelles applications et interdit le partage d'identifiants, et une page web ne peut pas signer les requêtes OAuth sans exposer le secret. L'atelier s'appuie donc sur les prix Cardmarket publiés par Scryfall, et vous renvoie vers la fiche du site pour l'achat.</div>`;
+      <br>Le budget, le prix maximum par carte et les préférences d'achat (état, langue, vendeur, pays) se règlent
+      dans la fenêtre « Achats sur Cardmarket », qu'ouvre la pastille « Budget » de l'en-tête, et n'y prennent
+      effet qu'au bouton « Appliquer ».</div>`;
   return {html, sug, graphPicks, edhrecPicks};
 }
 
@@ -652,8 +636,6 @@ function majHintF(sug, graphPicks, edhrecPicks) {
 function refreshSuggestions() {
   const r = listeSuggestions();
   const liste = document.getElementById('sugList'); if (liste) liste.innerHTML = r.html;
-  const bl = document.getElementById('budLine'); if (bl) bl.innerHTML = ligneBudget();
-  const bb = document.getElementById('budBuys'); if (bb) bb.innerHTML = ligneAchats();
   const cl = document.getElementById('catLine'); if (cl) cl.innerHTML = ligneCatalogue();
   majHintF(r.sug, r.graphPicks, r.edhrecPicks);
   renderTop();
@@ -663,7 +645,7 @@ function renderF() {
   const r = listeSuggestions();
   const bodyEl = document.getElementById('bodyF');
   if (bodyEl) {
-    bodyEl.innerHTML = `${panneauEdhrec()}${panneauAchats()}<div id="sugList">${r.html}</div>`;
+    bodyEl.innerHTML = `${panneauEdhrec()}<div id="catLine">${ligneCatalogue()}</div><div id="sugList">${r.html}</div>`;
   }
   majHintF(r.sug, r.graphPicks, r.edhrecPicks);
   const secCmds = commandantsSecondaires();
