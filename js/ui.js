@@ -557,6 +557,65 @@ function majFenetreFormat() {
   corps.scrollTop = y;
 }
 
+/* =====================================================================
+   Fenêtre « Catalogue », ouverte depuis la pastille de l'en-tête. Elle
+   rassemble ce qui touche au catalogue des cartes existantes, jusque-là
+   éparpillé entre la section Suggestions et la fenêtre de sauvegarde.
+
+   Elle mêle deux natures, et le dit : les réglages du haut attendent
+   « Appliquer », les actions du bas — mettre à jour, charger, effacer —
+   agissent au clic. Différer « effacer l'archive » derrière un bouton de
+   validation serait déroutant.
+   ===================================================================== */
+
+function corpsCatalogue() {
+  return avecBrouillon(() => `<div class="field">
+      <label class="lab" for="catMax">Cartes examinées au maximum</label>
+      <input id="catMax" type="number" min="100" step="1000" value="${S.candidatsMax}" data-cand style="width:120px">
+      <div class="small muted">Nombre de cartes du catalogue que les suggestions examinent au plus, une fois vos
+        filtres appliqués — les mieux classées par EDHREC passent en premier. Plus haut, la recherche est plus
+        large et le recalcul plus long.</div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--txt);cursor:pointer">
+        <input type="checkbox" data-act="catNumeriques" ${S.catalogueNumeriques ? 'checked' : ''} style="width:auto;margin:0">
+        Autoriser les cartes numériques
+      </label>
+      <div class="small muted">Les cartes qui n'existent que sur Arena ou MTGO — Alchemy, rééquilibrages —
+        et qu'on ne peut pas posséder sur papier. Cochée, elles entrent dans les suggestions, les éditions
+        numériques apparaissent dans le filtre par set, et la fiche d'une carte en montre les visuels.</div>
+    </div>
+    <div class="warnbox">Ces deux réglages attendent « Appliquer ». Ce qui suit agit immédiatement.</div>
+    ${blocCatalogue()}`);
+}
+
+function majFenetreCatalogue() {
+  const dlg = document.getElementById('dlg');
+  if (!dlg || !dlg.open) return;
+  const corps = document.getElementById('dlgBody');
+  if (!corps || !document.getElementById('blocCatalogue')) return;
+  const y = corps.scrollTop;
+  corps.innerHTML = corpsCatalogue();
+  corps.scrollTop = y;
+  if (typeof brancherCatalogue === 'function') brancherCatalogue();
+}
+
+async function appliquerCatalogue() {
+  verseBrouillon();
+  S.limitB = PAGE;
+  await filtrerAvecProgression();
+  closeDialog();
+}
+
+function openCatalogueModal() {
+  openDialog('Catalogue des cartes', corpsCatalogue(),
+    `<button type="button" class="btn" data-act="closeDialog">Annuler</button>
+     <button type="button" class="btn pri" data-act="appliquerCatalogue">Appliquer</button>
+     ${zoneProgression()}`);
+  ouvreBrouillon(['candidatsMax', 'catalogueNumeriques'], majFenetreCatalogue);
+  if (typeof brancherCatalogue === 'function') brancherCatalogue();
+}
+
 /* « Appliquer » verse le brouillon puis recalcule, comme pour les filtres :
    changer de format reprend l'atelier tout autant qu'un critère. */
 async function appliquerFormat() {
@@ -1204,7 +1263,7 @@ function renderTop() {
       ${filtreChipsHTML}
       ${deckPillHTML}
       <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
-      <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>
+      <button type="button" class="pill" id="pillDbFiltr" data-act="catalogueDialog" style="cursor:pointer" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue — cliquer pour ouvrir la fenêtre du catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></button>
       <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
       ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${S.budget.total > 0 ? `<span class="pill" id="pillBudget" title="Budget restant">Budget <b>${eur(Math.max(0, left))}</b></span>` : ''}

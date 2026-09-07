@@ -318,6 +318,7 @@ function ligneCatalogue() {
     if (st.couleurs) causes.push(`${n(st.couleurs)} par vos couleurs`);
     if (st.possedees) causes.push(`${n(st.possedees)} déjà dans votre collection`);
     if (st.prix) causes.push(`${n(st.prix)} au-dessus de ${eur(S.budget.perCard)}`);
+    if (st.numeriques) causes.push(`${n(st.numeriques)} numériques`);
     if (st.filtres) causes.push(`${n(st.filtres)} par vos filtres`);
     if (st.noeuds) causes.push(`${n(st.noeuds)} par les effets sélectionnés (${noeuds.map(x =>
       (typeof NODE !== 'undefined' && NODE[x] && NODE[x].label) || x).join(' + ')})`);
@@ -326,7 +327,8 @@ function ligneCatalogue() {
       Catalogue complet : ${n(CAT.cartes.length)} cartes en cache${maj ? ` (Scryfall, ${maj})` : ''}.
       <b>${n(st.retenus)}</b> candidate(s)${causes.length ? ` — écartées : ${causes.join(', ')}` : ' : rien n\'est écarté'}.
       ${st.coupes ? `Les ${n(st.coupes)} moins bien classées par EDHREC ne sont pas examinées,
-        le maximum étant fixé à ${n(S.candidatsMax)} (réglable ci-dessus).` : ''}
+        le maximum étant fixé à ${n(S.candidatsMax)} (réglable dans la fenêtre du catalogue,
+        par la pastille « Catalogue » de l'en-tête).` : ''}
       ${st.sansPrix ? `${n(st.sansPrix)} candidate(s) restent sans prix connu : elles comptent ici,
         mais ne peuvent pas être proposées à l'achat.` : ''}
       Les visuels se chargent ensuite, par score décroissant.
@@ -503,7 +505,6 @@ function panneauAchats() {
       <div class="row">
         <div class="field"><label class="lab" for="bT">Budget total (€)</label><input id="bT" type="number" min="0" step="1" value="${S.budget.total}" data-bud="total" style="width:96px"></div>
         <div class="field"><label class="lab" for="bP">Prix max / carte (€)</label><input id="bP" type="number" min="0" step="1" value="${S.budget.perCard}" data-bud="perCard" style="width:96px"></div>
-        <div class="field"><label class="lab" for="bX" title="Nombre de cartes du catalogue examinées au plus, une fois vos filtres appliqués. Les mieux classées par EDHREC passent en premier.">Cartes examinées</label><input id="bX" type="number" min="100" step="1000" value="${S.candidatsMax}" data-cand style="width:96px"></div>
         <div class="field"><label class="lab" for="bQ">État minimum</label>
           <select id="bQ" data-bud="condition">${CONDITIONS.map(([k,l]) => `<option value="${k}" ${S.budget.condition===k?'selected':''}>${k} — ${l}</option>`).join('')}</select></div>
         <div class="field"><label class="lab" for="bL">Langue</label>

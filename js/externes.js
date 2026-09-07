@@ -544,7 +544,8 @@ const SETS_PAUSE = 120;                   // ms entre deux pages, par courtoisie
 const SETS_ECARTES = new Set(['token', 'memorabilia', 'minigame']);
 
 function setRetenu(s) {
-  return !!s && !s.digital && !SETS_ECARTES.has(s.set_type);
+  if (!s || SETS_ECARTES.has(s.set_type)) return false;
+  return S.catalogueNumeriques || !s.digital;
 }
 
 /* Reprise du cache local, au démarrage : sans elle, un set coché avant le
@@ -557,6 +558,7 @@ async function reprendreSets() {
     SETS_BASE.charges = memo.charges || {};
     SETS_BASE.liste = memo.liste || [];
     SETS_BASE.maj = memo.maj || null;
+    SETS_BASE.numeriques = !!memo.numeriques;
     SETS_BASE.etat = SETS_BASE.liste.length ? 'ok' : 'idle';
     return SETS_BASE.liste.length > 0 || SETS_BASE.index.size > 0;
   } catch(err) {
@@ -567,6 +569,7 @@ async function reprendreSets() {
 function sauverSets() {
   idbEcrire(SETS_CLE_IDB, {
     v:1, maj:SETS_BASE.maj, liste:SETS_BASE.liste, charges:SETS_BASE.charges,
+    numeriques: !!S.catalogueNumeriques,
     cartes:cartesDepuisIndex(SETS_BASE.index)
   }).catch(() => {});
 }
@@ -574,7 +577,17 @@ function sauverSets() {
 /* Y a-t-il lieu d'interroger Scryfall ? Oui si nous n'avons rien, ou si
    notre liste a passé la semaine. */
 function setsARevoir() {
+  /* Basculer l'autorisation des cartes numériques périme la liste : elle a
+     été bâtie sous l'autre réglage, et son cache la resservirait telle quelle. */
+  if (!!SETS_BASE.numeriques !== !!S.catalogueNumeriques) return true;
   return !SETS_BASE.liste.length || !SETS_BASE.maj || Date.now() - SETS_BASE.maj > SETS_FRAICHEUR;
+}
+
+/* Les cartes déjà relevées d'un set l'ont été sous un réglage donné : changer
+   d'avis sur le numérique les rend caduques, il faut les redemander. */
+function oublieCartesSets() {
+  SETS_BASE.charges = {};
+  SETS_BASE.index = new Map();
 }
 
 /* La liste des sets : une requête, quelques centaines d'entrées. */
@@ -602,8 +615,10 @@ async function chargerListeSets() {
       n: x.card_count || 0
     })).filter(x => x.code);
     if (liste.length) {
+      if (!!SETS_BASE.numeriques !== !!S.catalogueNumeriques) oublieCartesSets();
       SETS_BASE.liste = liste;
       SETS_BASE.maj = Date.now();
+      SETS_BASE.numeriques = !!S.catalogueNumeriques;
       sauverSets();
     }
     SETS_BASE.etat = 'ok';
@@ -635,7 +650,7 @@ async function chargerSetScryfall(code) {
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
   const noms = new Set();
   let url = 'https://api.scryfall.com/cards/search?unique=cards&order=name&q='
-          + encodeURIComponent('set:' + c.toLowerCase() + ' game:paper');
+          + encodeURIComponent('set:' + c.toLowerCase() + (S.catalogueNumeriques ? '' : ' game:paper'));
   try {
     for (let page = 0; page < SETS_PAGES && url; page++) {
       const r = await fetch(url);
@@ -831,7 +846,10 @@ function compacte(sc) {
     codeLegalite(lg) || '', chemin, verso,
     (tg != null && /^\d+$/.test(String(tg))) ? +tg : null,
     sc.artist || (faces && faces[0] && faces[0].artist) || '',
-    String(sc.set || '').toUpperCase()
+    String(sc.set || '').toUpperCase(),
+    /* Carte qui n'existe que sous forme numérique : Alchemy, rééquilibrages
+       Arena, exclusivités MTGO. On ne peut pas les posséder sur papier. */
+    (sc.digital || (Array.isArray(sc.games) && !sc.games.includes('paper'))) ? 1 : 0
   ];
 }
 
@@ -1006,7 +1024,7 @@ async function lireCatalogueFichier(source, nom, suivi) {
   if (suivi) { suivi.phase = 'fini'; suivi.cartes = CAT.cartes.length; suivi.avance(true); }
   invaliderCandidats();
   if (saveState !== 'desactive' && S.catalogueActif)
-    idbEcrire('cartes', {v:3, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions}).catch(() => {});
+    idbEcrire('cartes', {v:4, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions}).catch(() => {});
   renderAll();
   toast(`${CAT.cartes.length.toLocaleString('fr-FR')} cartes retenues${
     impressions > CAT.cartes.length ? ` sur ${impressions.toLocaleString('fr-FR')} impressions lues` : ''}.`);
@@ -1148,7 +1166,7 @@ async function chargerCatalogueComplet(force) {
   try {
     if (!force) {
       const memo = await idbLire('cartes').catch(() => null);
-      if (memo && (memo.v === 1 || memo.v === 2 || memo.v === 3) && Array.isArray(memo.cartes) && memo.cartes.length && Array.isArray(memo.cartes[0])) {
+      if (memo && memo.v >= 1 && memo.v <= 4 && Array.isArray(memo.cartes) && memo.cartes.length && Array.isArray(memo.cartes[0])) {
         CAT.cartes = memo.cartes;
         CAT.maj = memo.maj;
         CAT.etat = 'ok';
@@ -1160,6 +1178,7 @@ async function chargerCatalogueComplet(force) {
         appliqueCatalogueAuxCartes();
         if (memo.v < 2) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour obtenir les visuels des cartes.';
         else if (memo.v < 3) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour filtrer par set sans réseau.';
+        else if (memo.v < 4) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour distinguer les cartes numériques.';
         invaliderCandidats();
         renderAll();
         return;
@@ -1310,7 +1329,8 @@ function invaliderCandidats() { CAND = {sig:null, liste:[], stats:null}; }
    décompte annoncé resservirait celui d'avant le filtre. */
 function signatureCandidats() {
   return [S.format, S.commander, [...S.colors].join(''), S.colorMode, S.budget.perCard,
-          CAT.cartes.length, S.collection.size, S.candidatsMax, S.filtreLegal, noeudsActifs().sort().join(','),
+          CAT.cartes.length, S.collection.size, S.candidatsMax, S.filtreLegal,
+          S.catalogueNumeriques, noeudsActifs().sort().join(','),
           JSON.stringify(S.filtres || {})].join('|');
 }
 
@@ -1352,10 +1372,13 @@ function selectionCandidats() {
   const ident = cmd ? cmd.identity : null;
   const noeuds = noeudsActifs();
   const st = {total:CAT.cartes.length, legalite:0, identite:0, couleurs:0, possedees:0,
-              prix:0, sansPrix:0, filtres:0, noeuds:0, retenus:0, coupes:0};
+              prix:0, sansPrix:0, filtres:0, noeuds:0, numeriques:0, retenus:0, coupes:0};
   const retenus = [];
   for (const rec of CAT.cartes) {
     if (!rec || rec.length <= CH.LEGAL) continue;
+    /* Une archive d'avant la colonne ne porte pas l'information : la carte
+       est alors « non jugée » et reste candidate, comme pour la légalité. */
+    if (!S.catalogueNumeriques && rec[CH.NUMERIQUE] === 1) { st.numeriques++; continue; }
     if (legal && String(rec[CH.LEGAL] || '').indexOf(legal) < 0) { st.legalite++; continue; }
     const id = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
     if (ident && id.some(x => !ident.includes(x))) { st.identite++; continue; }
@@ -1428,7 +1451,8 @@ function requeteCatalogue() {
   const ident = (cmd ? cmd.identity : [...S.colors].filter(c => c !== 'C'));
   const id = ident.length ? ident.join('').toLowerCase() : 'c';
   const legal = S.filtreLegal ? (fmt().scry || '') : '';
-  return [legal ? `legal:${legal}` : '', `id<=${id}`, '-is:token', '-t:basic'].filter(Boolean).join(' ');
+  return [legal ? `legal:${legal}` : '', S.catalogueNumeriques ? '' : 'game:paper',
+          `id<=${id}`, '-is:token', '-t:basic'].filter(Boolean).join(' ');
 }
 
 function signatureCatalogue() { return requeteCatalogue(); }

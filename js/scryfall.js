@@ -450,8 +450,8 @@ async function chercheImpressions(card) {
 
 /* Toutes les éditions publiées d'une carte, à la demande seulement : une
    recherche « unique=prints », dont on suit les pages jusqu'à trois. Les
-   éditions numériques sont écartées — la collection et les prix affichés
-   sont ceux du papier. */
+   éditions numériques sont écartées, sauf si la fenêtre du catalogue les
+   autorise — la collection et les prix affichés sont ceux du papier. */
 async function chercheToutesEditions(card) {
   if (!card || typeof fetch !== 'function') return false;
   if (card.editionsEtat === 'chargement' || card.editionsEtat === 'ok') return false;
@@ -459,7 +459,7 @@ async function chercheToutesEditions(card) {
   card.editionsErreur = '';
   const nom = String(card.name || '').replace(/"/g, '');
   let url = 'https://api.scryfall.com/cards/search?unique=prints&order=released&dir=desc&q='
-          + encodeURIComponent('!"' + nom + '" game:paper');
+          + encodeURIComponent('!"' + nom + '"' + (S.catalogueNumeriques ? '' : ' game:paper'));
   const out = [];
   try {
     for (let page = 0; page < 3 && url; page++) {

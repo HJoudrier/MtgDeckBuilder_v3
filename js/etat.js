@@ -39,6 +39,7 @@ const S = {
   exploreSig: null,
   exploreMax: 6000,        // plafond du chargement paginé par l'API Scryfall
   candidatsMax: 20000,     // plafond des candidats tirés du catalogue local
+  catalogueNumeriques: false,  // cartes d'Alchemy, d'Arena, de MTGO : écartées par défaut
   exploreTotal: 0,
   exploreCharge: 0,
   exploreReste: false,
@@ -106,6 +107,7 @@ const SETS_BASE = {
   maj:null, erreur:'',
   liste:[],           // sets publiés par Scryfall : {code, nom, sortie, type, n}
   charges:{},         // sets dont la liste de cartes est chargée : code -> {n}
+  numeriques:false,   // réglage sous lequel la liste a été bâtie
   index:new Map(),    // nom normalisé -> Set(code)
   enCours:new Set()   // sets en cours de chargement
 };
@@ -428,7 +430,7 @@ function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14, SET:15};
+const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14, SET:15, NUMERIQUE:16};
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,

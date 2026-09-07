@@ -138,7 +138,23 @@ deck reste visible dans les deux cas — la masquer la rendrait impossible à re
 `legality()` la signale. Une carte dont la légalité est inconnue n'est ni masquée ni
 marquée.
 
-`S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne les cartes du catalogue local examinées par les suggestions et se règle depuis la fenêtre des achats.
+`S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne
+les cartes du catalogue local examinées par les suggestions.
+
+La pastille « Catalogue » de l'en-tête ouvre une fenêtre qui rassemble tout ce qui touche au
+catalogue des cartes existantes. Elle mêle deux natures, et le dit : les **réglages** du haut —
+cartes examinées (`S.candidatsMax`), cartes numériques (`S.catalogueNumeriques`) — attendent
+« Appliquer », comme dans les fenêtres Filtres et Format ; les **actions** du bas — mettre à jour,
+télécharger, charger une archive, l'effacer, l'interrupteur d'archivage — agissent au clic.
+Différer « effacer l'archive » derrière une validation serait déroutant.
+
+`S.catalogueNumeriques` gouverne les cartes qui n'existent que sur Arena ou MTGO. Décochée — le
+défaut —, elles sont écartées des candidates (colonne `CH.NUMERIQUE` de l'archive), la requête API porte
+`game:paper`, la liste des sets n'offre que les éditions papier et la fiche d'une carte n'en montre
+que les impressions papier. Basculer l'option périme la liste des sets et les cartes déjà relevées
+pour chacun : elles ont été bâties sous l'autre réglage. Une archive antérieure à la colonne ne
+porte pas l'information : la carte est alors « non jugée » et reste candidate, comme pour la
+légalité.
 
 Rien de ce qui se règle dans la fenêtre des filtres n'agit avant « Appliquer » : ni les
 champs, ni les couleurs, ni les archétypes, rôles et sets. Filtrer coûte près d'une
@@ -307,10 +323,11 @@ Données : `STORE_KEY`, `STORE_OFF`
 | `restore(d)` | Restaure un instantané, cartes importées comprises. |
 | `chargerSauvegarde()` | Relit la sauvegarde existante. |
 | `pillSauvegarde()` | Pastille d'état affichée dans l'en-tête. |
-| `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale. |
-| `blocCatalogueSauvegarde()` | Section catalogue de cette fenêtre : état, taille, mises à jour. |
+| `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale, le catalogue ayant désormais la sienne. |
+| `blocCatalogue()` | Gestion de l'archive — état, taille, mises à jour — affichée dans la fenêtre du catalogue. |
 | `rafraichirFenetreSauvegarde()` | Réécrit cette fenêtre sur place quand l'état du catalogue a bougé. |
 | `openSaveDialog()` | Ouvre la fenêtre de gestion des données. |
+| `rafraichirFenetreSauvegarde()` | Rafraîchit celle des deux fenêtres — sauvegarde ou catalogue — qui est ouverte. |
 | `brancherCatalogue()` | Branche les commandes du catalogue. |
 | `brancherRestauration()` | Branche le sélecteur de fichier de restauration. |
 
@@ -338,7 +355,8 @@ plus le catalogue Scryfall complet et son archive IndexedDB.
 | `setRetenu(s)` | Un set à proposer : papier, ni jeton ni objet de collection. |
 | `reprendreSets()` *(async)* | Reprend la liste et l'index des sets depuis IndexedDB au démarrage. |
 | `sauverSets()` | Conserve la liste et l'index des sets dans IndexedDB. |
-| `setsARevoir()` | Faut-il réinterroger Scryfall ? Rien en cache, ou liste vieille d'une semaine. |
+| `setsARevoir()` | Faut-il réinterroger Scryfall ? Rien en cache, liste vieille d'une semaine, ou réglage des cartes numériques changé. |
+| `oublieCartesSets()` | Oublie les cartes relevées par set : elles l'ont été sous l'autre réglage. |
 | `chargerListeSets()` *(async)* | La liste des sets papier, en une requête, à l'ouverture des filtres. |
 | `noteSetIndex(nom,code)` | Rattache un nom de carte à un code de set dans l'index. |
 | `chargerSetScryfall(code)` *(async)* | Les cartes d'un set, à sa première utilisation. |
@@ -406,7 +424,7 @@ Données : `VISUELS_CHARGES`
 | `sugRow(s)` | Vignette d'une proposition. |
 | `ligneBudget()` | Ligne de budget restant. |
 | `ligneAchats()` | Rappel des cartes à acheter. |
-| `panneauAchats()` | Panneau Cardmarket : budget, état, langue, vendeur. |
+| `panneauAchats()` | Panneau Cardmarket : budget, état, langue, vendeur. Le plafond des cartes examinées en est parti pour la fenêtre du catalogue. |
 | `listeSuggestions()` | Assemble les groupes par type et le filtre par rôle. |
 | `visuelsSuggestions(byType)` | Demande les visuels des propositions affichées. |
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
@@ -481,6 +499,10 @@ Données : `RETOURNEES`
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
 | `openFormatModal()` | Ouvre la fenêtre du format et y ouvre un brouillon : rien n'y prend effet avant « Appliquer ». |
+| `openCatalogueModal()` | Ouvre la fenêtre du catalogue depuis la pastille de l'en-tête, brouillon compris. |
+| `corpsCatalogue()` | Contenu de cette fenêtre : les deux réglages différés, puis la gestion de l'archive. |
+| `majFenetreCatalogue()` | La réécrit sans perdre le défilement, et rebranche ses commandes. |
+| `appliquerCatalogue()` *(async)* | « Appliquer » : verse le brouillon puis recalcule. |
 | `corpsFormat()` | Contenu de cette fenêtre : format de jeu, case « écarter les cartes non légales » et panneau « Personnalisé ». |
 | `tagIllegal(card)` | Le tag « illégal », partout où la carte s'affiche. |
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |

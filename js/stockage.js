@@ -81,6 +81,7 @@ function snapshot() {
     showImplicit: S.showImplicit,
     budget: S.budget,
     candidatsMax: S.candidatsMax,
+    catalogueNumeriques: S.catalogueNumeriques,
     filtreLegal: S.filtreLegal,
     csbRelay: S.csbRelay,
     catalogueActif: S.catalogueActif,
@@ -180,6 +181,7 @@ function restore(d) {
   if (d.budget) S.budget = {...S.budget, ...d.budget};
   if (typeof d.candidatsMax === 'number' && d.candidatsMax > 0) S.candidatsMax = d.candidatsMax;
   if (typeof d.filtreLegal === 'boolean') S.filtreLegal = d.filtreLegal;
+  if (typeof d.catalogueNumeriques === 'boolean') S.catalogueNumeriques = d.catalogueNumeriques;
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
@@ -241,7 +243,8 @@ function corpsSauvegarde() {
     } catch(e) { return '—'; }
   })();
 
-  return `<div class="small">${etat}</div>
+  return `<div id="blocSauvegarde"></div>
+    <div class="small">${etat}</div>
     <div class="small muted">Les données ne quittent jamais cet appareil : ni serveur, ni compte. Un autre navigateur ne les verra pas — utilisez l'export pour les transporter.
       ${saveState==='desactive'?'':`<br>Espace occupé : ${taille}.`}</div>
     <label class="row small" style="gap:8px;margin-top:4px">
@@ -249,7 +252,7 @@ function corpsSauvegarde() {
       Enregistrer mes données sur cet appareil
     </label>
     <div class="small muted">Décochez sur un ordinateur qui n'est pas le vôtre : les données déjà enregistrées sont effacées immédiatement, et plus rien n'est écrit ensuite.</div>
-    ${blocCatalogueSauvegarde()}
+    <div class="small muted" style="margin-top:6px">Le catalogue des cartes existantes, lui, a sa propre fenêtre : la pastille « Catalogue » de l'en-tête.</div>
     <div class="row" style="gap:6px;margin-top:6px">
       <button type="button" class="btn sm" data-act="saveNow">Enregistrer maintenant</button>
       <button type="button" class="btn sm" data-act="saveExport">Exporter un fichier</button>
@@ -259,7 +262,7 @@ function corpsSauvegarde() {
     </div>`;
 }
 
-function blocCatalogueSauvegarde() {
+function blocCatalogue() {
   const dispo = (typeof indexedDB !== 'undefined');
   const taille = CAT.octets ? `${(CAT.octets/1048576).toFixed(1)} Mo` : '—';
   const maj = CAT.maj ? new Date(CAT.maj).toLocaleDateString('fr-FR') : 'inconnue';
@@ -272,8 +275,8 @@ function blocCatalogueSauvegarde() {
     erreur: 'échec du dernier chargement'
   }[CAT.etat] || CAT.etat;
 
-  return `<div class="bloc" style="border-top:1px solid var(--line);padding-top:9px;margin-top:4px">
-    <h4 style="margin:0 0 6px;font-family:var(--display);font-size:14px">Catalogue des cartes Magic</h4>
+  return `<div class="bloc" id="blocCatalogue" style="border-top:1px solid var(--line);padding-top:9px;margin-top:4px">
+    <h4 style="margin:0 0 6px;font-family:var(--display);font-size:14px">Gestion de l'archive</h4>
     <div class="small">${dispo
       ? `Archivé dans IndexedDB, séparément de vos données de collection — le quota de localStorage, 5 Mo, ne suffirait pas.`
       : `IndexedDB indisponible dans ce navigateur : le catalogue ne peut pas être archivé.`}</div>
@@ -319,12 +322,22 @@ function blocCatalogueSauvegarde() {
 
 /* La fenêtre de sauvegarde reste ouverte pendant qu'une archive se charge :
    son contenu est réécrit sur place quand l'état du catalogue a bougé. */
+/* Rafraîchit celle des deux fenêtres qui est ouverte. Le repère est un
+   marqueur explicite : la phrase qui servait autrefois d'indice a déménagé
+   avec le bloc du catalogue. */
 function rafraichirFenetreSauvegarde() {
   const corps = document.getElementById('dlgBody');
-  if (!corps || !corps.innerHTML.includes('Catalogue des cartes Magic')) return;
+  if (!corps) return;
+  if (document.getElementById('blocCatalogue')) {
+    const y = corps.scrollTop;
+    corps.innerHTML = corpsCatalogue();
+    corps.scrollTop = y;
+    brancherCatalogue();
+    return;
+  }
+  if (!document.getElementById('blocSauvegarde')) return;
   corps.innerHTML = corpsSauvegarde();
   brancherRestauration();
-  brancherCatalogue();
 }
 
 function openSaveDialog() {

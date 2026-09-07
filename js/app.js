@@ -140,6 +140,16 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'catalogueDialog') {
+    openCatalogueModal();
+    return;
+  }
+
+  if (act === 'appliquerCatalogue') {
+    appliquerCatalogue();
+    return;
+  }
+
   if (act === 'resetFiltres') {
     /* « Réinitialiser » dans la fenêtre vide le brouillon ; « Tout effacer »
        dans l'en-tête vide l'état, et s'applique aussitôt. */
@@ -577,7 +587,9 @@ document.addEventListener('input', ev => {
   if (t.dataset.cand !== undefined) {
     /* Le plafond des candidats : il ne borne que le catalogue local, jamais
        le chargement paginé par l'API (`S.exploreMax`). */
-    S.candidatsMax = Math.max(100, parseInt(t.value, 10) || 0);
+    modifieBrouillon(() => { S.candidatsMax = Math.max(100, parseInt(t.value, 10) || 0); });
+    /* Réécrire la fenêtre volerait le curseur du champ qu'on règle. */
+    if (brouillon) return;
     invaliderCandidats();
     refreshSuggestions();
     return;
@@ -593,6 +605,11 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
+  if (t.dataset.act === 'catNumeriques') {
+    modifieBrouillon(() => { S.catalogueNumeriques = !!t.checked; });
+    apresReglage();
+    return;
+  }
   if (t.dataset.act === 'filtreLegal') {
     modifieBrouillon(() => { S.filtreLegal = !!t.checked; });
     apresReglage();
