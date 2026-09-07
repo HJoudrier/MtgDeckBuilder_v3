@@ -354,7 +354,7 @@ document.addEventListener('click', ev => {
     S.majIgnoree = CAT.majDispo;
     scheduleSave();
     closeDialog();
-    toast("Mise à jour reportée : elle reste accessible depuis la pastille de sauvegarde.");
+    toast("Mise à jour reportée : elle reste accessible depuis la section « Suggestions d'ajout ».");
     return;
   }
 

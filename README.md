@@ -322,7 +322,6 @@ Données : `STORE_KEY`, `STORE_OFF`
 | `scheduleSave()` | Enregistrement différé après une modification. |
 | `restore(d)` | Restaure un instantané, cartes importées comprises. |
 | `chargerSauvegarde()` | Relit la sauvegarde existante. |
-| `pillSauvegarde()` | Pastille d'état affichée dans l'en-tête. |
 | `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale, le catalogue ayant désormais la sienne. |
 | `blocCatalogue()` | Gestion de l'archive — état, taille, mises à jour — affichée dans la fenêtre du catalogue. |
 | `rafraichirFenetreSauvegarde()` | Réécrit cette fenêtre sur place quand l'état du catalogue a bougé. |
@@ -514,7 +513,7 @@ Données : `RETOURNEES`
 | `rafraichirFiche()` | Reconstruit la fiche ouverte quand Scryfall a répondu ou renoncé. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
-| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
+| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres » et puces des filtres actifs. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et y ouvre un brouillon. |
 | `verseBrouillon()` | Verse le brouillon dans l'état : le seul moment où une fenêtre à brouillon touche à ce que l'atelier montre. |
 | `appliquerFiltres()` *(async)* | « Appliquer » : verse le brouillon dans l'état, lance le filtrage avec sa barre, puis ferme. |

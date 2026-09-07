@@ -1267,7 +1267,6 @@ function renderTop() {
       <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
       ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${S.budget.total > 0 ? `<span class="pill" id="pillBudget" title="Budget restant">Budget <b>${eur(Math.max(0, left))}</b></span>` : ''}
-      ${pillSauvegarde()}
       <button type="button" class="btn sm" data-act="toggleImages" aria-pressed="${S.images}" title="Afficher ou masquer les visuels Scryfall">Visuels</button>
       <button type="button" class="btn sm" data-act="exportDeck" title="Exporter le deck au format MTGO, CSV ou JSON">Exporter</button>
       ${toggleBtnHTML}

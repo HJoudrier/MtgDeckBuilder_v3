@@ -115,13 +115,11 @@ function save() {
       saveError = err2.message || 'espace de stockage saturé';
     }
   }
-  const p = document.getElementById('savePill');
-  if (p) p.outerHTML = pillSauvegarde();
   if (saveState !== 'ok' && saveState !== dernierEtatSignale) {
     dernierEtatSignale = saveState;
     toast(saveState === 'partiel'
       ? "Espace de stockage limité : les visuels et les textes des cartes importées ne sont pas conservés, les quantités et le deck le restent."
-      : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la pastille de sauvegarde de l'en-tête pour ne rien perdre.");
+      : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la fenêtre de sauvegarde pour ne rien perdre.");
   }
   if (saveState === 'ok') dernierEtatSignale = 'ok';
 }
@@ -200,30 +198,6 @@ function chargerSauvegarde() {
     saveError = err.message || '';
     return null;
   }
-}
-
-function pillSauvegarde() {
-  const t = {
-    ok: 'Sauvegarde locale',
-    partiel: 'Sauvegarde allégée',
-    plein: 'Sauvegarde saturée',
-    off: 'Sans sauvegarde',
-    desactive: 'Sauvegarde désactivée',
-    corrompu: 'Sauvegarde illisible'
-  }[saveState] || 'Sauvegarde';
-
-  const col = {
-    ok: 'var(--ok)',
-    partiel: 'var(--warn)',
-    plein: 'var(--bad)',
-    off: 'var(--dim2)',
-    desactive: 'var(--dim2)',
-    corrompu: 'var(--bad)'
-  }[saveState];
-
-  return `<button class="pill" id="savePill" data-act="saveDialog" style="cursor:pointer"
-    title="${esc(saveError || 'Cliquez pour gérer la sauvegarde locale')}">
-    <span class="dot" style="background:${col}"></span> ${t}</button>`;
 }
 
 function corpsSauvegarde() {
