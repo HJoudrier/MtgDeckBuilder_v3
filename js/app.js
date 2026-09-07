@@ -572,6 +572,14 @@ document.addEventListener('input', ev => {
     renderE();
     return;
   }
+  if (t.dataset.cand !== undefined) {
+    /* Le plafond des candidats : il ne borne que le catalogue local, jamais
+       le chargement paginé par l'API (`S.exploreMax`). */
+    S.candidatsMax = Math.max(100, parseInt(t.value, 10) || 0);
+    invaliderCandidats();
+    refreshSuggestions();
+    return;
+  }
   if (t.dataset.bud) {
     const k = t.dataset.bud;
     S.budget[k] = t.type === 'number' ? (parseFloat(t.value) || 0) : t.value;

@@ -34,7 +34,8 @@ const S = {
   limiteType: {},
   exploreEtat: '',
   exploreSig: null,
-  exploreMax: 6000,
+  exploreMax: 6000,        // plafond du chargement paginé par l'API Scryfall
+  candidatsMax: 20000,     // plafond des candidats tirés du catalogue local
   exploreTotal: 0,
   exploreCharge: 0,
   exploreReste: false,
@@ -290,39 +291,98 @@ function carteFiltree(card) {
   return !!card && colorOK(card) && roleOK(card) && filtreOK(card);
 }
 
-/* Applique les filtres avancés à une carte. Une carte dont la valeur est
-   inconnue (créature non renseignée, prix absent) est écartée dès qu'une
-   borne est posée sur ce critère. */
-function filtreOK(card) {
-  if (!card) return false;
+/* Une valeur peut être donnée telle quelle ou par une fonction, pour que
+   les critères coûteux — sets, archétypes, type développé — ne soient
+   calculés que si le filtre correspondant est posé. */
+function valeurFiltre(x, vide) {
+  return (typeof x === 'function' ? x() : x) || vide;
+}
+
+/* Le noyau des critères de la fenêtre, sur des valeurs plutôt que sur une
+   carte : la collection y arrive par `filtreOK(card)`, le catalogue par
+   `filtreOKRec(rec)`, sans que les comparaisons soient écrites deux fois.
+   Une valeur inconnue (créature non renseignée, prix absent) écarte la
+   carte dès qu'une borne est posée sur ce critère. */
+function filtresValeursOK(v) {
   const f = S.filtres || FILTRES_VIDE;
   const nom = String(f.nom || '').trim();
-  if (nom && !norm(card.name).includes(norm(nom))) return false;
+  if (nom && !norm(valeurFiltre(v.name, '')).includes(norm(nom))) return false;
   const type = String(f.type || '').trim();
-  if (type && !loose(card.type + ' ' + mainType(card)).includes(loose(type))) return false;
+  if (type && !loose(valeurFiltre(v.type, '')).includes(loose(type))) return false;
   const sets = setsFiltre();
   if (sets.length) {
-    const ceux = setsCarte(card);
+    const ceux = valeurFiltre(v.sets, []);
     if (!sets.some(c => ceux.includes(c))) return false;
   }
   const texte = String(f.texte || '').trim();
-  if (texte && !norm(card.text || '').includes(norm(texte))) return false;
+  if (texte && !norm(valeurFiltre(v.text, '')).includes(norm(texte))) return false;
   const artiste = String(f.artiste || '').trim();
-  if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
+  if (artiste && !loose(valeurFiltre(v.artist, '')).includes(loose(artiste))) return false;
   const arch = archetypesFiltre();
   if (arch.length) {
-    const ceux = archetypesCarte(card);
+    const ceux = valeurFiltre(v.archetypes, []);
     if (!arch.some(id => ceux.includes(id))) return false;
   }
   for (const [kMin, kMax, champ] of FILTRES_BORNES) {
     const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
     if (min === null && max === null) continue;
-    const val = card[champ];
+    const val = v[champ];
     if (typeof val !== 'number' || isNaN(val)) return false;
     if (min !== null && val < min) return false;
     if (max !== null && val > max) return false;
   }
   return true;
+}
+
+/* Applique les filtres avancés à une carte. */
+function filtreOK(card) {
+  if (!card) return false;
+  return filtresValeursOK({
+    name: card.name,
+    type: () => card.type + ' ' + mainType(card),
+    text: card.text || '',
+    artist: card.artist || '',
+    sets: () => setsCarte(card),
+    archetypes: () => archetypesCarte(card),
+    force: card.force, endurance: card.endurance, cmc: card.cmc, price: card.price
+  });
+}
+
+/* Sets d'un enregistrement du catalogue : ceux que porte l'archive, réunis
+   à ce que Scryfall a rapporté pour les sets déjà chargés. */
+function setsRec(rec) {
+  const out = new Set(String(rec[CH.SET] || '').split(',').filter(Boolean));
+  if (SETS_BASE.index.size) {
+    const nom = rec[CH.NOM];
+    const avant = typeof frontFace === 'function' ? frontFace(nom) : nom;
+    const s = SETS_BASE.index.get(norm(nom)) || SETS_BASE.index.get(norm(avant));
+    if (s) s.forEach(c => out.add(c));
+  }
+  return [...out];
+}
+
+/* Les mêmes critères, lus sur un enregistrement du catalogue : c'est ce qui
+   permet de filtrer les dizaines de milliers de cartes de l'archive sans en
+   construire autant d'objets. Les rôles, eux, réclament l'analyse du texte :
+   ils restent appliqués en aval, sur les seules cartes retenues. */
+function filtreOKRec(rec) {
+  if (!rec) return false;
+  const nom = rec[CH.NOM];
+  return filtresValeursOK({
+    name: nom,
+    type: () => (rec[CH.TYPE] || '') + ' ' + mainType({type: rec[CH.TYPE] || '', isToken: false}),
+    text: rec[CH.TEXTE] || '',
+    artist: rec[CH.ARTISTE] || '',
+    sets: () => setsRec(rec),
+    archetypes: () => {
+      if (!ARCH_BASE.index.size) return [];
+      const avant = typeof frontFace === 'function' ? frontFace(nom) : nom;
+      const a = ARCH_BASE.index.get(norm(nom)) || ARCH_BASE.index.get(norm(avant));
+      return a ? [...a] : [];
+    },
+    force: rec[CH.FORCE], endurance: rec[CH.ENDURANCE],
+    cmc: rec[CH.CMC], price: rec[CH.PRIX]
+  });
 }
 
 function fmt() {

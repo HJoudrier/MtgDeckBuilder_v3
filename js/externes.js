@@ -1195,12 +1195,15 @@ function carteDuCatalogue(rec) {
   return c;
 }
 
-let CAND = {sig:null, liste:[]};
-function invaliderCandidats() { CAND = {sig:null, liste:[]}; }
+let CAND = {sig:null, liste:[], stats:null};
+function invaliderCandidats() { CAND = {sig:null, liste:[], stats:null}; }
 
+/* Les critères de la fenêtre entrent dans la signature : sans eux, le
+   décompte annoncé resservirait celui d'avant le filtre. */
 function signatureCandidats() {
   return [S.format, S.commander, [...S.colors].join(''), S.colorMode, S.budget.perCard,
-          CAT.cartes.length, S.collection.size, S.exploreMax, noeudsActifs().sort().join(',')].join('|');
+          CAT.cartes.length, S.collection.size, S.candidatsMax, noeudsActifs().sort().join(','),
+          JSON.stringify(S.filtres || {})].join('|');
 }
 
 /* Le catalogue local porte le texte oracle complet et les prix à jour : on en
@@ -1229,6 +1232,11 @@ function appliqueCatalogueAuxCartes() {
   if (n) scheduleSave();
 }
 
+/* Les cartes du catalogue qu'il vaut la peine de proposer. Les critères de
+   la fenêtre s'appliquent ici, sur l'enregistrement compact : c'est ce qui
+   permet de chercher dans tout le catalogue, et non parmi les seules cartes
+   les mieux classées. Le plafond ne vient qu'après, sur ce qui reste, et il
+   est compté à part pour que la phrase de la section puisse le dire. */
 function candidatsCatalogue() {
   if (CAT.etat !== 'ok' || !CAT.cartes.length) return [];
   const sig = signatureCandidats();
@@ -1237,22 +1245,40 @@ function candidatsCatalogue() {
   const cmd = S.commander ? find(S.commander) : null;
   const ident = cmd ? cmd.identity : null;
   const noeuds = noeudsActifs();
+  const st = {total:CAT.cartes.length, legalite:0, identite:0, couleurs:0, possedees:0,
+              prix:0, sansPrix:0, filtres:0, noeuds:0, retenus:0, coupes:0};
   const retenus = [];
   for (const rec of CAT.cartes) {
     if (!rec || rec.length <= CH.LEGAL) continue;
-    if (legal && String(rec[CH.LEGAL] || '').indexOf(legal) < 0) continue;
+    if (legal && String(rec[CH.LEGAL] || '').indexOf(legal) < 0) { st.legalite++; continue; }
     const id = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
-    if (ident && id.some(x => !ident.includes(x))) continue;
-    if (!colorOK({identity:id})) continue;
-    if (S.collection.get(rec[CH.NOM]) > 0) continue;
+    if (ident && id.some(x => !ident.includes(x))) { st.identite++; continue; }
+    if (!colorOK({identity:id})) { st.couleurs++; continue; }
+    if (S.collection.get(rec[CH.NOM]) > 0) { st.possedees++; continue; }
+    /* Le plafond par carte ne vaut que pour un prix connu : une carte dont
+       Scryfall ne publie pas le prix reste candidate, même si la branche
+       « achat » ne saura pas la chiffrer. */
     const prix = rec[CH.PRIX];
-    if (prix <= 0 || prix > S.budget.perCard) continue;
-    if (noeuds.length && !recToucheNoeuds(rec, noeuds)) continue;
+    if (prix > 0 && prix > S.budget.perCard) { st.prix++; continue; }
+    if (!filtreOKRec(rec)) { st.filtres++; continue; }
+    if (noeuds.length && !recToucheNoeuds(rec, noeuds)) { st.noeuds++; continue; }
+    /* Compté sur les seules retenues : c'est d'elles que la phrase parle. */
+    if (!(prix > 0)) st.sansPrix++;
     retenus.push(rec);
   }
   retenus.sort((a, b) => a[CH.RANG] - b[CH.RANG]);
-  CAND = {sig, liste:retenus.slice(0, S.exploreMax).map(carteDuCatalogue)};
+  st.retenus = retenus.length;
+  st.coupes = Math.max(0, retenus.length - S.candidatsMax);
+  CAND = {sig, liste:retenus.slice(0, S.candidatsMax).map(carteDuCatalogue), stats:st};
   return CAND.liste;
+}
+
+/* Le détail de ce qui a écarté, pour la phrase de la section Suggestions.
+   Il se calcule avec les candidats, donc on les demande d'abord. */
+function statsCandidats() {
+  if (CAT.etat !== 'ok' || !CAT.cartes.length) return null;
+  candidatsCatalogue();
+  return CAND.stats;
 }
 
 function requeteCatalogue() {

@@ -79,6 +79,7 @@ function snapshot() {
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
     budget: S.budget,
+    candidatsMax: S.candidatsMax,
     csbRelay: S.csbRelay,
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
@@ -174,6 +175,7 @@ function restore(d) {
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
   if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};
   if (d.budget) S.budget = {...S.budget, ...d.budget};
+  if (typeof d.candidatsMax === 'number' && d.candidatsMax > 0) S.candidatsMax = d.candidatsMax;
   if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;

@@ -193,11 +193,15 @@ function currentSuggestions() {
   const X = contexteEvaluation();
   const f = X.f;
   const pool = [];
+  /* Le vivier atteint des dizaines de milliers de cartes : l'appartenance se
+     teste sur un ensemble de noms, jamais en balayant le vivier lui-même. */
+  const dansPool = new Set();
+  const ajoutePool = e => { pool.push(e); dansPool.add(e.card.name); };
 
   filtered().forEach(e => {
     if (e.card.isToken) return;
     if (availableFor(e.card) > 0 && (S.deck.get(e.card.name) || 0) < f.maxCopies)
-      pool.push({card:e.card, source:'collection'});
+      ajoutePool({card:e.card, source:'collection'});
   });
 
   const budgetLeft = S.budget.total - spent();
@@ -206,8 +210,8 @@ function currentSuggestions() {
     (CAT.etat === 'ok' ? candidatsCatalogue() : []).forEach(c => {
       if (c.isToken || (S.deck.get(c.name) || 0) >= f.maxCopies) return;
       const o = bestOffer(c);
-      if (o && o.price > 0 && o.price <= budgetLeft && !pool.some(x => x.card === c))
-        pool.push({card:c, source:'achat', offer:o});
+      if (o && o.price > 0 && o.price <= budgetLeft && !dansPool.has(c.name))
+        ajoutePool({card:c, source:'achat', offer:o});
     });
 
     DB.forEach(c => {
@@ -217,8 +221,8 @@ function currentSuggestions() {
       if (noeuds.length && !carteTouche(c, noeuds)) return;
       if ((S.deck.get(c.name) || 0) >= f.maxCopies) return;
       const o = bestOffer(c);
-      if (o && o.price > 0 && o.price <= budgetLeft && !pool.some(x => x.card === c))
-        pool.push({card:c, source:'achat', offer:o});
+      if (o && o.price > 0 && o.price <= budgetLeft && !dansPool.has(c.name))
+        ajoutePool({card:c, source:'achat', offer:o});
     });
   }
 
@@ -226,14 +230,14 @@ function currentSuggestions() {
     const c = find(rec.name);
     if (!c || c.isToken || !colorOK(c)) return;
     if ((S.deck.get(c.name) || 0) >= f.maxCopies) return;
-    if (pool.some(x => x.card.name === c.name)) return;
+    if (dansPool.has(c.name)) return;
     const inColl = (S.collection.get(c.name) || 0) > 0 && availableFor(c) > 0;
     if (inColl) {
-      pool.push({card: c, source: 'collection'});
+      ajoutePool({card: c, source: 'collection'});
     } else if (S.budget.total > 0 && S.budget.perCard > 0 && budgetLeft > 0) {
       const o = bestOffer(c);
       if (o && o.price > 0 && o.price <= budgetLeft) {
-        pool.push({card: c, source: 'achat', offer: o});
+        ajoutePool({card: c, source: 'achat', offer: o});
       }
     }
   };
@@ -257,13 +261,30 @@ function ligneCatalogue() {
   if (CAT.etat === 'chargement')
     return `<div class="small muted" style="margin-top:4px">Catalogue complet en cours de chargement (${esc(CAT.source||'')})… le classement fonctionne déjà avec vos cartes.</div>`;
   if (CAT.etat === 'ok') {
-    const dispos = candidatsCatalogue().length;
+    const st = statsCandidats() || {};
     const maj = CAT.maj ? new Date(CAT.maj).toLocaleDateString('fr-FR') : '';
     const noeuds = noeudsActifs();
-    const effTxt = noeuds.length ? `, les effets sélectionnés (${noeuds.map(n => (typeof NODE !== 'undefined' && NODE[n] && NODE[n].label) || n).join(' + ')})` : '';
+    const n = x => (x || 0).toLocaleString('fr-FR');
+
+    /* Chaque cause d'écart est nommée avec son nombre : c'est la seule façon
+       de comprendre pourquoi le catalogue se réduit à ce qu'on propose. */
+    const causes = [];
+    if (st.legalite) causes.push(`${n(st.legalite)} hors ${esc(fmt().label)}`);
+    if (st.identite) causes.push(`${n(st.identite)} hors identité du commandant`);
+    if (st.couleurs) causes.push(`${n(st.couleurs)} par vos couleurs`);
+    if (st.possedees) causes.push(`${n(st.possedees)} déjà dans votre collection`);
+    if (st.prix) causes.push(`${n(st.prix)} au-dessus de ${eur(S.budget.perCard)}`);
+    if (st.filtres) causes.push(`${n(st.filtres)} par vos filtres`);
+    if (st.noeuds) causes.push(`${n(st.noeuds)} par les effets sélectionnés (${noeuds.map(x =>
+      (typeof NODE !== 'undefined' && NODE[x] && NODE[x].label) || x).join(' + ')})`);
+
     return `<div class="small muted" style="margin-top:4px">
-      Catalogue complet : ${CAT.cartes.length.toLocaleString('fr-FR')} cartes en cache${maj?` (Scryfall, ${maj})`:''}.
-      ${dispos.toLocaleString('fr-FR')} retenue(s) par vos couleurs, le format${effTxt} et le prix maximum de ${eur(S.budget.perCard)}.
+      Catalogue complet : ${n(CAT.cartes.length)} cartes en cache${maj ? ` (Scryfall, ${maj})` : ''}.
+      <b>${n(st.retenus)}</b> candidate(s)${causes.length ? ` — écartées : ${causes.join(', ')}` : ' : rien n\'est écarté'}.
+      ${st.coupes ? `Les ${n(st.coupes)} moins bien classées par EDHREC ne sont pas examinées,
+        le maximum étant fixé à ${n(S.candidatsMax)} (réglable ci-dessus).` : ''}
+      ${st.sansPrix ? `${n(st.sansPrix)} candidate(s) restent sans prix connu : elles comptent ici,
+        mais ne peuvent pas être proposées à l'achat.` : ''}
       Les visuels se chargent ensuite, par score décroissant.
       ${catalogueObsolete() ? `<br><b>Une version plus récente du ${esc(new Date(CAT.majDispo).toLocaleDateString('fr-FR'))} est disponible.</b>
         ${CAT.uri ? `<a class="btn sm" href="${esc(CAT.uri)}" download target="_blank" rel="noopener">La télécharger</a>` : ''}
@@ -437,6 +458,7 @@ function panneauAchats() {
       <div class="row">
         <div class="field"><label class="lab" for="bT">Budget total (€)</label><input id="bT" type="number" min="0" step="1" value="${S.budget.total}" data-bud="total" style="width:96px"></div>
         <div class="field"><label class="lab" for="bP">Prix max / carte (€)</label><input id="bP" type="number" min="0" step="1" value="${S.budget.perCard}" data-bud="perCard" style="width:96px"></div>
+        <div class="field"><label class="lab" for="bX" title="Nombre de cartes du catalogue examinées au plus, une fois vos filtres appliqués. Les mieux classées par EDHREC passent en premier.">Cartes examinées</label><input id="bX" type="number" min="100" step="1000" value="${S.candidatsMax}" data-cand style="width:96px"></div>
         <div class="field"><label class="lab" for="bQ">État minimum</label>
           <select id="bQ" data-bud="condition">${CONDITIONS.map(([k,l]) => `<option value="${k}" ${S.budget.condition===k?'selected':''}>${k} — ${l}</option>`).join('')}</select></div>
         <div class="field"><label class="lab" for="bL">Langue</label>
@@ -448,7 +470,7 @@ function panneauAchats() {
       </div>
       <div class="small muted" style="margin-top:6px" id="budLine">${ligneBudget()}</div>
       <div class="small muted" style="margin-top:4px">Prix de référence : tendance Cardmarket, relayée par Scryfall et rafraîchie avec les visuels. L'état, la langue et le type de vendeur ajustent une <b>estimation</b> : les offres réelles se consultent sur la fiche Cardmarket, via le lien de chaque carte.</div>
-      ${ligneCatalogue()}
+      <div id="catLine">${ligneCatalogue()}</div>
       <div id="budBuys">${ligneAchats()}</div>
     </div>`;
 }
@@ -586,6 +608,7 @@ function refreshSuggestions() {
   const liste = document.getElementById('sugList'); if (liste) liste.innerHTML = r.html;
   const bl = document.getElementById('budLine'); if (bl) bl.innerHTML = ligneBudget();
   const bb = document.getElementById('budBuys'); if (bb) bb.innerHTML = ligneAchats();
+  const cl = document.getElementById('catLine'); if (cl) cl.innerHTML = ligneCatalogue();
   majHintF(r.sug, r.graphPicks, r.edhrecPicks);
   renderTop();
 }

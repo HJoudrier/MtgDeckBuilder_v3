@@ -127,6 +127,8 @@ EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
 Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`
 
+`S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne les cartes du catalogue local examinées par les suggestions et se règle depuis la fenêtre des achats.
+
 | Fonction | Rôle |
 |---|---|
 | `fmt()` | Contraintes du format en cours : taille, copies, commandant. |
@@ -138,6 +140,10 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 | `basculerRole(role)` | Coche ou décoche un rôle ; sans argument, les efface tous. |
 | `roleOK(card)` | La carte tient au moins un des rôles cochés. |
 | `filtreOK(card)` | Applique les filtres de la fenêtre (nom, type, set, texte de règles, archétype, force, endurance, coût, prix, illustrateur) à une carte. |
+| `filtresValeursOK(v)` | Le noyau de ces critères, sur des valeurs nues : une seule écriture des comparaisons pour la carte comme pour l'enregistrement. |
+| `valeurFiltre(x,vide)` | Lit une valeur donnée telle quelle ou par une fonction, pour ne calculer les critères coûteux que s'ils servent. |
+| `filtreOKRec(rec)` | Les mêmes critères sur un enregistrement du catalogue, sans construire la carte. Les rôles, qui exigent l'analyse, restent appliqués en aval. |
+| `setsRec(rec)` | Sets d'un enregistrement : ceux de l'archive, réunis à ceux que Scryfall a rapportés. |
 | `archetypesFiltre()` | Archétypes cochés, lus depuis la liste conservée dans `S.filtres`. |
 | `basculerArchetype(id)` | Coche ou décoche un archétype. |
 | `archetypesDisponibles()` | Les thèmes publiés par EDHREC, avec libellé et résumé. |
@@ -215,9 +221,10 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `completeDepuisRec(c,rec)` | Complète une carte existante avec ce que l'archive apporte de plus, texte oracle compris. |
 | `carteDuCatalogue(rec)` | Matérialise une carte du catalogue et l'analyse. |
 | `invaliderCandidats()` | Invalide la sélection mémorisée. |
-| `signatureCandidats()` | Signature des critères, pour ne recalculer qu'en cas de changement. |
+| `signatureCandidats()` | Signature des critères, filtres de la fenêtre compris, pour ne recalculer qu'en cas de changement. |
 | `appliqueCatalogueAuxCartes()` | Reporte les textes oracle complets et les prix de l'archive sur vos cartes. |
-| `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format et le prix. |
+| `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le format, le prix et les filtres de la fenêtre. Le plafond `S.candidatsMax` ne s'applique qu'ensuite, sur ce qui reste. |
+| `statsCandidats()` | Le détail de ce qui a écarté et combien, pour la phrase de la section Suggestions. |
 | `requeteCatalogue()` | Construit la requête Scryfall correspondant au format et aux couleurs. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
@@ -344,7 +351,7 @@ Données : `VISUELS_CHARGES`
 | `contexteEvaluation()` | Prépare le contexte de notation : graphe du deck, rôles manquants, courbe. |
 | `noteCarte(p,X)` | Note une carte : synergies, boucles, rôles, courbe, EDHREC, combos. |
 | `currentSuggestions()` | Constitue le vivier puis renvoie les propositions classées. |
-| `ligneCatalogue()` | État du catalogue et cartes écartées par le prix. |
+| `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
 | `panneauEdhrec()` | Panneau EDHREC du commandant. |
 | `sugRow(s)` | Vignette d'une proposition. |
 | `ligneBudget()` | Ligne de budget restant. |
