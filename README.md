@@ -129,12 +129,19 @@ Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`
 
 `S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne les cartes du catalogue local examinées par les suggestions et se règle depuis la fenêtre des achats.
 
-Les champs de saisie de la fenêtre des filtres (`FILTRES_SAISIE`, js/ui.js) n'agissent
-qu'au clic sur « Appliquer » : filtrer coûte près d'une seconde sur un grand catalogue,
-et l'appliquer à chaque lettre arrêtait l'application le temps d'écrire un nom. La frappe
-va dans un brouillon, seul le décompte de la fenêtre la suit, et « Appliquer » reporte le
-tout puis recalcule par tranches derrière une barre de progression. Les couleurs et les
-cases à cocher, elles, valent tout de suite : un clic ne se répète pas comme une frappe.
+Rien de ce qui se règle dans la fenêtre des filtres n'agit avant « Appliquer » : ni les
+champs, ni les couleurs, ni les archétypes, rôles et sets. Filtrer coûte près d'une
+seconde sur un grand catalogue, et « Annuler » n'aurait aucun sens si la moitié des
+réglages avait déjà pris effet. Tout va dans un brouillon (`{filtres, colors, colorMode}`,
+js/ui.js) que la fenêtre lit pour se peindre — d'où `avecBrouillon()` en lecture et
+`modifieFiltres()` en écriture — et seul le décompte du bas le suit, car il ne parcourt
+que la collection. « Appliquer » le verse dans l'état puis recalcule par tranches derrière
+une barre de progression ; toute autre fermeture le jette, sans rien à défaire.
+
+Hors de la fenêtre, tout continue d'agir au clic : la barre de mana de l'en-tête, ses
+puces de filtre et les jauges de rôle de la section Deck. Les mêmes gestionnaires servent
+aux deux régimes — sans brouillon, `modifieFiltres()` agit sur l'état lui-même —, la
+fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vient d'elle.
 
 | Fonction | Rôle |
 |---|---|
@@ -455,19 +462,21 @@ Données : `RETOURNEES`
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
-| `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et prend l'instantané auquel « Annuler » revient. |
-| `instantaneFiltres()` | Copie des critères et des couleurs, avant modification. |
-| `restaurerFiltres(memo)` | Repose un tel instantané. |
-| `appliquerFiltres()` *(async)* | « Appliquer » : reporte la saisie en attente sur l'état, lance le filtrage avec sa barre, puis ferme. |
-| `ouvreBrouillon()` | Ouvre un brouillon des champs de saisie, à l'ouverture de la fenêtre. |
-| `valeurChamp(cle)` | La valeur à afficher dans un champ : celle qu'on est en train de taper. |
-| `majBrouillon(cle,valeur)` | Écrit une frappe dans le brouillon plutôt que dans l'état. |
-| `brouillonModifie()` | La saisie en cours diffère-t-elle de ce qui est appliqué ? |
-| `avecBrouillon(fn)` | Exécute `fn` comme si le brouillon était appliqué, pour le décompte de la fenêtre. |
+| `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et y ouvre un brouillon. |
+| `instantaneFiltres()` | Copie des critères, des couleurs et du mode : la forme dont part le brouillon. |
+| `appliquerFiltres()` *(async)* | « Appliquer » : verse le brouillon dans l'état, lance le filtrage avec sa barre, puis ferme. |
+| `ouvreBrouillon()` | Ouvre le brouillon de la fenêtre, à son ouverture. |
+| `echangeBrouillon()` | Met le brouillon à la place de l'état appliqué, et rend de quoi revenir. |
+| `reprendEtat(memo,garder)` | Repose l'état appliqué, en reversant au brouillon ce qui vient d'être modifié. |
+| `avecBrouillon(fn)` | Lit comme si le brouillon était appliqué : c'est ainsi que la fenêtre se peint. |
+| `modifieFiltres(fn)` | Le jumeau écrivain : hors de la fenêtre, `fn` agit sur l'état lui-même. |
+| `brouillonModifie()` | Le brouillon diffère-t-il de ce qui est appliqué ? |
+| `apresReglageFiltre()` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle. |
+| `renderAllSiApplique()` | Un rendu global, sauf tant qu'un brouillon rend ce recalcul inutile. |
 | `zoneProgression()` | La barre de progression, dans le pied de la fenêtre. |
 | `majProgression(txt,fait,total)` | Avance la barre et son libellé. |
 | `filtrerAvecProgression()` *(async)* | Bâtit les candidates puis les note par tranches, barre à l'appui, et rend la main entre chaque lot. |
-| `fermetureFiltres()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — revient à l'instantané. |
+| `fermetureFiltres()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — jette le brouillon. |
 | `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, set, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
 | `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
 | `listeSetsHTML()` | Lignes de la liste des sets : nom, code, année et taille, du plus récent au plus ancien. |

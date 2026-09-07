@@ -26,18 +26,14 @@ document.addEventListener('click', ev => {
   }
   if (b.dataset.color || b.dataset.col) {
     const c = b.dataset.color || b.dataset.col;
-    if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c);
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
+    modifieFiltres(() => { if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c); });
+    apresReglageFiltre();
     return;
   }
 
   if (b.dataset.cmode) {
-    S.colorMode = b.dataset.cmode;
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
+    modifieFiltres(() => { S.colorMode = b.dataset.cmode; });
+    apresReglageFiltre();
     return;
   }
 
@@ -86,13 +82,11 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'toggleArch') {
-    basculerArchetype(b.dataset.arch);
-    // les cartes du thème coché sont cherchées à la demande
-    archetypesAChargerEdhrec().forEach(slug => chargerThemeEdhrec(slug));
-    majFenetreFiltres();
-    majResumeFiltres();
-    S.limitB = PAGE;
-    renderAll();
+    modifieFiltres(() => basculerArchetype(b.dataset.arch));
+    /* Les cartes du thème coché sont cherchées à la demande, sur ce qui est
+       coché dans la fenêtre : sans cela le décompte annoncerait zéro. */
+    avecBrouillon(() => archetypesAChargerEdhrec()).forEach(slug => chargerThemeEdhrec(slug));
+    apresReglageFiltre();
     return;
   }
 
@@ -103,21 +97,16 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'toggleSet') {
-    basculerSet(b.dataset.set);
-    // les cartes du set coché sont cherchées à la demande
-    setsACharger().forEach(code => chargerSetScryfall(code));
-    majFenetreFiltres();
-    majResumeFiltres();
-    S.limitB = PAGE;
-    renderAll();
+    modifieFiltres(() => basculerSet(b.dataset.set));
+    // les cartes du set coché sont cherchées à la demande, comme les thèmes
+    avecBrouillon(() => setsACharger()).forEach(code => chargerSetScryfall(code));
+    apresReglageFiltre();
     return;
   }
 
   if (act === 'dropFiltre') {
-    effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean));
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
+    modifieFiltres(() => effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean)));
+    apresReglageFiltre();
     return;
   }
 
@@ -142,11 +131,10 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'resetFiltres') {
-    reinitFiltres();
-    if (brouillonFiltres) ouvreBrouillon();
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
+    /* « Réinitialiser » dans la fenêtre vide le brouillon ; « Tout effacer »
+       dans l'en-tête vide l'état, et s'applique aussitôt. */
+    modifieFiltres(() => reinitFiltres());
+    apresReglageFiltre();
     toast('Filtres réinitialisés.');
     return;
   }
@@ -157,10 +145,10 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'toggleRole') {
-    basculerRole(b.dataset.role || '');
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
+    /* Les mêmes rôles se cochent depuis les jauges de la section Deck :
+       hors de la fenêtre, `modifieFiltres` agit sur l'état lui-même. */
+    modifieFiltres(() => basculerRole(b.dataset.role || ''));
+    apresReglageFiltre();
     return;
   }
 
@@ -179,18 +167,14 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'allColors') {
-    S.colors = new Set(['W','U','B','R','G','C']);
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
+    modifieFiltres(() => { S.colors = new Set(['W','U','B','R','G','C']); });
+    apresReglageFiltre();
     return;
   }
 
   if (act === 'clearColors' || act === 'noColors') {
-    S.colors = new Set();
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
+    modifieFiltres(() => { S.colors = new Set(); });
+    apresReglageFiltre();
     return;
   }
 
@@ -552,7 +536,7 @@ document.addEventListener('input', ev => {
   if (t.dataset.filtre) {
     /* La frappe va au brouillon : rien n'est appliqué avant « Appliquer ».
        Seul le décompte de la fenêtre suit, il ne coûte que la collection. */
-    majBrouillon(t.dataset.filtre, t.value);
+    modifieFiltres(() => majFiltre(t.dataset.filtre, t.value));
     majResumeFiltres();
     return;
   }

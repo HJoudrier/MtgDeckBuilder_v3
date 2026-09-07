@@ -461,7 +461,7 @@ async function chargerThemeEdhrec(slug) {
   } finally {
     ARCH_BASE.enCours.delete(slug);
     if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
-    if (typeof renderAll === 'function') renderAll();
+    if (typeof renderAllSiApplique === 'function') renderAllSiApplique();
   }
 }
 
@@ -523,7 +523,7 @@ async function chargerArchetypesEdhrec() {
       : 'EDHREC injoignable depuis ce navigateur (hors ligne, CORS ou accès bloqué)';
   }
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
-  if (typeof renderAll === 'function') renderAll();
+  if (typeof renderAllSiApplique === 'function') renderAllSiApplique();
 }
 
 /* 1 ter. Sets publiés par Scryfall
@@ -661,7 +661,7 @@ async function chargerSetScryfall(code) {
   }
   if (typeof majFenetreFiltres === 'function') majFenetreFiltres();
   if (typeof majResumeFiltres === 'function') majResumeFiltres();
-  if (typeof renderAll === 'function') renderAll();
+  if (typeof renderAllSiApplique === 'function') renderAllSiApplique();
 }
 
 /* 2. Commander Spellbook */

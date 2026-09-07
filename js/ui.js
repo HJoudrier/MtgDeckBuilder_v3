@@ -56,9 +56,8 @@ function toast(msg) {
 function openDialog(title, bodyHTML, actionsHTML, grande) {
   const dlg = document.getElementById('dlg');
   if (!dlg) return;
-  /* Une autre fenêtre prend la place : l'instantané des filtres n'a plus
-     lieu d'être, sans quoi sa fermeture ferait reculer les filtres. */
-  filtresAvant = null;
+  /* Une autre fenêtre prend la place : le brouillon des filtres n'a plus
+     lieu d'être. */
   brouillonFiltres = null;
   dlg.classList.toggle('grand', !!grande);
   dlg.classList.toggle('wide', !!grande);
@@ -566,53 +565,100 @@ function statsCatalogue() {
 const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
 
 /* ---------------------------------------------------------------------
-   Les champs où l'on tape n'agissent qu'au clic sur « Appliquer ». Filtrer
-   coûte près d'une seconde sur un grand catalogue : l'appliquer à chaque
-   lettre arrêtait l'application le temps d'écrire un nom. Les couleurs et
-   les cases, elles, valent tout de suite — un clic ne se répète pas comme
-   une frappe. Le brouillon ne vit que le temps de la fenêtre.
-   --------------------------------------------------------------------- */
+   Rien de ce qui se règle dans cette fenêtre n'agit avant « Appliquer » :
+   ni les champs, ni les couleurs, ni les cases. Filtrer coûte près d'une
+   seconde sur un grand catalogue, et « Annuler » n'aurait aucun sens si la
+   moitié des réglages avait déjà pris effet. Le brouillon ne vit que le
+   temps de la fenêtre ; hors d'elle — barre de mana de l'en-tête, puces de
+   filtre, jauges de rôle — tout continue d'agir au clic.
 
-const FILTRES_SAISIE = ['nom', 'type', 'texte', 'artiste',
-  'forceMin', 'forceMax', 'enduranceMin', 'enduranceMax',
-  'cmcMin', 'cmcMax', 'prixMin', 'prixMax'];
+   La fenêtre étant modale, l'arrière-plan est inerte : un brouillon ouvert
+   signifie forcément que le geste vient d'elle.
+   --------------------------------------------------------------------- */
 
 let brouillonFiltres = null;
 
 function ouvreBrouillon() {
-  brouillonFiltres = {};
-  FILTRES_SAISIE.forEach(k => brouillonFiltres[k] = S.filtres[k]);
+  brouillonFiltres = instantaneFiltres();
 }
 
-/* La valeur à afficher dans un champ : celle qu'on est en train de taper. */
-function valeurChamp(cle) {
-  return brouillonFiltres && (cle in brouillonFiltres) ? brouillonFiltres[cle] : (S.filtres[cle] || '');
+/* L'état appliqué, mis de côté le temps d'un échange : `brouillonModifie()`
+   en a besoin pour comparer, alors même que `S` porte le brouillon. */
+let etatApplique = null;
+
+/* Met le brouillon à la place de l'état appliqué, et rend de quoi revenir. */
+function echangeBrouillon() {
+  const memo = {filtres:S.filtres, colors:S.colors, colorMode:S.colorMode};
+  if (!etatApplique) etatApplique = memo;
+  S.filtres = brouillonFiltres.filtres;
+  S.colors = brouillonFiltres.colors;
+  S.colorMode = brouillonFiltres.colorMode;
+  return memo;
 }
 
-function majBrouillon(cle, valeur) {
-  if (brouillonFiltres && (cle in brouillonFiltres)) brouillonFiltres[cle] = valeur;
-  else majFiltre(cle, valeur);
+/* Repose l'état appliqué. `garder` reverse au brouillon ce qui vient d'être
+   modifié — y compris quand un champ a été réassigné plutôt que muté. */
+function reprendEtat(memo, garder) {
+  if (garder) {
+    brouillonFiltres.filtres = S.filtres;
+    brouillonFiltres.colors = S.colors;
+    brouillonFiltres.colorMode = S.colorMode;
+  }
+  S.filtres = memo.filtres;
+  S.colors = memo.colors;
+  S.colorMode = memo.colorMode;
+  if (etatApplique === memo) etatApplique = null;
 }
 
-/* La saisie en cours diffère-t-elle de ce qui est appliqué ? */
-function brouillonModifie() {
-  return !!brouillonFiltres &&
-    FILTRES_SAISIE.some(k => String(brouillonFiltres[k] || '') !== String(S.filtres[k] || ''));
-}
-
-/* Exécute `fn` comme si le brouillon était appliqué : c'est ainsi que le
-   décompte de la fenêtre annonce ce que « Appliquer » donnerait. */
+/* Lit comme si le brouillon était appliqué : c'est ainsi que la fenêtre se
+   peint et que son décompte annonce ce que « Appliquer » donnerait. */
 function avecBrouillon(fn) {
   if (!brouillonFiltres) return fn();
-  const avant = S.filtres;
-  S.filtres = {...S.filtres, ...brouillonFiltres};
-  try { return fn(); } finally { S.filtres = avant; }
+  const memo = echangeBrouillon();
+  try { return fn(); } finally { reprendEtat(memo, false); }
+}
+
+/* Le jumeau écrivain : ce que `fn` modifie reste dans le brouillon. Sans
+   brouillon — donc hors de la fenêtre — `fn` agit sur l'état lui-même. */
+function modifieFiltres(fn) {
+  if (!brouillonFiltres) return fn();
+  const memo = echangeBrouillon();
+  try { return fn(); } finally { reprendEtat(memo, true); }
+}
+
+/* Le brouillon diffère-t-il de ce qui est appliqué ? */
+function brouillonModifie() {
+  if (!brouillonFiltres) return false;
+  const b = brouillonFiltres;
+  const a = etatApplique || S;   // l'état appliqué, même au milieu d'un échange
+  if (b.colorMode !== a.colorMode) return true;
+  if (b.colors.size !== a.colors.size || [...b.colors].some(c => !a.colors.has(c))) return true;
+  return Object.keys(FILTRES_VIDE).some(k => String(b.filtres[k] || '') !== String(a.filtres[k] || ''));
+}
+
+/* Ce qui suit un réglage de filtre : dans la fenêtre, seule elle se
+   redessine, et rien n'est encore appliqué ; ailleurs — barre de mana de
+   l'en-tête, puces, jauges de rôle — l'atelier suit aussitôt. */
+function apresReglageFiltre() {
+  if (brouillonFiltres) { majFenetreFiltres(); majResumeFiltres(); return; }
+  invaliderCandidats();
+  S.limitB = PAGE;
+  renderAll();
+  majFenetreFiltres();
+}
+
+/* Un rendu global n'a de sens que si l'état appliqué a changé. Tant que la
+   fenêtre tient un brouillon, l'atelier montre déjà ce qu'il doit montrer :
+   le recalcul serait perdu, et c'est la seconde qu'on cherche à éviter. */
+function renderAllSiApplique() {
+  if (brouillonFiltres) { majResumeFiltres(); return; }
+  renderAll();
 }
 
 /* Une ligne « critère min → max ». */
 function ligneFiltre(kMin, kMax, label, aide, pas, min) {
   const champ = (cle, place) => `<input type="number" inputmode="decimal" step="${pas}" ${min !== undefined ? `min="${min}"` : ''}
-      id="f_${cle}" data-filtre="${cle}" value="${esc(valeurChamp(cle))}" placeholder="${place}" aria-label="${esc(label)} ${place}">`;
+      id="f_${cle}" data-filtre="${cle}" value="${esc(S.filtres[cle])}" placeholder="${place}" aria-label="${esc(label)} ${place}">`;
   return `<div class="filtre-ligne">
     <span class="filtre-nom" title="${esc(aide)}">${esc(label)}</span>
     <label class="lab" for="f_${kMin}">min</label>${champ(kMin, 'min')}
@@ -621,7 +667,9 @@ function ligneFiltre(kMin, kMax, label, aide, pas, min) {
 }
 
 function corpsFiltres() {
-  return `<div class="field">
+  /* Tout le corps se peint sous le brouillon : couleurs, cases et champs y
+     lisent ce qu'on est en train de régler, non ce qui est appliqué. */
+  return avecBrouillon(() => `<div class="field">
       <label class="lab">Couleurs considérées</label>
       <div class="row" style="align-items:center;gap:6px">
         ${COLS.map(([c, titre]) => `
@@ -638,11 +686,11 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab" for="f_nom">Nom</label>
-      <input type="text" id="f_nom" data-filtre="nom" value="${esc(valeurChamp('nom'))}" placeholder="ex. dragon, sol ring…" autocomplete="off">
+      <input type="text" id="f_nom" data-filtre="nom" value="${esc(S.filtres.nom)}" placeholder="ex. dragon, sol ring…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab" for="f_type">Type</label>
-      <input type="text" id="f_type" data-filtre="type" value="${esc(valeurChamp('type'))}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
+      <input type="text" id="f_type" data-filtre="type" value="${esc(S.filtres.type)}" placeholder="ex. créature, artefact, human soldier…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab">Set</label>
@@ -662,7 +710,7 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab" for="f_texte">Texte de règles</label>
-      <input type="text" id="f_texte" data-filtre="texte" value="${esc(valeurChamp('texte'))}" placeholder="ex. draw a card, sacrifice a creature…" autocomplete="off">
+      <input type="text" id="f_texte" data-filtre="texte" value="${esc(S.filtres.texte)}" placeholder="ex. draw a card, sacrifice a creature…" autocomplete="off">
     </div>
     <div class="field">
       <label class="lab">Archétype</label>
@@ -696,11 +744,11 @@ function corpsFiltres() {
     </div>
     <div class="field">
       <label class="lab" for="f_artiste">Illustrateur</label>
-      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(valeurChamp('artiste'))}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
+      <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(S.filtres.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
     </div>
     <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier ») ; « Texte de règles » cherche dans le texte d'Oracle de la carte, celui qui décrit ses capacités, et accepte une phrase entière. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs choisies ci-dessus ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
-    <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`;
+    <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`);
 }
 
 let archRecherche = '';
@@ -740,7 +788,7 @@ function listeArchetypesHTML() {
    dans le champ de recherche garde son curseur. */
 function majListeArchetypes() {
   const zone = document.querySelector('#archPanel .arch-liste');
-  if (zone) zone.innerHTML = listeArchetypesHTML();
+  if (zone) zone.innerHTML = avecBrouillon(listeArchetypesHTML);
 }
 
 /* État de la base d'archétypes extérieure, sous les boutons. */
@@ -798,7 +846,7 @@ function listeSetsHTML() {
    champ de recherche garde son curseur. */
 function majListeSets() {
   const zone = document.querySelector('#setPanel .arch-liste');
-  if (zone) zone.innerHTML = listeSetsHTML();
+  if (zone) zone.innerHTML = avecBrouillon(listeSetsHTML);
 }
 
 /* État de la liste des sets, sous le champ. */
@@ -905,48 +953,34 @@ function majFenetreFiltres() {
    vivre le décompte de cartes retenues. « Annuler » ne renonce donc pas à
    appliquer, il revient à l'état d'avant l'ouverture — d'où cet instantané.
    Il couvre tout ce que la fenêtre sait changer, couleurs comprises. */
-let filtresAvant = null;
-
+/* La copie dont part le brouillon : les trois champs que la fenêtre règle. */
 function instantaneFiltres() {
   return {filtres: {...S.filtres}, colors: new Set(S.colors), colorMode: S.colorMode};
 }
 
-function restaurerFiltres(memo) {
-  if (!memo) return;
-  S.filtres = {...memo.filtres};
-  S.colors = new Set(memo.colors);
-  S.colorMode = memo.colorMode;
-}
-
-/* « Appliquer » reporte la saisie en attente sur l'état, puis lance le
-   filtrage. C'est le seul moment où l'atelier entier est recalculé. */
+/* « Appliquer » verse le brouillon dans l'état, puis lance le filtrage.
+   C'est le seul moment où l'atelier entier est recalculé. */
 async function appliquerFiltres() {
   if (brouillonFiltres) {
-    Object.keys(brouillonFiltres).forEach(k => majFiltre(k, brouillonFiltres[k]));
+    S.filtres = {...brouillonFiltres.filtres};
+    S.colors = new Set(brouillonFiltres.colors);
+    S.colorMode = brouillonFiltres.colorMode;
     brouillonFiltres = null;
+    invaliderCandidats();
   }
-  filtresAvant = null;
   S.limitB = PAGE;
   await filtrerAvecProgression();
-  brouillonFiltres = null;
   closeDialog();
 }
 
 /* Toute autre façon de fermer — Annuler, la croix, Échap, l'arrière-plan —
-   laisse l'instantané en place : `fermetureFiltres()` s'en sert pour revenir
-   en arrière. */
+   jette le brouillon. Rien n'ayant été appliqué, il n'y a rien à défaire :
+   l'atelier n'a pas bougé depuis l'ouverture. */
 function fermetureFiltres() {
-  /* La saisie en attente n'a jamais été appliquée : elle se jette. */
   brouillonFiltres = null;
-  if (!filtresAvant) return;
-  restaurerFiltres(filtresAvant);
-  filtresAvant = null;
-  S.limitB = PAGE;
-  renderAll();
 }
 
 function openFiltresModal() {
-  const memo = instantaneFiltres();
   /* La liste des sets vient de Scryfall : on la demande à l'ouverture, elle
      ne repart en ligne qu'une fois par semaine. */
   if (typeof chargerListeSets === 'function') chargerListeSets();
@@ -958,7 +992,6 @@ function openFiltresModal() {
   /* Après `openDialog`, qui remet le brouillon à zéro comme tout changement
      de fenêtre. */
   ouvreBrouillon();
-  filtresAvant = memo;
 }
 
 function renderTop() {
