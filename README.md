@@ -145,13 +145,24 @@ champs, ni les couleurs, ni les archétypes, rôles et sets. Filtrer coûte prè
 seconde sur un grand catalogue, et « Annuler » n'aurait aucun sens si la moitié des
 réglages avait déjà pris effet. Tout va dans un brouillon (`{filtres, colors, colorMode}`,
 js/ui.js) que la fenêtre lit pour se peindre — d'où `avecBrouillon()` en lecture et
-`modifieFiltres()` en écriture — et seul le décompte du bas le suit, car il ne parcourt
+`modifieBrouillon()` en écriture — et seul le décompte du bas le suit, car il ne parcourt
 que la collection. « Appliquer » le verse dans l'état puis recalcule par tranches derrière
 une barre de progression ; toute autre fermeture le jette, sans rien à défaire.
 
+La fenêtre Format suit exactement le même principe, sur ses propres champs — `format`,
+`custom`, `filtreLegal` — avec ses boutons « Annuler » et « Appliquer ». Le brouillon est
+donc un mécanisme partagé, ouvert sur les champs que la fenêtre courante règle.
+
+Le chargement de l'archive Scryfall, lui, ouvre une boîte de progression : deux barres —
+ce qui arrive, ce qui en est extrait — et le décompte des cartes retenues. Les totaux
+viennent de `verifierMajCatalogue()`, qui relève la taille compressée et la taille brute.
+« Masquer » referme la boîte sans rien interrompre ; « Interrompre » abandonne vraiment, et
+l'archive déjà en place est rendue intacte — la lecture pose ses lots au fur et à mesure,
+il faut donc les défaire.
+
 Hors de la fenêtre, tout continue d'agir au clic : la barre de mana de l'en-tête, ses
 puces de filtre et les jauges de rôle de la section Deck. Les mêmes gestionnaires servent
-aux deux régimes — sans brouillon, `modifieFiltres()` agit sur l'état lui-même —, la
+aux deux régimes — sans brouillon, `modifieBrouillon()` agit sur l'état lui-même —, la
 fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vient d'elle.
 
 | Fonction | Rôle |
@@ -231,11 +242,15 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `compacte(sc)` | Réduit une carte Scryfall aux champs utiles à l'analyse et au classement, code d'édition compris. |
 | `autoCatalogue()` | Décide si le catalogue peut se charger tout seul. |
 | `estGzip(nom,octets)` | Détecte une archive compressée par son nom ou sa signature. |
-| `fluxTexte(source,nom)` *(async)* | Ouvre un flux de texte, décompression comprise. |
+| `fluxTexte(source,nom,suivi)` *(async)* | Ouvre un flux de texte, décompression comprise, en comptant les octets reçus puis extraits. |
+| `compteurOctets(onOctets)` | Compte les octets qui passent dans un flux, sans rien retenir. |
+| `nouveauSuivi(source,totalRecu,totalExtrait)` | L'avancement d'un chargement d'archive, tel que la boîte le lit. |
 | `retiens(par,rec)` | Ne garde qu'une entrée par nom, la mieux classée, en y accumulant les codes d'édition de toutes les impressions lues. |
 | `fusionneSets(a,b)` | Réunit deux listes de codes d'édition, sans doublon. |
 | `tailleEstimee(cartes)` | Estime le poids de l'archive par échantillonnage. |
-| `lireCatalogueFichier(source,nom)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue. |
+| `lireCatalogueFichier(source,nom,suivi)` *(async)* | Lit une archive Scryfall en flux et en extrait le catalogue, en rendant compte de son avancement et en sachant renoncer. |
+| `ArchiveAbandonnee()` | L'interruption voulue, que l'appelant distingue d'une panne. |
+| `interrompreCatalogue()` | Arrête le chargement en cours ; l'archive déjà en place est rendue intacte. |
 | `chargerCatalogueLocal()` *(async)* | Cherche une archive posée à côté de la page. |
 | `verifierMajCatalogue()` *(async)* | Interroge l'index Scryfall : date, adresse et taille de la version publiée. |
 | `catalogueAbsent()` | Dit si cet appareil n'a pas les cartes existantes. *(défini dans `etat.js`)* |
@@ -465,7 +480,7 @@ Données : `RETOURNEES`
 | `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. |
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
-| `openFormatModal()` | Ouvre la fenêtre du format, depuis la pastille « Format » de l'en-tête. |
+| `openFormatModal()` | Ouvre la fenêtre du format et y ouvre un brouillon : rien n'y prend effet avant « Appliquer ». |
 | `corpsFormat()` | Contenu de cette fenêtre : format de jeu, case « écarter les cartes non légales » et panneau « Personnalisé ». |
 | `tagIllegal(card)` | Le tag « illégal », partout où la carte s'affiche. |
 | `resumeFormat()` | Taille, exemplaires et commandant du format en cours. |
@@ -479,20 +494,29 @@ Données : `RETOURNEES`
 | `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et état de sauvegarde. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et y ouvre un brouillon. |
-| `instantaneFiltres()` | Copie des critères, des couleurs et du mode : la forme dont part le brouillon. |
+| `verseBrouillon()` | Verse le brouillon dans l'état : le seul moment où une fenêtre à brouillon touche à ce que l'atelier montre. |
 | `appliquerFiltres()` *(async)* | « Appliquer » : verse le brouillon dans l'état, lance le filtrage avec sa barre, puis ferme. |
-| `ouvreBrouillon()` | Ouvre le brouillon de la fenêtre, à son ouverture. |
+| `ouvreBrouillon(cles,redessine)` | Ouvre un brouillon sur les champs de `S` que la fenêtre règle, et retient comment elle se redessine. |
+| `copieEtat(v)` | Copie profonde d'un champ de `S` — `Set` des couleurs, `S.custom` imbriqué. |
+| `memeEtat(x,y)` | Compare deux valeurs d'état, `Set` et objets compris. |
 | `echangeBrouillon()` | Met le brouillon à la place de l'état appliqué, et rend de quoi revenir. |
 | `reprendEtat(memo,garder)` | Repose l'état appliqué, en reversant au brouillon ce qui vient d'être modifié. |
 | `avecBrouillon(fn)` | Lit comme si le brouillon était appliqué : c'est ainsi que la fenêtre se peint. |
-| `modifieFiltres(fn)` | Le jumeau écrivain : hors de la fenêtre, `fn` agit sur l'état lui-même. |
+| `modifieBrouillon(fn)` | Le jumeau écrivain : hors de la fenêtre, `fn` agit sur l'état lui-même. |
 | `brouillonModifie()` | Le brouillon diffère-t-il de ce qui est appliqué ? |
-| `apresReglageFiltre()` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle. |
+| `apresReglage()` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle. |
 | `renderAllSiApplique()` | Un rendu global, sauf tant qu'un brouillon rend ce recalcul inutile. |
 | `zoneProgression()` | La barre de progression, dans le pied de la fenêtre. |
 | `majProgression(txt,fait,total)` | Avance la barre et son libellé. |
 | `filtrerAvecProgression()` *(async)* | Bâtit les candidates puis les note par tranches, barre à l'appui, et rend la main entre chaque lot. |
-| `fermetureFiltres()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — jette le brouillon. |
+| `fermetureBrouillon()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — jette le brouillon. |
+| `appliquerFormat()` *(async)* | « Appliquer » de la fenêtre Format : verse le brouillon, puis recalcule avec la même barre que les filtres. |
+| `octets(n)` | Un poids en Ko ou Mo, pour la boîte de progression. |
+| `barreCatalogue(id,titre,fait,total)` | Une barre nommée de cette boîte. |
+| `corpsBoiteCatalogue()` | Contenu de la boîte : les deux barres et le décompte des cartes. |
+| `ouvrirBoiteCatalogue()` | Ouvre la boîte de progression du chargement de l'archive. |
+| `majBoiteCatalogue()` | Avance ses barres sans réécrire la fenêtre. |
+| `fermerBoiteCatalogue()` | La referme, si c'est bien elle que la fenêtre montre. |
 | `corpsFiltres()` | Contenu de cette fenêtre, dans l'ordre : couleur, nom, type, set, texte de règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. |
 | `etatArchetypes()` | État de la base d'archétypes EDHREC, sous les boutons d'archétype. |
 | `listeSetsHTML()` | Lignes de la liste des sets : nom, code, année et taille, du plus récent au plus ancien. |

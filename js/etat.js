@@ -432,7 +432,7 @@ const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, I
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
-  majDispo:null, uri:'', taille:0, impressions:0
+  majDispo:null, uri:'', taille:0, tailleBrute:0, impressions:0, suivi:null, ctrl:null
 };
 
 /* Vrai tant que cet appareil n'a pas les cartes existantes : archive jamais

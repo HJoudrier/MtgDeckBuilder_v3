@@ -59,7 +59,7 @@ function openDialog(title, bodyHTML, actionsHTML, grande) {
   if (!dlg) return;
   /* Une autre fenêtre prend la place : le brouillon des filtres n'a plus
      lieu d'être. */
-  brouillonFiltres = null;
+  brouillon = null;
   dlg.classList.toggle('grand', !!grande);
   dlg.classList.toggle('wide', !!grande);
   const headEl = document.getElementById('dlgTitle') || document.getElementById('dlgHead');
@@ -518,11 +518,13 @@ function resumeFormat() {
 
 function majResumeFormat() {
   const el = document.getElementById('formatResume');
-  if (el) el.textContent = resumeFormat();
+  if (el) el.textContent = avecBrouillon(resumeFormat);
 }
 
 function corpsFormat() {
-  return `<div class="field">
+  /* Sous le brouillon, comme la fenêtre des filtres : le panneau
+     « Personnalisé » surgit dès qu'on choisit ce format, avant d'appliquer. */
+  return avecBrouillon(() => `<div class="field">
       <label class="lab" for="fmtSel">Format de jeu</label>
       <select id="fmtSel" data-act="format">
         ${Object.entries(FORMATS).map(([k, v]) => `<option value="${k}" ${S.format === k ? 'selected' : ''}>${esc(v.label)}</option>`).join('')}
@@ -540,7 +542,7 @@ function corpsFormat() {
         : `${esc(fmt().label)} n'impose aucune légalité de format : ce réglage y reste sans effet.`}</div>
     </div>
     ${customPanel()}
-    <div class="small muted">Le format fixe la taille du deck, le nombre d'exemplaires autorisés et la présence d'un commandant ; il sert aussi au contrôle de conformité de la section Deck.</div>`;
+    <div class="small muted">Le format fixe la taille du deck, le nombre d'exemplaires autorisés et la présence d'un commandant ; il sert aussi au contrôle de conformité de la section Deck.</div>`);
 }
 
 /* Réécrit la fenêtre si elle est ouverte : changement de format,
@@ -555,9 +557,22 @@ function majFenetreFormat() {
   corps.scrollTop = y;
 }
 
+/* « Appliquer » verse le brouillon puis recalcule, comme pour les filtres :
+   changer de format reprend l'atelier tout autant qu'un critère. */
+async function appliquerFormat() {
+  verseBrouillon();
+  S.limitB = PAGE;
+  await filtrerAvecProgression();
+  closeDialog();
+}
+
 function openFormatModal() {
   openDialog('Format de jeu', corpsFormat(),
-    '<button type="button" class="btn pri" data-act="closeDialog">Fermer</button>');
+    `<button type="button" class="btn" data-act="closeDialog">Annuler</button>
+     <button type="button" class="btn pri" data-act="appliquerFormat">Appliquer</button>
+     ${zoneProgression()}`);
+  /* Après `openDialog`, qui remet le brouillon à zéro. */
+  ouvreBrouillon(['format', 'custom', 'filtreLegal'], majFenetreFormat);
 }
 
 function statsCatalogue() {
@@ -598,10 +613,25 @@ const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidde
    signifie forcément que le geste vient d'elle.
    --------------------------------------------------------------------- */
 
-let brouillonFiltres = null;
+/* Le brouillon en cours : les champs de `S` que la fenêtre ouverte règle,
+   mis de côté et rendus à `S` le temps d'une lecture ou d'une écriture. Les
+   deux fenêtres s'en servent — Filtres règle `filtres`, `colors` et
+   `colorMode` ; Format règle `format`, `custom` et `filtreLegal` — et il n'y
+   en a jamais qu'un, puisque `openDialog()` n'ouvre qu'une fenêtre. */
+let brouillon = null;
 
-function ouvreBrouillon() {
-  brouillonFiltres = instantaneFiltres();
+function ouvreBrouillon(cles, redessine) {
+  brouillon = {cles, redessine, val:{}};
+  cles.forEach(k => brouillon.val[k] = copieEtat(S[k]));
+}
+
+/* Copie profonde d'un champ de `S` : le `Set` des couleurs comme le
+   `S.custom` imbriqué doivent être détachés, sans quoi le brouillon
+   modifierait l'état appliqué. */
+function copieEtat(v) {
+  if (v instanceof Set) return new Set(v);
+  if (v && typeof v === 'object') return JSON.parse(JSON.stringify(v));
+  return v;
 }
 
 /* L'état appliqué, mis de côté le temps d'un échange : `brouillonModifie()`
@@ -610,70 +640,70 @@ let etatApplique = null;
 
 /* Met le brouillon à la place de l'état appliqué, et rend de quoi revenir. */
 function echangeBrouillon() {
-  const memo = {filtres:S.filtres, colors:S.colors, colorMode:S.colorMode};
+  const memo = {};
+  brouillon.cles.forEach(k => { memo[k] = S[k]; S[k] = brouillon.val[k]; });
   if (!etatApplique) etatApplique = memo;
-  S.filtres = brouillonFiltres.filtres;
-  S.colors = brouillonFiltres.colors;
-  S.colorMode = brouillonFiltres.colorMode;
   return memo;
 }
 
 /* Repose l'état appliqué. `garder` reverse au brouillon ce qui vient d'être
    modifié — y compris quand un champ a été réassigné plutôt que muté. */
 function reprendEtat(memo, garder) {
-  if (garder) {
-    brouillonFiltres.filtres = S.filtres;
-    brouillonFiltres.colors = S.colors;
-    brouillonFiltres.colorMode = S.colorMode;
-  }
-  S.filtres = memo.filtres;
-  S.colors = memo.colors;
-  S.colorMode = memo.colorMode;
+  brouillon.cles.forEach(k => {
+    if (garder) brouillon.val[k] = S[k];
+    S[k] = memo[k];
+  });
   if (etatApplique === memo) etatApplique = null;
 }
 
 /* Lit comme si le brouillon était appliqué : c'est ainsi que la fenêtre se
    peint et que son décompte annonce ce que « Appliquer » donnerait. */
 function avecBrouillon(fn) {
-  if (!brouillonFiltres) return fn();
+  if (!brouillon) return fn();
   const memo = echangeBrouillon();
   try { return fn(); } finally { reprendEtat(memo, false); }
 }
 
 /* Le jumeau écrivain : ce que `fn` modifie reste dans le brouillon. Sans
    brouillon — donc hors de la fenêtre — `fn` agit sur l'état lui-même. */
-function modifieFiltres(fn) {
-  if (!brouillonFiltres) return fn();
+function modifieBrouillon(fn) {
+  if (!brouillon) return fn();
   const memo = echangeBrouillon();
   try { return fn(); } finally { reprendEtat(memo, true); }
 }
 
 /* Le brouillon diffère-t-il de ce qui est appliqué ? */
 function brouillonModifie() {
-  if (!brouillonFiltres) return false;
-  const b = brouillonFiltres;
+  if (!brouillon) return false;
   const a = etatApplique || S;   // l'état appliqué, même au milieu d'un échange
-  if (b.colorMode !== a.colorMode) return true;
-  if (b.colors.size !== a.colors.size || [...b.colors].some(c => !a.colors.has(c))) return true;
-  return Object.keys(FILTRES_VIDE).some(k => String(b.filtres[k] || '') !== String(a.filtres[k] || ''));
+  return brouillon.cles.some(k => !memeEtat(brouillon.val[k], a[k]));
 }
 
-/* Ce qui suit un réglage de filtre : dans la fenêtre, seule elle se
-   redessine, et rien n'est encore appliqué ; ailleurs — barre de mana de
+function memeEtat(x, y) {
+  if (x instanceof Set || y instanceof Set) {
+    if (!(x instanceof Set) || !(y instanceof Set) || x.size !== y.size) return false;
+    return [...x].every(v => y.has(v));
+  }
+  if (x && y && typeof x === 'object') return JSON.stringify(x) === JSON.stringify(y);
+  return x === y;
+}
+
+/* Ce qui suit un réglage : dans une fenêtre à brouillon, seule elle se
+   redessine et rien n'est encore appliqué ; ailleurs — barre de mana de
    l'en-tête, puces, jauges de rôle — l'atelier suit aussitôt. */
-function apresReglageFiltre() {
-  if (brouillonFiltres) { majFenetreFiltres(); majResumeFiltres(); return; }
+function apresReglage() {
+  if (brouillon) { brouillon.redessine(); return; }
   invaliderCandidats();
   S.limitB = PAGE;
   renderAll();
   majFenetreFiltres();
 }
 
-/* Un rendu global n'a de sens que si l'état appliqué a changé. Tant que la
+/* Un rendu global n'a de sens que si l'état appliqué a changé. Tant qu'une
    fenêtre tient un brouillon, l'atelier montre déjà ce qu'il doit montrer :
    le recalcul serait perdu, et c'est la seconde qu'on cherche à éviter. */
 function renderAllSiApplique() {
-  if (brouillonFiltres) { majResumeFiltres(); return; }
+  if (brouillon) { majResumeFiltres(); return; }
   renderAll();
 }
 
@@ -971,25 +1001,96 @@ function majFenetreFiltres() {
   if (nouveauSet) nouveauSet.scrollTop = ySet;
 }
 
+/* =====================================================================
+   Boîte de progression du chargement de l'archive Scryfall. L'archive pèse
+   plus de cent mégaoctets : sans elle, l'atelier semblait figé une longue
+   minute au premier lancement. Deux barres — ce qui arrive, ce qui en est
+   extrait — et le décompte des cartes retenues.
+   ===================================================================== */
+
+function octets(n) {
+  if (!n) return '';
+  return n >= 1048576 ? `${(n/1048576).toFixed(1)} Mo` : `${Math.round(n/1024)} Ko`;
+}
+
+function barreCatalogue(id, titre, fait, total) {
+  const pct = total > 0 ? Math.min(100, Math.round(fait / total * 100)) : 0;
+  return `<div class="field">
+    <div class="small muted" id="${id}Txt">${esc(titre)}${fait
+      ? ` — ${octets(fait)}${total > 0 ? ` / ${octets(total)} (${pct} %)` : ''}` : '…'}</div>
+    <div class="track"><div class="fill" id="${id}Bar" style="width:${pct}%;background:var(--brass)"></div></div>
+  </div>`;
+}
+
+function corpsBoiteCatalogue() {
+  const s = CAT.suivi;
+  if (!s) return '<div class="small muted">Aucun chargement en cours.</div>';
+  const lecture = s.source === 'réseau' ? 'Téléchargement' : 'Lecture du fichier';
+  return `<div id="boiteCatalogue">
+    ${barreCatalogue('catRecu', lecture, s.recu, s.totalRecu)}
+    ${barreCatalogue('catExtrait', 'Extraction', s.extrait, s.totalExtrait)}
+    <div class="small muted" id="catCartes">${s.cartes
+      ? `${s.cartes.toLocaleString('fr-FR')} carte(s) retenues.`
+      : 'Lecture des cartes…'}</div>
+    <div class="small muted">L'archive est lue au fil de l'eau : elle n'est jamais gardée entière en mémoire.
+      « Masquer » referme cette fenêtre sans rien interrompre — la section Suggestions continue d'en rendre compte.</div>
+  </div>`;
+}
+
+function ouvrirBoiteCatalogue() {
+  openDialog("Archive Scryfall", corpsBoiteCatalogue(),
+    `<button type="button" class="btn foot-g" data-act="interrompreCatalogue">Interrompre</button>
+     <button type="button" class="btn pri" data-act="closeDialog">Masquer</button>`);
+}
+
+/* Rafraîchit les barres sans réécrire la fenêtre, pour ne pas la faire
+   clignoter dix fois par seconde. */
+function majBoiteCatalogue() {
+  const zone = document.getElementById('boiteCatalogue');
+  if (!zone || !CAT.suivi) return;
+  const s = CAT.suivi;
+  const lecture = s.source === 'réseau' ? 'Téléchargement' : 'Lecture du fichier';
+  const pose = (id, titre, fait, total) => {
+    const pct = total > 0 ? Math.min(100, Math.round(fait / total * 100)) : 0;
+    const t = document.getElementById(id + 'Txt');
+    const b = document.getElementById(id + 'Bar');
+    if (t) t.textContent = `${titre}${fait ? ` — ${octets(fait)}${total > 0 ? ` / ${octets(total)} (${pct} %)` : ''}` : '…'}`;
+    if (b) b.style.width = pct + '%';
+  };
+  pose('catRecu', lecture, s.recu, s.totalRecu);
+  pose('catExtrait', 'Extraction', s.extrait, s.totalExtrait);
+  const c = document.getElementById('catCartes');
+  if (c) c.textContent = s.cartes ? `${s.cartes.toLocaleString('fr-FR')} carte(s) retenues.` : 'Lecture des cartes…';
+}
+
+/* Ne referme que si c'est bien cette boîte qui est ouverte : l'utilisateur a
+   pu la masquer et ouvrir autre chose entre-temps. */
+function fermerBoiteCatalogue() {
+  /* `closeDialog()` ne vide pas le corps : un `#boiteCatalogue` peut traîner
+     dans le DOM d'une fenêtre déjà fermée. On ne referme donc que si la
+     fenêtre est ouverte et que c'est bien cette boîte qu'elle montre. */
+  const dlg = document.getElementById('dlg');
+  if (dlg && dlg.open && document.getElementById('boiteCatalogue')) closeDialog();
+  CAT.suivi = null;
+}
+
 /* Les critères s'appliquent en direct pendant la saisie : c'est ce qui fait
    vivre le décompte de cartes retenues. « Annuler » ne renonce donc pas à
    appliquer, il revient à l'état d'avant l'ouverture — d'où cet instantané.
    Il couvre tout ce que la fenêtre sait changer, couleurs comprises. */
-/* La copie dont part le brouillon : les trois champs que la fenêtre règle. */
-function instantaneFiltres() {
-  return {filtres: {...S.filtres}, colors: new Set(S.colors), colorMode: S.colorMode};
+/* Verse le brouillon dans l'état : le seul moment où une fenêtre à brouillon
+   touche à ce que l'atelier montre. */
+function verseBrouillon() {
+  if (!brouillon) return;
+  brouillon.cles.forEach(k => { S[k] = brouillon.val[k]; });
+  brouillon = null;
+  invaliderCandidats();
 }
 
-/* « Appliquer » verse le brouillon dans l'état, puis lance le filtrage.
-   C'est le seul moment où l'atelier entier est recalculé. */
+/* « Appliquer » verse le brouillon, puis recalcule. C'est le seul moment où
+   l'atelier entier est repris. */
 async function appliquerFiltres() {
-  if (brouillonFiltres) {
-    S.filtres = {...brouillonFiltres.filtres};
-    S.colors = new Set(brouillonFiltres.colors);
-    S.colorMode = brouillonFiltres.colorMode;
-    brouillonFiltres = null;
-    invaliderCandidats();
-  }
+  verseBrouillon();
   S.limitB = PAGE;
   await filtrerAvecProgression();
   closeDialog();
@@ -998,8 +1099,8 @@ async function appliquerFiltres() {
 /* Toute autre façon de fermer — Annuler, la croix, Échap, l'arrière-plan —
    jette le brouillon. Rien n'ayant été appliqué, il n'y a rien à défaire :
    l'atelier n'a pas bougé depuis l'ouverture. */
-function fermetureFiltres() {
-  brouillonFiltres = null;
+function fermetureBrouillon() {
+  brouillon = null;
 }
 
 function openFiltresModal() {
@@ -1013,7 +1114,8 @@ function openFiltresModal() {
      ${zoneProgression()}`);
   /* Après `openDialog`, qui remet le brouillon à zéro comme tout changement
      de fenêtre. */
-  ouvreBrouillon();
+  ouvreBrouillon(['filtres', 'colors', 'colorMode'],
+    () => { majFenetreFiltres(); majResumeFiltres(); });
 }
 
 function renderTop() {

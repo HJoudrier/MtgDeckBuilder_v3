@@ -26,14 +26,14 @@ document.addEventListener('click', ev => {
   }
   if (b.dataset.color || b.dataset.col) {
     const c = b.dataset.color || b.dataset.col;
-    modifieFiltres(() => { if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c); });
-    apresReglageFiltre();
+    modifieBrouillon(() => { if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c); });
+    apresReglage();
     return;
   }
 
   if (b.dataset.cmode) {
-    modifieFiltres(() => { S.colorMode = b.dataset.cmode; });
-    apresReglageFiltre();
+    modifieBrouillon(() => { S.colorMode = b.dataset.cmode; });
+    apresReglage();
     return;
   }
 
@@ -82,11 +82,11 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'toggleArch') {
-    modifieFiltres(() => basculerArchetype(b.dataset.arch));
+    modifieBrouillon(() => basculerArchetype(b.dataset.arch));
     /* Les cartes du thème coché sont cherchées à la demande, sur ce qui est
        coché dans la fenêtre : sans cela le décompte annoncerait zéro. */
     avecBrouillon(() => archetypesAChargerEdhrec()).forEach(slug => chargerThemeEdhrec(slug));
-    apresReglageFiltre();
+    apresReglage();
     return;
   }
 
@@ -97,16 +97,16 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'toggleSet') {
-    modifieFiltres(() => basculerSet(b.dataset.set));
+    modifieBrouillon(() => basculerSet(b.dataset.set));
     // les cartes du set coché sont cherchées à la demande, comme les thèmes
     avecBrouillon(() => setsACharger()).forEach(code => chargerSetScryfall(code));
-    apresReglageFiltre();
+    apresReglage();
     return;
   }
 
   if (act === 'dropFiltre') {
-    modifieFiltres(() => effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean)));
-    apresReglageFiltre();
+    modifieBrouillon(() => effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean)));
+    apresReglage();
     return;
   }
 
@@ -130,11 +130,21 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'interrompreCatalogue') {
+    interrompreCatalogue();
+    return;
+  }
+
+  if (act === 'appliquerFormat') {
+    appliquerFormat();
+    return;
+  }
+
   if (act === 'resetFiltres') {
     /* « Réinitialiser » dans la fenêtre vide le brouillon ; « Tout effacer »
        dans l'en-tête vide l'état, et s'applique aussitôt. */
-    modifieFiltres(() => reinitFiltres());
-    apresReglageFiltre();
+    modifieBrouillon(() => reinitFiltres());
+    apresReglage();
     toast('Filtres réinitialisés.');
     return;
   }
@@ -147,8 +157,8 @@ document.addEventListener('click', ev => {
   if (act === 'toggleRole') {
     /* Les mêmes rôles se cochent depuis les jauges de la section Deck :
        hors de la fenêtre, `modifieFiltres` agit sur l'état lui-même. */
-    modifieFiltres(() => basculerRole(b.dataset.role || ''));
-    apresReglageFiltre();
+    modifieBrouillon(() => basculerRole(b.dataset.role || ''));
+    apresReglage();
     return;
   }
 
@@ -167,14 +177,14 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'allColors') {
-    modifieFiltres(() => { S.colors = new Set(['W','U','B','R','G','C']); });
-    apresReglageFiltre();
+    modifieBrouillon(() => { S.colors = new Set(['W','U','B','R','G','C']); });
+    apresReglage();
     return;
   }
 
   if (act === 'clearColors' || act === 'noColors') {
-    modifieFiltres(() => { S.colors = new Set(); });
-    apresReglageFiltre();
+    modifieBrouillon(() => { S.colors = new Set(); });
+    apresReglage();
     return;
   }
 
@@ -536,7 +546,7 @@ document.addEventListener('input', ev => {
   if (t.dataset.filtre) {
     /* La frappe va au brouillon : rien n'est appliqué avant « Appliquer ».
        Seul le décompte de la fenêtre suit, il ne coûte que la collection. */
-    modifieFiltres(() => majFiltre(t.dataset.filtre, t.value));
+    modifieBrouillon(() => majFiltre(t.dataset.filtre, t.value));
     majResumeFiltres();
     return;
   }
@@ -546,7 +556,12 @@ document.addEventListener('input', ev => {
   }
   if (t.dataset.cst || t.dataset.cust) {
     const k = t.dataset.cst || t.dataset.cust;
-    S.custom[k] = t.type === 'checkbox' ? t.checked : (t.type === 'number' ? (parseInt(t.value, 10) || 0) : t.value);
+    modifieBrouillon(() => {
+      S.custom[k] = t.type === 'checkbox' ? t.checked : (t.type === 'number' ? (parseInt(t.value, 10) || 0) : t.value);
+    });
+    /* Seul le résumé bouge : réécrire la fenêtre volerait le curseur du
+       champ qu'on est en train de régler. */
+    if (brouillon) { majResumeFormat(); return; }
     renderAll();
     majResumeFormat();
     return;
@@ -554,7 +569,8 @@ document.addEventListener('input', ev => {
   if (t.dataset.clim || t.dataset.lim) {
     const c = t.dataset.clim || t.dataset.lim;
     const s = t.dataset.k || t.dataset.side;
-    S.custom.colorLimits[c][s] = parseInt(t.value, 10) || 0;
+    modifieBrouillon(() => { S.custom.colorLimits[c][s] = parseInt(t.value, 10) || 0; });
+    if (brouillon) return;
     renderE();
     return;
   }
@@ -578,14 +594,8 @@ document.addEventListener('input', ev => {
 document.addEventListener('change', ev => {
   const t = ev.target;
   if (t.dataset.act === 'filtreLegal') {
-    S.filtreLegal = !!t.checked;
-    invaliderCandidats();
-    S.limitB = PAGE;
-    renderAll();
-    majFenetreFormat();
-    toast(S.filtreLegal
-      ? `Cartes non légales en ${fmt().label} écartées.`
-      : `Cartes non légales en ${fmt().label} affichées, marquées « illégal ».`);
+    modifieBrouillon(() => { S.filtreLegal = !!t.checked; });
+    apresReglage();
     return;
   }
   if (t.dataset.act === 'sort') {
@@ -594,11 +604,11 @@ document.addEventListener('change', ev => {
     return;
   }
   if (t.dataset.act === 'format') {
-    S.format = t.value;
-    if (S.format === 'perso') S.custom.commander = fmt().commander;
-    invaliderCandidats();
-    renderAll();
-    majFenetreFormat();
+    modifieBrouillon(() => {
+      S.format = t.value;
+      if (S.format === 'perso') S.custom.commander = fmt().commander;
+    });
+    apresReglage();
     return;
   }
   if (t.dataset.act === 'chooseCmd') {
@@ -616,7 +626,7 @@ const dlgEl = document.getElementById('dlg');
 if (dlgEl) {
   /* Une fenêtre de filtres fermée autrement que par « Appliquer » revient
      à l'état d'avant son ouverture, quel qu'ait été le geste. */
-  dlgEl.addEventListener('close', () => fermetureFiltres());
+  dlgEl.addEventListener('close', () => fermetureBrouillon());
   dlgEl.addEventListener('click', ev => {
     if (ev.target === dlgEl) {
       const rect = dlgEl.getBoundingClientRect();

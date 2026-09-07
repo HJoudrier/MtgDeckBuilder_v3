@@ -357,9 +357,18 @@ function brancherCatalogue() {
     const f = ev.target.files && ev.target.files[0];
     if (!f) return;
     try {
-      await lireCatalogueFichier(f, f.name);
+      /* Un fichier posé à la main se lit aussi longuement qu'une archive
+         téléchargée : la même boîte en rend compte. Sa taille décompressée
+         reste inconnue, la seconde barre affichera donc un compte seul. */
+      const suivi = nouveauSuivi('fichier', f.size || 0, 0);
+      CAT.suivi = suivi;
+      ouvrirBoiteCatalogue();
+      await lireCatalogueFichier(f, f.name, suivi);
+      fermerBoiteCatalogue();
       rafraichirFenetreSauvegarde();
     } catch(err) {
+      fermerBoiteCatalogue();
+      if (err.abandon) { toast('Lecture de l\'archive interrompue.'); return; }
       CAT.etat = 'erreur';
       CAT.detail = `lecture du fichier impossible : ${err.message || 'format inattendu'}`;
       renderF();

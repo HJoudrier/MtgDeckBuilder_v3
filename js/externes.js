@@ -856,7 +856,41 @@ function estGzip(nom, octets) {
   return !!(octets && octets[0] === 0x1f && octets[1] === 0x8b);
 }
 
-async function fluxTexte(source, nom) {
+/* Compte les octets qui passent, sans rien retenir : c'est ce qui permet
+   d'annoncer un vrai pourcentage sans garder l'archive en mémoire. */
+function compteurOctets(onOctets) {
+  let n = 0;
+  return new TransformStream({
+    transform(bloc, ctrl) {
+      n += (bloc && (bloc.byteLength || bloc.length)) || 0;
+      onOctets(n);
+      ctrl.enqueue(bloc);
+    }
+  });
+}
+
+/* L'avancement d'un chargement d'archive, tel que la boîte de progression le
+   lit. Les totaux viennent de `verifierMajCatalogue()` — Scryfall publie la
+   taille compressée et la taille brute — ou de la taille du fichier choisi ;
+   quand ils manquent, la barre affiche un compte sans pourcentage. */
+function nouveauSuivi(source, totalRecu, totalExtrait) {
+  let dernier = 0;
+  return {
+    source, recu:0, extrait:0, cartes:0, phase:'telechargement',
+    totalRecu: totalRecu || 0, totalExtrait: totalExtrait || 0,
+    abandon: false,
+    /* Rafraîchir à chaque bloc serait du gaspillage : dix fois par seconde
+       suffit largement à l'œil. */
+    avance(force) {
+      const t = Date.now();
+      if (!force && t - dernier < 100) return;
+      dernier = t;
+      if (typeof majBoiteCatalogue === 'function') majBoiteCatalogue();
+    }
+  };
+}
+
+async function fluxTexte(source, nom, suivi) {
   let flux = source.stream ? source.stream() : source.body;
   let gz = /\.gz$/i.test(nom || '');
   if (!gz && source.slice) {
@@ -864,10 +898,16 @@ async function fluxTexte(source, nom) {
     gz = estGzip(nom, tete);
     flux = source.stream();
   }
+  if (suivi) flux = flux.pipeThrough(compteurOctets(n => {
+    suivi.recu = n;
+    if (!gz) suivi.extrait = n;   // rien à décompresser : c'est le même flot
+    suivi.avance();
+  }));
   if (gz) {
     if (typeof DecompressionStream === 'undefined')
       throw new Error('ce navigateur ne sait pas décompresser le .gz ; fournissez le fichier décompressé');
     flux = flux.pipeThrough(new DecompressionStream('gzip'));
+    if (suivi) flux = flux.pipeThrough(compteurOctets(n => { suivi.extrait = n; suivi.avance(); }));
   }
   return flux.pipeThrough(new TextDecoderStream());
 }
@@ -905,13 +945,29 @@ function tailleEstimee(cartes) {
   return Math.round(somme / n * cartes.length);
 }
 
-async function lireCatalogueFichier(source, nom) {
-  CAT.etat = 'chargement'; CAT.source = 'fichier'; CAT.detail = ''; CAT.partiel = false; renderF();
+/* Levée quand l'utilisateur interrompt : ce n'est pas une panne, et l'appelant
+   la distingue d'une erreur. */
+function ArchiveAbandonnee() { const e = new Error('chargement interrompu'); e.abandon = true; return e; }
+
+async function lireCatalogueFichier(source, nom, suivi) {
+  CAT.etat = 'chargement'; CAT.source = suivi && suivi.source === 'réseau' ? 'réseau' : 'fichier';
+  CAT.detail = ''; CAT.partiel = false; renderF();
   const par = new Map();
   const cartes = {get length(){ return par.size; }, push(rec){ retiens(par, rec); }};
   let impressions = 0, reste = '', tableau = null, lus = 0;
-  const lecteur = (await fluxTexte(source, nom)).getReader();
+  /* La lecture pose ses lots dans `CAT.cartes` au fur et à mesure, pour que
+     l'atelier montre déjà quelque chose. Renoncer doit donc rendre l'archive
+     telle qu'elle était, et non laisser une moitié de catalogue. */
+  const avant = CAT.cartes;
+  const lecteur = (await fluxTexte(source, nom, suivi)).getReader();
+  const renonce = async () => {
+    await lecteur.cancel().catch(() => {});
+    CAT.cartes = avant;
+    throw ArchiveAbandonnee();
+  };
+  if (suivi) { suivi.phase = 'extraction'; suivi.avance(true); }
   while (true) {
+    if (suivi && suivi.abandon) await renonce();
     const {done, value} = await lecteur.read();
     if (done) break;
     reste += value;
@@ -923,7 +979,13 @@ async function lireCatalogueFichier(source, nom) {
       reste = reste.slice(i + 1);
       if (ligne.length < 2 || ligne === '[' || ligne === ']') continue;
       try { const c = compacte(JSON.parse(ligne)); if (c) { cartes.push(c); impressions++; } } catch(e) {}
-      if (++lus % 25000 === 0) { CAT.cartes = [...par.values()]; renderF(); await new Promise(r => setTimeout(r, 0)); }
+      if (++lus % 25000 === 0) {
+        CAT.cartes = [...par.values()];
+        if (suivi) { suivi.cartes = par.size; suivi.avance(true); }
+        renderF();
+        await new Promise(r => setTimeout(r, 0));
+        if (suivi && suivi.abandon) await renonce();
+      }
     }
   }
   if (tableau) {
@@ -940,8 +1002,8 @@ async function lireCatalogueFichier(source, nom) {
   CAT.maj = CAT.maj || null;
   appliqueCatalogueAuxCartes();
   CAT.octets = tailleEstimee(CAT.cartes);
-  CAT.source = 'fichier';
   CAT.impressions = impressions;
+  if (suivi) { suivi.phase = 'fini'; suivi.cartes = CAT.cartes.length; suivi.avance(true); }
   invaliderCandidats();
   if (saveState !== 'desactive' && S.catalogueActif)
     idbEcrire('cartes', {v:3, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions}).catch(() => {});
@@ -1018,20 +1080,46 @@ async function majPrix(force) {
 
 async function telechargerCatalogue() {
   if (typeof fetch !== 'function') { toast('Téléchargement impossible dans ce contexte.'); return false; }
+  /* Un chargement est déjà en cours : on montre sa boîte plutôt que d'en
+     lancer un second, qui se disputerait `CAT.cartes` avec le premier. */
+  if (CAT.suivi) {
+    if (typeof ouvrirBoiteCatalogue === 'function') ouvrirBoiteCatalogue();
+    return false;
+  }
   CAT.etat = 'chargement'; CAT.source = 'réseau'; CAT.detail = ''; renderF();
   try {
     const info = await verifierMajCatalogue();
     const adresse = (info && (info.jsonl_download_uri || info.download_uri)) || CAT.uri;
     if (!adresse) throw new Error("adresse de téléchargement inconnue");
-    toast(`Téléchargement de l'archive${CAT.taille ? ` (${(CAT.taille/1048576).toFixed(0)} Mo)` : ''}…`);
-    const rep = await fetch(adresse);
+    CAT.ctrl = (typeof AbortController === 'function') ? new AbortController() : null;
+    const suivi = nouveauSuivi('réseau', CAT.taille, CAT.tailleBrute);
+    CAT.suivi = suivi;
+    if (typeof ouvrirBoiteCatalogue === 'function') ouvrirBoiteCatalogue();
+    const rep = await fetch(adresse, CAT.ctrl ? {signal:CAT.ctrl.signal} : undefined);
     if (!rep.ok) throw new Error('HTTP ' + rep.status);
+    /* Scryfall annonce la taille compressée, mais l'en-tête de la réponse
+       fait foi quand elle est là. */
+    const annonce = parseInt(rep.headers.get('content-length') || '0', 10);
+    if (annonce > 0) suivi.totalRecu = annonce;
     CAT.maj = (info && info.updated_at) || null;
-    await lireCatalogueFichier(rep, adresse);
+    await lireCatalogueFichier(rep, adresse, suivi);
     S.majIgnoree = null;
+    if (typeof fermerBoiteCatalogue === 'function') fermerBoiteCatalogue();
     rafraichirFenetreSauvegarde();
     return true;
   } catch(err) {
+    /* Une interruption voulue n'est pas une panne : l'archive déjà en place
+       n'a pas été touchée, `CAT.cartes` n'étant remplacé qu'en fin de lecture. */
+    if (err.abandon || err.name === 'AbortError' || (CAT.suivi && CAT.suivi.abandon)) {
+      CAT.etat = CAT.cartes.length ? 'ok' : '';
+      CAT.detail = '';
+      if (typeof fermerBoiteCatalogue === 'function') fermerBoiteCatalogue();
+      renderF();
+      rafraichirFenetreSauvegarde();
+      toast('Chargement de l\'archive interrompu.');
+      return false;
+    }
+    if (typeof fermerBoiteCatalogue === 'function') fermerBoiteCatalogue();
     const bloque = (err instanceof TypeError) || /Failed to fetch|NetworkError|Load failed/i.test(err.message || '');
     CAT.etat = bloque ? 'hors-ligne' : 'erreur';
     CAT.detail = bloque
@@ -1042,7 +1130,16 @@ async function telechargerCatalogue() {
     toast(bloque ? "Téléchargement direct refusé par Scryfall : passez par le lien puis le chargement de fichier."
                  : `Échec : ${err.message||'erreur inconnue'}.`);
     return false;
+  } finally {
+    CAT.ctrl = null;
   }
+}
+
+/* Interrompt le chargement en cours : le drapeau arrête la boucle de lecture,
+   l'`AbortController` coupe le téléchargement lui-même. */
+function interrompreCatalogue() {
+  if (CAT.suivi) CAT.suivi.abandon = true;
+  if (CAT.ctrl) { try { CAT.ctrl.abort(); } catch(e) {} }
 }
 
 async function chargerCatalogueComplet(force) {
@@ -1091,6 +1188,9 @@ async function demarrerCatalogue() {
   await chargerCatalogueComplet();
   await verifierMajCatalogue();
   if (catalogueAbsent()) return;
+  /* Ne pas proposer par-dessus un chargement en cours : la fenêtre prendrait
+     la place de la boîte de progression. */
+  if (CAT.suivi) return;
   if (catalogueObsolete() && S.majIgnoree !== CAT.majDispo) proposerMajCatalogue();
 }
 
