@@ -79,7 +79,6 @@ function snapshot() {
     sort: S.sort,
     filtres: S.filtres,
     view: S.view,
-    images: S.images,
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
     budget: S.budget,
@@ -181,7 +180,6 @@ function restore(d) {
   S.commander = d.commander && find(d.commander) ? d.commander : null;
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
   ['colorMode','format','sort','view','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
-  if (typeof d.images === 'boolean') S.images = d.images;
   if (typeof d.showImplicit === 'boolean') S.showImplicit = d.showImplicit;
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
   if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};

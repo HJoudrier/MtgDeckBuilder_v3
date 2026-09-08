@@ -78,6 +78,7 @@ const S = {
   prixMaj: null,
   majIgnoree: null,
   enriching: false,
+  // Les visuels Scryfall sont toujours actifs : plus aucun réglage ne les coupe.
   images: true,
   imagesFailed: false,
   scryHS: false,
