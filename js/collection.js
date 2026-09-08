@@ -40,6 +40,34 @@ function filtered() {
   return list.sort(cmp);
 }
 
+/* Ce qui écarte des cartes de la collection affichée, cause par cause, dans
+   l'ordre où les critères s'appliquent. Les couleurs cochées et la légalité du
+   format en écartent autant que les champs de la fenêtre, mais ne figuraient
+   nulle part : la ligne annonçait « aucun filtre » devant une collection
+   visiblement amputée, et l'on cherchait un filtre resté en place. */
+function causesCollection() {
+  const out = {couleurs:0, legalite:0, filtres:0, retenues:0};
+  collectionCards().forEach(e => {
+    const c = e.card;
+    if (!colorOK(c)) out.couleurs++;
+    else if (!legaliteOK(c)) out.legalite++;
+    else if (!roleOK(c) || !filtreOK(c)) out.filtres++;
+    else out.retenues++;
+  });
+  return out;
+}
+
+/* La phrase qui les nomme, chacune avec le geste qui la lève. */
+function ligneCausesCollection() {
+  const st = causesCollection();
+  const n = x => x.toLocaleString('fr-FR');
+  const causes = [];
+  if (st.couleurs) causes.push(`${n(st.couleurs)} par vos couleurs (${esc(nomCombinaisonCouleurs(S.colors))}, barre de mana de l'en-tête)`);
+  if (st.legalite) causes.push(`${n(st.legalite)} par la légalité ${esc(fmt().label)} (fenêtre « Format »)`);
+  if (st.filtres) causes.push(`${n(st.filtres)} par vos filtres (bouton « Filtres »${filtresActifs().length ? ` : ${esc(texteFiltresActifs(', '))}` : ''})`);
+  return causes.length ? `écartées : ${causes.join(', ')}` : 'rien n\'est écarté';
+}
+
 function frontFace(n) {
   return String(n||'').split(' // ')[0].trim();
 }
@@ -194,7 +222,7 @@ function renderB() {
         ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}
         <button class="btn danger" data-act="wipe">Vider</button>
       </div>
-      <div class="small muted" style="margin-bottom:8px">${list.length} cartes différentes après filtrage · ${shown} exemplaires sur ${total} dans la collection${rest>0?` · ${page.length} affichées`:''} · ${actifs.length ? `${actifs.length} filtre(s) réglés dans l'en-tête` : 'aucun filtre : bouton « Filtres » de l\'en-tête'}</div>
+      <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}</div>
       ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
       ${page.length ? (S.view === 'grid'
         ? `<div class="grid">${page.map(e => cardTile(e, 'collection')).join('')}</div>`

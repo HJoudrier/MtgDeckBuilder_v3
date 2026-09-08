@@ -283,6 +283,7 @@ fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vie
 | `eur(n)` | Formatage d'un montant en euros. |
 | `esc(s)` | Échappement HTML. |
 | `colorOK(card)` | Applique le filtre de couleur de la fenêtre des filtres à une carte. |
+| `motsFiltre(valeur,saisie,cle)` | Chaque mot de la saisie doit figurer dans la valeur, dans n'importe quel ordre : cherchés d'un seul bloc, « Legendary creature » écartait les dieux et les créatures-artefacts. |
 | `carteFiltree(card)` | Prédicat unique : couleurs, rôle et critères de la fenêtre. Vaut pour la collection, le deck, la courbe et les suggestions. |
 | `carteLegale(card)` | Légalité dans le format en cours : vrai, faux, ou `null` quand on l'ignore. |
 | `legaliteOK(card)` | Le filtre de légalité, tel que la case de la fenêtre Format le règle. |
@@ -314,7 +315,7 @@ fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vie
 | `reinitFiltres()` | Remet tous les filtres à vide. |
 | `nombreFiltre(v)` | Lit une borne numérique saisie ; renvoie `null` si le champ est vide. |
 | `collectionCards()` | Collection sous forme de paires carte / quantité. |
-| `filtered()` | Collection filtrée puis triée selon les réglages courants. |
+| `filtered()` | Collection filtrée puis triée selon les réglages courants. La pagination (`S.limitB`) n'est plus repliée par un réglage : seul un import la ramène à sa première page. |
 | `deckEntries()` | Cartes du deck, regroupées par type puis par coût. |
 | `deckSize()` | Nombre de cartes du deck. |
 | `availableFor(card)` | Exemplaires de la collection non encore engagés dans le deck. |
@@ -550,11 +551,13 @@ Le code d'édition entre parenthèses et le numéro de collection qui le suit �
 demandée telle quelle à Scryfall, avec son visuel, son illustrateur et son prix. La collection reste comptée
 par nom ; les éditions relevées s'ajoutent les unes aux autres sur la même carte.
 
-*10 fonction(s), 15 Ko*
+*12 fonction(s), 15 Ko*
 
 | Fonction | Rôle |
 |---|---|
 | `renderB()` | Rend la collection, en grille ou en liste, avec pagination ; les filtres se règlent dans l'en-tête. |
+| `causesCollection()` | Compte, cause par cause, ce qui écarte des cartes : les couleurs, la légalité du format, les champs de la fenêtre. |
+| `ligneCausesCollection()` | La phrase qui les nomme, chacune avec le geste qui la lève. |
 | `retireExtrait(s,i,n)` | Retire un fragment d'une ligne et recolle le reste. |
 | `extraitEdition(texte)` | Isole le code d'édition et le numéro de collection d'une ligne importée. |
 | `parseMtgoList(txt)` | Lit une liste MTGO ligne à ligne : quantité, nom, édition, et la section — deck, sideboard, maybeboard ou considering, commandant, jetons — que la ligne rejoint. |

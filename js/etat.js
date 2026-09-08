@@ -340,21 +340,33 @@ function valeurFiltre(x, vide) {
    `filtreOKRec(rec)`, sans que les comparaisons soient écrites deux fois.
    Une valeur inconnue (créature non renseignée, prix absent) écarte la
    carte dès qu'une borne est posée sur ce critère. */
+/* Chaque mot de la saisie doit se retrouver dans la valeur, dans n'importe
+   quel ordre. Cherchés d'un seul bloc, « Legendary creature » écartait
+   « Legendary Enchantment Creature — God », « Legendary Artifact Creature »
+   et « Legendary Snow Creature » : le mot intercalé rompait la chaîne, et
+   l'on perdait sans le savoir une partie de ses créatures légendaires. */
+function motsFiltre(valeur, saisie, cle) {
+  const mots = String(saisie).trim().split(/\s+/).map(m => cle(m)).filter(Boolean);
+  if (!mots.length) return true;
+  const v = cle(valeur);
+  return mots.every(m => v.includes(m));
+}
+
 function filtresValeursOK(v) {
   const f = S.filtres || FILTRES_VIDE;
   const nom = String(f.nom || '').trim();
-  if (nom && !norm(valeurFiltre(v.name, '')).includes(norm(nom))) return false;
+  if (nom && !motsFiltre(valeurFiltre(v.name, ''), nom, norm)) return false;
   const type = String(f.type || '').trim();
-  if (type && !loose(valeurFiltre(v.type, '')).includes(loose(type))) return false;
+  if (type && !motsFiltre(valeurFiltre(v.type, ''), type, loose)) return false;
   const sets = setsFiltre();
   if (sets.length) {
     const ceux = valeurFiltre(v.sets, []);
     if (!sets.some(c => ceux.includes(c))) return false;
   }
   const texte = String(f.texte || '').trim();
-  if (texte && !norm(valeurFiltre(v.text, '')).includes(norm(texte))) return false;
+  if (texte && !motsFiltre(valeurFiltre(v.text, ''), texte, norm)) return false;
   const artiste = String(f.artiste || '').trim();
-  if (artiste && !loose(valeurFiltre(v.artist, '')).includes(loose(artiste))) return false;
+  if (artiste && !motsFiltre(valeurFiltre(v.artist, ''), artiste, loose)) return false;
   const arch = archetypesFiltre();
   if (arch.length) {
     const ceux = valeurFiltre(v.archetypes, []);

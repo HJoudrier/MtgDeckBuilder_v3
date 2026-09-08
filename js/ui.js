@@ -635,7 +635,6 @@ function majFenetreCatalogue() {
 
 async function appliquerCatalogue() {
   verseBrouillon();
-  S.limitB = PAGE;
   await filtrerAvecProgression();
   closeDialog();
 }
@@ -653,7 +652,6 @@ function openCatalogueModal() {
    changer de format reprend l'atelier tout autant qu'un critère. */
 async function appliquerFormat() {
   verseBrouillon();
-  S.limitB = PAGE;
   await filtrerAvecProgression();
   closeDialog();
 }
@@ -729,7 +727,6 @@ function majResumeBudget() {
    carte entre dans la signature des candidates, tout est à reprendre. */
 async function appliquerBudget() {
   verseBrouillon();
-  S.limitB = PAGE;
   await filtrerAvecProgression();
   closeDialog();
 }
@@ -859,13 +856,17 @@ function memeEtat(x, y) {
 /* Ce qui suit un réglage : dans une fenêtre à brouillon, seule elle se
    redessine et rien n'est encore appliqué ; ailleurs — barre de mana de
    l'en-tête, puces, jauges de rôle — l'atelier suit aussitôt. */
+/* La pagination de la collection n'est pas remise à sa première page : elle
+   suit ce qu'on a demandé à voir. La replier faisait croire à un filtre resté
+   en place — une collection dépliée à huit cents cartes en rendait deux cents
+   après qu'un filtre eut été posé puis retiré. Seul un import, qui change la
+   collection elle-même, la ramène à sa première page. */
 function apresReglage(raison) {
   if (brouillon) { brouillon.redessine(); return; }
   /* Changer un filtre, un format, une couleur, c'est demander une autre
      liste : l'ordre gelé par les ajouts n'a plus lieu d'être. */
   if (typeof degeleSuggestions === 'function') degeleSuggestions();
   invaliderCandidats();
-  S.limitB = PAGE;
   /* Hors d'une fenêtre, un filtre change tout l'atelier : les candidates sont
      à rebâtir et à noter. C'est le recalcul annoncé, avec la raison du geste. */
   recalculerAvecProgression(raison || 'Un filtre a changé : les cartes retenues et les suggestions sont recalculées.');
@@ -971,7 +972,7 @@ function corpsFiltres() {
       <label class="lab" for="f_artiste">Illustrateur</label>
       <input type="text" id="f_artiste" data-filtre="artiste" value="${esc(S.filtres.artiste)}" placeholder="ex. John Avon, Rebecca Guay…" autocomplete="off">
     </div>
-    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier ») ; « Texte de règles » cherche dans le texte d'Oracle de la carte, celui qui décrit ses capacités, et accepte une phrase entière. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
+    <div class="small muted">Laissez un champ vide pour ne pas l'utiliser. Chaque champ cherche <b>ses mots un à un</b>, dans n'importe quel ordre : « Legendary creature » retient aussi « Legendary Enchantment Creature — God », et « draw card » les cartes qui disent « draw a card ». « Nom » ne regarde que le nom ; « Type » cherche dans la ligne de type, en français comme en anglais (« créature », « artifact », « human soldier ») ; « Texte de règles » cherche dans le texte d'Oracle de la carte, celui qui décrit ses capacités. Dès qu'une borne de force ou d'endurance est posée, les cartes qui n'en ont pas (sorts, terrains) sont écartées ; de même, filtrer par illustrateur écarte les cartes dont l'illustrateur n'est pas encore connu.</div>
     <div class="small muted">Ces filtres s'ajoutent aux couleurs choisies ci-dessus ; ils valent pour la collection affichée et pour les analyses qui en découlent.</div>
     <div class="warnbox" id="filtreResume">${resumeFiltres()}</div>`);
 }
@@ -1512,7 +1513,6 @@ function verseBrouillon() {
    l'atelier entier est repris. */
 async function appliquerFiltres() {
   verseBrouillon();
-  S.limitB = PAGE;
   await filtrerAvecProgression();
   closeDialog();
 }
