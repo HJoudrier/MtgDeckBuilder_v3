@@ -212,6 +212,17 @@ bout de `DELAI_BOITE`, sans quoi elle clignoterait pour un recalcul de deux dixi
 Et elle ne chasse jamais une fenêtre ouverte : si l'utilisateur lit une fiche ou remplit un
 formulaire, la barre se glisse dans le pied de cette fenêtre-là plutôt que de la refermer.
 
+La notation elle-même est mémorisée sous une empreinte — `signatureSuggestions()`, js/suggestions.js
+— qui réunit tout ce dont elle dépend : le deck et son commandant, la collection, les filtres, le
+budget entier, le format, les données EDHREC et les combos, jusqu'au compteur des cartes que
+Scryfall vient de compléter. Sans elle, la sélection ne servait qu'une fois et *tout* repeint de
+la section la repayait : ajouter une carte au deck déclenchait un recalcul, puis un deuxième quand
+le panneau EDHREC passait à « chargement… », puis un troisième à l'arrivée des combos. L'empreinte
+est relevée **après** la notation, jamais avant : bâtir le vivier enrôle des cartes du catalogue
+dans la base, et une empreinte prise avant naîtrait périmée. Le doute profite au recalcul — mieux
+vaut une empreinte trop large qu'une suggestion périmée —, mais l'état d'un chargement n'en fait
+pas partie : seules ses données comptent.
+
 Chaque geste dit sa raison, et c'est elle que la boîte affiche : « Couleur R retirée des
 filtres… », « Sol Ring ajoutée au deck : les suggestions sont renotées… ». Reste le filet, dans
 `renderF()` : un changement venu d'ailleurs — une archive qui finit de charger, une réponse de
@@ -471,8 +482,11 @@ Données : `VISUELS_CHARGES`
 | `vivierSuggestions()` | Constitue le vivier : toutes les cartes qu'on pourrait proposer, avant notation. |
 | `noterVivier(pool,X,res,debut,fin)` | Note une tranche du vivier. |
 | `ordonneSuggestions(res)` | Écarte les scores nuls, applique les filtres de l'en-tête et classe. |
-| `currentSuggestions()` | Vivier puis notation d'un bloc, ou reprise de la sélection déjà préparée. |
-| `prepareSuggestions(onProgress)` *(async)* | La même notation par tranches, mise de côté pour le rendu qui suit. |
+| `currentSuggestions()` | Vivier puis notation d'un bloc, ou reprise de la sélection mémorisée si son empreinte vaut encore. |
+| `prepareSuggestions(onProgress)` *(async)* | La même notation par tranches, celle qu'accompagne la barre de progression. |
+| `signatureSuggestions()` | L'empreinte de tout ce dont la notation dépend : deck, collection, filtres, budget, format, données EDHREC et combos, cartes complétées. |
+| `empreinteCollection()` | Un condensé bon marché de la collection, pour cette empreinte. |
+| `suggestionsAJour()` | La sélection mémorisée vaut-elle encore pour l'état courant ? |
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
 | `panneauEdhrec()` | Panneau EDHREC du commandant. |
 | `sugRow(s)` | Vignette d'une proposition. |

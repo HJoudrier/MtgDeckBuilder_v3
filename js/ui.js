@@ -1189,6 +1189,9 @@ function pausePeinte() {
    rebâtir depuis l'archive, ou le vivier à noter est déjà gros. */
 function recalculLong() {
   if (typeof CAT === 'undefined' || typeof CAND === 'undefined') return false;
+  /* Rien à renoter : la sélection vaut encore pour l'état courant, et le
+     rendu la reprendra telle quelle. */
+  if (typeof suggestionsAJour === 'function' && suggestionsAJour()) return false;
   const archive = CAT.etat === 'ok' && CAT.cartes.length > 0;
   if (archive && CAND.sig !== signatureCandidats()) return true;
   return (CAND.liste ? CAND.liste.length : 0) + S.collection.size > SEUIL_RECALCUL;

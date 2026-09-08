@@ -4,6 +4,11 @@
 
 let SYMS = null;
 
+/* Chaque carte complétée par Scryfall — texte, coût, prix, légalité — peut
+   changer sa note. Ce compteur entre dans l'empreinte des suggestions, qui
+   sans lui resservirait une sélection notée sur des cartes incomplètes. */
+let MAJ_CARTES = 0;
+
 async function loadSymbology() {
   if (typeof fetch !== 'function' || SYMS) return;
   try {
@@ -122,6 +127,7 @@ function applyScryfall(sc, requested, imagesOnly) {
     const art = sc.artist || (faces && faces[0] && faces[0].artist);
     if (art) target.artist = art;
     if (legal !== undefined) target.legal = legal;
+    MAJ_CARTES++;
     return true;
   }
 
