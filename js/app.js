@@ -239,6 +239,32 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'toAnnexe') {
+    versAnnexe(b.dataset.name, b.dataset.liste);
+    if (document.getElementById('dlg') && document.getElementById('dlg').open) {
+      openCardModal(b.dataset.name);
+    }
+    return;
+  }
+
+  if (act === 'dropAnnexe') {
+    retirerAnnexe(b.dataset.name, b.dataset.liste);
+    if (document.getElementById('dlg') && document.getElementById('dlg').open) {
+      openCardModal(b.dataset.name);
+    }
+    return;
+  }
+
+  if (act === 'clearAnnexe') {
+    const cle = b.dataset.liste, a = ANNEXES[cle];
+    openDialog(`Vider ${a.article}`,
+      `<p class="small">Cette action retire les ${annexeSize(cle)} carte(s) de ${esc(a.article)}. Le deck et la collection sont conservés.</p>`,
+      '<button class="btn" value="cancel" onclick="closeDialog()">Annuler</button><button class="btn danger" id="okClearAnnexe" value="ok">Vider</button>');
+    const ok = document.getElementById('okClearAnnexe');
+    if (ok) ok.onclick = () => { closeDialog(); viderAnnexe(cle); };
+    return;
+  }
+
   if (act === 'deckDrop') {
     S.deck.delete(b.dataset.name);
     if (S.commander === b.dataset.name) S.commander = null;
@@ -331,6 +357,7 @@ document.addEventListener('click', ev => {
       idbVider();
       S.collection.clear();
       S.deck.clear();
+      CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
       S.commander = null;
       saveState = storageOK ? 'ok' : 'off';
       saveError = '';
@@ -421,7 +448,7 @@ document.addEventListener('click', ev => {
 
   if (act === 'clearDeck') {
     openDialog('Vider le deck',
-      '<p class="small">Cette action retire toutes les cartes du deck. La collection est conservée.</p>',
+      '<p class="small">Cette action retire toutes les cartes de la liste principale. La collection, la réserve et les cartes à l\'étude sont conservées — chaque liste annexe a son propre bouton « Vider ».</p>',
       '<button class="btn" value="cancel" onclick="closeDialog()">Annuler</button><button class="btn danger" id="okClear" value="ok">Vider</button>');
     const okClear = document.getElementById('okClear');
     if (okClear) okClear.onclick = () => {

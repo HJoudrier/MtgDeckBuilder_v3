@@ -50,6 +50,14 @@ function mergeInto(card, canonical) {
   if (d) S.deck.set(canonical.name, (S.deck.get(canonical.name) || 0) + d);
   S.collection.delete(card.name);
   S.deck.delete(card.name);
+  /* La réserve et l'étude portent les mêmes noms : elles suivent la fusion,
+     sans quoi la carte y resterait sous un nom que la base ne connaît plus. */
+  CLES_ANNEXES.forEach(cle => {
+    const l = annexeListe(cle), n = l.get(card.name) || 0;
+    if (!n) return;
+    l.set(canonical.name, (l.get(canonical.name) || 0) + n);
+    l.delete(card.name);
+  });
   const i = DB.indexOf(card);
   if (i >= 0) DB.splice(i, 1);
   unindexCard(card);
@@ -66,7 +74,7 @@ function renameCard(card, newName) {
   unindexCard(card);
   card.name = newName;
   indexCard(card);
-  [S.collection, S.deck].forEach(m => {
+  [S.collection, S.deck, ...CLES_ANNEXES.map(annexeListe)].forEach(m => {
     if (m.has(old)) {
       m.set(newName, (m.get(newName) || 0) + m.get(old));
       m.delete(old);
@@ -117,13 +125,24 @@ function parseMtgoList(txt) {
   String(txt).replace(/^\uFEFF/, '').split(/\r?\n/).forEach(raw => {
     let l = raw.replace(/\t+/g, ' ').trim();
     if (!l || /^(\/\/|#)/.test(l)) return;
-    const entete = l.match(/^(deck|sideboard|commander|companion|maybeboard|tokens?)\s*:?\s*$/i);
+    const entete = l.match(/^(deck|sideboard|commander|companion|maybeboard|considering|tokens?)\s*:?\s*$/i);
     if (entete) {
+      /* Les en-têtes reconnus mènent chacun à une liste : le deck, la
+         réserve — le sideboard, et le compagnon qui l'accompagne —, l'étude
+         — le maybeboard des sites de decks —, le commandant. Les jetons
+         restent écartés : ils ne se jouent pas depuis la main. */
       const h = entete[1].toLowerCase();
-      section = h === 'commander' ? 'commandant' : (h === 'deck' ? 'deck' : 'reserve');
+      section = h === 'commander' ? 'commandant'
+        : h === 'deck' ? 'deck'
+        : h === 'sideboard' || h === 'companion' ? 'sideboard'
+        : h === 'maybeboard' || h === 'considering' ? 'considering'
+        : 'jetons';
       return;
     }
-    l = l.replace(/^sb:\s*/i, '');
+    /* « SB: » en tête de ligne est la marque du sideboard dans les listes
+       MTGO : elle vaut section, ligne à ligne. */
+    let sectionLigne = section;
+    if (/^sb:\s*/i.test(l)) { sectionLigne = 'sideboard'; l = l.replace(/^sb:\s*/i, ''); }
     const m = l.match(/^(\d+)\s*[xX]?\s+(.+)$/);
     let qty = 1, nm = l;
     if (m) { qty = parseInt(m[1], 10) || 1; nm = m[2]; }
@@ -136,11 +155,14 @@ function parseMtgoList(txt) {
     nm = nm.replace(/\s*(?:\/\/|\||\/)\s*/g, ' // ').replace(/\s{2,}/g, ' ').trim();
     if (!nm) return;
     // deux impressions d'une même carte restent deux lignes : leurs codes
-    // d'édition et leurs numéros sont conservés l'un et l'autre
-    const k = norm(nm) + '|' + ed.set + '|' + ed.num;
+    // d'édition et leurs numéros sont conservés l'un et l'autre. La section
+    // entre dans la clé depuis que la réserve et l'étude ont leur liste :
+    // sans elle, les deux exemplaires de réserve d'une carte déjà jouée
+    // grossiraient le deck au lieu de rester à côté.
+    const k = norm(nm) + '|' + ed.set + '|' + ed.num + '|' + sectionLigne;
     const dejaVu = out.get(k);
     out.set(k, {name:nm, qty:(dejaVu ? dejaVu.qty : 0) + Math.max(1, qty),
-      section:dejaVu ? dejaVu.section : section, set:ed.set, num:ed.num});
+      section:dejaVu ? dejaVu.section : sectionLigne, set:ed.set, num:ed.num});
   });
   return [...out.values()];
 }
@@ -193,7 +215,7 @@ function openImport(cible) {
   const versDeck = cible === 'deck';
   openDialog(versDeck ? 'Importer un deck (format MTGO)' : 'Importer une liste MTGO',
     `<p class="small muted">Une carte par ligne, au format « 4 Sol Ring ». Le code d'édition entre parenthèses et le numéro de collection qui le suit sont relevés (« 1 Sol Ring (LTC) 344 », « 1 [ELD#331] Arcane Signet ») : la carte est alors demandée à Scryfall dans cette impression précise, avec son visuel, son illustrateur et son prix. Les autres commentaires sont ignorés. ${versDeck
-      ? 'Les en-têtes « Sideboard » et « Commander » sont reconnus : la réserve est écartée, le commandant est désigné automatiquement.'
+      ? 'Les en-têtes sont reconnus : « Sideboard » (et les lignes « SB: ») remplit la réserve, « Maybeboard » ou « Considering » les cartes à l\'étude, « Commander » désigne le commandant, les jetons sont écartés.'
       : 'Les cartes absentes de la base sont créées puis complétées.'}</p>
      <div class="row" style="gap:8px;align-items:center">
        <label class="btn" for="impFile" style="margin:0;cursor:pointer">Choisir un fichier…</label>
@@ -201,7 +223,7 @@ function openImport(cible) {
        <span class="small muted" id="impInfo">ou déposez-le sur la zone ci-dessous, ou collez la liste</span>
      </div>
      <textarea id="imp" placeholder="1 Sol Ring (LTC) 344&#10;1 Rhystic Study&#10;4 Lightning Bolt (2X2) 117"></textarea>
-     ${versDeck ? `<label class="row small" style="gap:6px"><input type="checkbox" id="impReplace" checked> Vider le deck avant l'import</label>
+     ${versDeck ? `<label class="row small" style="gap:6px"><input type="checkbox" id="impReplace" checked> Vider le deck, la réserve et l'étude avant l'import</label>
        <label class="row small" style="gap:6px"><input type="checkbox" id="impStock"> Considérer que vous possédez déjà tout (ajoute les manquants à la collection)</label>
        <div class="small muted">Sinon, les cartes absentes de la collection entrent quand même dans le deck et sont comptées à l'achat.</div>` : ''}
      <label class="row small" style="gap:6px"><input type="checkbox" id="impEnrich" checked> Compléter les cartes inconnues via Scryfall (nécessite une connexion)</label>`,
@@ -254,11 +276,16 @@ function openImport(cible) {
     const entries = parseMtgoList(txt);
     // les champs sont lus : la fenêtre a fait son office
     closeDialog();
-    let known = 0, created = 0, qty = 0, reserve = 0, manquants = 0, avecEdition = 0;
+    let known = 0, created = 0, qty = 0, manquants = 0, avecEdition = 0, jetons = 0, doublons = 0;
+    const annexes = {sideboard:0, considering:0};
     const fresh = [];
     let cmd = null;
 
-    if (remplacer) { S.deck.clear(); S.commander = null; }
+    if (remplacer) {
+      S.deck.clear();
+      CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
+      S.commander = null;
+    }
     entries.forEach(e => {
       let c = find(e.name);
       if (!c) {
@@ -276,7 +303,18 @@ function openImport(cible) {
         qty += e.qty;
         return;
       }
-      if (e.section === 'reserve') { reserve += e.qty; return; }
+      if (e.section === 'jetons') { jetons += e.qty; return; }
+      /* La réserve et l'étude ont désormais leur place dans la section Deck :
+         ces lignes ne sont plus jetées, elles y vont. Une carte que la liste
+         principale porte déjà y reste — le deck l'emporte, et la ligne est
+         comptée à part plutôt que d'être perdue en silence. */
+      if (ANNEXES[e.section]) {
+        if (S.deck.get(c.name)) { doublons += e.qty; return; }
+        const l = annexeListe(e.section);
+        l.set(c.name, (l.get(c.name) || 0) + e.qty);
+        annexes[e.section] += e.qty;
+        return;
+      }
       const pose = deckAdd(c, e.qty, {completer, force:true});
       qty += pose;
       manquants += deckAdd.dernierAchat || 0;
@@ -295,7 +333,7 @@ function openImport(cible) {
       S.limitB = PAGE;
       renderAll();
       toast(versDeck
-        ? `${qty} carte(s) placées dans le deck${reserve ? ` · ${reserve} en réserve ignorées` : ''}${cmd ? ` · commandant : ${cmd}` : ''}${manquants ? ` · ${manquants} à acheter pour ${eur(spent())}` : ''}${created ? ` · ${created} carte(s) créées` : ''}${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`
+        ? `${qty} carte(s) placées dans le deck${CLES_ANNEXES.filter(cle => annexes[cle]).map(cle => ` · ${annexes[cle]} en ${ANNEXES[cle].titre.toLowerCase()}`).join('')}${jetons ? ` · ${jetons} jeton(s) ignorés` : ''}${doublons ? ` · ${doublons} déjà dans la liste principale` : ''}${cmd ? ` · commandant : ${cmd}` : ''}${manquants ? ` · ${manquants} à acheter pour ${eur(spent())}` : ''}${created ? ` · ${created} carte(s) créées` : ''}${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`
         : `${entries.length} ligne(s) lues · ${qty} exemplaires · ${known} carte(s) déjà connues · ${created} créée(s)${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`);
       if (wantEnrich && fresh.length) completeUnknown(fresh);
     }, 10);
@@ -303,6 +341,10 @@ function openImport(cible) {
 }
 
 function ajouterCarte(c, q, cible, completer) {
+  if (ANNEXES[cible]) {
+    versAnnexe(c.name, cible, q);
+    return;
+  }
   if (cible === 'deck') {
     const n = deckAdd(c, q, {completer});
     renderAll();
@@ -398,10 +440,12 @@ function majResultats(cible, sansRelancer) {
 
 function openAdd(cible) {
   const versDeck = cible === 'deck';
+  const annexe = ANNEXES[cible];
   scryRes = new Map();
   scryEtat = '';
   clearTimeout(scryTimer);
-  openDialog(versDeck ? 'Ajouter une carte au deck' : 'Ajouter une carte à la collection',
+  openDialog(annexe ? `Ajouter une carte à ${annexe.article}`
+    : versDeck ? 'Ajouter une carte au deck' : 'Ajouter une carte à la collection',
     `<div class="row" style="align-items:flex-end">
        <div class="field" style="flex:1;min-width:180px"><label class="lab" for="addN">Rechercher</label>
          <input id="addN" type="text" data-recherche="${cible}" placeholder="nom de la carte…" autocomplete="off"></div>
@@ -409,6 +453,7 @@ function openAdd(cible) {
          <input id="addQ" type="number" min="1" value="1" style="width:90px"></div>
      </div>
      ${versDeck ? `<label class="row small" style="gap:6px"><input type="checkbox" id="addStock"> Ajouter aussi à la collection (sinon la carte est comptée à l'achat)</label>` : ''}
+     ${annexe ? `<div class="small muted">${esc(annexe.aide)} Une carte posée ici quitte le deck s'il la portait : les trois listes s'excluent.</div>` : ''}
      <div id="addRes">${resultatsHTML('', cible)}</div>`,
     '<button class="btn" value="cancel">Fermer</button>', true);
 }

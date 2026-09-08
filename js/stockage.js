@@ -50,7 +50,7 @@ function snapshot() {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
       if (c.img || c.cmUrl || c.artist || c.textFull || c.set) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...impressionSnap(c)});
-    } else if (c.externe && !(S.collection.get(c.name) > 0) && !S.deck.has(c.name)) {
+    } else if (c.externe && !(S.collection.get(c.name) > 0) && !S.deck.has(c.name) && !annexeDe(c.name)) {
       // vivier d'exploration : non conservé
     } else {
       cartes.push({
@@ -68,6 +68,8 @@ function snapshot() {
     date: Date.now(),
     collection: [...S.collection],
     deck: [...S.deck],
+    sideboard: [...S.sideboard],
+    considering: [...S.considering],
     commander: S.commander,
     colors: [...S.colors],
     colorMode: S.colorMode,
@@ -169,6 +171,12 @@ function restore(d) {
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));
   S.deck = new Map((d.deck || []).filter(([n]) => find(n)));
+  /* Les listes annexes suivent le deck, et la même règle : un nom que la base
+     ne connaît plus ne revient pas. Une sauvegarde antérieure n'en a pas, et
+     les listes restent vides. */
+  CLES_ANNEXES.forEach(cle => {
+    S[cle] = new Map((d[cle] || []).filter(([n]) => find(n) && !S.deck.has(n)));
+  });
   S.commander = d.commander && find(d.commander) ? d.commander : null;
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
   ['colorMode','format','sort','view','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });

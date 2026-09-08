@@ -12,6 +12,29 @@ const FORMATS = {
   perso:    {label:'Personnalisé',    size:100, commander:false, maxCopies:1,  lands:36, legal:'',  scry:''}
 };
 
+/* Les deux listes annexes de la section Deck : la réserve — le sideboard —
+   et les cartes à l'étude — le considering des sites de decks. Elles tiennent
+   les cartes qu'on garde à côté sans les jouer, et le deck, la réserve et
+   l'étude s'excluent : une carte vit dans l'une des trois, jamais dans deux à
+   la fois, si bien que l'y poser l'en retire ailleurs. Rien de ce qu'elles
+   portent ne compte dans la taille du deck, sa légalité, sa courbe, ses rôles
+   ni ses achats : ce sont des listes d'attente, pas le deck. */
+const ANNEXES = {
+  sideboard: {
+    titre: 'Réserve', anglais: 'sideboard', article: 'la réserve',
+    poser: 'Mettre en réserve', retirer: 'Retirer de la réserve',
+    aide: "Les cartes tenues prêtes à côté du deck, comme la réserve d'un tournoi.",
+    vide: "La réserve est vide : les cartes envoyées ici quittent la liste principale sans quitter le deck des yeux."
+  },
+  considering: {
+    titre: "À l'étude", anglais: 'considering', article: "l'étude",
+    poser: "Mettre à l'étude", retirer: "Retirer de l'étude",
+    aide: "Les cartes qu'on hésite à jouer : elles attendent ici sans peser sur le deck.",
+    vide: "Aucune carte à l'étude : posez-y les pistes que vous n'avez pas encore tranchées."
+  }
+};
+const CLES_ANNEXES = Object.keys(ANNEXES);
+
 const RETOURNEES = new Set();
 let apercuEl = null;
 let apercuCardName = null;
@@ -19,6 +42,8 @@ let apercuCardName = null;
 const S = {
   collection: new Map(),
   deck: new Map(),
+  sideboard: new Map(),      // la réserve, hors de la liste principale
+  considering: new Map(),    // les cartes à l'étude, hors de la liste principale
   commander: null,
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',

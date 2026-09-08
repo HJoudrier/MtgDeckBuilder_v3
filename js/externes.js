@@ -1068,7 +1068,8 @@ function catalogueObsolete() {
 async function majPrix(force) {
   if (typeof fetch !== 'function') return;
   if (!force && S.prixMaj && Date.now() - S.prixMaj < 20 * 3600e3) return;
-  const noms = [...new Set([...S.collection.keys(), ...S.deck.keys()])].filter(n => find(n));
+  const noms = [...new Set([...S.collection.keys(), ...S.deck.keys(),
+    ...CLES_ANNEXES.flatMap(cle => [...annexeListe(cle).keys()])])].filter(n => find(n));
   if (!noms.length) return;
   let maj = 0;
   for (let i = 0; i < noms.length; i += 75) {
@@ -1339,7 +1340,8 @@ function signatureCandidats() {
    intégrée et les prix des cartes possédées ou jouées. */
 function appliqueCatalogueAuxCartes() {
   if (!CAT.cartes.length) return;
-  const utiles = new Set([...S.collection.keys(), ...S.deck.keys()].map(norm));
+  const utiles = new Set([...S.collection.keys(), ...S.deck.keys(),
+    ...CLES_ANNEXES.flatMap(cle => [...annexeListe(cle).keys()])].map(norm));
   const aCompleter = new Map();
   DB.forEach(c => { if (!c.textFull && !c.unknown) aCompleter.set(norm(c.name), c); });
   if (!utiles.size && !aCompleter.size) return;

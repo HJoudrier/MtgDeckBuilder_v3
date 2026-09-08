@@ -21,6 +21,121 @@ function availableFor(card) {
   return (S.collection.get(card.name) || 0) - (S.deck.get(card.name) || 0);
 }
 
+/* =====================================================================
+   Les listes annexes — réserve et étude. Mêmes gestes que le deck, mais
+   à côté de lui : elles ne comptent ni dans la taille, ni dans la légalité,
+   ni dans la courbe, ni dans les rôles, ni dans les achats. `ANNEXES`
+   (js/etat.js) dit ce que chacune est ; ce qui suit ne connaît que leur clé.
+   ===================================================================== */
+
+function annexeListe(cle) {
+  return S[cle] instanceof Map ? S[cle] : new Map();
+}
+
+/* Les mêmes entrées que `deckEntries()`, dans le même ordre : type, coût,
+   nom. Les deux listes s'affichent comme le deck, il leur faut son tri. */
+function annexeEntries(cle) {
+  const out = [];
+  annexeListe(cle).forEach((q, n) => {
+    const c = find(n);
+    if (c && q > 0) out.push({card:c, qty:q});
+  });
+  return out.sort((a, b) => TYPE_ORDER.indexOf(mainType(a.card)) - TYPE_ORDER.indexOf(mainType(b.card)) || a.card.cmc - b.card.cmc || a.card.name.localeCompare(b.card.name));
+}
+
+function annexeSize(cle) {
+  let n = 0;
+  annexeListe(cle).forEach(q => n += q);
+  return n;
+}
+
+/* Où vit cette carte hors du deck : la clé de la liste, ou rien. */
+function annexeDe(nom) {
+  return CLES_ANNEXES.find(k => annexeListe(k).has(nom)) || null;
+}
+
+/* Le déplacement emporte tous les exemplaires : les trois listes s'excluant,
+   une carte partagée entre deux d'entre elles n'aurait pas de sens. Vers le
+   deck, le format borne malgré tout les copies — le reste attend là où il
+   était. Rend le nombre d'exemplaires déplacés. */
+function deplacerCarte(nom, cible) {
+  const c = find(nom); if (!c) return 0;
+  const source = (S.deck.get(nom) || 0) ? 'deck' : annexeDe(nom);
+  if (source === cible) return 0;
+  const dispo = source === 'deck' ? (S.deck.get(nom) || 0) : (source ? annexeListe(source).get(nom) : 0);
+  let n = Math.max(1, dispo);
+
+  if (cible === 'deck') {
+    const f = fmt();
+    const max = /^Basic Land/i.test(c.type) ? n : Math.max(0, f.maxCopies - (S.deck.get(nom) || 0));
+    n = Math.min(n, max);
+    if (n <= 0) { toast(`${nom} : limite de ${f.maxCopies} copie(s) atteinte dans le deck.`); return 0; }
+    S.deck.set(nom, (S.deck.get(nom) || 0) + n);
+  } else {
+    annexeListe(cible).set(nom, (annexeListe(cible).get(nom) || 0) + n);
+  }
+
+  if (source === 'deck') {
+    const reste = (S.deck.get(nom) || 0) - (cible === 'deck' ? 0 : n);
+    if (reste > 0) S.deck.set(nom, reste); else S.deck.delete(nom);
+    /* Le commandant part avec sa carte : le deck n'en a plus. */
+    if (cible !== 'deck' && S.commander === nom && !S.deck.has(nom)) S.commander = null;
+  } else if (source) {
+    const reste = dispo - n;
+    if (reste > 0) annexeListe(source).set(nom, reste); else annexeListe(source).delete(nom);
+  }
+  return n;
+}
+
+/* Poser une carte dans une liste annexe, d'où qu'elle vienne : du deck, de
+   l'autre liste, ou de nulle part — la collection, la recherche, une
+   suggestion. */
+function versAnnexe(nom, cle, qty) {
+  const c = find(nom); if (!c || !ANNEXES[cle]) return;
+  const a = ANNEXES[cle], l = annexeListe(cle);
+  const demande = Math.max(1, qty || 1);
+  const source = (S.deck.get(nom) || 0) ? 'deck' : annexeDe(nom);
+
+  /* Déjà là : la demande s'ajoute. Ailleurs : la carte déménage avec ses
+     exemplaires, et la demande complète ce que le déménagement n'apporte
+     pas. Nulle part : elle arrive telle qu'on la demande. */
+  let deplaces = 0;
+  if (source && source !== cle) {
+    deplaces = deplacerCarte(nom, cle);
+    if (!deplaces) return;
+  }
+  const reste = demande - (deplaces || 0);
+  if (reste > 0) l.set(nom, (l.get(nom) || 0) + reste);
+
+  renderAll();
+  const total = l.get(nom) || 0;
+  toast(source === 'deck' ? `${nom} quitte le deck pour ${a.article} (×${total}).`
+    : source && source !== cle ? `${nom} déplacée vers ${a.article} (×${total}).`
+    : `${nom} dans ${a.article} : ×${total}.`);
+}
+
+/* Un exemplaire retiré d'une liste annexe ; le dernier retire la carte. */
+function retirerAnnexe(nom, cle) {
+  const l = annexeListe(cle), cur = l.get(nom) || 0;
+  if (cur <= 1) l.delete(nom); else l.set(nom, cur - 1);
+  renderAll();
+}
+
+function viderAnnexe(cle) {
+  annexeListe(cle).clear();
+  renderAll();
+  toast(`${ANNEXES[cle].titre} : liste vidée.`);
+}
+
+/* Le tag que portent, partout ailleurs, les cartes garées dans une annexe :
+   sans lui, on reproposerait sans fin une carte déjà mise de côté. */
+function tagAnnexe(card) {
+  const cle = card ? annexeDe(card.name) : null;
+  if (!cle) return '';
+  const n = annexeListe(cle).get(card.name);
+  return `<span class="tag" style="border-color:#6f7bd0;color:#9aa4e6" title="${esc(ANNEXES[cle].aide)}">${esc(ANNEXES[cle].titre.toLowerCase())}${n > 1 ? ` ×${n}` : ''}</span>`;
+}
+
 function targets() {
   const f = fmt(), k = f.size / 100;
   if (S.format === 'limite') return {terrains:17, creatures:15, interaction:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
@@ -95,6 +210,17 @@ function legality() {
 function addToDeck(name) {
   const c = find(name); if (!c) return;
   const f = fmt();
+  /* La carte attendait dans une liste annexe : elle passe dans le deck avec
+     ses exemplaires, plutôt que d'y être ajoutée une seconde fois. */
+  const annexe = annexeDe(name);
+  if (annexe) {
+    const n = deplacerCarte(name, 'deck');
+    if (!n) return;
+    if (f.commander && !S.commander && c.isLegendaryCreature) S.commander = name;
+    renderAll();
+    toast(`${name} ×${n} quitte ${ANNEXES[annexe].article} pour le deck.`);
+    return;
+  }
   const cur = S.deck.get(name) || 0;
   if (!/^Basic Land/i.test(c.type) && cur >= f.maxCopies) { toast(`${name} : limite de ${f.maxCopies} copie(s) atteinte.`); return; }
   const aPayer = availableFor(c) <= 0;
@@ -110,6 +236,10 @@ function addToDeck(name) {
 function deckAdd(card, qty, opts) {
   opts = opts || {};
   const f = fmt();
+  /* Le deck l'emporte sur les listes annexes : une carte qui y entre quitte
+     la réserve ou l'étude, les trois listes s'excluant. */
+  const annexe = annexeDe(card.name);
+  if (annexe) annexeListe(annexe).delete(card.name);
   let n = 0, achetees = 0;
   for (let i = 0; i < qty; i++) {
     const cur = S.deck.get(card.name) || 0;
@@ -364,6 +494,15 @@ function ficheHTML(card) {
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
           : (offre ? `hors collection — ≈ ${eur(offre.price)} sur Cardmarket (${offre.condition} ou mieux)` : 'hors collection et hors budget')}</div>
+        ${(() => {
+          /* Où cette carte se trouve, si ce n'est pas dans la liste
+             principale : sans cela, la fiche laisserait croire qu'elle
+             n'est nulle part. */
+          const cle = annexeDe(card.name);
+          if (!cle) return '';
+          const q = annexeListe(cle).get(card.name) || 0;
+          return `<div class="small" style="color:#9aa4e6">Hors de la liste principale : ${esc(ANNEXES[cle].titre.toLowerCase())}${q > 1 ? ` ×${q}` : ''}.</div>`;
+        })()}
       </div>
     </div>
     <div class="bloc"><h4>Ce qu'elle apporte au deck</h4>
@@ -413,11 +552,20 @@ function openCardModal(name) {
   chercheImpressions(card).then(rouvre);
   cacherApercu();
   const dispo = availableFor(card), offre = dispo > 0 ? null : bestOffer(card);
+  /* Une carte garée dans une liste annexe remonte au deck telle quelle : elle
+     y est déjà, il n'y a rien à acheter pour l'y mettre. */
+  const annexe = annexeDe(card.name);
   const actions = [
-    dispo > 0
+    annexe
+      ? `<button type="button" class="btn pri" data-act="toDeck" data-name="${esc(card.name)}">Remonter dans le deck</button>`
+      : dispo > 0
       ? `<button type="button" class="btn pri" data-act="toDeck" data-name="${esc(card.name)}">Ajouter au deck</button>`
       : (offre ? `<button type="button" class="btn pri" data-act="buy" data-name="${esc(card.name)}">Acheter + ajouter</button>` : ''),
     (S.deck.get(card.name) || 0) ? `<button type="button" class="btn" data-act="fromDeck" data-name="${esc(card.name)}">Retirer du deck</button>` : '',
+    /* Les deux listes annexes : y poser la carte, ou l'en retirer. */
+    ...CLES_ANNEXES.map(cle => annexeDe(card.name) === cle
+      ? `<button type="button" class="btn" data-act="dropAnnexe" data-liste="${cle}" data-name="${esc(card.name)}">${esc(ANNEXES[cle].retirer)}</button>`
+      : `<button type="button" class="btn" data-act="toAnnexe" data-liste="${cle}" data-name="${esc(card.name)}" title="${esc(ANNEXES[cle].aide)}">${esc(ANNEXES[cle].poser)}</button>`),
     `<a class="btn" href="${esc(cmLink(card))}" target="_blank" rel="noopener">Cardmarket ↗</a>`,
     `<button type="button" class="btn" data-act="closeDialog">Fermer</button>`
   ].filter(Boolean).join('');
@@ -507,6 +655,31 @@ function evalueDeck(entries) {
   });
 }
 
+/* Une des deux listes annexes, rendue comme le deck : mêmes tuiles, mêmes
+   filtres d'en-tête — ce qu'ils masquent est annoncé plutôt que tu. */
+function blocAnnexe(cle) {
+  const a = ANNEXES[cle];
+  const toutes = annexeEntries(cle);
+  const entries = toutes.filter(e => carteFiltree(e.card));
+  const n = toutes.reduce((x, e) => x + e.qty, 0);
+  const masquees = n - entries.reduce((x, e) => x + e.qty, 0);
+  const valeur = toutes.reduce((x, e) => x + (e.card.price || 0) * e.qty, 0);
+
+  return `<div class="group" id="bloc-${cle}" style="margin-top:12px">
+    <h4>${esc(a.titre)} <span class="small muted">${esc(a.anglais)}</span>
+      <span class="small muted">· ${n} carte(s)${n ? ` · ${eur(valeur)}` : ''}${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}</span></h4>
+    <div class="small muted" style="margin-bottom:6px">${esc(a.aide)}</div>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn sm" data-act="addCard" data-cible="${cle}">Ajouter</button>
+      ${n ? `<button class="btn sm danger" data-act="clearAnnexe" data-liste="${cle}">Vider</button>` : ''}
+    </div>
+    ${entries.length
+      ? (S.view === 'grid' ? `<div class="grid">${entries.map(e => cardTile(e, cle)).join('')}</div>`
+                           : `<div class="list">${entries.map(e => cardRow(e, cle)).join('')}</div>`)
+      : `<div class="empty">${n ? `Les filtres de l'en-tête masquent les ${n} carte(s) de cette liste.` : esc(a.vide)}</div>`}
+  </div>`;
+}
+
 function renderE() {
   const toutes = deckEntries(), n = deckSize(), f = fmt(), cnt = deckCounts(), tgt = targets();
   evalueDeck(toutes);
@@ -538,6 +711,8 @@ function renderE() {
         <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">CMC moyen <b>${avg.toFixed(2)}</b></span>
         <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">Valeur <b>${eur(price)}</b></span>
         ${S.commander ? `<span class="pill">Commandant <b>${esc(S.commander)}</b></span>` : ''}
+        ${CLES_ANNEXES.map(cle => { const q = annexeSize(cle); return q
+          ? `<span class="pill" title="${esc(ANNEXES[cle].aide)} Hors de la liste principale.">${esc(ANNEXES[cle].titre)} <b>${q}</b></span>` : ''; }).join('')}
         ${(() => {
           const a = aAcheter();
           const qte = a.reduce((x, l) => x + l.qty, 0);
@@ -565,11 +740,18 @@ function renderE() {
         ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
                           : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
         : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`
-             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>')}`;
+             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>')}
+      <h3 style="margin:16px 0 6px;font-size:15px">Hors de la liste principale</h3>
+      <div class="small muted">Deux listes tenues à côté du deck. Ce qu'elles portent ne compte ni dans la taille du deck,
+        ni dans sa conformité, ni dans sa courbe, ses rôles ou ses achats. Une carte ne vit que dans l'une des trois listes :
+        l'envoyer ici la retire du deck, la remonter (▲) l'y ramène. La fiche d'une carte — le bouton « i » — porte les mêmes
+        gestes, et fait passer une carte d'une liste à l'autre.</div>
+      ${CLES_ANNEXES.map(blocAnnexe).join('')}`;
   }
 
   const hintEl = document.getElementById('hintE');
-  if (hintEl) hintEl.textContent = `${n}/${f.size}`;
-  setTimeout(() => queueScryfall(entries.map(e => e.card)), 0);
+  const horsListe = CLES_ANNEXES.map(cle => [ANNEXES[cle].titre.toLowerCase(), annexeSize(cle)]).filter(([, q]) => q);
+  if (hintEl) hintEl.textContent = `${n}/${f.size}${horsListe.length ? ` · ${horsListe.map(([t, q]) => `${t} ${q}`).join(' · ')}` : ''}`;
+  setTimeout(() => queueScryfall(entries.concat(...CLES_ANNEXES.map(annexeEntries)).map(e => e.card)), 0);
   scheduleCombos();
 }

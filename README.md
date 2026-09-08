@@ -127,7 +127,12 @@ EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
 *20 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`
+Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`
+
+`ANNEXES` décrit les deux listes tenues à côté du deck — leur titre, le mot anglais des listes
+MTGO qui les nomme, l'aide affichée et les libellés de leurs boutons. Tout ce qui les manipule
+ne connaît que leur clé, `sideboard` ou `considering` : ajouter une troisième liste tiendrait
+dans cette table.
 
 Chaque format de `FORMATS` (js/etat.js) dit ce qu'il exige : `legal` est la lettre
 qu'emploie `codeLegalite()`, `scry` le nom que Scryfall donne au format dans ses
@@ -331,11 +336,11 @@ Données : `STORE_KEY`, `STORE_OFF`
 | `idbLire(cle)` | Lit une clé de l'archive. |
 | `idbEcrire(cle,val)` | Écrit une clé dans l'archive. |
 | `idbVider()` | Efface l'archive du catalogue. |
-| `snapshot()` | Instantané de l'état à enregistrer. |
+| `snapshot()` | Instantané de l'état à enregistrer, deck et listes annexes compris. |
 | `ecrire(payload)` | Écriture brute dans localStorage. |
 | `save()` | Enregistre, avec repli allégé si l'espace manque. |
 | `scheduleSave()` | Enregistrement différé après une modification. |
-| `restore(d)` | Restaure un instantané, cartes importées comprises. |
+| `restore(d)` | Restaure un instantané, cartes importées comprises ; une sauvegarde antérieure aux listes annexes les laisse vides. |
 | `chargerSauvegarde()` | Relit la sauvegarde existante. |
 | `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale, le catalogue ayant désormais la sienne. |
 | `blocCatalogue()` | Gestion de l'archive — état, taille, mises à jour — affichée dans la fenêtre du catalogue. |
@@ -462,22 +467,48 @@ par nom ; les éditions relevées s'ajoutent les unes aux autres sur la même ca
 | `renderB()` | Rend la collection, en grille ou en liste, avec pagination ; les filtres se règlent dans l'en-tête. |
 | `retireExtrait(s,i,n)` | Retire un fragment d'une ligne et recolle le reste. |
 | `extraitEdition(texte)` | Isole le code d'édition et le numéro de collection d'une ligne importée. |
-| `parseMtgoList(txt)` | Lit une liste MTGO : quantités, éditions et numéros de collection, réserve, commandant. |
-| `openImport(cible)` | Boîte d'import, par fichier, glisser-déposer ou collage. |
+| `parseMtgoList(txt)` | Lit une liste MTGO ligne à ligne : quantité, nom, édition, et la section — deck, sideboard, maybeboard ou considering, commandant, jetons — que la ligne rejoint. |
+| `openImport(cible)` | Boîte d'import, par fichier, glisser-déposer ou collage. Vers le deck, les sections de la liste se répartissent entre la liste principale, la réserve et l'étude. |
 | `ajouterCarte(c,q,cible,completer)` | Ajoute une carte à la collection ou au deck. |
 | `chercheCartes(q)` | Recherche par nom dans le catalogue local, filtrée par couleur. |
 | `resultatsHTML(q,cible)` | Liste des propositions de la boîte d'ajout. |
 | `majResultats(cible,sansRelancer)` | Met à jour ces propositions à la frappe. |
-| `openAdd(cible)` | Boîte d'ajout avec recherche locale puis en ligne. |
+| `openAdd(cible)` | Boîte d'ajout avec recherche locale puis en ligne. La cible est la collection, le deck ou l'une des deux listes annexes. |
 
 ### `js/deck.js` — Deck
 
-Composition, équilibre des rôles, commandant, conformité au format et cartes à acheter.
+Composition, équilibre des rôles, commandant, conformité au format et cartes à acheter,
+plus les deux listes tenues à côté de la liste principale : la réserve et l'étude.
 
 *12 fonction(s), 13 Ko*
 
+La section porte trois listes. La **liste principale** est le deck : elle seule compte dans la
+taille, la conformité au format, la courbe de mana, l'équilibre des rôles et les achats. À côté
+d'elle, deux **listes annexes** décrites par `ANNEXES` (js/etat.js) : la **Réserve**
+(`S.sideboard`, le *sideboard* des listes MTGO) et **À l'étude** (`S.considering`, le
+*considering* ou *maybeboard* des sites de decks). Elles tiennent les cartes qu'on garde sous la
+main sans les jouer, et rien de ce qu'elles portent n'entre dans un décompte du deck — pas même
+les achats : une carte mise de côté n'est pas une carte à acheter.
+
+Les trois listes s'excluent : une carte vit dans l'une d'elles, jamais dans deux à la fois. Y
+poser une carte l'ôte donc d'où elle était, et le déplacement emporte tous ses exemplaires —
+`deplacerCarte()`. Le deck l'emporte partout où le doute existe : `deckAdd()` retire la carte de
+sa liste annexe, et l'import garde en réserve ce que la liste principale ne porte pas déjà.
+Ailleurs dans l'atelier — collection, suggestions —, une carte garée se signale par le tag que
+rend `tagAnnexe()`, sans quoi on la reproposerait sans fin.
+
 | Fonction | Rôle |
 |---|---|
+| `annexeListe(cle)` | La `Map` d'une liste annexe, désignée par sa clé. |
+| `annexeEntries(cle)` | Ses cartes, triées comme celles du deck : type, coût, nom. |
+| `annexeSize(cle)` | Nombre d'exemplaires qu'elle porte. |
+| `annexeDe(nom)` | Où vit cette carte hors du deck, ou rien. |
+| `deplacerCarte(nom,cible)` | Déplace une carte d'une liste à l'autre, avec ses exemplaires ; vers le deck, le format borne les copies. |
+| `versAnnexe(nom,cle,qty)` | Pose une carte dans une liste annexe, d'où qu'elle vienne. |
+| `retirerAnnexe(nom,cle)` | En retire un exemplaire ; le dernier retire la carte. |
+| `viderAnnexe(cle)` | Vide la liste. |
+| `tagAnnexe(card)` | Le tag « réserve » ou « à l'étude » que la carte porte partout ailleurs. |
+| `blocAnnexe(cle)` | Rend une des deux listes, filtres de l'en-tête compris. |
 | `targets()` | Objectifs par rôle selon le format. |
 | `deckCounts()` | Compte les cartes du deck par rôle. |
 | `gauge(label,val,tgt,role)` | Jauge d'un rôle, cliquable pour filtrer les suggestions. |
@@ -485,7 +516,7 @@ Composition, équilibre des rôles, commandant, conformité au format et cartes 
 | `blocAchats()` | Bloc des cartes à acheter, avec budget et liens. |
 | `zoneCommandant()` | Encart du commandant : visuel, identité, changement. |
 | `evalueDeck(entries)` | Note les cartes du deck avec le moteur des suggestions. |
-| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, liste. |
+| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, liste principale, puis la réserve et l'étude. |
 | `addToDeck(name)` | Ajoute un exemplaire depuis l'interface. |
 | `deckAdd(card,qty,opts)` | Ajoute des exemplaires au deck, avec ou sans complément de collection. |
 | `removeFromDeck(name)` | Retire un exemplaire. |
@@ -510,7 +541,8 @@ Données : `RETOURNEES`
 | `manaFb(img)` | Remplace un symbole qui n'a pas pu se charger. |
 | `manaHTML(card,sm)` | Coût de mana complet d'une carte. |
 | `stripeColor(card)` | Bande de couleur d'identité d'une carte. |
-| `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. |
+| `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. Le contexte est la liste d'où elle vient : collection, deck, réserve, étude. |
+| `actesAnnexe(c,cle,avecBascule)` | Les gestes d'une carte garée : remonter au deck, passer à l'autre liste, en retirer un exemplaire. |
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
 | `openFormatModal()` | Ouvre la fenêtre du format et y ouvre un brouillon : rien n'y prend effet avant « Appliquer ». |

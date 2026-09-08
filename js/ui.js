@@ -345,6 +345,18 @@ function tagIllegal(card) {
     title="Cette carte n'a pas le droit d'être jouée en ${esc(fmt().label)}.">illégal</span>`;
 }
 
+/* Les gestes d'une carte garée dans une liste annexe : la remonter au deck,
+   la passer à l'autre liste, ou l'en retirer. Le pied d'une tuile ne tient
+   que trois boutons — un de plus déborde sur la tuile voisine, qui vole
+   alors le clic —, donc la bascule d'une liste à l'autre n'y figure pas :
+   elle reste au mode liste, plus large, et à la fiche. */
+function actesAnnexe(c, cle, avecBascule) {
+  const autre = CLES_ANNEXES.find(k => k !== cle);
+  return `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Remonter dans le deck">▲</button>
+    ${avecBascule && autre ? `<button class="btn sm" data-act="toAnnexe" data-liste="${autre}" data-name="${esc(c.name)}" title="${esc(ANNEXES[autre].poser)}">⇄</button>` : ''}
+    <button class="btn sm" data-act="dropAnnexe" data-liste="${cle}" data-name="${esc(c.name)}" title="Retirer un exemplaire de ${esc(ANNEXES[cle].article)}">−</button>`;
+}
+
 function cardTile(e, ctx) {
   const c = e.card, dispo = availableFor(c), inDeck = S.deck.get(c.name) || 0;
   const isCmd = S.commander === c.name;
@@ -364,7 +376,9 @@ function cardTile(e, ctx) {
       note.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''
     ].filter(Boolean).join('');
   })() : '';
-  const tags = tagIllegal(c) + tagsDeck;
+  /* Le tag de liste annexe suit la carte partout sauf dans la liste
+     elle-même, où il n'apprendrait rien. */
+  const tags = tagIllegal(c) + tagsDeck + (ANNEXES[ctx] ? '' : tagAnnexe(c));
   const tagsHTML = tags ? `<div class="tags">${tags}</div>` : '';
 
   const scoreHTML = (ctx === 'deck' && note)
@@ -380,12 +394,14 @@ function cardTile(e, ctx) {
     ${scoreHTML}
     ${tagsHTML}
     <div class="foot bot">
-      <span>${ctx==='deck'?`×${e.qty}`:`${e.qty} ex.`}</span>
+      <span>${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>
       <span class="mono">${eur(c.price)}</span>
       <div class="qty acts" style="margin-left:auto">
         <button class="btn sm" data-act="fiche" data-name="${esc(c.name)}" title="Fiche complète">i</button>
         ${ctx==='collection'
           ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>`
+          : ANNEXES[ctx]
+          ? actesAnnexe(c, ctx)
           : `<button class="btn sm" data-act="fromDeck" data-name="${esc(c.name)}" title="Retirer du deck">−</button>
              ${fmt().commander && c.isLegendaryCreature ? `<button class="btn sm ${isCmd?'pri':''}" data-act="${isCmd?'unsetCmd':'setCmd'}" data-name="${esc(c.name)}" title="${isCmd?'Commandant actuel':'Désigner comme commandant'}">★</button>` : ''}`}
       </div>
@@ -406,13 +422,15 @@ function cardRow(e, ctx) {
     ${tagIllegal(c)}
     ${c.set ? `<span class="mono small muted" title="Édition ${esc(c.setName || c.set)}${c.num?`, carte n°${esc(c.num)}`:''}">${esc(c.set)}${c.num?` ${esc(c.num)}`:''}</span>` : ''}
     <span class="mono small">${eur(c.price)}</span>
-    <span class="mono small">${ctx==='deck'?`×${e.qty}`:`${e.qty} ex.`}</span>
+    <span class="mono small">${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>
     ${dispoBadge}
     ${scoreBadge}
     <div class="acts qty" style="margin-left:${note||dispoBadge?'6px':'auto'}">
       <button class="btn sm" data-act="fiche" data-name="${esc(c.name)}" title="Fiche complète">i</button>
       ${ctx==='collection'
         ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>`
+        : ANNEXES[ctx]
+        ? actesAnnexe(c, ctx, true)
         : `<button class="btn sm" data-act="fromDeck" data-name="${esc(c.name)}" title="Retirer">−</button>
            ${fmt().commander && c.isLegendaryCreature ? `<button class="btn sm ${isCmd?'pri':''}" data-act="${isCmd?'unsetCmd':'setCmd'}" data-name="${esc(c.name)}" title="Commandant">★</button>` : ''}`}
     </div>
@@ -1376,16 +1394,27 @@ function exportDeckModal() {
   const nomFichier = `deck-${(S.commander || S.format || 'export').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${date}`;
   // l'édition relevée à l'import repart avec la liste, au format qu'elle avait
   const edTxt = c => c.set ? ` (${c.set})${c.num ? ' ' + c.num : ''}` : '';
-  const txt = entries.map(e => `${e.qty} ${e.card.name}${edTxt(e.card)}`).join('\n');
-  const csv = 'Quantity,Name,Set,Collector Number,Mana Cost,Type,Price EUR\n' +
-    entries.map(e => `${e.qty},"${e.card.name.replace(/"/g,'""')}","${e.card.set||''}","${e.card.num||''}","${e.card.cost}","${e.card.type}",${e.card.price}`).join('\n');
+  /* Les listes annexes repartent avec le deck, sous les en-têtes que les
+     listes MTGO emploient — « Sideboard », « Considering » — et que notre
+     propre import relit. */
+  const annexes = CLES_ANNEXES.map(cle => ({cle, a:ANNEXES[cle], entries:annexeEntries(cle)})).filter(x => x.entries.length);
+  const ligneTxt = e => `${e.qty} ${e.card.name}${edTxt(e.card)}`;
+  const txt = [entries.map(ligneTxt).join('\n')]
+    .concat(annexes.map(x => `\n${x.a.anglais.charAt(0).toUpperCase()}${x.a.anglais.slice(1)}\n${x.entries.map(ligneTxt).join('\n')}`))
+    .filter(bloc => bloc.trim()).join('\n');
+  const ligneCsv = (e, liste) => `${e.qty},"${e.card.name.replace(/"/g,'""')}","${e.card.set||''}","${e.card.num||''}","${e.card.cost}","${e.card.type}",${e.card.price},${liste}`;
+  const csv = 'Quantity,Name,Set,Collector Number,Mana Cost,Type,Price EUR,List\n' +
+    entries.map(e => ligneCsv(e, 'deck')).concat(
+      ...annexes.map(x => x.entries.map(e => ligneCsv(e, x.a.anglais)))).join('\n');
+  const carteJson = e => ({name:e.card.name, qty:e.qty, set:e.card.set||'', num:e.card.num||'',
+    mana:e.card.cost, type:e.card.type, price:e.card.price});
   const json = JSON.stringify({
     format: S.format,
     commander: S.commander,
     taille: deckSize(),
     date: new Date().toISOString(),
-    deck: entries.map(e => ({name:e.card.name, qty:e.qty, set:e.card.set||'', num:e.card.num||'',
-      mana:e.card.cost, type:e.card.type, price:e.card.price}))
+    deck: entries.map(carteJson),
+    ...Object.fromEntries(annexes.map(x => [x.cle, x.entries.map(carteJson)]))
   }, null, 2);
 
   openDialog('Exporter le deck',
@@ -1393,6 +1422,7 @@ function exportDeckModal() {
        <span class="pill">Format <b>${f.label}</b></span>
        ${S.commander ? `<span class="pill">Commandant <b>${esc(S.commander)}</b></span>` : ''}
        <span class="pill"><b>${deckSize()}</b> cartes</span>
+       ${annexes.map(x => `<span class="pill" title="Exportée sous l'en-tête « ${esc(x.a.anglais)} »">${esc(x.a.titre)} <b>${x.entries.reduce((n, e) => n + e.qty, 0)}</b></span>`).join('')}
        <span class="pill">Valeur <b>${eur(entries.reduce((a,e)=>a+e.card.price*e.qty,0))}</b></span>
      </div>
      <div class="field"><label class="lab">Format d'export</label>
@@ -1465,7 +1495,7 @@ function openWantsModal() {
 
 function openWipeModal() {
   openDialog('Vider la collection',
-    `<p class="small">Cette action effacera toutes les cartes de votre collection. Le deck sera également vidé.</p>
+    `<p class="small">Cette action effacera toutes les cartes de votre collection. Le deck, la réserve et les cartes à l'étude seront également vidés.</p>
      <p class="small muted">Pensez à faire une sauvegarde avant si vous souhaitez conserver vos listes.</p>`,
     `<button class="btn" value="cancel">Annuler</button>
      <button class="btn danger" id="confirmWipe" value="ok">Oui, tout effacer</button>`);
@@ -1474,10 +1504,11 @@ function openWipeModal() {
   if (confirmWipe) confirmWipe.onclick = () => {
     S.collection.clear();
     S.deck.clear();
+    CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
     S.commander = null;
     S.selected = null;
     closeDialog();
     renderAll();
-    toast('Collection et deck effacés.');
+    toast('Collection, deck et listes annexes effacés.');
   };
 }
