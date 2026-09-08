@@ -370,6 +370,33 @@ function filtresValeursOK(v) {
   return true;
 }
 
+/* ---------------------------------------------------------------------
+   Les « Game Changers » : la liste que Wizards publie pour les paliers du
+   format Commander — une quarantaine de cartes dont la présence hausse le
+   palier d'un deck. C'est une liste fermée, révisée de temps à autre par
+   l'éditeur : plutôt que de la recopier ici, où elle vieillirait en silence,
+   on la demande à Scryfall (`is:gamechanger`) et on la garde en cache, comme
+   la liste des sets. Tant qu'elle n'est pas chargée, aucune carte n'est
+   annoncée comme telle — l'ignorance se dit, elle ne s'invente pas.
+   --------------------------------------------------------------------- */
+
+const GC_BASE = {
+  etat:'idle',        // idle | chargement | ok | erreur
+  maj:null, erreur:'',
+  noms:new Set()      // noms normalisés, face avant comprise
+};
+
+function gameChangersConnus() {
+  return GC_BASE.noms.size > 0;
+}
+
+/* Vrai, faux, ou `null` quand la liste n'est pas là : une carte qu'on ne sait
+   pas juger n'est pas déclarée ordinaire pour autant. */
+function estGameChanger(card) {
+  if (!card || !gameChangersConnus()) return null;
+  return GC_BASE.noms.has(norm(card.name)) || GC_BASE.noms.has(norm(frontFace(card.name)));
+}
+
 /* Légalité d'une carte dans le format en cours. Trois réponses, pas deux :
    `true`, `false`, ou `null` quand nous l'ignorons — carte que ni l'archive ni
    Scryfall n'ont renseignée. Une carte qu'on ne sait pas juger n'est ni

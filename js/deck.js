@@ -136,6 +136,27 @@ function tagAnnexe(card) {
   return `<span class="tag" style="border-color:#6f7bd0;color:#9aa4e6" title="${esc(ANNEXES[cle].aide)}">${esc(ANNEXES[cle].titre.toLowerCase())}${n > 1 ? ` ×${n}` : ''}</span>`;
 }
 
+/* Les Game Changers de la liste principale. Leur nombre décide du palier
+   qu'un deck Commander peut revendiquer : aucun aux paliers 1 et 2, jusqu'à
+   trois au palier 3, sans limite aux paliers 4 et 5. La réserve et l'étude
+   n'y entrent pas — elles ne se jouent pas. */
+function gameChangersDuDeck() {
+  return deckEntries().filter(e => estGameChanger(e.card) === true);
+}
+
+/* Ce que ce décompte dit du palier, en une phrase. */
+function ligneGameChangers() {
+  if (!fmt().commander || !gameChangersConnus()) return '';
+  const gc = gameChangersDuDeck();
+  const n = gc.reduce((x, e) => x + e.qty, 0);
+  if (!n) return '';
+  return `<div class="small muted" style="margin:8px 0 0">
+    ${n} carte(s) classée(s) <b style="color:#cba6e8">Game Changer</b> par Wizards :
+    ${gc.map(e => esc(e.card.name)).join(', ')}.
+    ${n > 3 ? 'Au-delà de trois, le deck relève des paliers 4 ou 5.'
+            : 'Le palier 2 n\'en admet aucune, le palier 3 jusqu\'à trois.'}</div>`;
+}
+
 function targets() {
   const f = fmt(), k = f.size / 100;
   if (S.format === 'limite') return {terrains:17, creatures:15, interaction:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
@@ -494,6 +515,7 @@ function ficheHTML(card) {
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
           : (offre ? `hors collection — ≈ ${eur(offre.price)} sur Cardmarket (${offre.condition} ou mieux)` : 'hors collection et hors budget')}</div>
+        ${estGameChanger(card) === true ? `<div class="small" style="color:#cba6e8">Classée <b>Game Changer</b> par Wizards : au Commander, sa présence hausse le palier du deck — aucune aux paliers 1 et 2, jusqu'à trois au palier 3.</div>` : ''}
         ${(() => {
           /* Où cette carte se trouve, si ce n'est pas dans la liste
              principale : sans cela, la fiche laisserait croire qu'elle
@@ -736,6 +758,14 @@ function renderE() {
         <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">CMC moyen <b>${avg.toFixed(2)}</b></span>
         <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">Valeur <b>${eur(price)}</b></span>
         ${S.commander ? `<span class="pill">Commandant <b>${esc(S.commander)}</b></span>` : ''}
+        ${(() => {
+          if (!fmt().commander || !gameChangersConnus()) return '';
+          const gc = gameChangersDuDeck();
+          const q = gc.reduce((x, e) => x + e.qty, 0);
+          return `<span class="pill" style="${q ? 'border-color:#8a5fb0;color:#cba6e8' : ''}" title="${q
+            ? `Cartes classées « Game Changer » par Wizards : ${esc(gc.map(e => e.card.name).join(', '))}. Le palier 2 n'en admet aucune, le palier 3 jusqu'à trois, les paliers 4 et 5 sans limite.`
+            : 'Aucune carte classée « Game Changer » : le deck reste compatible avec les paliers 1 et 2 du Commander.'}">Game changers <b>${q}</b></span>`;
+        })()}
         ${CLES_ANNEXES.map(cle => { const q = annexeSize(cle); return q
           ? `<span class="pill" title="${esc(ANNEXES[cle].aide)} Hors de la liste principale.">${esc(ANNEXES[cle].titre)} <b>${q}</b></span>` : ''; }).join('')}
         ${(() => {
@@ -753,6 +783,7 @@ function renderE() {
         <button class="btn danger" data-act="clearDeck">Vider le deck</button>
       </div>
       ${msgs.length ? `<div class="warnbox"><b>À corriger</b><ul style="margin:5px 0 0 16px;padding:0">${msgs.slice(0,6).map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>` : `<div class="warnbox" style="border-color:#2f6b46;background:rgba(79,159,104,.1)">Le deck respecte les contraintes du format.</div>`}
+      ${ligneGameChangers()}
       ${f.commander ? zoneCommandant() : ''}
       ${blocAchats()}
       <h3 style="margin:12px 0 6px;font-size:15px">Courbe de mana</h3>

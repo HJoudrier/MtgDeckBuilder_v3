@@ -127,7 +127,16 @@ EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
 *20 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`
+Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`, `GC_BASE`
+
+`GC_BASE` tient les **Game Changers** : la liste fermée que Wizards publie pour les paliers du
+Commander, une quarantaine de cartes dont la présence hausse le palier d'un deck. La recopier ici
+la ferait vieillir en silence à chaque révision de l'éditeur ; elle est donc demandée à Scryfall,
+qui marque ces cartes (`is:gamechanger`), et gardée une semaine en cache IndexedDB comme la liste
+des sets. `estGameChanger()` répond en trois états, à l'exemple de `carteLegale()` : vrai, faux,
+ou `null` tant que la liste n'est pas chargée — une carte qu'on ne sait pas juger n'est pas
+déclarée ordinaire pour autant, et rien n'est alors affiché. Les noms sont indexés normalisés,
+face avant comprise, pour les cartes recto-verso.
 
 `ANNEXES` décrit les deux listes tenues à côté du deck — leur titre, le mot anglais des listes
 MTGO qui les nomme, l'aide affichée et les libellés de leurs boutons. Tout ce qui les manipule
@@ -353,8 +362,8 @@ Données : `STORE_KEY`, `STORE_OFF`
 ### `js/externes.js` — EDHREC et Commander Spellbook
 
 Statistiques d'inclusion et de synergie par commandant, thèmes de deck servant d'archétypes établis,
-sets publiés par Scryfall et composition de ceux qu'on coche, combos répertoriés et combos à une carte près,
-plus le catalogue Scryfall complet et son archive IndexedDB.
+sets publiés par Scryfall et composition de ceux qu'on coche, liste des Game Changers du Commander,
+combos répertoriés et combos à une carte près, plus le catalogue Scryfall complet et son archive IndexedDB.
 
 *48 fonction(s), 36 Ko*
 
@@ -377,6 +386,10 @@ plus le catalogue Scryfall complet et son archive IndexedDB.
 | `setsARevoir()` | Faut-il réinterroger Scryfall ? Rien en cache, liste vieille d'une semaine, ou réglage des cartes numériques changé. |
 | `oublieCartesSets()` | Oublie les cartes relevées par set : elles l'ont été sous l'autre réglage. |
 | `chargerListeSets()` *(async)* | La liste des sets papier, en une requête, à l'ouverture des filtres. |
+| `reprendreGameChangers()` *(async)* | Reprend la liste des Game Changers depuis IndexedDB au démarrage. |
+| `sauverGameChangers()` | L'y conserve, avec la date de son chargement. |
+| `gameChangersARevoir()` | Faut-il la redemander ? Rien en cache, ou liste vieille d'une semaine. |
+| `chargerGameChangers()` *(async)* | La liste que Wizards publie, telle que Scryfall la marque (`is:gamechanger`). |
 | `noteSetIndex(nom,code)` | Rattache un nom de carte à un code de set dans l'index. |
 | `chargerSetScryfall(code)` *(async)* | Les cartes d'un set, à sa première utilisation. |
 | `noterSetsArchive(c,rec)` | Reporte sur la carte les codes d'édition que porte l'archive. |
@@ -490,6 +503,14 @@ d'elle, deux **listes annexes** décrites par `ANNEXES` (js/etat.js) : la **Rés
 main sans les jouer, et rien de ce qu'elles portent n'entre dans un décompte du deck — pas même
 les achats : une carte mise de côté n'est pas une carte à acheter.
 
+Les cartes classées **Game Changer** se signalent partout où elles s'affichent — collection, deck,
+listes annexes, suggestions — par le tag que rend `tagGameChanger()`, et la fiche en dit la
+conséquence. La section Deck en tient le compte, mais seulement dans un format à commandant, où
+il veut dire quelque chose : une pastille, et sous le bloc de conformité la phrase de
+`ligneGameChangers()`, qui les nomme et rappelle le seuil des paliers — aucune aux paliers 1 et
+2, jusqu'à trois au palier 3. Ce n'est pas une faute à corriger : le décompte informe, il
+n'accuse pas, et n'entre donc pas dans `legality()`.
+
 Ces trois parties — Liste, Réserve, À l'étude — se replient chacune par son titre, comme les
 sections de la page. Le résumé qui suit le titre reste lisible plié — nombre de cartes, valeur,
 ce que les filtres masquent —, et le pli se retient d'une séance à l'autre : `S.deckPlie` tient
@@ -517,6 +538,8 @@ rend `tagAnnexe()`, sans quoi on la reproposerait sans fin.
 | `tagAnnexe(card)` | Le tag « réserve » ou « à l'étude » que la carte porte partout ailleurs. |
 | `partieDeck(cle,titre,resume,corps,classe)` | Une partie repliable de la section : titre, résumé lisible plié, corps. |
 | `blocAnnexe(cle)` | Rend une des deux listes, filtres de l'en-tête compris. |
+| `gameChangersDuDeck()` | Les cartes de la liste principale classées Game Changer. |
+| `ligneGameChangers()` | Ce que leur nombre dit du palier, en une phrase, sous le bloc de conformité. |
 | `targets()` | Objectifs par rôle selon le format. |
 | `deckCounts()` | Compte les cartes du deck par rôle. |
 | `gauge(label,val,tgt,role)` | Jauge d'un rôle, cliquable pour filtrer les suggestions. |
@@ -550,6 +573,7 @@ Données : `RETOURNEES`
 | `manaHTML(card,sm)` | Coût de mana complet d'une carte. |
 | `stripeColor(card)` | Bande de couleur d'identité d'une carte. |
 | `cardTile(e,ctx)` | Tuile de carte, avec indicateurs propres au deck. Le contexte est la liste d'où elle vient : collection, deck, réserve, étude. |
+| `tagGameChanger(card)` | Le tag « game changer », partout où la carte s'affiche. |
 | `actesAnnexe(c,cle,avecBascule)` | Les gestes d'une carte garée : remonter au deck, passer à l'autre liste, en retirer un exemplaire. |
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |

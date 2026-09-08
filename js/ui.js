@@ -345,6 +345,15 @@ function tagIllegal(card) {
     title="Cette carte n'a pas le droit d'être jouée en ${esc(fmt().label)}.">illégal</span>`;
 }
 
+/* Le tag des Game Changers : la liste de Wizards pour les paliers du
+   Commander. Il vaut partout où la carte s'affiche — c'est une propriété de
+   la carte, pas du deck —, et se tait tant que la liste n'est pas chargée. */
+function tagGameChanger(card) {
+  if (estGameChanger(card) !== true) return '';
+  return `<span class="tag" style="border-color:#b07cd8;color:#cba6e8;background:rgba(176,124,216,.12)"
+    title="Carte classée « Game Changer » par Wizards : sa présence hausse le palier d'un deck Commander. Le palier 2 n'en admet aucune, le palier 3 jusqu'à trois, les paliers 4 et 5 sans limite.">game changer</span>`;
+}
+
 /* Les gestes d'une carte garée dans une liste annexe : la remonter au deck,
    la passer à l'autre liste, ou l'en retirer. Le pied d'une tuile ne tient
    que trois boutons — un de plus déborde sur la tuile voisine, qui vole
@@ -378,7 +387,7 @@ function cardTile(e, ctx) {
   })() : '';
   /* Le tag de liste annexe suit la carte partout sauf dans la liste
      elle-même, où il n'apprendrait rien. */
-  const tags = tagIllegal(c) + tagsDeck + (ANNEXES[ctx] ? '' : tagAnnexe(c));
+  const tags = tagIllegal(c) + tagGameChanger(c) + tagsDeck + (ANNEXES[ctx] ? '' : tagAnnexe(c));
   const tagsHTML = tags ? `<div class="tags">${tags}</div>` : '';
 
   const scoreHTML = (ctx === 'deck' && note)
@@ -419,7 +428,7 @@ function cardRow(e, ctx) {
     <span class="cname" data-act="fiche" data-name="${esc(c.name)}">${esc(c.name)}</span>
     <span class="costs">${manaHTML(c, true)}</span>
     <span class="small muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${esc(c.type)}</span>
-    ${tagIllegal(c)}
+    ${tagIllegal(c)}${tagGameChanger(c)}
     ${c.set ? `<span class="mono small muted" title="Édition ${esc(c.setName || c.set)}${c.num?`, carte n°${esc(c.num)}`:''}">${esc(c.set)}${c.num?` ${esc(c.num)}`:''}</span>` : ''}
     <span class="mono small">${eur(c.price)}</span>
     <span class="mono small">${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>

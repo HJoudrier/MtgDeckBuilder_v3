@@ -755,6 +755,12 @@ function demarrer() {
   /* Les sets déjà connus reviennent du cache : un set coché avant le
      rechargement filtre de nouveau sans attendre Scryfall. */
   reprendreSets().then(trouve => { if (trouve) renderAll(); });
+  /* Les Game Changers du Commander : la liste revient du cache, et n'est
+     redemandée à Scryfall qu'une fois la semaine passée. */
+  reprendreGameChangers().then(trouve => {
+    if (trouve) renderAll();
+    if (gameChangersARevoir()) chargerGameChangers();
+  });
   demarrerCatalogue();
 }
 
