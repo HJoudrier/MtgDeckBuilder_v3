@@ -239,6 +239,20 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  if (act === 'plierPartie') {
+    /* Comme l'en-tête d'une section : la classe bascule sur place. Repasser
+       par `renderE()` renoterait toutes les cartes du deck pour un pli. */
+    const cle = b.dataset.partie;
+    const bloc = document.getElementById('partie-' + cle);
+    if (!bloc) return;
+    const ouverte = bloc.classList.toggle('ouverte');
+    b.setAttribute('aria-expanded', String(ouverte));
+    b.setAttribute('title', ouverte ? 'Replier cette partie' : 'Déplier cette partie');
+    if (ouverte) S.deckPlie.delete(cle); else S.deckPlie.add(cle);
+    scheduleSave();
+    return;
+  }
+
   if (act === 'toAnnexe') {
     versAnnexe(b.dataset.name, b.dataset.liste);
     if (document.getElementById('dlg') && document.getElementById('dlg').open) {

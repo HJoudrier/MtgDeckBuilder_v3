@@ -70,6 +70,7 @@ function snapshot() {
     deck: [...S.deck],
     sideboard: [...S.sideboard],
     considering: [...S.considering],
+    deckPlie: [...S.deckPlie],
     commander: S.commander,
     colors: [...S.colors],
     colorMode: S.colorMode,
@@ -193,6 +194,9 @@ function restore(d) {
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
   if (typeof d.majIgnoree === 'string') S.majIgnoree = d.majIgnoree;
   if (typeof d.headerCompact === 'boolean') S.headerCompact = d.headerCompact;
+  /* Les parties repliées de la section Deck, comme l'en-tête compact : une
+     préférence d'affichage, qu'on retrouve d'une séance à l'autre. */
+  if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   return true;
 }
 

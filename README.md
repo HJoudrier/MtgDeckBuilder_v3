@@ -490,6 +490,13 @@ d'elle, deux **listes annexes** décrites par `ANNEXES` (js/etat.js) : la **Rés
 main sans les jouer, et rien de ce qu'elles portent n'entre dans un décompte du deck — pas même
 les achats : une carte mise de côté n'est pas une carte à acheter.
 
+Ces trois parties — Liste, Réserve, À l'étude — se replient chacune par son titre, comme les
+sections de la page. Le résumé qui suit le titre reste lisible plié — nombre de cartes, valeur,
+ce que les filtres masquent —, et le pli se retient d'une séance à l'autre : `S.deckPlie` tient
+les clés repliées et part dans la sauvegarde, à côté de l'en-tête compact. Le geste ne bascule
+qu'une classe, sans repasser par `renderE()` : rendre le deck note toutes ses cartes, et ce
+serait payer une notation pour un simple pli.
+
 Les trois listes s'excluent : une carte vit dans l'une d'elles, jamais dans deux à la fois. Y
 poser une carte l'ôte donc d'où elle était, et le déplacement emporte tous ses exemplaires —
 `deplacerCarte()`. Le deck l'emporte partout où le doute existe : `deckAdd()` retire la carte de
@@ -508,6 +515,7 @@ rend `tagAnnexe()`, sans quoi on la reproposerait sans fin.
 | `retirerAnnexe(nom,cle)` | En retire un exemplaire ; le dernier retire la carte. |
 | `viderAnnexe(cle)` | Vide la liste. |
 | `tagAnnexe(card)` | Le tag « réserve » ou « à l'étude » que la carte porte partout ailleurs. |
+| `partieDeck(cle,titre,resume,corps,classe)` | Une partie repliable de la section : titre, résumé lisible plié, corps. |
 | `blocAnnexe(cle)` | Rend une des deux listes, filtres de l'en-tête compris. |
 | `targets()` | Objectifs par rôle selon le format. |
 | `deckCounts()` | Compte les cartes du deck par rôle. |
@@ -516,7 +524,7 @@ rend `tagAnnexe()`, sans quoi on la reproposerait sans fin.
 | `blocAchats()` | Bloc des cartes à acheter, avec budget et liens. |
 | `zoneCommandant()` | Encart du commandant : visuel, identité, changement. |
 | `evalueDeck(entries)` | Note les cartes du deck avec le moteur des suggestions. |
-| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, liste principale, puis la réserve et l'étude. |
+| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, puis les trois parties repliables — liste principale, réserve, étude. |
 | `addToDeck(name)` | Ajoute un exemplaire depuis l'interface. |
 | `deckAdd(card,qty,opts)` | Ajoute des exemplaires au deck, avec ou sans complément de collection. |
 | `removeFromDeck(name)` | Retire un exemplaire. |

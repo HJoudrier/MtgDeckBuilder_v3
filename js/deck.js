@@ -655,6 +655,30 @@ function evalueDeck(entries) {
   });
 }
 
+/* =====================================================================
+   Les trois parties repliables de la section : la liste principale, la
+   réserve, l'étude. Une carte y est vite longue, et l'une des trois suffit
+   souvent : le titre reste lisible plié, avec le résumé qui dit ce que la
+   partie contient. Le pli se retient d'une séance à l'autre (`S.deckPlie`,
+   enregistré comme le reste des préférences) et se bascule sans rien
+   recalculer — le rendu du deck note toutes ses cartes, ce serait payer une
+   notation pour un simple pli.
+   ===================================================================== */
+
+function partieDeck(cle, titre, resume, corps, classe) {
+  const ouverte = !S.deckPlie.has(cle);
+  return `<div class="partie ${ouverte ? 'ouverte' : ''}${classe ? ' ' + classe : ''}" id="partie-${cle}">
+    <button type="button" class="partie-tete" data-act="plierPartie" data-partie="${cle}"
+        aria-expanded="${ouverte}" aria-controls="corps-${cle}"
+        title="${ouverte ? 'Replier cette partie' : 'Déplier cette partie'}">
+      <span class="chev-partie" aria-hidden="true">›</span>
+      <h3>${titre}</h3>
+      ${resume ? `<span class="small muted">${resume}</span>` : ''}
+    </button>
+    <div class="partie-corps" id="corps-${cle}">${corps}</div>
+  </div>`;
+}
+
 /* Une des deux listes annexes, rendue comme le deck : mêmes tuiles, mêmes
    filtres d'en-tête — ce qu'ils masquent est annoncé plutôt que tu. */
 function blocAnnexe(cle) {
@@ -665,10 +689,7 @@ function blocAnnexe(cle) {
   const masquees = n - entries.reduce((x, e) => x + e.qty, 0);
   const valeur = toutes.reduce((x, e) => x + (e.card.price || 0) * e.qty, 0);
 
-  return `<div class="group" id="bloc-${cle}" style="margin-top:12px">
-    <h4>${esc(a.titre)} <span class="small muted">${esc(a.anglais)}</span>
-      <span class="small muted">· ${n} carte(s)${n ? ` · ${eur(valeur)}` : ''}${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}</span></h4>
-    <div class="small muted" style="margin-bottom:6px">${esc(a.aide)}</div>
+  const corps = `<div class="small muted" style="margin-bottom:6px">${esc(a.aide)}</div>
     <div class="row" style="margin-bottom:8px">
       <button class="btn sm" data-act="addCard" data-cible="${cle}">Ajouter</button>
       ${n ? `<button class="btn sm danger" data-act="clearAnnexe" data-liste="${cle}">Vider</button>` : ''}
@@ -676,8 +697,12 @@ function blocAnnexe(cle) {
     ${entries.length
       ? (S.view === 'grid' ? `<div class="grid">${entries.map(e => cardTile(e, cle)).join('')}</div>`
                            : `<div class="list">${entries.map(e => cardRow(e, cle)).join('')}</div>`)
-      : `<div class="empty">${n ? `Les filtres de l'en-tête masquent les ${n} carte(s) de cette liste.` : esc(a.vide)}</div>`}
-  </div>`;
+      : `<div class="empty">${n ? `Les filtres de l'en-tête masquent les ${n} carte(s) de cette liste.` : esc(a.vide)}</div>`}`;
+
+  return partieDeck(cle,
+    `${esc(a.titre)} <span class="small muted">${esc(a.anglais)}</span>`,
+    `${n} carte(s)${n ? ` · ${eur(valeur)}` : ''}${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}`,
+    corps, 'group');
 }
 
 function renderE() {
@@ -734,13 +759,14 @@ function renderE() {
       ${histogram(cmcSplit, true)}
       <h3 style="margin:14px 0 6px;font-size:15px">Équilibre des rôles</h3>
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
-      <h3 style="margin:14px 0 6px;font-size:15px">Liste</h3>
-      ${entries.length ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
+      ${partieDeck('liste', 'Liste',
+        `${n} carte(s)${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}${price ? ` · ${eur(price)}` : ''}`,
+        entries.length ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
         <div class="group"><h4>${t} <span class="small muted">${grouped[t].reduce((a,e)=>a+e.qty,0)}</span></h4>
         ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
                           : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
         : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`
-             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>')}
+             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>'))}
       <h3 style="margin:16px 0 6px;font-size:15px">Hors de la liste principale</h3>
       <div class="small muted">Deux listes tenues à côté du deck. Ce qu'elles portent ne compte ni dans la taille du deck,
         ni dans sa conformité, ni dans sa courbe, ses rôles ou ses achats. Une carte ne vit que dans l'une des trois listes :

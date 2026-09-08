@@ -44,6 +44,7 @@ const S = {
   deck: new Map(),
   sideboard: new Map(),      // la réserve, hors de la liste principale
   considering: new Map(),    // les cartes à l'étude, hors de la liste principale
+  deckPlie: new Set(),       // les parties repliées de la section Deck : 'liste', 'sideboard', 'considering'
   commander: null,
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',

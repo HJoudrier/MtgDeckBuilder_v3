@@ -344,6 +344,23 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .cmdbox .corps{flex:1;min-width:210px}
 .cardT .cmdbadge{position:absolute;right:5px;top:5px;font-size:9.5px;padding:1px 5px;border-radius:4px;
   background:var(--brass);color:#1a1526;font-weight:600}
+/* Les parties repliables de la section Deck : liste, réserve, étude. Le
+   chevron reprend celui des sections, à la même bascule. */
+.partie{margin:14px 0 0}
+.partie-tete{display:flex;align-items:center;gap:8px;width:100%;padding:2px 0;background:none;border:0;
+  color:var(--txt);cursor:pointer;text-align:left;font-family:inherit}
+.partie-tete h3{margin:0;font-size:15px;font-family:var(--display);flex:0 0 auto}
+.partie-tete .small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.partie-tete:hover h3, .partie-tete:hover .chev-partie{color:var(--brass)}
+/* Son propre nom : `.sec.open .chev` vaut pour tout ce que la section
+   contient, et laisserait ce chevron-ci tourné en permanence. */
+.partie-tete .chev-partie{transition:transform .18s ease;color:var(--dim);flex:0 0 auto}
+.partie.ouverte>.partie-tete .chev-partie{transform:rotate(90deg)}
+.partie-corps{display:none}
+.partie.ouverte>.partie-corps{display:block;margin-top:6px}
+.partie.group{padding:8px 10px 10px}
+.partie.group>.partie-tete{padding:0}
+
 .group{border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--bg2);margin-bottom:9px}
 .group>h4{margin:0 0 7px;font-family:var(--display);font-size:14px;display:flex;gap:8px;align-items:center}
 .why{font-size:11.5px;color:var(--dim);margin-top:3px}
