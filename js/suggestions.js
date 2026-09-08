@@ -644,6 +644,20 @@ function refreshSuggestions() {
 }
 
 function renderF() {
+  /* Le filet : un changement a rendu la sélection caduque sans passer par un
+     geste identifié — une archive qui finit de charger, une réponse de
+     Scryfall, un réglage venu d'ailleurs. Plutôt que de figer la fenêtre le
+     temps de noter des dizaines de milliers de cartes, la section dit ce
+     qu'elle fait et le recalcul repart par tranches, annoncé comme les
+     autres. */
+  if (!SUG_PRET && !recalculEnCours && typeof recalculLong === 'function' && recalculLong()) {
+    const attente = document.getElementById('bodyF');
+    if (attente) attente.innerHTML = `<div class="empty">Les suggestions se recalculent…</div>`;
+    const hint = document.getElementById('hintF');
+    if (hint) hint.textContent = 'recalcul…';
+    setTimeout(() => recalculerAvecProgression('Les suggestions se recalculent après un changement de l\'atelier.'), 0);
+    return;
+  }
   const r = listeSuggestions();
   const bodyEl = document.getElementById('bodyF');
   if (bodyEl) {

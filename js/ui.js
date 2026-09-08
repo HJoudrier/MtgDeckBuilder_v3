@@ -48,6 +48,12 @@ function aAcheter() {
 function toast(msg) {
   const t = document.getElementById('toast');
   if (!t) return;
+  /* Une fenêtre modale est peinte dans la « top layer », au-dessus de tout
+     z-index : le message doit y entrer pour rester visible — la boîte de
+     recalcul, entre autres, en couvrirait sinon chaque annonce. */
+  const dlg = document.getElementById('dlg');
+  const cible = (dlg && dlg.open) ? dlg : document.body;
+  if (t.parentElement !== cible) cible.appendChild(t);
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toast.timer);
@@ -853,11 +859,13 @@ function memeEtat(x, y) {
 /* Ce qui suit un réglage : dans une fenêtre à brouillon, seule elle se
    redessine et rien n'est encore appliqué ; ailleurs — barre de mana de
    l'en-tête, puces, jauges de rôle — l'atelier suit aussitôt. */
-function apresReglage() {
+function apresReglage(raison) {
   if (brouillon) { brouillon.redessine(); return; }
   invaliderCandidats();
   S.limitB = PAGE;
-  renderAll();
+  /* Hors d'une fenêtre, un filtre change tout l'atelier : les candidates sont
+     à rebâtir et à noter. C'est le recalcul annoncé, avec la raison du geste. */
+  recalculerAvecProgression(raison || 'Un filtre a changé : les cartes retenues et les suggestions sont recalculées.');
   majFenetreFiltres();
 }
 
@@ -1129,17 +1137,146 @@ async function filtrerAvecProgression() {
   const pied = document.getElementById('dlgFoot');
   if (pied) pied.querySelectorAll('button').forEach(b => b.disabled = true);
   majProgression('Préparation des cartes', 0, 0);
-  await new Promise(r => setTimeout(r, 0));
+  await pause();
   try {
     if (typeof prechauffeCandidats === 'function')
       await prechauffeCandidats((fait, total) => majProgression('Préparation des cartes', fait, total));
     if (typeof prepareSuggestions === 'function')
       await prepareSuggestions((fait, total) => majProgression('Notation des candidates', fait, total));
     majProgression('Affichage', 1, 1);
-    await new Promise(r => setTimeout(r, 0));
+    await pause();
     renderAll();
   } finally {
     if (pied) pied.querySelectorAll('button').forEach(b => b.disabled = false);
+  }
+}
+
+/* =====================================================================
+   Recalculs annoncés — la boîte de progression hors des fenêtres
+
+   Noter les candidates est le temps long de l'atelier : sur un catalogue
+   complet, ce sont des dizaines de milliers de cartes. Fait d'un bloc, il
+   fige la fenêtre sans rien dire ; d'où cette boîte, qui l'annonce, en
+   donne la raison et montre où il en est, pendant que le travail avance
+   par tranches.
+
+   Elle ne paraît que si le travail est assez gros pour se voir — sans quoi
+   elle clignoterait à chaque clic —, et jamais par-dessus une fenêtre déjà
+   ouverte : là, la barre se glisse dans son pied plutôt que de la chasser.
+   ===================================================================== */
+
+/* Au-delà de tant de cartes à noter, le calcul passe par tranches plutôt que
+   d'un bloc ; en deçà, l'atelier se refait sur-le-champ comme avant. */
+const SEUIL_RECALCUL = 1200;
+
+/* Et la boîte n'est montrée que si ces tranches durent : au-dessous, le
+   recalcul est fini avant qu'on ait pu la lire. */
+const DELAI_BOITE = 250;
+
+function pause() {
+  return new Promise(r => setTimeout(r, 0));
+}
+
+/* Rendre la main jusqu'à ce qu'une image ait été peinte : `setTimeout` seul
+   ne garantit pas qu'elle l'ait été, et la boîte doit être à l'écran avant
+   le premier calcul, qui lui ne rend rien avant d'avoir fini. */
+function pausePeinte() {
+  if (typeof requestAnimationFrame !== 'function') return pause();
+  return new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
+}
+
+/* Le recalcul qui vient sera-t-il long ? Deux cas : les candidates sont à
+   rebâtir depuis l'archive, ou le vivier à noter est déjà gros. */
+function recalculLong() {
+  if (typeof CAT === 'undefined' || typeof CAND === 'undefined') return false;
+  const archive = CAT.etat === 'ok' && CAT.cartes.length > 0;
+  if (archive && CAND.sig !== signatureCandidats()) return true;
+  return (CAND.liste ? CAND.liste.length : 0) + S.collection.size > SEUIL_RECALCUL;
+}
+
+let boiteRecalcul = false;      // notre boîte est-elle à l'écran ?
+let barreEmpruntee = false;     // la barre est-elle glissée dans le pied d'une autre fenêtre ?
+
+function corpsBoiteRecalcul(raison) {
+  return `<div id="boiteRecalcul">
+    <p class="small" style="margin:0 0 6px">${esc(raison)}</p>
+    <div class="small muted">Les cartes candidates sont rebâties, puis notées une à une. Le travail avance par
+      tranches : la fenêtre reste vivante, et cette boîte se referme d'elle-même une fois l'atelier à jour.
+      « Masquer » la referme sans rien interrompre.</div>
+    ${zoneProgression()}
+  </div>`;
+}
+
+/* Annonce le recalcul là où il ne gêne pas : dans sa boîte si rien n'est
+   ouvert, dans le pied de la fenêtre ouverte sinon — la refermer emporterait
+   la fiche ou le formulaire que l'on est en train de lire. */
+function annonceRecalcul(raison) {
+  const dlg = document.getElementById('dlg');
+  if (dlg && dlg.open) {
+    const pied = document.getElementById('dlgFoot');
+    if (pied && !document.getElementById('filtreProgres')) {
+      pied.insertAdjacentHTML('beforeend', zoneProgression());
+      barreEmpruntee = true;
+    }
+    return;
+  }
+  boiteRecalcul = true;
+  openDialog('Recalcul en cours', corpsBoiteRecalcul(raison),
+    '<button type="button" class="btn" data-act="closeDialog">Masquer</button>');
+}
+
+/* Ne referme que notre boîte : l'utilisateur a pu la masquer et ouvrir autre
+   chose pendant que le calcul se poursuivait. */
+function finRecalcul() {
+  if (barreEmpruntee) {
+    const zone = document.getElementById('filtreProgres');
+    if (zone && zone.parentElement && zone.parentElement.id === 'dlgFoot') zone.remove();
+    barreEmpruntee = false;
+  }
+  if (!boiteRecalcul) return;
+  boiteRecalcul = false;
+  const dlg = document.getElementById('dlg');
+  if (dlg && dlg.open && document.getElementById('boiteRecalcul')) closeDialog();
+}
+
+/* Un recalcul à la fois. Un geste arrivé pendant qu'un autre travaille est
+   retenu et repris ensuite : l'état qu'il lira sera le dernier, et le
+   résultat le bon. */
+let recalculEnCours = false;
+let recalculSuivant = null;
+
+async function recalculerAvecProgression(raison) {
+  if (recalculEnCours) { recalculSuivant = raison || recalculSuivant; return; }
+  /* Rien de long à faire : l'atelier se refait sur-le-champ, comme avant. */
+  if (!recalculLong()) { renderAll(); return; }
+
+  recalculEnCours = true;
+  /* La boîte n'est pas ouverte d'emblée : un recalcul bref — les cartes
+     déjà bâties, un catalogue modeste — se termine avant qu'on ait eu le
+     temps de la lire, et elle ne ferait que clignoter. Elle paraît si le
+     travail dure, entre deux tranches. */
+  const differe = setTimeout(() => {
+    annonceRecalcul(raison || 'L\'atelier se met à jour.');
+    majProgression('Préparation des cartes', 0, 0);
+  }, DELAI_BOITE);
+  try {
+    await pause();
+    if (typeof prechauffeCandidats === 'function')
+      await prechauffeCandidats((fait, total) => majProgression('Préparation des cartes', fait, total));
+    if (typeof prepareSuggestions === 'function')
+      await prepareSuggestions((fait, total) => majProgression('Notation des candidates', fait, total));
+    majProgression('Affichage', 1, 1);
+    await pause();
+    renderAll();
+  } finally {
+    clearTimeout(differe);
+    finRecalcul();
+    recalculEnCours = false;
+    if (recalculSuivant) {
+      const suite = recalculSuivant;
+      recalculSuivant = null;
+      recalculerAvecProgression(suite);
+    }
   }
 }
 

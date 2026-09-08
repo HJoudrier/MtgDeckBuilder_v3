@@ -1100,7 +1100,7 @@ async function lireCatalogueFichier(source, nom, suivi) {
   invaliderCandidats();
   if (saveState !== 'desactive' && S.catalogueActif)
     idbEcrire('cartes', {v:4, cartes:CAT.cartes, maj:CAT.maj, date:CAT.date, octets:CAT.octets, impressions}).catch(() => {});
-  renderAll();
+  recalculerAvecProgression(`L'archive Scryfall vient d'être chargée (${CAT.cartes.length.toLocaleString('fr-FR')} cartes) : les candidates sont bâties, puis notées.`);
   toast(`${CAT.cartes.length.toLocaleString('fr-FR')} cartes retenues${
     impressions > CAT.cartes.length ? ` sur ${impressions.toLocaleString('fr-FR')} impressions lues` : ''}.`);
   return true;
@@ -1256,7 +1256,7 @@ async function chargerCatalogueComplet(force) {
         else if (memo.v < 3) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour filtrer par set sans réseau.';
         else if (memo.v < 4) CAT.detail = 'archive d\'une version antérieure : rechargez le fichier Scryfall pour distinguer les cartes numériques.';
         invaliderCandidats();
-        renderAll();
+        recalculerAvecProgression(`L'archive Scryfall a été relue depuis ce navigateur (${CAT.cartes.length.toLocaleString('fr-FR')} cartes) : les candidates sont bâties, puis notées.`);
         return;
       }
     }

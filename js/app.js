@@ -27,13 +27,13 @@ document.addEventListener('click', ev => {
   if (b.dataset.color || b.dataset.col) {
     const c = b.dataset.color || b.dataset.col;
     modifieBrouillon(() => { if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c); });
-    apresReglage();
+    apresReglage(`Couleur ${c} ${S.colors.has(c) ? 'ajoutée aux' : 'retirée des'} filtres : la collection affichée et les suggestions sont recalculées.`);
     return;
   }
 
   if (b.dataset.cmode) {
     modifieBrouillon(() => { S.colorMode = b.dataset.cmode; });
-    apresReglage();
+    apresReglage('Mode de couleur changé : la collection affichée et les suggestions sont recalculées.');
     return;
   }
 
@@ -56,8 +56,7 @@ document.addEventListener('click', ev => {
     else S.focusNodes.add(id);
     invaliderCandidats();
     renderD();
-    renderF();
-    renderTop();
+    recalculerAvecProgression(`Effet ${(typeof NODE !== 'undefined' && NODE[id] && NODE[id].label) || id} ${S.focusNodes.has(id) ? 'isolé' : 'relâché'} : les candidates sont rebâties et notées.`);
     return;
   }
 
@@ -86,7 +85,7 @@ document.addEventListener('click', ev => {
     /* Les cartes du thème coché sont cherchées à la demande, sur ce qui est
        coché dans la fenêtre : sans cela le décompte annoncerait zéro. */
     avecBrouillon(() => archetypesAChargerEdhrec()).forEach(slug => chargerThemeEdhrec(slug));
-    apresReglage();
+    apresReglage('Filtre par archétype modifié : les cartes retenues et les suggestions sont recalculées.');
     return;
   }
 
@@ -100,13 +99,13 @@ document.addEventListener('click', ev => {
     modifieBrouillon(() => basculerSet(b.dataset.set));
     // les cartes du set coché sont cherchées à la demande, comme les thèmes
     avecBrouillon(() => setsACharger()).forEach(code => chargerSetScryfall(code));
-    apresReglage();
+    apresReglage('Filtre par set modifié : les cartes retenues et les suggestions sont recalculées.');
     return;
   }
 
   if (act === 'dropFiltre') {
     modifieBrouillon(() => effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean)));
-    apresReglage();
+    apresReglage('Filtre retiré : les cartes qu\'il écartait reviennent, et les suggestions sont recalculées.');
     return;
   }
 
@@ -164,7 +163,7 @@ document.addEventListener('click', ev => {
     /* « Réinitialiser » dans la fenêtre vide le brouillon ; « Tout effacer »
        dans l'en-tête vide l'état, et s'applique aussitôt. */
     modifieBrouillon(() => reinitFiltres());
-    apresReglage();
+    apresReglage('Filtres réinitialisés : tout l\'atelier est repris sans eux.');
     toast('Filtres réinitialisés.');
     return;
   }
@@ -178,7 +177,7 @@ document.addEventListener('click', ev => {
     /* Les mêmes rôles se cochent depuis les jauges de la section Deck :
        hors de la fenêtre, `modifieFiltres` agit sur l'état lui-même. */
     modifieBrouillon(() => basculerRole(b.dataset.role || ''));
-    apresReglage();
+    apresReglage('Filtre par rôle modifié : les cartes retenues et les suggestions sont recalculées.');
     return;
   }
 
@@ -198,20 +197,20 @@ document.addEventListener('click', ev => {
 
   if (act === 'allColors') {
     modifieBrouillon(() => { S.colors = new Set(['W','U','B','R','G','C']); });
-    apresReglage();
+    apresReglage('Toutes les couleurs retenues : la collection affichée et les suggestions sont recalculées.');
     return;
   }
 
   if (act === 'clearColors' || act === 'noColors') {
     modifieBrouillon(() => { S.colors = new Set(); });
-    apresReglage();
+    apresReglage('Plus aucune couleur retenue : la collection affichée et les suggestions sont recalculées.');
     return;
   }
 
   if (act === 'inc') {
     const n = b.dataset.name;
     S.collection.set(n, (S.collection.get(n) || 0) + 1);
-    renderAll();
+    recalculerAvecProgression(`${n} : un exemplaire de plus en collection, les suggestions en tiennent compte.`);
     return;
   }
 
@@ -219,7 +218,7 @@ document.addEventListener('click', ev => {
     const n = b.dataset.name;
     const c = S.collection.get(n) || 0;
     if (c <= 1) S.collection.delete(n); else S.collection.set(n, c - 1);
-    renderAll();
+    recalculerAvecProgression(`${n} : un exemplaire de moins en collection, les suggestions en tiennent compte.`);
     return;
   }
 
@@ -282,7 +281,7 @@ document.addEventListener('click', ev => {
   if (act === 'deckDrop') {
     S.deck.delete(b.dataset.name);
     if (S.commander === b.dataset.name) S.commander = null;
-    renderAll();
+    recalculerAvecProgression(`${b.dataset.name} retirée du deck : les suggestions sont renotées.`);
     return;
   }
 
@@ -300,19 +299,19 @@ document.addEventListener('click', ev => {
     const n = b.dataset.name;
     S.collection.set(n, (S.collection.get(n) || 0) + 1);
     toast(`${n} : 1 exemplaire ajouté à la collection.`);
-    renderAll();
+    recalculerAvecProgression(`${n} : un exemplaire de plus en collection, les suggestions en tiennent compte.`);
     return;
   }
 
   if (act === 'setCmd') {
     S.commander = b.dataset.name;
-    renderAll();
+    recalculerAvecProgression(`${b.dataset.name} désignée commandant : tout le classement des suggestions en dépend.`);
     return;
   }
 
   if (act === 'unsetCmd') {
     S.commander = null;
-    renderAll();
+    recalculerAvecProgression('Commandant retiré : le classement des suggestions est repris sans lui.');
     return;
   }
 
@@ -322,7 +321,7 @@ document.addEventListener('click', ev => {
       S.colors = new Set(cmd.identity.length ? cmd.identity : ['C']);
       S.colorMode = 'identity';
       invaliderCandidats();
-      renderAll();
+      recalculerAvecProgression(`Filtres alignés sur l'identité de ${cmd.name} : les candidates sont rebâties.`);
       toast(`Filtres alignés sur l'identité de ${cmd.name} : ${[...S.colors].join('')||'C'}.`);
     }
     return;
@@ -416,7 +415,7 @@ document.addEventListener('click', ev => {
       CAT.octets = 0;
       CAT.date = null;
       invaliderCandidats();
-      renderAll();
+      recalculerAvecProgression('Archive effacée : les suggestions se limitent de nouveau à votre collection.');
       rafraichirFenetreSauvegarde();
       toast("Archive du catalogue effacée.");
     });
@@ -469,7 +468,7 @@ document.addEventListener('click', ev => {
       S.deck.clear();
       S.commander = null;
       closeDialog();
-      renderAll();
+      recalculerAvecProgression('Liste principale vidée : les suggestions repartent d\'un deck vide.');
       toast('Deck vidé.');
     };
     return;
@@ -664,12 +663,12 @@ document.addEventListener('change', ev => {
   const t = ev.target;
   if (t.dataset.act === 'catNumeriques') {
     modifieBrouillon(() => { S.catalogueNumeriques = !!t.checked; });
-    apresReglage();
+    apresReglage('Réglage des cartes numériques modifié : les candidates sont rebâties.');
     return;
   }
   if (t.dataset.act === 'filtreLegal') {
     modifieBrouillon(() => { S.filtreLegal = !!t.checked; });
-    apresReglage();
+    apresReglage('Filtre de légalité modifié : les cartes retenues et les suggestions sont recalculées.');
     return;
   }
   if (t.dataset.act === 'sort') {
@@ -682,7 +681,7 @@ document.addEventListener('change', ev => {
       S.format = t.value;
       if (S.format === 'perso') S.custom.commander = fmt().commander;
     });
-    apresReglage();
+    apresReglage('Format changé : légalité, taille et suggestions sont repris.');
     return;
   }
   if (t.dataset.act === 'chooseCmd') {
@@ -700,7 +699,13 @@ const dlgEl = document.getElementById('dlg');
 if (dlgEl) {
   /* Une fenêtre de filtres fermée autrement que par « Appliquer » revient
      à l'état d'avant son ouverture, quel qu'ait été le geste. */
-  dlgEl.addEventListener('close', () => fermetureBrouillon());
+  dlgEl.addEventListener('close', () => {
+    fermetureBrouillon();
+    /* Le toast a pu être glissé dans la fenêtre pour passer au-dessus
+       d'elle : refermée, elle l'emporterait hors de vue. */
+    const t = document.getElementById('toast');
+    if (t && t.parentElement === dlgEl) document.body.appendChild(t);
+  });
   dlgEl.addEventListener('click', ev => {
     if (ev.target === dlgEl) {
       const rect = dlgEl.getBoundingClientRect();

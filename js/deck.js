@@ -107,7 +107,7 @@ function versAnnexe(nom, cle, qty) {
   const reste = demande - (deplaces || 0);
   if (reste > 0) l.set(nom, (l.get(nom) || 0) + reste);
 
-  renderAll();
+  recalculerAvecProgression(`${nom} placée dans ${a.article} : les suggestions tiennent compte du nouveau deck.`);
   const total = l.get(nom) || 0;
   toast(source === 'deck' ? `${nom} quitte le deck pour ${a.article} (×${total}).`
     : source && source !== cle ? `${nom} déplacée vers ${a.article} (×${total}).`
@@ -118,12 +118,12 @@ function versAnnexe(nom, cle, qty) {
 function retirerAnnexe(nom, cle) {
   const l = annexeListe(cle), cur = l.get(nom) || 0;
   if (cur <= 1) l.delete(nom); else l.set(nom, cur - 1);
-  renderAll();
+  recalculerAvecProgression(`${nom} retirée de ${ANNEXES[cle].article} : les suggestions sont reprises.`);
 }
 
 function viderAnnexe(cle) {
   annexeListe(cle).clear();
-  renderAll();
+  recalculerAvecProgression(`${ANNEXES[cle].titre} : liste vidée, les suggestions sont reprises.`);
   toast(`${ANNEXES[cle].titre} : liste vidée.`);
 }
 
@@ -238,7 +238,7 @@ function addToDeck(name) {
     const n = deplacerCarte(name, 'deck');
     if (!n) return;
     if (f.commander && !S.commander && c.isLegendaryCreature) S.commander = name;
-    renderAll();
+    recalculerAvecProgression(`${name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
     toast(`${name} ×${n} quitte ${ANNEXES[annexe].article} pour le deck.`);
     return;
   }
@@ -251,7 +251,7 @@ function addToDeck(name) {
     toast(`${name} n'est pas dans votre collection : ajoutée au deck et comptée à l'achat${prix?` (≈ ${eur(prix)})`:''}.`);
   }
   if (f.commander && !S.commander && c.isLegendaryCreature) S.commander = name;
-  renderAll();
+  recalculerAvecProgression(`${name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
 }
 
 function deckAdd(card, qty, opts) {
@@ -282,7 +282,7 @@ function removeFromDeck(name) {
     S.deck.delete(name);
     if (S.commander === name) S.commander = null;
   } else S.deck.set(name, cur - 1);
-  renderAll();
+  recalculerAvecProgression(`${name} retirée du deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
 }
 
 function buyCard(name) {
@@ -295,7 +295,7 @@ function buyCard(name) {
   if (!o) { toast("Aucune offre ne passe vos filtres d'état, de langue ou de prix maximum."); return; }
   if (spent() + o.price > S.budget.total) { toast('Budget dépassé. Augmentez-le, ou retirez une carte à acheter du deck.'); return; }
   deckAdd(c, 1, {force:true});
-  renderAll();
+  recalculerAvecProgression(`${name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
   toast(`${name} ajoutée au deck, comptée à l'achat : ${eur(o.price)} estimés (${o.condition} ou mieux, ${o.lang}).`);
 }
 

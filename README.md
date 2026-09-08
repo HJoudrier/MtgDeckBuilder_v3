@@ -198,6 +198,26 @@ l'état du démarrage — `budget: {total: 0, perCard: 5, …}` —, où l'ateli
 de la collection et n'engage aucun achat : le prix maximum par carte est posé d'avance, il n'attend
 qu'un budget pour valoir.
 
+Hors des fenêtres, un geste qui change l'atelier — une couleur de l'en-tête, une puce de filtre
+retirée, une carte ajoutée au deck — déclenche le même travail sans qu'aucune fenêtre ne soit là
+pour le montrer : bâtir les candidates du catalogue, puis les noter. Sur une archive complète,
+c'est plusieurs secondes pendant lesquelles la page ne répondait plus, sans un mot. Ces gestes
+passent désormais par `recalculerAvecProgression(raison)` (js/ui.js), qui fait le travail par
+tranches et l'annonce.
+
+Trois précautions y tiennent l'affichage juste. Le travail bref ne s'annonce pas : sans archive,
+ou avec un vivier de moins de `SEUIL_RECALCUL` cartes, l'atelier se refait sur-le-champ comme
+avant. Le travail long ne s'annonce pas non plus tout de suite : la boîte n'est montrée qu'au
+bout de `DELAI_BOITE`, sans quoi elle clignoterait pour un recalcul de deux dixièmes de seconde.
+Et elle ne chasse jamais une fenêtre ouverte : si l'utilisateur lit une fiche ou remplit un
+formulaire, la barre se glisse dans le pied de cette fenêtre-là plutôt que de la refermer.
+
+Chaque geste dit sa raison, et c'est elle que la boîte affiche : « Couleur R retirée des
+filtres… », « Sol Ring ajoutée au deck : les suggestions sont renotées… ». Reste le filet, dans
+`renderF()` : un changement venu d'ailleurs — une archive qui finit de charger, une réponse de
+Scryfall — trouverait sinon la sélection caduque et la recalculerait d'un bloc. La section
+annonce alors le recalcul et le renvoie au même mécanisme.
+
 Le chargement de l'archive Scryfall, lui, ouvre une boîte de progression : deux barres —
 ce qui arrive, ce qui en est extrait — et le décompte des cartes retenues. Les totaux
 viennent de `verifierMajCatalogue()`, qui relève la taille compressée et la taille brute.
@@ -463,7 +483,7 @@ Données : `VISUELS_CHARGES`
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
 | `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
 | `refreshSuggestions()` | Rafraîchit la liste sans toucher aux champs de saisie. |
-| `renderF()` | Rend la section des suggestions. |
+| `renderF()` | Rend la section des suggestions ; si la sélection est caduque et le recalcul long, la section l'annonce et le renvoie au recalcul par tranches. |
 
 ### `js/collection.js` — Collection
 
@@ -610,9 +630,16 @@ Données : `RETOURNEES`
 | `avecBrouillon(fn)` | Lit comme si le brouillon était appliqué : c'est ainsi que la fenêtre se peint. |
 | `modifieBrouillon(fn)` | Le jumeau écrivain : hors de la fenêtre, `fn` agit sur l'état lui-même. |
 | `brouillonModifie()` | Le brouillon diffère-t-il de ce qui est appliqué ? |
-| `apresReglage()` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle. |
+| `apresReglage(raison)` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle — par le recalcul annoncé, avec la raison du geste. |
 | `renderAllSiApplique()` | Un rendu global, sauf tant qu'un brouillon rend ce recalcul inutile. |
 | `zoneProgression()` | La barre de progression, dans le pied de la fenêtre. |
+| `pause()` | Rend la main entre deux tranches de calcul. |
+| `pausePeinte()` | La même, mais jusqu'à ce qu'une image ait été peinte. |
+| `recalculLong()` | Le recalcul qui vient sera-t-il assez long pour passer par tranches ? |
+| `corpsBoiteRecalcul(raison)` | Contenu de la boîte : la raison du recalcul, ce qu'il fait, sa barre. |
+| `annonceRecalcul(raison)` | L'ouvre — ou glisse la barre dans le pied de la fenêtre déjà ouverte. |
+| `finRecalcul()` | Referme la boîte, ou retire la barre empruntée. |
+| `recalculerAvecProgression(raison)` *(async)* | Bâtit les candidates et les note par tranches, annonce le travail s'il dure, puis rend l'atelier. Un seul à la fois : un geste arrivé pendant est repris ensuite. |
 | `majProgression(txt,fait,total)` | Avance la barre et son libellé. |
 | `filtrerAvecProgression()` *(async)* | Bâtit les candidates puis les note par tranches, barre à l'appui, et rend la main entre chaque lot. |
 | `fermetureBrouillon()` | Toute autre fermeture — Annuler, croix, Échap, arrière-plan — jette le brouillon. |

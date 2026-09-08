@@ -331,7 +331,9 @@ function openImport(cible) {
 
     setTimeout(() => {
       S.limitB = PAGE;
-      renderAll();
+      recalculerAvecProgression(versDeck
+        ? 'Deck importé : les candidates sont rebâties et notées d\'après lui.'
+        : 'Collection importée : les cartes retenues et les suggestions sont recalculées.');
       toast(versDeck
         ? `${qty} carte(s) placées dans le deck${CLES_ANNEXES.filter(cle => annexes[cle]).map(cle => ` · ${annexes[cle]} en ${ANNEXES[cle].titre.toLowerCase()}`).join('')}${jetons ? ` · ${jetons} jeton(s) ignorés` : ''}${doublons ? ` · ${doublons} déjà dans la liste principale` : ''}${cmd ? ` · commandant : ${cmd}` : ''}${manquants ? ` · ${manquants} à acheter pour ${eur(spent())}` : ''}${created ? ` · ${created} carte(s) créées` : ''}${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`
         : `${entries.length} ligne(s) lues · ${qty} exemplaires · ${known} carte(s) déjà connues · ${created} créée(s)${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`);
@@ -347,11 +349,11 @@ function ajouterCarte(c, q, cible, completer) {
   }
   if (cible === 'deck') {
     const n = deckAdd(c, q, {completer});
-    renderAll();
+    recalculerAvecProgression(`${c.name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
     toast(n ? `${c.name} ×${n} ajoutée(s) au deck.` : `${c.name} : limite de ${fmt().maxCopies} copie(s) atteinte.`);
   } else {
     S.collection.set(c.name, (S.collection.get(c.name) || 0) + q);
-    renderAll();
+    recalculerAvecProgression(`${c.name} ajoutée à la collection : les suggestions en tiennent compte.`);
     toast(`${c.name} ×${q} ajoutée(s) à la collection.`);
   }
 }
