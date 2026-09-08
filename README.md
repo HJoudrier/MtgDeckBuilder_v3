@@ -235,9 +235,29 @@ demandent une autre liste. Un repeint venu d'un chargement qui s'achève, lui, l
 
 S'y ajoute l'**ancre de défilement** (`releveAncre()` / `restaureAncre()`, js/ui.js) : le rendu
 d'un deck qui gagne une ligne, d'un en-tête qui gagne une pastille, descend de quelques dizaines
-de pixels ce qu'on lisait. L'ancre relève avant le rendu ce qui franchit le haut de la fenêtre —
-la vignette plutôt que la section qui la porte — et l'y remet après. Elle vaut pour tous les
-recalculs, pas seulement pour les ajouts.
+de pixels ce qu'on lisait. L'ancre retient, **à l'entrée du recalcul et avant tout changement de
+DOM**, le repère le plus proche du haut de la fenêtre — et, à distance égale, la vignette plutôt
+que la section qui la porte, une section prise pour ancre laissant le contenu glisser sous elle
+dès qu'une ligne s'ajoute au-dessus. Elle vaut pour tous les recalculs, pas seulement pour les
+ajouts.
+
+Reste le cas des recalculs que **personne n'a demandés** : des statistiques EDHREC qui arrivent,
+des combos, des prix, une carte que Scryfall vient de compléter. `recalculerAvecProgression()`
+les prend en mode `fond` (`opts.fond`), et trois règles les distinguent d'un geste. Ils ne
+vident jamais la section : le filet de `renderF()` laissait auparavant un encart d'une ligne à
+la place de la liste, la section fondait de quelques milliers de pixels à une soixantaine, le
+navigateur ramenait le défilement dans les nouvelles bornes et l'on se retrouvait au début de la
+section. Ils n'ouvrent aucune fenêtre : la progression tient dans le décompte de l'en-tête et un
+liseré de trois pixels au bord haut de la section, posé en position absolue — rien n'entre dans
+le flux, rien ne bouge. Et ils gèlent l'ordre affiché comme le fait un ajout, le bandeau
+« Reclasser » proposant le nouveau classement.
+
+Encore faut-il qu'ils soient rares. `applyScryfall()` (js/scryfall.js) comparait à peine avant
+d'écrire et incrémentait `MAJ_CARTES` pour toute réponse, fût-elle un simple visuel : chaque lot
+de soixante-quinze cartes périmait la sélection, et la file des images tournant sans cesse, la
+section se recalculait à intervalles imprévisibles. Le compteur ne compte plus que les champs
+qui changent une note — texte, identité, coût converti, force, endurance, légalité, prix —, et
+chacun n'est écrit qu'après comparaison, sur le modèle de la garde qui protégeait déjà `force`.
 
 Chaque geste dit sa raison, et c'est elle que la boîte affiche : « Couleur R retirée des
 filtres… », « Sol Ring ajoutée au deck : les suggestions sont renotées… ». Reste le filet, dans
@@ -365,7 +385,7 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `requeteCatalogue()` | Construit la requête Scryfall correspondant aux couleurs, et au format si `S.filtreLegal`. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
-| `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. |
+| `applyScryfall(sc,requested,imagesOnly)` | Applique une réponse Scryfall à une carte : texte, visuels, prix, verso. Ne compte dans `MAJ_CARTES` que les champs qui changent une note, chacun comparé avant écriture. |
 | `besoinScryfall(c)` | Dit si une carte attend encore son visuel ou son texte oracle complet. |
 | `identScryfall(c)` | Identifiant demandé à Scryfall : l'édition relevée à l'import, ou le nom. |
 | `cibleImpression(sc,parImpression)` | Retrouve la carte visée par une réponse, d'après l'édition demandée. |
@@ -503,7 +523,8 @@ Données : `VISUELS_CHARGES`
 | `signatureSuggestions()` | L'empreinte de tout ce dont la notation dépend : deck, collection, filtres, budget, format, données EDHREC et combos, cartes complétées. |
 | `empreinteCollection()` | Un condensé bon marché de la collection, pour cette empreinte. |
 | `suggestionsAJour()` | La sélection mémorisée vaut-elle encore pour l'état courant ? |
-| `geleSuggestions()` | Gèle l'ordre affiché et demande un rafraîchissement en place : c'est le geste d'ajout depuis une vignette. |
+| `geleSuggestions()` | Gèle l'ordre affiché — la dernière sélection rendue, jamais une notation en cours — et demande un rafraîchissement en place. |
+| `ordreGele()` | Un ordre est-il gelé ? Un tableau vide n'en est pas un. |
 | `degeleSuggestions()` | Lève le gel — « Reclasser », ou tout réglage de l'en-tête. |
 | `suggestionsAffichees()` | La sélection dans l'ordre où elle s'affiche : celui des scores, ou celui qui a été gelé. |
 | `classementDecale()` | L'ordre affiché diffère-t-il de celui des scores ? |
@@ -669,7 +690,9 @@ Données : `RETOURNEES`
 | `apresReglage(raison)` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle — par le recalcul annoncé, avec la raison du geste. |
 | `renderAllSiApplique()` | Un rendu global, sauf tant qu'un brouillon rend ce recalcul inutile. |
 | `zoneProgression()` | La barre de progression, dans le pied de la fenêtre. |
-| `releveAncre()` | Relève ce qui franchit le haut de la fenêtre avant un rendu. |
+| `releveAncre()` | Relève le repère le plus proche du haut de la fenêtre, avant tout changement de DOM. |
+| `progresSection(txt,fait,total)` | La progression discrète d'un recalcul de fond : le liseré de la section et son décompte. |
+| `finProgresSection()` | Retire ce liseré. |
 | `restaureAncre(a)` | L'y remet après, en corrigeant le défilement. |
 | `candidatsAncre()` | Les repères possibles : les sections et toute carte affichée. |
 | `pause()` | Rend la main entre deux tranches de calcul. |

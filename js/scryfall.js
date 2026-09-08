@@ -96,12 +96,22 @@ function applyScryfall(sc, requested, imagesOnly) {
     : (BY_NAME[norm(sc.name)] || LOOSE[loose(sc.name)] || (requested ? find(requested) : null));
 
   if (target && (imagesOnly || !target.unknown)) {
-    majTexteOracle(target, text);
+    /* Ce qui change la note de la carte, par opposition aux visuels et aux
+       adresses : c'est cela seul que `MAJ_CARTES` compte, et cela seul qui
+       périme la sélection des suggestions. Une réponse qui n'apporte qu'une
+       illustration — le cas le plus courant, la file des visuels tournant
+       sans cesse — ne doit rien faire recalculer. */
+    let fond = false;
+    fond = majTexteOracle(target, text) || fond;
     completeImpression(target, sc);
     if (Array.isArray(sc.color_identity) && !/^basic land/i.test(target.type || '')) {
-      target.identity = sc.color_identity.slice();
+      const avant = (target.identity || []).join('');
+      if (avant !== sc.color_identity.join('')) {
+        target.identity = sc.color_identity.slice();
+        fond = true;
+      }
     }
-    if (typeof sc.cmc === 'number') target.cmc = sc.cmc;
+    if (typeof sc.cmc === 'number' && target.cmc !== sc.cmc) { target.cmc = sc.cmc; fond = true; }
     /* Une illustration choisie à la main fait autorité : seule une réponse
        portant sur cette impression-là peut la remplacer. */
     const cleRep = cleImpression(sc.set, sc.collector_number);
@@ -116,18 +126,25 @@ function applyScryfall(sc, requested, imagesOnly) {
       target.imgBL = versoUris.large || target.imgB;
     }
     if (sc.purchase_uris && sc.purchase_uris.cardmarket) target.cmUrl = sc.purchase_uris.cardmarket;
-    if (pr.eur) target.price = parseFloat(pr.eur) || target.price;
+    if (pr.eur) {
+      const eurVal = parseFloat(pr.eur) || target.price;
+      if (target.price !== eurVal) { target.price = eurVal; fond = true; }
+    }
     const pw = sc.power || (faces && faces[0] && faces[0].power);
     if (pw != null && /^\d+$/.test(String(pw)) && target.force !== +pw) {
       target.force = +pw;
       reanalyser(target);
+      fond = true;
     }
     const tg = sc.toughness || (faces && faces[0] && faces[0].toughness);
-    if (tg != null && /^\d+$/.test(String(tg))) target.endurance = +tg;
+    if (tg != null && /^\d+$/.test(String(tg)) && target.endurance !== +tg) {
+      target.endurance = +tg;
+      fond = true;
+    }
     const art = sc.artist || (faces && faces[0] && faces[0].artist);
     if (art) target.artist = art;
-    if (legal !== undefined) target.legal = legal;
-    MAJ_CARTES++;
+    if (legal !== undefined && target.legal !== legal) { target.legal = legal; fond = true; }
+    if (fond) MAJ_CARTES++;
     return true;
   }
 

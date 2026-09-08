@@ -1219,15 +1219,21 @@ function candidatsAncre() {
 
 function releveAncre() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return null;
-  const cands = candidatsAncre();
-  let franchit = null, premier = null;
-  for (const el of cands) {
+  /* Le repère le plus proche du haut de la fenêtre, au-dessus comme au-dessous
+     — et, à distance égale, la carte plutôt que la section qui la porte : une
+     section prise pour ancre laisse le contenu glisser sous elle dès qu'une
+     ligne s'ajoute au-dessus, un bandeau par exemple. */
+  let cible = null, meilleur = Infinity;
+  for (const el of candidatsAncre()) {
     const r = el.getBoundingClientRect();
     if (r.bottom <= 0) continue;
-    if (!premier) premier = el;
-    if (r.top <= 0) franchit = el;   // le dernier qui commence au-dessus du bord
+    const d = Math.abs(r.top);
+    const carte = el.hasAttribute('data-card');
+    if (d < meilleur - 1 || (d < meilleur + 1 && carte && cible && !cible.hasAttribute('data-card'))) {
+      meilleur = Math.min(meilleur, d);
+      cible = el;
+    }
   }
-  const cible = franchit || premier;
   if (!cible) return null;
   return {
     section: cible.closest('section.sec') ? cible.closest('section.sec').id : '',
@@ -1293,18 +1299,63 @@ function finRecalcul() {
   if (dlg && dlg.open && document.getElementById('boiteRecalcul')) closeDialog();
 }
 
+/* La progression d'un recalcul de fond : rien de modal, rien qui pousse la
+   mise en page. Un liseré de trois pixels au bord haut de la section, posé en
+   position absolue, et le décompte de l'en-tête qui dit où l'on en est. Le
+   décompte normal — « 104 pistes » — revient au rendu qui suit. */
+function progresSection(txt, fait, total) {
+  const sec = document.getElementById('secF');
+  if (!sec) return;
+  let bande = document.getElementById('secProgres');
+  if (!bande) {
+    bande = document.createElement('div');
+    bande.id = 'secProgres';
+    bande.className = 'sec-progres';
+    bande.innerHTML = '<i></i>';
+    sec.appendChild(bande);
+  }
+  const pct = total > 0 ? Math.min(100, Math.round(fait / total * 100)) : 0;
+  if (bande.firstChild) bande.firstChild.style.width = pct + '%';
+  const hint = document.getElementById('hintF');
+  if (hint) hint.textContent = total > 0 ? `${txt} ${pct} %` : `${txt}…`;
+}
+
+function finProgresSection() {
+  const bande = document.getElementById('secProgres');
+  if (bande) bande.remove();
+}
+
 /* Un recalcul à la fois. Un geste arrivé pendant qu'un autre travaille est
    retenu et repris ensuite : l'état qu'il lira sera le dernier, et le
    résultat le bon. */
 let recalculEnCours = false;
 let recalculSuivant = null;
 
-async function recalculerAvecProgression(raison) {
-  if (recalculEnCours) { recalculSuivant = raison || recalculSuivant; return; }
-  /* Rien de long à faire : l'atelier se refait sur-le-champ, comme avant —
-     l'ancre gardant tout de même la page où elle était. */
+/* `opts.fond` : le recalcul n'a été demandé par personne — des statistiques
+   qui arrivent, des prix, une carte que Scryfall vient de compléter. Il ne
+   doit alors ni ouvrir de fenêtre, ni vider la section, ni bousculer l'ordre
+   affiché : il se signale d'un liseré et garde la liste en place. */
+async function recalculerAvecProgression(raison, opts) {
+  const fond = !!(opts && opts.fond);
+  if (recalculEnCours) {
+    /* Un geste arrivé pendant un recalcul de fond l'emporte : la reprise se
+       fera à découvert, avec sa boîte et sa raison. */
+    recalculSuivant = {
+      raison: raison || (recalculSuivant && recalculSuivant.raison) || '',
+      fond: fond && (!recalculSuivant || recalculSuivant.fond)
+    };
+    return;
+  }
+
+  /* L'ancre est relevée avant tout : c'est ce qu'on lit à cet instant, et non
+     ce qu'il en restera après un rendu. De même pour l'ordre gelé d'un
+     recalcul de fond : c'est le classement affiché qu'il faut retenir, pas
+     celui qui va sortir de la notation. */
+  const ancre = releveAncre();
+  if (fond && typeof geleSuggestions === 'function') geleSuggestions();
+
+  /* Rien de long à faire : l'atelier se refait sur-le-champ, comme avant. */
   if (!recalculLong()) {
-    const ancre = releveAncre();
     renderAll();
     restaureAncre(ancre);
     return;
@@ -1314,32 +1365,39 @@ async function recalculerAvecProgression(raison) {
   /* La boîte n'est pas ouverte d'emblée : un recalcul bref — les cartes
      déjà bâties, un catalogue modeste — se termine avant qu'on ait eu le
      temps de la lire, et elle ne ferait que clignoter. Elle paraît si le
-     travail dure, entre deux tranches. */
-  const differe = setTimeout(() => {
+     travail dure, entre deux tranches. Un recalcul de fond, lui, n'en ouvre
+     jamais. */
+  const avance = fond
+    ? (txt, fait, total) => progresSection(txt, fait, total)
+    : (txt, fait, total) => majProgression(txt, fait, total);
+  const differe = fond ? null : setTimeout(() => {
     annonceRecalcul(raison || 'L\'atelier se met à jour.');
     majProgression('Préparation des cartes', 0, 0);
   }, DELAI_BOITE);
+  if (fond) progresSection('recalcul', 0, 0);
   try {
     await pause();
     if (typeof prechauffeCandidats === 'function')
-      await prechauffeCandidats((fait, total) => majProgression('Préparation des cartes', fait, total));
+      await prechauffeCandidats((fait, total) => avance('Préparation des cartes', fait, total));
     if (typeof prepareSuggestions === 'function')
-      await prepareSuggestions((fait, total) => majProgression('Notation des candidates', fait, total));
-    majProgression('Affichage', 1, 1);
+      await prepareSuggestions((fait, total) => avance('Notation des candidates', fait, total));
+    avance('Affichage', 1, 1);
     await pause();
-    /* Le rendu déplace ce qu'on lisait — une ligne de plus dans le deck, une
-       pastille de plus dans l'en-tête : l'ancre l'y ramène. */
-    const ancre = releveAncre();
+    /* Le gel a été posé à l'entrée : la liste garde l'ordre qu'elle avait et
+       se rafraîchit en place, comme après un ajout. Il faut seulement le
+       redemander, un rendu ayant pu consommer le drapeau entre-temps. */
+    if (fond && typeof geleSuggestions === 'function') geleSuggestions();
     renderAll();
     restaureAncre(ancre);
   } finally {
-    clearTimeout(differe);
+    if (differe) clearTimeout(differe);
+    finProgresSection();
     finRecalcul();
     recalculEnCours = false;
     if (recalculSuivant) {
       const suite = recalculSuivant;
       recalculSuivant = null;
-      recalculerAvecProgression(suite);
+      recalculerAvecProgression(suite.raison, {fond: suite.fond});
     }
   }
 }

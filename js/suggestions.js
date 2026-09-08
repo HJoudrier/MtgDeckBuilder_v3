@@ -594,9 +594,21 @@ function ligneAchats() {
 let SUG_ORDRE = null;      // noms dans l'ordre affiché, ou null si l'on suit les scores
 let SUG_EN_PLACE = false;  // le prochain rendu de la section se fait sans la réécrire
 
+/* Gèle l'ordre tel qu'il est affiché — c'est-à-dire la dernière sélection
+   rendue, jamais une notation en cours : `SUG_MEMO.liste` porte exactement ce
+   que la section montre, et le lire ne recalcule rien. Sans elle, il n'y a
+   rien à geler et l'ordre des scores continue de valoir. */
 function geleSuggestions() {
-  if (!SUG_ORDRE) SUG_ORDRE = suggestionsAffichees().map(s => s.card.name);
+  /* Une sélection vide ne gèle rien : retenir un ordre vide reviendrait à
+     poser un gel qui ne retient personne, et — le tableau vide étant vrai —
+     à interdire tout gel ultérieur. */
+  if (!ordreGele() && SUG_MEMO.liste && SUG_MEMO.liste.length)
+    SUG_ORDRE = SUG_MEMO.liste.map(s => s.card.name);
   SUG_EN_PLACE = true;
+}
+
+function ordreGele() {
+  return !!(SUG_ORDRE && SUG_ORDRE.length);
 }
 
 function degeleSuggestions() {
@@ -608,7 +620,7 @@ function degeleSuggestions() {
    qui a été gelé — rang connu d'abord, nouvelles venues à la suite. */
 function suggestionsAffichees() {
   const liste = currentSuggestions();
-  if (!SUG_ORDRE) return liste;
+  if (!ordreGele()) return liste;
   const rang = new Map();
   SUG_ORDRE.forEach((nom, i) => rang.set(nom, i));
   const connues = [], nouvelles = [];
@@ -620,7 +632,7 @@ function suggestionsAffichees() {
 /* L'ordre affiché diffère-t-il de celui des scores ? C'est ce qui décide du
    bandeau : sans différence, rien à proposer. */
 function classementDecale() {
-  if (!SUG_ORDRE) return false;
+  if (!ordreGele()) return false;
   const parScore = currentSuggestions(), affiche = suggestionsAffichees();
   if (parScore.length !== affiche.length) return true;
   for (let i = 0; i < parScore.length; i++)
@@ -631,8 +643,7 @@ function classementDecale() {
 function bandeauReclassement() {
   if (!classementDecale()) return '';
   return `<div class="small muted" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-    Les scores ont changé depuis vos ajouts ; les vignettes gardent leur place pour ne pas vous
-    faire perdre le fil.
+    Les scores ont changé ; les vignettes gardent leur place pour ne pas vous faire perdre le fil.
     <button class="btn sm" data-act="reclasser" title="Reclasser les suggestions par score">Reclasser</button>
   </div>`;
 }
@@ -784,11 +795,13 @@ function renderF() {
      qu'elle fait et le recalcul repart par tranches, annoncé comme les
      autres. */
   if (!suggestionsAJour() && !recalculEnCours && typeof recalculLong === 'function' && recalculLong()) {
-    const attente = document.getElementById('bodyF');
-    if (attente) attente.innerHTML = `<div class="empty">Les suggestions se recalculent…</div>`;
-    const hint = document.getElementById('hintF');
-    if (hint) hint.textContent = 'recalcul…';
-    setTimeout(() => recalculerAvecProgression('Les suggestions se recalculent après un changement de l\'atelier.'), 0);
+    /* La liste affichée reste en place — la vider ferait fondre la section de
+       quelques milliers de pixels à une ligne, le navigateur ramènerait le
+       défilement dans les nouvelles bornes, et l'on se retrouverait au début
+       de la section. Ses scores datent d'un instant, le temps du recalcul ;
+       c'est le liseré de l'en-tête qui le dit. */
+    setTimeout(() => recalculerAvecProgression(
+      'Les suggestions se recalculent après un changement de l\'atelier.', {fond:true}), 0);
     return;
   }
   /* Rafraîchissement en place : seule la liste est réécrite, le reste de la

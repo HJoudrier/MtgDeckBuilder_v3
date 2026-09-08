@@ -157,7 +157,11 @@ header.top.compact .brand .sub{display:none}
 .head-toggle.is-compact:hover{color:var(--txt);border-color:var(--brass)}
 
 /* ---------- sections repliables ---------- */
-section.sec{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:14px 0;overflow:hidden}
+section.sec{position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:14px 0;overflow:hidden}
+/* Le liseré d'un recalcul de fond : posé par-dessus le bord haut de la
+   section, il n'entre pas dans le flux — rien ne bouge sous lui. */
+.sec-progres{position:absolute;left:0;top:0;width:100%;height:3px;background:rgba(211,164,65,.16);pointer-events:none;z-index:2}
+.sec-progres i{display:block;height:100%;width:0;background:var(--brass);transition:width .2s ease}
 .sec-head{
   display:flex;align-items:center;gap:10px;width:100%;
   padding:12px 14px;background:linear-gradient(180deg,var(--panel2),var(--panel));
