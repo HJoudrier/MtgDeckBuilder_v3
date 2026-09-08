@@ -861,6 +861,9 @@ function memeEtat(x, y) {
    l'en-tête, puces, jauges de rôle — l'atelier suit aussitôt. */
 function apresReglage(raison) {
   if (brouillon) { brouillon.redessine(); return; }
+  /* Changer un filtre, un format, une couleur, c'est demander une autre
+     liste : l'ordre gelé par les ajouts n'a plus lieu d'être. */
+  if (typeof degeleSuggestions === 'function') degeleSuggestions();
   invaliderCandidats();
   S.limitB = PAGE;
   /* Hors d'une fenêtre, un filtre change tout l'atelier : les candidates sont
@@ -1197,6 +1200,54 @@ function recalculLong() {
   return (CAND.liste ? CAND.liste.length : 0) + S.collection.size > SEUIL_RECALCUL;
 }
 
+/* ---------------------------------------------------------------------
+   L'ancre de défilement.
+
+   Un rendu complet repeint toutes les sections : le deck qui gagne une
+   ligne, l'en-tête qui gagne une pastille, et ce qu'on lisait descend de
+   quelques dizaines de pixels. On relève donc, avant, ce qui occupe le haut
+   de la fenêtre — la vignette qu'on regardait dans les suggestions, ou à
+   défaut la section — pour l'y remettre après.
+   --------------------------------------------------------------------- */
+
+/* Les repères possibles : les sections, et toute carte affichée. La bonne
+   ancre est la plus profonde de celles qui franchissent le haut de la
+   fenêtre — la vignette qu'on lisait plutôt que la section qui la porte. */
+function candidatsAncre() {
+  return [...document.querySelectorAll('section.sec, [data-card]')];
+}
+
+function releveAncre() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return null;
+  const cands = candidatsAncre();
+  let franchit = null, premier = null;
+  for (const el of cands) {
+    const r = el.getBoundingClientRect();
+    if (r.bottom <= 0) continue;
+    if (!premier) premier = el;
+    if (r.top <= 0) franchit = el;   // le dernier qui commence au-dessus du bord
+  }
+  const cible = franchit || premier;
+  if (!cible) return null;
+  return {
+    section: cible.closest('section.sec') ? cible.closest('section.sec').id : '',
+    nom: cible.getAttribute('data-card') || '',
+    y: cible.getBoundingClientRect().top
+  };
+}
+
+function restaureAncre(a) {
+  if (!a || typeof window === 'undefined') return;
+  const sec = a.section ? document.getElementById(a.section) : null;
+  let cible = null;
+  if (a.nom && typeof CSS !== 'undefined' && CSS.escape)
+    cible = (sec || document).querySelector(`[data-card="${CSS.escape(a.nom)}"]`);
+  cible = cible || sec;
+  if (!cible) return;
+  const ecart = cible.getBoundingClientRect().top - a.y;
+  if (Math.abs(ecart) > 1) window.scrollBy(0, ecart);
+}
+
 let boiteRecalcul = false;      // notre boîte est-elle à l'écran ?
 let barreEmpruntee = false;     // la barre est-elle glissée dans le pied d'une autre fenêtre ?
 
@@ -1250,8 +1301,14 @@ let recalculSuivant = null;
 
 async function recalculerAvecProgression(raison) {
   if (recalculEnCours) { recalculSuivant = raison || recalculSuivant; return; }
-  /* Rien de long à faire : l'atelier se refait sur-le-champ, comme avant. */
-  if (!recalculLong()) { renderAll(); return; }
+  /* Rien de long à faire : l'atelier se refait sur-le-champ, comme avant —
+     l'ancre gardant tout de même la page où elle était. */
+  if (!recalculLong()) {
+    const ancre = releveAncre();
+    renderAll();
+    restaureAncre(ancre);
+    return;
+  }
 
   recalculEnCours = true;
   /* La boîte n'est pas ouverte d'emblée : un recalcul bref — les cartes
@@ -1270,7 +1327,11 @@ async function recalculerAvecProgression(raison) {
       await prepareSuggestions((fait, total) => majProgression('Notation des candidates', fait, total));
     majProgression('Affichage', 1, 1);
     await pause();
+    /* Le rendu déplace ce qu'on lisait — une ligne de plus dans le deck, une
+       pastille de plus dans l'en-tête : l'ancre l'y ramène. */
+    const ancre = releveAncre();
     renderAll();
+    restaureAncre(ancre);
   } finally {
     clearTimeout(differe);
     finRecalcul();

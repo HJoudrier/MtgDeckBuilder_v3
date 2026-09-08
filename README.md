@@ -223,6 +223,22 @@ dans la base, et une empreinte prise avant naîtrait périmée. Le doute profite
 vaut une empreinte trop large qu'une suggestion périmée —, mais l'état d'un chargement n'en fait
 pas partie : seules ses données comptent.
 
+Reste ce que le rendu déplace. Ajouter une carte depuis une vignette renote la sélection — à
+raison, le deck a changé — mais le classement qui en sort n'est pas celui qu'on avait sous les
+yeux, et la section repeinte remettait au début celui qui parcourait le milieu d'une liste de
+trois cents cartes. Ce geste-là, et lui seul, **gèle l'ordre affiché** (`SUG_ORDRE`) et
+rafraîchit la section **en place** : seule la liste est réécrite, le panneau EDHREC et la ligne
+du catalogue gardent leur DOM. Chaque vignette reste à sa case, les nouvelles venues se rangent
+en fin de groupe, et un bandeau « Reclasser » paraît quand l'ordre des scores a divergé. Le gel
+tombe à ce bouton, ou au premier réglage (`apresReglage()`) — un filtre, une couleur, un format
+demandent une autre liste. Un repeint venu d'un chargement qui s'achève, lui, le respecte.
+
+S'y ajoute l'**ancre de défilement** (`releveAncre()` / `restaureAncre()`, js/ui.js) : le rendu
+d'un deck qui gagne une ligne, d'un en-tête qui gagne une pastille, descend de quelques dizaines
+de pixels ce qu'on lisait. L'ancre relève avant le rendu ce qui franchit le haut de la fenêtre —
+la vignette plutôt que la section qui la porte — et l'y remet après. Elle vaut pour tous les
+recalculs, pas seulement pour les ajouts.
+
 Chaque geste dit sa raison, et c'est elle que la boîte affiche : « Couleur R retirée des
 filtres… », « Sol Ring ajoutée au deck : les suggestions sont renotées… ». Reste le filet, dans
 `renderF()` : un changement venu d'ailleurs — une archive qui finit de charger, une réponse de
@@ -487,6 +503,12 @@ Données : `VISUELS_CHARGES`
 | `signatureSuggestions()` | L'empreinte de tout ce dont la notation dépend : deck, collection, filtres, budget, format, données EDHREC et combos, cartes complétées. |
 | `empreinteCollection()` | Un condensé bon marché de la collection, pour cette empreinte. |
 | `suggestionsAJour()` | La sélection mémorisée vaut-elle encore pour l'état courant ? |
+| `geleSuggestions()` | Gèle l'ordre affiché et demande un rafraîchissement en place : c'est le geste d'ajout depuis une vignette. |
+| `degeleSuggestions()` | Lève le gel — « Reclasser », ou tout réglage de l'en-tête. |
+| `suggestionsAffichees()` | La sélection dans l'ordre où elle s'affiche : celui des scores, ou celui qui a été gelé. |
+| `classementDecale()` | L'ordre affiché diffère-t-il de celui des scores ? |
+| `bandeauReclassement()` | Le bandeau qui le dit, et son bouton. |
+| `lanceEdhrecSiBesoin()` | Demande les statistiques du commandant quand il vient de changer, d'où que vienne le rendu. |
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
 | `panneauEdhrec()` | Panneau EDHREC du commandant. |
 | `sugRow(s)` | Vignette d'une proposition. |
@@ -496,7 +518,7 @@ Données : `VISUELS_CHARGES`
 | `visuelsSuggestions(byType)` | Demande les visuels des propositions affichées. |
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
 | `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
-| `refreshSuggestions()` | Rafraîchit la liste sans toucher aux champs de saisie. |
+| `refreshSuggestions()` | Rafraîchit la liste sans toucher au reste de la section : c'est aussi le rafraîchissement en place. |
 | `renderF()` | Rend la section des suggestions ; si la sélection est caduque et le recalcul long, la section l'annonce et le renvoie au recalcul par tranches. |
 
 ### `js/collection.js` — Collection
@@ -647,6 +669,9 @@ Données : `RETOURNEES`
 | `apresReglage(raison)` | Suite d'un réglage : la fenêtre seule se redessine, ou l'atelier entier hors d'elle — par le recalcul annoncé, avec la raison du geste. |
 | `renderAllSiApplique()` | Un rendu global, sauf tant qu'un brouillon rend ce recalcul inutile. |
 | `zoneProgression()` | La barre de progression, dans le pied de la fenêtre. |
+| `releveAncre()` | Relève ce qui franchit le haut de la fenêtre avant un rendu. |
+| `restaureAncre(a)` | L'y remet après, en corrigeant le défilement. |
+| `candidatsAncre()` | Les repères possibles : les sections et toute carte affichée. |
 | `pause()` | Rend la main entre deux tranches de calcul. |
 | `pausePeinte()` | La même, mais jusqu'à ce qu'une image ait été peinte. |
 | `recalculLong()` | Le recalcul qui vient sera-t-il assez long pour passer par tranches ? |

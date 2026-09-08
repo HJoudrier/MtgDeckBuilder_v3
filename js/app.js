@@ -223,6 +223,10 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'toDeck') {
+    /* Depuis une vignette de suggestion : l'ordre affiché est gelé et la
+       section rafraîchie en place, pour ne pas renvoyer au début celui qui
+       en parcourait le milieu. */
+    if (b.closest('.sugT')) geleSuggestions();
     addToDeck(b.dataset.name);
     if (document.getElementById('dlg') && document.getElementById('dlg').open) {
       openCardModal(b.dataset.name);
@@ -286,7 +290,17 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'buy') {
+    if (b.closest('.sugT')) geleSuggestions();
     buyCard(b.dataset.name);
+    return;
+  }
+
+  if (act === 'reclasser') {
+    /* Les scores sont déjà à jour : seul l'ordre affiché change, et le rendu
+       est immédiat. Le défilement n'est pas rattrapé — c'est un nouveau
+       classement qui a été demandé. */
+    degeleSuggestions();
+    renderF();
     return;
   }
 

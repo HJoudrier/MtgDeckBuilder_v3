@@ -575,8 +575,70 @@ function ligneAchats() {
      <div class="row" style="margin-top:6px"><button class="btn" data-act="wants">Exporter la liste de wants Cardmarket</button></div>`;
 }
 
+/* ---------------------------------------------------------------------
+   L'ordre gelé.
+
+   Ajouter une carte depuis une vignette change le deck, donc les scores :
+   la sélection est renotée, à raison. Mais le classement qui en sort n'est
+   pas celui qu'on avait sous les yeux, et la section repeinte remettait le
+   lecteur au début — perdant la place de celui qui parcourait le milieu
+   d'une liste de trois cents cartes.
+
+   Le geste gèle donc l'ordre affiché : les scores se recalculent et les
+   vignettes se rafraîchissent, chacune restant à sa case. Les nouvelles
+   venues se rangent à la suite. Quand le classement par score a changé, un
+   bandeau propose de reclasser ; sinon, le premier rendu complet venu — un
+   filtre, une couleur, un format — reprend l'ordre des scores.
+   --------------------------------------------------------------------- */
+
+let SUG_ORDRE = null;      // noms dans l'ordre affiché, ou null si l'on suit les scores
+let SUG_EN_PLACE = false;  // le prochain rendu de la section se fait sans la réécrire
+
+function geleSuggestions() {
+  if (!SUG_ORDRE) SUG_ORDRE = suggestionsAffichees().map(s => s.card.name);
+  SUG_EN_PLACE = true;
+}
+
+function degeleSuggestions() {
+  SUG_ORDRE = null;
+  SUG_EN_PLACE = false;
+}
+
+/* La sélection dans l'ordre où elle s'affiche : celui des scores, ou celui
+   qui a été gelé — rang connu d'abord, nouvelles venues à la suite. */
+function suggestionsAffichees() {
+  const liste = currentSuggestions();
+  if (!SUG_ORDRE) return liste;
+  const rang = new Map();
+  SUG_ORDRE.forEach((nom, i) => rang.set(nom, i));
+  const connues = [], nouvelles = [];
+  liste.forEach(s => (rang.has(s.card.name) ? connues : nouvelles).push(s));
+  connues.sort((a, b) => rang.get(a.card.name) - rang.get(b.card.name));
+  return connues.concat(nouvelles);
+}
+
+/* L'ordre affiché diffère-t-il de celui des scores ? C'est ce qui décide du
+   bandeau : sans différence, rien à proposer. */
+function classementDecale() {
+  if (!SUG_ORDRE) return false;
+  const parScore = currentSuggestions(), affiche = suggestionsAffichees();
+  if (parScore.length !== affiche.length) return true;
+  for (let i = 0; i < parScore.length; i++)
+    if (parScore[i].card.name !== affiche[i].card.name) return true;
+  return false;
+}
+
+function bandeauReclassement() {
+  if (!classementDecale()) return '';
+  return `<div class="small muted" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+    Les scores ont changé depuis vos ajouts ; les vignettes gardent leur place pour ne pas vous
+    faire perdre le fil.
+    <button class="btn sm" data-act="reclasser" title="Reclasser les suggestions par score">Reclasser</button>
+  </div>`;
+}
+
 function listeSuggestions() {
-  const toutes = currentSuggestions();
+  const toutes = suggestionsAffichees();
   const sug = toutes;
   const graphPicks = S.focusNodes.size ? sug.filter(s => s.graph && s.graph.includes('noeud')) : [];
   const edhrecPicks = sug.filter(s => s.edhrec);
@@ -618,6 +680,7 @@ function listeSuggestions() {
   })();
 
   const html = `
+    ${bandeauReclassement()}
     ${graphPicks.length ? `
       <div class="group" style="border-color:var(--brass-d)">
         <h4>Autour des nœuds sélectionnés
@@ -728,12 +791,31 @@ function renderF() {
     setTimeout(() => recalculerAvecProgression('Les suggestions se recalculent après un changement de l\'atelier.'), 0);
     return;
   }
+  /* Rafraîchissement en place : seule la liste est réécrite, le reste de la
+     section — panneau EDHREC, ligne du catalogue — garde son DOM. Réécrire
+     `#bodyF` entier remettrait le lecteur au début. */
+  if (SUG_EN_PLACE && document.getElementById('sugList')) {
+    SUG_EN_PLACE = false;
+    refreshSuggestions();
+    lanceEdhrecSiBesoin();
+    return;
+  }
+
+  /* Le rendu complet garde l'ordre gelé : il vient souvent d'un chargement
+     qui s'achève — EDHREC, les combos — et non d'un geste. Seuls un geste
+     de réglage (`apresReglage`) et le bouton « Reclasser » le lèvent. */
   const r = listeSuggestions();
   const bodyEl = document.getElementById('bodyF');
   if (bodyEl) {
     bodyEl.innerHTML = `${panneauEdhrec()}<div id="catLine">${ligneCatalogue()}</div><div id="sugList">${r.html}</div>`;
   }
   majHintF(r.sug, r.graphPicks, r.edhrecPicks);
+  lanceEdhrecSiBesoin();
+}
+
+/* Les statistiques du commandant sont demandées dès que celui-ci change —
+   d'où que vienne le rendu, complet ou en place. */
+function lanceEdhrecSiBesoin() {
   const secCmds = commandantsSecondaires();
   const cmdSig = (S.commander || '') + '::' + secCmds.map(c => c.name).sort().join('|');
   if (fmt().commander && (S.commander || secCmds.length) && typeof fetch === 'function'
