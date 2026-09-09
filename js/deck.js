@@ -717,7 +717,7 @@ function blocAnnexe(cle) {
       ${n ? `<button class="btn sm danger" data-act="clearAnnexe" data-liste="${cle}">Vider</button>` : ''}
     </div>
     ${entries.length
-      ? rendGroupes(groupeCartes(entries, S.groupes.deck, S.tris.deck), S.groupes.deck,
+      ? rendGroupes('deck', groupeCartes(entries, S.groupes.deck, S.tris.deck), S.groupes.deck,
           ents => S.view === 'grid' ? `<div class="grid">${ents.map(e => cardTile(e, cle)).join('')}</div>`
                                     : `<div class="list">${ents.map(e => cardRow(e, cle)).join('')}</div>`,
           g => g.entrees.reduce((x, e) => x + e.qty, 0))
@@ -797,7 +797,7 @@ function renderE() {
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       ${partieDeck('liste', 'Liste',
         `${n} carte(s)${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}${price ? ` · ${eur(price)}` : ''}${noteMultiple(mode)}`,
-        entries.length ? rendGroupes(groupes, mode, ents => S.view==='grid'
+        entries.length ? rendGroupes('deck', groupes, mode, ents => S.view==='grid'
           ? `<div class="grid">${ents.map(e=>cardTile(e,'deck')).join('')}</div>`
           : `<div class="list">${ents.map(e=>cardRow(e,'deck')).join('')}</div>`,
           g => g.entrees.reduce((a,e)=>a+e.qty,0))

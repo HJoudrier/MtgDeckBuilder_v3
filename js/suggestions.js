@@ -712,14 +712,19 @@ function listeSuggestions() {
     ${sug.length ? groupes.map(g => {
       const total = g.total, max = Math.min(S.limiteType[g.id] || 6, total), reste = total - max;
       const titre = GROUPES[mode].plat ? 'Toutes les pistes' : g.libelle;
-      return `<div class="group"><h4>${esc(titre)} <span class="small muted">${max} sur ${total}</span></h4>
-        <div class="sugrid">${g.entrees.slice(0,max).map(s=>sugRow(s)).join('')}</div>
+      /* Le corps entier — les vignettes et la pagination de la catégorie —
+         entre dans le pli : repliée, elle cache aussi ses boutons. */
+      const corps = `<div class="sugrid">${g.entrees.slice(0,max).map(s=>sugRow(s)).join('')}</div>
         ${total > 6 ? `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
           ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="30">Afficher ${Math.min(30,reste)} de plus</button>` : ''}
           ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="tout">Tout afficher (${total})</button>` : ''}
           ${max > 6 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="reduire">Réduire</button>` : ''}
-        </div>` : ''}
-      </div>`;
+        </div>` : ''}`;
+      /* Sans groupement, il n'y a pas de catégorie à replier : le bloc reste
+         celui d'avant, avec son seul titre. */
+      return GROUPES[mode].plat
+        ? `<div class="group"><h4>${esc(titre)} <span class="small muted">${max} sur ${total}</span></h4>${corps}</div>`
+        : enveloppeGroupe('suggestions', mode, g, titre, `${max} sur ${total}`, corps);
     }).join('')
       : '<div class="empty">Aucune suggestion. Ajoutez des cartes à la collection, élargissez les couleurs ou augmentez le budget.</div>'}
     ${(S.csb.status === 'cors' || S.csb.status === 'error') ? `<div class="small muted" style="margin-bottom:6px">
@@ -741,7 +746,13 @@ function visuelsSuggestions(groupes, edhrecPicks) {
   if (edhrecPicks && edhrecPicks.length) {
     vus.push(...edhrecPicks.slice(0, Math.min(S.limiteType['edhrec'] || 8, edhrecPicks.length)));
   }
-  groupes.forEach(g => vus.push(...g.entrees.slice(0, Math.min(S.limiteType[g.id] || 6, g.total))));
+  /* Une catégorie repliée ne montre rien : demander à Scryfall les visuels de
+     vignettes que personne ne voit serait autant de requêtes pour rien. */
+  const mode = S.groupes.suggestions;
+  groupes.forEach(g => {
+    if (groupePlie('suggestions', mode, g.id)) return;
+    vus.push(...g.entrees.slice(0, Math.min(S.limiteType[g.id] || 6, g.total)));
+  });
   setTimeout(() => queueScryfall(vus.map(x => x.card)), 0);
   setTimeout(chargeVisuelsClasses, 0);
 }

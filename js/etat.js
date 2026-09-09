@@ -45,6 +45,9 @@ const S = {
   sideboard: new Map(),      // la réserve, hors de la liste principale
   considering: new Map(),    // les cartes à l'étude, hors de la liste principale
   deckPlie: new Set(),       // les parties repliées de la section Deck : 'liste', 'sideboard', 'considering'
+  /* Les catégories repliées des trois sections, par clé « section|mode|groupe »
+     (js/groupes.js) : le pli d'un groupement ne vaut que pour lui. */
+  groupesPlies: new Set(),
   commander: null,
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',

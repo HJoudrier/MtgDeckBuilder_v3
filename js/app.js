@@ -258,6 +258,25 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  /* Le pli d'une catégorie. Il suit celui des parties du deck, à une nuance
+     près : dans la collection, une catégorie repliée ne consomme aucune place
+     dans la page, si bien que le pli change ce qui s'affiche et que la section
+     se redessine. Ailleurs il n'est qu'affichage, et la classe bascule sur
+     place — repasser par `renderE()` renoterait tout le deck pour un pli, et
+     réécrire `#sugList` ferait perdre sa place au lecteur. */
+  if (act === 'plierGroupe') {
+    const cle = b.dataset.cle;
+    if (S.groupesPlies.has(cle)) S.groupesPlies.delete(cle); else S.groupesPlies.add(cle);
+    scheduleSave();
+    if (b.dataset.section === 'collection') { renderB(); return; }
+    const bloc = b.closest('.partie');
+    if (!bloc) return;
+    const ouverte = bloc.classList.toggle('ouverte');
+    b.setAttribute('aria-expanded', String(ouverte));
+    b.setAttribute('title', ouverte ? 'Replier cette catégorie' : 'Déplier cette catégorie');
+    return;
+  }
+
   if (act === 'toAnnexe') {
     versAnnexe(b.dataset.name, b.dataset.liste);
     if (document.getElementById('dlg') && document.getElementById('dlg').open) {

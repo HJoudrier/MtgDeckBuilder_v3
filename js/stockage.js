@@ -71,6 +71,7 @@ function snapshot() {
     sideboard: [...S.sideboard],
     considering: [...S.considering],
     deckPlie: [...S.deckPlie],
+    groupesPlies: [...S.groupesPlies],
     commander: S.commander,
     colors: [...S.colors],
     colorMode: S.colorMode,
@@ -207,6 +208,7 @@ function restore(d) {
   /* Les parties repliées de la section Deck, comme l'en-tête compact : une
      préférence d'affichage, qu'on retrouve d'une séance à l'autre. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
+  if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
   return true;
 }
 

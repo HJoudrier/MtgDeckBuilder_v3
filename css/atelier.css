@@ -354,6 +354,9 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .partie-tete{display:flex;align-items:center;gap:8px;width:100%;padding:2px 0;background:none;border:0;
   color:var(--txt);cursor:pointer;text-align:left;font-family:inherit}
 .partie-tete h3{margin:0;font-size:15px;font-family:var(--display);flex:0 0 auto}
+/* Le titre d'une catégorie repliable : celui de `.group>h4`, glissé dans le
+   bouton de pli, qui porte désormais la disposition. */
+.partie-tete h4{margin:0;font-size:14px;font-family:var(--display);flex:0 0 auto}
 .partie-tete .small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .partie-tete:hover h3, .partie-tete:hover .chev-partie{color:var(--brass)}
 /* Son propre nom : `.sec.open .chev` vaut pour tout ce que la section

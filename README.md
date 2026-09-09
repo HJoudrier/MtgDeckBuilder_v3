@@ -346,9 +346,23 @@ est choisi, puis mémorisé sous l'empreinte des suggestions (`signatureSuggesti
 cent cartes à chaque rendu sans qu'on le sente ; une collection en compte des milliers, et les
 noter à chaque clic se paierait à chaque clic.
 
-*8 fonction(s), 9 Ko*
+Chaque catégorie se **replie** d'un clic sur son en-tête, comme les trois parties de la section
+Deck — mêmes classes, même chevron, même geste (`enveloppeGroupe()` reprend le patron de
+`partieDeck()`). La clé du pli réunit la section, le mode de groupement et le groupe :
+`collection|sousType|Wizard`. Replier « Créature » dans le deck ne replie donc pas celle de la
+collection, changer de groupement laisse les plis de l'autre mode en place, et une catégorie
+nouvelle s'ouvre. `S.groupesPlies` les tient, conservé comme `S.deckPlie`.
 
-Données : `GROUPES`, `TRIS`, `TRIS_SECTION`, `COULEUR_LABEL`, `COULEUR_ORDRE`, `NOTES_COLLECTION`
+Dans la collection, une catégorie repliée **ne consomme aucune place** dans la page : replier
+« Créature » fait apparaître les catégories suivantes au lieu de laisser les 200 places se remplir
+de cartes invisibles, et l'en-tête replié annonce alors le total entier de sa catégorie. C'est
+pourquoi le pli y redessine la section, là où le deck et les suggestions se contentent de basculer
+la classe sur place — repasser par `renderE()` renoterait tout le deck pour un pli, et réécrire
+`#sugList` ferait perdre sa place au lecteur.
+
+*12 fonction(s), 16 Ko*
+
+Données : `GROUPES`, `TRIS`, `TRIS_SECTION`, `COULEUR_LABEL`, `COULEUR_ORDRE`, `NOTES_COLLECTION`, `COMPTEUR_GROUPE`
 
 | Fonction | Rôle |
 |---|---|
@@ -357,7 +371,10 @@ Données : `GROUPES`, `TRIS`, `TRIS_SECTION`, `COULEUR_LABEL`, `COULEUR_ORDRE`, 
 | `scoreEntree(e)` | Le score d'une entrée, pris à la suggestion, au deck ou aux notes de la collection. |
 | `notesCollection(entrees)` | Note la collection à la demande et mémorise le résultat sous l'empreinte des suggestions. |
 | `groupeCartes(entrees,mode,tri)` | Range une liste en groupes ordonnés, chacun trié. Un tri `null` garde l'ordre reçu. |
-| `rendGroupes(groupes,mode,rend,compte)` | Le titre de chaque groupe ; la section rend son contenu. Sans groupe, la liste passe telle quelle. |
+| `clePli(section,mode,id)` | La clé d'un pli : la section, le mode de groupement et le groupe. |
+| `groupePlie(section,mode,id)` | Cette catégorie est-elle repliée ? |
+| `enveloppeGroupe(section,mode,g,titre,badge,corps)` | La catégorie repliable : en-tête cliquable, chevron, et le corps que la section fournit. |
+| `rendGroupes(section,groupes,mode,rend,compte)` | Une catégorie repliable par groupe ; la section rend son contenu. Sans groupe, la liste passe telle quelle, et rien ne se replie. |
 | `noteMultiple(mode)` | La phrase qui annonce qu'une carte compte dans plusieurs groupes. |
 | `barreGroupeTri(section)` | Les deux menus « Grouper par » et « Trier par », portant la section qu'ils règlent. |
 
@@ -576,7 +593,7 @@ Données : `VISUELS_CHARGES`
 | `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
 | `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |
 | `listeSuggestions()` | Assemble les groupes selon la barre de la section (js/groupes.js) et le filtre par rôle. Le tri « score » ne retrie rien : la liste arrive dans l'ordre des scores, ou dans l'ordre gelé que le geste précédent a retenu. |
-| `visuelsSuggestions(groupes)` | Demande les visuels des propositions affichées. |
+| `visuelsSuggestions(groupes)` | Demande les visuels des propositions affichées, les catégories repliées exceptées. |
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
 | `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
 | `refreshSuggestions()` | Rafraîchit la liste sans toucher au reste de la section : c'est aussi le rafraîchissement en place. |
@@ -594,7 +611,7 @@ par nom ; les éditions relevées s'ajoutent les unes aux autres sur la même ca
 
 | Fonction | Rôle |
 |---|---|
-| `renderB()` | Rend la collection, en grille ou en liste, groupée et triée selon la barre en tête de section (js/groupes.js), avec pagination ; les filtres se règlent dans l'en-tête. La page se remplit groupe par groupe, dans l'ordre affiché. |
+| `renderB()` | Rend la collection, en grille ou en liste, groupée et triée selon la barre en tête de section (js/groupes.js), avec pagination ; les filtres se règlent dans l'en-tête. La page se remplit groupe par groupe, dans l'ordre affiché, en sautant les catégories repliées. |
 | `causesCollection()` | Compte, cause par cause, ce qui écarte des cartes : les couleurs, la légalité du format, les champs de la fenêtre. |
 | `ligneCausesCollection()` | La phrase qui les nomme, chacune avec le geste qui la lève. |
 | `retireExtrait(s,i,n)` | Retire un fragment d'une ligne et recolle le reste. |

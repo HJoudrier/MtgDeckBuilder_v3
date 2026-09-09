@@ -209,6 +209,10 @@ function renderB() {
   let place = S.limitB;
   const pageGroupes = [];
   groupes.forEach(g => {
+    /* Une catégorie repliée ne coûte aucune place : ses cartes ne sont pas
+       rendues, les catégories ouvertes en profitent, et elle garde son
+       en-tête — replier la première fait donc apparaître les suivantes. */
+    if (groupePlie('collection', mode, g.id)) { pageGroupes.push({...g, entrees:[]}); return; }
     if (place <= 0) return;
     const part = g.entrees.slice(0, place);
     place -= part.length;
@@ -234,7 +238,7 @@ function renderB() {
       </div>
       <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}${noteMultiple(mode)}</div>
       ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
-      ${page.length ? rendGroupes(pageGroupes, mode, ents => S.view === 'grid'
+      ${pageGroupes.length ? rendGroupes('collection', pageGroupes, mode, ents => S.view === 'grid'
         ? `<div class="grid">${ents.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${ents.map(e => cardRow(e, 'collection')).join('')}</div>`)
         : (total === 0

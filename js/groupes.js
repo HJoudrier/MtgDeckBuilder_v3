@@ -211,19 +211,61 @@ function groupeCartes(entrees, modeId, triId) {
 }
 
 /* ---------------------------------------------------------------------
+   Le pli d'une catégorie. La clé réunit la section, le mode de groupement et
+   l'identifiant du groupe : replier « Créature » dans le deck ne replie pas
+   la « Créature » de la collection, et changer de groupement laisse les plis
+   de l'autre mode en place — y revenir les retrouve. Une catégorie jamais
+   repliée n'est pas dans l'ensemble : une catégorie nouvelle s'ouvre.
+   --------------------------------------------------------------------- */
+function clePli(section, modeId, id) {
+  return `${section}|${modeId}|${id}`;
+}
+
+function groupePlie(section, modeId, id) {
+  return S.groupesPlies.has(clePli(section, modeId, id));
+}
+
+/* L'identifiant que le bouton commande, tiré d'un compteur de rendu : un
+   libellé de sous-type ou d'édition n'a pas à être un identifiant HTML. */
+let COMPTEUR_GROUPE = 0;
+
+/* Une catégorie, repliable, sur le patron des parties de la section Deck
+   (`partieDeck`, js/deck.js) : mêmes classes, même chevron, même geste. Le
+   corps est rendu par la section, qui seule sait ce qu'elle y met. */
+function enveloppeGroupe(section, modeId, g, titre, badge, corps) {
+  const cle = clePli(section, modeId, g.id);
+  const ouverte = !S.groupesPlies.has(cle);
+  const idDom = `grp-${section}-${++COMPTEUR_GROUPE}`;
+  return `<div class="group partie ${ouverte ? 'ouverte' : ''}">
+    <button type="button" class="partie-tete" data-act="plierGroupe"
+        data-section="${section}" data-cle="${esc(cle)}"
+        aria-expanded="${ouverte}" aria-controls="${idDom}"
+        title="${ouverte ? 'Replier cette catégorie' : 'Déplier cette catégorie'}">
+      <span class="chev-partie" aria-hidden="true">›</span>
+      <h4>${esc(titre)}</h4>
+      <span class="small muted">${badge}</span>
+    </button>
+    <div class="partie-corps" id="${idDom}">${corps}</div>
+  </div>`;
+}
+
+/* ---------------------------------------------------------------------
    Le rendu commun : un titre par groupe, le contenu rendu par la section
    elle-même — la collection et le deck posent des tuiles ou des lignes, les
    suggestions leurs vignettes. Sans groupe, il n'y a pas de titre du tout :
-   la liste est rendue telle quelle.
+   la liste est rendue telle quelle, et rien ne se replie.
    --------------------------------------------------------------------- */
-function rendGroupes(groupes, modeId, rendEntrees, compte) {
+function rendGroupes(section, groupes, modeId, rendEntrees, compte) {
   if ((GROUPES[modeId] || GROUPES.aucun).plat)
     return rendEntrees(groupes.length ? groupes[0].entrees : []);
   return groupes.map(g => {
     const n = g.entrees.length;
-    const badge = compte ? compte(g) : (n < g.total ? `${n} sur ${g.total}` : `${n}`);
-    return `<div class="group"><h4>${esc(g.libelle)} <span class="small muted">${badge}</span></h4>
-      ${rendEntrees(g.entrees, g)}</div>`;
+    /* Une catégorie que la section n'a pas rendue — repliée, la collection ne
+       lui donne aucune place dans sa page — annonce son total entier plutôt
+       qu'un « 0 sur 59 » qui la dirait vide. */
+    const badge = compte ? compte(g)
+      : (!n && g.total ? `${g.total}` : n < g.total ? `${n} sur ${g.total}` : `${n}`);
+    return enveloppeGroupe(section, modeId, g, g.libelle, badge, rendEntrees(g.entrees, g));
   }).join('');
 }
 
