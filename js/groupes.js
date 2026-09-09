@@ -1,16 +1,17 @@
 /* =====================================================================
    js/groupes.js — Grouper et trier les listes de cartes
 
-   Les trois sections qui montrent des cartes — la collection, le deck, les
-   suggestions — rangeaient chacune à sa façon, sans que rien ne se règle :
-   la collection offrait un tri et aucun groupe, le deck groupait par type
-   en dur, les suggestions aussi. Ce module leur donne un vocabulaire
-   commun : une table de regroupements, une table de tris, et de quoi les
-   appliquer à n'importe quelle liste d'entrées.
+   Les sections qui montrent des cartes — la collection, le deck, le catalogue
+   des suggestions, les recommandations d'EDHREC — rangeaient chacune à sa
+   façon, sans que rien ne se règle : la collection offrait un tri et aucun
+   groupe, le deck groupait par type en dur, les suggestions aussi. Ce module
+   leur donne un vocabulaire commun : une table de regroupements, une table de
+   tris, et de quoi les appliquer à n'importe quelle liste d'entrées.
 
    Une « entrée » est ce que les sections manipulent déjà : un objet portant
-   `.card`, et selon la section `.qty` (collection, deck) ou `.score`
-   (suggestions). Rien d'autre n'est supposé.
+   `.card`, et selon la section `.qty` (collection, deck), `.score`
+   (suggestions) ou `.edhrec` (les statistiques du commandant). Rien d'autre
+   n'est supposé.
    ===================================================================== */
 
 /* ---------------------------------------------------------------------
@@ -120,6 +121,19 @@ const GROUPES = {
    partout : deux cartes de même coût ou de même prix gardent ainsi un ordre
    stable d'un rendu à l'autre.
    --------------------------------------------------------------------- */
+/* Le taux qu'EDHREC donne à une carte : sa part dans les decks recensés du
+   commandant (`inclusion`), ou l'écart avec les autres decks de la même
+   identité couleur (`synergy`). Une carte sans statistique — il y en a dans
+   toute autre section que l'onglet EDHREC — prend une valeur sentinelle
+   commune : elle se range en fin de groupe, et deux d'entre elles se
+   départagent par le nom, comme partout ailleurs. */
+const SANS_EDHREC = -999;
+
+function tauxEdhrec(e, champ) {
+  const r = e && e.edhrec;
+  return r && typeof r[champ] === 'number' ? r[champ] : SANS_EDHREC;
+}
+
 const TRIS = {
   alpha: {label:'Nom (A→Z)', cmp: (a, b) => a.card.name.localeCompare(b.card.name)},
   cmc:   {label:'Coût de mana', cmp: (a, b) => (a.card.cmc || 0) - (b.card.cmc || 0) || a.card.name.localeCompare(b.card.name)},
@@ -127,15 +141,22 @@ const TRIS = {
   qty:   {label:'Quantité', cmp: (a, b) => (b.qty || 0) - (a.qty || 0) || a.card.name.localeCompare(b.card.name)},
   type:  {label:'Type', cmp: (a, b) => TYPE_ORDER.indexOf(mainType(a.card)) - TYPE_ORDER.indexOf(mainType(b.card))
            || (a.card.cmc || 0) - (b.card.cmc || 0) || a.card.name.localeCompare(b.card.name)},
-  score: {label:'Score', cmp: (a, b) => scoreEntree(b) - scoreEntree(a) || a.card.name.localeCompare(b.card.name)}
+  score: {label:'Score', cmp: (a, b) => scoreEntree(b) - scoreEntree(a) || a.card.name.localeCompare(b.card.name)},
+  inclusion: {label:"Taux d'inclusion EDHREC",
+    cmp: (a, b) => tauxEdhrec(b, 'inclusion') - tauxEdhrec(a, 'inclusion') || a.card.name.localeCompare(b.card.name)},
+  synergie:  {label:'Synergie EDHREC',
+    cmp: (a, b) => tauxEdhrec(b, 'synergy') - tauxEdhrec(a, 'synergy') || a.card.name.localeCompare(b.card.name)}
 };
 
 /* Les tris proposés par chaque section : la quantité n'a pas de sens pour une
-   suggestion, qui n'est encore nulle part. */
+   suggestion, qui n'est encore nulle part, et les deux taux d'EDHREC n'en ont
+   que là où toute carte en porte — l'onglet EDHREC. Ils y viennent en tête :
+   c'est pour eux qu'on ouvre cette page. */
 const TRIS_SECTION = {
   collection: ['cmc', 'alpha', 'price', 'type', 'qty', 'score'],
   deck:       ['type', 'cmc', 'alpha', 'price', 'qty', 'score'],
-  suggestions:['score', 'cmc', 'alpha', 'price', 'type']
+  suggestions:['score', 'cmc', 'alpha', 'price', 'type'],
+  edhrec:     ['inclusion', 'synergie', 'score', 'cmc', 'alpha', 'price', 'type']
 };
 
 /* ---------------------------------------------------------------------

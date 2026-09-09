@@ -91,12 +91,14 @@ const S = {
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
-  /* Le rangement des trois sections qui montrent des cartes : chacune garde
+  /* Le rangement des quatre listes qui montrent des cartes : chacune garde
      son groupe et son tri. Les valeurs de départ reproduisent ce que les
      sections faisaient avant tout réglage — la collection triée par coût sans
-     groupe, le deck et les suggestions groupés par type. */
-  groupes: {collection:'aucun', deck:'type', suggestions:'type'},
-  tris: {collection:'cmc', deck:'type', suggestions:'score'},
+     groupe, le deck et le catalogue groupés par type. Les recommandations
+     d'EDHREC arrivent sans groupe et par taux d'inclusion décroissant :
+     c'est l'ordre dans lequel le site lui-même les présente. */
+  groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun'},
+  tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion'},
   view: 'grid',
   onglet: 'collection',      // l'onglet ouvert : une préférence d'affichage, conservée
   graphSource: 'collection',

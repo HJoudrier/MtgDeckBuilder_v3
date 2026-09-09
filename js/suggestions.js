@@ -684,14 +684,16 @@ function selectionSuggestions() {
    `js/app.js` y lit ce que « Afficher de plus » doit faire. */
 const LISTES_SUG = {graphe:{defaut:8}, edhrec:{defaut:8}};
 
-/* Les boutons de pagination d'une de ces listes, ou rien si tout tient. */
-function paginationListe(cle, total, max) {
-  const defaut = LISTES_SUG[cle].defaut, reste = total - max;
+/* Les boutons de pagination d'une liste hors catalogue, ou rien si tout
+   tient. Le compte par défaut est passé : une liste courte en montre huit,
+   une catégorie d'EDHREC six, comme les catégories du catalogue. */
+function paginationListe(cle, total, max, defaut) {
+  const reste = total - max;
   if (total <= defaut) return '';
   return `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
-    ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${cle}" data-pas="30">Afficher ${Math.min(30, reste)} de plus</button>` : ''}
-    ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${cle}" data-pas="tout">Tout afficher (${total})</button>` : ''}
-    ${max > defaut ? `<button class="btn sm" data-act="pageType" data-type="${cle}" data-pas="reduire">Réduire</button>` : ''}
+    ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${esc(cle)}" data-pas="30">Afficher ${Math.min(30, reste)} de plus</button>` : ''}
+    ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${esc(cle)}" data-pas="tout">Tout afficher (${total})</button>` : ''}
+    ${max > defaut ? `<button class="btn sm" data-act="pageType" data-type="${esc(cle)}" data-pas="reduire">Réduire</button>` : ''}
   </div>`;
 }
 
@@ -724,14 +726,49 @@ function blocGraphe(sel) {
     <h4>Autour de ${noms}
       <span class="small muted">${max} sur ${total} piste(s)</span></h4>
     <div class="sugrid">${picks.slice(0, max).map(s => sugRow(s)).join('')}</div>
-    ${paginationListe('graphe', total, max)}
+    ${paginationListe('graphe', total, max, LISTES_SUG.graphe.defaut)}
   </div>
   ${renvoiCatalogue('Ces pistes touchent tous les nœuds isolés ; le score, lui, est celui de la notation commune.')}`;
 }
 
+/* La clé de pagination d'une catégorie d'EDHREC. Elle est préfixée : sans
+   cela, « Créature » y partagerait son compte avec la « Créature » du
+   catalogue, et déplier l'une déplierait l'autre. */
+function cleLimiteEdhrec(idGroupe) {
+  return 'edhrec:' + idGroupe;
+}
+
+/* Le compte affiché d'une catégorie d'EDHREC, et sa pagination : sans groupe,
+   c'est la liste entière sous la clé « edhrec » ; groupée, chaque catégorie a
+   la sienne. */
+function corpsEdhrec(g, plat) {
+  const cle = plat ? 'edhrec' : cleLimiteEdhrec(g.id);
+  const defaut = plat ? LISTES_SUG.edhrec.defaut : 6;
+  const max = Math.min(S.limiteType[cle] || defaut, g.total);
+  return {max, html: `<div class="sugrid">${g.entrees.slice(0, max).map(s => sugRow(s)).join('')}</div>
+    ${paginationListe(cle, g.total, max, defaut)}`};
+}
+
+/* Les visuels des recommandations affichées, catégorie par catégorie : une
+   catégorie repliée ne montre rien, et ne demande donc rien. */
+function visuelsEdhrec(groupes, mode) {
+  if (!S.images) return;
+  const plat = GROUPES[mode].plat, vus = [];
+  groupes.forEach(g => {
+    if (!plat && groupePlie('edhrec', mode, g.id)) return;
+    vus.push(...g.entrees.slice(0, corpsEdhrec(g, plat).max));
+  });
+  visuelsSuggestions(vus);
+}
+
 /* La section EDHREC : le panneau du commandant est rendu à part (il ne dépend
    pas de la sélection), et voici les cartes que les decks recensés
-   recommandent parmi celles qu'on pourrait ajouter. */
+   recommandent parmi celles qu'on pourrait ajouter.
+
+   Elle se range comme les autres — sa propre barre, son propre groupement,
+   son propre tri, gardés sous la clé `edhrec` — et offre en plus les deux
+   tris qui n'ont de sens qu'ici : le taux d'inclusion et la synergie, tels
+   qu'EDHREC les publie. */
 function blocEdhrec(sel) {
   const f = fmt();
   if (!f.commander)
@@ -746,7 +783,7 @@ function blocEdhrec(sel) {
     return '';
   }
 
-  const total = edhrecPicks.length, max = Math.min(S.limiteType['edhrec'] || LISTES_SUG.edhrec.defaut, total);
+  const total = edhrecPicks.length;
   const cmdNom = (S.edhrec && S.edhrec.data && S.edhrec.data.commandant) || S.commander || '';
   const secList = (S.edhrec.secondaires || []).map(s => s.commandant);
   const budInfo = S.budget.total > 0 ? `budget max ${eur(S.budget.perCard)} / carte` : 'collection uniquement';
@@ -755,15 +792,35 @@ function blocEdhrec(sel) {
     ? `Recommandées pour ${esc(cmdNom)}${secList.length ? ` & ${secList.length} cmd 2nd` : ''}`
     : `Recommandées par les commandants secondaires (${secList.map(esc).join(', ')})`;
 
-  visuelsSuggestions(edhrecPicks.slice(0, max));
+  /* Comme au catalogue, le tri « score » ne retrie rien : la liste arrive
+     dans l'ordre des scores, ou dans l'ordre gelé qu'un ajout a retenu. Tout
+     autre tri — les deux taux d'EDHREC d'abord — est un ordre demandé, qui
+     passe donc avant le gel. */
+  const mode = S.groupes.edhrec;
+  const tri = S.tris.edhrec === 'score' ? null : S.tris.edhrec;
+  const groupes = groupeCartes(edhrecPicks, mode, tri);
+  const plat = GROUPES[mode].plat;
+  visuelsEdhrec(groupes, mode);
 
-  return `<div class="group" style="border-color:#2f6b68">
-    <h4>${titreEDH}
-      <span class="small muted">${max} sur ${total} recommandation(s) · ${budInfo}</span></h4>
-    <div class="sugrid">${edhrecPicks.slice(0, max).map(s => sugRow(s)).join('')}</div>
-    ${paginationListe('edhrec', total, max)}
-  </div>
-  ${renvoiCatalogue('Ces cartes portent l\'étiquette <b>edhrec</b> partout où elles paraissent.')}`;
+  const listes = plat
+    ? (() => {
+        const g = groupes[0], {max, html} = corpsEdhrec(g, true);
+        return `<div class="group" style="border-color:#2f6b68">
+          <h4>${titreEDH} <span class="small muted">${max} sur ${g.total}</span></h4>
+          ${html}</div>`;
+      })()
+    : groupes.map(g => {
+        const {max, html} = corpsEdhrec(g, false);
+        return enveloppeGroupe('edhrec', mode, g, g.libelle, `${max} sur ${g.total}`, html);
+      }).join('');
+
+  return `<div class="row" style="margin-bottom:10px">
+      ${barreGroupeTri('edhrec')}
+      <span class="small muted">${total} recommandation(s)${noteMultiple(mode)} · ${budInfo}</span>
+    </div>
+    ${plat ? '' : `<div class="small muted" style="margin-bottom:8px">${titreEDH}</div>`}
+    ${listes}
+    ${renvoiCatalogue('Ces cartes portent l\'étiquette <b>edhrec</b> partout où elles paraissent.')}`;
 }
 
 /* La section du catalogue : tout le classement, groupé et paginé selon la

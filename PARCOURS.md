@@ -25,18 +25,18 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 | [`js/effets.js`](README.md#jseffetsjs--lecture-des-effets-des-cartes) | Lecture des effets des cartes | 14 | 28 Ko |
 | [`js/cartes.js`](README.md#jscartesjs--base-de-cartes) | Base de cartes | 28 | 47 Ko |
 | [`js/etat.js`](README.md#jsetatjs--état-et-filtrage) | État et filtrage | 41 | 25 Ko |
-| [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 12 | 14 Ko |
+| [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 13 | 15 Ko |
 | [`js/marche.js`](README.md#jsmarchejs--cardmarket) | Cardmarket | 5 | 2 Ko |
 | [`js/scryfall.js`](README.md#jsscryfalljs--accès-à-scryfall) | Accès à Scryfall | 25 | 24 Ko |
 | [`js/stockage.js`](README.md#jsstockagejs--sauvegarde-locale) | Sauvegarde locale | 14 | 21 Ko |
 | [`js/externes.js`](README.md#jsexternesjs--edhrec-et-commander-spellbook) | EDHREC et Commander Spellbook | 80 | 64 Ko |
 | [`js/graphe.js`](README.md#jsgraphejs--graphe-des-capacités) | Graphe des capacités | 4 | 9 Ko |
 | [`js/stats.js`](README.md#jsstatsjs--statistiques) | Statistiques | 3 | 5 Ko |
-| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 40 | 49 Ko |
+| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 43 | 51 Ko |
 | [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 18 | 25 Ko |
 | [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 35 | 45 Ko |
 | [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 103 | 85 Ko |
-| [`js/app.js`](README.md#jsappjs--démarrage-et-évènements) | Démarrage et évènements | 1 | 26 Ko |
+| [`js/app.js`](README.md#jsappjs--démarrage-et-évènements) | Démarrage et évènements | 1 | 29 Ko |
 
 `js/app.js` ne déclare qu'une fonction — `demarrer()`. Tout le reste y est écouteurs : le module
 est un aiguillage, non une bibliothèque. C'est le point d'entrée de presque tous les parcours qui
@@ -317,7 +317,7 @@ sequenceDiagram
     participant SEC as collection.js / deck.js / suggestions.js
 
     U->>APP: choix dans « Grouper : … » ou « Trier : … »
-    APP->>APP: S.groupes[section] ou S.tris[section] = valeur
+    APP->>APP: S.groupes[liste] ou S.tris[liste] = valeur
     alt section = collection
         APP->>SEC: renderB()
         SEC->>SEC: filtered()
@@ -329,9 +329,9 @@ sequenceDiagram
         SEC->>GRP: rendGroupes(section, groupes, mode, rendu)
     else section = deck
         APP->>SEC: renderE()
-    else section = suggestions
+    else liste = suggestions (catalogue) ou edhrec
         APP->>SEC: refreshSuggestions()
-        Note over SEC: la barre ne paraît que dans l'onglet Catalogue,<br/>seule section groupée et triée ; le tri « score » ne retrie pas :<br/>la liste arrive déjà ordonnée, ou gelée
+        Note over SEC: deux barres, deux réglages : le catalogue et EDHREC<br/>se rangent chacun de son côté — EDHREC offrant en plus<br/>le taux d'inclusion et la synergie. Le tri « score » ne retrie pas :<br/>la liste arrive déjà ordonnée, ou gelée
     end
     APP->>APP: scheduleSave()
 ```

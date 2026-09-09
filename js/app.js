@@ -186,19 +186,28 @@ document.addEventListener('click', ev => {
   if (act === 'pageType') {
     const t = b.dataset.type, pas = b.dataset.pas;
     const all = currentSuggestions();
-    /* Deux listes ne sont pas des groupes du catalogue : celle du graphe et
-       celle d'EDHREC, chacune sur sa page (`LISTES_SUG`, js/suggestions.js).
-       Pour les autres, le groupe est celui du rangement en cours, non plus le
-       seul type principal : c'est lui qui dit combien de pistes il reste à
-       montrer. */
-    const hors = !!LISTES_SUG[t];
-    const groupe = hors ? null
-      : groupeCartes(all, S.groupes.suggestions, null).find(g => g.id === t);
-    const sel = hors ? selectionSuggestions() : null;
-    const total = hors
-      ? (t === 'graphe' ? sel.graphPicks.length : sel.edhrecPicks.length)
-      : (groupe ? groupe.total : 0);
-    const defaultLim = hors ? LISTES_SUG[t].defaut : 6;
+    /* Trois familles de listes paginées, chacune sachant dire son total et son
+       compte par défaut :
+       — les deux listes courtes du graphe et d'EDHREC sans groupe
+         (`LISTES_SUG`, js/suggestions.js) ;
+       — les catégories d'EDHREC quand cet onglet est groupé, sous des clés
+         préfixées « edhrec: » pour ne pas partager leur compte avec celles du
+         catalogue ;
+       — les catégories du catalogue, où le groupe est celui du rangement en
+         cours, non plus le seul type principal. */
+    let total = 0, defaultLim = 6;
+    if (LISTES_SUG[t]) {
+      const sel = selectionSuggestions();
+      total = t === 'graphe' ? sel.graphPicks.length : sel.edhrecPicks.length;
+      defaultLim = LISTES_SUG[t].defaut;
+    } else if (t.indexOf('edhrec:') === 0) {
+      const g = groupeCartes(selectionSuggestions().edhrecPicks, S.groupes.edhrec, null)
+        .find(x => cleLimiteEdhrec(x.id) === t);
+      total = g ? g.total : 0;
+    } else {
+      const g = groupeCartes(all, S.groupes.suggestions, null).find(x => x.id === t);
+      total = g ? g.total : 0;
+    }
     if (pas === 'tout') S.limiteType[t] = total;
     else if (pas === 'reduire') S.limiteType[t] = defaultLim;
     else S.limiteType[t] = Math.min(total, (S.limiteType[t] || defaultLim) + parseInt(pas, 10));

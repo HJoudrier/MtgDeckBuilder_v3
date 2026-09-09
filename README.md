@@ -34,7 +34,8 @@ Les sept sections de la page se répartissent en cinq onglets, posés au bas de 
 toujours visibles : **Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
-recommandent, **Catalogue** porte le classement complet, groupé et paginé. La table
+recommandent — groupées et triées à part, avec deux tris qui n'existent que là : le taux
+d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé. La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
 `ONGLETS_ANCIENS`. Les sept sections sont rendues à chaque fois, celles qu'on ne
@@ -354,12 +355,18 @@ fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vie
 
 ### `js/groupes.js` — Grouper et trier les listes
 
-Le vocabulaire commun des trois sections qui montrent des cartes — la collection, le deck, les
-suggestions. Chacune y puise ses regroupements et ses tris, et garde les siens : `S.groupes` et
-`S.tris` portent un réglage par section, conservés comme le reste des préférences.
+Le vocabulaire commun des quatre listes qui montrent des cartes — la collection, le deck, le
+catalogue des suggestions, les recommandations d'EDHREC. Chacune y puise ses regroupements et ses
+tris, et garde les siens : `S.groupes` et `S.tris` portent un réglage par liste, conservés comme le
+reste des préférences.
 
-Sept regroupements — pas de groupe, type, sous-type, couleur, coût de mana, rôle, édition — et six
-tris : nom, coût de mana, prix, quantité, type, score. Deux regroupements rangent une carte à
+Sept regroupements — pas de groupe, type, sous-type, couleur, coût de mana, rôle, édition — et huit
+tris : nom, coût de mana, prix, quantité, type, score, taux d'inclusion EDHREC, synergie EDHREC.
+`TRIS_SECTION` dit lesquels chaque liste propose : la quantité n'a pas de sens pour une suggestion,
+qui n'est encore nulle part, et les deux taux d'EDHREC n'en ont que là où toute carte en porte —
+l'onglet EDHREC, où ils viennent en tête, l'inclusion par défaut. Une carte sans statistique prend
+une valeur sentinelle commune (`SANS_EDHREC`) : elle se range en fin de groupe, et deux d'entre
+elles se départagent par le nom. Deux regroupements rangent une carte à
 plusieurs endroits : le sous-type (« Legendary Creature — Human Wizard » compte parmi les Humains
 **et** parmi les Sorciers) et le rôle (une carte qui pioche et qui rampe compte dans les deux). La
 somme des groupes dépasse alors le total, et `noteMultiple()` le dit en toutes lettres sous la
@@ -389,15 +396,16 @@ pourquoi le pli y redessine la section, là où le deck et les suggestions se co
 la classe sur place — repasser par `renderE()` renoterait tout le deck pour un pli, et réécrire
 `#sugList` ferait perdre sa place au lecteur.
 
-*12 fonction(s), 16 Ko*
+*13 fonction(s), 15 Ko*
 
-Données : `GROUPES`, `TRIS`, `TRIS_SECTION`, `COULEUR_LABEL`, `COULEUR_ORDRE`, `NOTES_COLLECTION`, `COMPTEUR_GROUPE`
+Données : `GROUPES`, `TRIS`, `TRIS_SECTION`, `COULEUR_LABEL`, `COULEUR_ORDRE`, `NOTES_COLLECTION`, `COMPTEUR_GROUPE`, `SANS_EDHREC`
 
 | Fonction | Rôle |
 |---|---|
 | `sousTypesCarte(card)` | Les sous-types lus sur la ligne de type après le tiret cadratin, face par face. |
 | `seauCmc(card)` | Le seau de coût de la courbe de mana : au-delà de sept, tout ensemble. |
 | `scoreEntree(e)` | Le score d'une entrée, pris à la suggestion, au deck ou aux notes de la collection. |
+| `tauxEdhrec(e,champ)` | Le taux d'inclusion ou de synergie qu'EDHREC donne à une carte ; une valeur sentinelle si elle n'en a pas. |
 | `notesCollection(entrees)` | Note la collection à la demande et mémorise le résultat sous l'empreinte des suggestions. |
 | `groupeCartes(entrees,mode,tri)` | Range une liste en groupes ordonnés, chacun trié. Un tri `null` garde l'ordre reçu. |
 | `clePli(section,mode,id)` | La clé d'un pli : la section, le mode de groupement et le groupe. |
@@ -597,7 +605,7 @@ Le module rend trois sections, une par onglet : les pistes branchées sur les n�
 (`secG`), les recommandations d'EDHREC (`secH`), le classement complet du catalogue (`secF`). Elles
 lisent une seule sélection notée, partitionnée par `selectionSuggestions()`.
 
-*40 fonction(s), 49 Ko*
+*43 fonction(s), 51 Ko*
 
 Données : `VISUELS_CHARGES`, `LISTES_SUG`
 
@@ -626,10 +634,13 @@ Données : `VISUELS_CHARGES`, `LISTES_SUG`
 | `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
 | `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |
 | `selectionSuggestions()` | Partitionne la sélection notée en trois lectures : les pistes des nœuds isolés, les recommandations d'EDHREC, tout le classement. |
-| `paginationListe(cle,total,max)` | Les boutons « Afficher de plus / Tout / Réduire » d'une liste hors catalogue (`LISTES_SUG`). |
+| `paginationListe(cle,total,max,defaut)` | Les boutons « Afficher de plus / Tout / Réduire » d'une liste hors catalogue : les deux listes courtes (`LISTES_SUG`) et les catégories d'EDHREC. |
 | `renvoiCatalogue(quoi)` | Le renvoi des deux listes courtes vers le classement complet. |
 | `blocGraphe(sel)` | La section du graphe : ce qui se branche sur les nœuds qu'on y a isolés, ou l'invitation à en cliquer un. |
-| `blocEdhrec(sel)` | La section EDHREC : les cartes que les decks recensés recommandent, avec leur pagination. |
+| `blocEdhrec(sel)` | La section EDHREC : sa barre de rangement, les cartes que les decks recensés recommandent, groupées et triées comme on le demande. |
+| `cleLimiteEdhrec(id)` | La clé de pagination d'une catégorie d'EDHREC, préfixée pour ne pas partager son compte avec celle du catalogue. |
+| `corpsEdhrec(g,plat)` | Les vignettes d'une catégorie d'EDHREC et sa pagination. |
+| `visuelsEdhrec(groupes,mode)` | Les visuels des recommandations affichées, les catégories repliées exceptées. |
 | `listeSuggestions(sel)` | La section du catalogue : assemble les groupes selon la barre de la section (js/groupes.js) et le filtre par rôle. Le tri « score » ne retrie rien : la liste arrive dans l'ordre des scores, ou dans l'ordre gelé que le geste précédent a retenu. |
 | `visuelsSuggestions(vus)` | Demande les visuels des vignettes qu'une section affiche. |
 | `visuelsCatalogue(groupes)` | Les mêmes pour le catalogue, groupe par groupe, les catégories repliées exceptées. |
