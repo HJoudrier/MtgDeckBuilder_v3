@@ -10,7 +10,7 @@ carte, qu'on filtre ou qu'on retire une carte du deck — sont dans [PARCOURS.md
 présent document dit ce que fait chaque fonction ; celui-là, l'ordre où elles s'appellent.
 
 ```
-index.html          page et structure des cinq sections
+index.html          page et structure des sept sections
 css/atelier.css     styles
 js/                 modules, chargés dans cet ordre :
   effets.js        Lecture des effets des cartes
@@ -30,16 +30,28 @@ js/                 modules, chargés dans cet ordre :
   app.js           Démarrage et évènements
 ```
 
-Les cinq sections de la page se répartissent en trois onglets, posés au bas de l'en-tête et
+Les sept sections de la page se répartissent en cinq onglets, posés au bas de l'en-tête et
 toujours visibles : **Collection** porte les statistiques puis la collection, **Deck** porte le
-deck, **Suggestions** porte le graphe des capacités puis les suggestions d'ajout. La table
+deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
+isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
+recommandent, **Catalogue** porte le classement complet, groupé et paginé. La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
-conserve d'une séance à l'autre. Les cinq sections sont rendues à chaque fois, celles qu'on ne
+conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
+`ONGLETS_ANCIENS`. Les sept sections sont rendues à chaque fois, celles qu'on ne
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
 alors aucun rendu. Le format, les filtres, le catalogue et le budget se règlent depuis les
 fenêtres qu'ouvrent les pastilles de l'en-tête. Les identifiants internes des sections
-(`secB`…`secF`, `renderB`…`renderF`) ont gardé leur lettre d'origine, que les rendus connaissent ;
+(`secB`…`secH`, `renderB`…`renderH`) ont gardé leur lettre d'origine, que les rendus connaissent ;
 plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
+
+Les trois dernières lisent une **même sélection notée** : la notation ne connaît qu'une liste, et
+`selectionSuggestions()` (`js/suggestions.js`) la partitionne une fois — ce qui touche les nœuds
+isolés, ce qu'EDHREC recommande, tout le reste. `SECTIONS_SUGGESTIONS` (`js/etat.js`) les nomme ;
+`renderSuggestions()` les peint ensemble et sert de point d'entrée aux autres modules, si bien
+qu'une donnée qui arrive — d'EDHREC, du catalogue, de Scryfall — met les trois pages à jour d'un
+coup. Chacune garde son enveloppe et ne réécrit que ses listes (`poseCorps()`) : le
+rafraîchissement est en place par construction, et le lecteur qui parcourait le milieu d'une liste
+de trois cents vignettes n'est jamais renvoyé au début.
 
 La feuille de style et les modules portent un marqueur de version dans leur adresse
 (`?v=…`, `index.html`). Sans lui, un navigateur relit la page en gardant en cache ce qu'elle
@@ -144,7 +156,7 @@ EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
 *20 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`, `GC_BASE`
+Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`, `GC_BASE`, `ONGLETS`, `ONGLETS_ANCIENS`, `SECTIONS_SUGGESTIONS`
 
 `GC_BASE` tient les **Game Changers** : la liste fermée que Wizards publie pour les paliers du
 Commander, une quarantaine de cartes dont la présence hausse le palier d'un deck. La recopier ici
@@ -261,12 +273,12 @@ ajouts.
 Reste le cas des recalculs que **personne n'a demandés** : des statistiques EDHREC qui arrivent,
 des combos, des prix, une carte que Scryfall vient de compléter. `recalculerAvecProgression()`
 les prend en mode `fond` (`opts.fond`), et trois règles les distinguent d'un geste. Ils ne
-vident jamais la section : le filet de `renderF()` laissait auparavant un encart d'une ligne à
-la place de la liste, la section fondait de quelques milliers de pixels à une soixantaine, le
+vident jamais la section : le filet — `filetSuggestions()` — laissait auparavant un encart d'une
+ligne à la place de la liste, la section fondait de quelques milliers de pixels à une soixantaine, le
 navigateur ramenait le défilement dans les nouvelles bornes et l'on se retrouvait au début de la
 section. Ils n'ouvrent aucune fenêtre : la progression tient dans le décompte de l'en-tête et un
-liseré de trois pixels au bord haut de la section, posé en position absolue — rien n'entre dans
-le flux, rien ne bouge. Et ils gèlent l'ordre affiché comme le fait un ajout, le bandeau
+liseré de trois pixels au bord haut de chacune des trois sections des propositions, posé en
+position absolue — rien n'entre dans le flux, rien ne bouge. Et ils gèlent l'ordre affiché comme le fait un ajout, le bandeau
 « Reclasser » proposant le nouveau classement.
 
 Encore faut-il qu'ils soient rares. `applyScryfall()` (js/scryfall.js) comparait à peine avant
@@ -277,10 +289,11 @@ qui changent une note — texte, identité, coût converti, force, endurance, l�
 chacun n'est écrit qu'après comparaison, sur le modèle de la garde qui protégeait déjà `force`.
 
 Chaque geste dit sa raison, et c'est elle que la boîte affiche : « Couleur R retirée des
-filtres… », « Sol Ring ajoutée au deck : les suggestions sont renotées… ». Reste le filet, dans
-`renderF()` : un changement venu d'ailleurs — une archive qui finit de charger, une réponse de
-Scryfall — trouverait sinon la sélection caduque et la recalculerait d'un bloc. La section
-annonce alors le recalcul et le renvoie au même mécanisme.
+filtres… », « Sol Ring ajoutée au deck : les suggestions sont renotées… ». Reste le filet,
+`filetSuggestions()` : un changement venu d'ailleurs — une archive qui finit de charger, une
+réponse de Scryfall — trouverait sinon la sélection caduque et la recalculerait d'un bloc. Les
+trois sections gardent alors ce qu'elles affichent, annoncent le recalcul par leur liseré et le
+renvoient au même mécanisme.
 
 Le chargement de l'archive Scryfall, lui, ouvre une boîte de progression : deux barres —
 ce qui arrive, ce qui en est extrait — et le décompte des cartes retenues. Les totaux
@@ -454,7 +467,7 @@ Données : `CAT`, `IDB_NOM`, `CH`, `CDN`, `FICHIERS_LOCAUX`
 | `selectionCandidats()` | La boucle qui écarte et le classement par rang EDHREC, communs aux deux façons de bâtir les candidats. |
 | `candidatsCatalogue()` | Cartes du catalogue retenues par les couleurs, le prix, les filtres de la fenêtre et — si `S.filtreLegal` — la légalité dans le format. Le plafond `S.candidatsMax` ne s'applique qu'ensuite, sur ce qui reste. |
 | `prechauffeCandidats(onProgress)` *(async)* | La même construction par tranches, en rendant la main, pour la barre de progression d'« Appliquer ». |
-| `statsCandidats()` | Le détail de ce qui a écarté et combien, pour la phrase de la section Suggestions. |
+| `statsCandidats()` | Le détail de ce qui a écarté et combien, pour la phrase de la section du catalogue. |
 | `requeteCatalogue()` | Construit la requête Scryfall correspondant aux couleurs, et au format si `S.filtreLegal`. |
 | `signatureCatalogue()` | Signature du contexte de chargement du catalogue. |
 | `chargerCatalogue()` *(async)* | Chargement paginé par l'API, en secours de l'archive. |
@@ -580,9 +593,13 @@ Notation des cartes — commune aux propositions et aux cartes du deck —, vign
 Le panneau « Achats sur Cardmarket » a quitté la section pour la fenêtre qu'ouvre la pastille « Budget »
 de l'en-tête ; seules en restent les deux lignes de résumé, que cette fenêtre affiche.
 
-*15 fonction(s), 25 Ko*
+Le module rend trois sections, une par onglet : les pistes branchées sur les nœuds isolés du graphe
+(`secG`), les recommandations d'EDHREC (`secH`), le classement complet du catalogue (`secF`). Elles
+lisent une seule sélection notée, partitionnée par `selectionSuggestions()`.
 
-Données : `VISUELS_CHARGES`
+*40 fonction(s), 49 Ko*
+
+Données : `VISUELS_CHARGES`, `LISTES_SUG`
 
 | Fonction | Rôle |
 |---|---|
@@ -596,7 +613,7 @@ Données : `VISUELS_CHARGES`
 | `signatureSuggestions()` | L'empreinte de tout ce dont la notation dépend : deck, collection, filtres, budget, format, données EDHREC et combos, cartes complétées. |
 | `empreinteCollection()` | Un condensé bon marché de la collection, pour cette empreinte. |
 | `suggestionsAJour()` | La sélection mémorisée vaut-elle encore pour l'état courant ? |
-| `geleSuggestions()` | Gèle l'ordre affiché — la dernière sélection rendue, jamais une notation en cours — et demande un rafraîchissement en place. |
+| `geleSuggestions()` | Gèle l'ordre affiché — la dernière sélection rendue, jamais une notation en cours. |
 | `ordreGele()` | Un ordre est-il gelé ? Un tableau vide n'en est pas un. |
 | `degeleSuggestions()` | Lève le gel — « Reclasser », ou tout réglage de l'en-tête. |
 | `suggestionsAffichees()` | La sélection dans l'ordre où elle s'affiche : celui des scores, ou celui qui a été gelé. |
@@ -604,16 +621,27 @@ Données : `VISUELS_CHARGES`
 | `bandeauReclassement()` | Le bandeau qui le dit, et son bouton. |
 | `lanceEdhrecSiBesoin()` | Demande les statistiques du commandant quand il vient de changer, d'où que vienne le rendu. |
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
-| `panneauEdhrec()` | Panneau EDHREC du commandant. |
+| `panneauEdhrec()` | Panneau EDHREC du commandant, en tête de l'onglet EDHREC. |
 | `sugRow(s)` | Vignette d'une proposition. |
 | `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
 | `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |
-| `listeSuggestions()` | Assemble les groupes selon la barre de la section (js/groupes.js) et le filtre par rôle. Le tri « score » ne retrie rien : la liste arrive dans l'ordre des scores, ou dans l'ordre gelé que le geste précédent a retenu. |
-| `visuelsSuggestions(groupes)` | Demande les visuels des propositions affichées, les catégories repliées exceptées. |
+| `selectionSuggestions()` | Partitionne la sélection notée en trois lectures : les pistes des nœuds isolés, les recommandations d'EDHREC, tout le classement. |
+| `paginationListe(cle,total,max)` | Les boutons « Afficher de plus / Tout / Réduire » d'une liste hors catalogue (`LISTES_SUG`). |
+| `renvoiCatalogue(quoi)` | Le renvoi des deux listes courtes vers le classement complet. |
+| `blocGraphe(sel)` | La section du graphe : ce qui se branche sur les nœuds qu'on y a isolés, ou l'invitation à en cliquer un. |
+| `blocEdhrec(sel)` | La section EDHREC : les cartes que les decks recensés recommandent, avec leur pagination. |
+| `listeSuggestions(sel)` | La section du catalogue : assemble les groupes selon la barre de la section (js/groupes.js) et le filtre par rôle. Le tri « score » ne retrie rien : la liste arrive dans l'ordre des scores, ou dans l'ordre gelé que le geste précédent a retenu. |
+| `visuelsSuggestions(vus)` | Demande les visuels des vignettes qu'une section affiche. |
+| `visuelsCatalogue(groupes)` | Les mêmes pour le catalogue, groupe par groupe, les catégories repliées exceptées. |
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
-| `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
-| `refreshSuggestions()` | Rafraîchit la liste sans toucher au reste de la section : c'est aussi le rafraîchissement en place. |
-| `renderF()` | Rend la section des suggestions ; si la sélection est caduque et le recalcul long, la section l'annonce et le renvoie au recalcul par tranches. |
+| `majHint(id,texte)` | Le décompte d'une section, dans son en-tête. |
+| `poseCorps(idCorps,morceaux)` | Pose le contenu d'une section sans refaire son enveloppe : seuls les conteneurs nommés sont réécrits. |
+| `filetSuggestions()` | Le filet : sélection caduque et recalcul long, les sections gardent ce qu'elles affichent et le travail repart par tranches. |
+| `renderSuggestions()` | Peint les trois sections ensemble, la sélection n'étant partitionnée qu'une fois. C'est le point d'entrée des autres modules. |
+| `renderG(sel)` | Rend la section des pistes du graphe (onglet Graphe). |
+| `renderH(sel)` | Rend la section EDHREC (onglet EDHREC) : panneau puis recommandations. |
+| `renderF(sel)` | Rend la section du catalogue (onglet Catalogue) : état du catalogue puis classement complet. |
+| `refreshSuggestions()` | Rafraîchit les trois sections et l'en-tête, sans rien recalculer : pagination, groupement, tri. |
 
 ### `js/collection.js` — Collection
 
@@ -796,7 +824,7 @@ Données : `RETOURNEES`
 | `resumeFiltres()` | Décompte des cartes retenues, saisie en attente comprise, et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
 | `majFenetreFiltres()` | Réécrit les champs après une réinitialisation ou un changement de couleur. |
-| `renderAll()` | Rend les cinq sections, masquées comprises, et programme la sauvegarde. |
+| `renderAll()` | Rend les sept sections, masquées comprises, et programme la sauvegarde. |
 | `renderOnglets()` | Pose l'onglet ouvert sur la barre et découvre sa page ; la barre change d'attributs, elle ne se réécrit pas. |
 | `activerOnglet(cle,opts)` | Passe à un onglet : rien n'est redessiné, et le défilement retrouve celui que la page avait. |
 | `allerVersSection(id)` | Mène à une section d'où qu'on parte : son onglet s'ouvre, et le défilement s'arrête sous l'en-tête collante. |

@@ -177,7 +177,7 @@ async function loadEdhrec(force) {
   S.edhrec.status = 'loading';
   S.edhrec.secStatus = secCmds.length ? 'loading' : 'idle';
   S.edhrec.cmdSignature = cmdSig;
-  renderF();
+  renderSuggestions();
 
   try {
     const promises = [];
@@ -216,7 +216,7 @@ async function loadEdhrec(force) {
     S.edhrec.status = 'error';
     S.edhrec.error = err.message || 'requête refusée';
   }
-  renderF();
+  renderSuggestions();
 }
 
 /* 1 bis. Archétypes établis : thèmes EDHREC
@@ -838,7 +838,7 @@ async function loadCombos(force) {
     S.csb = {sig, status:cors ? 'cors' : 'error', data:null, error:err.message || 'requête refusée'};
   }
   renderE();
-  renderF();
+  renderSuggestions();
 }
 
 function combosDe(card) {
@@ -1044,7 +1044,7 @@ function ArchiveAbandonnee() { const e = new Error('chargement interrompu'); e.a
 
 async function lireCatalogueFichier(source, nom, suivi) {
   CAT.etat = 'chargement'; CAT.source = suivi && suivi.source === 'réseau' ? 'réseau' : 'fichier';
-  CAT.detail = ''; CAT.partiel = false; renderF();
+  CAT.detail = ''; CAT.partiel = false; renderSuggestions();
   const par = new Map();
   const cartes = {get length(){ return par.size; }, push(rec){ retiens(par, rec); }};
   let impressions = 0, reste = '', tableau = null, lus = 0;
@@ -1075,7 +1075,7 @@ async function lireCatalogueFichier(source, nom, suivi) {
       if (++lus % 25000 === 0) {
         CAT.cartes = [...par.values()];
         if (suivi) { suivi.cartes = par.size; suivi.avance(true); }
-        renderF();
+        renderSuggestions();
         await new Promise(r => setTimeout(r, 0));
         if (suivi && suivi.abandon) await renonce();
       }
@@ -1129,7 +1129,7 @@ async function verifierMajCatalogue() {
     CAT.uri = j.jsonl_download_uri || j.download_uri || '';
     CAT.taille = j.compressed_size || 0;
     CAT.tailleBrute = j.size || 0;
-    renderF();
+    renderSuggestions();
     return j;
   } catch(err) { return null; }
 }
@@ -1180,7 +1180,7 @@ async function telechargerCatalogue() {
     if (typeof ouvrirBoiteCatalogue === 'function') ouvrirBoiteCatalogue();
     return false;
   }
-  CAT.etat = 'chargement'; CAT.source = 'réseau'; CAT.detail = ''; renderF();
+  CAT.etat = 'chargement'; CAT.source = 'réseau'; CAT.detail = ''; renderSuggestions();
   try {
     const info = await verifierMajCatalogue();
     const adresse = (info && (info.jsonl_download_uri || info.download_uri)) || CAT.uri;
@@ -1208,7 +1208,7 @@ async function telechargerCatalogue() {
       CAT.etat = CAT.cartes.length ? 'ok' : '';
       CAT.detail = '';
       if (typeof fermerBoiteCatalogue === 'function') fermerBoiteCatalogue();
-      renderF();
+      renderSuggestions();
       rafraichirFenetreSauvegarde();
       toast('Chargement de l\'archive interrompu.');
       return false;
@@ -1219,7 +1219,7 @@ async function telechargerCatalogue() {
     CAT.detail = bloque
       ? `le serveur de fichiers de Scryfall (data.scryfall.io) refuse la requête depuis une page tierce. Utilisez le bouton de téléchargement, puis chargez l'archive obtenue — sans la décompresser.`
       : `échec du téléchargement : ${err.message||'erreur inconnue'}`;
-    renderF();
+    renderSuggestions();
     rafraichirFenetreSauvegarde();
     toast(bloque ? "Téléchargement direct refusé par Scryfall : passez par le lien puis le chargement de fichier."
                  : `Échec : ${err.message||'erreur inconnue'}.`);
@@ -1238,7 +1238,7 @@ function interrompreCatalogue() {
 
 async function chargerCatalogueComplet(force) {
   if (CAT.etat === 'chargement' || typeof fetch !== 'function') return;
-  CAT.etat = 'chargement'; CAT.source = 'cache'; renderF();
+  CAT.etat = 'chargement'; CAT.source = 'cache'; renderSuggestions();
   try {
     if (!force) {
       const memo = await idbLire('cartes').catch(() => null);
@@ -1260,11 +1260,11 @@ async function chargerCatalogueComplet(force) {
         return;
       }
     }
-    CAT.etat = ''; renderF();
+    CAT.etat = ''; renderSuggestions();
     if (!force && await chargerCatalogueLocal()) return;
   } catch(err) {
     CAT.etat = (err instanceof TypeError) ? 'hors-ligne' : 'erreur';
-    renderF();
+    renderSuggestions();
     return;
   }
   /* Rien sur cet appareil : l'archive est téléchargée et extraite sans
@@ -1539,14 +1539,14 @@ async function chargerCatalogue() {
   const sig = signatureCatalogue();
   S.exploreSig = sig;
   S.exploreEtat = 'chargement';
-  renderF();
+  renderSuggestions();
   const q = requeteCatalogue();
   let url = 'https://api.scryfall.com/cards/search?order=edhrec&unique=cards&q=' + encodeURIComponent(q);
   let charge = 0, ajoutees = 0;
   try {
     while (url && charge < S.exploreMax) {
       const r = await fetch(url);
-      if (r.status === 404) { S.exploreEtat = 'aucune'; S.exploreTotal = 0; renderF(); return; }
+      if (r.status === 404) { S.exploreEtat = 'aucune'; S.exploreTotal = 0; renderSuggestions(); return; }
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const j = await r.json();
       if (typeof j.total_cards === 'number') S.exploreTotal = j.total_cards;
@@ -1560,7 +1560,7 @@ async function chargerCatalogue() {
       S.exploreCharge = charge;
       url = j.has_more ? j.next_page : null;
       S.exploreReste = !!url;
-      if (charge <= 175 || charge % 1400 < 175) renderF();
+      if (charge <= 175 || charge % 1400 < 175) renderSuggestions();
       if (url && charge < S.exploreMax) await new Promise(r2 => setTimeout(r2, 110));
     }
     S.exploreEtat = 'ok';

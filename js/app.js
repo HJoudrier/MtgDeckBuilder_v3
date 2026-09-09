@@ -186,12 +186,19 @@ document.addEventListener('click', ev => {
   if (act === 'pageType') {
     const t = b.dataset.type, pas = b.dataset.pas;
     const all = currentSuggestions();
-    /* Le groupe est celui du rangement en cours, non plus le seul type
-       principal : c'est lui qui dit combien de pistes il reste à montrer. */
-    const groupe = t === 'edhrec' ? null
+    /* Deux listes ne sont pas des groupes du catalogue : celle du graphe et
+       celle d'EDHREC, chacune sur sa page (`LISTES_SUG`, js/suggestions.js).
+       Pour les autres, le groupe est celui du rangement en cours, non plus le
+       seul type principal : c'est lui qui dit combien de pistes il reste à
+       montrer. */
+    const hors = !!LISTES_SUG[t];
+    const groupe = hors ? null
       : groupeCartes(all, S.groupes.suggestions, null).find(g => g.id === t);
-    const total = (t === 'edhrec') ? all.filter(s => s.edhrec).length : (groupe ? groupe.total : 0);
-    const defaultLim = (t === 'edhrec') ? 8 : 6;
+    const sel = hors ? selectionSuggestions() : null;
+    const total = hors
+      ? (t === 'graphe' ? sel.graphPicks.length : sel.edhrecPicks.length)
+      : (groupe ? groupe.total : 0);
+    const defaultLim = hors ? LISTES_SUG[t].defaut : 6;
     if (pas === 'tout') S.limiteType[t] = total;
     else if (pas === 'reduire') S.limiteType[t] = defaultLim;
     else S.limiteType[t] = Math.min(total, (S.limiteType[t] || defaultLim) + parseInt(pas, 10));
@@ -323,7 +330,7 @@ document.addEventListener('click', ev => {
        est immédiat. Le défilement n'est pas rattrapé — c'est un nouveau
        classement qui a été demandé. */
     degeleSuggestions();
-    renderF();
+    renderSuggestions();
     return;
   }
 
@@ -527,7 +534,7 @@ document.addEventListener('click', ev => {
     S.focusNodes.clear();
     invaliderCandidats();
     renderD();
-    renderF();
+    renderSuggestions();
     renderTop();
     return;
   }
@@ -536,7 +543,7 @@ document.addEventListener('click', ev => {
     S.focusNodes.delete(b.dataset.node2);
     invaliderCandidats();
     renderD();
-    renderF();
+    renderSuggestions();
     renderTop();
     return;
   }
@@ -549,7 +556,7 @@ document.addEventListener('click', ev => {
       closeDialog();
       invaliderCandidats();
       renderD();
-      renderF();
+      renderSuggestions();
       renderTop();
       /* La fiche a pu être ouverte depuis n'importe quel onglet : celui du
          graphe s'ouvre d'abord, et le défilement ne part qu'une fois la
@@ -559,8 +566,12 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'graphToF') {
-    allerVersSection('secF');
+  /* Un renvoi d'une section à une autre : le bouton nomme la section, et
+     l'onglet qui la porte s'ouvre au passage (`allerVersSection`, js/ui.js).
+     Le graphe s'en sert pour mener aux pistes qu'il branche, sur sa propre
+     page, ou au classement complet dans l'onglet Catalogue. */
+  if (act === 'allerSection') {
+    allerVersSection(b.dataset.sec || 'secF');
     return;
   }
 

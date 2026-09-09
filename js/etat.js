@@ -35,16 +35,36 @@ const ANNEXES = {
 };
 const CLES_ANNEXES = Object.keys(ANNEXES);
 
-/* Les trois onglets de l'atelier, dans l'ordre où ils paraissent sous
+/* Les cinq onglets de l'atelier, dans l'ordre où ils paraissent sous
    l'entête. Chacun nomme les sections qu'il porte : c'est la seule table qui
    les répartisse, et tout le reste — la barre, le passage d'un onglet à
-   l'autre, le signal d'un travail de fond — s'y réfère. */
+   l'autre, le signal d'un travail de fond — s'y réfère.
+
+   Les propositions occupaient un seul onglet, où trois lectures d'une même
+   notation se suivaient sans se distinguer : ce qui se branche sur les nœuds
+   isolés du graphe, ce que les decks recensés par EDHREC recommandent, et le
+   reste du catalogue. Chacune a désormais sa page — on lit le graphe sans
+   dérouler trois mille vignettes, et l'on revient aux recommandations
+   d'EDHREC sans les chercher. */
 const ONGLETS = {
-  collection:  {label:'Collection',  sections:['secC','secB']},
-  deck:        {label:'Deck',        sections:['secE']},
-  suggestions: {label:'Suggestions', sections:['secD','secF']}
+  collection: {label:'Collection', sections:['secC','secB']},
+  deck:       {label:'Deck',       sections:['secE']},
+  graphe:     {label:'Graphe',     sections:['secD','secG']},
+  edhrec:     {label:'EDHREC',     sections:['secH']},
+  catalogue:  {label:'Catalogue',  sections:['secF']}
 };
 const CLES_ONGLETS = Object.keys(ONGLETS);
+
+/* L'onglet unique d'hier, tel qu'une sauvegarde le nomme encore : elle
+   rouvrait sinon la collection, et l'on perdait la page qu'on regardait en
+   quittant l'atelier. */
+const ONGLETS_ANCIENS = {suggestions: 'graphe'};
+
+/* Les trois sections que la notation alimente, dans l'ordre des onglets. Un
+   recalcul les concerne toutes les trois à la fois : elles partagent la même
+   sélection notée, et c'est cette table que le liseré de progression et le
+   rendu des propositions parcourent. */
+const SECTIONS_SUGGESTIONS = ['secG', 'secH', 'secF'];
 
 /* L'onglet qui porte une section, pour les gestes qui traversent l'atelier —
    la fiche d'une carte qui renvoie au graphe, par exemple. */

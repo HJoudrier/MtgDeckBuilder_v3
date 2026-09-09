@@ -499,7 +499,7 @@ function panneauEdhrec() {
 
   return `<div class="group" style="border-color:#2f6b68">
     <h4>${titrePrincipal}</h4>
-    <div class="small muted">Les cartes de vos suggestions recommandées par EDHREC (pour votre commandant principal ou vos commandants secondaires) portent l'étiquette <b>edhrec</b> avec leur taux d'inclusion et leur synergie.</div>
+    <div class="small muted">Les cartes recommandées par EDHREC (pour votre commandant principal ou vos commandants secondaires) sont réunies ci-dessous ; elles portent partout ailleurs l'étiquette <b>edhrec</b>, avec leur taux d'inclusion et leur synergie.</div>
     ${absentes.length ? `<div class="small" style="margin-top:8px">Fréquentes chez ${esc(d.commandant)} mais absentes de votre collection :
       ${absentes.map(r => `<span class="chip" title="synergie ${r.synergy>=0?'+':'−'}${Math.abs(Math.round(r.synergy*100))} %">${esc(r.name)} — ${Math.round(r.inclusion*100)} %</span>`).join(' ')}</div>` : ''}
     ${secHTML}
@@ -589,10 +589,15 @@ function ligneAchats() {
    venues se rangent à la suite. Quand le classement par score a changé, un
    bandeau propose de reclasser ; sinon, le premier rendu complet venu — un
    filtre, une couleur, un format — reprend l'ordre des scores.
+
+   Il fallait autrefois un second drapeau pour demander un rafraîchissement
+   « en place », la section entière étant réécrite d'un bloc. Les trois
+   sections des propositions gardent désormais leur enveloppe et ne réécrivent
+   que leurs listes (`poseCorps`) : le rafraîchissement est en place par
+   construction, et le gel de l'ordre suffit.
    --------------------------------------------------------------------- */
 
 let SUG_ORDRE = null;      // noms dans l'ordre affiché, ou null si l'on suit les scores
-let SUG_EN_PLACE = false;  // le prochain rendu de la section se fait sans la réécrire
 
 /* Gèle l'ordre tel qu'il est affiché — c'est-à-dire la dernière sélection
    rendue, jamais une notation en cours : `SUG_MEMO.liste` porte exactement ce
@@ -604,7 +609,6 @@ function geleSuggestions() {
      à interdire tout gel ultérieur. */
   if (!ordreGele() && SUG_MEMO.liste && SUG_MEMO.liste.length)
     SUG_ORDRE = SUG_MEMO.liste.map(s => s.card.name);
-  SUG_EN_PLACE = true;
 }
 
 function ordreGele() {
@@ -613,7 +617,6 @@ function ordreGele() {
 
 function degeleSuggestions() {
   SUG_ORDRE = null;
-  SUG_EN_PLACE = false;
 }
 
 /* La sélection dans l'ordre où elle s'affiche : celui des scores, ou celui
@@ -648,11 +651,126 @@ function bandeauReclassement() {
   </div>`;
 }
 
-function listeSuggestions() {
-  const toutes = suggestionsAffichees();
-  const sug = toutes;
-  const graphPicks = S.focusNodes.size ? sug.filter(s => s.graph && s.graph.includes('noeud')) : [];
-  const edhrecPicks = sug.filter(s => s.edhrec);
+/* ---------------------------------------------------------------------
+   Trois lectures d'une même sélection.
+
+   La notation ne connaît qu'une liste : toutes les cartes qu'on pourrait
+   ajouter, classées par score. Trois onglets la lisent différemment — le
+   graphe ne retient que ce qui se branche sur les nœuds isolés, EDHREC que ce
+   que les decks recensés recommandent, le catalogue montre tout, groupé et
+   paginé. Les trois vivaient hier sous le même onglet, l'un derrière l'autre :
+   il fallait dérouler des centaines de vignettes pour revenir au graphe, et
+   les recommandations d'EDHREC se perdaient au milieu.
+
+   La partition est faite une fois — `selectionSuggestions()` — et les trois
+   sections s'y servent. `renderSuggestions()` est le seul point d'entrée des
+   autres modules : une donnée qui arrive, d'EDHREC ou du catalogue, touche les
+   trois pages à la fois.
+   --------------------------------------------------------------------- */
+
+function selectionSuggestions() {
+  const sug = suggestionsAffichees();
+  return {
+    sug,
+    /* Sans nœud isolé, le graphe ne distingue rien : la liste serait celle du
+       catalogue, et n'aurait pas sa place sur cette page. */
+    graphPicks: S.focusNodes.size ? sug.filter(s => s.graph && s.graph.includes('noeud')) : [],
+    edhrecPicks: sug.filter(s => s.edhrec)
+  };
+}
+
+/* La pagination d'une liste qui n'est pas un groupe du catalogue : celle du
+   graphe et celle d'EDHREC, chacune sur sa page, avec son compte par défaut.
+   `js/app.js` y lit ce que « Afficher de plus » doit faire. */
+const LISTES_SUG = {graphe:{defaut:8}, edhrec:{defaut:8}};
+
+/* Les boutons de pagination d'une de ces listes, ou rien si tout tient. */
+function paginationListe(cle, total, max) {
+  const defaut = LISTES_SUG[cle].defaut, reste = total - max;
+  if (total <= defaut) return '';
+  return `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
+    ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${cle}" data-pas="30">Afficher ${Math.min(30, reste)} de plus</button>` : ''}
+    ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${cle}" data-pas="tout">Tout afficher (${total})</button>` : ''}
+    ${max > defaut ? `<button class="btn sm" data-act="pageType" data-type="${cle}" data-pas="reduire">Réduire</button>` : ''}
+  </div>`;
+}
+
+/* Le renvoi au catalogue : les deux listes courtes ne montrent qu'un extrait
+   du classement, et le dire évite de les croire exhaustives. */
+function renvoiCatalogue(quoi) {
+  return `<div class="small muted" style="margin-top:8px">${quoi} Le classement complet, groupé et paginé, est dans
+    <button type="button" class="btn sm" data-onglet="catalogue">l'onglet Catalogue</button>.</div>`;
+}
+
+/* La section du graphe : ce qui se branche sur les nœuds qu'on y a isolés.
+   Elle suit le graphe sur la même page — on clique un effet, on voit aussitôt
+   de quoi l'alimenter. */
+function blocGraphe(sel) {
+  const actifs = noeudsActifs();
+  if (!actifs.length)
+    return `<div class="empty">Aucun nœud isolé. Cliquez un nœud du graphe, ci-dessus : les cartes qui s'y branchent
+      seront proposées ici, à part du reste du classement.</div>`;
+
+  const noms = actifs.map(n => esc(NODE[n].label)).join(' + ');
+  const picks = sel.graphPicks;
+  if (!picks.length)
+    return `<div class="empty">Rien à proposer autour de ${noms} : élargissez les couleurs, le budget ou les filtres,
+      ou relâchez un nœud dans le graphe.</div>`;
+
+  const total = picks.length, max = Math.min(S.limiteType['graphe'] || LISTES_SUG.graphe.defaut, total);
+  visuelsSuggestions(picks.slice(0, max));
+
+  return `<div class="group" style="border-color:var(--brass-d)">
+    <h4>Autour de ${noms}
+      <span class="small muted">${max} sur ${total} piste(s)</span></h4>
+    <div class="sugrid">${picks.slice(0, max).map(s => sugRow(s)).join('')}</div>
+    ${paginationListe('graphe', total, max)}
+  </div>
+  ${renvoiCatalogue('Ces pistes touchent tous les nœuds isolés ; le score, lui, est celui de la notation commune.')}`;
+}
+
+/* La section EDHREC : le panneau du commandant est rendu à part (il ne dépend
+   pas de la sélection), et voici les cartes que les decks recensés
+   recommandent parmi celles qu'on pourrait ajouter. */
+function blocEdhrec(sel) {
+  const f = fmt();
+  if (!f.commander)
+    return `<div class="empty">Ce format n'a pas de commandant : EDHREC ne recense que les decks Commander.
+      Les suggestions de l'atelier restent dans <button type="button" class="btn sm" data-onglet="catalogue">l'onglet Catalogue</button>.</div>`;
+
+  const edhrecPicks = sel.edhrecPicks;
+  if (!edhrecPicks.length) {
+    if (S.edhrec && S.edhrec.status === 'ok' && (S.commander || commandantsSecondaires().length))
+      return `<div class="empty">Aucune carte recommandée par EDHREC ne correspond à votre budget actuel
+        (${S.budget.total > 0 ? `${eur(S.budget.perCard)} max / carte` : 'collection uniquement'}) ou à vos filtres.</div>`;
+    return '';
+  }
+
+  const total = edhrecPicks.length, max = Math.min(S.limiteType['edhrec'] || LISTES_SUG.edhrec.defaut, total);
+  const cmdNom = (S.edhrec && S.edhrec.data && S.edhrec.data.commandant) || S.commander || '';
+  const secList = (S.edhrec.secondaires || []).map(s => s.commandant);
+  const budInfo = S.budget.total > 0 ? `budget max ${eur(S.budget.perCard)} / carte` : 'collection uniquement';
+
+  const titreEDH = cmdNom
+    ? `Recommandées pour ${esc(cmdNom)}${secList.length ? ` & ${secList.length} cmd 2nd` : ''}`
+    : `Recommandées par les commandants secondaires (${secList.map(esc).join(', ')})`;
+
+  visuelsSuggestions(edhrecPicks.slice(0, max));
+
+  return `<div class="group" style="border-color:#2f6b68">
+    <h4>${titreEDH}
+      <span class="small muted">${max} sur ${total} recommandation(s) · ${budInfo}</span></h4>
+    <div class="sugrid">${edhrecPicks.slice(0, max).map(s => sugRow(s)).join('')}</div>
+    ${paginationListe('edhrec', total, max)}
+  </div>
+  ${renvoiCatalogue('Ces cartes portent l\'étiquette <b>edhrec</b> partout où elles paraissent.')}`;
+}
+
+/* La section du catalogue : tout le classement, groupé et paginé selon la
+   barre de la section. Les deux listes courtes des autres onglets en sont des
+   extraits — rien n'est retiré d'ici. */
+function listeSuggestions(sel) {
+  const sug = sel.sug;
   /* Le rangement de la section. Le tri par score ne retrie rien : la liste
      arrive déjà dans l'ordre des scores, ou dans l'ordre gelé que le geste
      précédent a retenu — la retrier ferait sauter les vignettes que ce gel
@@ -661,54 +779,14 @@ function listeSuggestions() {
   const mode = S.groupes.suggestions;
   const tri = S.tris.suggestions === 'score' ? null : S.tris.suggestions;
   const groupes = groupeCartes(sug, mode, tri);
-  visuelsSuggestions(groupes, edhrecPicks);
+  visuelsCatalogue(groupes);
 
-  const edhrecHTML = (() => {
-    if (!edhrecPicks.length) {
-      if (S.edhrec && S.edhrec.status === 'ok' && (fmt().commander || commandantsSecondaires().length)) {
-        return `<div class="group" style="border-color:#2f6b68">
-          <h4>Suggestions depuis EDHREC</h4>
-          <div class="small muted">Aucune carte recommandée par EDHREC ne correspond à votre budget actuel (${S.budget.total>0?`${eur(S.budget.perCard)} max / carte`:'collection uniquement'}) ou à vos filtres.</div>
-        </div>`;
-      }
-      return '';
-    }
-    const total = edhrecPicks.length, max = Math.min(S.limiteType['edhrec'] || 8, total), reste = total - max;
-    const cmdNom = (S.edhrec && S.edhrec.data && S.edhrec.data.commandant) || S.commander || '';
-    const secList = (S.edhrec.secondaires || []).map(s => s.commandant);
-    const budInfo = S.budget.total > 0
-      ? `budget max ${eur(S.budget.perCard)} / carte`
-      : 'collection uniquement';
-    
-    const titreEDH = cmdNom
-      ? `Suggestions depuis EDHREC — ${esc(cmdNom)}${secList.length ? ` & ${secList.length} cmd 2nd` : ''}`
-      : `Suggestions depuis EDHREC — Commandants secondaires (${secList.map(esc).join(', ')})`;
-
-    return `<div class="group" style="border-color:#2f6b68">
-      <h4>${titreEDH}
-        <span class="small muted">${max} sur ${total} recommandation(s) · ${budInfo}</span></h4>
-      <div class="sugrid">${edhrecPicks.slice(0, max).map(s => sugRow(s)).join('')}</div>
-      ${total > 8 ? `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
-        ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="edhrec" data-pas="30">Afficher ${Math.min(30, reste)} de plus</button>` : ''}
-        ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="edhrec" data-pas="tout">Tout afficher (${total})</button>` : ''}
-        ${max > 8 ? `<button class="btn sm" data-act="pageType" data-type="edhrec" data-pas="reduire">Réduire</button>` : ''}
-      </div>` : ''}
-    </div>`;
-  })();
-
-  const html = `
+  return `
     <div class="row" style="margin-bottom:10px">
       ${barreGroupeTri('suggestions')}
       <span class="small muted">${sug.length} piste(s)${noteMultiple(mode)}</span>
     </div>
     ${bandeauReclassement()}
-    ${graphPicks.length ? `
-      <div class="group" style="border-color:var(--brass-d)">
-        <h4>Autour des nœuds sélectionnés
-          <span class="small muted">${noeudsActifs().map(n=>esc(NODE[n].label)).join(' + ')} — le graphe, ci-dessus</span></h4>
-        <div class="sugrid">${graphPicks.slice(0,8).map(s=>sugRow(s)).join('')}</div>
-      </div>` : ''}
-    ${edhrecHTML}
     ${sug.length ? groupes.map(g => {
       const total = g.total, max = Math.min(S.limiteType[g.id] || 6, total), reste = total - max;
       const titre = GROUPES[mode].plat ? 'Toutes les pistes' : g.libelle;
@@ -734,27 +812,35 @@ function listeSuggestions() {
         <button class="btn sm" data-act="combos">Réessayer</button>
       </span></div>` : ''}
     <div class="small muted">Le score combine les branchements avec le deck (un effet produit ici déclenche une capacité là-bas), les rôles manquants, la courbe de mana et la densité de capacités. Les cartes hors collection sont pénalisées et limitées par le budget.
+      <br>Les pistes tirées des nœuds isolés du graphe sont réunies dans <button type="button" class="btn sm" data-onglet="graphe">l'onglet Graphe</button>,
+      celles que recommandent les decks recensés dans <button type="button" class="btn sm" data-onglet="edhrec">l'onglet EDHREC</button> : toutes figurent aussi ici.
       <br>Le budget, le prix maximum par carte et les préférences d'achat (état, langue, vendeur, pays) se règlent
       dans la fenêtre « Achats sur Cardmarket », qu'ouvre la pastille « Budget » de l'en-tête, et n'y prennent
       effet qu'au bouton « Appliquer ».</div>`;
-  return {html, sug, graphPicks, edhrecPicks};
 }
 
-function visuelsSuggestions(groupes, edhrecPicks) {
+/* Les visuels des vignettes qu'une section affiche. Chacune demande les
+   siennes : Scryfall n'est sollicité qu'une fois par carte — `queueScryfall`
+   écarte celles déjà demandées —, et une page qu'on ne regarde pas ne charge
+   donc rien de plus que ce qu'elle montre. */
+function visuelsSuggestions(vus) {
+  if (!S.images || !vus || !vus.length) return;
+  setTimeout(() => queueScryfall(vus.map(x => x.card)), 0);
+  setTimeout(chargeVisuelsClasses, 0);
+}
+
+/* Celles du catalogue, groupe par groupe : une catégorie repliée ne montre
+   rien, et demander les visuels de vignettes que personne ne voit serait
+   autant de requêtes pour rien. */
+function visuelsCatalogue(groupes) {
   if (!S.images) return;
   const vus = [];
-  if (edhrecPicks && edhrecPicks.length) {
-    vus.push(...edhrecPicks.slice(0, Math.min(S.limiteType['edhrec'] || 8, edhrecPicks.length)));
-  }
-  /* Une catégorie repliée ne montre rien : demander à Scryfall les visuels de
-     vignettes que personne ne voit serait autant de requêtes pour rien. */
   const mode = S.groupes.suggestions;
   groupes.forEach(g => {
     if (groupePlie('suggestions', mode, g.id)) return;
     vus.push(...g.entrees.slice(0, Math.min(S.limiteType[g.id] || 6, g.total)));
   });
-  setTimeout(() => queueScryfall(vus.map(x => x.card)), 0);
-  setTimeout(chargeVisuelsClasses, 0);
+  visuelsSuggestions(vus);
 }
 
 let visuelsEnCours = false;
@@ -793,59 +879,100 @@ function chargeVisuelsClasses() {
   suivant();
 }
 
-function majHintF(sug, graphPicks, edhrecPicks) {
-  const edhrecCount = (edhrecPicks && edhrecPicks.length) !== undefined ? edhrecPicks.length : sug.filter(x => x.edhrec).length;
-  const hintEl = document.getElementById('hintF');
-  if (hintEl) {
-    hintEl.textContent = `${sug.length} pistes${graphPicks.length?` · ${graphPicks.length} via le graphe`:''}${edhrecCount?` · ${edhrecCount} sur EDHREC`:''}`;
-  }
+/* Le décompte d'une section, dans son en-tête : « 104 pistes ». Il dit ce que
+   la page montre, non ce que la notation a trouvé — chaque section a le sien
+   depuis qu'elles sont trois. */
+function majHint(idSection, texte) {
+  const el = document.getElementById('hint' + idSection.slice(3));
+  if (el) el.textContent = texte;
 }
 
-function refreshSuggestions() {
-  const r = listeSuggestions();
-  const liste = document.getElementById('sugList'); if (liste) liste.innerHTML = r.html;
-  const cl = document.getElementById('catLine'); if (cl) cl.innerHTML = ligneCatalogue();
-  majHintF(r.sug, r.graphPicks, r.edhrecPicks);
-  renderTop();
+/* Poser le contenu d'une section sans en refaire l'enveloppe : les
+   conteneurs nommés survivent d'un rendu à l'autre, et seuls leurs contenus
+   sont réécrits. C'est ce qui garde sa place au lecteur qui parcourait le
+   milieu d'une liste de trois cents vignettes : réécrire le corps entier le
+   ramènerait au début. L'enveloppe n'est bâtie qu'au premier rendu, ou si un
+   conteneur manque. */
+function poseCorps(idCorps, morceaux) {
+  if (morceaux.every(([id]) => document.getElementById(id))) {
+    morceaux.forEach(([id, html]) => { document.getElementById(id).innerHTML = html; });
+    return;
+  }
+  const corps = document.getElementById(idCorps);
+  if (corps) corps.innerHTML = morceaux.map(([id, html]) => `<div id="${id}">${html}</div>`).join('');
 }
 
-function renderF() {
-  /* Le filet : un changement a rendu la sélection caduque sans passer par un
-     geste identifié — une archive qui finit de charger, une réponse de
-     Scryfall, un réglage venu d'ailleurs. Plutôt que de figer la fenêtre le
-     temps de noter des dizaines de milliers de cartes, la section dit ce
-     qu'elle fait et le recalcul repart par tranches, annoncé comme les
-     autres. */
-  if (!suggestionsAJour() && !recalculEnCours && typeof recalculLong === 'function' && recalculLong()) {
-    /* La liste affichée reste en place — la vider ferait fondre la section de
-       quelques milliers de pixels à une ligne, le navigateur ramènerait le
-       défilement dans les nouvelles bornes, et l'on se retrouverait au début
-       de la section. Ses scores datent d'un instant, le temps du recalcul ;
-       c'est le liseré de l'en-tête qui le dit. */
-    setTimeout(() => recalculerAvecProgression(
-      'Les suggestions se recalculent après un changement de l\'atelier.', {fond:true}), 0);
-    return;
-  }
-  /* Rafraîchissement en place : seule la liste est réécrite, le reste de la
-     section — panneau EDHREC, ligne du catalogue — garde son DOM. Réécrire
-     `#bodyF` entier remettrait le lecteur au début. */
-  if (SUG_EN_PLACE && document.getElementById('sugList')) {
-    SUG_EN_PLACE = false;
-    refreshSuggestions();
-    lanceEdhrecSiBesoin();
-    return;
-  }
+/* Le filet : un changement a rendu la sélection caduque sans passer par un
+   geste identifié — une archive qui finit de charger, une réponse de
+   Scryfall, un réglage venu d'ailleurs. Plutôt que de figer la fenêtre le
+   temps de noter des dizaines de milliers de cartes, les sections gardent ce
+   qu'elles affichent et le recalcul repart par tranches, annoncé comme les
+   autres : leurs scores datent d'un instant, et c'est le liseré des en-têtes
+   qui le dit. Vider les listes ferait fondre les sections de quelques
+   milliers de pixels à une ligne, et le navigateur ramènerait le défilement
+   au début. */
+function filetSuggestions() {
+  if (suggestionsAJour() || recalculEnCours
+      || typeof recalculLong !== 'function' || !recalculLong()) return false;
+  setTimeout(() => recalculerAvecProgression(
+    'Les suggestions se recalculent après un changement de l\'atelier.', {fond:true}), 0);
+  return true;
+}
 
-  /* Le rendu complet garde l'ordre gelé : il vient souvent d'un chargement
-     qui s'achève — EDHREC, les combos — et non d'un geste. Seuls un geste
-     de réglage (`apresReglage`) et le bouton « Reclasser » le lèvent. */
-  const r = listeSuggestions();
-  const bodyEl = document.getElementById('bodyF');
-  if (bodyEl) {
-    bodyEl.innerHTML = `${panneauEdhrec()}<div id="catLine">${ligneCatalogue()}</div><div id="sugList">${r.html}</div>`;
-  }
-  majHintF(r.sug, r.graphPicks, r.edhrecPicks);
+/* Les trois sections des propositions, peintes ensemble : la sélection n'est
+   partitionnée qu'une fois, et une donnée qui arrive — d'EDHREC, du
+   catalogue, de Scryfall — les met toutes les trois à jour. C'est le point
+   d'entrée des autres modules. */
+function renderSuggestions() {
+  if (filetSuggestions()) return;
+  const sel = selectionSuggestions();
+  renderG(sel);
+  renderH(sel);
+  renderF(sel);
   lanceEdhrecSiBesoin();
+}
+
+/* La section du graphe (onglet Graphe) : les pistes branchées sur les nœuds
+   isolés. Le graphe lui-même — `renderD()`, js/graphe.js — la précède sur la
+   page et ne dépend pas de la notation. */
+function renderG(sel) {
+  if (filetSuggestions()) return;
+  const s = sel || selectionSuggestions();
+  poseCorps('bodyG', [['grapheList', blocGraphe(s)]]);
+  const actifs = noeudsActifs();
+  majHint('secG', actifs.length
+    ? `${s.graphPicks.length} piste(s) · ${actifs.length} nœud(s) isolé(s)`
+    : 'aucun nœud isolé');
+}
+
+/* La section EDHREC (onglet EDHREC) : le panneau du commandant, puis les
+   cartes que les decks recensés recommandent. */
+function renderH(sel) {
+  if (filetSuggestions()) return;
+  const s = sel || selectionSuggestions();
+  poseCorps('bodyH', [['edhrecPanneau', panneauEdhrec()], ['edhrecList', blocEdhrec(s)]]);
+  const e = S.edhrec || {};
+  majHint('secH', !fmt().commander ? 'hors Commander'
+    : e.status === 'loading' ? 'chargement…'
+    : `${s.edhrecPicks.length} recommandation(s)${e.data ? ` · ${e.data.total.toLocaleString('fr-FR')} decks recensés` : ''}`);
+  lanceEdhrecSiBesoin();
+}
+
+/* La section du catalogue (onglet Catalogue) : l'état du catalogue, puis tout
+   le classement. */
+function renderF(sel) {
+  if (filetSuggestions()) return;
+  const s = sel || selectionSuggestions();
+  poseCorps('bodyF', [['catLine', ligneCatalogue()], ['sugList', listeSuggestions(s)]]);
+  majHint('secF', `${s.sug.length} pistes`);
+}
+
+/* Rafraîchir sans rien recalculer : la pagination d'une liste, un
+   groupement, un tri. L'en-tête suit, ses pastilles comptant les mêmes
+   pistes. */
+function refreshSuggestions() {
+  renderSuggestions();
+  renderTop();
 }
 
 /* Les statistiques du commandant sont demandées dès que celui-ci change —

@@ -467,7 +467,10 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .brand h1{font-size:16px} .brand .sub{display:none}
   .sec-head{padding:11px 10px} .sec-body{padding:10px}
   .onglets{padding:0 6px;gap:0;border-top-color:var(--line2)}
-  .onglet{flex:1 1 0;justify-content:center;padding:8px 6px 6px;font-size:13px}
+  /* Cinq onglets sur un écran de téléphone : ils se partagent la largeur tant
+     qu'ils y tiennent, et la barre glisse latéralement quand ils n'y tiennent
+     plus — sans jamais couper un nom. */
+  .onglet{flex:1 0 auto;justify-content:center;padding:8px 6px 6px;font-size:12.5px}
   .bars{height:120px}
   .top-in{padding:6px 8px;gap:6px 8px}
   .top-stats{gap:4px 6px;width:100%;justify-content:flex-start}

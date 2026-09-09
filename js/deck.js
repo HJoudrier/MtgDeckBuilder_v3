@@ -802,7 +802,7 @@ function renderE() {
           : `<div class="list">${ents.map(e=>cardRow(e,'deck')).join('')}</div>`,
           g => g.entrees.reduce((a,e)=>a+e.qty,0))
         : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`
-             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis <button type="button" class="btn sm" data-onglet="suggestions">les suggestions d\'ajout</button>.</div>'))}
+             : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis <button type="button" class="btn sm" data-onglet="catalogue">les suggestions du catalogue</button>.</div>'))}
       <h3 style="margin:16px 0 6px;font-size:15px">Hors de la liste principale</h3>
       <div class="small muted">Deux listes tenues à côté du deck. Ce qu'elles portent ne compte ni dans la taille du deck,
         ni dans sa conformité, ni dans sa courbe, ses rôles ou ses achats. Une carte ne vit que dans l'une des trois listes :

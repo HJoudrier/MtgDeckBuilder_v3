@@ -1309,29 +1309,37 @@ function finRecalcul() {
    position absolue, et le décompte de l'en-tête qui dit où l'on en est. Le
    décompte normal — « 104 pistes » — revient au rendu qui suit. */
 function progresSection(txt, fait, total) {
-  const sec = document.getElementById('secF');
-  if (!sec) return;
-  let bande = document.getElementById('secProgres');
-  if (!bande) {
-    bande = document.createElement('div');
-    bande.id = 'secProgres';
-    bande.className = 'sec-progres';
-    bande.innerHTML = '<i></i>';
-    sec.appendChild(bande);
-  }
   const pct = total > 0 ? Math.min(100, Math.round(fait / total * 100)) : 0;
-  if (bande.firstChild) bande.firstChild.style.width = pct + '%';
-  const hint = document.getElementById('hintF');
-  if (hint) hint.textContent = total > 0 ? `${txt} ${pct} %` : `${txt}…`;
-  /* Le liseré ne se voit pas depuis un autre onglet : le point de la barre
-     dit, lui, qu'un travail court dans une page qu'on ne regarde pas. */
-  signalerTravail('secF', true, total > 0 ? `${txt} ${pct} %` : `${txt}…`);
+  const etiquette = total > 0 ? `${txt} ${pct} %` : `${txt}…`;
+  /* Une même notation nourrit les trois sections des propositions : le liseré
+     paraît sur chacune, et l'on voit le travail avancer depuis la page qu'on
+     regarde, quelle qu'elle soit. */
+  SECTIONS_SUGGESTIONS.forEach(id => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    let bande = sec.querySelector(':scope > .sec-progres');
+    if (!bande) {
+      bande = document.createElement('div');
+      bande.className = 'sec-progres';
+      bande.innerHTML = '<i></i>';
+      sec.appendChild(bande);
+    }
+    if (bande.firstChild) bande.firstChild.style.width = pct + '%';
+    const hint = document.getElementById('hint' + id.slice(3));
+    if (hint) hint.textContent = etiquette;
+    /* Le liseré ne se voit pas depuis un autre onglet : le point de la barre
+       dit, lui, qu'un travail court dans une page qu'on ne regarde pas. */
+    signalerTravail(id, true, etiquette);
+  });
 }
 
 function finProgresSection() {
-  const bande = document.getElementById('secProgres');
-  if (bande) bande.remove();
-  signalerTravail('secF', false);
+  SECTIONS_SUGGESTIONS.forEach(id => {
+    const sec = document.getElementById(id);
+    const bande = sec && sec.querySelector(':scope > .sec-progres');
+    if (bande) bande.remove();
+    signalerTravail(id, false);
+  });
 }
 
 /* Un recalcul à la fois. Un geste arrivé pendant qu'un autre travaille est
@@ -1463,7 +1471,7 @@ function corpsBoiteCatalogue() {
       ? `${s.cartes.toLocaleString('fr-FR')} carte(s) retenues.`
       : 'Lecture des cartes…'}</div>
     <div class="small muted">L'archive est lue au fil de l'eau : elle n'est jamais gardée entière en mémoire.
-      « Masquer » referme cette fenêtre sans rien interrompre — la section Suggestions continue d'en rendre compte.</div>
+      « Masquer » referme cette fenêtre sans rien interrompre — les sections des propositions continuent d'en rendre compte.</div>
   </div>`;
 }
 
@@ -1743,7 +1751,7 @@ function renderAll() {
   renderC();
   renderD();
   renderE();
-  renderF();
+  renderSuggestions();
   scheduleSave();
 }
 

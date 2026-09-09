@@ -13,7 +13,7 @@
        coque des onglets vit ici, un cache en retard donne des boutons nus et
        des gestes sans effet. À rehausser dès qu'un changement touche à la fois
        cette page et ce qu'elle charge. -->
-  <link rel="stylesheet" href="css/atelier.css?v=20260909">
+  <link rel="stylesheet" href="css/atelier.css?v=20260909b">
 </head>
 <body>
   <header class="top" id="topHeader">
@@ -25,8 +25,11 @@
       <div class="top-stats" id="topStats"></div>
     </div>
 
-    <!-- Les trois onglets, dans l'entête même : la barre est collante avec
-         elle, et l'on passe d'un pan de l'atelier à l'autre sans remonter. -->
+    <!-- Les cinq onglets, dans l'entête même : la barre est collante avec
+         elle, et l'on passe d'un pan de l'atelier à l'autre sans remonter.
+         Les propositions se lisaient sous un seul onglet ; elles en ont
+         désormais trois — le graphe et ce qu'il branche, EDHREC et ses
+         recommandations, le catalogue et tout le reste. -->
     <div class="onglets" id="onglets" role="tablist" aria-label="Pans de l'atelier">
       <button type="button" class="onglet" id="ongletCollection" role="tab"
               data-onglet="collection" aria-selected="true" aria-controls="pageCollection" tabindex="0">
@@ -36,17 +39,27 @@
               data-onglet="deck" aria-selected="false" aria-controls="pageDeck" tabindex="-1">
         Deck<span class="onglet-pt" aria-hidden="true"></span>
       </button>
-      <button type="button" class="onglet" id="ongletSuggestions" role="tab"
-              data-onglet="suggestions" aria-selected="false" aria-controls="pageSuggestions" tabindex="-1">
-        Suggestions<span class="onglet-pt" aria-hidden="true"></span>
+      <button type="button" class="onglet" id="ongletGraphe" role="tab"
+              data-onglet="graphe" aria-selected="false" aria-controls="pageGraphe" tabindex="-1">
+        Graphe<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletEdhrec" role="tab"
+              data-onglet="edhrec" aria-selected="false" aria-controls="pageEdhrec" tabindex="-1">
+        EDHREC<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletCatalogue" role="tab"
+              data-onglet="catalogue" aria-selected="false" aria-controls="pageCatalogue" tabindex="-1">
+        Catalogue<span class="onglet-pt" aria-hidden="true"></span>
       </button>
     </div>
   </header>
 
   <main class="wrap">
-    <!-- Les cinq sections se répartissent en trois onglets. Leurs identifiants
-         — secB…secF, bodyB…hintF — ont gardé la lettre d'origine que les
-         rendus connaissent ; plus aucune lettre n'est affichée. -->
+    <!-- Les sept sections se répartissent en cinq onglets. Leurs identifiants
+         — secB…secH, bodyB…hintH — ont gardé la lettre d'origine que les
+         rendus connaissent ; plus aucune lettre n'est affichée. Les deux
+         dernières, secG et secH, sont nées de la division de l'onglet des
+         suggestions : elles poursuivent la série sans rien renommer. -->
 
     <!-- Onglet 1 — ce que la collection pèse, et la collection -->
     <div class="page" id="pageCollection" data-page="collection"
@@ -79,9 +92,10 @@
       </section>
     </div>
 
-    <!-- Onglet 3 — le graphe, et ce qu'il propose -->
-    <div class="page" id="pageSuggestions" data-page="suggestions"
-         role="tabpanel" aria-labelledby="ongletSuggestions" tabindex="0" hidden>
+    <!-- Onglet 3 — le graphe, et les cartes qui se branchent sur les nœuds
+         qu'on y isole : on choisit un effet, on voit aussitôt quoi l'alimenter -->
+    <div class="page" id="pageGraphe" data-page="graphe"
+         role="tabpanel" aria-labelledby="ongletGraphe" tabindex="0" hidden>
       <section class="sec" id="secD">
         <div class="sec-head">
           <h2>Graphe des capacités</h2>
@@ -89,9 +103,36 @@
         </div>
         <div class="sec-body" id="bodyD"></div>
       </section>
+      <section class="sec" id="secG">
+        <div class="sec-head">
+          <h2>Pistes autour des nœuds</h2>
+          <span class="hint" id="hintG"></span>
+        </div>
+        <div class="sec-body" id="bodyG"></div>
+      </section>
+    </div>
+
+    <!-- Onglet 4 — tout ce qui vient d'EDHREC : les statistiques du
+         commandant, celles des commandants secondaires, et les cartes que les
+         decks recensés recommandent -->
+    <div class="page" id="pageEdhrec" data-page="edhrec"
+         role="tabpanel" aria-labelledby="ongletEdhrec" tabindex="0" hidden>
+      <section class="sec" id="secH">
+        <div class="sec-head">
+          <h2>EDHREC</h2>
+          <span class="hint" id="hintH"></span>
+        </div>
+        <div class="sec-body" id="bodyH"></div>
+      </section>
+    </div>
+
+    <!-- Onglet 5 — les suggestions tirées de tout le catalogue, groupées et
+         paginées, et l'état du catalogue qui les nourrit -->
+    <div class="page" id="pageCatalogue" data-page="catalogue"
+         role="tabpanel" aria-labelledby="ongletCatalogue" tabindex="0" hidden>
       <section class="sec" id="secF">
         <div class="sec-head">
-          <h2>Suggestions d'ajout</h2>
+          <h2>Suggestions du catalogue</h2>
           <span class="hint" id="hintF"></span>
         </div>
         <div class="sec-body" id="bodyF"></div>
@@ -111,20 +152,20 @@
   <div id="cardPreview"></div>
 
   <!-- Modules chargés dans l'ordre strict défini par l'architecture -->
-  <script src="js/effets.js?v=20260909"></script>
-  <script src="js/cartes.js?v=20260909"></script>
-  <script src="js/etat.js?v=20260909"></script>
-  <script src="js/groupes.js?v=20260909"></script>
-  <script src="js/marche.js?v=20260909"></script>
-  <script src="js/scryfall.js?v=20260909"></script>
-  <script src="js/stockage.js?v=20260909"></script>
-  <script src="js/externes.js?v=20260909"></script>
-  <script src="js/graphe.js?v=20260909"></script>
-  <script src="js/stats.js?v=20260909"></script>
-  <script src="js/suggestions.js?v=20260909"></script>
-  <script src="js/collection.js?v=20260909"></script>
-  <script src="js/deck.js?v=20260909"></script>
-  <script src="js/ui.js?v=20260909"></script>
-  <script src="js/app.js?v=20260909"></script>
+  <script src="js/effets.js?v=20260909b"></script>
+  <script src="js/cartes.js?v=20260909b"></script>
+  <script src="js/etat.js?v=20260909b"></script>
+  <script src="js/groupes.js?v=20260909b"></script>
+  <script src="js/marche.js?v=20260909b"></script>
+  <script src="js/scryfall.js?v=20260909b"></script>
+  <script src="js/stockage.js?v=20260909b"></script>
+  <script src="js/externes.js?v=20260909b"></script>
+  <script src="js/graphe.js?v=20260909b"></script>
+  <script src="js/stats.js?v=20260909b"></script>
+  <script src="js/suggestions.js?v=20260909b"></script>
+  <script src="js/collection.js?v=20260909b"></script>
+  <script src="js/deck.js?v=20260909b"></script>
+  <script src="js/ui.js?v=20260909b"></script>
+  <script src="js/app.js?v=20260909b"></script>
 </body>
 </html>

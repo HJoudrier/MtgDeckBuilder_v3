@@ -24,15 +24,15 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 |---|---|---|---|
 | [`js/effets.js`](README.md#jseffetsjs--lecture-des-effets-des-cartes) | Lecture des effets des cartes | 14 | 28 Ko |
 | [`js/cartes.js`](README.md#jscartesjs--base-de-cartes) | Base de cartes | 28 | 47 Ko |
-| [`js/etat.js`](README.md#jsetatjs--état-et-filtrage) | État et filtrage | 41 | 24 Ko |
+| [`js/etat.js`](README.md#jsetatjs--état-et-filtrage) | État et filtrage | 41 | 25 Ko |
 | [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 12 | 14 Ko |
 | [`js/marche.js`](README.md#jsmarchejs--cardmarket) | Cardmarket | 5 | 2 Ko |
 | [`js/scryfall.js`](README.md#jsscryfalljs--accès-à-scryfall) | Accès à Scryfall | 25 | 24 Ko |
-| [`js/stockage.js`](README.md#jsstockagejs--sauvegarde-locale) | Sauvegarde locale | 14 | 20 Ko |
+| [`js/stockage.js`](README.md#jsstockagejs--sauvegarde-locale) | Sauvegarde locale | 14 | 21 Ko |
 | [`js/externes.js`](README.md#jsexternesjs--edhrec-et-commander-spellbook) | EDHREC et Commander Spellbook | 80 | 64 Ko |
 | [`js/graphe.js`](README.md#jsgraphejs--graphe-des-capacités) | Graphe des capacités | 4 | 9 Ko |
 | [`js/stats.js`](README.md#jsstatsjs--statistiques) | Statistiques | 3 | 5 Ko |
-| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 29 | 43 Ko |
+| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 40 | 49 Ko |
 | [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 18 | 25 Ko |
 | [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 35 | 45 Ko |
 | [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 103 | 85 Ko |
@@ -66,11 +66,13 @@ tout geste qui change le deck ou les filtres. Il relève l'ancre de défilement,
   navigateur entre chacune, une boîte ouverte seulement si le travail dure plus que `DELAI_BOITE`.
 
 **Le rendu.** `renderAll()` (`js/ui.js`) pose d'abord l'onglet ouvert — `renderOnglets` —, puis
-repeint l'en-tête et les cinq sections — `renderTop`, `renderB` (collection), `renderC`
-(statistiques), `renderD` (graphe), `renderE` (deck), `renderF` (suggestions) — et programme la
-sauvegarde. Chaque section réécrit l'`innerHTML` de son conteneur. Les sections des onglets qu'on
-ne regarde pas sont rendues elles aussi : leur page est masquée, donc jamais mise en page, et
-changer d'onglet ne demande alors aucun rendu.
+repeint l'en-tête et les sept sections — `renderTop`, `renderB` (collection), `renderC`
+(statistiques), `renderD` (graphe), `renderE` (deck), puis `renderSuggestions`, qui peint d'un
+coup les trois sections nées d'une même notation : `renderG` (les pistes du graphe), `renderH`
+(EDHREC), `renderF` (le catalogue) — et programme la sauvegarde. Chaque section réécrit
+l'`innerHTML` de ses conteneurs nommés, jamais celui de son corps entier : c'est ce qui garde sa
+place au lecteur. Les sections des onglets qu'on ne regarde pas sont rendues elles aussi : leur
+page est masquée, donc jamais mise en page, et changer d'onglet ne demande alors aucun rendu.
 
 **La sauvegarde.** `scheduleSave()` (`js/stockage.js`) attend 700 ms, puis `save()` sérialise
 tout l'état par `snapshot()` dans `localStorage`. Différée, elle absorbe une rafale de gestes en
@@ -132,7 +134,7 @@ sequenceDiagram
 
     U->>APP: clic « Ajouter » sur une vignette
     APP->>SUG: geleSuggestions()
-    Note over SUG: SUG_ORDRE retient l'ordre affiché,<br/>SUG_EN_PLACE demande un rafraîchissement en place
+    Note over SUG: SUG_ORDRE retient l'ordre affiché ;<br/>les sections ne réécrivent que leurs listes, jamais leur corps
     APP->>DECK: addToDeck(nom)
     DECK->>DECK: find(nom), fmt(), annexeDe(nom)
 
@@ -166,8 +168,8 @@ sequenceDiagram
         UI->>UI: renderAll()
     end
 
-    UI->>SUG: renderF()
-    Note over SUG: SUG_EN_PLACE étant posé, seule la liste<br/>des suggestions est réécrite — la page ne remonte pas au début
+    UI->>SUG: renderSuggestions()
+    Note over SUG: une seule partition de la sélection, trois sections peintes ;<br/>seules leurs listes sont réécrites — la page ne remonte pas au début
     UI->>UI: restaureAncre()
     UI->>STOCK: scheduleSave()
 ```
@@ -329,7 +331,7 @@ sequenceDiagram
         APP->>SEC: renderE()
     else section = suggestions
         APP->>SEC: refreshSuggestions()
-        Note over SEC: le tri « score » ne retrie pas :<br/>la liste arrive déjà ordonnée, ou gelée
+        Note over SEC: la barre ne paraît que dans l'onglet Catalogue,<br/>seule section groupée et triée ; le tri « score » ne retrie pas :<br/>la liste arrive déjà ordonnée, ou gelée
     end
     APP->>APP: scheduleSave()
 ```
@@ -412,7 +414,7 @@ sequenceDiagram
     APP->>UI: recalculerAvecProgression(raison)
     Note over UI: le commandant entre dans contexteEvaluation() :<br/>son identité couleur écarte des candidates entières
     UI->>SUG: prepareSuggestions() — tout est renoté
-    UI->>SUG: renderF() → lanceEdhrecSiBesoin()
+    UI->>SUG: renderSuggestions() → lanceEdhrecSiBesoin()
     SUG->>SUG: loadEdhrec() si la signature du commandant a changé
 ```
 
@@ -423,7 +425,7 @@ Le seul parcours que l'utilisateur ne déclenche pas : il part du rendu lui-mêm
 ```mermaid
 sequenceDiagram
     autonumber
-    participant SEC as renderB / renderE / renderF
+    participant SEC as renderB / renderE / renderSuggestions
     participant SCRY as scryfall.js
     participant API as api.scryfall.com
     participant UI as ui.js
@@ -443,12 +445,12 @@ sequenceDiagram
             SCRY->>UI: toast(« Visuels indisponibles »)
         end
     end
-    Note over UI: MAJ_CARTES entre dans signatureSuggestions() :<br/>renderF() constate la péremption et lance<br/>recalculerAvecProgression(raison, {fond:true})
+    Note over UI: MAJ_CARTES entre dans signatureSuggestions() :<br/>filetSuggestions() constate la péremption et lance<br/>recalculerAvecProgression(raison, {fond:true})
 ```
 
 Le recalcul de fond ne montre pas de boîte : il gèle l'ordre affiché, avance par tranches et
-signale son travail par le liseré de la section. Une carte complétée pendant qu'on lit ne doit pas
-interrompre la lecture.
+signale son travail par le liseré des trois sections des propositions. Une carte complétée pendant
+qu'on lit ne doit pas interrompre la lecture.
 
 ### 3.11 EDHREC et Commander Spellbook
 
@@ -456,7 +458,7 @@ interrompre la lecture.
 sequenceDiagram
     autonumber
     participant E as renderE (deck)
-    participant F as renderF (suggestions)
+    participant F as renderH / renderF (propositions)
     participant EXT as externes.js
     participant SUG as suggestions.js
     participant NET as EDHREC / Commander Spellbook
@@ -472,7 +474,7 @@ sequenceDiagram
     SUG->>SUG: signature du commandant et des commandants secondaires
     SUG->>NET: json.edhrec.com/pages/commanders/<slug>.json
     NET-->>SUG: taux d'inclusion et synergies
-    SUG->>F: renderF() — le panneau et les étiquettes edhrec paraissent
+    SUG->>F: renderSuggestions() — le panneau EDHREC, ses recommandations<br/>et les étiquettes edhrec paraissent
 ```
 
 Les deux sources sont attendues, jamais bloquantes : une signature les empêche de repartir pour un

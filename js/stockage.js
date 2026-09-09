@@ -207,9 +207,11 @@ function restore(d) {
   if (typeof d.majIgnoree === 'string') S.majIgnoree = d.majIgnoree;
   if (typeof d.headerCompact === 'boolean') S.headerCompact = d.headerCompact;
   /* L'onglet ouvert revient comme l'entête compact : on retrouve l'atelier là
-     où on l'avait laissé. Une clé inconnue — une sauvegarde d'une autre
-     version — est écartée, sans quoi plus aucune page ne paraîtrait. */
+     où on l'avait laissé. Un nom qu'un onglet d'hier portait est traduit
+     (`ONGLETS_ANCIENS`) ; une clé inconnue est écartée, sans quoi plus aucune
+     page ne paraîtrait. */
   if (ONGLETS[d.onglet]) S.onglet = d.onglet;
+  else if (ONGLETS_ANCIENS[d.onglet]) S.onglet = ONGLETS_ANCIENS[d.onglet];
   /* Les parties repliées de la section Deck, comme l'en-tête compact : une
      préférence d'affichage, qu'on retrouve d'une séance à l'autre. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
@@ -387,7 +389,7 @@ function brancherCatalogue() {
       if (err.abandon) { toast('Lecture de l\'archive interrompue.'); return; }
       CAT.etat = 'erreur';
       CAT.detail = `lecture du fichier impossible : ${err.message || 'format inattendu'}`;
-      renderF();
+      renderSuggestions();
       toast(`Fichier illisible : ${err.message || 'format inattendu'}.`);
     }
   });
