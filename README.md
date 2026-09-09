@@ -73,7 +73,7 @@ Données : `GROUPS`, `NODES`, `NODE`, `IMPLICIT`, `EFFECT_RULES`, `TRIGGER_RULES
 | `scopeOf(s)` | Détermine si une clause vise votre côté ou celui de l'adversaire. |
 | `refineEffects(list, clause)` | Arbitre les conflits entre effets détectés (blink contre exil, négations…). |
 | `analyze(card)` | Analyse une carte : capacités, arcs déclencheur → effet, accroches et productions. |
-| `categories(card)` | Rôles d'une carte, croisant son type avec les capacités, coûts et déclencheurs relevés par `analyze()`. Le rôle `interaction` couvre destruction, exil, renvoi, dégâts et contresorts. |
+| `categories(card)` | Rôles d'une carte, croisant son type avec les capacités, coûts et déclencheurs relevés par `analyze()`. Le rôle `interaction` couvre destruction, exil, renvoi, dégâts et contresorts. Le rôle `wipe` porte sur ce qui est **en jeu** : un sort qui frappe chaque adversaire sans rien retirer du champ de bataille est du dégât de masse, non un board wipe ; en revanche le sacrifice imposé à la table (« chaque joueur sacrifie une créature ») et la force retirée en masse (« toutes les créatures gagnent -X/-X ») en sont. |
 | `feeds(concept)` | Concepts qu'une production peut alimenter, équivalences comprises. |
 | `feedsDe(p)` | Même chose, en tenant compte du détail de la production. |
 | `croise(prods,trigs,dir,out)` | Croise les productions d'une carte avec les accroches d'une autre. |

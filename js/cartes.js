@@ -385,12 +385,24 @@ function categories(card) {
     if (surLuiMeme(e) && /(?:owner's|your) (?:library|hand|graveyard)/.test(e)) return true;
     return /\byou control\b|\bto you\b|\byourself\b|\byour (?:creatures?|permanents?|lands?|hand|library|graveyard)\b/.test(e);
   };
+  /* Un balayage porte sur ce qui est en jeu : des permanentes, non des
+     joueurs. « Inflige 2 blessures à chaque adversaire » frappe tout le monde
+     sans rien retirer du champ de bataille — c'est du dégât de masse, et
+     Purphoros n'est pas un board wipe. */
   const enMasse = x => {
     const e = effet(x);
     // « le dessus de la bibliothèque de chaque joueur » ne balaie rien
     if (/(?:player|opponent)['\u2019]s (?:library|hand|graveyard)/.test(e)) return false;
-    return /\b(?:all|each|every)\s+(?:other\s+)?(?:creature|permanent|artifact|enchantment|land|nonland|player|opponent)/.test(e);
+    return /\b(?:all|each|every)\s+(?:other\s+)?(?:creature|permanent|artifact|enchantment|land|nonland)/.test(e);
   };
+  /* Le sacrifice imposé à la table vide le champ de bataille aussi sûrement
+     qu'une destruction : « chaque joueur sacrifie une créature ». C'est le
+     seul balayage qui passe par les joueurs, et il nomme sa cible. */
+  const sacrificeGeneral = x =>
+    /\b(?:all|each|every)\s+(?:other\s+)?(?:player|opponent)s?\b[^.]*\bsacrifices?\b[^.]*\b(?:creature|permanent|artifact|enchantment|land)/.test(effet(x));
+  /* Une force retirée en masse tue comme une destruction : « toutes les
+     créatures gagnent -X/-X ». Un bonus, lui, ne balaie rien. */
+  const affaiblitEnMasse = x => enMasse(x) && /-\s*[\dx]+\s*\/\s*-\s*[\dx]+/.test(effet(x));
 
   if (/creature/.test(t)) c.add('creatures');
   if (/land/.test(t)) c.add('terrains');
@@ -415,7 +427,9 @@ function categories(card) {
      le champ de bataille, quoi qu'en dise la lettre de son texte. */
   const emphase = /\boverload\b/.test(tx);
   if (vers(['DESTRUCTION', 'EXIL', 'DEGATS', 'MIS_EN_BIBLIO', 'BOUNCE'],
-    x => (enMasse(x) || emphase) && !surSoi(x))) c.add('wipe');
+        x => (enMasse(x) || emphase) && !surSoi(x))
+      || vers(['SACRIFICE'], sacrificeGeneral)
+      || vers(['BOOST'], x => affaiblitEnMasse(x) && !surSoi(x))) c.add('wipe');
 
   /* Protection : pour nos permanentes, pas pour celles d'en face. */
   if (vers(['INDESTRUCTIBLE', 'LINCEUL', 'PROTECTION'], x => x.scopeEff !== 'adv')) c.add('protection');
