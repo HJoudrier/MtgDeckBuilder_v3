@@ -77,7 +77,7 @@ function snapshot() {
     colorMode: S.colorMode,
     format: S.format,
     custom: S.custom,
-    colonnes: S.colonnes,
+    colonnes: {...S.colonnes},
     groupes: S.groupes,
     tris: S.tris,
     filtres: S.filtres,
@@ -184,10 +184,18 @@ function restore(d) {
   S.commander = d.commander && find(d.commander) ? d.commander : null;
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
   ['colorMode','format','view','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
-  /* Le nombre de colonnes de la grille : une valeur qui n'est plus offerte —
-     une sauvegarde d'une autre version — laisse la grille automatique plutôt
-     qu'une mise en page que le menu ne saurait plus nommer. */
-  if (COLONNES.indexOf(d.colonnes) >= 0) S.colonnes = d.colonnes;
+  /* Le nombre de colonnes de chaque grille. Les premières sauvegardes n'en
+     portaient qu'un, celui de la collection, en nombre nu : il devient le
+     sien. Une valeur qui n'est plus offerte — une sauvegarde d'une autre
+     version — laisse la grille automatique plutôt qu'une mise en page que le
+     menu ne saurait plus nommer. */
+  if (typeof d.colonnes === 'number') {
+    if (COLONNES.indexOf(d.colonnes) >= 0) S.colonnes.collection = d.colonnes;
+  } else if (d.colonnes && typeof d.colonnes === 'object') {
+    Object.keys(S.colonnes).forEach(liste => {
+      if (COLONNES.indexOf(d.colonnes[liste]) >= 0) S.colonnes[liste] = d.colonnes[liste];
+    });
+  }
   /* Le rangement de chaque section, une clé inconnue écartée : une sauvegarde
      d'une version ultérieure ne doit pas laisser la section sans tri. Les
      sauvegardes antérieures ne portent qu'un tri de collection, `sort`, dont

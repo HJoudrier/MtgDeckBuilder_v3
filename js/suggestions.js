@@ -841,6 +841,7 @@ function listeSuggestions(sel) {
   return `
     <div class="row" style="margin-bottom:10px">
       ${barreGroupeTri('suggestions')}
+      ${menuColonnes('suggestions')}
       <span class="small muted">${sug.length} piste(s)${noteMultiple(mode)}</span>
     </div>
     ${bandeauReclassement()}
@@ -849,7 +850,7 @@ function listeSuggestions(sel) {
       const titre = GROUPES[mode].plat ? 'Toutes les pistes' : g.libelle;
       /* Le corps entier — les vignettes et la pagination de la catégorie —
          entre dans le pli : repliée, elle cache aussi ses boutons. */
-      const corps = `<div class="sugrid">${g.entrees.slice(0,max).map(s=>sugRow(s)).join('')}</div>
+      const corps = `${ouvreGrille('suggestions', 'sugrid')}${g.entrees.slice(0,max).map(s=>sugRow(s)).join('')}</div>
         ${total > 6 ? `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
           ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="30">Afficher ${Math.min(30,reste)} de plus</button>` : ''}
           ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="tout">Tout afficher (${total})</button>` : ''}

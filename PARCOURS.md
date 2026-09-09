@@ -25,7 +25,7 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 | [`js/effets.js`](README.md#jseffetsjs--lecture-des-effets-des-cartes) | Lecture des effets des cartes | 14 | 28 Ko |
 | [`js/cartes.js`](README.md#jscartesjs--base-de-cartes) | Base de cartes | 28 | 47 Ko |
 | [`js/etat.js`](README.md#jsetatjs--état-et-filtrage) | État et filtrage | 41 | 27 Ko |
-| [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 13 | 15 Ko |
+| [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 16 | 17 Ko |
 | [`js/marche.js`](README.md#jsmarchejs--cardmarket) | Cardmarket | 5 | 2 Ko |
 | [`js/scryfall.js`](README.md#jsscryfalljs--accès-à-scryfall) | Accès à Scryfall | 25 | 24 Ko |
 | [`js/stockage.js`](README.md#jsstockagejs--sauvegarde-locale) | Sauvegarde locale | 14 | 21 Ko |
@@ -33,7 +33,7 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 | [`js/graphe.js`](README.md#jsgraphejs--graphe-des-capacités) | Graphe des capacités | 4 | 9 Ko |
 | [`js/stats.js`](README.md#jsstatsjs--statistiques) | Statistiques | 3 | 5 Ko |
 | [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 43 | 51 Ko |
-| [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 20 | 27 Ko |
+| [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 18 | 25 Ko |
 | [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 35 | 45 Ko |
 | [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 103 | 85 Ko |
 | [`js/app.js`](README.md#jsappjs--démarrage-et-évènements) | Démarrage et évènements | 1 | 29 Ko |

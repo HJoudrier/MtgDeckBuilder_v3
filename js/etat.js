@@ -72,9 +72,9 @@ function ongletDeSection(id) {
   return CLES_ONGLETS.find(cle => ONGLETS[cle].sections.includes(id)) || CLES_ONGLETS[0];
 }
 
-/* Les nombres de colonnes offerts par la grille de la collection, zéro valant
-   « autant que la largeur en permet ». Au-delà de huit, les cartes d'une
-   grille tiendraient sur une vignette de timbre. */
+/* Les nombres de colonnes offerts par les grilles, zéro valant « autant que la
+   largeur en permet ». Au-delà de huit, les cartes d'une grille tiendraient
+   sur une vignette de timbre. */
 const COLONNES = [0, 1, 2, 3, 4, 5, 6, 8];
 
 const RETOURNEES = new Set();
@@ -105,12 +105,14 @@ const S = {
   groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun'},
   tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion'},
   view: 'grid',
-  /* Le nombre de colonnes de la grille de la collection ; zéro laisse le
-     navigateur en poser autant que la largeur en permet, ce qu'il a toujours
-     fait. Une valeur choisie s'impose à toutes les largeurs : c'est ainsi
-     qu'on lit une carte par ligne sur un téléphone, ou deux grandes cartes
-     sur un écran large. */
-  colonnes: 0,
+  /* Le nombre de colonnes des grilles qui l'offrent — la collection et le
+     catalogue —, chacune gardant le sien comme elle garde son groupement et
+     son tri. Zéro laisse le navigateur en poser autant que la largeur en
+     permet, ce qu'il a toujours fait ; une valeur choisie s'impose à toutes
+     les largeurs, et c'est ainsi qu'on lit une carte par ligne sur un
+     téléphone. Le catalogue est nommé « suggestions », comme partout où son
+     rangement est en jeu. */
+  colonnes: {collection:0, suggestions:0},
   onglet: 'collection',      // l'onglet ouvert : une préférence d'affichage, conservée
   graphSource: 'collection',
   showImplicit: true,

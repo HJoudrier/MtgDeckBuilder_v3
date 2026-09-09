@@ -305,6 +305,43 @@ function noteMultiple(modeId) {
    section en attribut : c'est elle qui dit quel réglage change, chacune
    gardant le sien.
    --------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------
+   Le nombre de cartes par ligne.
+
+   Les grilles posaient autant de colonnes que la largeur en permettait,
+   chacune d'une largeur minimale : sur un téléphone, cela fait deux ou trois
+   vignettes par ligne, où l'on ne lit plus rien. Le menu laisse imposer un
+   nombre — une seule carte par ligne pour la lire vraiment, deux ou trois
+   pour comparer, davantage pour embrasser la liste d'un coup d'œil.
+
+   « Auto » est le choix de départ : c'est le comportement d'avant, et rien ne
+   change pour qui n'y touche pas. Comme le groupement et le tri, le réglage
+   appartient à la liste qui le porte — la collection et le catalogue ont
+   chacun le sien — et se conserve d'une séance à l'autre.
+   --------------------------------------------------------------------- */
+function colonnesDe(section) {
+  const n = (S.colonnes && S.colonnes[section]) | 0;
+  return COLONNES.indexOf(n) >= 0 ? n : 0;
+}
+
+function menuColonnes(section) {
+  const n = colonnesDe(section);
+  return `<select data-colonnes="${section}" aria-label="Nombre de cartes par ligne"
+      title="Nombre de cartes par ligne, quelle que soit la largeur de l'écran">
+    ${COLONNES.map(v =>
+      `<option value="${v}" ${n === v ? 'selected' : ''}>Colonnes : ${v === 0 ? 'auto' : v}</option>`).join('')}
+  </select>`;
+}
+
+/* L'ouverture d'une grille : la classe et la variable qui portent le choix,
+   ou la grille d'avant si l'on s'en remet à la largeur. `base` est la classe
+   de la grille — `grid` pour les tuiles de la collection, `sugrid` pour les
+   vignettes du catalogue. */
+function ouvreGrille(section, base) {
+  const n = colonnesDe(section);
+  return n > 0 ? `<div class="${base} cols" style="--cols:${n}">` : `<div class="${base}">`;
+}
+
 function barreGroupeTri(section) {
   const g = (S.groupes && S.groupes[section]) || 'aucun';
   const t = (S.tris && S.tris[section]) || 'alpha';
