@@ -722,6 +722,15 @@ document.addEventListener('change', ev => {
   /* Le rangement d'une section : chacune garde le sien, et seule celle qu'on
      règle est redessinée. Le tri par score de la collection peut demander une
      notation : `renderB` s'en charge par `filtered()`, et la mémorise. */
+  /* Le nombre de colonnes de la grille : rien n'est recalculé, la collection
+     est simplement redessinée — c'est une mise en page, non une sélection. */
+  if (t.dataset.colonnes) {
+    const n = parseInt(t.value, 10);
+    S.colonnes = COLONNES.indexOf(n) >= 0 ? n : 0;
+    renderB();
+    scheduleSave();
+    return;
+  }
   if (t.dataset.groupe || t.dataset.tri) {
     const section = t.dataset.groupe || t.dataset.tri;
     (t.dataset.groupe ? S.groupes : S.tris)[section] = t.value;

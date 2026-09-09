@@ -157,7 +157,7 @@ EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
 *20 fonction(s), 11 Ko*
 
-Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`, `GC_BASE`, `ONGLETS`, `ONGLETS_ANCIENS`, `SECTIONS_SUGGESTIONS`
+Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`, `GC_BASE`, `ONGLETS`, `ONGLETS_ANCIENS`, `SECTIONS_SUGGESTIONS`, `COLONNES`
 
 `GC_BASE` tient les **Game Changers** : la liste fermée que Wizards publie pour les paliers du
 Commander, une quarantaine de cartes dont la présence hausse le palier d'un deck. La recopier ici
@@ -662,11 +662,24 @@ Le code d'édition entre parenthèses et le numéro de collection qui le suit �
 demandée telle quelle à Scryfall, avec son visuel, son illustrateur et son prix. La collection reste comptée
 par nom ; les éditions relevées s'ajoutent les unes aux autres sur la même carte.
 
-*12 fonction(s), 15 Ko*
+La grille laisse choisir **combien de cartes par ligne**. Elle posait jusqu'ici autant de colonnes
+que la largeur en permettait, chacune d'au moins 130 pixels : sur un téléphone, cela fait deux ou
+trois vignettes par ligne, où l'on ne lit plus rien. Le menu « Colonnes » — visible en grille
+seulement — impose un nombre à toutes les largeurs : une seule carte par ligne pour la lire
+vraiment, deux ou trois pour comparer, jusqu'à huit pour embrasser la collection d'un coup d'œil.
+« Auto » reste le choix de départ, celui d'avant. La largeur d'une colonne est bornée par la
+feuille de style (`--col-max`, 460 px) : à une ou deux colonnes sur un écran large, le visuel
+serait sans cela agrandi bien au-delà de sa définition, et l'on gagnerait du flou plutôt que de la
+lisibilité. Le réglage tient dans `S.colonnes`, se conserve d'une séance à l'autre, et ne vaut que
+pour la collection — le deck et les listes annexes gardent leur grille automatique.
+
+*20 fonction(s), 27 Ko*
 
 | Fonction | Rôle |
 |---|---|
 | `renderB()` | Rend la collection, en grille ou en liste, groupée et triée selon la barre en tête de section (js/groupes.js), avec pagination ; les filtres se règlent dans l'en-tête. La page se remplit groupe par groupe, dans l'ordre affiché, en sautant les catégories repliées. |
+| `menuColonnes()` | Le menu du nombre de cartes par ligne, en grille seulement. |
+| `ouvreGrille()` | L'ouverture de la grille : la classe et la variable qui portent ce choix, ou la grille automatique d'avant. |
 | `causesCollection()` | Compte, cause par cause, ce qui écarte des cartes : les couleurs, la légalité du format, les champs de la fenêtre. |
 | `ligneCausesCollection()` | La phrase qui les nomme, chacune avec le geste qui la lève. |
 | `retireExtrait(s,i,n)` | Retire un fragment d'une ligne et recolle le reste. |

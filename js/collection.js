@@ -194,6 +194,35 @@ function parseMtgoList(txt) {
   return [...out.values()];
 }
 
+/* ---------------------------------------------------------------------
+   Le nombre de cartes par ligne.
+
+   La grille posait autant de colonnes que la largeur en permettait, chacune
+   d'au moins 130 pixels : sur un téléphone, cela fait deux ou trois vignettes
+   par ligne, où l'on ne lit plus rien. Le menu laisse imposer un nombre — une
+   seule carte par ligne pour la lire vraiment, deux ou trois pour comparer,
+   davantage pour embrasser la collection d'un coup d'œil.
+
+   « Auto » est le choix de départ : c'est le comportement d'avant, et rien ne
+   change pour qui n'y touche pas. Le réglage ne vaut que pour la grille de la
+   collection, et se conserve d'une séance à l'autre.
+   --------------------------------------------------------------------- */
+function menuColonnes() {
+  const n = S.colonnes | 0;
+  return `<select data-colonnes="collection" aria-label="Nombre de cartes par ligne"
+      title="Nombre de cartes par ligne, quelle que soit la largeur de l'écran">
+    ${COLONNES.map(v =>
+      `<option value="${v}" ${n === v ? 'selected' : ''}>Colonnes : ${v === 0 ? 'auto' : v}</option>`).join('')}
+  </select>`;
+}
+
+/* L'ouverture de la grille : la classe et la variable qui portent le choix,
+   ou la grille d'avant si l'on s'en remet à la largeur. */
+function ouvreGrille() {
+  const n = S.colonnes | 0;
+  return n > 0 ? `<div class="grid cols" style="--cols:${n}">` : '<div class="grid">';
+}
+
 function renderB() {
   renderTop();
   const list = filtered();
@@ -231,6 +260,7 @@ function renderB() {
           <button data-view="grid" aria-pressed="${S.view==='grid'}">Grille</button>
           <button data-view="list" aria-pressed="${S.view==='list'}">Liste</button>
         </div>
+        ${S.view === 'grid' ? menuColonnes() : ''}
         <button class="btn" data-act="addCard">Ajouter</button>
         <button class="btn" data-act="import">Importer MTGO</button>
         ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}
@@ -239,7 +269,7 @@ function renderB() {
       <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}${noteMultiple(mode)}</div>
       ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
       ${pageGroupes.length ? rendGroupes('collection', pageGroupes, mode, ents => S.view === 'grid'
-        ? `<div class="grid">${ents.map(e => cardTile(e, 'collection')).join('')}</div>`
+        ? `${ouvreGrille()}${ents.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${ents.map(e => cardRow(e, 'collection')).join('')}</div>`)
         : (total === 0
           ? `<div class="empty">Votre collection est vide. Ajoutez une carte, ou importez une liste MTGO, avec les boutons ci-dessus.</div>`

@@ -250,6 +250,20 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 
 /* ---------- cartes ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px}
+/* Un nombre de colonnes choisi (`S.colonnes`, la grille de la collection). La
+   règle porte deux classes, elle l'emporte donc sur les `.grid` des requêtes
+   de média : le choix vaut à toutes les largeurs, y compris sur un téléphone
+   où l'on veut justement une seule carte par ligne.
+
+   La largeur d'une colonne est bornée par `--col-max` : à une ou deux
+   colonnes sur un écran large, le visuel serait sans cela agrandi bien
+   au-delà de sa définition (488 px de large chez Scryfall), et l'on gagnerait
+   du flou, non de la lisibilité. */
+.grid.cols{
+  --col-max:460px;
+  grid-template-columns:repeat(var(--cols),minmax(0,1fr));
+  max-width:calc(var(--cols) * var(--col-max) + (var(--cols) - 1) * 7px)
+}
 .cardT, .card{
   position:relative;border:1px solid var(--line);border-radius:8px;padding:6px 7px 5px;
   background:linear-gradient(160deg,var(--panel2),var(--bg2));text-align:left;width:100%;
