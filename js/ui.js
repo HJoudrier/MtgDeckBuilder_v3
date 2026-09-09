@@ -1251,6 +1251,10 @@ function restaureAncre(a) {
     cible = (sec || document).querySelector(`[data-card="${CSS.escape(a.nom)}"]`);
   cible = cible || sec;
   if (!cible) return;
+  /* L'ancre a pu passer sous un autre onglet pendant un recalcul de fond :
+     une page masquée n'a pas de rectangle, et l'écart mesuré ferait sauter le
+     défilement de celle qu'on regarde. */
+  if (typeof cible.getClientRects === 'function' && !cible.getClientRects().length) return;
   const ecart = cible.getBoundingClientRect().top - a.y;
   if (Math.abs(ecart) > 1) window.scrollBy(0, ecart);
 }
@@ -1319,11 +1323,15 @@ function progresSection(txt, fait, total) {
   if (bande.firstChild) bande.firstChild.style.width = pct + '%';
   const hint = document.getElementById('hintF');
   if (hint) hint.textContent = total > 0 ? `${txt} ${pct} %` : `${txt}…`;
+  /* Le liseré ne se voit pas depuis un autre onglet : le point de la barre
+     dit, lui, qu'un travail court dans une page qu'on ne regarde pas. */
+  signalerTravail('secF', true, total > 0 ? `${txt} ${pct} %` : `${txt}…`);
 }
 
 function finProgresSection() {
   const bande = document.getElementById('secProgres');
   if (bande) bande.remove();
+  signalerTravail('secF', false);
 }
 
 /* Un recalcul à la fois. Un geste arrivé pendant qu'un autre travaille est
@@ -1539,11 +1547,20 @@ function openFiltresModal() {
     () => { majFenetreFiltres(); majResumeFiltres(); });
 }
 
+/* La hauteur de l'entête, publiée pour le CSS : les sections s'en servent
+   comme marge de défilement et s'arrêtent sous elle plutôt que derrière. Elle
+   se relève après coup — l'entête se replie et ses pastilles s'enroulent, si
+   bien qu'une mesure prise avant l'écriture donnerait la hauteur d'avant. */
+function majHauteurEntete() {
+  const entete = document.getElementById('topHeader');
+  if (entete) document.documentElement.style.setProperty('--h-entete', entete.offsetHeight + 'px');
+}
+
 function renderTop() {
   const topStats = document.getElementById('topStats');
   const topHeader = document.getElementById('topHeader');
   if (topHeader) topHeader.classList.toggle('compact', !!S.headerCompact);
-  if (!topStats) return;
+  if (!topStats) { majHauteurEntete(); return; }
 
   const dCount = deckSize(), f = fmt();
   const allCards = collectionCards();
@@ -1642,9 +1659,85 @@ function renderTop() {
       ${toggleBtnHTML}
     `;
   }
+  majHauteurEntete();
+}
+
+/* ---------------------------------------------------------------------
+   Les onglets.
+
+   Les cinq sections sont rendues à chaque fois, celles qu'on ne regarde pas
+   comprises : une page masquée n'est pas mise en page, elle ne coûte que le
+   texte qu'on y écrit, et changer d'onglet ne demande alors aucun rendu — un
+   attribut, et la page est là, jamais périmée.
+   --------------------------------------------------------------------- */
+
+/* Où l'on en était dans chaque onglet. Le défilement est celui du document,
+   partagé par les trois pages : sans ce relevé, revenir au deck après une
+   longue collection retomberait n'importe où. Rien n'en est conservé d'une
+   séance à l'autre — c'est le fil d'une lecture, pas un réglage. */
+const POS_ONGLETS = {};
+
+/* La barre ne se réécrit pas, elle change d'attributs : la réécrire
+   emporterait le focus du bouton qu'on vient de presser, et les flèches
+   n'auraient plus rien sous elles. */
+function renderOnglets() {
+  if (!ONGLETS[S.onglet]) S.onglet = CLES_ONGLETS[0];
+  document.querySelectorAll('#onglets [data-onglet]').forEach(b => {
+    const actif = b.dataset.onglet === S.onglet;
+    b.setAttribute('aria-selected', String(actif));
+    // une seule tabulation entre dans la barre ; les flèches font le reste
+    b.tabIndex = actif ? 0 : -1;
+    if (actif) { b.classList.remove('travaille'); b.removeAttribute('title'); }
+  });
+  document.querySelectorAll('.page[data-page]').forEach(p => {
+    p.hidden = p.dataset.page !== S.onglet;
+  });
+}
+
+/* Passer d'un onglet à l'autre : rien n'est redessiné, les cinq sections
+   étant toujours rendues. La page voulue est découverte, et le défilement
+   retrouve celui qu'elle avait. */
+function activerOnglet(cle, opts) {
+  if (!ONGLETS[cle]) return;
+  const change = S.onglet !== cle;
+  if (change && typeof window !== 'undefined') POS_ONGLETS[S.onglet] = window.scrollY;
+  S.onglet = cle;
+  renderOnglets();
+  if (change) {
+    if (!(opts && opts.sansDefiler) && typeof window !== 'undefined')
+      window.scrollTo({top: POS_ONGLETS[cle] || 0, behavior:'auto'});
+    scheduleSave();
+  }
+}
+
+/* Aller à une section, d'où qu'on parte : l'onglet qui la porte s'ouvre, et
+   le défilement s'arrête sous l'entête collante plutôt que derrière elle. */
+function allerVersSection(id) {
+  activerOnglet(ongletDeSection(id), {sansDefiler:true});
+  const el = document.getElementById(id);
+  if (!el || typeof window === 'undefined') return;
+  const entete = document.getElementById('topHeader');
+  const marge = entete ? entete.getBoundingClientRect().height + 8 : 0;
+  const y = el.getBoundingClientRect().top + window.scrollY - marge;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+}
+
+/* Un travail de fond se signale là où on peut le voir : le liseré sur la
+   section quand elle est sous les yeux, un point sur l'onglet qui la porte
+   quand on regarde ailleurs. */
+function signalerTravail(idSection, actif, texte) {
+  const cle = ongletDeSection(idSection);
+  const b = document.querySelector(`#onglets [data-onglet="${cle}"]`);
+  if (!b) return;
+  b.classList.toggle('travaille', !!actif && S.onglet !== cle);
+  if (actif && texte && S.onglet !== cle) b.title = texte;
+  else if (!actif || S.onglet === cle) b.removeAttribute('title');
 }
 
 function renderAll() {
+  /* La bonne page d'abord : au premier rendu, rien ne doit paraître de celles
+     qu'on ne demande pas. */
+  renderOnglets();
   renderTop();
   renderB();
   renderC();

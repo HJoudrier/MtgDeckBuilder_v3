@@ -156,8 +156,37 @@ header.top.compact .brand .sub{display:none}
 .head-toggle.is-compact{color:var(--dim);border-color:var(--line2);background:var(--panel)}
 .head-toggle.is-compact:hover{color:var(--txt);border-color:var(--brass)}
 
-/* ---------- sections repliables ---------- */
-section.sec{position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:14px 0;overflow:hidden}
+/* ---------- onglets ---------- */
+/* La barre vit dans l'entête collante : elle ne quitte jamais l'écran, et
+   passer d'un pan de l'atelier à l'autre ne demande pas de remonter. */
+.onglets{
+  max-width:1180px;margin:0 auto;padding:0 12px;
+  display:flex;gap:4px;align-items:stretch;border-top:1px solid var(--line);
+  overflow-x:auto;scrollbar-width:none
+}
+.onglets::-webkit-scrollbar{display:none}
+.onglet{
+  position:relative;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;
+  padding:9px 14px 7px;font-family:var(--display);font-size:14.5px;color:var(--dim);
+  transition:color .15s ease, background .15s ease
+}
+.onglet:hover{color:var(--txt)}
+.onglet[aria-selected=true]{color:var(--brass);border-bottom-color:var(--brass);background:rgba(211,164,65,.08)}
+/* Le point d'attente : un travail de fond dans une page qu'on ne regarde
+   pas — le liseré de la section, lui, y resterait invisible. */
+.onglet .onglet-pt{width:6px;height:6px;border-radius:99px;background:var(--brass);opacity:0;transition:opacity .2s ease}
+.onglet.travaille .onglet-pt{opacity:1;animation:battement 1.2s ease-in-out infinite}
+@keyframes battement{0%,100%{opacity:1}50%{opacity:.25}}
+header.top.compact .onglets{padding:0 10px}
+header.top.compact .onglet{padding:6px 11px 5px;font-size:13px}
+
+/* Une page masquée n'est pas mise en page : rien n'y est mesuré, et son
+   contenu reste rendu, prêt à paraître d'un seul attribut. */
+.page[hidden]{display:none}
+
+/* ---------- sections ---------- */
+section.sec{position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:14px 0;overflow:hidden;scroll-margin-top:var(--h-entete,110px)}
 /* Le liseré d'un recalcul de fond : posé par-dessus le bord haut de la
    section, il n'entre pas dans le flux — rien ne bouge sous lui. */
 .sec-progres{position:absolute;left:0;top:0;width:100%;height:3px;background:rgba(211,164,65,.16);pointer-events:none;z-index:2}
@@ -165,20 +194,11 @@ section.sec{position:relative;border:1px solid var(--line);border-radius:var(--r
 .sec-head{
   display:flex;align-items:center;gap:10px;width:100%;
   padding:12px 14px;background:linear-gradient(180deg,var(--panel2),var(--panel));
-  border:0;border-bottom:1px solid transparent;text-align:left
-}
-.sec.open .sec-head{border-bottom-color:var(--line)}
-.sec-head .letter{
-  font-family:var(--display);font-size:14px;width:26px;height:26px;flex:0 0 26px;
-  display:grid;place-items:center;border-radius:6px;
-  background:var(--brass-d);color:#1a1526;font-weight:700
+  border:0;border-bottom:1px solid var(--line);text-align:left
 }
 .sec-head h2{font-size:16px;flex:1;min-width:0}
 .sec-head .hint{color:var(--dim2);font-size:12px;font-family:var(--mono)}
-.chev{transition:transform .18s ease;color:var(--dim);flex:0 0 auto}
-.sec.open .chev{transform:rotate(90deg)}
-.sec-body{display:none;padding:14px}
-.sec.open .sec-body{display:block}
+.sec-body{display:block;padding:14px}
 
 /* ---------- contrôles ---------- */
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -359,8 +379,8 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .partie-tete h4{margin:0;font-size:14px;font-family:var(--display);flex:0 0 auto}
 .partie-tete .small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .partie-tete:hover h3, .partie-tete:hover .chev-partie{color:var(--brass)}
-/* Son propre nom : `.sec.open .chev` vaut pour tout ce que la section
-   contient, et laisserait ce chevron-ci tourné en permanence. */
+/* Son propre nom : les sections ne se replient plus — les onglets ont pris
+   ce rôle — mais le chevron d'une partie, lui, garde le sien. */
 .partie-tete .chev-partie{transition:transform .18s ease;color:var(--dim);flex:0 0 auto}
 .partie.ouverte>.partie-tete .chev-partie{transform:rotate(90deg)}
 .partie-corps{display:none}
@@ -446,6 +466,8 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:7px}
   .brand h1{font-size:16px} .brand .sub{display:none}
   .sec-head{padding:11px 10px} .sec-body{padding:10px}
+  .onglets{padding:0 6px;gap:0;border-top-color:var(--line2)}
+  .onglet{flex:1 1 0;justify-content:center;padding:8px 6px 6px;font-size:13px}
   .bars{height:120px}
   .top-in{padding:6px 8px;gap:6px 8px}
   .top-stats{gap:4px 6px;width:100%;justify-content:flex-start}

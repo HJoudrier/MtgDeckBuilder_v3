@@ -133,7 +133,7 @@ function renderD() {
 
   const emptyMsg = {
     collection: 'Aucune carte ne passe les filtres en cours.',
-    all: 'Votre collection est vide : ajoutez ou importez des cartes en section A.',
+    all: 'Votre collection est vide : ajoutez ou importez des cartes depuis <button type="button" class="btn sm" data-onglet="collection">l\'onglet Collection</button>.',
     deck: 'Le deck est vide.',
     suggestions: 'Aucune suggestion pour le moment.'
   }[S.graphSource] || 'Aucune carte.';

@@ -35,6 +35,23 @@ const ANNEXES = {
 };
 const CLES_ANNEXES = Object.keys(ANNEXES);
 
+/* Les trois onglets de l'atelier, dans l'ordre où ils paraissent sous
+   l'entête. Chacun nomme les sections qu'il porte : c'est la seule table qui
+   les répartisse, et tout le reste — la barre, le passage d'un onglet à
+   l'autre, le signal d'un travail de fond — s'y réfère. */
+const ONGLETS = {
+  collection:  {label:'Collection',  sections:['secC','secB']},
+  deck:        {label:'Deck',        sections:['secE']},
+  suggestions: {label:'Suggestions', sections:['secD','secF']}
+};
+const CLES_ONGLETS = Object.keys(ONGLETS);
+
+/* L'onglet qui porte une section, pour les gestes qui traversent l'atelier —
+   la fiche d'une carte qui renvoie au graphe, par exemple. */
+function ongletDeSection(id) {
+  return CLES_ONGLETS.find(cle => ONGLETS[cle].sections.includes(id)) || CLES_ONGLETS[0];
+}
+
 const RETOURNEES = new Set();
 let apercuEl = null;
 let apercuCardName = null;
@@ -61,6 +78,7 @@ const S = {
   groupes: {collection:'aucun', deck:'type', suggestions:'type'},
   tris: {collection:'cmc', deck:'type', suggestions:'score'},
   view: 'grid',
+  onglet: 'collection',      // l'onglet ouvert : une préférence d'affichage, conservée
   graphSource: 'collection',
   showImplicit: true,
   focusNodes: new Set(),

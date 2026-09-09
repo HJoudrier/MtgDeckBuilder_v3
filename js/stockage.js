@@ -81,6 +81,7 @@ function snapshot() {
     tris: S.tris,
     filtres: S.filtres,
     view: S.view,
+    onglet: S.onglet,
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
     budget: S.budget,
@@ -205,6 +206,10 @@ function restore(d) {
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
   if (typeof d.majIgnoree === 'string') S.majIgnoree = d.majIgnoree;
   if (typeof d.headerCompact === 'boolean') S.headerCompact = d.headerCompact;
+  /* L'onglet ouvert revient comme l'entête compact : on retrouve l'atelier là
+     où on l'avait laissé. Une clé inconnue — une sauvegarde d'une autre
+     version — est écartée, sans quoi plus aucune page ne paraîtrait. */
+  if (ONGLETS[d.onglet]) S.onglet = d.onglet;
   /* Les parties repliées de la section Deck, comme l'en-tête compact : une
      préférence d'affichage, qu'on retrouve d'une séance à l'autre. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);

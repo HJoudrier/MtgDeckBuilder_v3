@@ -18,63 +18,79 @@
       </div>
       <div class="top-stats" id="topStats"></div>
     </div>
+
+    <!-- Les trois onglets, dans l'entête même : la barre est collante avec
+         elle, et l'on passe d'un pan de l'atelier à l'autre sans remonter. -->
+    <div class="onglets" id="onglets" role="tablist" aria-label="Pans de l'atelier">
+      <button type="button" class="onglet" id="ongletCollection" role="tab"
+              data-onglet="collection" aria-selected="true" aria-controls="pageCollection" tabindex="0">
+        Collection<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletDeck" role="tab"
+              data-onglet="deck" aria-selected="false" aria-controls="pageDeck" tabindex="-1">
+        Deck<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletSuggestions" role="tab"
+              data-onglet="suggestions" aria-selected="false" aria-controls="pageSuggestions" tabindex="-1">
+        Suggestions<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+    </div>
   </header>
 
   <main class="wrap">
-    <!-- Section A : Collection — les identifiants restent secB…secF, la lettre affichée seule change -->
-    <section class="sec open" id="secB">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">A</span>
-        <h2>Collection</h2>
-        <span class="hint" id="hintB"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyB"></div>
-    </section>
+    <!-- Les cinq sections se répartissent en trois onglets. Leurs identifiants
+         — secB…secF, bodyB…hintF — ont gardé la lettre d'origine que les
+         rendus connaissent ; plus aucune lettre n'est affichée. -->
 
-    <!-- Section B : Statistiques -->
-    <section class="sec open" id="secC">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">B</span>
-        <h2>Statistiques</h2>
-        <span class="hint" id="hintC"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyC"></div>
-    </section>
+    <!-- Onglet 1 — ce que la collection pèse, et la collection -->
+    <div class="page" id="pageCollection" data-page="collection"
+         role="tabpanel" aria-labelledby="ongletCollection" tabindex="0">
+      <section class="sec" id="secC">
+        <div class="sec-head">
+          <h2>Statistiques</h2>
+          <span class="hint" id="hintC"></span>
+        </div>
+        <div class="sec-body" id="bodyC"></div>
+      </section>
+      <section class="sec" id="secB">
+        <div class="sec-head">
+          <h2>Collection</h2>
+          <span class="hint" id="hintB"></span>
+        </div>
+        <div class="sec-body" id="bodyB"></div>
+      </section>
+    </div>
 
-    <!-- Section C : Graphe des capacités -->
-    <section class="sec open" id="secD">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">C</span>
-        <h2>Graphe des capacités</h2>
-        <span class="hint" id="hintD"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyD"></div>
-    </section>
+    <!-- Onglet 2 — le deck en construction -->
+    <div class="page" id="pageDeck" data-page="deck"
+         role="tabpanel" aria-labelledby="ongletDeck" tabindex="0" hidden>
+      <section class="sec" id="secE">
+        <div class="sec-head">
+          <h2>Deck</h2>
+          <span class="hint" id="hintE"></span>
+        </div>
+        <div class="sec-body" id="bodyE"></div>
+      </section>
+    </div>
 
-    <!-- Section D : Deck -->
-    <section class="sec open" id="secE">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">D</span>
-        <h2>Deck</h2>
-        <span class="hint" id="hintE"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyE"></div>
-    </section>
-
-    <!-- Section E : Suggestions -->
-    <section class="sec open" id="secF">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">E</span>
-        <h2>Suggestions d'ajout</h2>
-        <span class="hint" id="hintF"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyF"></div>
-    </section>
+    <!-- Onglet 3 — le graphe, et ce qu'il propose -->
+    <div class="page" id="pageSuggestions" data-page="suggestions"
+         role="tabpanel" aria-labelledby="ongletSuggestions" tabindex="0" hidden>
+      <section class="sec" id="secD">
+        <div class="sec-head">
+          <h2>Graphe des capacités</h2>
+          <span class="hint" id="hintD"></span>
+        </div>
+        <div class="sec-body" id="bodyD"></div>
+      </section>
+      <section class="sec" id="secF">
+        <div class="sec-head">
+          <h2>Suggestions d'ajout</h2>
+          <span class="hint" id="hintF"></span>
+        </div>
+        <div class="sec-body" id="bodyF"></div>
+      </section>
+    </div>
   </main>
 
   <!-- Fenêtre modale commune -->

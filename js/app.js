@@ -4,17 +4,7 @@
    ===================================================================== */
 
 document.addEventListener('click', ev => {
-  const head = ev.target.closest('.sec-head');
-  if (head) {
-    const sec = head.closest('section.sec');
-    if (sec) {
-      sec.classList.toggle('open');
-      head.setAttribute('aria-expanded', String(sec.classList.contains('open')));
-      return;
-    }
-  }
-
-  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-view], [data-gsrc], [data-cmode], [data-color], [data-col]');
+  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-view], [data-gsrc], [data-cmode], [data-color], [data-col]');
   if (!b) return;
 
   const act = b.dataset.act;
@@ -50,13 +40,25 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (b.dataset.node || b.dataset.node2) {
+  /* Le nœud cliqué à même le graphe : une bascule, rien de plus. Les boutons
+     qui nomment leur geste — « retirer », « isoler dans le graphe » — passent
+     outre et gagnent leur propre branche, plus bas : sans cette réserve, la
+     bascule les happait tous, et « isoler » se contentait d'ajouter le nœud
+     sans fermer la fiche ni mener au graphe. */
+  if (!act && (b.dataset.node || b.dataset.node2)) {
     const id = b.dataset.node || b.dataset.node2;
     if (S.focusNodes.has(id)) S.focusNodes.delete(id);
     else S.focusNodes.add(id);
     invaliderCandidats();
     renderD();
     recalculerAvecProgression(`Effet ${(typeof NODE !== 'undefined' && NODE[id] && NODE[id].label) || id} ${S.focusNodes.has(id) ? 'isolé' : 'relâché'} : les candidates sont rebâties et notées.`);
+    return;
+  }
+
+  /* Les onglets : rien n'est recalculé, les sections étant toujours rendues.
+     La page voulue paraît, et c'est tout. */
+  if (b.dataset.onglet) {
+    activerOnglet(b.dataset.onglet);
     return;
   }
 
@@ -545,18 +547,20 @@ document.addEventListener('click', ev => {
       S.focusNodes.clear();
       S.focusNodes.add(n);
       closeDialog();
-      document.getElementById('secD').scrollIntoView({behavior:'smooth'});
       invaliderCandidats();
       renderD();
       renderF();
       renderTop();
+      /* La fiche a pu être ouverte depuis n'importe quel onglet : celui du
+         graphe s'ouvre d'abord, et le défilement ne part qu'une fois la
+         section redessinée, à sa hauteur définitive. */
+      allerVersSection('secD');
     }
     return;
   }
 
   if (act === 'graphToF') {
-    const secF = document.getElementById('secF');
-    if (secF) secF.scrollIntoView({behavior:'smooth'});
+    allerVersSection('secF');
     return;
   }
 
@@ -751,6 +755,11 @@ if (dlgEl) {
   });
 }
 
+/* L'entête s'enroule autrement selon la largeur : sa hauteur est relevée à
+   nouveau, sans rien redessiner, pour que les sections gardent la bonne marge
+   de défilement. */
+window.addEventListener('resize', majHauteurEntete);
+
 // Clavier : Échap ferme la modale et l'aperçu
 document.addEventListener('keydown', ev => {
   if (ev.key === 'Escape') {
@@ -768,6 +777,20 @@ document.addEventListener('keydown', ev => {
   if (ev.key === 'Enter' && ev.target && ev.target.dataset && ev.target.dataset.bud) {
     ev.preventDefault();
     appliquerBudget();
+  }
+  /* La barre d'onglets au clavier, selon le motif « tablist » : les flèches
+     parcourent les onglets, Origine et Fin vont aux extrémités, et la page
+     suit le focus. La tabulation, elle, n'entre qu'une fois dans la barre. */
+  const ongletFocus = ev.target && ev.target.closest && ev.target.closest('#onglets [data-onglet]');
+  if (ongletFocus && ['ArrowLeft','ArrowRight','Home','End'].includes(ev.key)) {
+    ev.preventDefault();
+    const boutons = [...document.querySelectorAll('#onglets [data-onglet]')];
+    const i = boutons.indexOf(ongletFocus);
+    const j = ev.key === 'Home' ? 0
+      : ev.key === 'End' ? boutons.length - 1
+      : (i + (ev.key === 'ArrowRight' ? 1 : -1) + boutons.length) % boutons.length;
+    activerOnglet(boutons[j].dataset.onglet);
+    boutons[j].focus();
   }
 });
 

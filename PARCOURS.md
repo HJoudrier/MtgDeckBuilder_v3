@@ -65,10 +65,12 @@ tout geste qui change le deck ou les filtres. Il relève l'ancre de défilement,
 - **long** — `prechauffeCandidats()` puis `prepareSuggestions()` par tranches, la main rendue au
   navigateur entre chacune, une boîte ouverte seulement si le travail dure plus que `DELAI_BOITE`.
 
-**Le rendu.** `renderAll()` (`js/ui.js`) repeint l'en-tête et les cinq sections —
-`renderTop`, `renderB` (collection), `renderC` (statistiques), `renderD` (graphe), `renderE`
-(deck), `renderF` (suggestions) — puis programme la sauvegarde. Chaque section réécrit
-l'`innerHTML` de son conteneur.
+**Le rendu.** `renderAll()` (`js/ui.js`) pose d'abord l'onglet ouvert — `renderOnglets` —, puis
+repeint l'en-tête et les cinq sections — `renderTop`, `renderB` (collection), `renderC`
+(statistiques), `renderD` (graphe), `renderE` (deck), `renderF` (suggestions) — et programme la
+sauvegarde. Chaque section réécrit l'`innerHTML` de son conteneur. Les sections des onglets qu'on
+ne regarde pas sont rendues elles aussi : leur page est masquée, donc jamais mise en page, et
+changer d'onglet ne demande alors aucun rendu.
 
 **La sauvegarde.** `scheduleSave()` (`js/stockage.js`) attend 700 ms, puis `save()` sérialise
 tout l'état par `snapshot()` dans `localStorage`. Différée, elle absorbe une rafale de gestes en

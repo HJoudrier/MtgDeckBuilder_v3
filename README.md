@@ -30,11 +30,16 @@ js/                 modules, chargés dans cet ordre :
   app.js           Démarrage et évènements
 ```
 
-Les cinq sections de la page sont Collection, Statistiques, Graphe des capacités, Deck et Suggestions ;
-le format, les filtres, le catalogue et le budget se règlent depuis les fenêtres qu'ouvrent les
-pastilles de l'en-tête. Les identifiants internes des sections (`secB`…`secF`, `renderB`…`renderF`)
-ont gardé leur lettre d'origine, seule la lettre affichée a été resserrée après le passage de la
-section « Filtres & Format » en fenêtre.
+Les cinq sections de la page se répartissent en trois onglets, posés au bas de l'en-tête et
+toujours visibles : **Collection** porte les statistiques puis la collection, **Deck** porte le
+deck, **Suggestions** porte le graphe des capacités puis les suggestions d'ajout. La table
+`ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
+conserve d'une séance à l'autre. Les cinq sections sont rendues à chaque fois, celles qu'on ne
+regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
+alors aucun rendu. Le format, les filtres, le catalogue et le budget se règlent depuis les
+fenêtres qu'ouvrent les pastilles de l'en-tête. Les identifiants internes des sections
+(`secB`…`secF`, `renderB`…`renderF`) ont gardé leur lettre d'origine, que les rendus connaissent ;
+plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
 
 L'ordre de chargement compte : `effets.js` définit l'analyseur qu'utilise `cartes.js`
 au moment de construire la base livrée. Les modules partagent la portée globale ;
@@ -784,7 +789,11 @@ Données : `RETOURNEES`
 | `resumeFiltres()` | Décompte des cartes retenues, saisie en attente comprise, et rappel des filtres actifs. |
 | `majResumeFiltres()` | Rafraîchit ce décompte à chaque frappe. |
 | `majFenetreFiltres()` | Réécrit les champs après une réinitialisation ou un changement de couleur. |
-| `renderAll()` | Rend les cinq sections et programme la sauvegarde. |
+| `renderAll()` | Rend les cinq sections, masquées comprises, et programme la sauvegarde. |
+| `renderOnglets()` | Pose l'onglet ouvert sur la barre et découvre sa page ; la barre change d'attributs, elle ne se réécrit pas. |
+| `activerOnglet(cle,opts)` | Passe à un onglet : rien n'est redessiné, et le défilement retrouve celui que la page avait. |
+| `allerVersSection(id)` | Mène à une section d'où qu'on parte : son onglet s'ouvre, et le défilement s'arrête sous l'en-tête collante. |
+| `signalerTravail(id,actif,texte)` | Le point d'attente d'un onglet : un travail de fond qui court dans une page qu'on ne regarde pas. |
 | `aDeuxFaces(c)` | Détecte une carte recto-verso. |
 | `autreFace(c,grande)` | Face opposée, pour la vignette de retournement. |
 | `faceVisible(c,grande)` | Face actuellement affichée. |
@@ -823,7 +832,7 @@ Données : `RETOURNEES`
 
 - 241 fonctions au total, réparties en 14 modules.
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
-- Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-filtre` et `data-card-name`.
+- Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-onglet`, `data-filtre` et `data-card-name`.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes,
   pour l'index des archétypes EDHREC et pour celui des sets.
 - Le filtre par set retient une carte dès qu'elle a paru dans un des sets cochés, possédée ou non dans cette édition.
