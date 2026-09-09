@@ -5,6 +5,10 @@ les fichiers s'ouvrent directement dans un navigateur.
 
 ## Organisation
 
+Les diagrammes de séquence des parcours — ce qui s'appelle, dans quel ordre, quand on ajoute une
+carte, qu'on filtre ou qu'on retire une carte du deck — sont dans [PARCOURS.md](PARCOURS.md). Le
+présent document dit ce que fait chaque fonction ; celui-là, l'ordre où elles s'appellent.
+
 ```
 index.html          page et structure des cinq sections
 css/atelier.css     styles
