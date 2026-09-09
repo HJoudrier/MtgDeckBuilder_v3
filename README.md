@@ -41,6 +41,13 @@ fenêtres qu'ouvrent les pastilles de l'en-tête. Les identifiants internes des 
 (`secB`…`secF`, `renderB`…`renderF`) ont gardé leur lettre d'origine, que les rendus connaissent ;
 plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
 
+La feuille de style et les modules portent un marqueur de version dans leur adresse
+(`?v=…`, `index.html`). Sans lui, un navigateur relit la page en gardant en cache ce qu'elle
+charge : tant que chacun tenait son rôle de son côté la dérive passait inaperçue, mais depuis
+que la coque des onglets vit dans la page, un cache en retard donne des boutons nus et des
+gestes sans effet. Le marqueur est à rehausser dès qu'un changement touche à la fois `index.html`
+et ce qu'il charge.
+
 L'ordre de chargement compte : `effets.js` définit l'analyseur qu'utilise `cartes.js`
 au moment de construire la base livrée. Les modules partagent la portée globale ;
 aucun système de modules n'est employé, afin que l'application reste utilisable
