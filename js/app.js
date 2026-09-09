@@ -184,9 +184,11 @@ document.addEventListener('click', ev => {
   if (act === 'pageType') {
     const t = b.dataset.type, pas = b.dataset.pas;
     const all = currentSuggestions();
-    const total = (t === 'edhrec')
-      ? all.filter(s => s.edhrec).length
-      : all.filter(s => mainType(s.card) === t).length;
+    /* Le groupe est celui du rangement en cours, non plus le seul type
+       principal : c'est lui qui dit combien de pistes il reste à montrer. */
+    const groupe = t === 'edhrec' ? null
+      : groupeCartes(all, S.groupes.suggestions, null).find(g => g.id === t);
+    const total = (t === 'edhrec') ? all.filter(s => s.edhrec).length : (groupe ? groupe.total : 0);
     const defaultLim = (t === 'edhrec') ? 8 : 6;
     if (pas === 'tout') S.limiteType[t] = total;
     else if (pas === 'reduire') S.limiteType[t] = defaultLim;
@@ -674,9 +676,16 @@ document.addEventListener('change', ev => {
     apresReglage('Filtre de légalité modifié : les cartes retenues et les suggestions sont recalculées.');
     return;
   }
-  if (t.dataset.act === 'sort') {
-    S.sort = t.value;
-    renderB();
+  /* Le rangement d'une section : chacune garde le sien, et seule celle qu'on
+     règle est redessinée. Le tri par score de la collection peut demander une
+     notation : `renderB` s'en charge par `filtered()`, et la mémorise. */
+  if (t.dataset.groupe || t.dataset.tri) {
+    const section = t.dataset.groupe || t.dataset.tri;
+    (t.dataset.groupe ? S.groupes : S.tris)[section] = t.value;
+    if (section === 'collection') { S.limitB = PAGE; renderB(); }
+    else if (section === 'deck') renderE();
+    else refreshSuggestions();
+    scheduleSave();
     return;
   }
   if (t.dataset.act === 'format') {

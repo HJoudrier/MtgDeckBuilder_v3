@@ -717,8 +717,10 @@ function blocAnnexe(cle) {
       ${n ? `<button class="btn sm danger" data-act="clearAnnexe" data-liste="${cle}">Vider</button>` : ''}
     </div>
     ${entries.length
-      ? (S.view === 'grid' ? `<div class="grid">${entries.map(e => cardTile(e, cle)).join('')}</div>`
-                           : `<div class="list">${entries.map(e => cardRow(e, cle)).join('')}</div>`)
+      ? rendGroupes(groupeCartes(entries, S.groupes.deck, S.tris.deck), S.groupes.deck,
+          ents => S.view === 'grid' ? `<div class="grid">${ents.map(e => cardTile(e, cle)).join('')}</div>`
+                                    : `<div class="list">${ents.map(e => cardRow(e, cle)).join('')}</div>`,
+          g => g.entrees.reduce((x, e) => x + e.qty, 0))
       : `<div class="empty">${n ? `Les filtres de l'en-tête masquent les ${n} carte(s) de cette liste.` : esc(a.vide)}</div>`}`;
 
   return partieDeck(cle,
@@ -746,8 +748,10 @@ function renderE() {
   const avg = nonland.length ? (nonland.reduce((a, e) => a + e.card.cmc * e.qty, 0) / nonland.reduce((a, e) => a + e.qty, 0)) : 0;
   const price = entries.reduce((a, e) => a + e.card.price * e.qty, 0);
   const msgs = legality();
-  const grouped = {};
-  entries.forEach(e => { const t = mainType(e.card); (grouped[t] = grouped[t] || []).push(e); });
+  /* Le rangement de la section, réglé par la barre ci-dessous et partagé par
+     la liste principale comme par la réserve et l'étude. */
+  const mode = S.groupes.deck;
+  const groupes = groupeCartes(entries, mode, S.tris.deck);
 
   const bodyEl = document.getElementById('bodyE');
   if (bodyEl) {
@@ -777,6 +781,7 @@ function renderE() {
           <button data-view="grid" aria-pressed="${S.view==='grid'}">Grille</button>
           <button data-view="list" aria-pressed="${S.view==='list'}">Liste</button>
         </div>
+        ${barreGroupeTri('deck')}
         <button class="btn" data-act="addCard" data-cible="deck">Ajouter</button>
         <button class="btn" data-act="import" data-cible="deck">Importer MTGO</button>
         <button class="btn" data-act="exportDeck">Exporter</button>
@@ -791,11 +796,11 @@ function renderE() {
       <h3 style="margin:14px 0 6px;font-size:15px">Équilibre des rôles</h3>
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       ${partieDeck('liste', 'Liste',
-        `${n} carte(s)${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}${price ? ` · ${eur(price)}` : ''}`,
-        entries.length ? Object.keys(grouped).sort((a,b) => TYPE_ORDER.indexOf(a) - TYPE_ORDER.indexOf(b)).map(t => `
-        <div class="group"><h4>${t} <span class="small muted">${grouped[t].reduce((a,e)=>a+e.qty,0)}</span></h4>
-        ${S.view==='grid' ? `<div class="grid">${grouped[t].map(e=>cardTile(e,'deck')).join('')}</div>`
-                          : `<div class="list">${grouped[t].map(e=>cardRow(e,'deck')).join('')}</div>`}</div>`).join('')
+        `${n} carte(s)${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}${price ? ` · ${eur(price)}` : ''}${noteMultiple(mode)}`,
+        entries.length ? rendGroupes(groupes, mode, ents => S.view==='grid'
+          ? `<div class="grid">${ents.map(e=>cardTile(e,'deck')).join('')}</div>`
+          : `<div class="list">${ents.map(e=>cardRow(e,'deck')).join('')}</div>`,
+          g => g.entrees.reduce((a,e)=>a+e.qty,0))
         : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`
              : '<div class="empty">Le deck est vide. Ajoutez des cartes depuis la collection (▲) ou depuis les suggestions en section E.</div>'))}
       <h3 style="margin:16px 0 6px;font-size:15px">Hors de la liste principale</h3>

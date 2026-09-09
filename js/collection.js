@@ -30,14 +30,13 @@ function filtered() {
   const list = collectionCards().filter(e => carteRetenue(e.card));
   const f = fmt();
   list.forEach(e => e.usable = Math.min(e.qty, f.maxCopies));
-  const cmp = {
-    cmc:   (a, b) => a.card.cmc - b.card.cmc || a.card.name.localeCompare(b.card.name),
-    price: (a, b) => b.card.price - a.card.price,
-    alpha: (a, b) => a.card.name.localeCompare(b.card.name),
-    type:  (a, b) => TYPE_ORDER.indexOf(mainType(a.card)) - TYPE_ORDER.indexOf(mainType(b.card)) || a.card.cmc - b.card.cmc,
-    qty:   (a, b) => b.qty - a.qty
-  }[S.sort];
-  return list.sort(cmp);
+  /* Les comparateurs vivent maintenant dans `TRIS` (js/groupes.js), partagés
+     avec le deck et les suggestions. Le tri par score demande une notation de
+     la collection : elle n'a lieu qu'ici, quand ce tri est choisi, et se
+     mémorise sous l'empreinte des suggestions. */
+  const tri = S.tris.collection;
+  if (tri === 'score') notesCollection(list);
+  return list.sort((TRIS[tri] || TRIS.cmc).cmp);
 }
 
 /* Ce qui écarte des cartes de la collection affichée, cause par cause, dans
@@ -201,18 +200,29 @@ function renderB() {
   const total = collectionCards().reduce((n, e) => n + e.qty, 0);
   const shown = list.reduce((n, e) => n + e.qty, 0);
   const unk = collectionCards().filter(e => e.card.unknown).length;
-  const page = list.slice(0, S.limitB);
-  const rest = list.length - page.length;
+  /* La page se remplit groupe par groupe, dans l'ordre où ils s'affichent :
+     couper dans une liste seulement triée sèmerait quelques cartes dans
+     chaque groupe au lieu de remplir les premiers. */
+  const mode = S.groupes.collection;
+  const groupes = groupeCartes(list, mode, S.tris.collection);
+  const totalGroupes = groupes.reduce((n, g) => n + g.total, 0);
+  let place = S.limitB;
+  const pageGroupes = [];
+  groupes.forEach(g => {
+    if (place <= 0) return;
+    const part = g.entrees.slice(0, place);
+    place -= part.length;
+    pageGroupes.push({...g, entrees:part});
+  });
+  const page = pageGroupes.reduce((acc, g) => acc.concat(g.entrees), []);
+  const rest = totalGroupes - page.length;
   const actifs = filtresActifs();
 
   const bodyEl = document.getElementById('bodyB');
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        <select data-act="sort">
-          ${[['cmc','Tri : coût de mana'],['price','Tri : prix'],['alpha','Tri : alphabétique'],['type','Tri : type'],['qty','Tri : quantité']]
-            .map(([k,l]) => `<option value="${k}" ${S.sort===k?'selected':''}>${l}</option>`).join('')}
-        </select>
+        ${barreGroupeTri('collection')}
         <div class="seg">
           <button data-view="grid" aria-pressed="${S.view==='grid'}">Grille</button>
           <button data-view="list" aria-pressed="${S.view==='list'}">Liste</button>
@@ -222,11 +232,11 @@ function renderB() {
         ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}
         <button class="btn danger" data-act="wipe">Vider</button>
       </div>
-      <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}</div>
+      <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}${noteMultiple(mode)}</div>
       ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
-      ${page.length ? (S.view === 'grid'
-        ? `<div class="grid">${page.map(e => cardTile(e, 'collection')).join('')}</div>`
-        : `<div class="list">${page.map(e => cardRow(e, 'collection')).join('')}</div>`)
+      ${page.length ? rendGroupes(pageGroupes, mode, ents => S.view === 'grid'
+        ? `<div class="grid">${ents.map(e => cardTile(e, 'collection')).join('')}</div>`
+        : `<div class="list">${ents.map(e => cardRow(e, 'collection')).join('')}</div>`)
         : (total === 0
           ? `<div class="empty">Votre collection est vide. Ajoutez une carte, ou importez une liste MTGO, avec les boutons ci-dessus.</div>`
           : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs${actifs.length ? " ou assouplissez les filtres" : ''} depuis le bouton « Filtres » de l'en-tête.</div>`)}

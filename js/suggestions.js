@@ -653,9 +653,15 @@ function listeSuggestions() {
   const sug = toutes;
   const graphPicks = S.focusNodes.size ? sug.filter(s => s.graph && s.graph.includes('noeud')) : [];
   const edhrecPicks = sug.filter(s => s.edhrec);
-  const byType = {};
-  sug.forEach(s => { const t = mainType(s.card); (byType[t] = byType[t] || []).push(s); });
-  visuelsSuggestions(byType, edhrecPicks);
+  /* Le rangement de la section. Le tri par score ne retrie rien : la liste
+     arrive déjà dans l'ordre des scores, ou dans l'ordre gelé que le geste
+     précédent a retenu — la retrier ferait sauter les vignettes que ce gel
+     tient justement en place. Tout autre tri est un ordre demandé, qui passe
+     donc avant le gel. */
+  const mode = S.groupes.suggestions;
+  const tri = S.tris.suggestions === 'score' ? null : S.tris.suggestions;
+  const groupes = groupeCartes(sug, mode, tri);
+  visuelsSuggestions(groupes, edhrecPicks);
 
   const edhrecHTML = (() => {
     if (!edhrecPicks.length) {
@@ -691,6 +697,10 @@ function listeSuggestions() {
   })();
 
   const html = `
+    <div class="row" style="margin-bottom:10px">
+      ${barreGroupeTri('suggestions')}
+      <span class="small muted">${sug.length} piste(s)${noteMultiple(mode)}</span>
+    </div>
     ${bandeauReclassement()}
     ${graphPicks.length ? `
       <div class="group" style="border-color:var(--brass-d)">
@@ -699,14 +709,15 @@ function listeSuggestions() {
         <div class="sugrid">${graphPicks.slice(0,8).map(s=>sugRow(s)).join('')}</div>
       </div>` : ''}
     ${edhrecHTML}
-    ${sug.length ? TYPE_ORDER.filter(t => byType[t]).map(t => {
-      const total = byType[t].length, max = Math.min(S.limiteType[t] || 6, total), reste = total - max;
-      return `<div class="group"><h4>${t} <span class="small muted">${max} sur ${total}</span></h4>
-        <div class="sugrid">${byType[t].slice(0,max).map(s=>sugRow(s)).join('')}</div>
+    ${sug.length ? groupes.map(g => {
+      const total = g.total, max = Math.min(S.limiteType[g.id] || 6, total), reste = total - max;
+      const titre = GROUPES[mode].plat ? 'Toutes les pistes' : g.libelle;
+      return `<div class="group"><h4>${esc(titre)} <span class="small muted">${max} sur ${total}</span></h4>
+        <div class="sugrid">${g.entrees.slice(0,max).map(s=>sugRow(s)).join('')}</div>
         ${total > 6 ? `<div class="row" style="justify-content:center;gap:6px;margin-top:8px">
-          ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${esc(t)}" data-pas="30">Afficher ${Math.min(30,reste)} de plus</button>` : ''}
-          ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${esc(t)}" data-pas="tout">Tout afficher (${total})</button>` : ''}
-          ${max > 6 ? `<button class="btn sm" data-act="pageType" data-type="${esc(t)}" data-pas="reduire">Réduire</button>` : ''}
+          ${reste > 0 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="30">Afficher ${Math.min(30,reste)} de plus</button>` : ''}
+          ${reste > 30 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="tout">Tout afficher (${total})</button>` : ''}
+          ${max > 6 ? `<button class="btn sm" data-act="pageType" data-type="${esc(g.id)}" data-pas="reduire">Réduire</button>` : ''}
         </div>` : ''}
       </div>`;
     }).join('')
@@ -724,13 +735,13 @@ function listeSuggestions() {
   return {html, sug, graphPicks, edhrecPicks};
 }
 
-function visuelsSuggestions(byType, edhrecPicks) {
+function visuelsSuggestions(groupes, edhrecPicks) {
   if (!S.images) return;
   const vus = [];
   if (edhrecPicks && edhrecPicks.length) {
     vus.push(...edhrecPicks.slice(0, Math.min(S.limiteType['edhrec'] || 8, edhrecPicks.length)));
   }
-  TYPE_ORDER.forEach(t => { if (byType[t]) vus.push(...byType[t].slice(0, Math.min(S.limiteType[t] || 6, byType[t].length))); });
+  groupes.forEach(g => vus.push(...g.entrees.slice(0, Math.min(S.limiteType[g.id] || 6, g.total))));
   setTimeout(() => queueScryfall(vus.map(x => x.card)), 0);
   setTimeout(chargeVisuelsClasses, 0);
 }

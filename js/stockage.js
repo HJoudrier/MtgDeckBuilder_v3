@@ -76,7 +76,8 @@ function snapshot() {
     colorMode: S.colorMode,
     format: S.format,
     custom: S.custom,
-    sort: S.sort,
+    groupes: S.groupes,
+    tris: S.tris,
     filtres: S.filtres,
     view: S.view,
     graphSource: S.graphSource,
@@ -179,7 +180,18 @@ function restore(d) {
   });
   S.commander = d.commander && find(d.commander) ? d.commander : null;
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
-  ['colorMode','format','sort','view','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  ['colorMode','format','view','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  /* Le rangement de chaque section, une clé inconnue écartée : une sauvegarde
+     d'une version ultérieure ne doit pas laisser la section sans tri. Les
+     sauvegardes antérieures ne portent qu'un tri de collection, `sort`, dont
+     les valeurs sont justement les clés de `TRIS` : il devient celui-là. */
+  ['groupes','tris'].forEach(k => {
+    const src = d[k];
+    if (!src || typeof src !== 'object') return;
+    const table = k === 'groupes' ? GROUPES : TRIS;
+    Object.keys(S[k]).forEach(sec => { if (table[src[sec]]) S[k][sec] = src[sec]; });
+  });
+  if (!d.tris && TRIS[d.sort]) S.tris.collection = d.sort;
   if (typeof d.showImplicit === 'boolean') S.showImplicit = d.showImplicit;
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
   if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};

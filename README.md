@@ -12,6 +12,7 @@ js/                 modules, chargés dans cet ordre :
   effets.js        Lecture des effets des cartes
   cartes.js        Base de cartes
   etat.js          État et filtrage
+  groupes.js       Grouper et trier les listes
   marche.js        Cardmarket
   scryfall.js      Accès à Scryfall
   stockage.js      Sauvegarde locale
@@ -322,6 +323,44 @@ fenêtre étant modale, un brouillon ouvert signifie forcément que le geste vie
 | `aAcheter()` | Cartes du deck non couvertes par la collection, chiffrées. |
 | `spent()` | Total estimé des cartes à acheter. |
 
+### `js/groupes.js` — Grouper et trier les listes
+
+Le vocabulaire commun des trois sections qui montrent des cartes — la collection, le deck, les
+suggestions. Chacune y puise ses regroupements et ses tris, et garde les siens : `S.groupes` et
+`S.tris` portent un réglage par section, conservés comme le reste des préférences.
+
+Sept regroupements — pas de groupe, type, sous-type, couleur, coût de mana, rôle, édition — et six
+tris : nom, coût de mana, prix, quantité, type, score. Deux regroupements rangent une carte à
+plusieurs endroits : le sous-type (« Legendary Creature — Human Wizard » compte parmi les Humains
+**et** parmi les Sorciers) et le rôle (une carte qui pioche et qui rampe compte dans les deux). La
+somme des groupes dépasse alors le total, et `noteMultiple()` le dit en toutes lettres sous la
+barre plutôt que de laisser compter faux.
+
+La **rareté** manque à l'appel : ni la base intégrée, ni le catalogue local (`CH`, js/etat.js) ne
+la portent — seul Scryfall la connaît, carte par carte. La proposer aujourd'hui rangerait la
+quasi-totalité d'une collection sous « inconnue » ; elle attend que la donnée existe.
+
+Le **score** se lit là où il se trouve : porté par la suggestion, relevé dans `NOTES_DECK` pour le
+deck, et calculé pour la collection par `notesCollection()` — à la demande seulement, quand ce tri
+est choisi, puis mémorisé sous l'empreinte des suggestions (`signatureSuggestions()`). Le deck note
+cent cartes à chaque rendu sans qu'on le sente ; une collection en compte des milliers, et les
+noter à chaque clic se paierait à chaque clic.
+
+*8 fonction(s), 9 Ko*
+
+Données : `GROUPES`, `TRIS`, `TRIS_SECTION`, `COULEUR_LABEL`, `COULEUR_ORDRE`, `NOTES_COLLECTION`
+
+| Fonction | Rôle |
+|---|---|
+| `sousTypesCarte(card)` | Les sous-types lus sur la ligne de type après le tiret cadratin, face par face. |
+| `seauCmc(card)` | Le seau de coût de la courbe de mana : au-delà de sept, tout ensemble. |
+| `scoreEntree(e)` | Le score d'une entrée, pris à la suggestion, au deck ou aux notes de la collection. |
+| `notesCollection(entrees)` | Note la collection à la demande et mémorise le résultat sous l'empreinte des suggestions. |
+| `groupeCartes(entrees,mode,tri)` | Range une liste en groupes ordonnés, chacun trié. Un tri `null` garde l'ordre reçu. |
+| `rendGroupes(groupes,mode,rend,compte)` | Le titre de chaque groupe ; la section rend son contenu. Sans groupe, la liste passe telle quelle. |
+| `noteMultiple(mode)` | La phrase qui annonce qu'une carte compte dans plusieurs groupes. |
+| `barreGroupeTri(section)` | Les deux menus « Grouper par » et « Trier par », portant la section qu'ils règlent. |
+
 ### `js/marche.js` — Cardmarket
 
 Échelle d'état, langues et types de vendeur du site, estimation de prix à partir de la tendance, liens vers les fiches.
@@ -536,8 +575,8 @@ Données : `VISUELS_CHARGES`
 | `sugRow(s)` | Vignette d'une proposition. |
 | `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
 | `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |
-| `listeSuggestions()` | Assemble les groupes par type et le filtre par rôle. |
-| `visuelsSuggestions(byType)` | Demande les visuels des propositions affichées. |
+| `listeSuggestions()` | Assemble les groupes selon la barre de la section (js/groupes.js) et le filtre par rôle. Le tri « score » ne retrie rien : la liste arrive dans l'ordre des scores, ou dans l'ordre gelé que le geste précédent a retenu. |
+| `visuelsSuggestions(groupes)` | Demande les visuels des propositions affichées. |
 | `chargeVisuelsClasses()` | Charge les visuels par lots de six, en relisant le document à chaque lot pour survivre à un nouveau rendu. |
 | `majHintF(sug,graphPicks)` | Met à jour l'indicateur de la section. |
 | `refreshSuggestions()` | Rafraîchit la liste sans toucher au reste de la section : c'est aussi le rafraîchissement en place. |
@@ -555,7 +594,7 @@ par nom ; les éditions relevées s'ajoutent les unes aux autres sur la même ca
 
 | Fonction | Rôle |
 |---|---|
-| `renderB()` | Rend la collection, en grille ou en liste, avec pagination ; les filtres se règlent dans l'en-tête. |
+| `renderB()` | Rend la collection, en grille ou en liste, groupée et triée selon la barre en tête de section (js/groupes.js), avec pagination ; les filtres se règlent dans l'en-tête. La page se remplit groupe par groupe, dans l'ordre affiché. |
 | `causesCollection()` | Compte, cause par cause, ce qui écarte des cartes : les couleurs, la légalité du format, les champs de la fenêtre. |
 | `ligneCausesCollection()` | La phrase qui les nomme, chacune avec le geste qui la lève. |
 | `retireExtrait(s,i,n)` | Retire un fragment d'une ligne et recolle le reste. |
@@ -627,7 +666,7 @@ rend `tagAnnexe()`, sans quoi on la reproposerait sans fin.
 | `blocAchats()` | Bloc des cartes à acheter, avec budget et liens. |
 | `zoneCommandant()` | Encart du commandant : visuel, identité, changement. |
 | `evalueDeck(entries)` | Note les cartes du deck avec le moteur des suggestions. |
-| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, puis les trois parties repliables — liste principale, réserve, étude. |
+| `renderE()` | Rend le deck : courbe, rôles, commandant, achats, puis les trois parties repliables — liste principale, réserve, étude. Les trois suivent le même groupement et le même tri, réglés par la barre de la section (js/groupes.js). |
 | `addToDeck(name)` | Ajoute un exemplaire depuis l'interface. |
 | `deckAdd(card,qty,opts)` | Ajoute des exemplaires au deck, avec ou sans complément de collection. |
 | `removeFromDeck(name)` | Retire un exemplaire. |

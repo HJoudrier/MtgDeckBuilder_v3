@@ -51,7 +51,12 @@ const S = {
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
-  sort: 'cmc',
+  /* Le rangement des trois sections qui montrent des cartes : chacune garde
+     son groupe et son tri. Les valeurs de départ reproduisent ce que les
+     sections faisaient avant tout réglage — la collection triée par coût sans
+     groupe, le deck et les suggestions groupés par type. */
+  groupes: {collection:'aucun', deck:'type', suggestions:'type'},
+  tris: {collection:'cmc', deck:'type', suggestions:'score'},
   view: 'grid',
   graphSource: 'collection',
   showImplicit: true,
