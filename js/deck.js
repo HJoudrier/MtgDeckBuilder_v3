@@ -806,8 +806,8 @@ function renderE() {
       <h3 style="margin:16px 0 6px;font-size:15px">Hors de la liste principale</h3>
       <div class="small muted">Deux listes tenues à côté du deck. Ce qu'elles portent ne compte ni dans la taille du deck,
         ni dans sa conformité, ni dans sa courbe, ses rôles ou ses achats. Une carte ne vit que dans l'une des trois listes :
-        l'envoyer ici la retire du deck, la remonter (▲) l'y ramène. La fiche d'une carte — le bouton « i » — porte les mêmes
-        gestes, et fait passer une carte d'une liste à l'autre.</div>
+        l'envoyer ici la retire du deck, la remonter (▲) l'y ramène. La fiche d'une carte — qu'ouvre un clic sur elle —
+        porte les mêmes gestes, et fait passer une carte d'une liste à l'autre.</div>
       ${CLES_ANNEXES.map(blocAnnexe).join('')}`;
   }
 

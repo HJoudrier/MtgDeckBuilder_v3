@@ -372,6 +372,11 @@ function actesAnnexe(c, cle, avecBascule) {
     <button class="btn sm" data-act="dropAnnexe" data-liste="${cle}" data-name="${esc(c.name)}" title="Retirer un exemplaire de ${esc(ANNEXES[cle].article)}">−</button>`;
 }
 
+/* Les deux rendus d'une carte — vignette et ligne — n'offrent pas de bouton
+   vers la fiche : un clic sur la vignette, ou n'importe où sur la ligne,
+   l'ouvre déjà (js/app.js, la branche des éléments porteurs de `data-card`).
+   Le bouton « i » doublait ce geste et prenait la place des actions qui, elles,
+   n'ont pas d'équivalent ailleurs. */
 function cardTile(e, ctx) {
   const c = e.card, dispo = availableFor(c), inDeck = S.deck.get(c.name) || 0;
   const isCmd = S.commander === c.name;
@@ -412,7 +417,6 @@ function cardTile(e, ctx) {
       <span>${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>
       <span class="mono">${eur(c.price)}</span>
       <div class="qty acts" style="margin-left:auto">
-        <button class="btn sm" data-act="fiche" data-name="${esc(c.name)}" title="Fiche complète">i</button>
         ${ctx==='collection'
           ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>`
           : ANNEXES[ctx]
@@ -441,7 +445,6 @@ function cardRow(e, ctx) {
     ${dispoBadge}
     ${scoreBadge}
     <div class="acts qty" style="margin-left:${note||dispoBadge?'6px':'auto'}">
-      <button class="btn sm" data-act="fiche" data-name="${esc(c.name)}" title="Fiche complète">i</button>
       ${ctx==='collection'
         ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>`
         : ANNEXES[ctx]
