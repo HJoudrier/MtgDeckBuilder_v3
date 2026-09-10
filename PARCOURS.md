@@ -23,7 +23,7 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 | Module | Rôle | Fonctions | Taille |
 |---|---|---|---|
 | [`js/effets.js`](README.md#jseffetsjs--lecture-des-effets-des-cartes) | Lecture des effets des cartes | 14 | 28 Ko |
-| [`js/cartes.js`](README.md#jscartesjs--base-de-cartes) | Base de cartes | 29 | 48 Ko |
+| [`js/cartes.js`](README.md#jscartesjs--base-de-cartes) | Base de cartes | 30 | 48 Ko |
 | [`js/etat.js`](README.md#jsetatjs--état-et-filtrage) | État et filtrage | 41 | 27 Ko |
 | [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 16 | 17 Ko |
 | [`js/marche.js`](README.md#jsmarchejs--cardmarket) | Cardmarket | 5 | 2 Ko |
@@ -32,7 +32,7 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 | [`js/externes.js`](README.md#jsexternesjs--edhrec-et-commander-spellbook) | EDHREC et Commander Spellbook | 81 | 65 Ko |
 | [`js/graphe.js`](README.md#jsgraphejs--graphe-des-capacités) | Graphe des capacités | 4 | 9 Ko |
 | [`js/stats.js`](README.md#jsstatsjs--statistiques) | Statistiques | 3 | 5 Ko |
-| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 46 | 54 Ko |
+| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 46 | 55 Ko |
 | [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 18 | 25 Ko |
 | [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 38 | 49 Ko |
 | [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 108 | 95 Ko |

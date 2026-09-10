@@ -119,7 +119,7 @@ rôles de deck déduits du texte oracle, et tables d'affichage des archétypes �
 fonctionnement — dont la liste et le contenu viennent d'EDHREC. Les textes livrés avec l'atelier sont des résumés :
 ils sont remplacés par le texte oracle complet dès que Scryfall ou le catalogue local répond.
 
-*29 fonction(s), 48 Ko*
+*30 fonction(s), 48 Ko*
 
 Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`
 
@@ -134,7 +134,8 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 | `find(name)` | Retrouve une carte malgré les variantes d'écriture ou une face seule. |
 | `peutCommander(c)` | Vérifie qu'une carte peut être commandant. |
 | `commandantsPossibles()` | Créatures légendaires du deck éligibles au rôle. |
-| `commandantsSecondairesPossibles()` | Les mêmes, commandant principal mis à part : la liste qu'affiche l'onglet EDHREC. |
+| `commandantsPrincipaux()` | Les commandants principaux du deck : le désigné aujourd'hui, ses partenaires demain — la liste attend plusieurs cartes. |
+| `commandantsSecondairesPossibles()` | Les autres cartes du deck qui pourraient commander : la liste cochable qu'affiche l'onglet EDHREC. |
 | `commandantsSecondaires()` | Celles qu'on traite effectivement comme commandants — les autres ont été décochées (`S.secondairesOff`). |
 | `mainType(c)` | Type principal en français, face avant pour les cartes multi-faces. |
 | `reanalyser(card)` | Refait analyse, rôles et archétypes après un changement de texte ou de force. |
@@ -546,9 +547,11 @@ Données : `STORE_KEY`, `STORE_OFF`
 ### `js/externes.js` — EDHREC et Commander Spellbook
 
 Un deck Commander porte souvent plusieurs créatures légendaires : l'une commande, les autres
-pourraient. L'atelier croise les pages EDHREC de toutes celles qu'on retient — le commandant
-principal, désigné dans l'onglet Deck, et les **secondaires** que la liste en tête de l'onglet
-EDHREC laisse cocher une à une. Décocher retire les statistiques d'une carte du croisement sans la
+pourraient. L'atelier croise les pages EDHREC de toutes celles qu'on retient — les commandants
+**principaux**, désignés dans l'onglet Deck, et les **secondaires** que la section « Commandants
+EDHREC », en tête de l'onglet, laisse cocher une à une. Chaque ligne y porte le nom de la carte —
+qui montre son visuel au survol et ouvre sa fiche au clic — et le nombre de decks recensés, qui est
+le lien vers sa page EDHREC. Décocher retire les statistiques d'une carte du croisement sans la
 sortir du deck : ses recommandations et ses étiquettes disparaissent, les scores sont repris, et
 rien n'est redemandé au réseau — les statistiques des autres restent en place. Les écartées
 tiennent dans `S.secondairesOff`, conservé d'une séance à l'autre : ce sont les exclusions qu'on
@@ -638,7 +641,7 @@ Le module rend trois sections, une par onglet : les pistes branchées sur les n�
 (`secG`), les recommandations d'EDHREC (`secH`), le classement complet du catalogue (`secF`). Elles
 lisent une seule sélection notée, partitionnée par `selectionSuggestions()`.
 
-*46 fonction(s), 54 Ko*
+*46 fonction(s), 55 Ko*
 
 Données : `VISUELS_CHARGES`, `LISTES_SUG`
 
@@ -663,9 +666,9 @@ Données : `VISUELS_CHARGES`, `LISTES_SUG`
 | `lanceEdhrecSiBesoin()` | Demande les statistiques du commandant quand il vient de changer, d'où que vienne le rendu. |
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
 | `panneauEdhrec()` | Panneau EDHREC en tête de l'onglet : la liste des commandants, puis ce qu'EDHREC répond. |
-| `blocCommandants(cmd,secPossibles)` | La liste des commandants du deck, une ligne par carte. |
-| `ligneCommandant(carte,principal)` | Une ligne : l'étoile du principal ou la case d'un secondaire, le nom, l'état auprès d'EDHREC. |
-| `etatEdhrecCommandant(nom,actif)` | Cet état en quelques mots : decks recensés et lien, absence, attente, ou carte écartée. |
+| `blocCommandants(principaux,secPossibles)` | Les deux listes de la section : commandants principaux, puis secondaires cochables. |
+| `ligneCommandant(carte,principal)` | Une ligne : l'étoile du principal ou la case d'un secondaire, le nom, le décompte des decks. |
+| `lienDecksEdhrec(nom,actif)` | Le nombre de decks recensés, qui est aussi le lien vers la page EDHREC de la carte. |
 | `sugRow(s)` | Vignette d'une proposition. |
 | `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
 | `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |

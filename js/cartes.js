@@ -651,8 +651,19 @@ function commandantsPossibles() {
   return deckEntries().map(e => e.card).filter(peutCommander);
 }
 
-/* Toutes les cartes du deck qui pourraient commander, le commandant principal
-   mis à part : la liste que l'onglet EDHREC affiche, cochées ou non. */
+/* Les commandants principaux du deck. Un seul se désigne aujourd'hui — l'étoile
+   de l'onglet Deck, `S.commander` —, mais la liste en attend plusieurs : deux
+   cartes liées par « Partner » commandent ensemble, et c'est ici, en un seul
+   endroit, qu'elles s'ajouteraient. Tout ce qui les affiche parcourt donc une
+   liste, non une carte. */
+function commandantsPrincipaux() {
+  const c = S.commander ? find(S.commander) : null;
+  return c ? [c] : [];
+}
+
+/* Toutes les cartes du deck qui pourraient commander, les commandants
+   principaux mis à part : la liste que l'onglet EDHREC affiche, cochées ou
+   non. */
 function commandantsSecondairesPossibles() {
   return deckEntries().map(e => e.card).filter(c => peutCommander(c) && (!S.commander || c.name !== S.commander));
 }

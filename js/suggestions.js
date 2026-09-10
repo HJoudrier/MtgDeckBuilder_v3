@@ -458,52 +458,67 @@ function ligneCatalogue() {
    rien de plus.
    --------------------------------------------------------------------- */
 
-/* L'état d'un commandant auprès d'EDHREC, en quelques mots : le nombre de
-   decks recensés et le lien, l'absence, l'attente. */
-function etatEdhrecCommandant(nom, actif) {
+/* Le nombre de decks recensés par EDHREC pour un commandant, et le lien vers
+   sa page — le décompte est le lien : c'est là qu'on veut aller quand on le
+   lit. Sans statistiques, il n'y a rien à compter mais la page existe tout de
+   même, et le lien y mène. */
+function lienDecksEdhrec(nom, actif) {
   const e = S.edhrec || {};
-  if (!actif) return '<span class="muted">écarté du croisement</span>';
   const d = (e.data && e.data.commandant === nom) ? e.data
     : (e.secondaires || []).find(x => x.commandant === nom);
-  if (d && d.status !== 'error' && d.total)
-    return `<a href="${esc(d.url)}" target="_blank" rel="noopener" title="Ouvrir la page EDHREC">${d.total.toLocaleString('fr-FR')} decks ↗</a>`;
-  if (d && d.status === 'error') return `<span class="muted" title="${esc(d.error || '')}">absent d'EDHREC</span>`;
-  if (e.status === 'loading') return '<span class="muted">chargement…</span>';
-  return '<span class="muted">en attente</span>';
+  const url = (d && d.url) || ('https://edhrec.com/commanders/' + edhrecSlug(nom));
+  const page = `ouvrir la page EDHREC de ${nom}`;
+  let txt, aide;
+  if (!actif)                                  { txt = 'écarté';      aide = `Ce commandant est écarté du croisement — ${page}`; }
+  else if (d && d.status !== 'error' && d.total) { txt = `${d.total.toLocaleString('fr-FR')} decks`; aide = `${d.total.toLocaleString('fr-FR')} decks recensés — ${page}`; }
+  else if (d && d.status === 'error')          { txt = 'absent';      aide = `${d.error || "absent d'EDHREC"} — ${page}`; }
+  else if (e.status === 'loading')             { txt = 'chargement…'; aide = `Statistiques en cours de chargement — ${page}`; }
+  else                                         { txt = '—';           aide = `Statistiques non chargées — ${page}`; }
+  return `<a class="cmd-d" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(aide)}">${esc(txt)} ↗</a>`;
 }
 
+/* Une ligne : la marque à gauche — l'étoile d'un principal, la case d'un
+   secondaire —, le nom au milieu, le décompte à droite. Le nom ouvre la fiche
+   au clic et montre le visuel au survol (`montrerApercu`, js/app.js, qui suit
+   les éléments portant `data-act="fiche"`). */
 function ligneCommandant(carte, principal) {
   const nom = carte.name;
   const actif = principal || !S.secondairesOff.has(nom);
   const marque = principal
     ? `<span class="cmd-b etoile" title="Commandant principal, désigné dans l'onglet Deck">★</span>`
-    : `<button type="button" class="btn sm cmd-b" data-act="cmdSecondaire" data-name="${esc(nom)}"
-        aria-pressed="${actif}" role="switch"
-        title="${actif ? 'Ne plus traiter cette carte comme commandant : ses statistiques EDHREC quittent le croisement'
-                       : 'Traiter cette carte comme commandant : ses statistiques EDHREC entrent dans le croisement'}">${actif ? '✓' : '○'}</button>`;
+    : `<input type="checkbox" class="coche" data-act="cmdSecondaire" data-name="${esc(nom)}" ${actif ? 'checked' : ''}
+        aria-label="Traiter ${esc(nom)} comme commandant secondaire"
+        title="${actif ? "Décocher : les statistiques EDHREC de cette carte quittent le croisement"
+                       : "Cocher : les statistiques EDHREC de cette carte entrent dans le croisement"}">`;
   return `<li class="cmd-l ${actif ? 'on' : 'off'}">
     ${marque}
-    <button type="button" class="cmd-n" data-act="fiche" data-name="${esc(nom)}" title="Voir la fiche de ${esc(nom)}">${esc(nom)}</button>
-    <span class="small cmd-e">${etatEdhrecCommandant(nom, actif)}</span>
+    <button type="button" class="cmd-n" data-act="fiche" data-name="${esc(nom)}"
+      title="Ouvrir la fiche de ${esc(nom)} — le visuel paraît au survol">${esc(nom)}</button>
+    ${lienDecksEdhrec(nom, actif)}
   </li>`;
 }
 
-function blocCommandants(cmd, secPossibles) {
+function blocCommandants(principaux, secPossibles) {
   const retenus = secPossibles.filter(c => !S.secondairesOff.has(c.name)).length;
   return `<div class="cmd-bloc">
-    <div class="small"><b>Commandants du deck</b>
-      <span class="muted">${secPossibles.length
-        ? `· ${retenus} secondaire(s) retenu(s) sur ${secPossibles.length}`
-        : '· aucun commandant secondaire'}</span></div>
+    <div class="cmd-titre small"><b>Commandant principal</b></div>
     <ul class="cmd-rows">
-      ${cmd ? ligneCommandant(cmd, true) : `<li class="cmd-l off">
-        <span class="cmd-b etoile">★</span>
-        <span class="cmd-n muted">Aucun commandant principal</span>
-        <span class="small"><button type="button" class="btn sm" data-onglet="deck">Le désigner dans l'onglet Deck</button></span>
-      </li>`}
+      ${principaux.length
+        ? principaux.map(c => ligneCommandant(c, true)).join('')
+        : `<li class="cmd-l off">
+            <span class="cmd-b etoile">★</span>
+            <span class="cmd-n muted">Aucun commandant désigné</span>
+            <button type="button" class="btn sm" data-onglet="deck">Le désigner dans l'onglet Deck</button>
+          </li>`}
+    </ul>
+    <div class="cmd-titre small" style="margin-top:8px"><b>Commandants secondaires</b>
+      <span class="muted">${secPossibles.length
+        ? `· ${retenus} retenu(s) sur ${secPossibles.length}`
+        : '· aucune autre carte du deck ne peut commander'}</span></div>
+    ${secPossibles.length ? `<ul class="cmd-rows">
       ${secPossibles.map(c => ligneCommandant(c, false)).join('')}
     </ul>
-    ${secPossibles.length ? `<div class="small muted" style="margin-top:4px">Décocher une carte retire ses statistiques du croisement — ses recommandations et ses étiquettes disparaissent, et les scores sont repris. Elle reste dans le deck.</div>` : ''}
+    <div class="small muted" style="margin-top:4px">Décocher une carte retire ses statistiques du croisement — ses recommandations et ses étiquettes disparaissent, et les scores sont repris. Elle reste dans le deck.</div>` : ''}
   </div>`;
 }
 
@@ -511,6 +526,7 @@ function panneauEdhrec() {
   const f = fmt();
   if (!f.commander) return '';
   const e = S.edhrec, cmd = S.commander ? find(S.commander) : null;
+  const principaux = commandantsPrincipaux();
   const secPossibles = commandantsSecondairesPossibles();
   const secCmds = commandantsSecondaires();
   const sansDonnees = !e.data && (!e.secondaires || !e.secondaires.length);
@@ -554,16 +570,11 @@ function panneauEdhrec() {
       </div>`;
   })();
 
-  const d = e.data;
-  const titre = d
-    ? `EDHREC — ${esc(d.commandant)} <span class="small muted">${d.total.toLocaleString('fr-FR')} decks recensés</span>`
-    : (e.secondaires || []).length
-    ? `EDHREC — Commandants secondaires (${(e.secondaires || []).length})`
-    : 'EDHREC';
-
+  /* Le titre ne nomme plus le commandant : la liste, juste dessous, les nomme
+     tous et dit ce que chacun pèse. */
   return `<div class="group" style="border-color:#2f6b68">
-    <h4>${titre}</h4>
-    ${blocCommandants(cmd, secPossibles)}
+    <h4>Commandants EDHREC</h4>
+    ${blocCommandants(principaux, secPossibles)}
     ${corps}
   </div>`;
 }

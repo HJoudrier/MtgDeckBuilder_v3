@@ -439,26 +439,47 @@ dialog::backdrop{background:rgba(8,6,14,.7)}
    — celle de droite a pris la place de la croix. Un bouton inerte reste
    visible plutôt que de disparaître : le titre garderait sinon son centre au
    prix d'un saut, aux deux extrémités de la liste parcourue. */
-/* La liste des commandants du deck, en tête de l'onglet EDHREC : une ligne par
-   carte, la marque à gauche — l'étoile du principal, la case des secondaires —,
-   le nom au milieu et l'état auprès d'EDHREC à droite. Une ligne décochée
-   pâlit sans disparaître : c'est par elle qu'on la rétablit. */
+/* La liste des commandants du deck, en tête de l'onglet EDHREC : deux listes
+   — les principaux, puis les secondaires —, une ligne par carte. La marque à
+   gauche (l'étoile d'un principal, la case d'un secondaire), le nom au milieu,
+   le nombre de decks à droite, qui est aussi le lien vers EDHREC. Une ligne
+   décochée pâlit sans disparaître : c'est par elle qu'on la rétablit. */
 .cmd-bloc{margin:8px 0;padding-top:6px;border-top:1px dashed var(--line2)}
-.cmd-rows{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
-.cmd-l{display:flex;align-items:center;gap:8px;padding:4px 7px;border:1px solid var(--line);border-radius:7px;background:var(--bg2)}
+.cmd-titre{margin-bottom:2px}
+.cmd-rows{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.cmd-l{display:flex;align-items:center;gap:9px;padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg2)}
 .cmd-l.on{border-color:#2f6b68}
-.cmd-l .cmd-b{flex:0 0 auto;width:24px;height:22px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.cmd-l .cmd-b{flex:0 0 auto;width:17px;text-align:center;font-size:13px}
 .cmd-l .etoile{color:var(--brass)}
-.cmd-l.on .cmd-b[aria-pressed=true]{border-color:#2f6b68;color:#57c9c4}
 .cmd-l .cmd-n{flex:1;min-width:0;padding:0;border:0;background:none;text-align:left;cursor:pointer;
-  font-family:var(--display);font-size:13px;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  font-family:var(--display);font-size:13.5px;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cmd-l .cmd-n:hover{color:var(--brass)}
 .cmd-l.off .cmd-n{color:var(--dim2)}
-.cmd-l .cmd-e{flex:0 0 auto;color:var(--dim)}
-.cmd-l .cmd-e a{color:#57c9c4}
+.cmd-l .cmd-d{flex:0 0 auto;font-family:var(--mono);font-size:11px;color:#57c9c4;text-decoration:none;white-space:nowrap}
+.cmd-l .cmd-d:hover{text-decoration:underline}
+.cmd-l.off .cmd-d{color:var(--dim2)}
+
+/* La case à cocher, dessinée plutôt qu'empruntée au navigateur : un carré
+   arrondi qui se remplit du vert d'EDHREC, et la coche tracée en deux traits.
+   Celle du navigateur ne se colore pas, ne s'arrondit pas, et jurait au milieu
+   d'une ligne sombre. */
+.coche{
+  appearance:none;-webkit-appearance:none;flex:0 0 auto;margin:0;
+  width:17px;height:17px;border:1.5px solid var(--line2);border-radius:5px;
+  background:var(--panel);cursor:pointer;position:relative;
+  transition:background .15s ease,border-color .15s ease
+}
+.coche:hover{border-color:#57c9c4}
+.coche:checked{background:#2f6b68;border-color:#57c9c4}
+.coche:checked::after{
+  content:'';position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid #d9fffd;border-width:0 2px 2px 0;transform:rotate(42deg)
+}
+.coche:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
 @media (max-width:520px){
   .cmd-l{flex-wrap:wrap}
-  .cmd-l .cmd-e{width:100%;padding-left:32px}
+  .cmd-l .cmd-d{width:100%;padding-left:26px}
 }
 
 /* Les sections de la fenêtre des paramètres : un filet et un titre séparent
