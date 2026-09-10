@@ -64,7 +64,6 @@ function renderTop() {
   const noeuds = noeudsActifs();
   const noeudsTxt = noeuds.length ? ` & effets (${noeuds.map(n => (typeof NODE !== 'undefined' && NODE[n] && NODE[n].label) || n).join(', ')})` : '';
 
-  const totalDeckVal = deckEntries().reduce((a, e) => a + (e.card.price || 0) * e.qty, 0);
   const sp = spent();
   const left = S.budget.total - sp;
   const leg = legality();
@@ -88,7 +87,6 @@ function renderTop() {
 
   const deckPillHTML = `
     <button type="button" class="pill head-format" id="pillDeck" data-act="formatDialog" title="Format de jeu : ${esc(f.label)} (cliquer pour le changer)">Format <b>${esc(f.label)}</b> · Deck <b>${dCount}/${f.size}</b>${dCount === f.size ? (isLegal ? ' <span style="color:var(--ok)">✓</span>' : ' <span style="color:var(--warn)" title="Règles non respectées">⚠</span>') : ''}</button>
-    ${S.commander ? `<button type="button" class="pill head-cmd" data-act="fiche" data-name="${esc(S.commander)}" style="cursor:pointer" title="Commandant désigné (cliquer pour voir la fiche)">Cmd <b>${esc(S.commander)}</b></button>` : ''}
   `;
 
   const actifs = filtresActifs();
@@ -130,7 +128,6 @@ function renderTop() {
       ${filtreBtnHTML}
       ${filtreChipsHTML}
       ${deckPillHTML}
-      ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${budgetPillHTML}
       ${toggleBtnHTML}
     `;
@@ -142,8 +139,6 @@ function renderTop() {
       ${deckPillHTML}
       <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection — la sauvegarde de ces données se règle dans les paramètres (l'engrenage de l'entête)">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
       <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue — l'archive et ses réglages sont dans les paramètres (l'engrenage de l'entête)">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>
-      <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
-      ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${budgetPillHTML}
       ${toggleBtnHTML}
     `;

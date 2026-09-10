@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**452 fonctions**, 32 modules, 511 Ko de JavaScript.
+**452 fonctions**, 32 modules, 510 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -23,7 +23,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
 | [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 46 | 1116 |
 | [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 504 |
-| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 38 | 897 |
+| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 38 | 895 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 6 | 68 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
 | [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 146 |
@@ -33,7 +33,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 165 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 67 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 9 | 220 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 6 | 219 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 6 | 214 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 68 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 10 | 145 |
@@ -555,7 +555,7 @@ Gestion de la collection, filtres & imports MTGO. *18 fonctions, 504 lignes, 25 
 
 ## js/deck.js
 
-Construction du deck, légalité, commandant & fiches détaillées. *38 fonctions, 897 lignes, 49 Ko.*
+Construction du deck, légalité, commandant & fiches détaillées. *38 fonctions, 895 lignes, 49 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -753,7 +753,7 @@ Les recalculs annoncés. *9 fonctions, 220 lignes, 9.6 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *6 fonctions, 219 lignes, 12 Ko.*
+L'en-tête et la barre des onglets. *6 fonctions, 214 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

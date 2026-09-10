@@ -834,11 +834,9 @@ function renderE() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        <span class="pill" title="Deck entier, filtres compris">Cartes <b>${n}/${f.size}</b></span>
         ${masquees ? `<button type="button" class="pill head-format" data-act="filtres" title="Les filtres de l'en-tête masquent une partie du deck (cliquer pour les modifier)" style="border-color:var(--brass-d);color:var(--brass)">Filtrées <b>${n - masquees}</b> · ${masquees} masquée(s)</button>` : ''}
         <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">CMC moyen <b>${avg.toFixed(2)}</b></span>
         <span class="pill" title="${masquees ? 'Cartes affichées seulement' : 'Deck entier'}">Valeur <b>${eur(price)}</b></span>
-        ${S.commander ? `<span class="pill">Commandant <b>${esc(S.commander)}</b></span>` : ''}
         ${(() => {
           if (!fmt().commander || !gameChangersConnus()) return '';
           const gc = gameChangersDuDeck();
@@ -852,7 +850,7 @@ function renderE() {
         ${(() => {
           const a = aAcheter();
           const qte = a.reduce((x, l) => x + l.qty, 0);
-          return qte ? `<span class="pill" style="border-color:var(--bad)"><span class="dot" style="background:var(--bad)"></span> ${qte} à acheter · ${eur(spent())}</span>` : '';
+          return qte ? `<button type="button" class="pill" data-act="wants" style="border-color:var(--bad);cursor:pointer" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket"><span class="dot" style="background:var(--bad)"></span> ${qte} à acheter · ${eur(spent())}</button>` : '';
         })()}
         <div class="seg" style="margin-left:auto">
           <button data-view="grid" aria-pressed="${S.view==='grid'}">Grille</button>
