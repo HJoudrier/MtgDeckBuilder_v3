@@ -119,7 +119,7 @@ rôles de deck déduits du texte oracle, et tables d'affichage des archétypes �
 fonctionnement — dont la liste et le contenu viennent d'EDHREC. Les textes livrés avec l'atelier sont des résumés :
 ils sont remplacés par le texte oracle complet dès que Scryfall ou le catalogue local répond.
 
-*25 fonction(s), 38 Ko*
+*29 fonction(s), 48 Ko*
 
 Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARCH_RESUMES`
 
@@ -134,6 +134,8 @@ Données : `RAW`, `DB`, `TYPE_ORDER`, `BUILTIN`, `CATLABEL`, `ARCH_LABELS`, `ARC
 | `find(name)` | Retrouve une carte malgré les variantes d'écriture ou une face seule. |
 | `peutCommander(c)` | Vérifie qu'une carte peut être commandant. |
 | `commandantsPossibles()` | Créatures légendaires du deck éligibles au rôle. |
+| `commandantsSecondairesPossibles()` | Les mêmes, commandant principal mis à part : la liste qu'affiche l'onglet EDHREC. |
+| `commandantsSecondaires()` | Celles qu'on traite effectivement comme commandants — les autres ont été décochées (`S.secondairesOff`). |
 | `mainType(c)` | Type principal en français, face avant pour les cartes multi-faces. |
 | `reanalyser(card)` | Refait analyse, rôles et archétypes après un changement de texte ou de force. |
 | `majTexteOracle(card,texte)` | Remplace le résumé de la base intégrée par le texte oracle complet d'une source officielle, puis relance l'analyse. |
@@ -158,7 +160,7 @@ C'est aussi ici que vivent les filtres de l'en-tête : les couleurs (`S.colors`,
 règles, archétype, rôle, force, endurance, coût de mana, prix, illustrateur. S'y ajoutent l'index des archétypes établis par
 EDHREC (`ARCH_BASE`) et celui des sets publiés par Scryfall (`SETS_BASE`).
 
-*20 fonction(s), 11 Ko*
+*42 fonction(s), 27 Ko*
 
 Données : `FORMATS`, `ANNEXES`, `CLES_ANNEXES`, `S`, `PAGE`, `FILTRES_VIDE`, `FILTRES_BORNES`, `ARCH_BASE`, `SETS_BASE`, `GC_BASE`, `ONGLETS`, `ONGLETS_ANCIENS`, `SECTIONS_SUGGESTIONS`, `COLONNES`
 
@@ -543,14 +545,24 @@ Données : `STORE_KEY`, `STORE_OFF`
 
 ### `js/externes.js` — EDHREC et Commander Spellbook
 
+Un deck Commander porte souvent plusieurs créatures légendaires : l'une commande, les autres
+pourraient. L'atelier croise les pages EDHREC de toutes celles qu'on retient — le commandant
+principal, désigné dans l'onglet Deck, et les **secondaires** que la liste en tête de l'onglet
+EDHREC laisse cocher une à une. Décocher retire les statistiques d'une carte du croisement sans la
+sortir du deck : ses recommandations et ses étiquettes disparaissent, les scores sont repris, et
+rien n'est redemandé au réseau — les statistiques des autres restent en place. Les écartées
+tiennent dans `S.secondairesOff`, conservé d'une séance à l'autre : ce sont les exclusions qu'on
+retient, non les inclusions, pour qu'une légendaire ajoutée au deck compte dès son arrivée.
+
 Statistiques d'inclusion et de synergie par commandant, thèmes de deck servant d'archétypes établis,
 sets publiés par Scryfall et composition de ceux qu'on coche, liste des Game Changers du Commander,
 combos répertoriés et combos à une carte près, plus le catalogue Scryfall complet et son archive IndexedDB.
 
-*48 fonction(s), 36 Ko*
+*81 fonction(s), 65 Ko*
 
 | Fonction | Rôle |
 |---|---|
+| `signatureCommandants()` | Les commandants croisés avec EDHREC — le principal et les secondaires retenus — en une chaîne : elle dit quand les statistiques en place ne valent plus. |
 | `chargerArchetypesEdhrec()` *(async)* | Charge la liste des thèmes EDHREC, puis les thèmes déjà cochés. Appelée seule, au démarrage. |
 | `chargerListeArchetypesEdhrec()` *(async)* | L'index des thèmes publiés, en une requête. Renvoie sa trouvaille sans toucher au cache. |
 | `archetypesARevoir()` | Faut-il interroger EDHREC ? Rien en cache, ou liste vieille d'une semaine. |
@@ -626,7 +638,7 @@ Le module rend trois sections, une par onglet : les pistes branchées sur les n�
 (`secG`), les recommandations d'EDHREC (`secH`), le classement complet du catalogue (`secF`). Elles
 lisent une seule sélection notée, partitionnée par `selectionSuggestions()`.
 
-*43 fonction(s), 51 Ko*
+*46 fonction(s), 54 Ko*
 
 Données : `VISUELS_CHARGES`, `LISTES_SUG`
 
@@ -650,7 +662,10 @@ Données : `VISUELS_CHARGES`, `LISTES_SUG`
 | `bandeauReclassement()` | Le bandeau qui le dit, et son bouton. |
 | `lanceEdhrecSiBesoin()` | Demande les statistiques du commandant quand il vient de changer, d'où que vienne le rendu. |
 | `ligneCatalogue()` | État du catalogue et décompte des cartes écartées, cause par cause. |
-| `panneauEdhrec()` | Panneau EDHREC du commandant, en tête de l'onglet EDHREC. |
+| `panneauEdhrec()` | Panneau EDHREC en tête de l'onglet : la liste des commandants, puis ce qu'EDHREC répond. |
+| `blocCommandants(cmd,secPossibles)` | La liste des commandants du deck, une ligne par carte. |
+| `ligneCommandant(carte,principal)` | Une ligne : l'étoile du principal ou la case d'un secondaire, le nom, l'état auprès d'EDHREC. |
+| `etatEdhrecCommandant(nom,actif)` | Cet état en quelques mots : decks recensés et lien, absence, attente, ou carte écartée. |
 | `sugRow(s)` | Vignette d'une proposition. |
 | `ligneBudget()` | Ligne de budget restant, peinte dans la fenêtre « Achats sur Cardmarket ». |
 | `ligneAchats()` | Rappel des cartes à acheter, dans cette même fenêtre. |

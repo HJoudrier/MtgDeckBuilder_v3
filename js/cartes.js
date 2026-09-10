@@ -651,8 +651,18 @@ function commandantsPossibles() {
   return deckEntries().map(e => e.card).filter(peutCommander);
 }
 
-function commandantsSecondaires() {
+/* Toutes les cartes du deck qui pourraient commander, le commandant principal
+   mis à part : la liste que l'onglet EDHREC affiche, cochées ou non. */
+function commandantsSecondairesPossibles() {
   return deckEntries().map(e => e.card).filter(c => peutCommander(c) && (!S.commander || c.name !== S.commander));
+}
+
+/* Celles qu'on traite effectivement comme commandants secondaires : les autres
+   ont été décochées dans l'onglet EDHREC (`S.secondairesOff`). Tout ce qui
+   croise l'atelier avec EDHREC passe par ici — les statistiques demandées, les
+   étiquettes des vignettes, l'empreinte de la notation. */
+function commandantsSecondaires() {
+  return commandantsSecondairesPossibles().filter(c => !S.secondairesOff.has(c.name));
 }
 
 function mainType(c) {

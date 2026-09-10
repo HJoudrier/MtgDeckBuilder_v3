@@ -444,69 +444,128 @@ function ligneCatalogue() {
   </div>`;
 }
 
+/* ---------------------------------------------------------------------
+   Les commandants du deck, en tête de l'onglet EDHREC.
+
+   Le deck peut porter plusieurs créatures légendaires : l'une commande, les
+   autres pourraient. EDHREC publie une page par commandant, et l'atelier les
+   croise toutes — mais toutes ne méritent pas de peser sur le classement. La
+   liste les montre donc une par ligne, chacune cochée ou non : décocher retire
+   ses statistiques du croisement, cocher les redemande.
+
+   Le commandant principal n'est pas de cette liste : il se désigne dans
+   l'onglet Deck, et sa ligne le dit — elle ouvre sa fiche et sa page EDHREC,
+   rien de plus.
+   --------------------------------------------------------------------- */
+
+/* L'état d'un commandant auprès d'EDHREC, en quelques mots : le nombre de
+   decks recensés et le lien, l'absence, l'attente. */
+function etatEdhrecCommandant(nom, actif) {
+  const e = S.edhrec || {};
+  if (!actif) return '<span class="muted">écarté du croisement</span>';
+  const d = (e.data && e.data.commandant === nom) ? e.data
+    : (e.secondaires || []).find(x => x.commandant === nom);
+  if (d && d.status !== 'error' && d.total)
+    return `<a href="${esc(d.url)}" target="_blank" rel="noopener" title="Ouvrir la page EDHREC">${d.total.toLocaleString('fr-FR')} decks ↗</a>`;
+  if (d && d.status === 'error') return `<span class="muted" title="${esc(d.error || '')}">absent d'EDHREC</span>`;
+  if (e.status === 'loading') return '<span class="muted">chargement…</span>';
+  return '<span class="muted">en attente</span>';
+}
+
+function ligneCommandant(carte, principal) {
+  const nom = carte.name;
+  const actif = principal || !S.secondairesOff.has(nom);
+  const marque = principal
+    ? `<span class="cmd-b etoile" title="Commandant principal, désigné dans l'onglet Deck">★</span>`
+    : `<button type="button" class="btn sm cmd-b" data-act="cmdSecondaire" data-name="${esc(nom)}"
+        aria-pressed="${actif}" role="switch"
+        title="${actif ? 'Ne plus traiter cette carte comme commandant : ses statistiques EDHREC quittent le croisement'
+                       : 'Traiter cette carte comme commandant : ses statistiques EDHREC entrent dans le croisement'}">${actif ? '✓' : '○'}</button>`;
+  return `<li class="cmd-l ${actif ? 'on' : 'off'}">
+    ${marque}
+    <button type="button" class="cmd-n" data-act="fiche" data-name="${esc(nom)}" title="Voir la fiche de ${esc(nom)}">${esc(nom)}</button>
+    <span class="small cmd-e">${etatEdhrecCommandant(nom, actif)}</span>
+  </li>`;
+}
+
+function blocCommandants(cmd, secPossibles) {
+  const retenus = secPossibles.filter(c => !S.secondairesOff.has(c.name)).length;
+  return `<div class="cmd-bloc">
+    <div class="small"><b>Commandants du deck</b>
+      <span class="muted">${secPossibles.length
+        ? `· ${retenus} secondaire(s) retenu(s) sur ${secPossibles.length}`
+        : '· aucun commandant secondaire'}</span></div>
+    <ul class="cmd-rows">
+      ${cmd ? ligneCommandant(cmd, true) : `<li class="cmd-l off">
+        <span class="cmd-b etoile">★</span>
+        <span class="cmd-n muted">Aucun commandant principal</span>
+        <span class="small"><button type="button" class="btn sm" data-onglet="deck">Le désigner dans l'onglet Deck</button></span>
+      </li>`}
+      ${secPossibles.map(c => ligneCommandant(c, false)).join('')}
+    </ul>
+    ${secPossibles.length ? `<div class="small muted" style="margin-top:4px">Décocher une carte retire ses statistiques du croisement — ses recommandations et ses étiquettes disparaissent, et les scores sont repris. Elle reste dans le deck.</div>` : ''}
+  </div>`;
+}
+
 function panneauEdhrec() {
   const f = fmt();
   if (!f.commander) return '';
   const e = S.edhrec, cmd = S.commander ? find(S.commander) : null;
+  const secPossibles = commandantsSecondairesPossibles();
   const secCmds = commandantsSecondaires();
+  const sansDonnees = !e.data && (!e.secondaires || !e.secondaires.length);
 
-  if (!cmd && !secCmds.length) return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Désignez un commandant depuis <button type="button" class="btn sm" data-onglet="deck">l'onglet Deck</button> ou ajoutez des créatures légendaires au deck pour croiser les suggestions avec les statistiques d'EDHREC.</div></div>`;
+  /* Ce qu'EDHREC répond, selon l'état. La liste des commandants, elle, paraît
+     dans tous les cas : c'est par elle qu'on choisit ce qui sera demandé, et
+     la faire disparaître au premier échec interdirait de rien y changer. */
+  const corps = (() => {
+    if (!cmd && !secPossibles.length)
+      return `<div class="small muted">Désignez un commandant depuis <button type="button" class="btn sm" data-onglet="deck">l'onglet Deck</button> ou ajoutez des créatures légendaires au deck pour croiser les suggestions avec les statistiques d'EDHREC.</div>`;
 
-  if (e.status === 'loading') return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Chargement des statistiques EDHREC${cmd ? ` pour ${esc(cmd.name)}` : ''}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}…</div></div>`;
+    if (e.status === 'loading')
+      return `<div class="small muted">Chargement des statistiques EDHREC${cmd ? ` pour ${esc(cmd.name)}` : ''}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}…</div>`;
 
-  if (e.status === 'error' && (!e.data && (!e.secondaires || !e.secondaires.length))) return `<div class="group"><h4>EDHREC</h4>
-    <div class="small">Statistiques indisponibles (${esc(e.error||'')}). Le site n'autorise pas forcément la requête depuis un navigateur tiers, ou la page peut ne pas exister pour ce commandant.</div>
-    <div class="row" style="gap:6px;margin-top:6px">
-      <button class="btn sm" data-act="edhrec" data-force="1">Réessayer</button>
-      ${cmd ? `<a class="btn sm" href="https://edhrec.com/commanders/${esc(e.slug||edhrecSlug(cmd.name))}" target="_blank" rel="noopener">Ouvrir la page EDHREC ↗</a>` : ''}
-    </div></div>`;
+    if (e.status === 'error' && sansDonnees)
+      return `<div class="small">Statistiques indisponibles (${esc(e.error||'')}). Le site n'autorise pas forcément la requête depuis un navigateur tiers, ou la page peut ne pas exister pour ce commandant.</div>
+        <div class="row" style="gap:6px;margin-top:6px">
+          <button class="btn sm" data-act="edhrec" data-force="1">Réessayer</button>
+          ${cmd ? `<a class="btn sm" href="https://edhrec.com/commanders/${esc(e.slug||edhrecSlug(cmd.name))}" target="_blank" rel="noopener">Ouvrir la page EDHREC ↗</a>` : ''}
+        </div>`;
 
-  if (e.status !== 'ok' && !e.data && (!e.secondaires || !e.secondaires.length)) return `<div class="group"><h4>EDHREC</h4>
-    <div class="small muted">Croiser les suggestions avec les decks recensés pour ${cmd ? esc(cmd.name) : 'vos commandants'}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}.</div>
-    <div class="row" style="margin-top:6px"><button class="btn sm" data-act="edhrec">Charger les statistiques</button></div></div>`;
+    if (e.status !== 'ok' && sansDonnees)
+      return `<div class="small muted">Croiser les suggestions avec les decks recensés pour ${cmd ? esc(cmd.name) : 'vos commandants'}${secCmds.length ? ` et ${secCmds.length} commandant(s) secondaire(s)` : ''}.</div>
+        <div class="row" style="margin-top:6px"><button class="btn sm" data-act="edhrec">Charger les statistiques</button></div>`;
+
+    const d = e.data;
+    let absentes = [];
+    if (d && d.map) {
+      const connues = [...new Set([...d.map.values()])];
+      absentes = connues
+        .filter(r => { const c = find(r.name); return !c || ((S.collection.get(c.name) || 0) === 0 && !S.deck.has(c.name)); })
+        .sort((a, b) => b.inclusion - a.inclusion).slice(0, 6);
+    }
+
+    return `<div class="small muted">Les cartes recommandées par EDHREC (pour votre commandant principal ou vos commandants secondaires) sont réunies ci-dessous ; elles portent partout ailleurs l'étiquette <b>edhrec</b>, avec leur taux d'inclusion et leur synergie.</div>
+      ${absentes.length ? `<div class="small" style="margin-top:8px">Fréquentes chez ${esc(d.commandant)} mais absentes de votre collection :
+        ${absentes.map(r => `<span class="chip" title="synergie ${r.synergy>=0?'+':'−'}${Math.abs(Math.round(r.synergy*100))} %">${esc(r.name)} — ${Math.round(r.inclusion*100)} %</span>`).join(' ')}</div>` : ''}
+      <div class="row" style="gap:6px;margin-top:8px">
+        <button class="btn sm" data-act="edhrec" data-force="1">Rafraîchir</button>
+        ${d ? `<a class="btn sm" href="${esc(d.url)}" target="_blank" rel="noopener">Page EDHREC (${esc(d.commandant)}) ↗</a>` : ''}
+      </div>`;
+  })();
 
   const d = e.data;
-  let absentes = [];
-  if (d && d.map) {
-    const connues = [...new Set([...d.map.values()])];
-    absentes = connues
-      .filter(r => { const c = find(r.name); return !c || ((S.collection.get(c.name) || 0) === 0 && !S.deck.has(c.name)); })
-      .sort((a, b) => b.inclusion - a.inclusion).slice(0, 6);
-  }
-
-  const secHTML = secCmds.length ? `
-    <div class="small" style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--line2)">
-      <b>Commandants secondaires dans le deck (${secCmds.length}) :</b>
-      <div class="row" style="gap:6px;margin-top:4px;flex-wrap:wrap">
-        ${secCmds.map(sc => {
-          const sd = (e.secondaires || []).find(x => x.commandant === sc.name);
-          if (sd && sd.status === 'ok') {
-            return `<a class="chip on" style="border-color:#57c9c4;color:#57c9c4;text-decoration:none" href="${esc(sd.url)}" target="_blank" rel="noopener" title="Voir sur EDHREC (${sd.total.toLocaleString('fr-FR')} decks)">★ ${esc(sc.name)} <span class="muted">(${sd.total.toLocaleString('fr-FR')} decks) ↗</span></a>`;
-          } else if (sd && sd.status === 'error') {
-            return `<span class="chip" title="${esc(sd.error||'non trouvé')}">★ ${esc(sc.name)} <span class="muted">(absent EDHREC)</span></span>`;
-          } else {
-            return `<span class="chip">★ ${esc(sc.name)} <span class="muted">(en attente)</span></span>`;
-          }
-        }).join('')}
-      </div>
-    </div>` : '';
-
-  const titrePrincipal = d
+  const titre = d
     ? `EDHREC — ${esc(d.commandant)} <span class="small muted">${d.total.toLocaleString('fr-FR')} decks recensés</span>`
-    : `EDHREC — Commandants secondaires (${(e.secondaires||[]).length})`;
+    : (e.secondaires || []).length
+    ? `EDHREC — Commandants secondaires (${(e.secondaires || []).length})`
+    : 'EDHREC';
 
   return `<div class="group" style="border-color:#2f6b68">
-    <h4>${titrePrincipal}</h4>
-    <div class="small muted">Les cartes recommandées par EDHREC (pour votre commandant principal ou vos commandants secondaires) sont réunies ci-dessous ; elles portent partout ailleurs l'étiquette <b>edhrec</b>, avec leur taux d'inclusion et leur synergie.</div>
-    ${absentes.length ? `<div class="small" style="margin-top:8px">Fréquentes chez ${esc(d.commandant)} mais absentes de votre collection :
-      ${absentes.map(r => `<span class="chip" title="synergie ${r.synergy>=0?'+':'−'}${Math.abs(Math.round(r.synergy*100))} %">${esc(r.name)} — ${Math.round(r.inclusion*100)} %</span>`).join(' ')}</div>` : ''}
-    ${secHTML}
-    <div class="row" style="gap:6px;margin-top:8px">
-      <button class="btn sm" data-act="edhrec" data-force="1">Rafraîchir</button>
-      ${d ? `<a class="btn sm" href="${esc(d.url)}" target="_blank" rel="noopener">Page EDHREC (${esc(d.commandant)}) ↗</a>` : ''}
-    </div></div>`;
+    <h4>${titre}</h4>
+    ${blocCommandants(cmd, secPossibles)}
+    ${corps}
+  </div>`;
 }
 
 function sugRow(s) {
@@ -1037,7 +1096,7 @@ function refreshSuggestions() {
    d'où que vienne le rendu, complet ou en place. */
 function lanceEdhrecSiBesoin() {
   const secCmds = commandantsSecondaires();
-  const cmdSig = (S.commander || '') + '::' + secCmds.map(c => c.name).sort().join('|');
+  const cmdSig = signatureCommandants();
   if (fmt().commander && (S.commander || secCmds.length) && typeof fetch === 'function'
      && S.edhrec.cmdSignature !== cmdSig && S.edhrec.status !== 'loading') {
     setTimeout(() => loadEdhrec(), 0);

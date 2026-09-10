@@ -337,6 +337,27 @@ document.addEventListener('click', ev => {
     return;
   }
 
+  /* Cocher ou décocher un commandant secondaire, dans l'onglet EDHREC. Les
+     statistiques déjà chargées d'un commandant qu'on écarte quittent l'état
+     sur-le-champ : les laisser peser jusqu'au prochain aller-retour ferait
+     mentir la case. Celles d'un commandant qu'on rétablit manquent, et
+     l'empreinte remise à zéro les fait redemander au rendu qui suit. */
+  if (act === 'cmdSecondaire') {
+    const nom = b.dataset.name;
+    if (!nom) return;
+    const ecarte = !S.secondairesOff.has(nom);
+    if (ecarte) S.secondairesOff.add(nom); else S.secondairesOff.delete(nom);
+    S.edhrec.secondaires = (S.edhrec.secondaires || []).filter(x => !S.secondairesOff.has(x.commandant));
+    /* Écarter ne demande rien : les statistiques des autres restent en place,
+       et l'empreinte est remise au niveau de la nouvelle liste. Rétablir, au
+       contraire, laisse l'empreinte périmée — le rendu qui suit redemande la
+       page manquante, servie par le cache si elle a déjà été lue. */
+    S.edhrec.cmdSignature = ecarte ? signatureCommandants() : null;
+    scheduleSave();
+    apresReglage(`${nom} ${ecarte ? "n'est plus traitée comme commandant" : 'est traitée comme commandant'} : les statistiques EDHREC et les suggestions sont reprises.`);
+    return;
+  }
+
   if (act === 'reclasser') {
     /* Les scores sont déjà à jour : seul l'ordre affiché change, et le rendu
        est immédiat. Le défilement n'est pas rattrapé — c'est un nouveau

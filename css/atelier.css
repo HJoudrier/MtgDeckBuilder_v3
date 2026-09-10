@@ -439,6 +439,28 @@ dialog::backdrop{background:rgba(8,6,14,.7)}
    — celle de droite a pris la place de la croix. Un bouton inerte reste
    visible plutôt que de disparaître : le titre garderait sinon son centre au
    prix d'un saut, aux deux extrémités de la liste parcourue. */
+/* La liste des commandants du deck, en tête de l'onglet EDHREC : une ligne par
+   carte, la marque à gauche — l'étoile du principal, la case des secondaires —,
+   le nom au milieu et l'état auprès d'EDHREC à droite. Une ligne décochée
+   pâlit sans disparaître : c'est par elle qu'on la rétablit. */
+.cmd-bloc{margin:8px 0;padding-top:6px;border-top:1px dashed var(--line2)}
+.cmd-rows{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.cmd-l{display:flex;align-items:center;gap:8px;padding:4px 7px;border:1px solid var(--line);border-radius:7px;background:var(--bg2)}
+.cmd-l.on{border-color:#2f6b68}
+.cmd-l .cmd-b{flex:0 0 auto;width:24px;height:22px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.cmd-l .etoile{color:var(--brass)}
+.cmd-l.on .cmd-b[aria-pressed=true]{border-color:#2f6b68;color:#57c9c4}
+.cmd-l .cmd-n{flex:1;min-width:0;padding:0;border:0;background:none;text-align:left;cursor:pointer;
+  font-family:var(--display);font-size:13px;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmd-l .cmd-n:hover{color:var(--brass)}
+.cmd-l.off .cmd-n{color:var(--dim2)}
+.cmd-l .cmd-e{flex:0 0 auto;color:var(--dim)}
+.cmd-l .cmd-e a{color:#57c9c4}
+@media (max-width:520px){
+  .cmd-l{flex-wrap:wrap}
+  .cmd-l .cmd-e{width:100%;padding-left:32px}
+}
+
 /* Les sections de la fenêtre des paramètres : un filet et un titre séparent
    chaque groupe de réglages du suivant, la fenêtre en portant trois. */
 .params{display:flex;flex-direction:column;gap:14px}

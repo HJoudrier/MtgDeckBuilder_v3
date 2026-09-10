@@ -142,7 +142,10 @@ function edhrecAllFor(card) {
   }
 
   // 3. Commandants secondaires du deck non encore dans S.edhrec.secondaires mais dans EDHREC_CACHE
-  const secDeckCards = commandantsPossibles ? commandantsPossibles().filter(c => !cmdPrincipal || norm(c.name) !== norm(cmdPrincipal)) : [];
+  /* Les secondaires retenus, non toutes les légendaires du deck : une carte
+     décochée dans l'onglet EDHREC ne doit plus rien apporter, fût-ce depuis le
+     cache d'une visite précédente. */
+  const secDeckCards = typeof commandantsSecondaires === 'function' ? commandantsSecondaires() : [];
   secDeckCards.forEach(sc => {
     const cmdKey = norm(sc.name);
     if (seenCmds.has(cmdKey)) return;
@@ -160,6 +163,17 @@ function edhrecAllFor(card) {
   return list;
 }
 
+/* Les commandants que l'atelier croise avec EDHREC, en une chaîne : le
+   principal et les secondaires retenus. Elle dit quand les statistiques en
+   place ne valent plus — un commandant désigné, une légendaire ajoutée au
+   deck, une case décochée dans l'onglet EDHREC. Définie une fois : le
+   chargement, le rendu et la case s'y réfèrent tous les trois, et deux
+   formules jumelles finiraient par diverger. */
+function signatureCommandants() {
+  const cmd = S.commander ? find(S.commander) : null;
+  return (cmd ? cmd.name : '') + '::' + commandantsSecondaires().map(c => c.name).sort().join('|');
+}
+
 async function loadEdhrec(force) {
   const cmd = S.commander ? find(S.commander) : null;
   const secCmds = commandantsSecondaires();
@@ -167,7 +181,7 @@ async function loadEdhrec(force) {
     toast("Désignez un commandant dans l'onglet Deck ou ajoutez des créatures légendaires au deck.");
     return;
   }
-  const cmdSig = (cmd ? cmd.name : '') + '::' + secCmds.map(c => c.name).sort().join('|');
+  const cmdSig = signatureCommandants();
   if (!force && S.edhrec.cmdSignature === cmdSig && S.edhrec.status !== 'idle' && S.edhrec.status !== 'error') {
     return;
   }

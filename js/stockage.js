@@ -71,6 +71,7 @@ function snapshot() {
     sideboard: [...S.sideboard],
     considering: [...S.considering],
     deckPlie: [...S.deckPlie],
+    secondairesOff: [...S.secondairesOff],
     groupesPlies: [...S.groupesPlies],
     commander: S.commander,
     colors: [...S.colors],
@@ -229,6 +230,8 @@ function restore(d) {
      préférence d'affichage, qu'on retrouve d'une séance à l'autre. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
+  /* Les commandants secondaires écartés : une préférence, comme les plis. */
+  if (Array.isArray(d.secondairesOff)) S.secondairesOff = new Set(d.secondairesOff);
   return true;
 }
 

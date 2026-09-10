@@ -91,6 +91,12 @@ const S = {
      (js/groupes.js) : le pli d'un groupement ne vaut que pour lui. */
   groupesPlies: new Set(),
   commander: null,
+  /* Les créatures légendaires du deck qu'on ne veut pas voir traitées comme
+     commandants par EDHREC : la liste se coche et se décoche dans l'onglet
+     EDHREC. Ce sont les écartées qu'on retient, non les retenues — le deck
+     change, et une carte qu'on n'a jamais décochée doit compter dès qu'elle
+     arrive. */
+  secondairesOff: new Set(),
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',
   format: 'edh',
