@@ -270,7 +270,6 @@ function corpsSauvegarde() {
       Enregistrer mes données sur cet appareil
     </label>
     <div class="small muted">Décochez sur un ordinateur qui n'est pas le vôtre : les données déjà enregistrées sont effacées immédiatement, et plus rien n'est écrit ensuite.</div>
-    <div class="small muted" style="margin-top:6px">Le catalogue des cartes existantes, lui, a sa propre fenêtre : la pastille « Catalogue » de l'en-tête.</div>
     <div class="row" style="gap:6px;margin-top:6px">
       <button type="button" class="btn sm" data-act="saveNow">Enregistrer maintenant</button>
       <button type="button" class="btn sm" data-act="saveExport">Exporter un fichier</button>
@@ -338,30 +337,22 @@ function blocCatalogue() {
   </div>`;
 }
 
-/* La fenêtre de sauvegarde reste ouverte pendant qu'une archive se charge :
-   son contenu est réécrit sur place quand l'état du catalogue a bougé. */
-/* Rafraîchit celle des deux fenêtres qui est ouverte. Le repère est un
-   marqueur explicite : la phrase qui servait autrefois d'indice a déménagé
-   avec le bloc du catalogue. */
+/* La fenêtre des paramètres reste ouverte pendant qu'une archive se charge :
+   son contenu est réécrit sur place quand l'état du catalogue a bougé. Le
+   repère est un marqueur explicite — le bloc du catalogue, qui n'existe que
+   là. */
 function rafraichirFenetreSauvegarde() {
-  const corps = document.getElementById('dlgBody');
-  if (!corps) return;
-  if (document.getElementById('blocCatalogue')) {
-    const y = corps.scrollTop;
-    corps.innerHTML = corpsCatalogue();
-    corps.scrollTop = y;
-    brancherCatalogue();
-    return;
-  }
-  if (!document.getElementById('blocSauvegarde')) return;
-  corps.innerHTML = corpsSauvegarde();
-  brancherRestauration();
+  if (typeof majFenetreParametres === 'function') majFenetreParametres();
 }
 
-function openSaveDialog() {
-  openDialog('Sauvegarde locale', corpsSauvegarde(), '<button class="btn" value="ok">Fermer</button>');
+/* L'interrupteur de la sauvegarde, dans la section « Sauvegarde locale » de
+   la fenêtre des paramètres : cocher réactive et réécrit tout, décocher
+   efface sur-le-champ ce que cet appareil gardait. La section est ensuite
+   réécrite pour dire le nouvel état. */
+function brancherSauvegarde() {
   const sw = document.getElementById('saveSwitch');
-  if (sw) sw.addEventListener('change', ev => {
+  if (!sw) return;
+  sw.addEventListener('change', ev => {
     if (ev.target.checked) {
       try { localStorage.removeItem(STORE_OFF); } catch(e) {}
       saveState = 'ok';
@@ -375,11 +366,8 @@ function openSaveDialog() {
       toast("Sauvegarde désactivée et données effacées de cet appareil.");
     }
     renderTop();
-    document.getElementById('dlgBody').innerHTML = corpsSauvegarde();
-    brancherRestauration();
+    if (typeof majFenetreParametres === 'function') majFenetreParametres();
   });
-  brancherRestauration();
-  brancherCatalogue();
 }
 
 function brancherCatalogue() {

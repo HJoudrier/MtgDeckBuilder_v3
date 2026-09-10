@@ -397,8 +397,8 @@ function ligneCatalogue() {
       Catalogue complet : ${n(CAT.cartes.length)} cartes en cache${maj ? ` (Scryfall, ${maj})` : ''}.
       <b>${n(st.retenus)}</b> candidate(s)${causes.length ? ` — écartées : ${causes.join(', ')}` : ' : rien n\'est écarté'}.
       ${st.coupes ? `Les ${n(st.coupes)} moins bien classées par EDHREC ne sont pas examinées,
-        le maximum étant fixé à ${n(S.candidatsMax)} (réglable dans la fenêtre du catalogue,
-        par la pastille « Catalogue » de l'en-tête).` : ''}
+        le maximum étant fixé à ${n(S.candidatsMax)} (réglable dans les paramètres,
+        section « Catalogue des cartes » — l'engrenage de l'entête).` : ''}
       ${st.sansPrix ? `${n(st.sansPrix)} candidate(s) restent sans prix connu : elles comptent ici,
         mais ne peuvent pas être proposées à l'achat.` : ''}
       Les visuels se chargent ensuite, par score décroissant.

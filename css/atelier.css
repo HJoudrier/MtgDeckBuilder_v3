@@ -42,7 +42,27 @@ header.top.compact .top-in{padding:5px 10px;gap:6px 10px}
 header.top.compact .brand h1{font-size:15px}
 header.top.compact .brand .sub{display:none}
 
-.top-stats{margin-left:auto;display:flex;gap:6px 8px;align-items:center;flex-wrap:wrap}
+/* `min-width:0` : les décomptes s'enroulent d'eux-mêmes, et leur boîte peut
+   donc se rétrécir pour laisser l'engrenage sur la même ligne qu'eux. Sans
+   cela, elle occupait toute la largeur restante et le bouton tombait seul sur
+   une ligne, à gauche. */
+.top-stats{margin-left:auto;min-width:0;display:flex;gap:6px 8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+/* L'engrenage des paramètres, ancré au coin haut-droit de l'entête. Il est
+   posé hors du flux : les décomptes s'enroulent sur autant de lignes qu'il
+   leur en faut, et le bouton reste à la même place — dans le flux, il
+   retombait sous eux, à gauche, dès que leur boîte prenait toute la largeur.
+   La marge droite de l'entête lui réserve sa place, pour que rien ne passe
+   dessous. */
+.top-in{position:relative;padding-right:52px}
+.head-param{
+  position:absolute;right:12px;top:8px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:30px;height:30px;padding:0;border-radius:99px;border:1px solid var(--line2);
+  background:var(--panel);color:var(--dim);cursor:pointer;transition:color .15s ease,border-color .15s ease
+}
+.head-param:hover{color:var(--brass);border-color:var(--brass)}
+header.top.compact .top-in{padding-right:46px}
+header.top.compact .head-param{width:26px;height:26px;right:10px;top:5px}
 .pill{
   font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:99px;
   border:1px solid var(--line2); background:var(--panel); color:var(--dim);white-space:nowrap;
@@ -419,6 +439,14 @@ dialog::backdrop{background:rgba(8,6,14,.7)}
    — celle de droite a pris la place de la croix. Un bouton inerte reste
    visible plutôt que de disparaître : le titre garderait sinon son centre au
    prix d'un saut, aux deux extrémités de la liste parcourue. */
+/* Les sections de la fenêtre des paramètres : un filet et un titre séparent
+   chaque groupe de réglages du suivant, la fenêtre en portant trois. */
+.params{display:flex;flex-direction:column;gap:14px}
+.param-sec{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:var(--bg2)}
+.param-sec>h4{margin:0 0 4px;font-family:var(--display);font-size:15px;color:var(--brass)}
+.param-sec .param-chapeau{margin-bottom:8px}
+.param-sec .bloc{border-top:0!important;margin-top:0!important}
+
 .dlg-h-nav{display:flex;align-items:center;gap:10px;width:100%}
 .dlg-titre{flex:1;min-width:0;margin:0;text-align:center;font-family:var(--display);font-size:17px;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -500,7 +528,8 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
      plus — sans jamais couper un nom. */
   .onglet{flex:1 0 auto;justify-content:center;padding:8px 6px 6px;font-size:12.5px}
   .bars{height:120px}
-  .top-in{padding:6px 8px;gap:6px 8px}
+  .top-in{padding:6px 8px;padding-right:44px;gap:6px 8px}
+  .head-param{width:28px;height:28px;right:8px;top:6px}
   .top-stats{gap:4px 6px;width:100%;justify-content:flex-start}
   .head-colors{gap:4px}
   .head-mana-bar{gap:2px}

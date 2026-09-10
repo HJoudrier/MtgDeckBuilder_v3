@@ -40,8 +40,11 @@ d'inclusion et la synergie —, **Catalogue** porte le classement complet, group
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
 `ONGLETS_ANCIENS`. Les sept sections sont rendues à chaque fois, celles qu'on ne
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
-alors aucun rendu. Le format, les filtres, le catalogue et le budget se règlent depuis les
-fenêtres qu'ouvrent les pastilles de l'en-tête. Les identifiants internes des sections
+alors aucun rendu. Le format, les filtres et le budget se règlent depuis les
+fenêtres qu'ouvrent les pastilles de l'en-tête ; la **sauvegarde locale**, les **données de la
+collection** et le **catalogue** ont la leur, ouverte par l'engrenage posé au coin haut-droit de
+l'entête — trois sections dans une seule fenêtre, là où deux pastilles ouvraient deux fenêtres en
+comptant tout autre chose. Les identifiants internes des sections
 (`secB`…`secH`, `renderB`…`renderH`) ont gardé leur lettre d'origine, que les rendus connaissent ;
 plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
 
@@ -186,12 +189,13 @@ marquée.
 `S.exploreMax` borne le chargement paginé par l'API Scryfall ; `S.candidatsMax`, distinct, borne
 les cartes du catalogue local examinées par les suggestions.
 
-La pastille « Catalogue » de l'en-tête ouvre une fenêtre qui rassemble tout ce qui touche au
-catalogue des cartes existantes. Elle mêle deux natures, et le dit : les **réglages** du haut —
-cartes examinées (`S.candidatsMax`), cartes numériques (`S.catalogueNumeriques`) — attendent
-« Appliquer », comme dans les fenêtres Filtres et Format ; les **actions** du bas — mettre à jour,
-télécharger, charger une archive, l'effacer, l'interrupteur d'archivage — agissent au clic.
-Différer « effacer l'archive » derrière une validation serait déroutant.
+La section « Catalogue des cartes » de la fenêtre **Paramètres** (l'engrenage de l'entête)
+rassemble tout ce qui touche au catalogue des cartes existantes. Elle mêle deux natures, et la
+fenêtre le dit : les **réglages** — cartes examinées (`S.candidatsMax`), cartes numériques
+(`S.catalogueNumeriques`) — attendent « Appliquer », comme dans les fenêtres Filtres et Format ;
+les **actions** — mettre à jour, télécharger, charger une archive, l'effacer, l'interrupteur
+d'archivage — agissent au clic. Différer « effacer l'archive » derrière une validation serait
+déroutant.
 
 `S.catalogueNumeriques` gouverne les cartes qui n'existent que sur Arena ou MTGO. Décochée — le
 défaut —, elles sont écartées des candidates (colonne `CH.NUMERIQUE` de l'archive), la requête API porte
@@ -530,11 +534,10 @@ Données : `STORE_KEY`, `STORE_OFF`
 | `scheduleSave()` | Enregistrement différé après une modification. |
 | `restore(d)` | Restaure un instantané, cartes importées comprises ; une sauvegarde antérieure aux listes annexes les laisse vides. |
 | `chargerSauvegarde()` | Relit la sauvegarde existante. |
-| `corpsSauvegarde()` | Contenu de la fenêtre de sauvegarde locale, le catalogue ayant désormais la sienne. |
-| `blocCatalogue()` | Gestion de l'archive — état, taille, mises à jour — affichée dans la fenêtre du catalogue. |
-| `rafraichirFenetreSauvegarde()` | Réécrit cette fenêtre sur place quand l'état du catalogue a bougé. |
-| `openSaveDialog()` | Ouvre la fenêtre de gestion des données, depuis la pastille « Collection » de l'en-tête. |
-| `rafraichirFenetreSauvegarde()` | Rafraîchit celle des deux fenêtres — sauvegarde ou catalogue — qui est ouverte. |
+| `corpsSauvegarde()` | La section « Sauvegarde locale » de la fenêtre des paramètres. |
+| `blocCatalogue()` | Gestion de l'archive — état, taille, mises à jour — affichée dans la section « Catalogue des cartes ». |
+| `brancherSauvegarde()` | Branche l'interrupteur de la sauvegarde locale. |
+| `rafraichirFenetreSauvegarde()` | Réécrit la fenêtre des paramètres sur place quand l'état du catalogue a bougé. |
 | `brancherCatalogue()` | Branche les commandes du catalogue. |
 | `brancherRestauration()` | Branche le sélecteur de fichier de restauration. |
 
@@ -781,11 +784,13 @@ rend `tagAnnexe()`, sans quoi on la reproposerait sans fin.
 ### `js/ui.js` — Interface commune
 
 Symboles de mana, tuiles de cartes, fiche détaillée, aperçu au survol, fenêtres et rendu global,
-dont le bouton « Filtres » de l'en-tête et les fenêtres modales qu'ouvrent ses pastilles.
+dont le bouton « Filtres » de l'en-tête, les fenêtres qu'ouvrent ses pastilles, et la fenêtre des
+**Paramètres** — sauvegarde locale, collection, catalogue — qu'ouvre l'engrenage du coin
+haut-droit.
 
-*36 fonction(s), 31 Ko*
+*113 fonction(s), 95 Ko*
 
-Données : `COLS`, `MODES_COULEUR`, `FILTRE_ICONE`
+Données : `COLS`, `MODES_COULEUR`, `FILTRE_ICONE`, `PARAM_ICONE`
 
 Données : `RETOURNEES`
 
@@ -803,7 +808,14 @@ Données : `RETOURNEES`
 | `cardRow(e,ctx)` | Ligne de carte en mode liste. |
 | `listeArchetypesHTML()` | Lignes de la liste déroulante : nom, provenance et résumé de fonctionnement. |
 | `openFormatModal()` | Ouvre la fenêtre du format et y ouvre un brouillon : rien n'y prend effet avant « Appliquer ». |
-| `openCatalogueModal()` | Ouvre la fenêtre du catalogue depuis la pastille de l'en-tête, brouillon compris. |
+| `sectionParametres(titre,chapeau,corps)` | Une section de la fenêtre des paramètres. |
+| `corpsCollectionParam()` | La section « Collection » : ce que la collection pèse, et de quoi la remplir ou la vider. |
+| `corpsParametres()` | Le corps entier : sauvegarde locale, collection, catalogue. |
+| `majFenetreParametres()` | Réécrit ce corps sur place — défilement gardé, champs de fichier rebranchés. |
+| `majFenetreCatalogue()` | L'ancien nom, que le chargement d'une archive appelle encore. |
+| `brancherParametres()` | Rebranche les interrupteurs et les champs de fichier des trois sections. |
+| `appliquerParametres()` | Verse le brouillon du catalogue, recalcule, ferme. |
+| `openParametresModal()` | Ouvre la fenêtre des paramètres depuis l'engrenage de l'entête, brouillon compris. |
 | `corpsCatalogue()` | Contenu de cette fenêtre : les deux réglages différés, puis la gestion de l'archive. |
 | `majFenetreCatalogue()` | La réécrit sans perdre le défilement, et rebranche ses commandes. |
 | `appliquerCatalogue()` *(async)* | « Appliquer » : verse le brouillon puis recalcule. |
@@ -826,7 +838,7 @@ Données : `RETOURNEES`
 | `poseParcoursFiche(el,nom)` | Relève le fil de lecture sur le document : les cartes de la section d'où part le geste, dans l'ordre affiché. |
 | `ficheVoisine(pas)` | Passe à la carte précédente ou suivante de ce fil, et rend le focus au bouton pressé. |
 | `enteteFiche(nom)` | L'entête de la fiche : le nom, son rang dans le fil, et les deux boutons de parcours. |
-| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et pastilles qui ouvrent les fenêtres — Format, Collection, Catalogue, Budget. |
+| `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs, pastilles qui ouvrent une fenêtre — Format, Budget — et pastilles qui ne font que compter — Collection, Catalogue, Valeur du deck. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et y ouvre un brouillon. |
 | `verseBrouillon()` | Verse le brouillon dans l'état : le seul moment où une fenêtre à brouillon touche à ce que l'atelier montre. |
 | `appliquerFiltres()` *(async)* | « Appliquer » : verse le brouillon dans l'état, lance le filtrage avec sa barre, puis ferme. |

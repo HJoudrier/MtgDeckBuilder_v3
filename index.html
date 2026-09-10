@@ -13,7 +13,7 @@
        coque des onglets vit ici, un cache en retard donne des boutons nus et
        des gestes sans effet. À rehausser dès qu'un changement touche à la fois
        cette page et ce qu'elle charge. -->
-  <link rel="stylesheet" href="css/atelier.css?v=20260910a">
+  <link rel="stylesheet" href="css/atelier.css?v=20260910b">
 </head>
 <body>
   <header class="top" id="topHeader">
@@ -23,6 +23,12 @@
         <span class="sub">Constructeur &amp; Optimiseur</span>
       </div>
       <div class="top-stats" id="topStats"></div>
+      <!-- L'engrenage : les réglages généraux de l'atelier — sauvegarde
+           locale, collection, catalogue —, réunis dans une seule fenêtre.
+           Il vit dans le HTML plutôt que dans le rendu de l'entête : rien
+           n'y change jamais, et un rendu de moins le laisse sous le doigt. -->
+      <button type="button" class="head-param" id="btnParametres" data-act="parametres"
+              title="Paramètres : sauvegarde locale, collection, catalogue" aria-label="Paramètres"></button>
     </div>
 
     <!-- Les cinq onglets, dans l'entête même : la barre est collante avec
@@ -152,20 +158,20 @@
   <div id="cardPreview"></div>
 
   <!-- Modules chargés dans l'ordre strict défini par l'architecture -->
-  <script src="js/effets.js?v=20260910a"></script>
-  <script src="js/cartes.js?v=20260910a"></script>
-  <script src="js/etat.js?v=20260910a"></script>
-  <script src="js/groupes.js?v=20260910a"></script>
-  <script src="js/marche.js?v=20260910a"></script>
-  <script src="js/scryfall.js?v=20260910a"></script>
-  <script src="js/stockage.js?v=20260910a"></script>
-  <script src="js/externes.js?v=20260910a"></script>
-  <script src="js/graphe.js?v=20260910a"></script>
-  <script src="js/stats.js?v=20260910a"></script>
-  <script src="js/suggestions.js?v=20260910a"></script>
-  <script src="js/collection.js?v=20260910a"></script>
-  <script src="js/deck.js?v=20260910a"></script>
-  <script src="js/ui.js?v=20260910a"></script>
-  <script src="js/app.js?v=20260910a"></script>
+  <script src="js/effets.js?v=20260910b"></script>
+  <script src="js/cartes.js?v=20260910b"></script>
+  <script src="js/etat.js?v=20260910b"></script>
+  <script src="js/groupes.js?v=20260910b"></script>
+  <script src="js/marche.js?v=20260910b"></script>
+  <script src="js/scryfall.js?v=20260910b"></script>
+  <script src="js/stockage.js?v=20260910b"></script>
+  <script src="js/externes.js?v=20260910b"></script>
+  <script src="js/graphe.js?v=20260910b"></script>
+  <script src="js/stats.js?v=20260910b"></script>
+  <script src="js/suggestions.js?v=20260910b"></script>
+  <script src="js/collection.js?v=20260910b"></script>
+  <script src="js/deck.js?v=20260910b"></script>
+  <script src="js/ui.js?v=20260910b"></script>
+  <script src="js/app.js?v=20260910b"></script>
 </body>
 </html>

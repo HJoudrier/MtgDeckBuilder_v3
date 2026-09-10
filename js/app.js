@@ -141,13 +141,16 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'catalogueDialog') {
-    openCatalogueModal();
+  /* L'engrenage de l'entête, et les deux anciens noms que des boutons de
+     l'atelier appellent encore — charger une archive, régler le catalogue :
+     tout mène à la même fenêtre, où ces réglages vivent désormais ensemble. */
+  if (act === 'parametres' || act === 'catalogueDialog' || act === 'saveDialog') {
+    openParametresModal();
     return;
   }
 
-  if (act === 'appliquerCatalogue') {
-    appliquerCatalogue();
+  if (act === 'appliquerParametres') {
+    appliquerParametres();
     return;
   }
 
@@ -403,11 +406,6 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'saveDialog') {
-    openSaveDialog();
-    return;
-  }
-
   if (act === 'saveNow') {
     save();
     toast(saveState === 'ok' ? 'Données enregistrées dans ce navigateur.' : (saveError || 'Enregistré.'));
@@ -467,7 +465,7 @@ document.addEventListener('click', ev => {
     S.majIgnoree = CAT.majDispo;
     scheduleSave();
     closeDialog();
-    toast("Mise à jour reportée : elle reste accessible depuis la pastille « Catalogue » de l'en-tête.");
+    toast("Mise à jour reportée : elle reste accessible dans les paramètres (l'engrenage de l'entête).");
     return;
   }
 

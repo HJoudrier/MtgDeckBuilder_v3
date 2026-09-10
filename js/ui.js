@@ -598,15 +598,53 @@ function majFenetreFormat() {
 }
 
 /* =====================================================================
-   Fenêtre « Catalogue », ouverte depuis la pastille de l'en-tête. Elle
-   rassemble ce qui touche au catalogue des cartes existantes, jusque-là
-   éparpillé entre la section Suggestions et la fenêtre de sauvegarde.
+   Fenêtre « Paramètres », ouverte par l'engrenage de l'entête.
 
-   Elle mêle deux natures, et le dit : les réglages du haut attendent
-   « Appliquer », les actions du bas — mettre à jour, charger, effacer —
-   agissent au clic. Différer « effacer l'archive » derrière un bouton de
-   validation serait déroutant.
+   Trois réglages généraux vivaient dans deux fenêtres, elles-mêmes ouvertes
+   par deux pastilles de l'entête qui comptaient tout autre chose — le nombre
+   de cartes retenues. La sauvegarde locale, les données de la collection et
+   le catalogue tiennent désormais dans une seule fenêtre, en trois sections,
+   et les deux pastilles redeviennent ce qu'elles disent : des décomptes.
+
+   La fenêtre mêle deux natures, et le dit : les réglages du catalogue
+   attendent « Appliquer » — filtrer coûte près d'une seconde sur un grand
+   catalogue —, tandis que les actions — enregistrer, exporter, mettre à jour,
+   effacer — agissent au clic. Différer « effacer l'archive » derrière un
+   bouton de validation serait déroutant.
    ===================================================================== */
+
+/* Une section de la fenêtre : un titre, une phrase qui dit ce qu'elle règle,
+   et son contenu. */
+function sectionParametres(titre, chapeau, corps) {
+  return `<div class="param-sec">
+    <h4>${esc(titre)}</h4>
+    ${chapeau ? `<div class="small muted param-chapeau">${chapeau}</div>` : ''}
+    ${corps}
+  </div>`;
+}
+
+/* Ce que la collection pèse sur cet appareil, et les deux gestes qui la
+   remplissent ou la vident d'un coup. Le détail — ajouter, compléter,
+   grouper — reste dans la section Collection, où l'on a les cartes sous les
+   yeux ; ici, on ne fait qu'entrer et sortir. */
+function corpsCollectionParam() {
+  const cartes = collectionCards();
+  const distinctes = cartes.length;
+  const exemplaires = cartes.reduce((n, e) => n + e.qty, 0);
+  const valeur = cartes.reduce((t, e) => t + (e.card.price || 0) * e.qty, 0);
+  const inconnues = cartes.filter(e => e.card.unknown).length;
+  return `<div class="scroll"><table class="tbl"><tbody>
+      <tr><td>Cartes différentes</td><td>${distinctes.toLocaleString('fr-FR')}</td></tr>
+      <tr><td>Exemplaires</td><td>${exemplaires.toLocaleString('fr-FR')}</td></tr>
+      <tr><td>Valeur estimée</td><td>${eur(valeur)}</td></tr>
+      ${inconnues ? `<tr><td>Cartes incomplètes</td><td>${inconnues.toLocaleString('fr-FR')} — sans coût ni texte tant que Scryfall ne les a pas complétées</td></tr>` : ''}
+    </tbody></table></div>
+    <div class="row" style="gap:6px;margin-top:6px">
+      <button type="button" class="btn sm" data-act="import">Importer une liste MTGO</button>
+      ${inconnues ? `<button type="button" class="btn sm" data-act="enrich">Compléter ${inconnues} carte${inconnues > 1 ? 's' : ''}</button>` : ''}
+      <button type="button" class="btn sm danger" data-act="wipe">Vider la collection</button>
+    </div>`;
+}
 
 function corpsCatalogue() {
   return avecBrouillon(() => `<div class="field">
@@ -625,34 +663,65 @@ function corpsCatalogue() {
         et qu'on ne peut pas posséder sur papier. Cochée, elles entrent dans les suggestions, les éditions
         numériques apparaissent dans le filtre par set, et la fiche d'une carte en montre les visuels.</div>
     </div>
-    <div class="warnbox">Ces deux réglages attendent « Appliquer ». Ce qui suit agit immédiatement.</div>
+    <div class="warnbox">Ces deux réglages attendent « Appliquer ». Tout le reste de cette fenêtre agit immédiatement.</div>
     ${blocCatalogue()}`);
 }
 
-function majFenetreCatalogue() {
+/* Le corps entier, les trois sections à la suite. La sauvegarde vient en
+   tête : c'est d'elle que dépend tout ce qui suit. */
+function corpsParametres() {
+  return `<div class="params">
+    ${sectionParametres('Sauvegarde locale',
+      "Où vivent vos données, et comment les emporter d'un appareil à l'autre.",
+      corpsSauvegarde())}
+    ${sectionParametres('Collection',
+      'Ce que votre collection pèse sur cet appareil, et de quoi la remplir ou la vider.',
+      corpsCollectionParam())}
+    ${sectionParametres('Catalogue des cartes',
+      "L'archive de toutes les cartes existantes, et ce que les suggestions y puisent.",
+      corpsCatalogue())}
+  </div>`;
+}
+
+/* La fenêtre reste ouverte pendant qu'une archive se charge ou qu'un réglage
+   change : son corps est réécrit sur place, le défilement gardé, et les
+   champs de fichier rebranchés — l'ancien HTML emportait leurs écouteurs. */
+function majFenetreParametres() {
   const dlg = document.getElementById('dlg');
   if (!dlg || !dlg.open) return;
   const corps = document.getElementById('dlgBody');
   if (!corps || !document.getElementById('blocCatalogue')) return;
   const y = corps.scrollTop;
-  corps.innerHTML = corpsCatalogue();
+  corps.innerHTML = corpsParametres();
   corps.scrollTop = y;
+  brancherParametres();
+}
+
+/* Le nom d'hier, que le chargement du catalogue appelle encore : la fenêtre
+   qu'il rafraîchit est celle des paramètres. */
+function majFenetreCatalogue() {
+  majFenetreParametres();
+}
+
+function brancherParametres() {
+  if (typeof brancherSauvegarde === 'function') brancherSauvegarde();
+  if (typeof brancherRestauration === 'function') brancherRestauration();
   if (typeof brancherCatalogue === 'function') brancherCatalogue();
 }
 
-async function appliquerCatalogue() {
+async function appliquerParametres() {
   verseBrouillon();
   await filtrerAvecProgression();
   closeDialog();
 }
 
-function openCatalogueModal() {
-  openDialog('Catalogue des cartes', corpsCatalogue(),
-    `<button type="button" class="btn" data-act="closeDialog">Annuler</button>
-     <button type="button" class="btn pri" data-act="appliquerCatalogue">Appliquer</button>
-     ${zoneProgression()}`);
-  ouvreBrouillon(['candidatsMax', 'catalogueNumeriques'], majFenetreCatalogue);
-  if (typeof brancherCatalogue === 'function') brancherCatalogue();
+function openParametresModal() {
+  openDialog('Paramètres', corpsParametres(),
+    `<button type="button" class="btn" data-act="closeDialog">Fermer</button>
+     <button type="button" class="btn pri" data-act="appliquerParametres">Appliquer</button>
+     ${zoneProgression()}`, true);
+  ouvreBrouillon(['candidatsMax', 'catalogueNumeriques'], majFenetreParametres);
+  brancherParametres();
 }
 
 /* « Appliquer » verse le brouillon puis recalcule, comme pour les filtres :
@@ -772,6 +841,14 @@ function statsCatalogue() {
    ===================================================================== */
 
 const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
+
+/* L'engrenage des paramètres : douze dents posées en couronne et un moyeu
+   évidé, dessinés ici plutôt que chargés — l'atelier ne dépend d'aucun
+   fichier extérieur, pas même d'une icône. */
+const PARAM_ICONE = `<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" focusable="false">
+  <path fill="currentColor" d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2zm0 5.9a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6z"/>
+  <path fill="currentColor" d="M20.3 13.6a8.6 8.6 0 0 0 0-3.2l1.8-1.4-1.8-3.1-2.1.8a8.4 8.4 0 0 0-2.8-1.6L15.1 2h-3.6l-.3 2.3H11a8.4 8.4 0 0 0-2.7 1.6l-2.1-.8-1.8 3.1 1.8 1.4a8.6 8.6 0 0 0 0 3.2l-1.8 1.4 1.8 3.1 2.1-.8a8.4 8.4 0 0 0 2.8 1.6l.3 2.3h3.6l.3-2.3a8.4 8.4 0 0 0 2.8-1.6l2.1.8 1.8-3.1-1.8-1.4zm-1.6-1.6c0 .5-.05 1-.15 1.5l-.12.6 1.5 1.16-.53.92-1.76-.67-.46.4c-.73.64-1.6 1.14-2.53 1.45l-.58.2-.26 1.94h-1.06l-.26-1.95-.58-.19a6.9 6.9 0 0 1-2.53-1.46l-.46-.4-1.76.67-.53-.92 1.5-1.15-.12-.6a7.2 7.2 0 0 1 0-3l.12-.6-1.5-1.16.53-.92 1.76.67.46-.4A6.9 6.9 0 0 1 11.7 6.5l.58-.2.26-1.94h1.06l.26 1.95.58.19c.93.31 1.8.81 2.53 1.46l.46.4 1.76-.67.53.92-1.5 1.15.12.6c.1.5.15 1 .15 1.5z"/>
+</svg>`;
 
 /* ---------------------------------------------------------------------
    Rien de ce qui se règle dans cette fenêtre n'agit avant « Appliquer » :
@@ -1666,14 +1743,19 @@ function renderTop() {
       ${filtreBtnHTML}
       ${filtreChipsHTML}
       ${deckPillHTML}
-      <button type="button" class="pill" id="pillColFiltr" data-act="saveDialog" style="cursor:pointer" title="Cartes de la collection correspondant aux filtres / Total collection — cliquer pour ouvrir la sauvegarde locale">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></button>
-      <button type="button" class="pill" id="pillDbFiltr" data-act="catalogueDialog" style="cursor:pointer" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue — cliquer pour ouvrir la fenêtre du catalogue">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></button>
+      <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection — la sauvegarde de ces données se règle dans les paramètres (l'engrenage de l'entête)">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
+      <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue — l'archive et ses réglages sont dans les paramètres (l'engrenage de l'entête)">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>
       <span class="pill" id="pillVal" title="Valeur totale estimée du deck">Valeur deck <b>${eur(totalDeckVal)}</b></span>
       ${sp > 0 ? `<button type="button" class="pill" data-act="wants" style="cursor:pointer;border-color:var(--bad);color:#e39a90" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket">À acheter <b>${eur(sp)}</b></button>` : ''}
       ${budgetPillHTML}
       ${toggleBtnHTML}
     `;
   }
+  /* L'engrenage vit dans la page, non dans ce rendu : son dessin n'y est
+     posé qu'une fois. */
+  const param = document.getElementById('btnParametres');
+  if (param && !param.firstChild) param.innerHTML = PARAM_ICONE;
+
   majHauteurEntete();
 }
 
