@@ -51,8 +51,11 @@ function nomCombinaisonCouleurs(sel) {
   const wubrg = ['W', 'U', 'B', 'R', 'G'].filter(c => sel.has(c)).join('');
   if (!wubrg && hasC) return 'Incolore';
   if (!wubrg && !hasC) return 'Aucune';
-  const base = MTG_COMBINAISONS[wubrg] || wubrg;
-  return hasC ? `${base} (+ Incolore)` : base;
+  /* Le nom de la guilde, seul. L'incolore coché en plus des couleurs allongeait
+     ce nom d'un « (+ Incolore) » qui le noyait, et le pion `C` de la barre de
+     mana le dit déjà : allumé, il est retenu ; éteint, il est écarté. Coché
+     seul, en revanche, l'incolore garde son nom — la ligne au-dessus. */
+  return MTG_COMBINAISONS[wubrg] || wubrg;
 }
 
 /* Couleurs proposées par l'en-tête et par la fenêtre des filtres. */

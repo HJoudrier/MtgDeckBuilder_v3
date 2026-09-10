@@ -53,16 +53,20 @@ header.top.compact .brand .sub{display:none}
    retombait sous eux, à gauche, dès que leur boîte prenait toute la largeur.
    La marge droite de l'entête lui réserve sa place, pour que rien ne passe
    dessous. */
-.top-in{position:relative;padding-right:52px}
+.top-in{position:relative;padding-right:150px}
+/* Les deux commandes du coin, côte à côte : le bouton des filtres puis
+   l'engrenage. C'est le conteneur qui est ancré, non plus chaque bouton — un
+   seul point à déplacer quand l'entête se replie ou se réduit. */
+.head-actions{position:absolute;right:12px;top:8px;display:flex;align-items:center;gap:6px}
 .head-param{
-  position:absolute;right:12px;top:8px;
   display:inline-flex;align-items:center;justify-content:center;
   width:30px;height:30px;padding:0;border-radius:99px;border:1px solid var(--line2);
   background:var(--panel);color:var(--dim);cursor:pointer;transition:color .15s ease,border-color .15s ease
 }
 .head-param:hover{color:var(--brass);border-color:var(--brass)}
-header.top.compact .top-in{padding-right:46px}
-header.top.compact .head-param{width:26px;height:26px;right:10px;top:5px}
+header.top.compact .top-in{padding-right:144px}
+header.top.compact .head-actions{right:10px;top:5px}
+header.top.compact .head-param{width:26px;height:26px}
 .pill{
   font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:99px;
   border:1px solid var(--line2); background:var(--panel); color:var(--dim);white-space:nowrap;
@@ -573,8 +577,14 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
      plus — sans jamais couper un nom. */
   .onglet{flex:1 0 auto;justify-content:center;padding:8px 6px 6px;font-size:12.5px}
   .bars{height:120px}
-  .top-in{padding:6px 8px;padding-right:44px;gap:6px 8px}
-  .head-param{width:28px;height:28px;right:8px;top:6px}
+  /* Ici les pastilles passent à la ligne (`width:100%` plus bas), si bien que
+     la première ligne ne porte que le titre : c'est à lui de réserver le coin,
+     et non à l'entête entière — une réserve sur `.top-in` amputerait aussi la
+     rangée des pastilles, de cent-quarante pixels sur quatre cents. */
+  .top-in{padding:6px 8px;gap:6px 8px}
+  .brand{padding-right:138px}
+  .head-actions{right:8px;top:6px;gap:4px}
+  .head-param{width:28px;height:28px}
   .top-stats{gap:4px 6px;width:100%;justify-content:flex-start}
   .head-colors{gap:4px}
   .head-mana-bar{gap:2px}

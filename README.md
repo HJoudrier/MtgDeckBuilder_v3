@@ -69,11 +69,19 @@ d'inclusion et la synergie —, **Catalogue** porte le classement complet, group
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
 `ONGLETS_ANCIENS`. Les sept sections sont rendues à chaque fois, celles qu'on ne
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
-alors aucun rendu. Le format, les filtres et le budget se règlent depuis les
-fenêtres qu'ouvrent les pastilles de l'en-tête ; la **sauvegarde locale**, les **données de la
-collection** et le **catalogue** ont la leur, ouverte par l'engrenage posé au coin haut-droit de
-l'entête — trois sections dans une seule fenêtre, là où deux pastilles ouvraient deux fenêtres en
-comptant tout autre chose. Les identifiants internes des sections
+alors aucun rendu. L'en-tête garde trois pastilles — la barre de mana et le nom de la combinaison,
+le format, le budget — et deux commandes au coin haut-droit : le bouton des **filtres** et
+l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, les données de la collection et le
+catalogue. Les deux voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
+`.head-actions` les ancre, et la réserve qui leur laisse la place est portée par `.top-in` là où les
+pastilles partagent leur ligne, par `.brand` sous 640 px où les pastilles passent seules à la ligne.
+Deux pastilles disaient ici ce que la collection retenait et ce que le catalogue contenait ; les
+sections le disent déjà, et mieux — la phrase de causes de la collection énumère ce qui écarte chaque
+carte, `ligneCatalogue()` compte les candidates avec le motif des écartées. Les retirer épargne à
+chaque rendu de l'en-tête un filtrage complet de la collection et un parcours de tout le catalogue,
+soit deux fois par repeint, `renderB()` redemandant `renderTop()` après `renderAll()`. La pastille du
+format ne porte plus que le format : la taille du deck et sa conformité sont dans l'onglet Deck, qui
+les détaille. Les identifiants internes des sections
 (`secB`…`secH`, `renderB`…`renderH`) ont gardé leur lettre d'origine, que les rendus connaissent ;
 plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
 

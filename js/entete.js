@@ -17,25 +17,6 @@ const PARAM_ICONE = `<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden
   <path fill="currentColor" d="M20.3 13.6a8.6 8.6 0 0 0 0-3.2l1.8-1.4-1.8-3.1-2.1.8a8.4 8.4 0 0 0-2.8-1.6L15.1 2h-3.6l-.3 2.3H11a8.4 8.4 0 0 0-2.7 1.6l-2.1-.8-1.8 3.1 1.8 1.4a8.6 8.6 0 0 0 0 3.2l-1.8 1.4 1.8 3.1 2.1-.8a8.4 8.4 0 0 0 2.8 1.6l.3 2.3h3.6l.3-2.3a8.4 8.4 0 0 0 2.8-1.6l2.1.8 1.8-3.1-1.8-1.4zm-1.6-1.6c0 .5-.05 1-.15 1.5l-.12.6 1.5 1.16-.53.92-1.76-.67-.46.4c-.73.64-1.6 1.14-2.53 1.45l-.58.2-.26 1.94h-1.06l-.26-1.95-.58-.19a6.9 6.9 0 0 1-2.53-1.46l-.46-.4-1.76.67-.53-.92 1.5-1.15-.12-.6a7.2 7.2 0 0 1 0-3l.12-.6-1.5-1.16.53-.92 1.76.67.46-.4A6.9 6.9 0 0 1 11.7 6.5l.58-.2.26-1.94h1.06l.26 1.95.58.19c.93.31 1.8.81 2.53 1.46l.46.4 1.76-.67.53.92-1.5 1.15.12.6c.1.5.15 1 .15 1.5z"/>
 </svg>`;
 
-function statsCatalogue() {
-  const noeuds = noeudsActifs();
-  if (typeof CAT !== 'undefined' && CAT.cartes && CAT.cartes.length > 0) {
-    const total = CAT.cartes.length;
-    let filtr = 0;
-    for (let i = 0; i < total; i++) {
-      const rec = CAT.cartes[i];
-      const id = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
-      if (!colorOK({identity: id})) continue;
-      if (noeuds.length && !recToucheNoeuds(rec, noeuds)) continue;
-      filtr++;
-    }
-    return { filtr, total };
-  }
-  const total = DB.length;
-  const filtr = DB.filter(c => colorOK(c) && (!noeuds.length || carteTouche(c, noeuds))).length;
-  return { filtr, total };
-}
-
 /* La hauteur de l'entête, publiée pour le CSS : les sections s'en servent
    comme marge de défilement et s'arrêtent sous elle plutôt que derrière. Elle
    se relève après coup — l'entête se replie et ses pastilles s'enroulent, si
@@ -51,23 +32,10 @@ function renderTop() {
   if (topHeader) topHeader.classList.toggle('compact', !!S.headerCompact);
   if (!topStats) { majHauteurEntete(); return; }
 
-  const dCount = deckSize(), f = fmt();
-  const allCards = collectionCards();
-  const cDistinct = allCards.length;
-  const cCount = allCards.reduce((n, e) => n + e.qty, 0);
-
-  const colFiltr = filtered();
-  const colDistinctFiltr = colFiltr.length;
-  const colTotalFiltr = colFiltr.reduce((n, e) => n + e.qty, 0);
-
-  const catStats = statsCatalogue();
-  const noeuds = noeudsActifs();
-  const noeudsTxt = noeuds.length ? ` & effets (${noeuds.map(n => (typeof NODE !== 'undefined' && NODE[n] && NODE[n].label) || n).join(', ')})` : '';
+  const f = fmt();
 
   const sp = spent();
   const left = S.budget.total - sp;
-  const leg = legality();
-  const isLegal = leg.length === 0;
 
   const gName = nomCombinaisonCouleurs(S.colors);
 
@@ -85,8 +53,11 @@ function renderTop() {
     </div>
   `;
 
+  /* Le format seul. La taille du deck et sa conformité vivaient ici aussi ;
+     l'onglet Deck les dit mieux — son indice porte le décompte, et son encadré
+     énumère ce qu'il reste à corriger au lieu d'un seul glyphe. */
   const deckPillHTML = `
-    <button type="button" class="pill head-format" id="pillDeck" data-act="formatDialog" title="Format de jeu : ${esc(f.label)} (cliquer pour le changer)">Format <b>${esc(f.label)}</b> · Deck <b>${dCount}/${f.size}</b>${dCount === f.size ? (isLegal ? ' <span style="color:var(--ok)">✓</span>' : ' <span style="color:var(--warn)" title="Règles non respectées">⚠</span>') : ''}</button>
+    <button type="button" class="pill head-format" id="pillDeck" data-act="formatDialog" title="Format de jeu : ${esc(f.label)} (cliquer pour le changer)">Format <b>${esc(f.label)}</b></button>
   `;
 
   const actifs = filtresActifs();
@@ -122,31 +93,29 @@ function renderTop() {
     </button>
   `;
 
-  if (S.headerCompact) {
-    topStats.innerHTML = `
-      ${manaBarHTML}
-      ${filtreBtnHTML}
-      ${filtreChipsHTML}
-      ${deckPillHTML}
-      ${budgetPillHTML}
-      ${toggleBtnHTML}
-    `;
-  } else {
-    topStats.innerHTML = `
-      ${manaBarHTML}
-      ${filtreBtnHTML}
-      ${filtreChipsHTML}
-      ${deckPillHTML}
-      <span class="pill" id="pillColFiltr" title="Cartes de la collection correspondant aux filtres / Total collection — la sauvegarde de ces données se règle dans les paramètres (l'engrenage de l'entête)">Collection <b>${colDistinctFiltr}</b> <span class="muted">(${colTotalFiltr} ex.) / ${cDistinct}</span></span>
-      <span class="pill" id="pillDbFiltr" title="Cartes du catalogue Scryfall correspondant aux filtres couleur${noeudsTxt} / Total catalogue — l'archive et ses réglages sont dans les paramètres (l'engrenage de l'entête)">Catalogue <b>${catStats.filtr.toLocaleString('fr-FR')}</b> <span class="muted">/ ${catStats.total.toLocaleString('fr-FR')}</span></span>
-      ${budgetPillHTML}
-      ${toggleBtnHTML}
-    `;
-  }
-  /* L'engrenage vit dans la page, non dans ce rendu : son dessin n'y est
-     posé qu'une fois. */
+  /* Deux pastilles disaient ici ce que la collection retenait et ce que le
+     catalogue contenait. Les sections le disent déjà, et mieux : la phrase de
+     causes de la collection énumère ce qui écarte chaque carte, et
+     `ligneCatalogue()` compte les candidates avec le motif des écartées. Les
+     retirer épargne, à chaque rendu de l'entête, un filtrage complet de la
+     collection et un parcours de tout le catalogue — et l'entête se rend deux
+     fois par repeint, `renderB()` le redemandant après `renderAll()`. */
+  topStats.innerHTML = `
+    ${manaBarHTML}
+    ${filtreChipsHTML}
+    ${deckPillHTML}
+    ${budgetPillHTML}
+    ${toggleBtnHTML}
+  `;
+
+  /* L'engrenage et le bouton des filtres partagent le coin haut-droit : tous
+     deux règlent la vue, non ce qu'elle montre. L'engrenage vit dans la page et
+     son dessin n'y est posé qu'une fois ; le bouton des filtres, lui, porte un
+     compte et une infobulle qui changent, d'où sa lucarne réécrite ici. */
   const param = document.getElementById('btnParametres');
   if (param && !param.firstChild) param.innerHTML = PARAM_ICONE;
+  const lucarne = document.getElementById('headFiltre');
+  if (lucarne) lucarne.innerHTML = filtreBtnHTML;
 
   majHauteurEntete();
 }

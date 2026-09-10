@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**452 fonctions**, 32 modules, 510 Ko de JavaScript.
+**451 fonctions**, 32 modules, 509 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -27,13 +27,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 6 | 68 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
 | [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 146 |
-| [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 74 |
+| [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
 | [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 165 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 67 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 9 | 220 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 6 | 214 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 183 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 68 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 10 | 145 |
@@ -651,7 +651,7 @@ Le brouillon des fenêtres à « Appliquer ». *12 fonctions, 146 lignes, 6.6 Ko
 
 ## js/couleurs.js
 
-Le vocabulaire des couleurs. *1 fonctions, 74 lignes, 2 Ko.*
+Le vocabulaire des couleurs. *1 fonctions, 77 lignes, 2.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -753,11 +753,10 @@ Les recalculs annoncés. *9 fonctions, 220 lignes, 9.6 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *6 fonctions, 214 lignes, 11 Ko.*
+L'en-tête et la barre des onglets. *5 fonctions, 183 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `statsCatalogue()` | — |
 | `majHauteurEntete()` | La hauteur de l'entête, publiée pour le CSS : les sections s'en servent comme marge de défilement et s'arrêtent sous elle plutôt que derrière. |
 | `renderTop()` | — |
 | `renderOnglets()` | La barre ne se réécrit pas, elle change d'attributs : la réécrire emporterait le focus du bouton qu'on vient de presser, et les flèches n'auraient plus rien sous elles. |
