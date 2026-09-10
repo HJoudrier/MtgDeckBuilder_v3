@@ -298,6 +298,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .cimg{width:100%;aspect-ratio:488/680;object-fit:cover;border-radius:5px;background:#191524;display:block}
 .cardT.withimg, .card.withimg{padding:4px;gap:3px}
 .cardT.achat, .card.achat{border-color:var(--bad);box-shadow:0 0 0 1px rgba(211,87,63,.35) inset}
+.cardT.audeck, .card.audeck{border-color:var(--ok);box-shadow:0 0 0 1px rgba(79,159,104,.35) inset}
 .sugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px}
 .sugT{display:flex;flex-direction:column;gap:4px;padding:7px;border:1px solid var(--line);border-radius:9px;
   background:linear-gradient(160deg,var(--panel2),var(--bg2));cursor:pointer;text-align:left;position:relative}
@@ -318,6 +319,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .cardT .achatbadge, .card .achatbadge{position:absolute;right:4px;bottom:4px;font-size:9px;padding:1px 4px;border-radius:4px;
   background:rgba(20,16,30,.88);border:1px solid var(--bad);color:#e39a90}
 .lrow.achat{border-color:var(--bad)}
+.lrow.audeck{border-color:var(--ok)}
 .cardT.withimg .cname, .card.withimg .cname{font-size:11.5px;line-height:1.15}
 .detail .dimg{float:right;width:min(190px,38%);border-radius:9px;margin:0 0 8px 12px;background:#191524}
 .imgwrap{position:relative}

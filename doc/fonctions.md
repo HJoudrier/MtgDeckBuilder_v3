@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**451 fonctions**, 32 modules, 510 Ko de JavaScript.
+**452 fonctions**, 32 modules, 511 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -30,7 +30,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 74 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
-| [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 6 | 144 |
+| [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 165 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 67 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 9 | 220 |
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 6 | 219 |
@@ -704,12 +704,13 @@ Les éditions d'une même carte. *14 fonctions, 173 lignes, 6.9 Ko.*
 
 ## js/tuiles.js
 
-Les deux rendus d'une carte. *6 fonctions, 144 lignes, 9.3 Ko.*
+Les deux rendus d'une carte. *7 fonctions, 165 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `tagIllegal(card)` | Le tag « illégal », partout où une carte s'affiche. |
 | `tagGameChanger(card)` | Le tag des Game Changers : la liste de Wizards pour les paliers du Commander. |
+| `tagDeck(card, ctx)` | Ce que le deck a déjà pris. L'étiquette ne paraît que dans la collection : au deck elle serait vraie de toutes les cartes et n'apprendrait rien, et les listes annexes ont la leur. Le… |
 | `actesAnnexe(c, cle, avecBascule)` | Les gestes d'une carte garée dans une liste annexe : la remonter au deck, la passer à l'autre liste, ou l'en retirer. |
 | `cardTile(e, ctx)` | Les deux rendus d'une carte — vignette et ligne — n'offrent pas de bouton vers la fiche : un clic sur la vignette, ou n'importe où sur la ligne, l'ouvre déjà (js/app.js, la branche des… |
 | `cardRow(e, ctx)` | — |

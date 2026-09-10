@@ -24,6 +24,25 @@ function tagGameChanger(card) {
     title="Carte classée « Game Changer » par Wizards : sa présence hausse le palier d'un deck Commander. Le palier 2 n'en admet aucune, le palier 3 jusqu'à trois, les paliers 4 et 5 sans limite.">game changer</span>`;
 }
 
+/* Ce que le deck a déjà pris. L'étiquette ne paraît que dans la collection :
+   au deck elle serait vraie de toutes les cartes et n'apprendrait rien, et les
+   listes annexes ont la leur. Le contexte est donc lu ici plutôt qu'aux deux
+   appels — la vignette et la ligne ne peuvent pas en juger différemment.
+
+   Le titre dit la part montée sur le total possédé, parce que c'est la question
+   suivante : reste-t-il un exemplaire à jouer ? */
+function tagDeck(card, ctx) {
+  if (ctx !== 'collection') return '';
+  const n = S.deck.get(card.name) || 0;
+  if (!n) return '';
+  const ai = S.collection.get(card.name) || 0;
+  const reste = ai - n;
+  const aide = `${n} exemplaire(s) dans le deck sur ${ai} possédé(s)`
+    + (reste > 0 ? ` — il en reste ${reste} de disponible(s).` : ' — aucun ne reste disponible.');
+  return `<span class="tag" style="border-color:var(--ok);color:#7fc98f;background:rgba(79,159,104,.12)"
+    title="${esc(aide)}">dans le deck${n > 1 ? ` ×${n}` : ''}</span>`;
+}
+
 /* Les gestes d'une carte garée dans une liste annexe : la remonter au deck,
    la passer à l'autre liste, ou l'en retirer. Le pied d'une tuile ne tient
    que trois boutons — un de plus déborde sur la tuile voisine, qui vole
@@ -62,14 +81,15 @@ function cardTile(e, ctx) {
   })() : '';
   /* Le tag de liste annexe suit la carte partout sauf dans la liste
      elle-même, où il n'apprendrait rien. */
-  const tags = tagIllegal(c) + tagGameChanger(c) + tagsDeck + (ANNEXES[ctx] ? '' : tagAnnexe(c));
+  const tags = tagIllegal(c) + tagGameChanger(c) + tagsDeck + tagDeck(c, ctx)
+    + (ANNEXES[ctx] ? '' : tagAnnexe(c));
   const tagsHTML = tags ? `<div class="tags">${tags}</div>` : '';
 
   const scoreHTML = (ctx === 'deck' && note)
     ? `<div class="score-line mono small muted" title="${esc((note.reasons||[]).slice(0,3).join(' · '))}">score ${note.score.toFixed(1)}</div>`
     : '';
 
-  return `<div class="cardT card ${img?'withimg':''} ${dispo<=0?'zero':''} ${isCmd?'cmd':''} ${ctx==='deck'&&dispo<0?'achat':''}" data-card="${esc(c.name)}" data-ctx="${ctx}">
+  return `<div class="cardT card ${img?'withimg':''} ${dispo<=0?'zero':''} ${isCmd?'cmd':''} ${ctx==='deck'&&dispo<0?'achat':''} ${ctx==='collection'&&inDeck>0?'audeck':''}" data-card="${esc(c.name)}" data-ctx="${ctx}">
     ${isCmd ? `<span class="cmdbadge">Commandant</span>` : ''}
     ${img ? `<div class="imgwrap">
       <img class="cimg" src="${esc(face)}" alt="${esc(c.name)}" loading="lazy" decoding="async">
@@ -94,15 +114,16 @@ function cardTile(e, ctx) {
 
 function cardRow(e, ctx) {
   const c = e.card, dispo = availableFor(c), isCmd = S.commander === c.name;
+  const inDeck = S.deck.get(c.name) || 0;
   const note = ctx === 'deck' ? NOTES_DECK.get(c.name) : null;
   const scoreBadge = note ? `<span class="mono small muted" style="margin-left:auto;margin-right:8px" title="${esc((note.reasons||[]).slice(0,3).join(' · '))}">score ${note.score.toFixed(1)}</span>` : '';
   const dispoBadge = ctx === 'deck' && dispo < 0 ? `<span class="achatbadge" style="position:static;margin-left:6px">à acheter (${-dispo})</span>` : '';
 
-  return `<div class="lrow ${dispo<=0?'zero':''} ${isCmd?'cmd':''} ${ctx==='deck'&&dispo<0?'achat':''}" data-card="${esc(c.name)}" data-ctx="${ctx}">
+  return `<div class="lrow ${dispo<=0?'zero':''} ${isCmd?'cmd':''} ${ctx==='deck'&&dispo<0?'achat':''} ${ctx==='collection'&&inDeck>0?'audeck':''}" data-card="${esc(c.name)}" data-ctx="${ctx}">
     <span class="cname" data-act="fiche" data-name="${esc(c.name)}">${esc(c.name)}</span>
     <span class="costs">${manaHTML(c, true)}</span>
     <span class="small muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${esc(c.type)}</span>
-    ${tagIllegal(c)}${tagGameChanger(c)}
+    ${tagIllegal(c)}${tagGameChanger(c)}${tagDeck(c, ctx)}
     ${c.set ? `<span class="mono small muted" title="Édition ${esc(c.setName || c.set)}${c.num?`, carte n°${esc(c.num)}`:''}">${esc(c.set)}${c.num?` ${esc(c.num)}`:''}</span>` : ''}
     <span class="mono small">${eur(c.price)}</span>
     <span class="mono small">${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>

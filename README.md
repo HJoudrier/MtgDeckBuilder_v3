@@ -155,6 +155,16 @@ un fichier à couper : on lit moins pour comprendre une pièce, et on réécrit 
   relevé — ce que chaque capacité produit, sur qui porte l'effet (`textEff`), ce que les coûts consomment
   (`sacOutlet`) et ce qui la déclenche. Un terrain qui n'ajoute qu'un mana n'est pas du ramp, une carte qui se blesse
   elle-même ne fait pas de l'interaction, une contrainte qu'on s'impose n'est pas du stax.
+- Une carte de la collection déjà montée dans le deck se voit : liseré vert (`--ok`) doublé d'un anneau
+  intérieur sur sa vignette comme sur sa ligne, et étiquette « dans le deck », suffixée de `×N` au-delà
+  d'un exemplaire, dont le titre dit la part montée sur le total possédé. `tagDeck()` (`js/tuiles.js`)
+  ne rend rien hors du contexte `collection` : au deck l'étiquette serait vraie de toutes les cartes,
+  et les listes annexes ont la leur (`tagAnnexe()`). Le vert fait la paire avec le rouge de « à
+  acheter » (`.achat`), qui est l'état inverse — et le seul autre liseré d'état d'une carte. La classe
+  `zero`, posée quand plus aucun exemplaire n'est disponible, ne recouvre pas cette notion et reste
+  sans style : une carte possédée en quatre exemplaires dont un est monté n'est pas `zero`, et une
+  carte possédée à zéro l'est sans être au deck.
+
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
 - La fiche d'une carte feuillette ses éditions, sous deux listes. « Mes éditions » vient de `card.impressions`,
