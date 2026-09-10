@@ -381,7 +381,17 @@ document.addEventListener('click', ev => {
   }
 
   if (act === 'fiche') {
+    /* Le fil de lecture part de l'endroit d'où l'on ouvre la fiche : la
+       section qui porte le bouton, dans l'ordre où elle affiche ses cartes. */
+    poseParcoursFiche(b, b.dataset.name);
     openCardModal(b.dataset.name);
+    return;
+  }
+
+  /* Les deux boutons de l'entête d'une fiche : la carte précédente, la
+     suivante, dans la liste qu'on parcourait. */
+  if (act === 'ficheNav') {
+    ficheVoisine(parseInt(b.dataset.pas, 10) || 0);
     return;
   }
 
@@ -617,7 +627,7 @@ document.addEventListener('click', ev => {
   const tile = b.closest('[data-card]');
   if (tile) {
     const nom = tile.dataset.card;
-    if (nom) openCardModal(nom);
+    if (nom) { poseParcoursFiche(tile, nom); openCardModal(nom); }
     return;
   }
 });
@@ -807,6 +817,19 @@ document.addEventListener('keydown', ev => {
     ev.preventDefault();
     appliquerBudget();
   }
+  /* Les flèches, une fiche ouverte : la carte précédente, la suivante — les
+     mêmes que les deux boutons de son entête. Un champ de saisie garde ses
+     flèches, et la barre d'onglets les siennes : la fiche est modale, elle
+     n'a pas le focus en même temps qu'eux. */
+  const dlgFiche = document.getElementById('dlg');
+  if (dlgFiche && dlgFiche.open && dlgFiche.querySelector('.fiche[data-fiche]')
+      && (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight')
+      && !(ev.target && ev.target.closest && ev.target.closest('input, textarea, select'))) {
+    ev.preventDefault();
+    ficheVoisine(ev.key === 'ArrowLeft' ? -1 : 1);
+    return;
+  }
+
   /* La barre d'onglets au clavier, selon le motif « tablist » : les flèches
      parcourent les onglets, Origine et Fin vont aux extrémités, et la page
      suit le focus. La tabulation, elle, n'entre qu'une fois dans la barre. */

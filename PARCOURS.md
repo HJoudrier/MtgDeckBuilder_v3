@@ -34,9 +34,9 @@ Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` défini
 | [`js/stats.js`](README.md#jsstatsjs--statistiques) | Statistiques | 3 | 5 Ko |
 | [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 43 | 51 Ko |
 | [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 18 | 25 Ko |
-| [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 35 | 45 Ko |
-| [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 103 | 85 Ko |
-| [`js/app.js`](README.md#jsappjs--démarrage-et-évènements) | Démarrage et évènements | 1 | 29 Ko |
+| [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 38 | 49 Ko |
+| [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 103 | 91 Ko |
+| [`js/app.js`](README.md#jsappjs--démarrage-et-évènements) | Démarrage et évènements | 1 | 30 Ko |
 
 `js/app.js` ne déclare qu'une fonction — `demarrer()`. Tout le reste y est écouteurs : le module
 est un aiguillage, non une bibliothèque. C'est le point d'entrée de presque tous les parcours qui

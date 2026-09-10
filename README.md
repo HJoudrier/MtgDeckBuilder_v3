@@ -706,7 +706,19 @@ s'applique à la grille des tuiles, et le menu disparaît en vue liste.
 Composition, équilibre des rôles, commandant, conformité au format et cartes à acheter,
 plus les deux listes tenues à côté de la liste principale : la réserve et l'étude.
 
-*12 fonction(s), 13 Ko*
+La **fiche d'une carte** s'ouvre d'un clic sur elle, où qu'elle paraisse. Son entête porte le nom
+au centre et, de part et d'autre, deux boutons qui mènent à la carte précédente et à la suivante —
+celui de droite a pris la place de la croix, la fenêtre se fermant par Échap, par l'arrière-plan ou
+par le bouton « Fermer » de son pied. Les flèches ← et → du clavier font la même chose. Le fil
+qu'ils suivent est relevé **sur le document** au moment du geste (`poseParcoursFiche()`) : les
+cartes de la section d'où part le clic, dans l'ordre où elle les affiche — filtres, groupement,
+tri, pagination et catégories repliées y sont déjà, et il n'y a rien à reconstruire depuis l'état.
+Seuls les noms sont retenus, un rendu pouvant survenir entre deux fiches. Les extrémités ne
+bouclent pas : le bouton devient inerte, ce qui se voit mieux qu'un saut à l'autre bout. Une fiche
+ouverte hors d'une liste — la pastille du commandant, un nom cité dans un texte — n'a pas de fil,
+et ses deux boutons restent inertes.
+
+*38 fonction(s), 49 Ko*
 
 La section porte trois listes. La **liste principale** est le deck : elle seule compte dans la
 taille, la conformité au format, la courbe de mana, l'équilibre des rôles et les achats. À côté
@@ -810,7 +822,10 @@ Données : `RETOURNEES`
 | `visuelAttenteHTML()` | Carte vide et son icône de chargement, le temps que le visuel arrive. |
 | `rafraichirFiche()` | Reconstruit la fiche ouverte quand Scryfall a répondu ou renoncé. |
 | `ficheImageKO(img)` | Bascule sur ce rendu texte quand le visuel ne se charge pas. |
-| `openCardModal(name)` | Ouvre la fiche dans une fenêtre. |
+| `openCardModal(name)` | Ouvre la fiche dans une fenêtre : le nom au centre de l'entête, une flèche de chaque côté. |
+| `poseParcoursFiche(el,nom)` | Relève le fil de lecture sur le document : les cartes de la section d'où part le geste, dans l'ordre affiché. |
+| `ficheVoisine(pas)` | Passe à la carte précédente ou suivante de ce fil, et rend le focus au bouton pressé. |
+| `enteteFiche(nom)` | L'entête de la fiche : le nom, son rang dans le fil, et les deux boutons de parcours. |
 | `renderTop()` | Barre d'en-tête : totaux, bouton « Filtres », puces des filtres actifs et pastilles qui ouvrent les fenêtres — Format, Collection, Catalogue, Budget. |
 | `openFiltresModal()` | Ouvre la fenêtre des filtres avancés depuis l'en-tête, et y ouvre un brouillon. |
 | `verseBrouillon()` | Verse le brouillon dans l'état : le seul moment où une fenêtre à brouillon touche à ce que l'atelier montre. |
@@ -885,7 +900,7 @@ Données : `RETOURNEES`
 | `majApercu()` | Met à jour l'aperçu quand le visuel arrive. |
 | `cacherApercu()` | Masque l'aperçu. |
 | `toast(msg)` | Message temporaire en bas d'écran. |
-| `openDialog(title,bodyHTML,footHTML,wide)` | Ouvre une fenêtre modale, sans la rouvrir si elle l'est déjà. |
+| `openDialog(title,bodyHTML,footHTML,wide,entete)` | Ouvre une fenêtre modale, sans la rouvrir si elle l'est déjà. `entete` remplace le titre suivi de sa croix — c'est ainsi que la fiche d'une carte pose ses deux boutons de parcours. |
 
 ### `js/app.js` — Démarrage et évènements
 

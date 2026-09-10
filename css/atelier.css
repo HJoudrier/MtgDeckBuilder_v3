@@ -415,6 +415,16 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 dialog{border:1px solid var(--line2);border-radius:var(--r);background:var(--panel);color:var(--txt);max-width:min(560px,94vw);padding:0}
 dialog::backdrop{background:rgba(8,6,14,.7)}
 .dlg-h{padding:12px 14px;border-bottom:1px solid var(--line);font-family:var(--display);font-size:16px}
+/* L'entête d'une fiche de carte : le nom au centre, une flèche de chaque côté
+   — celle de droite a pris la place de la croix. Un bouton inerte reste
+   visible plutôt que de disparaître : le titre garderait sinon son centre au
+   prix d'un saut, aux deux extrémités de la liste parcourue. */
+.dlg-h-nav{display:flex;align-items:center;gap:10px;width:100%}
+.dlg-titre{flex:1;min-width:0;margin:0;text-align:center;font-family:var(--display);font-size:17px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dlg-nav{flex:0 0 auto;padding:1px 11px;line-height:1;font-size:19px}
+.dlg-nav[disabled]{opacity:.3;cursor:default}
+.dlg-nav[disabled]:hover{border-color:var(--line2);color:inherit}
 .dlg-b{padding:14px;display:flex;flex-direction:column;gap:10px;max-height:min(68vh,620px);overflow:auto}
 dialog.wide{max-width:min(760px,96vw)}
 .fiche{display:flex;gap:14px;flex-wrap:wrap}
