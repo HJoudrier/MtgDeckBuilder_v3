@@ -605,7 +605,7 @@ document.addEventListener('click', ev => {
   }
 
   /* Un renvoi d'une section à une autre : le bouton nomme la section, et
-     l'onglet qui la porte s'ouvre au passage (`allerVersSection`, js/ui.js).
+     l'onglet qui la porte s'ouvre au passage (`allerVersSection`, js/entete.js).
      Le graphe s'en sert pour mener aux pistes qu'il branche, sur sa propre
      page, ou au classement complet dans l'onglet Catalogue. */
   if (act === 'allerSection') {

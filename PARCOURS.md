@@ -20,23 +20,12 @@ faut le reconstituer à la lecture. C'est ce travail-là, fait une fois.
 Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` définissant l'analyseur dont
 `cartes.js` se sert pour bâtir la base livrée.
 
-| Module | Rôle | Fonctions | Taille |
-|---|---|---|---|
-| [`js/effets.js`](README.md#jseffetsjs--lecture-des-effets-des-cartes) | Lecture des effets des cartes | 14 | 28 Ko |
-| [`js/cartes.js`](README.md#jscartesjs--base-de-cartes) | Base de cartes | 30 | 48 Ko |
-| [`js/etat.js`](README.md#jsetatjs--état-et-filtrage) | État et filtrage | 41 | 27 Ko |
-| [`js/groupes.js`](README.md#jsgroupesjs--grouper-et-trier-les-listes) | Grouper et trier les listes | 16 | 17 Ko |
-| [`js/marche.js`](README.md#jsmarchejs--cardmarket) | Cardmarket | 5 | 2 Ko |
-| [`js/scryfall.js`](README.md#jsscryfalljs--accès-à-scryfall) | Accès à Scryfall | 25 | 24 Ko |
-| [`js/stockage.js`](README.md#jsstockagejs--sauvegarde-locale) | Sauvegarde locale | 14 | 21 Ko |
-| [`js/externes.js`](README.md#jsexternesjs--edhrec-et-commander-spellbook) | EDHREC et Commander Spellbook | 81 | 65 Ko |
-| [`js/graphe.js`](README.md#jsgraphejs--graphe-des-capacités) | Graphe des capacités | 4 | 9 Ko |
-| [`js/stats.js`](README.md#jsstatsjs--statistiques) | Statistiques | 3 | 5 Ko |
-| [`js/suggestions.js`](README.md#jssuggestionsjs--suggestions-dajout) | Suggestions d'ajout | 46 | 55 Ko |
-| [`js/collection.js`](README.md#jscollectionjs--collection) | Collection | 18 | 25 Ko |
-| [`js/deck.js`](README.md#jsdeckjs--deck) | Deck | 38 | 49 Ko |
-| [`js/ui.js`](README.md#jsuijs--interface-commune) | Interface commune | 108 | 95 Ko |
-| [`js/app.js`](README.md#jsappjs--démarrage-et-évènements) | Démarrage et évènements | 1 | 32 Ko |
+Le plan des modules — leur famille et leur rôle — est dans le
+[README](README.md#organisation) ; l'inventaire de leurs fonctions dans
+[doc/fonctions.md](doc/fonctions.md), que `node outils/genDoc.js` réécrit à partir des sources.
+Les diagrammes qui suivent nomment `interface` l'ensemble des modules communs — `dialogue.js`,
+`brouillon.js`, `recalcul.js`, `rendu.js`, `entete.js`, `outils.js` et les `fen*.js` : un seul
+participant, parce qu'un parcours en traverse plusieurs sans que la couture importe.
 
 `js/app.js` ne déclare qu'une fonction — `demarrer()`. Tout le reste y est écouteurs : le module
 est un aiguillage, non une bibliothèque. C'est le point d'entrée de presque tous les parcours qui
@@ -57,15 +46,15 @@ propre : le HTML est réécrit sans cesse, des gestionnaires attachés ne surviv
 listes annexes sont des `Map` ; les couleurs et les plis, des `Set`. Rien n'est immuable, rien
 n'est copié — sauf le brouillon d'une fenêtre de réglage, qui met de côté ce qu'il modifie.
 
-**Le recalcul.** `recalculerAvecProgression(raison)` (`js/ui.js`) est le passage obligé de
+**Le recalcul.** `recalculerAvecProgression(raison)` (`js/recalcul.js`) est le passage obligé de
 tout geste qui change le deck ou les filtres. Il relève l'ancre de défilement, demande à
-`recalculLong()` (`js/ui.js`) si le travail vaut une barre de progression, puis :
+`recalculLong()` (`js/recalcul.js`) si le travail vaut une barre de progression, puis :
 
 - **court** — `renderAll()` sur-le-champ ;
 - **long** — `prechauffeCandidats()` puis `prepareSuggestions()` par tranches, la main rendue au
   navigateur entre chacune, une boîte ouverte seulement si le travail dure plus que `DELAI_BOITE`.
 
-**Le rendu.** `renderAll()` (`js/ui.js`) pose d'abord l'onglet ouvert — `renderOnglets` —, puis
+**Le rendu.** `renderAll()` (`js/rendu.js`) pose d'abord l'onglet ouvert — `renderOnglets` —, puis
 repeint l'en-tête et les sept sections — `renderTop`, `renderB` (collection), `renderC`
 (statistiques), `renderD` (graphe), `renderE` (deck), puis `renderSuggestions`, qui peint d'un
 coup les trois sections nées d'une même notation : `renderG` (les pistes du graphe), `renderH`
@@ -91,7 +80,7 @@ sequenceDiagram
     participant APP as app.js
     participant CARTES as cartes.js
     participant STOCK as stockage.js
-    participant UI as ui.js
+    participant UI as interface
     participant EXT as externes.js
 
     NAV->>APP: DOMContentLoaded
@@ -127,7 +116,7 @@ sequenceDiagram
     participant APP as app.js
     participant SUG as suggestions.js
     participant DECK as deck.js
-    participant UI as ui.js
+    participant UI as interface
     participant EXT as externes.js
     participant STOCK as stockage.js
     participant S as S (état)
@@ -192,7 +181,7 @@ sequenceDiagram
     participant APP as app.js
     participant DECK as deck.js
     participant S as S (état)
-    participant UI as ui.js
+    participant UI as interface
 
     U->>APP: clic « − » sur une tuile du deck
     APP->>DECK: removeFromDeck(nom)
@@ -227,7 +216,7 @@ sequenceDiagram
     autonumber
     actor U as Utilisateur
     participant APP as app.js
-    participant UI as ui.js
+    participant UI as interface
     participant S as S (état)
     participant EXT as externes.js
     participant SUG as suggestions.js
@@ -265,7 +254,7 @@ sequenceDiagram
 ```
 
 Un filtre appliqué hors fenêtre — une couleur cliquée dans l'en-tête, un rôle basculé — passe par
-`apresReglage(raison)` (`js/ui.js`), qui dégèle les suggestions, invalide les candidates et
+`apresReglage(raison)` (`js/brouillon.js`), qui dégèle les suggestions, invalide les candidates et
 appelle le même recalcul. C'est le point commun de tous les réglages : **un filtre change le
 vivier, donc tout le classement.**
 
@@ -276,7 +265,7 @@ Le moteur appelé par les parcours précédents, vu de près.
 ```mermaid
 sequenceDiagram
     autonumber
-    participant UI as ui.js
+    participant UI as interface
     participant SUG as suggestions.js
     participant ETAT as etat.js
     participant EXT as externes.js
@@ -371,7 +360,7 @@ sequenceDiagram
     participant CARTES as cartes.js
     participant DECK as deck.js
     participant SCRY as scryfall.js
-    participant UI as ui.js
+    participant UI as interface
 
     U->>APP: clic « Importer MTGO »
     APP->>COL: openImport(cible)
@@ -406,7 +395,7 @@ sequenceDiagram
     actor U as Utilisateur
     participant APP as app.js
     participant S as S (état)
-    participant UI as ui.js
+    participant UI as interface
     participant SUG as suggestions.js
 
     U->>APP: clic « ★ » sur une créature légendaire
@@ -428,7 +417,7 @@ sequenceDiagram
     participant SEC as renderB / renderE / renderSuggestions
     participant SCRY as scryfall.js
     participant API as api.scryfall.com
-    participant UI as ui.js
+    participant UI as interface
 
     SEC->>SCRY: queueScryfall(cartes affichées)
     SCRY->>SCRY: besoinScryfall(c) — visuel, texte ou édition manquants
@@ -490,7 +479,7 @@ sequenceDiagram
     participant APP as app.js
     participant DECK as deck.js
     participant MARCHE as marche.js
-    participant UI as ui.js
+    participant UI as interface
 
     U->>APP: clic « Acheter » sur une vignette hors collection
     APP->>DECK: buyCard(nom)

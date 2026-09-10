@@ -629,7 +629,7 @@ function sugRow(s) {
 
 /* Le budget et les préférences d'achat se règlent désormais dans la fenêtre
    « Achats sur Cardmarket », ouverte par la pastille « Budget » de l'en-tête
-   (js/ui.js). Ces deux lignes en peignent le résumé, et la fenêtre les lit
+   (js/fenBudget.js). Ces deux lignes en peignent le résumé, et la fenêtre les lit
    sous son brouillon : elles annoncent donc ce que « Appliquer » donnerait. */
 function ligneBudget() {
   const left = S.budget.total - spent();
