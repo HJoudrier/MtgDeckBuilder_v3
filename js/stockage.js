@@ -94,7 +94,6 @@ function snapshot() {
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
     majIgnoree: S.majIgnoree,
-    headerCompact: S.headerCompact,
     cartes,
     enrich
   };
@@ -219,15 +218,14 @@ function restore(d) {
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
   if (typeof d.majIgnoree === 'string') S.majIgnoree = d.majIgnoree;
-  if (typeof d.headerCompact === 'boolean') S.headerCompact = d.headerCompact;
-  /* L'onglet ouvert revient comme l'entête compact : on retrouve l'atelier là
-     où on l'avait laissé. Un nom qu'un onglet d'hier portait est traduit
+  /* L'onglet ouvert se retient : on retrouve l'atelier là où on l'avait
+     laissé. Un nom qu'un onglet d'hier portait est traduit
      (`ONGLETS_ANCIENS`) ; une clé inconnue est écartée, sans quoi plus aucune
      page ne paraîtrait. */
   if (ONGLETS[d.onglet]) S.onglet = d.onglet;
   else if (ONGLETS_ANCIENS[d.onglet]) S.onglet = ONGLETS_ANCIENS[d.onglet];
-  /* Les parties repliées de la section Deck, comme l'en-tête compact : une
-     préférence d'affichage, qu'on retrouve d'une séance à l'autre. */
+  /* Les parties repliées de la section Deck : une préférence d'affichage, qu'on
+     retrouve d'une séance à l'autre, comme l'onglet ouvert. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
   /* Les commandants secondaires écartés : une préférence, comme les plis. */

@@ -75,6 +75,10 @@ l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, les données de
 catalogue. Les deux voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
 `.head-actions` les ancre, et la réserve qui leur laisse la place est portée par `.top-in` là où les
 pastilles partagent leur ligne, par `.brand` sous 640 px où les pastilles passent seules à la ligne.
+L'en-tête ne se replie plus : un bouton « Stats » basculait un mode compact qui, sous 640 px,
+s'allumait aussi tout seul — deux mécanismes pour une même chose, l'un en JavaScript et figé au
+chargement, l'autre en CSS et suivant le redimensionnement. Seul le second demeure, et la mise en
+page du téléphone tient désormais dans le bloc `@media (max-width:640px)`.
 Deux pastilles disaient ici ce que la collection retenait et ce que le catalogue contenait ; les
 sections le disent déjà, et mieux — la phrase de causes de la collection énumère ce qui écarte chaque
 carte, `ligneCatalogue()` compte les candidates avec le motif des écartées. Les retirer épargne à

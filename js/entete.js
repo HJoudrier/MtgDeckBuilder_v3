@@ -1,10 +1,11 @@
 /* =====================================================================
    js/entete.js — L'en-tête et la barre des onglets
 
-   Le bandeau du haut : les pastilles de format, de budget et de filtres, les
-   compteurs, l'engrenage des paramètres. Puis les onglets, qui ne redessinent
-   rien en changeant — les cinq sections sont déjà peintes, on masque et on
-   démasque, chacun retrouvant son défilement.
+   Le bandeau du haut : la barre de mana et le nom de la combinaison, le format,
+   le budget, les puces des filtres en vigueur ; au coin haut-droit, le bouton
+   des filtres et l'engrenage des paramètres. Puis les onglets, qui ne
+   redessinent rien en changeant — les cinq sections sont déjà peintes, on masque
+   et on démasque, chacun retrouvant son défilement.
    ===================================================================== */
 
 const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
@@ -19,8 +20,9 @@ const PARAM_ICONE = `<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden
 
 /* La hauteur de l'entête, publiée pour le CSS : les sections s'en servent
    comme marge de défilement et s'arrêtent sous elle plutôt que derrière. Elle
-   se relève après coup — l'entête se replie et ses pastilles s'enroulent, si
-   bien qu'une mesure prise avant l'écriture donnerait la hauteur d'avant. */
+   se relève après coup — les pastilles et les puces de filtres s'enroulent sur
+   autant de lignes qu'il leur en faut, si bien qu'une mesure prise avant
+   l'écriture donnerait la hauteur d'avant. */
 function majHauteurEntete() {
   const entete = document.getElementById('topHeader');
   if (entete) document.documentElement.style.setProperty('--h-entete', entete.offsetHeight + 'px');
@@ -28,8 +30,6 @@ function majHauteurEntete() {
 
 function renderTop() {
   const topStats = document.getElementById('topStats');
-  const topHeader = document.getElementById('topHeader');
-  if (topHeader) topHeader.classList.toggle('compact', !!S.headerCompact);
   if (!topStats) { majHauteurEntete(); return; }
 
   const f = fmt();
@@ -87,12 +87,6 @@ function renderTop() {
         : 'Aucun budget : seules les cartes de votre collection sont proposées — cliquer pour en fixer un'}">Budget <b>${S.budget.total > 0 ? eur(Math.max(0, left)) : '—'}</b></button>
   `;
 
-  const toggleBtnHTML = `
-    <button type="button" class="btn sm head-toggle ${S.headerCompact ? 'is-compact' : ''}" data-act="toggleHeader" title="${S.headerCompact ? 'Déplier l\'en-tête (afficher toutes les statistiques et actions)' : 'Réduire l\'en-tête (navigation compacte)'}" aria-pressed="${!S.headerCompact}">
-      ${S.headerCompact ? '▾ Stats' : '▴ Réduire'}
-    </button>
-  `;
-
   /* Deux pastilles disaient ici ce que la collection retenait et ce que le
      catalogue contenait. Les sections le disent déjà, et mieux : la phrase de
      causes de la collection énumère ce qui écarte chaque carte, et
@@ -105,7 +99,6 @@ function renderTop() {
     ${filtreChipsHTML}
     ${deckPillHTML}
     ${budgetPillHTML}
-    ${toggleBtnHTML}
   `;
 
   /* L'engrenage et le bouton des filtres partagent le coin haut-droit : tous

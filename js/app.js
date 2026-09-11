@@ -62,15 +62,6 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'toggleHeader') {
-    S.headerCompact = !S.headerCompact;
-    try {
-      localStorage.setItem('mtg_compact_header', S.headerCompact ? '1' : '0');
-    } catch(e) {}
-    renderTop();
-    return;
-  }
-
   if (act === 'filtres') {
     openFiltresModal();
     return;

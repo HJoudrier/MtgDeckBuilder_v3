@@ -7,17 +7,17 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**451 fonctions**, 32 modules, 509 Ko de JavaScript.
+**451 fonctions**, 32 modules, 508 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
 | [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 14 | 516 |
 | [`cartes.js`](#jscartesjs) | Base de cartes, indexation, analyse & typage | 30 | 712 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 622 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 621 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 16 | 358 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`scryfall.js`](#jsscryfalljs) | Intégration Scryfall, symboles, visuels & complétion | 25 | 568 |
-| [`stockage.js`](#jsstockagejs) | Persistance locale (localStorage) & gestion des sauvegardes | 15 | 441 |
+| [`stockage.js`](#jsstockagejs) | Persistance locale (localStorage) & gestion des sauvegardes | 15 | 439 |
 | [`externes.js`](#jsexternesjs) | EDHREC, Commander Spellbook & Catalogue complet Scryfall | 81 | 1587 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 168 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
@@ -33,7 +33,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 165 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 67 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 9 | 220 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 183 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 176 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 68 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 10 | 145 |
@@ -42,7 +42,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 127 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 82 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 134 |
-| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 902 |
+| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 893 |
 
 ## js/effets.js
 
@@ -130,7 +130,7 @@ Base de cartes, indexation, analyse & typage. *30 fonctions, 712 lignes, 48 Ko.*
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *42 fonctions, 622 lignes, 27 Ko.*
+État global de l'application & utilitaires. *42 fonctions, 621 lignes, 27 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -298,7 +298,7 @@ Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 568 ligne
 
 ## js/stockage.js
 
-Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 441 lignes, 21 Ko.*
+Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 439 lignes, 21 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -753,7 +753,7 @@ Les recalculs annoncés. *9 fonctions, 220 lignes, 9.6 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *5 fonctions, 183 lignes, 9.9 Ko.*
+L'en-tête et la barre des onglets. *5 fonctions, 176 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -881,7 +881,7 @@ Fenêtres d'export et d'effacement. *3 fonctions, 134 lignes, 6.9 Ko.*
 
 ## js/app.js
 
-Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 902 lignes, 32 Ko.*
+Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 893 lignes, 31 Ko.*
 
 | Fonction | Rôle |
 |---|---|

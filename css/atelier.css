@@ -35,12 +35,9 @@ header.top{
   transition:padding .2s ease, background .2s ease;
 }
 .top-in{max-width:1180px;margin:0 auto;padding:8px 12px;display:flex;gap:8px 12px;align-items:center;flex-wrap:wrap}
-header.top.compact .top-in{padding:5px 10px;gap:6px 10px}
 .brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand h1{font-size:18px;letter-spacing:.3px;white-space:nowrap}
 .brand .sub{color:var(--dim2);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
-header.top.compact .brand h1{font-size:15px}
-header.top.compact .brand .sub{display:none}
 
 /* `min-width:0` : les décomptes s'enroulent d'eux-mêmes, et leur boîte peut
    donc se rétrécir pour laisser l'engrenage sur la même ligne qu'eux. Sans
@@ -56,7 +53,7 @@ header.top.compact .brand .sub{display:none}
 .top-in{position:relative;padding-right:150px}
 /* Les deux commandes du coin, côte à côte : le bouton des filtres puis
    l'engrenage. C'est le conteneur qui est ancré, non plus chaque bouton — un
-   seul point à déplacer quand l'entête se replie ou se réduit. */
+   seul point à déplacer d'une largeur d'écran à l'autre. */
 .head-actions{position:absolute;right:12px;top:8px;display:flex;align-items:center;gap:6px}
 .head-param{
   display:inline-flex;align-items:center;justify-content:center;
@@ -64,9 +61,6 @@ header.top.compact .brand .sub{display:none}
   background:var(--panel);color:var(--dim);cursor:pointer;transition:color .15s ease,border-color .15s ease
 }
 .head-param:hover{color:var(--brass);border-color:var(--brass)}
-header.top.compact .top-in{padding-right:144px}
-header.top.compact .head-actions{right:10px;top:5px}
-header.top.compact .head-param{width:26px;height:26px}
 .pill{
   font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:99px;
   border:1px solid var(--line2); background:var(--panel); color:var(--dim);white-space:nowrap;
@@ -171,15 +165,6 @@ header.top.compact .head-param{width:26px;height:26px}
   .filtre-ligne .filtre-nom{grid-column:1 / -1;font-size:12px;color:var(--dim)}
 }
 
-.head-toggle{
-  display:inline-flex;align-items:center;gap:4px;padding:3px 9px;
-  font-size:11.5px;font-weight:600;border-color:var(--brass-d);
-  color:var(--brass);background:rgba(211,164,65,.1);border-radius:6px;
-}
-.head-toggle:hover{background:rgba(211,164,65,.22);border-color:var(--brass)}
-.head-toggle.is-compact{color:var(--dim);border-color:var(--line2);background:var(--panel)}
-.head-toggle.is-compact:hover{color:var(--txt);border-color:var(--brass)}
-
 /* ---------- onglets ---------- */
 /* La barre vit dans l'entête collante : elle ne quitte jamais l'écran, et
    passer d'un pan de l'atelier à l'autre ne demande pas de remonter. */
@@ -202,8 +187,6 @@ header.top.compact .head-param{width:26px;height:26px}
 .onglet .onglet-pt{width:6px;height:6px;border-radius:99px;background:var(--brass);opacity:0;transition:opacity .2s ease}
 .onglet.travaille .onglet-pt{opacity:1;animation:battement 1.2s ease-in-out infinite}
 @keyframes battement{0%,100%{opacity:1}50%{opacity:.25}}
-header.top.compact .onglets{padding:0 10px}
-header.top.compact .onglet{padding:6px 11px 5px;font-size:13px}
 
 /* Une page masquée n'est pas mise en page : rien n'y est mesuré, et son
    contenu reste rendu, prêt à paraître d'un seul attribut. */
@@ -590,7 +573,6 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .head-mana-bar{gap:2px}
   .head-mana-bar .mana-btn{width:25px;height:25px;min-width:25px;min-height:25px}
   .pill{font-size:10.5px;padding:3px 7px}
-  .head-toggle{font-size:10.5px;padding:2px 8px;margin-left:auto}
   .head-filtre{font-size:10.5px;padding:2px 8px}
   .filtre-chip{font-size:10px;max-width:170px}
   .filtre-chip .chip-txt{max-width:135px;padding-left:8px}
