@@ -67,6 +67,7 @@
   "fenParametres.js",
   "fenBudget.js",
   "fenFiltres.js",
+  "fenAffichage.js",
   "fenListes.js",
   "boiteCatalogue.js",
   "fenExport.js",
@@ -1805,8 +1806,11 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "corpsAffichage",
     "menuColonnes",
-    "ouvreGrille"
+    "openAffichageModal",
+    "ouvreGrille",
+    "resumeAffichage"
    ]
   },
   {
@@ -1820,8 +1824,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "listeSuggestions",
-    "renderB"
+    "listeSuggestions"
    ]
   },
   {
@@ -1850,7 +1853,6 @@
    "appeleePar": [
     "blocEdhrec",
     "listeSuggestions",
-    "renderB",
     "renderE"
    ]
   },
@@ -2398,6 +2400,7 @@
     "activerOnglet",
     "app.js (chargement)",
     "appliqueCatalogueAuxCartes",
+    "appliquerAffichage",
     "brancherCatalogue",
     "chercheTexte",
     "chercheVerso",
@@ -4765,26 +4768,27 @@
    "ligne": 73,
    "chargement": false,
    "appelle": [
-    "barreGroupeTri",
     "cardRow",
     "cardTile",
     "collectionCards",
+    "esc",
     "filtered",
     "filtresActifs",
     "groupeCartes",
     "groupePlie",
     "ligneCausesCollection",
-    "menuColonnes",
     "noteMultiple",
     "ouvreGrille",
     "queueScryfall",
     "rendGroupes",
-    "renderTop"
+    "renderTop",
+    "resumeAffichage"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliquerAffichage",
     "gestesDeck",
     "gestesGraphe",
     "gestesVue",
@@ -5517,6 +5521,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliquerAffichage",
     "gestesVue",
     "renderAll",
     "runScryQueue"
@@ -5745,6 +5750,7 @@
     "cardRow",
     "cardTile",
     "champBudget",
+    "corpsAffichage",
     "corpsBoiteRecalcul",
     "corpsFiltres",
     "corpsFormat",
@@ -5778,6 +5784,7 @@
     "panneauEdhrec",
     "proposerMajCatalogue",
     "refCarte",
+    "renderB",
     "renderD",
     "renderE",
     "renderTop",
@@ -5978,6 +5985,7 @@
     "gestesDeck",
     "gestesDonnees",
     "openAdd",
+    "openAffichageModal",
     "openBudgetModal",
     "openCardModal",
     "openFiltresModal",
@@ -6000,6 +6008,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliquerAffichage",
     "appliquerBudget",
     "appliquerFiltres",
     "appliquerFormat",
@@ -6025,6 +6034,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "openAffichageModal",
     "openBudgetModal",
     "openFiltresModal",
     "openFormatModal",
@@ -6081,6 +6091,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "corpsAffichage",
     "corpsBudget",
     "corpsCatalogue",
     "corpsFiltres",
@@ -6107,7 +6118,9 @@
    "appeleePar": [
     "app.js (chargement)",
     "gestesReglages",
-    "gestesVue"
+    "gestesVue",
+    "glisseColonnes",
+    "reglageAffichage"
    ]
   },
   {
@@ -6184,6 +6197,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "appliquerAffichage",
     "appliquerBudget",
     "appliquerFiltres",
     "appliquerFormat",
@@ -7533,6 +7547,135 @@
    ]
   },
   {
+   "nom": "indexColonnes",
+   "fichier": "fenAffichage.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsAffichage",
+    "openAffichageModal"
+   ]
+  },
+  {
+   "nom": "resumeAffichage",
+   "fichier": "fenAffichage.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [
+    "colonnesDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsAffichage",
+    "renderB"
+   ]
+  },
+  {
+   "nom": "corpsAffichage",
+   "fichier": "fenAffichage.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [
+    "avecBrouillon",
+    "colonnesDe",
+    "esc",
+    "indexColonnes",
+    "resumeAffichage"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "majFenetreAffichage",
+    "openAffichageModal"
+   ]
+  },
+  {
+   "nom": "majFenetreAffichage",
+   "fichier": "fenAffichage.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [
+    "corpsAffichage"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "openAffichageModal",
+    "reglageAffichage"
+   ]
+  },
+  {
+   "nom": "reglageAffichage",
+   "fichier": "fenAffichage.js",
+   "ligne": 93,
+   "chargement": false,
+   "appelle": [
+    "majFenetreAffichage",
+    "modifieBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "glisseColonnes",
+   "fichier": "fenAffichage.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [
+    "modifieBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "appliquerAffichage",
+   "fichier": "fenAffichage.js",
+   "ligne": 121,
+   "chargement": false,
+   "appelle": [
+    "closeDialog",
+    "renderB",
+    "renderE",
+    "scheduleSave",
+    "verseBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages"
+   ]
+  },
+  {
+   "nom": "openAffichageModal",
+   "fichier": "fenAffichage.js",
+   "ligne": 131,
+   "chargement": false,
+   "appelle": [
+    "colonnesDe",
+    "corpsAffichage",
+    "indexColonnes",
+    "openDialog",
+    "ouvreBrouillon"
+   ],
+   "appelleDiffere": [
+    "majFenetreAffichage"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages"
+   ]
+  },
+  {
    "nom": "listeArchetypesHTML",
    "fichier": "fenListes.js",
    "ligne": 17,
@@ -7809,9 +7952,10 @@
   {
    "nom": "gestesReglages",
    "fichier": "gestesReglages.js",
-   "ligne": 8,
+   "ligne": 9,
    "chargement": false,
    "appelle": [
+    "appliquerAffichage",
     "appliquerBudget",
     "appliquerFiltres",
     "appliquerFormat",
@@ -7823,6 +7967,7 @@
     "groupeCartes",
     "interrompreCatalogue",
     "modifieBrouillon",
+    "openAffichageModal",
     "openBudgetModal",
     "openFormatModal",
     "openParametresModal",
@@ -7960,6 +8105,7 @@
     "gestesGraphe",
     "gestesReglages",
     "gestesVue",
+    "glisseColonnes",
     "invaliderCandidats",
     "majFiltre",
     "majListeArchetypes",
@@ -7972,6 +8118,7 @@
     "montrerApercu",
     "placerApercu",
     "refreshSuggestions",
+    "reglageAffichage",
     "renderAll",
     "renderB",
     "renderE",
@@ -7987,7 +8134,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 240,
+   "ligne": 251,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",

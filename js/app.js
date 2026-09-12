@@ -56,6 +56,10 @@ document.addEventListener('input', ev => {
     majResumeFiltres();
     return;
   }
+  if (t.dataset.affglisse !== undefined) {
+    glisseColonnes(t);
+    return;
+  }
   if (t.dataset.recherche) {
     majResultats(t.dataset.recherche);
     return;
@@ -115,6 +119,13 @@ document.addEventListener('change', ev => {
   if (t.dataset.act === 'filtreLegal') {
     modifieBrouillon(() => { S.filtreLegal = !!t.checked; });
     apresReglage('Filtre de légalité modifié : les cartes retenues et les suggestions sont recalculées.');
+    return;
+  }
+  /* La fenêtre « Affichage » de la collection : ses quatre réglages vont au
+     brouillon, et seule la fenêtre se redessine — la collection attend
+     « Appliquer ». */
+  if (t.dataset.aff) {
+    reglageAffichage(t.dataset.aff, t);
     return;
   }
   /* Le rangement d'une section : chacune garde le sien, et seule celle qu'on

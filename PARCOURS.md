@@ -297,32 +297,73 @@ sequenceDiagram
 
 ### 3.6 Grouper et trier
 
+Le deck, le catalogue et EDHREC gardent leurs menus dans leur barre, et chaque choix agit au
+premier geste.
+
 ```mermaid
 sequenceDiagram
     autonumber
     actor U as Utilisateur
     participant APP as app.js
     participant GRP as groupes.js
-    participant SEC as collection.js / deck.js / suggestions.js
+    participant SEC as deck.js / suggestions.js
 
     U->>APP: choix dans « Grouper : … » ou « Trier : … »
     APP->>APP: S.groupes[liste] ou S.tris[liste] = valeur
-    alt section = collection
-        APP->>SEC: renderB()
-        SEC->>SEC: filtered()
-        opt tri « score »
-            SEC->>GRP: notesCollection(list)
-            Note over GRP: notée à la demande, mémorisée sous<br/>l'empreinte des suggestions
-        end
+    alt section = deck
+        APP->>SEC: renderE()
         SEC->>GRP: groupeCartes(list, mode, tri)
         SEC->>GRP: rendGroupes(section, groupes, mode, rendu)
-    else section = deck
-        APP->>SEC: renderE()
     else liste = suggestions (catalogue) ou edhrec
         APP->>SEC: refreshSuggestions()
         Note over SEC: deux barres, deux réglages : le catalogue et EDHREC<br/>se rangent chacun de son côté — EDHREC offrant en plus<br/>le taux d'inclusion et la synergie. Le tri « score » ne retrie pas :<br/>la liste arrive déjà ordonnée, ou gelée
     end
     APP->>APP: scheduleSave()
+```
+
+La collection, elle, règle les quatre d'un coup dans la fenêtre « Affichage » : rien ne bouge avant
+« Appliquer ».
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant AFF as fenAffichage.js
+    participant BR as brouillon.js
+    participant COL as collection.js / deckSection.js
+    participant GRP as groupes.js
+
+    U->>APP: clic « Affichage »
+    APP->>AFF: openAffichageModal()
+    AFF->>BR: ouvreBrouillon(['view','colonnes','groupes','tris'], majFenetreAffichage)
+    loop chaque réglage
+        U->>APP: radio, case « Auto », curseur ou menu
+        APP->>AFF: reglageAffichage(...) ou glisseColonnes(...)
+        AFF->>BR: modifieBrouillon(...)
+        Note over AFF: le curseur décoche « Auto » et ne réécrit<br/>que la phrase sous lui — réécrire la fenêtre<br/>emporterait le curseur qu'on tient
+        AFF->>AFF: majFenetreAffichage()
+    end
+    alt « Appliquer »
+        U->>APP: clic « Appliquer »
+        APP->>AFF: appliquerAffichage()
+        AFF->>BR: verseBrouillon()
+        opt le groupement ou le tri a changé
+            AFF->>AFF: S.limitB = PAGE
+        end
+        AFF->>COL: renderB()
+        opt tri « score »
+            COL->>GRP: notesCollection(list)
+            Note over GRP: notée à la demande, mémorisée sous<br/>l'empreinte des suggestions
+        end
+        COL->>GRP: groupeCartes(), rendGroupes()
+        AFF->>COL: renderE()
+        Note over AFF: liste ou grille est commun au deck,<br/>qui est donc repeint aussi
+        AFF->>AFF: scheduleSave(), closeDialog()
+    else Annuler, la croix, Échap, l'arrière-plan
+        APP->>BR: fermetureBrouillon()
+        Note over BR: rien n'ayant été appliqué,<br/>il n'y a rien à défaire
+    end
 ```
 
 ### 3.7 Replier une catégorie

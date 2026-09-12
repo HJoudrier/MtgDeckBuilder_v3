@@ -102,12 +102,7 @@ function renderB() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        ${barreGroupeTri('collection')}
-        <div class="seg">
-          <button data-view="grid" aria-pressed="${S.view==='grid'}">Grille</button>
-          <button data-view="list" aria-pressed="${S.view==='list'}">Liste</button>
-        </div>
-        ${S.view === 'grid' ? menuColonnes('collection') : ''}
+        <button class="btn" data-act="affichage" title="Disposition, colonnes, groupement et tri — ${esc(resumeAffichage())}">Affichage</button>
         <button class="btn" data-act="addCard">Ajouter</button>
         <button class="btn" data-act="import">Importer MTGO</button>
         ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}

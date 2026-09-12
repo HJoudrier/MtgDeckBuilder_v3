@@ -90,13 +90,14 @@ js/                 modules, chargés dans cet ordre :
   fenParametres.js  sauvegarde locale, collection, catalogue
   fenBudget.js      budget et achats
   fenFiltres.js     filtres de la collection
+  fenAffichage.js   liste ou grille, colonnes, groupement et tri de la collection
   fenListes.js      listes déroulantes des archétypes et des éditions
   boiteCatalogue.js progression du chargement de l'archive Scryfall
   fenExport.js      export du deck, liste d'achats, effacement
 
   — les gestes —
   gestesVue.js      fermer, cocher une couleur, changer d'onglet
-  gestesReglages.js « Appliquer » des quatre fenêtres, jauges, pagination
+  gestesReglages.js « Appliquer » des fenêtres de réglage, jauges, pagination
   gestesDeck.js     monter, démonter, garer, ouvrir une fiche
   gestesDonnees.js  sauvegarde, archive, EDHREC, import
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
@@ -271,6 +272,15 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   sans style : une carte possédée en quatre exemplaires dont un est monté n'est pas `zero`, et une
   carte possédée à zéro l'est sans être au deck.
 
+- La mise en page de la collection — liste ou grille, nombre de colonnes, groupement, tri — se règle
+  dans la fenêtre « Affichage » (`js/fenAffichage.js`), ouverte par le bouton du même nom. Ces quatre
+  réglages occupaient la barre de la section en quatre contrôles posés entre les boutons d'action :
+  la ligne débordait sur un écran étroit, et chaque geste repeignait aussitôt toute la collection.
+  La fenêtre les prend au brouillon et n'agit qu'à « Appliquer » — on choisit les quatre d'un coup,
+  et la collection n'est redessinée qu'une fois. Le bouton en porte le résumé dans son infobulle,
+  le réglage n'étant plus visible dans la barre. Le deck, le catalogue et EDHREC gardent les leurs
+  dans leur barre, où ils agissent toujours au premier geste : la fenêtre ne règle que la collection.
+  `S.view` est pourtant commun à la collection et au deck — « Appliquer » repeint donc les deux.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
 - La fiche d'une carte feuillette ses éditions, sous deux listes. « Mes éditions » vient de `card.impressions`,

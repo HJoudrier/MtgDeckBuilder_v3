@@ -83,19 +83,20 @@ digraph modules {
     "fenParametres.js" [label="js/fenParametres.js\n9 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
     "fenBudget.js" [label="js/fenBudget.js\n5 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "fenFiltres.js" [label="js/fenFiltres.js\n10 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "fenListes.js" [label="js/fenListes.js\n6 fonctions", fillcolor="#a8846d33", color="#a8846d"];
-    "boiteCatalogue.js" [label="js/boiteCatalogue.js\n6 fonctions", fillcolor="#6da88c33", color="#6da88c"];
-    "fenExport.js" [label="js/fenExport.js\n3 fonctions", fillcolor="#a86d8a33", color="#a86d8a"];
+    "fenListes.js" [label="js/fenListes.js\n6 fonctions", fillcolor="#6da88c33", color="#6da88c"];
+    "boiteCatalogue.js" [label="js/boiteCatalogue.js\n6 fonctions", fillcolor="#a86d8a33", color="#a86d8a"];
+    "fenExport.js" [label="js/fenExport.js\n3 fonctions", fillcolor="#96a86d33", color="#96a86d"];
   }
   subgraph "cluster_couche_5" {
     label="les gestes"; fontsize=16; fontcolor="#555555"; style="rounded"; color="#00000022"; penwidth=1.6;
-    "gestesVue.js" [label="js/gestesVue.js\n1 fonction", fillcolor="#96a86d33", color="#96a86d"];
-    "gestesReglages.js" [label="js/gestesReglages.js\n1 fonction", fillcolor="#6da8a433", color="#6da8a4"];
-    "gestesDeck.js" [label="js/gestesDeck.js\n1 fonction", fillcolor="#a89b6d33", color="#a89b6d"];
-    "gestesDonnees.js" [label="js/gestesDonnees.js\n1 fonction", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "gestesGraphe.js" [label="js/gestesGraphe.js\n1 fonction", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "app.js" [label="js/app.js\n1 fonction", fillcolor="#a8846d33", color="#a8846d"];
+    "gestesVue.js" [label="js/gestesVue.js\n1 fonction", fillcolor="#6da8a433", color="#6da8a4"];
+    "gestesReglages.js" [label="js/gestesReglages.js\n1 fonction", fillcolor="#a89b6d33", color="#a89b6d"];
+    "gestesDeck.js" [label="js/gestesDeck.js\n1 fonction", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "gestesDonnees.js" [label="js/gestesDonnees.js\n1 fonction", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "gestesGraphe.js" [label="js/gestesGraphe.js\n1 fonction", fillcolor="#a8846d33", color="#a8846d"];
+    "app.js" [label="js/app.js\n1 fonction", fillcolor="#6da88c33", color="#6da88c"];
   }
+    "fenAffichage.js" [label="js/fenAffichage.js\n8 fonctions", fillcolor="#a8846d33", color="#a8846d"];
 
   "edhrec.js" -> "cartes.js" [penwidth=4.00, color="#8a7fa8aa", tooltip="15 appel(s)"];
   "versions.js" -> "impressions.js" [penwidth=4.00, color="#6d8ca8aa", tooltip="14 appel(s)"];
@@ -105,7 +106,7 @@ digraph modules {
   "scryfallApplique.js" -> "cartes.js" [penwidth=3.82, color="#6da88caa", tooltip="10 appel(s)"];
   "sugListes.js" -> "barreGroupes.js" [penwidth=3.82, color="#a89b6daa", tooltip="10 appel(s)"];
   "candidats.js" -> "cartes.js" [penwidth=3.67, color="#6d8ca8aa", tooltip="9 appel(s)"];
-  "fenExport.js" -> "outils.js" [penwidth=3.67, color="#a86d8aaa", tooltip="9 appel(s)"];
+  "fenExport.js" -> "outils.js" [penwidth=3.67, color="#96a86daa", tooltip="9 appel(s)"];
   "analyse.js" -> "effets.js" [penwidth=3.50, color="#a86d8aaa", tooltip="8 appel(s)"];
   "retenue.js" -> "cartes.js" [penwidth=3.50, color="#96a86daa", tooltip="8 appel(s)"];
   "edhrecThemes.js" -> "edhrecForme.js" [penwidth=3.31, color="#6da88caa", tooltip="7 appel(s)"];
@@ -115,7 +116,6 @@ digraph modules {
   "fiche.js" -> "versions.js" [penwidth=3.31, color="#8a7fa8aa", tooltip="7 appel(s)"];
   "filtres.js" -> "archetypesSets.js" [penwidth=3.08, color="#a86d8aaa", tooltip="6 appel(s)"];
   "sugListes.js" -> "outils.js" [penwidth=3.08, color="#a89b6daa", tooltip="6 appel(s)"];
-  "collection.js" -> "barreGroupes.js" [penwidth=3.08, color="#8a7fa8aa", tooltip="6 appel(s)"];
   "deckSection.js" -> "legalite.js" [penwidth=3.08, color="#a89b6daa", tooltip="6 appel(s)"];
   "tuiles.js" -> "notation.js" [penwidth=3.08, color="#8a7fa8aa", tooltip="6 appel(s)"];
   "stockage.js" -> "cartes.js" [penwidth=2.82, color="#6da8a4aa", tooltip="5 appel(s)"];
@@ -127,6 +127,7 @@ digraph modules {
   "fenParametres.js" -> "fenSauvegarde.js" [penwidth=2.82, color="#a89b6daa", tooltip="5 appel(s)"];
   "fenFiltres.js" -> "brouillon.js" [penwidth=2.82, color="#8a7fa8aa", tooltip="5 appel(s)"];
   "fenFiltres.js" -> "archetypesSets.js" [penwidth=2.82, color="#8a7fa8aa", tooltip="5 appel(s)"];
+  "fenAffichage.js" -> "brouillon.js" [penwidth=2.82, color="#a8846daa", tooltip="5 appel(s)"];
   "archetypesSets.js" -> "cartes.js" [penwidth=2.50, color="#6da88caa", tooltip="4 appel(s)"];
   "scryfall.js" -> "impressions.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
   "scryfall.js" -> "scryfallApplique.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
@@ -137,7 +138,9 @@ digraph modules {
   "catalogue.js" -> "outils.js" [penwidth=2.50, color="#a89b6daa", tooltip="4 appel(s)"];
   "sugCommandants.js" -> "outils.js" [penwidth=2.50, color="#6da8a4aa", tooltip="4 appel(s)"];
   "sugCommandants.js" -> "cartes.js" [penwidth=2.50, color="#6da8a4aa", tooltip="4 appel(s)"];
+  "collection.js" -> "outils.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
   "collection.js" -> "filtres.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
+  "collection.js" -> "barreGroupes.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
   "fenImport.js" -> "cartes.js" [penwidth=2.50, color="#a8846daa", tooltip="4 appel(s)"];
   "fenImport.js" -> "outils.js" [penwidth=2.50, color="#a8846daa", tooltip="4 appel(s)"];
   "fenAjout.js" -> "outils.js" [penwidth=2.50, color="#6da88caa", tooltip="4 appel(s)"];
@@ -154,11 +157,11 @@ digraph modules {
   "fenBudget.js" -> "brouillon.js" [penwidth=2.50, color="#6d8ca8aa", tooltip="4 appel(s)"];
   "fenBudget.js" -> "suggestions.js" [penwidth=2.50, color="#6d8ca8aa", tooltip="4 appel(s)"];
   "fenFiltres.js" -> "fenListes.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
-  "fenListes.js" -> "outils.js" [penwidth=2.50, color="#a8846daa", tooltip="4 appel(s)"];
-  "fenExport.js" -> "dialogue.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
-  "gestesVue.js" -> "archetypesSets.js" [penwidth=2.50, color="#96a86daa", tooltip="4 appel(s)"];
-  "gestesDeck.js" -> "annexes.js" [penwidth=2.50, color="#a89b6daa", tooltip="4 appel(s)"];
-  "gestesGraphe.js" -> "cartes.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
+  "fenListes.js" -> "outils.js" [penwidth=2.50, color="#6da88caa", tooltip="4 appel(s)"];
+  "fenExport.js" -> "dialogue.js" [penwidth=2.50, color="#96a86daa", tooltip="4 appel(s)"];
+  "gestesVue.js" -> "archetypesSets.js" [penwidth=2.50, color="#6da8a4aa", tooltip="4 appel(s)"];
+  "gestesDeck.js" -> "annexes.js" [penwidth=2.50, color="#6d8ca8aa", tooltip="4 appel(s)"];
+  "gestesGraphe.js" -> "cartes.js" [penwidth=2.50, color="#a8846daa", tooltip="4 appel(s)"];
   "retenue.js" -> "filtres.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
   "recherches.js" -> "scryfallApplique.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
   "sets.js" -> "fenFiltres.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
@@ -169,7 +172,6 @@ digraph modules {
   "notation.js" -> "liens.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
   "sugListes.js" -> "tuiles.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
   "collection.js" -> "retenue.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
-  "collection.js" -> "outils.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
   "annexes.js" -> "recalcul.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
   "deck.js" -> "recalcul.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
   "legalite.js" -> "retenue.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
@@ -191,16 +193,17 @@ digraph modules {
   "fenParametres.js" -> "dialogue.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
   "fenFiltres.js" -> "outils.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
   "fenFiltres.js" -> "filtres.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
-  "fenListes.js" -> "archetypesSets.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
-  "gestesVue.js" -> "brouillon.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
-  "gestesVue.js" -> "versions.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
-  "gestesReglages.js" -> "fenParametres.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
-  "gestesDeck.js" -> "deck.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
-  "gestesDeck.js" -> "ficheParcours.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
-  "gestesDonnees.js" -> "stockage.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
-  "app.js" -> "stockage.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
-  "app.js" -> "edhrecThemes.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
-  "app.js" -> "gameChangers.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
-  "app.js" -> "apercu.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
-  "app.js" -> "brouillon.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
+  "fenAffichage.js" -> "barreGroupes.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
+  "fenListes.js" -> "archetypesSets.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
+  "gestesVue.js" -> "brouillon.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
+  "gestesVue.js" -> "versions.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
+  "gestesReglages.js" -> "fenParametres.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
+  "gestesDeck.js" -> "deck.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
+  "gestesDeck.js" -> "ficheParcours.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
+  "gestesDonnees.js" -> "stockage.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
+  "app.js" -> "stockage.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
+  "app.js" -> "edhrecThemes.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
+  "app.js" -> "gameChangers.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
+  "app.js" -> "apercu.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
+  "app.js" -> "brouillon.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
 }

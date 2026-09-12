@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**456 fonctions**, 75 modules, 526 Ko de JavaScript.
+**464 fonctions**, 76 modules, 534 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -52,7 +52,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
 | [`sugListes.js`](#jssuglistesjs) | Les trois lectures d'une même sélection | 11 | 246 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 243 |
-| [`collection.js`](#jscollectionjs) | La section Collection | 6 | 131 |
+| [`collection.js`](#jscollectionjs) | La section Collection | 6 | 126 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
@@ -77,15 +77,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 129 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
+| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » de la collection | 8 | 139 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 119 |
-| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 113 |
+| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 126 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 138 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 100 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 271 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 282 |
 
 ## js/reglesEffets.js
 
@@ -828,7 +829,7 @@ Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
 
 ## js/collection.js
 
-La section Collection. *6 fonctions, 131 lignes, 6.6 Ko.*
+La section Collection. *6 fonctions, 126 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1202,6 +1203,26 @@ Fenêtre « Filtres ». *10 fonctions, 207 lignes, 12 Ko.*
 | `appliquerFiltres()` | « Appliquer » verse le brouillon, puis recalcule. |
 | `openFiltresModal()` | — |
 
+## js/fenAffichage.js
+
+Fenêtre « Affichage » de la collection. *8 fonctions, 139 lignes, 6.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `indexColonnes(n)` | — |
+| `resumeAffichage()` | La phrase qui dit, sous le bouton comme dans la fenêtre, ce qui est en vigueur : le réglage n'est plus visible dans la barre, il doit se lire quelque part. |
+| `corpsAffichage()` | — |
+| `majFenetreAffichage()` | — |
+| `reglageAffichage(quoi, el)` | Les quatre réglages de la fenêtre, au brouillon : rien ne bouge dans la collection avant « Appliquer ». |
+| `glisseColonnes(el)` | Le curseur des colonnes décoche « Auto » du seul fait qu'on s'en serve : imposer un nombre, c'est cesser de s'en remettre à la largeur. |
+| `appliquerAffichage()` | « Appliquer » verse les quatre réglages d'un coup. |
+| `openAffichageModal()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `COLONNES_IMPOSEES` | Les nombres de colonnes qu'on impose, « auto » mis à part : c'est la case à cocher qui porte ce choix-là, et le curseur ne parcourt que les autres. |
+| `positionColonnes` | La position du curseur quand « Auto » est cochée : l'état ne retient alors aucun nombre, et le curseur doit tout de même se poser quelque part — là où on l'avait laissé, sans quoi… |
+
 ## js/fenListes.js
 
 Les deux listes déroulantes des filtres. *6 fonctions, 125 lignes, 6.7 Ko.*
@@ -1255,7 +1276,7 @@ Les gestes qui règlent la vue. *1 fonctions, 119 lignes, 4.4 Ko.*
 
 ## js/gestesReglages.js
 
-Les fenêtres de réglage et leurs boutons. *1 fonctions, 113 lignes, 3.9 Ko.*
+Les fenêtres de réglage et leurs boutons. *1 fonctions, 126 lignes, 4.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1287,7 +1308,7 @@ Les gestes du graphe et des listes. *1 fonctions, 100 lignes, 3.1 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 271 lignes, 10 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 282 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

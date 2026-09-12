@@ -1,8 +1,9 @@
 /* =====================================================================
    js/gestesReglages.js — Les fenêtres de réglage et leurs boutons
 
-   « Appliquer » et « Réinitialiser » des quatre fenêtres — filtres, format,
-   paramètres, budget —, les jauges de rôle et la pagination par type.
+   « Appliquer » et « Réinitialiser » des fenêtres de réglage — filtres,
+   affichage, format, paramètres, budget —, les jauges de rôle et la
+   pagination par type.
    ===================================================================== */
 
 function gestesReglages(act, b) {
@@ -13,6 +14,18 @@ function gestesReglages(act, b) {
 
   if (act === 'interrompreCatalogue') {
     interrompreCatalogue();
+    return true;
+  }
+
+  /* Les quatre réglages de mise en page de la collection, réunis en fenêtre :
+     ils n'agissent qu'à « Appliquer », comme les filtres. */
+  if (act === 'affichage') {
+    openAffichageModal();
+    return true;
+  }
+
+  if (act === 'appliquerAffichage') {
+    appliquerAffichage();
     return true;
   }
 
