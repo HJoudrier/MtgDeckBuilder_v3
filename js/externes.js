@@ -1,5 +1,5 @@
 /* =====================================================================
-   js/externes.js — EDHREC, Commander Spellbook & Catalogue complet Scryfall
+   js/externes.js — EDHREC & Catalogue complet Scryfall
    ===================================================================== */
 
 /* 1. EDHREC */
@@ -768,109 +768,10 @@ async function chargerGameChangers() {
   if (typeof renderAll === 'function') renderAll();
 }
 
-/* 2. Commander Spellbook */
+/* 2. L'empreinte du deck, dont l'empreinte des suggestions se sert pour savoir
+   si la notation vaut encore. */
 function deckSignature() {
   return deckEntries().map(e => e.card.name + '×' + e.qty).sort().join('|') + '||' + (S.commander || '');
-}
-
-function comboDepuisVariante(v) {
-  const cartes = (v.uses || []).map(u => (u && u.card && (u.card.name || u.card)) || u.cardName || '').filter(Boolean);
-  const produit = (v.produces || []).map(x => (x && x.feature && (x.feature.name || x.feature)) || x.name || '').filter(Boolean);
-  return {
-    id: v.id,
-    cartes,
-    produit,
-    description: v.description || '',
-    prerequis: v.otherPrerequisites || v.other_prerequisites || '',
-    mana: v.manaNeeded || v.mana_needed || '',
-    url: 'https://commanderspellbook.com/combo/' + v.id + '/'
-  };
-}
-
-let csbTimer = null;
-
-function scheduleCombos() {
-  if (typeof fetch !== 'function') return;
-  const sig = deckSignature();
-  if (S.csb.sig === sig || S.csb.status === 'loading') return;
-  clearTimeout(csbTimer);
-  csbTimer = setTimeout(() => loadCombos(), 1200);
-}
-
-async function loadCombos(force) {
-  const sig = deckSignature();
-  if (!force && S.csb.sig === sig) return;
-  const entries = deckEntries();
-  if (entries.length < 2) { S.csb = {sig, status:'idle', data:null, error:null}; return; }
-  S.csb = {sig, status:'loading', data:S.csb.data, error:null};
-  renderE();
-  const cmd = S.commander ? [{card:S.commander, quantity:1}] : [];
-  const main = entries.filter(e => e.card.name !== S.commander).map(e => ({card:e.card.name, quantity:e.qty}));
-  const CIBLE = 'https://backend.commanderspellbook.com/find-my-combos';
-  const adresse = () => S.csbRelay
-    ? S.csbRelay.replace('{url}', encodeURIComponent(CIBLE)) + (S.csbRelay.includes('{url}') ? '' : encodeURIComponent(CIBLE))
-    : CIBLE;
-
-  const envoyer = async(corps, type) => fetch(adresse(), {
-    method: 'POST',
-    headers: {'Content-Type': type || 'application/json'},
-    body: JSON.stringify(corps)
-  });
-
-  try {
-    let r = null, bloque = null;
-    for (const type of ['application/json', 'text/plain;charset=UTF-8']) {
-      try {
-        r = await envoyer({commanders:cmd, main}, type);
-        if (r.status === 400) r = await envoyer({main:[...cmd, ...main]}, type);
-        if (r.status === 415) { r = null; continue; }
-        break;
-      } catch(err) { bloque = err; r = null; }
-    }
-    if (!r) throw bloque || new Error('requête bloquée par le navigateur');
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json();
-    const res = j.results || j;
-    const dansDeck = new Set(entries.map(e => norm(e.card.name)));
-    const assembles = (res.included || []).map(comboDepuisVariante);
-    const presque = [...(res.almostIncluded || []), ...(res.almostIncludedByAddingColors || [])]
-      .map(comboDepuisVariante)
-      .map(c => ({...c, manquantes:c.cartes.filter(n => !dansDeck.has(norm(n)))}))
-      .filter(c => c.manquantes.length > 0 && c.manquantes.length <= 2);
-
-    const parManquante = new Map(), parCarte = new Map();
-    const ajoute = (m, k, v) => {
-      const key = norm(k);
-      if (!m.has(key)) m.set(key, []);
-      if (m.get(key).length < 6) m.get(key).push(v);
-    };
-    presque.forEach(c => c.manquantes.forEach(n => ajoute(parManquante, n, c)));
-    [...assembles, ...presque].forEach(c => c.cartes.forEach(n => ajoute(parCarte, n, c)));
-    S.csb = {sig, status:'ok', error:null, data:{assembles, presque, parManquante, parCarte}};
-  } catch(err) {
-    const cors = (err instanceof TypeError) || /Failed to fetch|NetworkError|Load failed/i.test(err.message || '');
-    S.csb = {sig, status:cors ? 'cors' : 'error', data:null, error:err.message || 'requête refusée'};
-  }
-  renderE();
-  renderSuggestions();
-}
-
-function combosDe(card) {
-  const d = S.csb.data;
-  if (!d || !card) return [];
-  return d.parCarte.get(norm(card.name)) || d.parCarte.get(norm(frontFace(card.name))) || [];
-}
-
-function combosCompletesPar(card) {
-  const d = S.csb.data;
-  if (!d || !card) return [];
-  return d.parManquante.get(norm(card.name)) || d.parManquante.get(norm(frontFace(card.name))) || [];
-}
-
-function libelleCombo(c, carteCourante, liens) {
-  const autres = c.cartes.filter(n => !carteCourante || norm(n) !== norm(carteCourante.name));
-  const noms = liens ? autres.map(refCarte) : autres.map(esc);
-  return `${noms.join(' + ')}${c.produit.length ? ` → ${esc(c.produit.slice(0,3).join(', '))}` : ''}`;
 }
 
 /* 3. Catalogue Scryfall IndexedDB (CAT et CH sont définis dans js/etat.js) */

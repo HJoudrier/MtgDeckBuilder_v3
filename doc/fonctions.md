@@ -7,31 +7,31 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**463 fonctions**, 33 modules, 520 Ko de JavaScript.
+**457 fonctions**, 33 modules, 513 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
 | [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 16 | 570 |
 | [`cartes.js`](#jscartesjs) | Base de cartes, indexation, analyse & typage | 30 | 717 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 621 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 619 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 16 | 358 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`scryfall.js`](#jsscryfalljs) | Intégration Scryfall, symboles, visuels & complétion | 25 | 568 |
-| [`stockage.js`](#jsstockagejs) | Persistance locale (localStorage) & gestion des sauvegardes | 15 | 439 |
-| [`externes.js`](#jsexternesjs) | EDHREC, Commander Spellbook & Catalogue complet Scryfall | 81 | 1587 |
+| [`stockage.js`](#jsstockagejs) | Persistance locale (localStorage) & gestion des sauvegardes | 15 | 437 |
+| [`externes.js`](#jsexternesjs) | EDHREC & Catalogue complet Scryfall | 75 | 1488 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 168 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
-| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 49 | 1165 |
+| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 49 | 1150 |
 | [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 504 |
-| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 39 | 922 |
+| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 39 | 900 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 6 | 68 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
 | [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 146 |
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
-| [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 165 |
+| [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 164 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 67 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 9 | 220 |
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 176 |
@@ -43,7 +43,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 127 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 82 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 134 |
-| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 893 |
+| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 886 |
 
 ## js/effets.js
 
@@ -147,7 +147,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *42 fonctions, 621 lignes, 27 Ko.*
+État global de l'application & utilitaires. *42 fonctions, 619 lignes, 27 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -315,7 +315,7 @@ Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 568 ligne
 
 ## js/stockage.js
 
-Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 439 lignes, 21 Ko.*
+Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 437 lignes, 21 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -346,7 +346,7 @@ Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 439 
 
 ## js/externes.js
 
-EDHREC, Commander Spellbook & Catalogue complet Scryfall. *81 fonctions, 1587 lignes, 65 Ko.*
+EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -385,13 +385,7 @@ EDHREC, Commander Spellbook & Catalogue complet Scryfall. *81 fonctions, 1587 li
 | `sauverGameChangers()` | — |
 | `gameChangersARevoir()` | — |
 | `chargerGameChangers()` | — |
-| `deckSignature()` | 2. Commander Spellbook |
-| `comboDepuisVariante(v)` | — |
-| `scheduleCombos()` | — |
-| `loadCombos(force)` | — |
-| `combosDe(card)` | — |
-| `combosCompletesPar(card)` | — |
-| `libelleCombo(c, carteCourante, liens)` | — |
+| `deckSignature()` | 2. L'empreinte du deck, dont l'empreinte des suggestions se sert pour savoir si la notation vaut encore. |
 | `idb()` | — |
 | `idbLire(cle)` | — |
 | `idbEcrire(cle, val)` | — |
@@ -450,7 +444,6 @@ EDHREC, Commander Spellbook & Catalogue complet Scryfall. *81 fonctions, 1587 li
 | `GC_CLE_IDB` | 1 quater. Game Changers La liste que Wizards publie pour les paliers du Commander, telle que Scryfall la marque (`is:gamechanger`). Une quarantaine de cartes, une requête, gardée en… |
 | `GC_FRAICHEUR` | — |
 | `GC_PAGES` | — |
-| `csbTimer` | — |
 | `IDB_NOM` | 3. Catalogue Scryfall IndexedDB (CAT et CH sont définis dans js/etat.js) |
 | `CDN` | — |
 | `FICHIERS_LOCAUX` | — |
@@ -479,7 +472,7 @@ Statistiques, répartitions & courbes de mana. *3 fonctions, 90 lignes, 4.5 Ko.*
 
 ## js/suggestions.js
 
-Moteur d'évaluation, scoring & suggestions d'ajout. *49 fonctions, 1165 lignes, 58 Ko.*
+Moteur d'évaluation, scoring & suggestions d'ajout. *49 fonctions, 1150 lignes, 57 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -575,7 +568,7 @@ Gestion de la collection, filtres & imports MTGO. *18 fonctions, 504 lignes, 25 
 
 ## js/deck.js
 
-Construction du deck, légalité, commandant & fiches détaillées. *39 fonctions, 922 lignes, 51 Ko.*
+Construction du deck, légalité, commandant & fiches détaillées. *39 fonctions, 900 lignes, 49 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -725,7 +718,7 @@ Les éditions d'une même carte. *14 fonctions, 173 lignes, 6.9 Ko.*
 
 ## js/tuiles.js
 
-Les deux rendus d'une carte. *7 fonctions, 165 lignes, 11 Ko.*
+Les deux rendus d'une carte. *7 fonctions, 164 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -902,7 +895,7 @@ Fenêtres d'export et d'effacement. *3 fonctions, 134 lignes, 6.9 Ko.*
 
 ## js/app.js
 
-Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 893 lignes, 31 Ko.*
+Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 886 lignes, 31 Ko.*
 
 | Fonction | Rôle |
 |---|---|

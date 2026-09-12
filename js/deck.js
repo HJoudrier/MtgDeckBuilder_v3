@@ -559,27 +559,6 @@ function ficheHTML(card) {
       ${roles.join('') || '<div class="role-l"><span class="chip">Rôle non identifié</span></div>'}
       <div class="small muted" style="margin:10px 0 5px">Cartes du deck avec lesquelles elle se branche</div>
       ${blocLiens(triD, 8, 'aucune pour le moment')}</div>
-    ${(() => {
-      const cs = combosDe(card);
-      if (!cs.length) return '';
-      return `<div class="bloc"><h4>Combos répertoriés <span class="small muted">Commander Spellbook</span></h4>
-        ${cs.slice(0,4).map(c => {
-          const manque = (c.manquantes || []).filter(n => norm(n) !== norm(card.name));
-          const complet = !c.manquantes || !c.manquantes.length;
-          return `<div class="arc" style="margin-bottom:6px">
-            <b>${libelleCombo(c, card, true)}</b>
-            <div class="small ${complet?'':'muted'}">${complet
-              ? 'toutes les pièces sont dans le deck'
-              : (c.manquantes.some(n => norm(n) === norm(card.name))
-                  ? `cette carte est la pièce manquante${manque.length?`, avec ${manque.map(refCarte).join(', ')}`:''}`
-                  : `il manque ${c.manquantes.map(refCarte).join(', ')}`)}</div>
-            ${c.description ? `<div class="small muted">${esc(c.description.split('\n').slice(0,3).join(' '))}</div>` : ''}
-            ${c.prerequis ? `<div class="small muted">prérequis : ${esc(c.prerequis)}</div>` : ''}
-            <a class="small" href="${esc(c.url)}" target="_blank" rel="noopener" style="color:var(--brass)">voir le combo ↗</a>
-          </div>`;
-        }).join('')}
-      </div>`;
-    })()}
     <div class="bloc"><h4>Capacités extraites</h4>
       ${card.an.abilities.length ? card.an.abilities.map(a => {
           const ql = libelleQual(a.q);
@@ -917,5 +896,4 @@ function renderE() {
   const horsListe = CLES_ANNEXES.map(cle => [ANNEXES[cle].titre.toLowerCase(), annexeSize(cle)]).filter(([, q]) => q);
   if (hintEl) hintEl.textContent = `${n}/${f.size}${horsListe.length ? ` · ${horsListe.map(([t, q]) => `${t} ${q}`).join(' · ')}` : ''}`;
   setTimeout(() => queueScryfall(entries.concat(...CLES_ANNEXES.map(annexeEntries)).map(e => e.card)), 0);
-  scheduleCombos();
 }

@@ -500,13 +500,6 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'combos') {
-    const rel = document.getElementById('csbRelay');
-    if (rel) S.csbRelay = rel.value.trim();
-    loadCombos(true);
-    return;
-  }
-
   if (act === 'catalogueSuite') {
     chargerCatalogue();
     return;

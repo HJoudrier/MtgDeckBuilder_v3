@@ -441,23 +441,14 @@ Le recalcul de fond ne montre pas de boîte : il gèle l'ordre affiché, avance 
 signale son travail par le liseré des trois sections des propositions. Une carte complétée pendant
 qu'on lit ne doit pas interrompre la lecture.
 
-### 3.11 EDHREC et Commander Spellbook
+### 3.11 EDHREC
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant E as renderE (deck)
     participant F as renderH / renderF (propositions)
-    participant EXT as externes.js
     participant SUG as suggestions.js
-    participant NET as EDHREC / Commander Spellbook
-
-    E->>EXT: scheduleCombos()
-    EXT->>EXT: deckSignature() — déjà vue ?
-    EXT->>EXT: attente de 1200 ms
-    EXT->>NET: POST /find-my-combos
-    NET-->>EXT: combos du deck
-    EXT->>E: renderE() — les étiquettes « combo » paraissent
+    participant NET as EDHREC
 
     F->>SUG: lanceEdhrecSiBesoin()
     SUG->>SUG: signature du commandant et des commandants secondaires
@@ -466,9 +457,8 @@ sequenceDiagram
     SUG->>F: renderSuggestions() — le panneau EDHREC, ses recommandations<br/>et les étiquettes edhrec paraissent
 ```
 
-Les deux sources sont attendues, jamais bloquantes : une signature les empêche de repartir pour un
-deck inchangé, et leur absence ne retire rien au classement, qui repose d'abord sur l'analyse des
-textes.
+La source est attendue, jamais bloquante : une signature l'empêche de repartir pour un commandant
+inchangé, et son absence ne retire rien au classement, qui repose d'abord sur l'analyse des textes.
 
 ### 3.12 Acheter sur Cardmarket
 
@@ -522,7 +512,7 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | Mémo | Ce qu'il garde | Son empreinte | Ce qui la change |
 |---|---|---|---|
 | `CAND` (`js/externes.js`) | Le vivier tiré du catalogue | `signatureCandidats()` | Format, couleurs, filtres, prix maximum, plafond des candidates, légalité, effets isolés |
-| `SUG_MEMO` (`js/suggestions.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget, `MAJ_CARTES`, les données EDHREC et combos |
+| `SUG_MEMO` (`js/suggestions.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget, `MAJ_CARTES`, les données EDHREC |
 | `NOTES_COLLECTION` (`js/groupes.js`) | Les notes de la collection, pour le tri par score | `signatureSuggestions()` | Les mêmes |
 
 Deux conséquences pratiques :

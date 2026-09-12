@@ -75,7 +75,6 @@ function cardTile(e, ctx) {
     return [
       (n || larges) ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit précisément (${liens} lien(s) d'effets)${larges ? ` — et ${larges} autre(s) que seul un déclencheur large relie : ${libelleFamillesLarges(note.larges)}, que tout le deck alimente` : ''}">${n}${larges ? ` (+${larges})` : ''} interaction${n + larges > 1 ? 's' : ''}</span>` : '',
       isHors ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
-      note.combos && note.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
       note.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''
     ].filter(Boolean).join('');
   })() : '';

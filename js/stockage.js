@@ -90,7 +90,6 @@ function snapshot() {
     candidatsMax: S.candidatsMax,
     catalogueNumeriques: S.catalogueNumeriques,
     filtreLegal: S.filtreLegal,
-    csbRelay: S.csbRelay,
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
     majIgnoree: S.majIgnoree,
@@ -214,7 +213,6 @@ function restore(d) {
   if (typeof d.candidatsMax === 'number' && d.candidatsMax > 0) S.candidatsMax = d.candidatsMax;
   if (typeof d.filtreLegal === 'boolean') S.filtreLegal = d.filtreLegal;
   if (typeof d.catalogueNumeriques === 'boolean') S.catalogueNumeriques = d.catalogueNumeriques;
-  if (typeof d.csbRelay === 'string') S.csbRelay = d.csbRelay;
   if (typeof d.catalogueActif === 'boolean') S.catalogueActif = d.catalogueActif;
   if (typeof d.prixMaj === 'number') S.prixMaj = d.prixMaj;
   if (typeof d.majIgnoree === 'string') S.majIgnoree = d.majIgnoree;

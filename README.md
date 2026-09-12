@@ -24,7 +24,7 @@ js/                 modules, chargés dans cet ordre :
   marche.js         Cardmarket
   scryfall.js       accès à Scryfall
   stockage.js       sauvegarde locale
-  externes.js       EDHREC et Commander Spellbook
+  externes.js       EDHREC et catalogue Scryfall
 
   — les sections —
   graphe.js         graphe des capacités

@@ -148,13 +148,6 @@ function noteCarte(p, X) {
     reasons.unshift('relie deux effets déjà présents : elle reçoit un déclencheur du deck et en fournit un autre');
   }
 
-  const combos = combosCompletesPar(c);
-  if (combos.length) {
-    score += 11;
-    const c0 = combos[0];
-    reasons.unshift(`combo connu : avec ${c0.cartes.filter(n=>norm(n)!==norm(c.name)).join(' + ')}${c0.produit.length?` → ${c0.produit.slice(0,2).join(', ')}`:''}${combos.length>1?` (et ${combos.length-1} autre${combos.length>2?'s':''})`:''}`);
-  }
-
   const erAll = edhrecAllFor(c);
   const er = edhrecFor(c);
   erAll.sort((a, b) => {
@@ -212,7 +205,7 @@ function noteCarte(p, X) {
   }
   if (deckSize() === 0) score += (c.cats.has('ramp') || c.cats.has('pioche')) ? 4 : 0;
   return {card:c, score, reasons, partners, nbPrecis, nbLarges, larges:tri.familles,
-          source:p.source, offer:p.offer, graph, edhrec:er, combos};
+          source:p.source, offer:p.offer, graph, edhrec:er};
 }
 
 /* Le nombre d'interactions d'une note est un nombre de cartes du deck, jamais
@@ -326,7 +319,7 @@ function ordonneSuggestions(res) {
    ne servait qu'une fois, par prudence : tout rendu ultérieur recalculait,
    « faute de quoi un changement d'état passerait inaperçu ». Mais la section
    se repeint pour bien autre chose qu'un changement d'état — un panneau
-   EDHREC qui passe à « chargement… », des combos qui arrivent, un visuel —,
+   EDHREC qui passe à « chargement… », un visuel qui arrive —,
    et chacun de ces repeints repayait la notation entière.
 
    L'empreinte règle la question : elle réunit tout ce dont la notation
@@ -350,7 +343,7 @@ function tailleDe(x) {
 }
 
 function signatureSuggestions() {
-  const e = S.edhrec || {}, csb = S.csb || {};
+  const e = S.edhrec || {};
   return [
     /* Ce qui décide du vivier : format, couleurs, filtres, prix maximum,
        archive, plafond des candidates, légalité, effets isolés. */
@@ -369,7 +362,6 @@ function signatureSuggestions() {
     /* `map` est une `Map` : c'est sa taille qui la mesure, non sa longueur. */
     e.data ? `${e.data.commandant || ''}#${tailleDe(e.data.map)}` : '',
     (e.secondaires || []).map(x => `${x.commandant || ''}#${tailleDe(x.map)}`).join(','),
-    csb.data ? `${csb.sig || ''}#${csb.data.parManquante ? csb.data.parManquante.size : 0}` : '',
     (typeof ARCH_BASE !== 'undefined' && ARCH_BASE.index) ? ARCH_BASE.index.size : 0,
     (typeof SETS_BASE !== 'undefined' && SETS_BASE.index) ? SETS_BASE.index.size : 0
   ].join('|');
@@ -654,7 +646,6 @@ function sugRow(s) {
     tagIllegal(s.card),
     tagGameChanger(s.card),
     s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
-    s.combos && s.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
     tagAnnexe(c),
     edhrecTag
   ].filter(Boolean).join('');
@@ -982,12 +973,6 @@ function listeSuggestions(sel) {
         : enveloppeGroupe('suggestions', mode, g, titre, `${max} sur ${total}`, corps);
     }).join('')
       : '<div class="empty">Aucune suggestion. Ajoutez des cartes à la collection, élargissez les couleurs ou augmentez le budget.</div>'}
-    ${(S.csb.status === 'cors' || S.csb.status === 'error') ? `<div class="small muted" style="margin-bottom:6px">
-      Commander Spellbook injoignable (${esc(S.csb.error||'')}) : les étiquettes « combo » sont absentes.
-      <span class="row" style="gap:6px;margin-top:4px">
-        <input id="csbRelay" type="text" value="${esc(S.csbRelay)}" placeholder="relais éventuel, ex. https://corsproxy.io/?url={url}" style="flex:1;min-width:200px">
-        <button class="btn sm" data-act="combos">Réessayer</button>
-      </span></div>` : ''}
     <div class="small muted">Le score combine les branchements avec le deck (un effet produit ici déclenche une capacité là-bas), les rôles manquants, la courbe de mana et la densité de capacités. Les cartes hors collection sont pénalisées et limitées par le budget.
       <br>Les pistes tirées des nœuds isolés du graphe sont réunies dans <button type="button" class="btn sm" data-onglet="graphe">l'onglet Graphe</button>,
       celles que recommandent les decks recensés dans <button type="button" class="btn sm" data-onglet="edhrec">l'onglet EDHREC</button> : toutes figurent aussi ici.
