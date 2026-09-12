@@ -10,7 +10,8 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "doc": "node outils/genDoc.js",
-    "doc:verifie": "node outils/genDoc.js --verifie"
+    "doc:verifie": "node outils/genDoc.js --verifie",
+    "appels": "node outils/genAppels.js"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

@@ -210,6 +210,33 @@ paramètres, l'aperçu volant, l'ancre de défilement et les tuiles d'une carte 
 et leur nom le dit — `fen*` pour une fenêtre modale. Un fichier qui passe les trois cents lignes est
 un fichier à couper : on lit moins pour comprendre une pièce, et on réécrit moins pour la changer.
 
+## Qui appelle qui
+
+L'inventaire dit ce que chaque fonction fait ; un second outil dit à qui elle parle :
+
+```
+node outils/genAppels.js                 # doc/appels.md, doc/appels.json, les deux .dot
+node outils/genAppels.js --module=deck.js  # le graphe réduit à un module et ses voisins
+node outils/genAppels.js --seuil=1        # le graphe des modules sans seuil
+```
+
+Il relève chaque fonction, le fichier où elle est définie et les fonctions du projet qu'elle
+appelle — directement, en la passant en rappel, ou depuis un gestionnaire posé dans le HTML que
+l'atelier fabrique. Le résultat va dans [doc/appels.md](doc/appels.md) et dans deux graphes
+Graphviz : `doc/graphe-fonctions.dot`, où chaque fichier est une boîte et chaque fonction un nœud,
+et `doc/graphe-modules.dot`, où les appels sont agrégés fichier par fichier et rangés dans les
+couches déclarées par la carte ci-dessus.
+
+Tout vivant dans la portée globale, un appel est un nom suivi d'une parenthèse : il suffit de
+savoir lequel des noms rencontrés est l'un des nôtres. Encore faut-il ne pas confondre du code avec
+de la prose — les fichiers sont pleins de commentaires français et de gabarits de cent lignes —, ni
+prendre une clé d'objet ou un paramètre pour une référence. D'où la passe qui efface commentaires
+et textes en gardant les interpolations, qui sont bien du code.
+
+Le graphe des fonctions porte tous les appels. Celui des modules ne trace, par défaut, que les
+liens d'au moins trois appels, et son titre le dit : sans seuil, tout le monde parle à tout le
+monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont écrits quand même.
+
 
 ## Repères
 
