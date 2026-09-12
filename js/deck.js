@@ -11,6 +11,15 @@ function deckEntries() {
   return out.sort((a, b) => TYPE_ORDER.indexOf(mainType(a.card)) - TYPE_ORDER.indexOf(mainType(b.card)) || a.card.cmc - b.card.cmc || a.card.name.localeCompare(b.card.name));
 }
 
+/* Les cartes du deck, une fois chacune. Deux clés de `S.deck` peuvent viser la
+   même carte — un import l'a nommée autrement et `find()` la rattrape, avant
+   que `mergeInto()` ne fusionne les deux entrées. Tout ce qui raisonne par
+   carte, et non par exemplaire, passe par ici : sans quoi la même carte se
+   compte deux fois, dans la courbe comme dans les branchements. */
+function cartesDuDeck() {
+  return [...new Map(deckEntries().map(e => [e.card.name, e.card])).values()];
+}
+
 function deckSize() {
   let n = 0;
   S.deck.forEach(q => n += q);
@@ -406,7 +415,7 @@ function blocVersions(card) {
 }
 
 function ficheHTML(card) {
-  const deck = deckEntries().map(e => e.card);
+  const deck = cartesDuDeck();
   const dansDeck = S.deck.get(card.name) || 0;
   const tgt = targets(), cnt = deckCounts();
   const partD = partnersFor(card, deck).slice(0, 8);

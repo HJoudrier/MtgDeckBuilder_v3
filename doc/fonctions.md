@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**451 fonctions**, 32 modules, 508 Ko de JavaScript.
+**454 fonctions**, 32 modules, 511 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,9 +21,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`externes.js`](#jsexternesjs) | EDHREC, Commander Spellbook & Catalogue complet Scryfall | 81 | 1587 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 168 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
-| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 46 | 1116 |
+| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 48 | 1143 |
 | [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 504 |
-| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 38 | 895 |
+| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 39 | 904 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 6 | 68 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
 | [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 146 |
@@ -462,12 +462,14 @@ Statistiques, répartitions & courbes de mana. *3 fonctions, 90 lignes, 4.5 Ko.*
 
 ## js/suggestions.js
 
-Moteur d'évaluation, scoring & suggestions d'ajout. *46 fonctions, 1116 lignes, 55 Ko.*
+Moteur d'évaluation, scoring & suggestions d'ajout. *48 fonctions, 1143 lignes, 57 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `contexteEvaluation()` | — |
 | `noteCarte(p, X)` | — |
+| `nbInteractions(note)` | Le nombre d'interactions d'une note est un nombre de cartes du deck, jamais un nombre d'arcs : une carte reliée par quatre effets reste une carte. |
+| `nbLiens(note)` | Le nombre d'arcs, lui, ne sert qu'à l'infobulle : il dit par combien d'effets le lien passe, sans jamais grossir le décompte des cartes. |
 | `vivierSuggestions()` | La sélection se fait en deux temps : bâtir le vivier — toutes les cartes qu'on pourrait proposer — puis le noter. |
 | `noterVivier(pool, X, res, debut, fin)` | Notation d'une tranche du vivier, de `debut` inclus à `fin` exclu. |
 | `ordonneSuggestions(res)` | Les filtres de l'en-tête valent aussi pour ce qu'on propose d'ajouter. |
@@ -555,11 +557,12 @@ Gestion de la collection, filtres & imports MTGO. *18 fonctions, 504 lignes, 25 
 
 ## js/deck.js
 
-Construction du deck, légalité, commandant & fiches détaillées. *38 fonctions, 895 lignes, 49 Ko.*
+Construction du deck, légalité, commandant & fiches détaillées. *39 fonctions, 904 lignes, 50 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `deckEntries()` | — |
+| `cartesDuDeck()` | Les cartes du deck, une fois chacune. Deux clés de `S.deck` peuvent viser la même carte — un import l'a nommée autrement et `find()` la rattrape, avant que `mergeInto()` ne fusionne les… |
 | `deckSize()` | — |
 | `availableFor(card)` | — |
 | `annexeListe(cle)` | — |

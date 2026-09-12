@@ -71,9 +71,9 @@ function cardTile(e, ctx) {
   /* Le tag d'illégalité vaut dans tous les contextes : la collection comme
      le deck. Les autres tags restent propres au deck, qui seul les calcule. */
   const tagsDeck = (ctx === 'deck' && note) ? (() => {
-    const n = (note.partners || []).length;
+    const n = nbInteractions(note), liens = nbLiens(note);
     return [
-      n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : '',
+      n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit — ${liens} lien(s) d'effets en tout">${n} interaction${n>1?'s':''}</span>` : '',
       isHors ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
       note.combos && note.combos.length ? `<span class="tag" style="border-color:#a077cf;color:#a077cf">combo</span>` : '',
       note.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''

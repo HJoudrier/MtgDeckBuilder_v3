@@ -3,7 +3,7 @@
    ===================================================================== */
 
 function contexteEvaluation() {
-  const deck = deckEntries().map(e => e.card);
+  const deck = cartesDuDeck();
   const f = fmt(), cnt = deckCounts(), tgt = targets();
   const cmcCount = {};
   deck.forEach(c => { if (!c.isLand) cmcCount[Math.min(c.cmc, 7)] = (cmcCount[Math.min(c.cmc, 7)] || 0) + 1; });
@@ -84,26 +84,37 @@ function noteCarte(p, X) {
       addLink(x.nom, tt.c, 'ba', compat(x.p, tt), libelleQual(tt.q)));
   });
 
+  /* Une carte du deck ne pèse qu'une fois, quel que soit le nombre d'effets qui
+     la relient : son meilleur lien fait le poids, les suivants ne font que le
+     nuancer, sans jamais dépasser une fois et demie ce meilleur lien. La somme
+     de tous les arcs, elle, faisait qu'une carte branchée à deux cartes du deck
+     par quatre effets chacune valait une carte qui s'intègre à huit — l'inverse
+     de ce que l'on cherche à mettre en avant. */
   const partners = [...linkMap.entries()].map(([nm, m]) => {
     const links = [...m.values()];
-    let w = 0;
-    links.forEach(l => {
-      const base = (l.concept === 'ETB' || l.concept === 'LANCEMENT') ? 0.8 : (l.dir === 'ab' ? 3.2 : 2.6);
-      w += base * (l.k || 1);
-    });
+    const forces = links
+      .map(l => ((l.concept === 'ETB' || l.concept === 'LANCEMENT') ? 0.8 : (l.dir === 'ab' ? 3.2 : 2.6)) * (l.k || 1))
+      .sort((a, b) => b - a);
+    const meilleur = forces[0] || 0;
+    const w = Math.min(meilleur * 1.5, meilleur + 0.2 * forces.slice(1).reduce((a, f) => a + f, 0));
     return {name:nm, links, w};
   });
 
+  /* Le plafond reste 26, mais on l'approche sans jamais l'atteindre : la
+     coupure nette mettait à égalité une carte branchée à huit cartes du deck et
+     une branchée à vingt-cinq, alors que c'est précisément l'étendue que l'on
+     veut voir remonter. */
   let weight = partners.reduce((a, p2) => a + p2.w, 0);
   partners.sort((a, b) => b.w - a.w);
-  score += Math.min(26, weight);
+  score += 26 * (1 - Math.exp(-weight / 14));
 
   if (partners.length) {
     const detail = partners.slice(0, 3).map(p2 => {
       const cs = [...new Set(p2.links.map(l => NODE[l.concept].label.toLowerCase()))].slice(0, 2).join(', ');
       return `${p2.name} (${cs})`;
     }).join(', ');
-    reasons.push(`se branche à ${partners.length} carte(s) : ${detail}`);
+    const liens = partners.reduce((a, p2) => a + p2.links.length, 0);
+    reasons.push(`se branche à ${partners.length} carte(s) du deck (${liens} lien(s)) : ${detail}`);
   }
 
   const graph = [];
@@ -187,6 +198,22 @@ function noteCarte(p, X) {
   }
   if (deckSize() === 0) score += (c.cats.has('ramp') || c.cats.has('pioche')) ? 4 : 0;
   return {card:c, score, reasons, partners, source:p.source, offer:p.offer, graph, edhrec:er, combos};
+}
+
+/* Le nombre d'interactions d'une note est un nombre de cartes du deck, jamais
+   un nombre d'arcs : une carte reliée par quatre effets reste une carte. Le
+   dédoublonnage se fait sur le nom normalisé, pour que deux entrées du deck
+   visant la même carte n'en fassent pas deux partenaires. */
+function nbInteractions(note) {
+  if (!note || !note.partners) return 0;
+  return new Set(note.partners.map(p => norm(p.name))).size;
+}
+
+/* Le nombre d'arcs, lui, ne sert qu'à l'infobulle : il dit par combien d'effets
+   le lien passe, sans jamais grossir le décompte des cartes. */
+function nbLiens(note) {
+  if (!note || !note.partners) return 0;
+  return note.partners.reduce((a, p) => a + p.links.length, 0);
 }
 
 /* La sélection se fait en deux temps : bâtir le vivier — toutes les cartes
@@ -580,7 +607,7 @@ function panneauEdhrec() {
 }
 
 function sugRow(s) {
-  const c = s.card, n = (s.partners || []).length;
+  const c = s.card, n = nbInteractions(s), liens = nbLiens(s);
   const inDeck = S.deck.get(c.name) || 0;
   const img = S.images && (c.imgN || c.img);
   const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
@@ -601,7 +628,7 @@ function sugRow(s) {
   })();
 
   const tags = [
-    n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="Cartes du deck avec lesquelles elle interagit">${n} interaction${n>1?'s':''}</span>` : '',
+    n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit — ${liens} lien(s) d'effets en tout">${n} interaction${n>1?'s':''}</span>` : '',
     tagIllegal(s.card),
     tagGameChanger(s.card),
     s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
