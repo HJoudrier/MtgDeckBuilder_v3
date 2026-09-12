@@ -16,6 +16,12 @@ function deckEntries() {
    que `mergeInto()` ne fusionne les deux entrées. Tout ce qui raisonne par
    carte, et non par exemplaire, passe par ici : sans quoi la même carte se
    compte deux fois, dans la courbe comme dans les branchements. */
+/* 2. L'empreinte du deck, dont l'empreinte des suggestions se sert pour savoir
+   si la notation vaut encore. */
+function deckSignature() {
+  return deckEntries().map(e => e.card.name + '×' + e.qty).sort().join('|') + '||' + (S.commander || '');
+}
+
 function cartesDuDeck() {
   return [...new Map(deckEntries().map(e => [e.card.name, e.card])).values()];
 }
@@ -501,8 +507,7 @@ function ficheHTML(card) {
   const vAffichee = !vCour || vCle === cleImpression(card.set, card.num);
   const vSrc = vCour ? visuelVersion(card, vCour, true) : faceVisible(card, true);
   /* Trois états : le visuel est là, il se cherche encore, ou il n'y en a pas. */
-  const blocVisuel = !S.images ? ficheTexteHTML(card)
-    : vSrc ? `<div class="visuwrap">
+  const blocVisuel = vSrc ? `<div class="visuwrap">
         <img class="visu" src="${esc(vSrc)}" alt="${esc(card.name)}" data-name="${esc(card.name)}" onerror="ficheImageKO(this)">
         ${vAffichee && aDeuxFaces(card) && autreFace(card) ? `<button type="button" class="miniface" data-act="flip" data-name="${esc(card.name)}"
             title="Afficher ${RETOURNEES.has(card.name)?'le recto':'le verso'}">
@@ -728,7 +733,7 @@ function zoneCommandant() {
   const ident = cmd.identity.length ? cmd.identity : ['C'];
   const horsIdentite = deckEntries().filter(e => e.card.identity.some(x => !cmd.identity.includes(x))).length;
   return `<div class="cmdbox">
-    ${S.images && (cmd.imgL || cmd.imgN || cmd.img)
+    ${(cmd.imgL || cmd.imgN || cmd.img)
       ? `<img class="visu" src="${esc(cmd.imgL||cmd.imgN||cmd.img)}" alt="${esc(cmd.name)}">`
       : `<div class="vide">${esc(cmd.name)}</div>`}
     <div class="corps">

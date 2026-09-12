@@ -132,10 +132,9 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  /* L'engrenage de l'entête, et les deux anciens noms que des boutons de
-     l'atelier appellent encore — charger une archive, régler le catalogue :
-     tout mène à la même fenêtre, où ces réglages vivent désormais ensemble. */
-  if (act === 'parametres' || act === 'catalogueDialog' || act === 'saveDialog') {
+  /* L'engrenage de l'entête, et le bouton « La charger » du catalogue : tout
+     mène à la même fenêtre, où ces réglages vivent désormais ensemble. */
+  if (act === 'parametres' || act === 'saveDialog') {
     openParametresModal();
     return;
   }
@@ -215,24 +214,9 @@ document.addEventListener('click', ev => {
     return;
   }
 
-  if (act === 'clearColors' || act === 'noColors') {
+  if (act === 'clearColors') {
     modifieBrouillon(() => { S.colors = new Set(); });
     apresReglage('Plus aucune couleur retenue : la collection affichée et les suggestions sont recalculées.');
-    return;
-  }
-
-  if (act === 'inc') {
-    const n = b.dataset.name;
-    S.collection.set(n, (S.collection.get(n) || 0) + 1);
-    recalculerAvecProgression(`${n} : un exemplaire de plus en collection, les suggestions en tiennent compte.`);
-    return;
-  }
-
-  if (act === 'dec') {
-    const n = b.dataset.name;
-    const c = S.collection.get(n) || 0;
-    if (c <= 1) S.collection.delete(n); else S.collection.set(n, c - 1);
-    recalculerAvecProgression(`${n} : un exemplaire de moins en collection, les suggestions en tiennent compte.`);
     return;
   }
 

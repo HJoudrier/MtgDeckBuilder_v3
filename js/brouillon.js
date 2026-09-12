@@ -6,19 +6,12 @@
    aucun sens si la moitié des réglages avait déjà pris. Les champs de `S` que
    la fenêtre règle sont donc mis de côté, lus et écrits à sa place, puis rendus
    d'un coup par « Appliquer » — ou jetés par tout autre départ.
-   ===================================================================== */
 
-/* ---------------------------------------------------------------------
-   Rien de ce qui se règle dans cette fenêtre n'agit avant « Appliquer » :
-   ni les champs, ni les couleurs, ni les cases. Filtrer coûte près d'une
-   seconde sur un grand catalogue, et « Annuler » n'aurait aucun sens si la
-   moitié des réglages avait déjà pris effet. Le brouillon ne vit que le
-   temps de la fenêtre ; hors d'elle — barre de mana de l'en-tête, puces de
-   filtre, jauges de rôle — tout continue d'agir au clic.
-
+   Le brouillon ne vit que le temps de la fenêtre ; hors d'elle — barre de mana
+   de l'en-tête, puces de filtre, jauges de rôle — tout continue d'agir au clic.
    La fenêtre étant modale, l'arrière-plan est inerte : un brouillon ouvert
    signifie forcément que le geste vient d'elle.
-   --------------------------------------------------------------------- */
+   ===================================================================== */
 
 /* Le brouillon en cours : les champs de `S` que la fenêtre ouverte règle,
    mis de côté et rendus à `S` le temps d'une lecture ou d'une écriture. Les

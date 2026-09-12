@@ -122,5 +122,3 @@ function etatSets() {
     d'un set à sa première utilisation. Le tout est gardé en cache sur cet appareil.`;
 }
 
-/* Décompte des cartes retenues, rafraîchi à chaque frappe. */
-

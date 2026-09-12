@@ -40,7 +40,7 @@ function montrerApercu(nom, x, y) {
   apercuCardName = c.name;
   if (typeof queueScryfall === 'function') queueScryfall([c]);
   const imgUrl = faceVisible(c, true) || faceVisible(c, false);
-  if (S.images && imgUrl) {
+  if (imgUrl) {
     el.innerHTML = `<img src="${esc(imgUrl)}" alt="${esc(c.name)}" style="width:240px;display:block;border-radius:8px">`;
   } else {
     el.innerHTML = `<div style="padding:10px;font-size:12px;background:var(--panel);border-radius:8px;max-width:240px">
@@ -90,7 +90,7 @@ function majApercu() {
       const c = find(apercuCardName);
       if (c) {
         const imgUrl = faceVisible(c, true) || faceVisible(c, false);
-        if (S.images && imgUrl) {
+        if (imgUrl) {
           el.innerHTML = `<img src="${esc(imgUrl)}" alt="${esc(c.name)}" style="width:240px;display:block;border-radius:8px">`;
         }
       }

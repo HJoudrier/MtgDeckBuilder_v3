@@ -5,22 +5,12 @@
    deux fenêtres ouvertes par des étiquettes qu'on ne devinait pas cliquables :
    la sauvegarde locale, la collection et le catalogue sont désormais trois
    sections d'une seule fenêtre.
-   ===================================================================== */
 
-/* =====================================================================
-   Fenêtre « Paramètres », ouverte par l'engrenage de l'entête.
-
-   Trois réglages généraux vivaient dans deux fenêtres, elles-mêmes ouvertes
-   par deux pastilles de l'entête qui comptaient tout autre chose — le nombre
-   de cartes retenues. La sauvegarde locale, les données de la collection et
-   le catalogue tiennent désormais dans une seule fenêtre, en trois sections,
-   et les deux pastilles redeviennent ce qu'elles disent : des décomptes.
-
-   La fenêtre mêle deux natures, et le dit : les réglages du catalogue
-   attendent « Appliquer » — filtrer coûte près d'une seconde sur un grand
-   catalogue —, tandis que les actions — enregistrer, exporter, mettre à jour,
-   effacer — agissent au clic. Différer « effacer l'archive » derrière un
-   bouton de validation serait déroutant.
+   Elle mêle deux natures, et le dit : les réglages du catalogue attendent
+   « Appliquer » — filtrer coûte près d'une seconde sur un grand catalogue —,
+   tandis que les actions — enregistrer, exporter, mettre à jour, effacer —
+   agissent au clic. Différer « effacer l'archive » derrière un bouton de
+   validation serait déroutant.
    ===================================================================== */
 
 /* Une section de la fenêtre : un titre, une phrase qui dit ce qu'elle règle,
@@ -105,12 +95,6 @@ function majFenetreParametres() {
   corps.innerHTML = corpsParametres();
   corps.scrollTop = y;
   brancherParametres();
-}
-
-/* Le nom d'hier, que le chargement du catalogue appelle encore : la fenêtre
-   qu'il rafraîchit est celle des paramètres. */
-function majFenetreCatalogue() {
-  majFenetreParametres();
 }
 
 function brancherParametres() {

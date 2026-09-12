@@ -623,7 +623,7 @@ function panneauEdhrec() {
 function sugRow(s) {
   const c = s.card, n = nbInteractions(s), larges = nbCartesLarges(s), liens = nbLiens(s);
   const inDeck = S.deck.get(c.name) || 0;
-  const img = S.images && (c.imgN || c.img);
+  const img = c.imgN || c.img;
   const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
 
   const edhrecTag = (() => {
@@ -862,7 +862,6 @@ function corpsEdhrec(g, plat) {
 /* Les visuels des recommandations affichées, catégorie par catégorie : une
    catégorie repliée ne montre rien, et ne demande donc rien. */
 function visuelsEdhrec(groupes, mode) {
-  if (!S.images) return;
   const plat = GROUPES[mode].plat, vus = [];
   groupes.forEach(g => {
     if (!plat && groupePlie('edhrec', mode, g.id)) return;
@@ -986,7 +985,7 @@ function listeSuggestions(sel) {
    écarte celles déjà demandées —, et une page qu'on ne regarde pas ne charge
    donc rien de plus que ce qu'elle montre. */
 function visuelsSuggestions(vus) {
-  if (!S.images || !vus || !vus.length) return;
+  if (!vus || !vus.length) return;
   setTimeout(() => queueScryfall(vus.map(x => x.card)), 0);
   setTimeout(chargeVisuelsClasses, 0);
 }
@@ -995,7 +994,6 @@ function visuelsSuggestions(vus) {
    rien, et demander les visuels de vignettes que personne ne voit serait
    autant de requêtes pour rien. */
 function visuelsCatalogue(groupes) {
-  if (!S.images) return;
   const vus = [];
   const mode = S.groupes.suggestions;
   groupes.forEach(g => {

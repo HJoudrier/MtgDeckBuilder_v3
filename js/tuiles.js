@@ -63,7 +63,7 @@ function actesAnnexe(c, cle, avecBascule) {
 function cardTile(e, ctx) {
   const c = e.card, dispo = availableFor(c), inDeck = S.deck.get(c.name) || 0;
   const isCmd = S.commander === c.name;
-  const img = S.images && (c.imgN || c.img);
+  const img = c.imgN || c.img;
   const note = ctx === 'deck' ? NOTES_DECK.get(c.name) : null;
   const face = faceVisible(c);
   const isHors = dispo < 0 || (S.collection.get(c.name) || 0) <= 0;

@@ -89,7 +89,6 @@ function mergeInto(card, canonical) {
   if (i >= 0) DB.splice(i, 1);
   unindexCard(card);
   if (S.commander === card.name) S.commander = canonical.name;
-  if (S.selected === card.name) S.selected = canonical.name;
   return canonical;
 }
 
@@ -108,7 +107,6 @@ function renameCard(card, newName) {
     }
   });
   if (S.commander === old) S.commander = newName;
-  if (S.selected === old) S.selected = newName;
   return card;
 }
 

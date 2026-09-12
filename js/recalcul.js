@@ -8,20 +8,6 @@
    chasser, et jamais pour un travail trop court pour se voir.
    ===================================================================== */
 
-/* =====================================================================
-   Recalculs annoncés — la boîte de progression hors des fenêtres
-
-   Noter les candidates est le temps long de l'atelier : sur un catalogue
-   complet, ce sont des dizaines de milliers de cartes. Fait d'un bloc, il
-   fige la fenêtre sans rien dire ; d'où cette boîte, qui l'annonce, en
-   donne la raison et montre où il en est, pendant que le travail avance
-   par tranches.
-
-   Elle ne paraît que si le travail est assez gros pour se voir — sans quoi
-   elle clignoterait à chaque clic —, et jamais par-dessus une fenêtre déjà
-   ouverte : là, la barre se glisse dans son pied plutôt que de la chasser.
-   ===================================================================== */
-
 /* Au-delà de tant de cartes à noter, le calcul passe par tranches plutôt que
    d'un bloc ; en deçà, l'atelier se refait sur-le-champ comme avant. */
 const SEUIL_RECALCUL = 1200;
@@ -32,14 +18,6 @@ const DELAI_BOITE = 250;
 
 function pause() {
   return new Promise(r => setTimeout(r, 0));
-}
-
-/* Rendre la main jusqu'à ce qu'une image ait été peinte : `setTimeout` seul
-   ne garantit pas qu'elle l'ait été, et la boîte doit être à l'écran avant
-   le premier calcul, qui lui ne rend rien avant d'avoir fini. */
-function pausePeinte() {
-  if (typeof requestAnimationFrame !== 'function') return pause();
-  return new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
 }
 
 /* Le recalcul qui vient sera-t-il long ? Deux cas : les candidates sont à
@@ -213,7 +191,4 @@ async function recalculerAvecProgression(raison, opts) {
     }
   }
 }
-
-/* Réécrit les champs de la fenêtre après une réinitialisation ou un
-   changement de couleur, en conservant la position de défilement. */
 

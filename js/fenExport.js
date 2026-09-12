@@ -124,7 +124,6 @@ function openWipeModal() {
     S.deck.clear();
     CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
     S.commander = null;
-    S.selected = null;
     closeDialog();
     renderAll();
     toast('Collection, deck et listes annexes effacés.');

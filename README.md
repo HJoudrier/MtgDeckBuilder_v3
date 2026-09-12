@@ -57,8 +57,6 @@ js/                 modules, chargés dans cet ordre :
 
   app.js            démarrage et évènements
 ```
-  app.js           Démarrage et évènements
-```
 
 Les sept sections de la page se répartissent en cinq onglets, posés au bas de l'en-tête et
 toujours visibles : **Collection** porte les statistiques puis la collection, **Deck** porte le

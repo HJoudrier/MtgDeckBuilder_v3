@@ -227,14 +227,14 @@ function indexImpressions(cartes) {
 }
 
 /* Une carte mérite un aller-retour Scryfall tant qu'il lui manque son visuel
-   (mode images) ou son texte oracle complet : la base intégrée n'en garde
-   qu'un résumé, ce qui coupait par exemple l'alternative d'un sort. Une
+   ou son texte oracle complet : la base intégrée n'en garde qu'un résumé, ce
+   qui coupait par exemple l'alternative d'un sort. Une
    édition relevée à l'import justifie elle aussi un aller-retour : le visuel
    affiché doit être celui de l'impression possédée, pas d'une autre. */
 function besoinScryfall(c) {
   if (!c || c.unknown) return false;
-  if (S.images && !c.img && !c.imgTried) return true;
-  if (S.images && c.set && c.num && !c.impressionTried && !c.impressionKO && !c.impressionChoisie
+  if (!c.img && !c.imgTried) return true;
+  if (c.set && c.num && !c.impressionTried && !c.impressionKO && !c.impressionChoisie
       && c.imgImpression !== cleImpression(c.set, c.num)) return true;
   return !c.textFull && !c.texteTried;
 }
@@ -282,12 +282,7 @@ async function runScryQueue() {
       chunk.forEach(c => c.imgEnCours = false);
       scryQueue.forEach(c => c.imgEnCours = false);
       if (typeof rafraichirFiche === 'function') rafraichirFiche();
-      if (S.images) {
-        S.imagesFailed = true;
-        toast("Visuels indisponibles (hors ligne ou accès bloqué). L'affichage reste en mode texte.");
-      } else {
-        toast("Textes complets indisponibles (hors ligne ou accès bloqué) : les résumés de la base intégrée restent affichés.");
-      }
+      toast("Visuels indisponibles (hors ligne ou accès bloqué). L'affichage reste en mode texte.");
       renderB();
       return;
     }

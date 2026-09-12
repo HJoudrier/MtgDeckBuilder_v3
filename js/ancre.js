@@ -6,16 +6,6 @@
    remet après au même creux du défilement.
    ===================================================================== */
 
-/* ---------------------------------------------------------------------
-   L'ancre de défilement.
-
-   Un rendu complet repeint toutes les sections : le deck qui gagne une
-   ligne, l'en-tête qui gagne une pastille, et ce qu'on lisait descend de
-   quelques dizaines de pixels. On relève donc, avant, ce qui occupe le haut
-   de la fenêtre — la vignette qu'on regardait dans les suggestions, ou à
-   défaut la section — pour l'y remettre après.
-   --------------------------------------------------------------------- */
-
 /* Les repères possibles : les sections, et toute carte affichée. La bonne
    ancre est la plus profonde de celles qui franchissent le haut de la
    fenêtre — la vignette qu'on lisait plutôt que la section qui la porte. */

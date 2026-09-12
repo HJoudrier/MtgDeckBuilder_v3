@@ -7,43 +7,51 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**457 fonctions**, 33 modules, 513 Ko de JavaScript.
+**455 fonctions**, 41 modules, 511 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
 | [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 16 | 570 |
 | [`cartes.js`](#jscartesjs) | Base de cartes, indexation, analyse & typage | 30 | 717 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 619 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 613 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 16 | 358 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
-| [`scryfall.js`](#jsscryfalljs) | Intégration Scryfall, symboles, visuels & complétion | 25 | 568 |
+| [`scryfall.js`](#jsscryfalljs) | Intégration Scryfall, symboles, visuels & complétion | 25 | 563 |
 | [`stockage.js`](#jsstockagejs) | Persistance locale (localStorage) & gestion des sauvegardes | 15 | 437 |
-| [`externes.js`](#jsexternesjs) | EDHREC & Catalogue complet Scryfall | 75 | 1488 |
+| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
+| [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
+| [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
+| [`edhrecThemes.js`](#jsedhrecthemesjs) | L'index des thèmes EDHREC | 10 | 179 |
+| [`sets.js`](#jssetsjs) | Les sets publiés par Scryfall | 8 | 156 |
+| [`gameChangers.js`](#jsgamechangersjs) | La liste des « Game Changers » | 4 | 77 |
+| [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 219 |
+| [`catalogue.js`](#jscataloguejs) | Tenir le catalogue à jour | 10 | 232 |
+| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 252 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 168 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
-| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 49 | 1150 |
-| [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 504 |
-| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 39 | 900 |
+| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 49 | 1148 |
+| [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 502 |
+| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 40 | 905 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 6 | 68 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
-| [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 146 |
+| [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 139 |
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
 | [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 7 | 164 |
-| [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 67 |
-| [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 9 | 220 |
+| [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
+| [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 195 |
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 176 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
-| [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 68 |
-| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 10 | 145 |
-| [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 84 |
+| [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
+| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 129 |
+| [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
-| [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 127 |
-| [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 82 |
-| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 134 |
-| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 886 |
+| [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
+| [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
+| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
+| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 870 |
 
 ## js/effets.js
 
@@ -147,7 +155,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *42 fonctions, 619 lignes, 27 Ko.*
+État global de l'application & utilitaires. *42 fonctions, 613 lignes, 27 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -275,7 +283,7 @@ Marché Cardmarket, estimations & panier d'achat. *5 fonctions, 69 lignes, 2.5 K
 
 ## js/scryfall.js
 
-Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 568 lignes, 24 Ko.*
+Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 563 lignes, 24 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -291,7 +299,7 @@ Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 568 ligne
 | `identScryfall(c)` | Identifiant demandé à Scryfall : l'édition relevée à l'import quand la carte en a une, le nom sinon. |
 | `cibleImpression(sc, parImpression)` | Retrouve la carte visée par une réponse, d'abord par l'édition demandée. |
 | `indexImpressions(cartes)` | — |
-| `besoinScryfall(c)` | Une carte mérite un aller-retour Scryfall tant qu'il lui manque son visuel (mode images) ou son texte oracle complet : la base intégrée n'en garde qu'un résumé, ce qui coupait par… |
+| `besoinScryfall(c)` | Une carte mérite un aller-retour Scryfall tant qu'il lui manque son visuel ou son texte oracle complet : la base intégrée n'en garde qu'un résumé, ce qui coupait par exemple… |
 | `queueScryfall(cards)` | — |
 | `runScryQueue()` | — |
 | `completeUnknown(names)` | — |
@@ -344,9 +352,24 @@ Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 437 
 | `saveError` | — |
 | `dernierEtatSignale` | — |
 
-## js/externes.js
+## js/idb.js
 
-EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
+Le magasin IndexedDB. *4 fonctions, 44 lignes, 1.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `idb()` | — |
+| `idbLire(cle)` | — |
+| `idbEcrire(cle, val)` | — |
+| `idbVider()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `IDB_NOM` | — |
+
+## js/edhrec.js
+
+Les statistiques d'EDHREC pour un commandant. *6 fonctions, 242 lignes, 8.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -356,6 +379,17 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 | `edhrecAllFor(card)` | — |
 | `signatureCommandants()` | Les commandants que l'atelier croise avec EDHREC, en une chaîne : le principal et les secondaires retenus. |
 | `loadEdhrec(force)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `EDHREC_CACHE` | — |
+
+## js/edhrecForme.js
+
+Deviner la forme des pages de thèmes d'EDHREC. *7 fonctions, 142 lignes, 5.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `pauseEdhrec()` | — |
 | `formesDeduites()` | Dernier recours : une page de commandant cite les pages de thème du site. |
 | `formeThemeEdhrec()` | Cherche la forme d'adresse qui répond avec des cartes lisibles. |
@@ -363,6 +397,23 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 | `nomsPageEdhrec(j)` | Noms de cartes d'une page EDHREC, quelle que soit la variante de forme. |
 | `indexDepuisCartes(cartes)` | — |
 | `cartesDepuisIndex(index)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `ARCH_CLE_IDB` | — |
+| `ARCH_PAUSE` | — |
+| `ARCH_FRAICHEUR` | EDHREC ne publie aucun manifeste daté : impossible de demander « ta liste a-t-elle changé ? » sans la relire. |
+| `ARCH_HOTE` | json.edhrec.com est un dépôt de fichiers : une clé absente répond « AccessDenied », jamais 404. |
+| `ARCH_FORMES` | — |
+| `ARCH_SONDES` | — |
+| `ARCH_TEMOIN` | — |
+
+## js/edhrecThemes.js
+
+L'index des thèmes EDHREC. *10 fonctions, 179 lignes, 7.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `reprendreArchetypesEdhrec()` | Reprise du cache local, au démarrage. |
 | `urlIndexEdhrec(pre)` | Index des thèmes publiés par EDHREC : une requête, quelques centaines d'entrées. |
 | `descriptionPageEdhrec(j)` | Description que la page d'un thème porte parfois en tête. |
@@ -373,6 +424,13 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 | `signatureArchetypes(liste)` | Une liste vaut l'autre si elle porte les mêmes thèmes. |
 | `archetypesARevoir()` | Y a-t-il lieu d'interroger EDHREC ? Oui si nous n'avons rien, ou si notre liste a passé la semaine. |
 | `chargerArchetypesEdhrec()` | Chargement automatique, au démarrage : l'index, puis les thèmes déjà cochés. |
+
+## js/sets.js
+
+Les sets publiés par Scryfall. *8 fonctions, 156 lignes, 6.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `setRetenu(s)` | — |
 | `reprendreSets()` | Reprise du cache local, au démarrage : sans elle, un set coché avant le rechargement ne filtrerait plus rien tant que Scryfall n'a pas répondu. |
 | `sauverSets()` | — |
@@ -381,15 +439,38 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 | `chargerListeSets()` | La liste des sets : une requête, quelques centaines d'entrées. |
 | `noteSetIndex(nom, code)` | — |
 | `chargerSetScryfall(code)` | Les cartes d'un set, à sa première utilisation. |
+
+| Donnée | Rôle |
+|---|---|
+| `SETS_CLE_IDB` | — |
+| `SETS_FRAICHEUR` | — |
+| `SETS_PAGES` | — |
+| `SETS_PAUSE` | — |
+| `SETS_ECARTES` | Sets proposés : ceux qu'on peut avoir en main. |
+
+## js/gameChangers.js
+
+La liste des « Game Changers ». *4 fonctions, 77 lignes, 2.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `reprendreGameChangers()` | — |
 | `sauverGameChangers()` | — |
 | `gameChangersARevoir()` | — |
 | `chargerGameChangers()` | — |
-| `deckSignature()` | 2. L'empreinte du deck, dont l'empreinte des suggestions se sert pour savoir si la notation vaut encore. |
-| `idb()` | — |
-| `idbLire(cle)` | — |
-| `idbEcrire(cle, val)` | — |
-| `idbVider()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `GC_CLE_IDB` | — |
+| `GC_FRAICHEUR` | — |
+| `GC_PAGES` | — |
+
+## js/archive.js
+
+Lire l'archive Scryfall. *11 fonctions, 219 lignes, 9.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `compacte(sc)` | — |
 | `autoCatalogue()` | — |
 | `estGzip(nom, octets)` | — |
@@ -401,6 +482,18 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 | `tailleEstimee(cartes)` | — |
 | `ArchiveAbandonnee()` | Levée quand l'utilisateur interrompt : ce n'est pas une panne, et l'appelant la distingue d'une erreur. |
 | `lireCatalogueFichier(source, nom, suivi)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `CDN` | — |
+| `FICHIERS_LOCAUX` | — |
+
+## js/catalogue.js
+
+Tenir le catalogue à jour. *10 fonctions, 232 lignes, 11 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `chargerCatalogueLocal()` | — |
 | `verifierMajCatalogue()` | — |
 | `catalogueObsolete()` | — |
@@ -411,6 +504,13 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 | `demarrerCatalogue()` | Enchaînement du démarrage : on regarde d'abord ce que cet appareil garde déjà des cartes existantes, puis ce que Scryfall publie. |
 | `proposerMajCatalogue()` | Fenêtre signalant que les données des cartes ont pu changer. |
 | `majCatalogue()` | Bouton « Mettre à jour » de la fenêtre de sauvegarde, et de la fenêtre ci-dessus : on teste la version publiée, et l'archive n'est retéléchargée que si elle manque ou si elle a vieilli. |
+
+## js/candidats.js
+
+Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 252 lignes, 11 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `completeDepuisRec(c, rec)` | — |
 | `noterLegalArchive(c, rec)` | Ce que l'archive sait de la légalité d'une carte. |
 | `noterSetsArchive(c, rec)` | Ce que l'archive sait des éditions d'une carte, gardé sur la carte pour que le filtre par set réponde sans réseau. |
@@ -428,25 +528,6 @@ EDHREC & Catalogue complet Scryfall. *75 fonctions, 1488 lignes, 61 Ko.*
 
 | Donnée | Rôle |
 |---|---|
-| `EDHREC_CACHE` | 1. EDHREC |
-| `ARCH_CLE_IDB` | 1 bis. Archétypes établis : thèmes EDHREC Une page par thème, même hôte et même forme que les pages de commandant déjà exploitées ci-dessus. Les noms retenus alimentent `ARCH_BASE`… |
-| `ARCH_PAUSE` | — |
-| `ARCH_FRAICHEUR` | EDHREC ne publie aucun manifeste daté : impossible de demander « ta liste a-t-elle changé ? » sans la relire. |
-| `ARCH_HOTE` | json.edhrec.com est un dépôt de fichiers : une clé absente répond « AccessDenied », jamais 404. |
-| `ARCH_FORMES` | — |
-| `ARCH_SONDES` | — |
-| `ARCH_TEMOIN` | — |
-| `SETS_CLE_IDB` | 1 ter. Sets publiés par Scryfall La liste des sets tient en une requête ; la composition d'un set n'est cherchée qu'au moment où on le coche. Les noms retenus alimentent `SETS_BASE`… |
-| `SETS_FRAICHEUR` | — |
-| `SETS_PAGES` | — |
-| `SETS_PAUSE` | — |
-| `SETS_ECARTES` | Sets proposés : ceux qu'on peut avoir en main. |
-| `GC_CLE_IDB` | 1 quater. Game Changers La liste que Wizards publie pour les paliers du Commander, telle que Scryfall la marque (`is:gamechanger`). Une quarantaine de cartes, une requête, gardée en… |
-| `GC_FRAICHEUR` | — |
-| `GC_PAGES` | — |
-| `IDB_NOM` | 3. Catalogue Scryfall IndexedDB (CAT et CH sont définis dans js/etat.js) |
-| `CDN` | — |
-| `FICHIERS_LOCAUX` | — |
 | `CAND` | — |
 
 ## js/graphe.js
@@ -472,7 +553,7 @@ Statistiques, répartitions & courbes de mana. *3 fonctions, 90 lignes, 4.5 Ko.*
 
 ## js/suggestions.js
 
-Moteur d'évaluation, scoring & suggestions d'ajout. *49 fonctions, 1150 lignes, 57 Ko.*
+Moteur d'évaluation, scoring & suggestions d'ajout. *49 fonctions, 1148 lignes, 57 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -536,7 +617,7 @@ Moteur d'évaluation, scoring & suggestions d'ajout. *49 fonctions, 1150 lignes,
 
 ## js/collection.js
 
-Gestion de la collection, filtres & imports MTGO. *18 fonctions, 504 lignes, 25 Ko.*
+Gestion de la collection, filtres & imports MTGO. *18 fonctions, 502 lignes, 25 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -568,12 +649,13 @@ Gestion de la collection, filtres & imports MTGO. *18 fonctions, 504 lignes, 25 
 
 ## js/deck.js
 
-Construction du deck, légalité, commandant & fiches détaillées. *39 fonctions, 900 lignes, 49 Ko.*
+Construction du deck, légalité, commandant & fiches détaillées. *40 fonctions, 905 lignes, 50 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `deckEntries()` | — |
-| `cartesDuDeck()` | Les cartes du deck, une fois chacune. Deux clés de `S.deck` peuvent viser la même carte — un import l'a nommée autrement et `find()` la rattrape, avant que `mergeInto()` ne fusionne les… |
+| `deckSignature()` | 2. L'empreinte du deck, dont l'empreinte des suggestions se sert pour savoir si la notation vaut encore. |
+| `cartesDuDeck()` | — |
 | `deckSize()` | — |
 | `availableFor(card)` | — |
 | `annexeListe(cle)` | — |
@@ -641,7 +723,7 @@ La fenêtre modale, une à la fois. *2 fonctions, 42 lignes, 2.1 Ko.*
 
 ## js/brouillon.js
 
-Le brouillon des fenêtres à « Appliquer ». *12 fonctions, 146 lignes, 6.6 Ko.*
+Le brouillon des fenêtres à « Appliquer ». *12 fonctions, 139 lignes, 6.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -732,7 +814,7 @@ Les deux rendus d'une carte. *7 fonctions, 164 lignes, 11 Ko.*
 
 ## js/ancre.js
 
-L'ancre de défilement. *3 fonctions, 67 lignes, 3 Ko.*
+L'ancre de défilement. *3 fonctions, 57 lignes, 2.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -742,12 +824,11 @@ L'ancre de défilement. *3 fonctions, 67 lignes, 3 Ko.*
 
 ## js/recalcul.js
 
-Les recalculs annoncés. *9 fonctions, 220 lignes, 9.6 Ko.*
+Les recalculs annoncés. *8 fonctions, 195 lignes, 8.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `pause()` | — |
-| `pausePeinte()` | Rendre la main jusqu'à ce qu'une image ait été peinte : `setTimeout` seul ne garantit pas qu'elle l'ait été, et la boîte doit être à l'écran avant le premier calcul, qui lui ne rend rien… |
 | `recalculLong()` | Le recalcul qui vient sera-t-il long ? Deux cas : les candidates sont à rebâtir depuis l'archive, ou le vivier à noter est déjà gros. |
 | `corpsBoiteRecalcul(raison)` | — |
 | `annonceRecalcul(raison)` | Annonce le recalcul là où il ne gêne pas : dans sa boîte si rien n'est ouvert, dans le pied de la fenêtre ouverte sinon — la refermer emporterait la fiche ou le formulaire que l'on est… |
@@ -794,7 +875,7 @@ Le rendu d'ensemble. *2 fonctions, 33 lignes, 1.1 Ko.*
 
 ## js/fenFormat.js
 
-Fenêtre « Format ». *5 fonctions, 68 lignes, 3.5 Ko.*
+Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -806,7 +887,7 @@ Fenêtre « Format ». *5 fonctions, 68 lignes, 3.5 Ko.*
 
 ## js/fenParametres.js
 
-Fenêtre « Paramètres ». *10 fonctions, 145 lignes, 7 Ko.*
+Fenêtre « Paramètres ». *9 fonctions, 129 lignes, 6.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -815,7 +896,6 @@ Fenêtre « Paramètres ». *10 fonctions, 145 lignes, 7 Ko.*
 | `corpsCatalogue()` | — |
 | `corpsParametres()` | Le corps entier, les trois sections à la suite. |
 | `majFenetreParametres()` | La fenêtre reste ouverte pendant qu'une archive se charge ou qu'un réglage change : son corps est réécrit sur place, le défilement gardé, et les champs de fichier rebranchés — l'ancien… |
-| `majFenetreCatalogue()` | Le nom d'hier, que le chargement du catalogue appelle encore : la fenêtre qu'il rafraîchit est celle des paramètres. |
 | `brancherParametres()` | — |
 | `appliquerParametres()` | — |
 | `openParametresModal()` | — |
@@ -823,7 +903,7 @@ Fenêtre « Paramètres ». *10 fonctions, 145 lignes, 7 Ko.*
 
 ## js/fenBudget.js
 
-Fenêtre « Budget ». *5 fonctions, 84 lignes, 4.8 Ko.*
+Fenêtre « Budget ». *5 fonctions, 78 lignes, 4.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -852,7 +932,7 @@ Fenêtre « Filtres ». *10 fonctions, 207 lignes, 12 Ko.*
 
 ## js/fenListes.js
 
-Les deux listes déroulantes des filtres. *6 fonctions, 127 lignes, 6.8 Ko.*
+Les deux listes déroulantes des filtres. *6 fonctions, 125 lignes, 6.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -872,7 +952,7 @@ Les deux listes déroulantes des filtres. *6 fonctions, 127 lignes, 6.8 Ko.*
 
 ## js/boiteCatalogue.js
 
-Boîte de chargement de l'archive Scryfall. *6 fonctions, 82 lignes, 4 Ko.*
+Boîte de chargement de l'archive Scryfall. *6 fonctions, 75 lignes, 3.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -885,7 +965,7 @@ Boîte de chargement de l'archive Scryfall. *6 fonctions, 82 lignes, 4 Ko.*
 
 ## js/fenExport.js
 
-Fenêtres d'export et d'effacement. *3 fonctions, 134 lignes, 6.9 Ko.*
+Fenêtres d'export et d'effacement. *3 fonctions, 133 lignes, 6.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -895,7 +975,7 @@ Fenêtres d'export et d'effacement. *3 fonctions, 134 lignes, 6.9 Ko.*
 
 ## js/app.js
 
-Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 886 lignes, 31 Ko.*
+Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 870 lignes, 31 Ko.*
 
 | Fonction | Rôle |
 |---|---|

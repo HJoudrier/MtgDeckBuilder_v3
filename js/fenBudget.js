@@ -1,22 +1,16 @@
 /* =====================================================================
    js/fenBudget.js — Fenêtre « Budget »
 
-   Ouverte depuis la pastille de l'en-tête : le budget total, le prix maximum par
-   carte et l'état de la dépense. C'était le panneau « Achats sur Cardmarket »
-   de l'ancienne section Suggestions.
-   ===================================================================== */
+   Ouverte depuis la pastille de l'en-tête : le budget total, le prix maximum
+   par carte et les préférences qui font l'estimation — état, langue, type de
+   vendeur, pays. C'était le panneau « Achats sur Cardmarket » de l'ancienne
+   section Suggestions.
 
-/* =====================================================================
-   Fenêtre « Budget », ouverte depuis la pastille de l'en-tête. Elle porte
-   ce qui était le panneau « Achats sur Cardmarket » de la section
-   Suggestions : le budget total, le prix maximum par carte et les
-   préférences qui font l'estimation — état, langue, type de vendeur, pays.
-
-   Comme les fenêtres Filtres, Format et Catalogue, ses réglages attendent
-   « Appliquer » : un budget se cherche par tâtonnements, et chaque chiffre
-   essayé relancerait sinon la notation des candidates. Le résumé et la
-   liste des achats se peignent, eux, sous le brouillon : ils annoncent ce
-   que « Appliquer » donnerait.
+   Comme les fenêtres Filtres et Format, ses réglages attendent « Appliquer » :
+   un budget se cherche par tâtonnements, et chaque chiffre essayé relancerait
+   sinon la notation des candidates. Le résumé et la liste des achats se
+   peignent, eux, sous le brouillon : ils annoncent ce que « Appliquer »
+   donnerait.
    ===================================================================== */
 
 function champBudget(id, label, cle, liste) {

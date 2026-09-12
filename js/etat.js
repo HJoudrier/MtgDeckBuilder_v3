@@ -128,12 +128,9 @@ const S = {
      dans la fenêtre « Achats sur Cardmarket ». Le prix maximum par carte, lui,
      est déjà posé : il n'attend que le budget pour valoir. */
   budget: {total:0, perCard:5, condition:'GD', lang:'any', sellerType:'any', country:'any'},
-  selected: null,
-  selectedCtx: 'collection',
   limitB: 200,
   limiteType: {},
   exploreEtat: '',
-  exploreSig: null,
   exploreMax: 6000,        // plafond du chargement paginé par l'API Scryfall
   candidatsMax: 20000,     // plafond des candidats tirés du catalogue local
   catalogueNumeriques: false,  // cartes d'Alchemy, d'Arena, de MTGO : écartées par défaut
@@ -145,9 +142,6 @@ const S = {
   prixMaj: null,
   majIgnoree: null,
   enriching: false,
-  // Les visuels Scryfall sont toujours actifs : plus aucun réglage ne les coupe.
-  images: true,
-  imagesFailed: false,
   scryHS: false,
   edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null}
 };

@@ -6,13 +6,6 @@
    réseau, ce qui en est rangé dans IndexedDB.
    ===================================================================== */
 
-/* =====================================================================
-   Boîte de progression du chargement de l'archive Scryfall. L'archive pèse
-   plus de cent mégaoctets : sans elle, l'atelier semblait figé une longue
-   minute au premier lancement. Deux barres — ce qui arrive, ce qui en est
-   extrait — et le décompte des cartes retenues.
-   ===================================================================== */
-
 function octets(n) {
   if (!n) return '';
   return n >= 1048576 ? `${(n/1048576).toFixed(1)} Mo` : `${Math.round(n/1024)} Ko`;

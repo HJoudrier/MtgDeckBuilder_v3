@@ -5,11 +5,6 @@
    Commander et la légalité. Les couleurs, elles, se règlent dans les filtres.
    ===================================================================== */
 
-/* =====================================================================
-   Fenêtre « Format », ouverte depuis la pastille de l'en-tête. Les
-   couleurs, elles, se règlent dans la fenêtre des filtres.
-   ===================================================================== */
-
 function resumeFormat() {
   const f = fmt();
   return `${f.size} cartes · max ${f.maxCopies >= 99 ? 'illimité' : f.maxCopies} ex. · ${f.commander ? 'commandant obligatoire' : 'sans commandant'}`;

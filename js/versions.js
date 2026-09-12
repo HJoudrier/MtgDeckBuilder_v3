@@ -123,7 +123,7 @@ function visuelVersion(card, v, grand) {
    icône de chargement, plutôt que de retomber sur le panneau de texte —
    qui, lui, dit « pas de visuel », ce qui serait prématuré. */
 function visuelEnRecherche(card, v) {
-  if (!card || !S.images) return false;
+  if (!card) return false;
   if (card.editionsEtat === 'chargement') return true;
   if (card.visuelsEnCours) return true;
   if (v) {
