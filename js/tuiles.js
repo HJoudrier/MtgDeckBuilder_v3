@@ -12,7 +12,7 @@
    est légale ou que sa légalité nous échappe. */
 function tagIllegal(card) {
   if (carteLegale(card) !== false) return '';
-  return `<span class="tag" style="border-color:var(--bad);color:#e39a90"
+  return `<span class="tag" style="border-color:var(--bad);color:var(--bad-txt)"
     title="Cette carte n'a pas le droit d'être jouée en ${esc(fmt().label)}.">illégal</span>`;
 }
 
@@ -21,7 +21,7 @@ function tagIllegal(card) {
    la carte, pas du deck —, et se tait tant que la liste n'est pas chargée. */
 function tagGameChanger(card) {
   if (estGameChanger(card) !== true) return '';
-  return `<span class="tag" style="border-color:#b07cd8;color:#cba6e8;background:rgba(176,124,216,.12)"
+  return `<span class="tag" style="border-color:var(--gc);color:var(--gc-txt);background:var(--gc-bg)"
     title="Carte classée « Game Changer » par Wizards : sa présence hausse le palier d'un deck Commander. Le palier 2 n'en admet aucune, le palier 3 jusqu'à trois, les paliers 4 et 5 sans limite.">game changer</span>`;
 }
 
@@ -40,7 +40,7 @@ function tagDeck(card, ctx) {
   const reste = ai - n;
   const aide = `${n} exemplaire(s) dans le deck sur ${ai} possédé(s)`
     + (reste > 0 ? ` — il en reste ${reste} de disponible(s).` : ' — aucun ne reste disponible.');
-  return `<span class="tag" style="border-color:var(--ok);color:#7fc98f;background:rgba(79,159,104,.12)"
+  return `<span class="tag" style="border-color:var(--ok);color:var(--ok-txt);background:var(--ok-bg)"
     title="${esc(aide)}">dans le deck${n > 1 ? ` ×${n}` : ''}</span>`;
 }
 
@@ -75,8 +75,8 @@ function cardTile(e, ctx) {
     const n = nbInteractions(note), larges = nbCartesLarges(note), liens = nbLiens(note);
     return [
       (n || larges) ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit précisément (${liens} lien(s) d'effets)${larges ? ` — et ${larges} autre(s) que seul un déclencheur large relie : ${libelleFamillesLarges(note.larges)}, que tout le deck alimente` : ''}">${n}${larges ? ` (+${larges})` : ''} interaction${n + larges > 1 ? 's' : ''}</span>` : '',
-      isHors ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
-      note.edhrec ? `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''
+      isHors ? `<span class="tag" style="border-color:var(--bad);color:var(--bad-txt)">hors collection</span>` : '',
+      note.edhrec ? `<span class="tag" style="border-color:var(--edh);color:var(--edh)" title="Taux d'inclusion dans les decks de ce commandant, et synergie par rapport aux autres decks de la même identité couleur">edhrec ${Math.round(note.edhrec.inclusion*100)} % / ${note.edhrec.synergy>=0?'+':'−'}${Math.abs(Math.round(note.edhrec.synergy*100))} %</span>` : ''
     ].filter(Boolean).join('');
   })() : '';
   /* Le tag de liste annexe suit la carte partout sauf dans la liste
@@ -170,10 +170,10 @@ function tagEdhrec(s) {
   const syn = (s.edhrec.synergy >= 0 ? '+' : '−') + Math.abs(Math.round(s.edhrec.synergy * 100)) + ' %';
   const secs = s.edhrec.secondaires || [];
   if (s.edhrec.role !== 'principal')
-    return `<span class="tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.12)" title="EDHREC (Commandant secondaire ${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}">★ ${esc(s.edhrec.commandant)} ${pct} %</span>`;
+    return `<span class="tag" style="border-color:var(--edh-d);color:var(--edh-txt);background:var(--edh-bg)" title="EDHREC (Commandant secondaire ${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}">★ ${esc(s.edhrec.commandant)} ${pct} %</span>`;
   const secTxt = secs.length ? ` (+${secs.length} 2nd)` : '';
   const secTitle = secs.length ? ` · Également recommandé par : ${secs.map(x => x.commandant).join(', ')}` : '';
-  return `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="EDHREC (${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}${secTitle}">edhrec ${pct} % / ${syn}${secTxt}</span>`;
+  return `<span class="tag" style="border-color:var(--edh);color:var(--edh)" title="EDHREC (${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}${secTitle}">edhrec ${pct} % / ${syn}${secTxt}</span>`;
 }
 
 /* Ce qu'une proposition dit d'elle-même : ses interactions avec le deck, sa
@@ -186,7 +186,7 @@ function tagsSuggestion(s, edhrecTag) {
     (n || larges) ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit précisément (${liens} lien(s) d'effets)${larges ? ` — et ${larges} autre(s) que seul un déclencheur large relie : ${libelleFamillesLarges(s.larges)}, que tout le deck alimente` : ''}">${n}${larges ? ` (+${larges})` : ''} interaction${n + larges > 1 ? 's' : ''}</span>` : '',
     tagIllegal(s.card),
     tagGameChanger(s.card),
-    s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
+    s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:var(--bad-txt)">hors collection</span>` : '',
     tagAnnexe(s.card),
     edhrecTag
   ].filter(Boolean).join('');

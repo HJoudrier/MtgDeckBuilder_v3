@@ -141,6 +141,10 @@ const S = {
      ligne sur un téléphone. Le catalogue est nommé « suggestions », comme
      partout où son rangement est en jeu. */
   colonnes: {collection:0, deck:0, graphe:0, edhrec:0, suggestions:0},
+  /* Le thème sombre — le dessin d'origine de l'atelier — ou le papier clair.
+     `null` tant que rien n'a été choisi : le démarrage suit alors la
+     préférence du système (`js/theme.js`). */
+  sombre: null,
   onglet: 'collection',      // l'onglet ouvert : une préférence d'affichage, conservée
   graphSource: 'collection',
   showImplicit: true,

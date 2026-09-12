@@ -178,7 +178,7 @@ function renderE() {
           if (!fmt().commander || !gameChangersConnus()) return '';
           const gc = gameChangersDuDeck();
           const q = gc.reduce((x, e) => x + e.qty, 0);
-          return `<span class="pill" style="${q ? 'border-color:#8a5fb0;color:#cba6e8' : ''}" title="${q
+          return `<span class="pill" style="${q ? 'border-color:var(--gc);color:var(--gc-txt)' : ''}" title="${q
             ? `Cartes classées « Game Changer » par Wizards : ${esc(gc.map(e => e.card.name).join(', '))}. Le palier 2 n'en admet aucune, le palier 3 jusqu'à trois, les paliers 4 et 5 sans limite.`
             : 'Aucune carte classée « Game Changer » : le deck reste compatible avec les paliers 1 et 2 du Commander.'}">Game changers <b>${q}</b></span>`;
         })()}
@@ -195,7 +195,7 @@ function renderE() {
         <button class="btn" data-act="exportDeck">Exporter</button>
         <button class="btn danger" data-act="clearDeck">Vider le deck</button>
       </div>
-      ${msgs.length ? `<div class="warnbox"><b>À corriger</b><ul style="margin:5px 0 0 16px;padding:0">${msgs.slice(0,6).map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>` : `<div class="warnbox" style="border-color:#2f6b46;background:rgba(79,159,104,.1)">Le deck respecte les contraintes du format.</div>`}
+      ${msgs.length ? `<div class="warnbox"><b>À corriger</b><ul style="margin:5px 0 0 16px;padding:0">${msgs.slice(0,6).map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>` : `<div class="warnbox" style="border-color:var(--ok-d);background:var(--ok-bg)">Le deck respecte les contraintes du format.</div>`}
       ${ligneGameChangers()}
       ${f.commander ? zoneCommandant() : ''}
       ${blocAchats()}

@@ -77,6 +77,7 @@ js/                 modules, chargés dans cet ordre :
 
   — l'interface commune —
   outils.js         échapper, formater un prix, souffler un mot
+  theme.js          le thème clair et le thème sombre
   dialogue.js       la fenêtre modale, une à la fois
   brouillon.js      les réglages qui n'agissent qu'à « Appliquer »
   couleurs.js       le nom des combinaisons de mana
@@ -168,6 +169,24 @@ coup. Chacune garde son enveloppe et ne réécrit que ses listes (`poseCorps()`)
 rafraîchissement est en place par construction, et le lecteur qui parcourait le milieu d'une liste
 de trois cents vignettes n'est jamais renvoyé au début.
 
+L'atelier a deux teintes. Le dessin d'origine — le laiton sur fond d'encre — est conservé entier et
+devient le **mode sombre**, que coche la section « Apparence » de la fenêtre des paramètres ; le
+thème de départ est un papier clair. Tout tient dans l'attribut `data-theme` de la racine : la
+feuille de style porte deux palettes aux mêmes noms, et le navigateur recalcule les couleurs sans
+qu'aucun rendu soit refait (`js/theme.js`). D'où une règle qui vaut partout : **aucune couleur n'est
+écrite en dur**, ni dans une règle CSS, ni dans un style en ligne du JavaScript — elle resterait
+sombre sur fond clair. Les variables disent le rôle et jamais la teinte : `--sur-brass` est l'encre
+qu'on pose sur du laiton, `--vide-img` le fond d'un visuel qui manque, `--voile` le verre dépoli
+d'une étiquette posée sur une image, `--W-txt` la couleur du mana blanc quand elle sert d'encre et
+non de pastille. Le graphe est le seul endroit où la couleur passe par un attribut SVG : ceux-ci
+n'acceptent pas `var()`, elle y est donc posée en style en ligne (`js/graphe.js`). La préférence vit
+dans `S.sombre` comme le reste de l'état, mais s'écrit aussi dans une clé à elle
+(`mtg-atelier-theme`) : quatre lignes en tête de `index.html` la lisent pour peindre la page avant
+que les modules ne soient chargés — ouvrir là toute la sauvegarde pour une seule valeur coûterait ce
+qu'on cherche à éviter, et sans elles un atelier réglé en sombre clignerait en clair à chaque
+visite. Tant que rien n'a été choisi, `S.sombre` vaut `null` et l'atelier suit la préférence du
+système.
+
 La feuille de style et les modules portent un marqueur de version dans leur adresse
 (`?v=…`, `index.html`). Sans lui, un navigateur relit la page en gardant en cache ce qu'elle
 charge : tant que chacun tenait son rôle de son côté la dérive passait inaperçue, mais depuis
@@ -246,6 +265,12 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
 
 - L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-onglet`, `data-filtre` et `data-card-name`.
+- La fenêtre des paramètres porte trois sections : la sauvegarde locale, l'apparence, le catalogue.
+  Une quatrième tenait le décompte des cartes de la collection, des exemplaires et leur valeur, avec
+  trois boutons. Les chiffres, la section Collection les donne déjà et mieux — sa phrase de causes
+  dit en plus ce que chaque filtre écarte —, et les trois boutons sont ceux de sa barre : deux
+  endroits pour une même chose, dont l'un obligeait à ouvrir une fenêtre pour lire ce qui était
+  affiché derrière.
 - Les données restent sur l'appareil : `localStorage` pour la collection et le deck, IndexedDB pour le catalogue des cartes,
   pour l'index des archétypes EDHREC et pour celui des sets.
 - Le filtre par set retient une carte dès qu'elle a paru dans un des sets cochés, possédée ou non dans cette édition.

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**472 fonctions**, 79 modules, 540 Ko de JavaScript.
+**476 fonctions**, 80 modules, 543 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,7 +21,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 172 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 176 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
@@ -33,7 +33,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 9 | 200 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 258 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 262 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
@@ -44,7 +44,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 219 |
 | [`catalogue.js`](#jscataloguejs) | Tenir le catalogue à jour | 10 | 232 |
 | [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 252 |
-| [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 168 |
+| [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 169 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
 | [`notation.js`](#jsnotationjs) | La note d'une carte candidate | 5 | 239 |
 | [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 195 |
@@ -66,6 +66,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 7 | 72 |
+| [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
 | [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 139 |
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
@@ -77,7 +78,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 176 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
-| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 129 |
+| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 127 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
@@ -89,7 +90,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 138 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 100 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 263 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 272 |
 
 ## js/reglesEffets.js
 
@@ -250,7 +251,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 172 lignes, 9.4 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 176 lignes, 9.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -490,7 +491,7 @@ Les recherches nommées chez Scryfall. *9 fonctions, 200 lignes, 8.2 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 258 lignes, 10 Ko.*
+La sauvegarde locale. *9 fonctions, 262 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -706,7 +707,7 @@ Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 252 ligne
 
 ## js/graphe.js
 
-Visualisation circulaire interactive des capacités. *4 fonctions, 168 lignes, 9.4 Ko.*
+Visualisation circulaire interactive des capacités. *4 fonctions, 169 lignes, 9.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1013,6 +1014,21 @@ Menue monnaie de l'atelier. *7 fonctions, 72 lignes, 2.4 Ko.*
 | `aAcheter()` | — |
 | `toast(msg)` | — |
 
+## js/theme.js
+
+Le thème clair et le thème sombre. *4 fonctions, 59 lignes, 2.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `themeDuSysteme()` | Ce que le système préfère, quand rien n'a jamais été choisi : un atelier ouvert sur une machine réglée en sombre s'ouvre en sombre. |
+| `appliqueTheme()` | Pose le thème sur la racine, et note la préférence dans sa clé. |
+| `reprendTheme()` | Au démarrage : la sauvegarde a pu porter le choix (`restore`), sinon on reprend la clé — c'est le cas quand la sauvegarde est désactivée —, sinon la préférence du système. |
+| `basculeTheme(sombre)` | La case de la fenêtre des paramètres. Le thème agit au clic : c'est un réglage qu'on juge à l'œil, et le faire attendre « Appliquer » obligerait à fermer la fenêtre pour voir ce qu'on… |
+
+| Donnée | Rôle |
+|---|---|
+| `STORE_THEME` | — |
+
 ## js/dialogue.js
 
 La fenêtre modale, une à la fois. *2 fonctions, 42 lignes, 2.1 Ko.*
@@ -1193,12 +1209,12 @@ Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 
 ## js/fenParametres.js
 
-Fenêtre « Paramètres ». *9 fonctions, 129 lignes, 6.2 Ko.*
+Fenêtre « Paramètres ». *9 fonctions, 127 lignes, 5.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `sectionParametres(titre, chapeau, corps)` | Une section de la fenêtre : un titre, une phrase qui dit ce qu'elle règle, et son contenu. |
-| `corpsCollectionParam()` | Ce que la collection pèse sur cet appareil, et les deux gestes qui la remplissent ou la vident d'un coup. |
+| `corpsApparence()` | L'apparence : le thème sombre, le dessin d'origine de l'atelier, ou le papier clair. |
 | `corpsCatalogue()` | — |
 | `corpsParametres()` | Le corps entier, les trois sections à la suite. |
 | `majFenetreParametres()` | La fenêtre reste ouverte pendant qu'une archive se charge ou qu'un réglage change : son corps est réécrit sur place, le défilement gardé, et les champs de fichier rebranchés — l'ancien… |
@@ -1343,7 +1359,7 @@ Les gestes du graphe et des listes. *1 fonctions, 100 lignes, 3.1 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 263 lignes, 9.9 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 272 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|

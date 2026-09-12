@@ -52,9 +52,9 @@ function ficheHTML(card) {
     const tagContent = `${pct} % apparition / ${synSign}${synVal} % synergie`;
 
     if (isSelected) {
-      return `<span class="tag edhrec-tag selected" style="border-color:#57c9c4;color:#57c9c4;background:rgba(87,201,196,.18);font-weight:600;padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant sélectionné : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">★ ${esc(erItem.commandant)} ${tagContent}</span>`;
+      return `<span class="tag edhrec-tag selected" style="border-color:var(--edh);color:var(--edh);background:var(--edh-bg);font-weight:600;padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant sélectionné : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">★ ${esc(erItem.commandant)} ${tagContent}</span>`;
     } else {
-      return `<span class="tag edhrec-tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.08);padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant secondaire : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">${esc(erItem.commandant)} ${tagContent}</span>`;
+      return `<span class="tag edhrec-tag" style="border-color:var(--edh-d);color:var(--edh-txt);background:var(--edh-bg);padding:3px 8px;font-size:11px;display:inline-flex;align-items:center;gap:4px" title="Commandant secondaire : ${esc(erItem.commandant)} — ${pct} % apparition, ${synSign}${synVal} % synergie">${esc(erItem.commandant)} ${tagContent}</span>`;
     }
   });
 
@@ -133,7 +133,7 @@ function ficheHTML(card) {
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
           : (offre ? `hors collection — ≈ ${eur(offre.price)} sur Cardmarket (${offre.condition} ou mieux)` : 'hors collection et hors budget')}</div>
-        ${estGameChanger(card) === true ? `<div class="small" style="color:#cba6e8">Classée <b>Game Changer</b> par Wizards : au Commander, sa présence hausse le palier du deck — aucune aux paliers 1 et 2, jusqu'à trois au palier 3.</div>` : ''}
+        ${estGameChanger(card) === true ? `<div class="small" style="color:var(--gc-txt)">Classée <b>Game Changer</b> par Wizards : au Commander, sa présence hausse le palier du deck — aucune aux paliers 1 et 2, jusqu'à trois au palier 3.</div>` : ''}
         ${(() => {
           /* Où cette carte se trouve, si ce n'est pas dans la liste
              principale : sans cela, la fiche laisserait croire qu'elle
@@ -141,7 +141,7 @@ function ficheHTML(card) {
           const cle = annexeDe(card.name);
           if (!cle) return '';
           const q = annexeListe(cle).get(card.name) || 0;
-          return `<div class="small" style="color:#9aa4e6">Hors de la liste principale : ${esc(ANNEXES[cle].titre.toLowerCase())}${q > 1 ? ` ×${q}` : ''}.</div>`;
+          return `<div class="small" style="color:var(--annexe-txt)">Hors de la liste principale : ${esc(ANNEXES[cle].titre.toLowerCase())}${q > 1 ? ` ×${q}` : ''}.</div>`;
         })()}
       </div>
     </div>

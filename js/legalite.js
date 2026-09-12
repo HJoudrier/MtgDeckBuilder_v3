@@ -23,7 +23,7 @@ function ligneGameChangers() {
   const n = gc.reduce((x, e) => x + e.qty, 0);
   if (!n) return '';
   return `<div class="small muted" style="margin:8px 0 0">
-    ${n} carte(s) classée(s) <b style="color:#cba6e8">Game Changer</b> par Wizards :
+    ${n} carte(s) classée(s) <b style="color:var(--gc-txt)">Game Changer</b> par Wizards :
     ${gc.map(e => esc(e.card.name)).join(', ')}.
     ${n > 3 ? 'Au-delà de trois, le deck relève des paliers 4 ou 5.'
             : 'Le palier 2 n\'en admet aucune, le palier 3 jusqu\'à trois.'}</div>`;

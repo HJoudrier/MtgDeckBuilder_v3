@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**471 fonctions** dans 79 modules, **1332 appels** relevés.
+**475 fonctions** dans 80 modules, **1336 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -910,31 +910,31 @@ Appelle : `annexeDe()` *(annexes.js)*, `impressionSnap()` *(stockage.js)*, `norm
 
 Appelée par : `gestesDonnees`, `save`
 
-### `ecrire()` — ligne 107
+### `ecrire()` — ligne 108
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `save`
 
-### `save()` — ligne 111
+### `save()` — ligne 112
 
 Appelle : `ecrire()` *(stockage.js)*, `snapshot()` *(stockage.js)*, `toast()` *(outils.js)*
 
 Appelée par : `brancherRestauration`, `brancherSauvegarde`, `gestesDonnees`, `scheduleSave`
 
-### `scheduleSave()` — ligne 138
+### `scheduleSave()` — ligne 139
 
 Appelle : → `save()` *(stockage.js)*
 
-Appelée par : `activerOnglet`, `appliqueCatalogueAuxCartes`, `appliquerAffichage`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `gestesDeck`, `gestesDonnees`, `renderAll`, `runScryQueue`
+Appelée par : `activerOnglet`, `appliqueCatalogueAuxCartes`, `appliquerAffichage`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `gestesDeck`, `gestesDonnees`, `renderAll`, `runScryQueue`
 
-### `restore()` — ligne 144
+### `restore()` — ligne 145
 
 Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*, `impressionRestore()` *(stockage.js)*, `majTexteOracle()` *(cartes.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*
 
 Appelée par : `brancherRestauration`, `demarrer`
 
-### `chargerSauvegarde()` — ligne 247
+### `chargerSauvegarde()` — ligne 251
 
 N'appelle aucune fonction du projet.
 
@@ -1460,7 +1460,7 @@ Appelle : `esc()` *(outils.js)*
 
 Appelée par : `renderD`
 
-### `renderD()` — ligne 98
+### `renderD()` — ligne 99
 
 Appelle : `buildGraph()` *(graphe.js)*, `carteTouche()` *(catalogueEtat.js)*, `esc()` *(outils.js)*, `graphCards()` *(graphe.js)*, `noeudsActifs()` *(catalogueEtat.js)*, `refCarte()` *(outils.js)*, `svgGraph()` *(graphe.js)*
 
@@ -1822,7 +1822,7 @@ Appelée par : `carteFiltree`, `causesCollection`, `chercheCartes`, `chercheScry
 
 Appelle : `find()` *(cartes.js)*
 
-Appelée par : `brancherRestauration`, `causesCollection`, `corpsCollectionParam`, `filtered`, `graphCards`, `renderB`, `renderC`, `resumeFiltres`
+Appelée par : `brancherRestauration`, `causesCollection`, `filtered`, `graphCards`, `renderB`, `renderC`, `resumeFiltres`
 
 ### `filtered()` — ligne 32
 
@@ -2172,7 +2172,7 @@ Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, 
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `addToDeck`, `blocAchats`, `blocAnnexe`, `blocEdhrec`, `buyCard`, `cardRow`, `cardTile`, `corpsCollectionParam`, `exportDeckModal`, `ficheHTML`, `legality`, `ligneAchats`, `ligneBudget`, `ligneCatalogue`, `noteCarte`, `openImport`, `openWantsModal`, `renderC`, `renderE`, `renderTop`, `sugLigne`, `sugRow`
+Appelée par : `addToDeck`, `blocAchats`, `blocAnnexe`, `blocEdhrec`, `buyCard`, `cardRow`, `cardTile`, `exportDeckModal`, `ficheHTML`, `legality`, `ligneAchats`, `ligneBudget`, `ligneCatalogue`, `noteCarte`, `openImport`, `openWantsModal`, `renderC`, `renderE`, `renderTop`, `sugLigne`, `sugRow`
 
 ### `refCarte()` — ligne 18
 
@@ -2203,6 +2203,32 @@ Appelée par : `blocAchats`, `ligneAchats`, `openWantsModal`, `renderE`, `spent`
 N'appelle aucune fonction du projet.
 
 Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `completeUnknown`, `deplacerCarte`, `enrichAllUnknown`, `exportDeckModal`, `gestesDeck`, `gestesDonnees`, `gestesReglages`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `openImport`, `openWantsModal`, `openWipeModal`, `runScryQueue`, `save`, `telechargerCatalogue`, `versAnnexe`, `viderAnnexe`
+
+## js/theme.js
+
+### `themeDuSysteme()` — ligne 24
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `reprendTheme`
+
+### `appliqueTheme()` — ligne 31
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `basculeTheme`, `reprendTheme`
+
+### `reprendTheme()` — ligne 42
+
+Appelle : `appliqueTheme()` *(theme.js)*, `themeDuSysteme()` *(theme.js)*
+
+Appelée par : `demarrer`
+
+### `basculeTheme()` — ligne 54
+
+Appelle : `appliqueTheme()` *(theme.js)*, `scheduleSave()` *(stockage.js)*
+
+Appelée par : `app.js (chargement)`
 
 ## js/dialogue.js
 
@@ -2660,49 +2686,49 @@ Appelle : `esc()` *(outils.js)*
 
 Appelée par : `corpsParametres`
 
-### `corpsCollectionParam()` — ligne 30
+### `corpsApparence()` — ligne 30
 
-Appelle : `collectionCards()` *(collection.js)*, `eur()` *(outils.js)*
+N'appelle aucune fonction du projet.
 
 Appelée par : `corpsParametres`
 
-### `corpsCatalogue()` — ligne 49
+### `corpsCatalogue()` — ligne 40
 
 Appelle : `avecBrouillon()` *(brouillon.js)*, `blocCatalogue()` *(fenSauvegarde.js)*
 
 Appelée par : `corpsParametres`
 
-### `corpsParametres()` — ligne 72
+### `corpsParametres()` — ligne 70
 
-Appelle : `corpsCatalogue()` *(fenParametres.js)*, `corpsCollectionParam()` *(fenParametres.js)*, `corpsSauvegarde()` *(fenSauvegarde.js)*, `sectionParametres()` *(fenParametres.js)*
+Appelle : `corpsApparence()` *(fenParametres.js)*, `corpsCatalogue()` *(fenParametres.js)*, `corpsSauvegarde()` *(fenSauvegarde.js)*, `sectionParametres()` *(fenParametres.js)*
 
 Appelée par : `majFenetreParametres`, `openParametresModal`
 
-### `majFenetreParametres()` — ligne 89
+### `majFenetreParametres()` — ligne 87
 
 Appelle : `brancherParametres()` *(fenParametres.js)*, `corpsParametres()` *(fenParametres.js)*
 
 Appelée par : `brancherSauvegarde`, `openParametresModal`, `rafraichirFenetreSauvegarde`
 
-### `brancherParametres()` — ligne 100
+### `brancherParametres()` — ligne 98
 
 Appelle : `brancherCatalogue()` *(fenSauvegarde.js)*, `brancherRestauration()` *(fenSauvegarde.js)*, `brancherSauvegarde()` *(fenSauvegarde.js)*
 
 Appelée par : `majFenetreParametres`, `openParametresModal`
 
-### `appliquerParametres()` — ligne 106
+### `appliquerParametres()` — ligne 104
 
 Appelle : `closeDialog()` *(dialogue.js)*, `filtrerAvecProgression()` *(fenFiltres.js)*, `verseBrouillon()` *(brouillon.js)*
 
 Appelée par : `gestesReglages`
 
-### `openParametresModal()` — ligne 112
+### `openParametresModal()` — ligne 110
 
 Appelle : `brancherParametres()` *(fenParametres.js)*, `corpsParametres()` *(fenParametres.js)*, `openDialog()` *(dialogue.js)*, `ouvreBrouillon()` *(brouillon.js)*, `zoneProgression()` *(fenFiltres.js)*, → `majFenetreParametres()` *(fenParametres.js)*
 
 Appelée par : `gestesReglages`
 
-### `appliquerFormat()` — ligne 123
+### `appliquerFormat()` — ligne 121
 
 Appelle : `closeDialog()` *(dialogue.js)*, `filtrerAvecProgression()` *(fenFiltres.js)*, `verseBrouillon()` *(brouillon.js)*
 
@@ -2998,11 +3024,11 @@ Appelée par : `app.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `activerOnglet()` *(entete.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `cacherApercu()` *(apercu.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesDeck()` *(gestesDeck.js)*, `gestesDonnees()` *(gestesDonnees.js)*, `gestesGraphe()` *(gestesGraphe.js)*, `gestesReglages()` *(gestesReglages.js)*, `gestesVue()` *(gestesVue.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeBudget()` *(fenBudget.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `toast()` *(outils.js)*, → `majHauteurEntete()` *(entete.js)*
+Appelle : `activerOnglet()` *(entete.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesDeck()` *(gestesDeck.js)*, `gestesDonnees()` *(gestesDonnees.js)*, `gestesGraphe()` *(gestesGraphe.js)*, `gestesReglages()` *(gestesReglages.js)*, `gestesVue()` *(gestesVue.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeBudget()` *(fenBudget.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `toast()` *(outils.js)*, → `majHauteurEntete()` *(entete.js)*
 
-### `demarrer()` — ligne 232
+### `demarrer()` — ligne 238
 
-Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `renderAll()` *(rendu.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*
+Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*
 
 Appelée par : `app.js (chargement)`
 

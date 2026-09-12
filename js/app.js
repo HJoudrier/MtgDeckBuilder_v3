@@ -116,6 +116,12 @@ document.addEventListener('change', ev => {
     apresReglage('Réglage des cartes numériques modifié : les candidates sont rebâties.');
     return;
   }
+  /* Le thème : il agit au clic, et rien n'est à repeindre — les deux palettes
+     vivent dans la feuille de style, le navigateur recalcule les couleurs. */
+  if (t.dataset.act === 'modeSombre') {
+    basculeTheme(t.checked);
+    return;
+  }
   if (t.dataset.act === 'filtreLegal') {
     modifieBrouillon(() => { S.filtreLegal = !!t.checked; });
     apresReglage('Filtre de légalité modifié : les cartes retenues et les suggestions sont recalculées.');
@@ -237,6 +243,9 @@ function demarrer() {
     const s = chargerSauvegarde();
     if (s) restore(s);
   }
+  /* Le thème d'abord : le petit script de `index.html` a déjà peint la page du
+     bon côté, mais la sauvegarde peut porter un autre choix que sa clé. */
+  reprendTheme();
   renderAll();
   loadSymbology();
   reprendreArchetypesEdhrec().then(trouve => {

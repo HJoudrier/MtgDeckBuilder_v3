@@ -47,6 +47,6 @@ function blocEdhrec(sel) {
       <span class="small muted">${total} recommandation(s)${noteMultiple(mode)} · ${budInfo}</span>
     </div>
     ${plat ? '' : `<div class="small muted" style="margin-bottom:8px">${titreEDH}</div>`}
-    ${listesSug('edhrec', groupes, mode, titreEDH, '#2f6b68')}
+    ${listesSug('edhrec', groupes, mode, titreEDH, 'var(--edh-d)')}
     ${renvoiCatalogue('Ces cartes portent l\'étiquette <b>edhrec</b> partout où elles paraissent.')}`;
 }

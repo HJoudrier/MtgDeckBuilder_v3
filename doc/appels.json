@@ -56,6 +56,7 @@
   "fiche.js",
   "ficheParcours.js",
   "outils.js",
+  "theme.js",
   "dialogue.js",
   "brouillon.js",
   "couleurs.js",
@@ -2373,7 +2374,7 @@
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 107,
+   "ligne": 108,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2385,7 +2386,7 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 111,
+   "ligne": 112,
    "chargement": false,
    "appelle": [
     "ecrire",
@@ -2404,7 +2405,7 @@
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 138,
+   "ligne": 139,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -2415,6 +2416,7 @@
     "activerOnglet",
     "appliqueCatalogueAuxCartes",
     "appliquerAffichage",
+    "basculeTheme",
     "brancherCatalogue",
     "chercheTexte",
     "chercheVerso",
@@ -2428,7 +2430,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 144,
+   "ligne": 145,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -2448,7 +2450,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 247,
+   "ligne": 251,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -3785,7 +3787,7 @@
   {
    "nom": "renderD",
    "fichier": "graphe.js",
-   "ligne": 98,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "buildGraph",
@@ -4756,7 +4758,6 @@
    "appeleePar": [
     "brancherRestauration",
     "causesCollection",
-    "corpsCollectionParam",
     "filtered",
     "graphCards",
     "renderB",
@@ -5881,7 +5882,6 @@
     "buyCard",
     "cardRow",
     "cardTile",
-    "corpsCollectionParam",
     "exportDeckModal",
     "ficheHTML",
     "legality",
@@ -6032,6 +6032,61 @@
     "telechargerCatalogue",
     "versAnnexe",
     "viderAnnexe"
+   ]
+  },
+  {
+   "nom": "themeDuSysteme",
+   "fichier": "theme.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reprendTheme"
+   ]
+  },
+  {
+   "nom": "appliqueTheme",
+   "fichier": "theme.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "basculeTheme",
+    "reprendTheme"
+   ]
+  },
+  {
+   "nom": "reprendTheme",
+   "fichier": "theme.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "appliqueTheme",
+    "themeDuSysteme"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarrer"
+   ]
+  },
+  {
+   "nom": "basculeTheme",
+   "fichier": "theme.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "appliqueTheme",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
    ]
   },
   {
@@ -7272,14 +7327,11 @@
    ]
   },
   {
-   "nom": "corpsCollectionParam",
+   "nom": "corpsApparence",
    "fichier": "fenParametres.js",
    "ligne": 30,
    "chargement": false,
-   "appelle": [
-    "collectionCards",
-    "eur"
-   ],
+   "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -7289,7 +7341,7 @@
   {
    "nom": "corpsCatalogue",
    "fichier": "fenParametres.js",
-   "ligne": 49,
+   "ligne": 40,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
@@ -7304,11 +7356,11 @@
   {
    "nom": "corpsParametres",
    "fichier": "fenParametres.js",
-   "ligne": 72,
+   "ligne": 70,
    "chargement": false,
    "appelle": [
+    "corpsApparence",
     "corpsCatalogue",
-    "corpsCollectionParam",
     "corpsSauvegarde",
     "sectionParametres"
    ],
@@ -7322,7 +7374,7 @@
   {
    "nom": "majFenetreParametres",
    "fichier": "fenParametres.js",
-   "ligne": 89,
+   "ligne": 87,
    "chargement": false,
    "appelle": [
     "brancherParametres",
@@ -7339,7 +7391,7 @@
   {
    "nom": "brancherParametres",
    "fichier": "fenParametres.js",
-   "ligne": 100,
+   "ligne": 98,
    "chargement": false,
    "appelle": [
     "brancherCatalogue",
@@ -7356,7 +7408,7 @@
   {
    "nom": "appliquerParametres",
    "fichier": "fenParametres.js",
-   "ligne": 106,
+   "ligne": 104,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -7372,7 +7424,7 @@
   {
    "nom": "openParametresModal",
    "fichier": "fenParametres.js",
-   "ligne": 112,
+   "ligne": 110,
    "chargement": false,
    "appelle": [
     "brancherParametres",
@@ -7392,7 +7444,7 @@
   {
    "nom": "appliquerFormat",
    "fichier": "fenParametres.js",
-   "ligne": 123,
+   "ligne": 121,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -8248,6 +8300,7 @@
     "appliquerBudget",
     "appliquerFiltres",
     "apresReglage",
+    "basculeTheme",
     "cacherApercu",
     "closeDialog",
     "demarrer",
@@ -8286,7 +8339,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 232,
+   "ligne": 238,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",
@@ -8298,6 +8351,7 @@
     "initBuiltin",
     "loadSymbology",
     "renderAll",
+    "reprendTheme",
     "reprendreArchetypesEdhrec",
     "reprendreGameChangers",
     "reprendreSets",

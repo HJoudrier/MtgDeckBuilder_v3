@@ -89,6 +89,7 @@ function snapshot() {
     tris: S.tris,
     filtres: S.filtres,
     vues: {...S.vues},
+    sombre: S.sombre,
     onglet: S.onglet,
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
@@ -219,6 +220,9 @@ function restore(d) {
     Object.keys(S[k]).forEach(sec => { if (table[src[sec]]) S[k][sec] = src[sec]; });
   });
   if (!d.tris && TRIS[d.sort]) S.tris.collection = d.sort;
+  /* Le thème. Une sauvegarde d'hier ne le porte pas : `null` laisse le
+     démarrage suivre la clé du thème, puis la préférence du système. */
+  if (typeof d.sombre === 'boolean') S.sombre = d.sombre;
   if (typeof d.showImplicit === 'boolean') S.showImplicit = d.showImplicit;
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
   if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};

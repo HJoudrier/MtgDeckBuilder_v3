@@ -130,7 +130,7 @@ function panneauEdhrec() {
 
   /* Le titre ne nomme plus le commandant : la liste, juste dessous, les nomme
      tous et dit ce que chacun pèse. */
-  return `<div class="group" style="border-color:#2f6b68">
+  return `<div class="group" style="border-color:var(--edh-d)">
     <h4>Commandants EDHREC</h4>
     ${blocCommandants(principaux, secPossibles)}
     ${corps}

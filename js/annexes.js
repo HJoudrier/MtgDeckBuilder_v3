@@ -112,5 +112,5 @@ function tagAnnexe(card) {
   const cle = card ? annexeDe(card.name) : null;
   if (!cle) return '';
   const n = annexeListe(cle).get(card.name);
-  return `<span class="tag" style="border-color:#6f7bd0;color:#9aa4e6" title="${esc(ANNEXES[cle].aide)}">${esc(ANNEXES[cle].titre.toLowerCase())}${n > 1 ? ` ×${n}` : ''}</span>`;
+  return `<span class="tag" style="border-color:var(--annexe);color:var(--annexe-txt)" title="${esc(ANNEXES[cle].aide)}">${esc(ANNEXES[cle].titre.toLowerCase())}${n > 1 ? ` ×${n}` : ''}</span>`;
 }
