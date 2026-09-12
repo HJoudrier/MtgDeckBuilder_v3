@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**477 fonctions**, 80 modules, 545 Ko de JavaScript.
+**491 fonctions**, 81 modules, 557 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -32,7 +32,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
-| [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 9 | 200 |
+| [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 262 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
@@ -55,13 +55,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 52 |
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 243 |
-| [`collection.js`](#jscollectionjs) | La section Collection | 6 | 125 |
+| [`collection.js`](#jscollectionjs) | La section Collection | 8 | 148 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
+| [`rechercheSection.js`](#jsrecherchesectionjs) | Le champ de recherche d'une section | 11 | 178 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 6 | 102 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 226 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 228 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -84,13 +85,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
-| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
+| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 151 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 119 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
-| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 138 |
-| [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 100 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 272 |
+| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 139 |
+| [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 289 |
 
 ## js/reglesEffets.js
 
@@ -470,10 +471,11 @@ La file d'attente vers Scryfall. *7 fonctions, 181 lignes, 7.7 Ko.*
 
 ## js/recherches.js
 
-Les recherches nommées chez Scryfall. *9 fonctions, 200 lignes, 8.2 Ko.*
+Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `majRecherches(cible)` | La réponse de Scryfall met à jour ce qui est ouvert : la fenêtre d'ajout des listes annexes, ou le champ de recherche d'une section — jamais les deux, et chacune se tait si elle n'est… |
 | `chercheScryfall(q, cible)` | — |
 | `semeVisuelVersion(card)` | Visuels de chaque édition possédée, pour les faire défiler dans la fiche. |
 | `visuelDepuisScryfall(sc)` | — |
@@ -858,11 +860,13 @@ Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
 
 ## js/collection.js
 
-La section Collection. *6 fonctions, 125 lignes, 6.3 Ko.*
+La section Collection. *8 fonctions, 148 lignes, 7.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `colorOK(card)` | — |
+| `ajoutCollection(nom)` | Un exemplaire de plus ou de moins dans la collection. |
+| `retraitCollection(nom)` | — |
 | `collectionCards()` | — |
 | `filtered()` | — |
 | `causesCollection()` | Ce qui écarte des cartes de la collection affichée, cause par cause, dans l'ordre où les critères s'appliquent. |
@@ -901,6 +905,29 @@ Ajouter une carte à la main. *5 fonctions, 126 lignes, 6.3 Ko.*
 | `resultatsHTML(q, cible)` | — |
 | `majResultats(cible, sansRelancer)` | — |
 | `openAdd(cible)` | — |
+
+## js/rechercheSection.js
+
+Le champ de recherche d'une section. *11 fonctions, 178 lignes, 8.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `etatRecherche(cible)` | — |
+| `compteListe(cible, nom)` | Combien d'exemplaires une liste porte déjà. |
+| `champRecherche(cible)` | Le champ et ses propositions, posés sous la barre de la section. |
+| `ligneProposition(c, cible)` | Une proposition : le nom — survolé, il montre son visuel —, ce qu'en dit l'autre liste, et le compteur qu'on fait défiler. |
+| `ligneEnLigne(nom, cible)` | Une carte que Scryfall connaît et que le catalogue n'a pas : elle n'existe pas encore dans l'atelier, il n'y a donc rien à compter — seul l'ajout a du sens, et c'est lui qui l'inscrit. |
+| `propositionsHTML(cible)` | — |
+| `majPropositions(cible)` | Seules les propositions sont réécrites pendant la frappe : réécrire la section volerait le curseur du champ qu'on est en train de remplir. |
+| `saisieRecherche(cible, valeur)` | La frappe. Scryfall n'est interrogé qu'après une pause et seulement si le catalogue local n'a rien : c'est le même délai que la fenêtre d'ajout. |
+| `pasRecherche(nom, cible, pas)` | Un exemplaire de plus ou de moins, d'où que vienne le geste : le clic sur un nom, les deux boutons du compteur, ou la molette au-dessus de lui. |
+| `molletteRecherche(el, deltaY)` | — |
+| `restaureRecherche(cible)` | La section a été réécrite : le champ retrouve sa frappe et, si le geste venait de lui, le curseur. |
+
+| Donnée | Rôle |
+|---|---|
+| `RECHERCHE` | Ce que la recherche d'une liste retient entre deux rendus. |
+| `derniereMolette` | La molette au-dessus d'un compteur. Un tour de molette lance une dizaine d'évènements : sans ce garde-fou, un seul geste ajouterait dix exemplaires et demanderait dix recalculs. |
 
 ## js/annexes.js
 
@@ -949,7 +976,7 @@ Ce que le format exige, et l'équilibre des rôles. *6 fonctions, 102 lignes, 5.
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 226 lignes, 14 Ko.*
+La section Deck. *6 fonctions, 228 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1311,11 +1338,11 @@ Boîte de chargement de l'archive Scryfall. *6 fonctions, 75 lignes, 3.6 Ko.*
 
 ## js/fenExport.js
 
-Fenêtres d'export et d'effacement. *3 fonctions, 133 lignes, 6.8 Ko.*
+Fenêtres d'export et d'effacement. *3 fonctions, 151 lignes, 7.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `exportDeckModal()` | — |
+| `exportModal(cible)` | — |
 | `openWantsModal()` | — |
 | `openWipeModal()` | — |
 
@@ -1345,7 +1372,7 @@ Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 193 lignes, 7.5
 
 ## js/gestesDonnees.js
 
-Les gestes qui touchent aux données. *1 fonctions, 138 lignes, 4.3 Ko.*
+Les gestes qui touchent aux données. *1 fonctions, 139 lignes, 4.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1353,7 +1380,7 @@ Les gestes qui touchent aux données. *1 fonctions, 138 lignes, 4.3 Ko.*
 
 ## js/gestesGraphe.js
 
-Les gestes du graphe et des listes. *1 fonctions, 100 lignes, 3.1 Ko.*
+Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1361,7 +1388,7 @@ Les gestes du graphe et des listes. *1 fonctions, 100 lignes, 3.1 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 272 lignes, 10 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 289 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

@@ -60,6 +60,13 @@ document.addEventListener('input', ev => {
     glisseColonnes(t);
     return;
   }
+  /* Le champ de recherche d'une section : seules ses propositions sont
+     réécrites, la section entière volerait le curseur qu'on est en train de
+     remplir. */
+  if (t.dataset.rech) {
+    saisieRecherche(t.dataset.rech, t.value);
+    return;
+  }
   if (t.dataset.recherche) {
     majResultats(t.dataset.recherche);
     return;
@@ -179,6 +186,16 @@ if (dlgEl) {
     }
   });
 }
+
+/* La molette au-dessus du compteur d'une proposition : elle fait défiler les
+   exemplaires plutôt que la page. Le seul endroit où l'atelier retienne la
+   molette, et il le dit dans l'infobulle du compteur. */
+document.addEventListener('wheel', ev => {
+  const el = ev.target.closest && ev.target.closest('[data-molette]');
+  if (!el) return;
+  ev.preventDefault();
+  molletteRecherche(el, ev.deltaY);
+}, {passive:false});
 
 /* L'entête s'enroule autrement selon la largeur : sa hauteur est relevée à
    nouveau, sans rien redessiner, pour que les sections gardent la bonne marge

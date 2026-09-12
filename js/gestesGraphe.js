@@ -68,8 +68,16 @@ function gestesGraphe(act, b) {
     return true;
   }
 
+  /* Un exemplaire de plus ou de moins depuis le champ de recherche d'une
+     section : le clic sur un nom, les boutons du compteur, la molette. */
+  if (act === 'rechPas') {
+    pasRecherche(b.dataset.name, b.dataset.cible, parseInt(b.dataset.pas, 10) || 1);
+    return true;
+  }
+
   if (act === 'addScry') {
-    const n = b.dataset.name, q = parseInt(document.getElementById('addQ').value, 10) || 1;
+    const champQ = document.getElementById('addQ');
+    const n = b.dataset.name, q = champQ ? (parseInt(champQ.value, 10) || 1) : 1;
     const info = scryRes.get(norm(n)) || scryRes.get(n);
     const comp = document.getElementById('addStock') && document.getElementById('addStock').checked;
     let c = find(n);

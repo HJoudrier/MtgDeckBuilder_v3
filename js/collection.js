@@ -20,6 +20,26 @@ function colorOK(card) {
   return id.length === [...sel].filter(c => c !== 'C').length && id.every(c => sel.has(c));
 }
 
+/* Un exemplaire de plus ou de moins dans la collection. Le deck a les siens
+   — `addToDeck`, `removeFromDeck` (js/deck.js) — et le champ de recherche d'une
+   section a besoin des deux gestes de ce côté-ci : ajouter la carte qu'on
+   vient de trouver, ou revenir sur un ajout de trop. Le dernier exemplaire
+   retire la carte plutôt que de la laisser à zéro : une carte possédée à zéro
+   n'est pas une carte de la collection. */
+function ajoutCollection(nom) {
+  const c = find(nom);
+  if (!c) return;
+  S.collection.set(nom, (S.collection.get(nom) || 0) + 1);
+  recalculerAvecProgression(`${nom} ajoutée à la collection : les suggestions en tiennent compte.`);
+}
+
+function retraitCollection(nom) {
+  const n = S.collection.get(nom) || 0;
+  if (!n) return;
+  if (n <= 1) S.collection.delete(nom); else S.collection.set(nom, n - 1);
+  recalculerAvecProgression(`${nom} retirée de la collection : les suggestions en tiennent compte.`);
+}
+
 function collectionCards() {
   const out = [];
   S.collection.forEach((q, n) => {
@@ -102,13 +122,14 @@ function renderB() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        <button class="btn" data-act="addCard">Ajouter</button>
-        <button class="btn" data-act="import">Importer MTGO</button>
-        ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}
+        <button class="btn" data-act="import">Importer</button>
+        <button class="btn" data-act="exporter" data-cible="collection">Exporter</button>
         <button class="btn danger" data-act="wipe">Vider</button>
       </div>
+      ${champRecherche('collection')}
       <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}${noteMultiple(mode)}</div>
-      ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
+      ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.
+        <button class="btn sm" data-act="enrich" style="margin-left:6px">Compléter ${unk} carte${unk>1?'s':''}</button></div>` : ''}
       ${pageGroupes.length ? rendGroupes('collection', pageGroupes, mode, ents => vueDe('collection') === 'grid'
         ? `${ouvreGrille('collection', 'grid')}${ents.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${ents.map(e => cardRow(e, 'collection')).join('')}</div>`)
@@ -117,6 +138,8 @@ function renderB() {
           : `<div class="empty">Aucune carte ne passe les filtres. Élargissez les couleurs${actifs.length ? " ou assouplissez les filtres" : ''} depuis le bouton « Filtres » de l'en-tête.</div>`)}
       ${rest > 0 ? `<div style="text-align:center;margin-top:10px"><button class="btn" data-act="moreB">Afficher ${Math.min(PAGE, rest)} cartes de plus (${rest} restantes)</button></div>` : ''}`;
   }
+
+  restaureRecherche('collection');
 
   const hintEl = document.getElementById('hintB');
   if (hintEl) hintEl.textContent = `${shown}/${total} ex.`;

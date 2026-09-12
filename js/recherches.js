@@ -9,15 +9,23 @@
 
 let scrySeq = 0, scryTimer = null, scryRes = new Map(), scryEtat = '';
 
+/* La réponse de Scryfall met à jour ce qui est ouvert : la fenêtre d'ajout des
+   listes annexes, ou le champ de recherche d'une section — jamais les deux, et
+   chacune se tait si elle n'est pas à l'écran. */
+function majRecherches(cible) {
+  if (typeof majResultats === 'function') majResultats(cible, true);
+  if (typeof majPropositions === 'function') majPropositions(cible);
+}
+
 async function chercheScryfall(q, cible) {
   const seq = ++scrySeq;
   if (typeof fetch !== 'function' || norm(q).length < 3) { scryRes = new Map(); scryEtat = ''; return; }
   scryEtat = 'chargement';
-  majResultats(cible, true);
+  majRecherches(cible);
   try {
     const r = await fetch('https://api.scryfall.com/cards/search?order=name&unique=cards&q=' + encodeURIComponent(q));
     if (seq !== scrySeq) return;
-    if (r.status === 404) { scryRes = new Map(); scryEtat = 'aucune'; majResultats(cible, true); return; }
+    if (r.status === 404) { scryRes = new Map(); scryEtat = 'aucune'; majRecherches(cible); return; }
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
     scryRes = new Map((j.data || [])
@@ -29,7 +37,7 @@ async function chercheScryfall(q, cible) {
     scryRes = new Map();
     scryEtat = 'hors-ligne';
   }
-  majResultats(cible, true);
+  majRecherches(cible);
 }
 
 /* Visuels de chaque édition possédée, pour les faire défiler dans la fiche.

@@ -48,6 +48,7 @@
   "collection.js",
   "fenImport.js",
   "fenAjout.js",
+  "rechercheSection.js",
   "annexes.js",
   "deck.js",
   "legalite.js",
@@ -561,10 +562,12 @@
     "noteCarte",
     "noteSetIndex",
     "parseMtgoList",
+    "propositionsHTML",
     "registerCard",
     "renameCard",
     "resultatsHTML",
     "retiens",
+    "saisieRecherche",
     "scryTarget",
     "setsCarte",
     "setsRec",
@@ -703,6 +706,7 @@
    "appeleePar": [
     "aAcheter",
     "addToDeck",
+    "ajoutCollection",
     "annexeEntries",
     "appliqueCatalogueAuxCartes",
     "applyScryfall",
@@ -730,6 +734,7 @@
     "openCardModal",
     "openImport",
     "panneauEdhrec",
+    "propositionsHTML",
     "requeteCatalogue",
     "restore",
     "resultatsHTML",
@@ -1985,6 +1990,7 @@
    "appeleePar": [
     "cardRow",
     "ficheTexteHTML",
+    "ligneProposition",
     "montrerApercu",
     "sugLigne"
    ]
@@ -2175,25 +2181,41 @@
    ]
   },
   {
+   "nom": "majRecherches",
+   "fichier": "recherches.js",
+   "ligne": 15,
+   "chargement": false,
+   "appelle": [
+    "majPropositions",
+    "majResultats"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chercheScryfall"
+   ]
+  },
+  {
    "nom": "chercheScryfall",
    "fichier": "recherches.js",
-   "ligne": 12,
+   "ligne": 20,
    "chargement": false,
    "appelle": [
     "colorOK",
-    "majResultats",
+    "majRecherches",
     "norm"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "majResultats"
+    "majResultats",
+    "saisieRecherche"
    ]
   },
   {
    "nom": "semeVisuelVersion",
    "fichier": "recherches.js",
-   "ligne": 39,
+   "ligne": 47,
    "chargement": false,
    "appelle": [
     "cleImpression"
@@ -2207,7 +2229,7 @@
   {
    "nom": "visuelDepuisScryfall",
    "fichier": "recherches.js",
-   "ligne": 52,
+   "ligne": 60,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2220,7 +2242,7 @@
   {
    "nom": "chercheImpressions",
    "fichier": "recherches.js",
-   "ligne": 68,
+   "ligne": 76,
    "chargement": false,
    "appelle": [
     "cleImpression",
@@ -2238,7 +2260,7 @@
   {
    "nom": "chercheToutesEditions",
    "fichier": "recherches.js",
-   "ligne": 110,
+   "ligne": 118,
    "chargement": false,
    "appelle": [
     "visuelDepuisScryfall"
@@ -2252,7 +2274,7 @@
   {
    "nom": "chercheVerso",
    "fichier": "recherches.js",
-   "ligne": 150,
+   "ligne": 158,
    "chargement": false,
    "appelle": [
     "applyScryfall",
@@ -2268,7 +2290,7 @@
   {
    "nom": "chercheTexte",
    "fichier": "recherches.js",
-   "ligne": 165,
+   "ligne": 173,
    "chargement": false,
    "appelle": [
     "applyScryfall",
@@ -2284,7 +2306,7 @@
   {
    "nom": "carteDepuisScryfall",
    "fichier": "recherches.js",
-   "ligne": 179,
+   "ligne": 187,
    "chargement": false,
    "appelle": [
     "applyScryfall",
@@ -2299,7 +2321,7 @@
   {
    "nom": "enrichAllUnknown",
    "fichier": "recherches.js",
-   "ligne": 192,
+   "ligne": 200,
    "chargement": false,
    "appelle": [
     "completeUnknown",
@@ -4724,9 +4746,38 @@
    ]
   },
   {
+   "nom": "ajoutCollection",
+   "fichier": "collection.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [
+    "find",
+    "recalculerAvecProgression"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pasRecherche"
+   ]
+  },
+  {
+   "nom": "retraitCollection",
+   "fichier": "collection.js",
+   "ligne": 36,
+   "chargement": false,
+   "appelle": [
+    "recalculerAvecProgression"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pasRecherche"
+   ]
+  },
+  {
    "nom": "collectionCards",
    "fichier": "collection.js",
-   "ligne": 23,
+   "ligne": 43,
    "chargement": false,
    "appelle": [
     "find"
@@ -4736,6 +4787,7 @@
    "appeleePar": [
     "brancherRestauration",
     "causesCollection",
+    "exportModal",
     "filtered",
     "graphCards",
     "renderB",
@@ -4746,7 +4798,7 @@
   {
    "nom": "filtered",
    "fichier": "collection.js",
-   "ligne": 32,
+   "ligne": 52,
    "chargement": false,
    "appelle": [
     "carteRetenue",
@@ -4768,7 +4820,7 @@
   {
    "nom": "causesCollection",
    "fichier": "collection.js",
-   "ligne": 50,
+   "ligne": 70,
    "chargement": false,
    "appelle": [
     "collectionCards",
@@ -4786,7 +4838,7 @@
   {
    "nom": "ligneCausesCollection",
    "fichier": "collection.js",
-   "ligne": 63,
+   "ligne": 83,
    "chargement": false,
    "appelle": [
     "causesCollection",
@@ -4805,11 +4857,12 @@
   {
    "nom": "renderB",
    "fichier": "collection.js",
-   "ligne": 73,
+   "ligne": 93,
    "chargement": false,
    "appelle": [
     "cardRow",
     "cardTile",
+    "champRecherche",
     "collectionCards",
     "filtered",
     "filtresActifs",
@@ -4821,6 +4874,7 @@
     "queueScryfall",
     "rendGroupes",
     "renderTop",
+    "restaureRecherche",
     "vueDe"
    ],
    "appelleDiffere": [],
@@ -4937,6 +4991,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "propositionsHTML",
     "resultatsHTML"
    ]
   },
@@ -4973,8 +5028,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
-    "chercheScryfall",
-    "gestesGraphe"
+    "gestesGraphe",
+    "majRecherches"
    ]
   },
   {
@@ -4991,6 +5046,182 @@
    "appelleParHtml": [],
    "appeleePar": [
     "gestesDonnees"
+   ]
+  },
+  {
+   "nom": "etatRecherche",
+   "fichier": "rechercheSection.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "champRecherche",
+    "pasRecherche",
+    "propositionsHTML",
+    "restaureRecherche",
+    "saisieRecherche"
+   ]
+  },
+  {
+   "nom": "compteListe",
+   "fichier": "rechercheSection.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ligneProposition"
+   ]
+  },
+  {
+   "nom": "champRecherche",
+   "fichier": "rechercheSection.js",
+   "ligne": 40,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "etatRecherche",
+    "propositionsHTML"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderB",
+    "renderE"
+   ]
+  },
+  {
+   "nom": "ligneProposition",
+   "fichier": "rechercheSection.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "compteListe",
+    "esc",
+    "manaHTML"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "propositionsHTML"
+   ]
+  },
+  {
+   "nom": "ligneEnLigne",
+   "fichier": "rechercheSection.js",
+   "ligne": 82,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "propositionsHTML"
+   ]
+  },
+  {
+   "nom": "propositionsHTML",
+   "fichier": "rechercheSection.js",
+   "ligne": 94,
+   "chargement": false,
+   "appelle": [
+    "chercheCartes",
+    "esc",
+    "etatRecherche",
+    "find",
+    "ligneEnLigne",
+    "ligneProposition",
+    "norm"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "champRecherche",
+    "majPropositions"
+   ]
+  },
+  {
+   "nom": "majPropositions",
+   "fichier": "rechercheSection.js",
+   "ligne": 120,
+   "chargement": false,
+   "appelle": [
+    "propositionsHTML"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "majRecherches",
+    "saisieRecherche"
+   ]
+  },
+  {
+   "nom": "saisieRecherche",
+   "fichier": "rechercheSection.js",
+   "ligne": 127,
+   "chargement": false,
+   "appelle": [
+    "chercheScryfall",
+    "etatRecherche",
+    "majPropositions",
+    "norm"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "pasRecherche",
+   "fichier": "rechercheSection.js",
+   "ligne": 141,
+   "chargement": false,
+   "appelle": [
+    "addToDeck",
+    "ajoutCollection",
+    "etatRecherche",
+    "removeFromDeck",
+    "retraitCollection"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesGraphe",
+    "molletteRecherche"
+   ]
+  },
+  {
+   "nom": "molletteRecherche",
+   "fichier": "rechercheSection.js",
+   "ligne": 156,
+   "chargement": false,
+   "appelle": [
+    "pasRecherche"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "restaureRecherche",
+   "fichier": "rechercheSection.js",
+   "ligne": 166,
+   "chargement": false,
+   "appelle": [
+    "etatRecherche"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderB",
+    "renderE"
    ]
   },
   {
@@ -5035,7 +5266,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "blocAnnexe",
-    "exportDeckModal",
+    "exportModal",
     "renderE"
    ]
   },
@@ -5179,7 +5410,7 @@
     "commandantsSecondairesPossibles",
     "deckCounts",
     "deckSignature",
-    "exportDeckModal",
+    "exportModal",
     "ficheHTML",
     "gameChangersDuDeck",
     "graphCards",
@@ -5228,7 +5459,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "brancherRestauration",
-    "exportDeckModal",
+    "exportModal",
     "legality",
     "noteCarte",
     "renderE"
@@ -5271,7 +5502,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "gestesDeck"
+    "gestesDeck",
+    "pasRecherche"
    ]
   },
   {
@@ -5304,7 +5536,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "gestesDeck"
+    "gestesDeck",
+    "pasRecherche"
    ]
   },
   {
@@ -5530,6 +5763,7 @@
     "cardRow",
     "cardTile",
     "carteFiltree",
+    "champRecherche",
     "deckCounts",
     "deckEntries",
     "deckSize",
@@ -5549,6 +5783,7 @@
     "partieDeck",
     "queueScryfall",
     "rendGroupes",
+    "restaureRecherche",
     "spent",
     "targets",
     "vueDe",
@@ -5790,6 +6025,7 @@
     "cardRow",
     "cardTile",
     "champBudget",
+    "champRecherche",
     "corpsAffichage",
     "corpsBoiteRecalcul",
     "corpsFiltres",
@@ -5799,7 +6035,7 @@
     "enveloppeGroupe",
     "etatArchetypes",
     "etatSets",
-    "exportDeckModal",
+    "exportModal",
     "ficheHTML",
     "ficheTexteHTML",
     "gauge",
@@ -5809,8 +6045,10 @@
     "ligneCatalogue",
     "ligneCausesCollection",
     "ligneCommandant",
+    "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
+    "ligneProposition",
     "listeArchetypesHTML",
     "listeSetsHTML",
     "majApercu",
@@ -5823,6 +6061,7 @@
     "paginationListe",
     "panneauEdhrec",
     "proposerMajCatalogue",
+    "propositionsHTML",
     "refCarte",
     "renderD",
     "renderE",
@@ -5858,7 +6097,7 @@
     "buyCard",
     "cardRow",
     "cardTile",
-    "exportDeckModal",
+    "exportModal",
     "ficheHTML",
     "legality",
     "ligneAchats",
@@ -5910,7 +6149,7 @@
     "corpsFormat",
     "deckAdd",
     "deplacerCarte",
-    "exportDeckModal",
+    "exportModal",
     "filtered",
     "lanceEdhrecSiBesoin",
     "legality",
@@ -5992,7 +6231,7 @@
     "completeUnknown",
     "deplacerCarte",
     "enrichAllUnknown",
-    "exportDeckModal",
+    "exportModal",
     "gestesDeck",
     "gestesDonnees",
     "gestesReglages",
@@ -6077,7 +6316,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "annonceRecalcul",
-    "exportDeckModal",
+    "exportModal",
     "gestesDeck",
     "gestesDonnees",
     "openAdd",
@@ -7053,6 +7292,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "addToDeck",
+    "ajoutCollection",
     "ajouterCarte",
     "apresReglage",
     "buyCard",
@@ -7065,6 +7305,7 @@
     "openImport",
     "removeFromDeck",
     "retirerAnnexe",
+    "retraitCollection",
     "versAnnexe",
     "viderAnnexe"
    ]
@@ -8073,12 +8314,13 @@
    ]
   },
   {
-   "nom": "exportDeckModal",
+   "nom": "exportModal",
    "fichier": "fenExport.js",
-   "ligne": 8,
+   "ligne": 11,
    "chargement": false,
    "appelle": [
     "annexeEntries",
+    "collectionCards",
     "deckEntries",
     "deckSize",
     "esc",
@@ -8096,7 +8338,7 @@
   {
    "nom": "openWantsModal",
    "fichier": "fenExport.js",
-   "ligne": 88,
+   "ligne": 106,
    "chargement": false,
    "appelle": [
     "aAcheter",
@@ -8114,7 +8356,7 @@
   {
    "nom": "openWipeModal",
    "fichier": "fenExport.js",
-   "ligne": 114,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "annexeListe",
@@ -8245,7 +8487,7 @@
     "chargerCatalogue",
     "closeDialog",
     "enrichAllUnknown",
-    "exportDeckModal",
+    "exportModal",
     "idbVider",
     "invaliderCandidats",
     "loadEdhrec",
@@ -8285,6 +8527,7 @@
     "majResultats",
     "norm",
     "openCardModal",
+    "pasRecherche",
     "poseParcoursFiche",
     "registerCard",
     "renderB",
@@ -8330,12 +8573,14 @@
     "majResumeFiltres",
     "majResumeFormat",
     "modifieBrouillon",
+    "molletteRecherche",
     "montrerApercu",
     "placerApercu",
     "refreshSuggestions",
     "reglageAffichage",
     "renderAll",
     "renderE",
+    "saisieRecherche",
     "toast"
    ],
    "appelleDiffere": [
@@ -8347,7 +8592,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 238,
+   "ligne": 255,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",

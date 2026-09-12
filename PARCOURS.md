@@ -172,7 +172,46 @@ Trois précautions que le diagramme rend visibles :
 - **La notation** ne repart que si l'empreinte a changé (§4). Ajouter une carte la change toujours
   — le deck fait partie de l'empreinte.
 
-### 3.3 Retirer une carte du deck
+### 3.3 Ajouter une carte par le champ de recherche
+
+Le champ vit dans la section — la collection ou le deck —, et la frappe ne réécrit que ses
+propositions : réécrire la section volerait le curseur du champ qu'on remplit.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant RECH as rechercheSection.js
+    participant AJOUT as fenAjout.js
+    participant EXT as recherches.js
+    participant SEC as collection.js / deckSection.js
+
+    U->>APP: frappe dans le champ
+    APP->>RECH: saisieRecherche(cible, valeur)
+    RECH->>AJOUT: chercheCartes(q)
+    Note over AJOUT: le catalogue local d'abord, la base livrée à défaut ;<br/>filtré par les couleurs retenues et les nœuds isolés
+    RECH->>RECH: majPropositions(cible)
+    Note over RECH: seules les propositions sont réécrites
+    opt trois lettres, et une pause de 350 ms
+        RECH->>EXT: chercheScryfall(q, cible)
+        EXT->>RECH: majRecherches(cible) — les cartes absentes du catalogue
+    end
+
+    U->>APP: clic sur un nom, sur « + » ou « − », ou molette sur le compteur
+    APP->>RECH: pasRecherche(nom, cible, pas)
+    alt cible = deck
+        RECH->>RECH: addToDeck(nom) / removeFromDeck(nom)
+    else cible = collection
+        RECH->>RECH: ajoutCollection(nom) / retraitCollection(nom)
+    end
+    Note over RECH: mêmes fonctions que les vignettes :<br/>même limite de format, même recalcul annoncé
+    RECH->>SEC: recalculerAvecProgression(...) → renderAll()
+    SEC->>RECH: restaureRecherche(cible)
+    Note over RECH: la frappe revient, et le curseur si<br/>plus rien ne l'a pris entre-temps
+```
+
+### 3.4 Retirer une carte du deck
 
 ```mermaid
 sequenceDiagram
@@ -206,7 +245,7 @@ Le retrait n'est pas le symétrique exact de l'ajout : il ne gèle pas l'ordre d
 geste part d'une tuile du deck, non d'une vignette de la section F ; il n'y a pas de place à
 perdre dans une liste qu'on ne parcourait pas.
 
-### 3.4 Filtrer
+### 3.5 Filtrer
 
 Le seul parcours à deux temps : la fenêtre travaille sur un brouillon, et rien ne s'applique avant
 « Appliquer ».
@@ -258,7 +297,7 @@ Un filtre appliqué hors fenêtre — une couleur cliquée dans l'en-tête, un r
 appelle le même recalcul. C'est le point commun de tous les réglages : **un filtre change le
 vivier, donc tout le classement.**
 
-### 3.5 Noter les suggestions
+### 3.6 Noter les suggestions
 
 Le moteur appelé par les parcours précédents, vu de près.
 
@@ -295,7 +334,7 @@ sequenceDiagram
     end
 ```
 
-### 3.6 Régler l'affichage d'une liste
+### 3.7 Régler l'affichage d'une liste
 
 Les cinq listes de cartes — la collection, le deck, les pistes du graphe, les recommandations
 d'EDHREC, le catalogue — se règlent chacune dans sa fenêtre « Affichage », et rien ne bouge avant
@@ -350,7 +389,7 @@ Le tri par score ne retrie pas les propositions : la liste arrive dans l'ordre d
 l'ordre gelé qu'un ajout a retenu. Le tri par score de la collection, lui, demande une notation —
 `renderB()` l'obtient par `filtered()`, et la mémorise sous l'empreinte des suggestions.
 
-### 3.7 Replier une catégorie
+### 3.8 Replier une catégorie
 
 ```mermaid
 sequenceDiagram
@@ -374,7 +413,7 @@ sequenceDiagram
     end
 ```
 
-### 3.8 Importer une liste MTGO
+### 3.9 Importer une liste MTGO
 
 ```mermaid
 sequenceDiagram
@@ -412,7 +451,7 @@ sequenceDiagram
     SCRY-->>UI: applyScryfall() puis nouveau rendu
 ```
 
-### 3.9 Désigner un commandant
+### 3.10 Désigner un commandant
 
 ```mermaid
 sequenceDiagram
@@ -432,7 +471,7 @@ sequenceDiagram
     SUG->>SUG: loadEdhrec() si la signature du commandant a changé
 ```
 
-### 3.10 Enrichir par Scryfall
+### 3.11 Enrichir par Scryfall
 
 Le seul parcours que l'utilisateur ne déclenche pas : il part du rendu lui-même.
 
@@ -466,7 +505,7 @@ Le recalcul de fond ne montre pas de boîte : il gèle l'ordre affiché, avance 
 signale son travail par le liseré des trois sections des propositions. Une carte complétée pendant
 qu'on lit ne doit pas interrompre la lecture.
 
-### 3.11 EDHREC
+### 3.12 EDHREC
 
 ```mermaid
 sequenceDiagram
@@ -485,7 +524,7 @@ sequenceDiagram
 La source est attendue, jamais bloquante : une signature l'empêche de repartir pour un commandant
 inchangé, et son absence ne retire rien au classement, qui repose d'abord sur l'analyse des textes.
 
-### 3.12 Acheter sur Cardmarket
+### 3.13 Acheter sur Cardmarket
 
 ```mermaid
 sequenceDiagram
@@ -506,7 +545,7 @@ sequenceDiagram
     DECK->>UI: recalculerAvecProgression(raison)
 ```
 
-### 3.13 Sauvegarder
+### 3.14 Sauvegarder
 
 ```mermaid
 sequenceDiagram

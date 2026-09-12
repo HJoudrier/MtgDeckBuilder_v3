@@ -66,7 +66,8 @@ js/                 modules, chargés dans cet ordre :
   suggestions.js    les trois sections des propositions
   collection.js     la section Collection
   fenImport.js      importer une liste de cartes
-  fenAjout.js       ajouter une carte à la main
+  fenAjout.js       ajouter une carte à la main (les deux listes annexes)
+  rechercheSection.js  le champ de recherche d'une section, et ses propositions
   annexes.js        la réserve et l'étude
   deck.js           ce qu'il y a dans le deck, et les gestes qui l'y mettent
   legalite.js       ce que le format exige, et l'équilibre des rôles
@@ -340,6 +341,25 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   `cleLimiteSug()` (`js/sugListes.js`) rend « graphe », « edhrec » ou « suggestions » pour une liste
   sans groupe, « section:catégorie » pour une catégorie —, sans quoi « Créature » partagerait son
   compte entre les trois pages.
+- La collection et le deck portent les mêmes trois boutons — **Importer**, **Exporter**, **Vider** —
+  et le même champ de recherche sous eux. Les deux barres divergeaient : « Ajouter » ouvrait une
+  fenêtre, « Importer MTGO » n'était nommé que d'un côté, « Exporter » n'existait que pour le deck,
+  et un « Compléter N cartes » s'y glissait quand des cartes arrivaient sans texte — il vit désormais
+  dans l'encadré qui l'explique, où il a sa raison sous les yeux. La collection s'exporte comme le
+  deck, aux trois mêmes formats (`exportModal()`, `js/fenExport.js`).
+- Le champ de recherche d'une section (`js/rechercheSection.js`) remplace le bouton « Ajouter » et sa
+  fenêtre : on tape, les cartes se proposent, le nom survolé montre son visuel comme partout
+  ailleurs, et le clic en ajoute un exemplaire à la liste de la section. Chaque proposition porte à
+  droite un **compteur** — ce que la liste en contient déjà —, et ce que l'autre liste en porte quand
+  elle en porte : on voit d'un coup d'œil qu'une carte est déjà montée au deck. Le compteur se fait
+  défiler, par ses deux boutons ou à la molette au-dessus de lui, ce qui remplace le champ
+  « Exemplaires » de la fenêtre d'avant : on ajuste en voyant ce qu'on a. C'est le seul endroit où
+  l'atelier retienne la molette, et l'infobulle du compteur le dit. Les deux listes annexes gardent
+  la fenêtre (`js/fenAjout.js`) : elles n'ont pas de barre à elles.
+- La frappe ne réécrit que les propositions ; la section entière l'est à chaque ajout, et le champ y
+  perdrait sa frappe et le curseur. Ils sont donc gardés dans `RECHERCHE` et rendus après coup par
+  `restaureRecherche()`, qui ne reprend le curseur que si plus rien ne l'a — un rendu déclenché
+  ailleurs ne doit pas l'arracher à autre chose.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
 - La fiche d'une carte feuillette ses éditions, sous deux listes. « Mes éditions » vient de `card.impressions`,

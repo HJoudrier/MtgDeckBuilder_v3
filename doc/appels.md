@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**476 fonctions** dans 80 modules, **1334 appels** relevés.
+**490 fonctions** dans 81 modules, **1373 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -216,7 +216,7 @@ Appelle : `buildCard()` *(cartes.js)*, `norm()` *(cartes.js)*, `registerCard()` 
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `appliqueCatalogueAuxCartes`, `applyScryfall`, `archetypesCarte`, `cartes.js (chargement)`, `chargerGameChangers`, `chercheCartes`, `chercheScryfall`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, `estGameChanger`, `fetchEdhrecCommander`, `ficheHTML`, `filtreOKRec`, `filtresValeursOK`, `find`, `gestesGraphe`, `indexCard`, `loose`, `majResultats`, `nbInteractions`, `nomsPageEdhrec`, `noteCarte`, `noteSetIndex`, `parseMtgoList`, `registerCard`, `renameCard`, `resultatsHTML`, `retiens`, `scryTarget`, `setsCarte`, `setsRec`, `snapshot`, `unindexCard`
+Appelée par : `appliqueCatalogueAuxCartes`, `applyScryfall`, `archetypesCarte`, `cartes.js (chargement)`, `chargerGameChangers`, `chercheCartes`, `chercheScryfall`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, `estGameChanger`, `fetchEdhrecCommander`, `ficheHTML`, `filtreOKRec`, `filtresValeursOK`, `find`, `gestesGraphe`, `indexCard`, `loose`, `majResultats`, `nbInteractions`, `nomsPageEdhrec`, `noteCarte`, `noteSetIndex`, `parseMtgoList`, `propositionsHTML`, `registerCard`, `renameCard`, `resultatsHTML`, `retiens`, `saisieRecherche`, `scryTarget`, `setsCarte`, `setsRec`, `snapshot`, `unindexCard`
 
 ### `loose()` — ligne 18
 
@@ -258,7 +258,7 @@ Appelée par : `applyScryfall`, `carteDuCatalogue`, `cartes.js (chargement)`, `g
 
 Appelle : `loose()` *(cartes.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `aAcheter`, `addToDeck`, `annexeEntries`, `appliqueCatalogueAuxCartes`, `applyScryfall`, `basculerSourceVersions`, `buyCard`, `carteDuCatalogue`, `chargerCatalogue`, `choisirVersion`, `collectionCards`, `commandantsPrincipaux`, `completeUnknown`, `contexteEvaluation`, `deckEntries`, `deplacerCarte`, `faireDefilerVersion`, `ficheImageKO`, `gestesDeck`, `gestesGraphe`, `getCardOrAnalyzedRec`, `legality`, `loadEdhrec`, `majApercu`, `majPrix`, `montrerApercu`, `openCardModal`, `openImport`, `panneauEdhrec`, `requeteCatalogue`, `restore`, `resultatsHTML`, `selectionCandidats`, `signatureCommandants`, `versAnnexe`, `vivierSuggestions`, `zoneCommandant`
+Appelée par : `aAcheter`, `addToDeck`, `ajoutCollection`, `annexeEntries`, `appliqueCatalogueAuxCartes`, `applyScryfall`, `basculerSourceVersions`, `buyCard`, `carteDuCatalogue`, `chargerCatalogue`, `choisirVersion`, `collectionCards`, `commandantsPrincipaux`, `completeUnknown`, `contexteEvaluation`, `deckEntries`, `deplacerCarte`, `faireDefilerVersion`, `ficheImageKO`, `gestesDeck`, `gestesGraphe`, `getCardOrAnalyzedRec`, `legality`, `loadEdhrec`, `majApercu`, `majPrix`, `montrerApercu`, `openCardModal`, `openImport`, `panneauEdhrec`, `propositionsHTML`, `requeteCatalogue`, `restore`, `resultatsHTML`, `selectionCandidats`, `signatureCommandants`, `versAnnexe`, `vivierSuggestions`, `zoneCommandant`
 
 ### `peutCommander()` — ligne 98
 
@@ -762,7 +762,7 @@ Appelée par : `symIcon`
 
 Appelle : `symIcon()` *(symboles.js)*
 
-Appelée par : `cardRow`, `ficheTexteHTML`, `montrerApercu`, `sugLigne`
+Appelée par : `cardRow`, `ficheTexteHTML`, `ligneProposition`, `montrerApercu`, `sugLigne`
 
 ### `stripeColor()` — ligne 66
 
@@ -830,55 +830,61 @@ Appelée par : `enrichAllUnknown`, `openImport`
 
 ## js/recherches.js
 
-### `chercheScryfall()` — ligne 12
+### `majRecherches()` — ligne 15
 
-Appelle : `colorOK()` *(collection.js)*, `majResultats()` *(fenAjout.js)*, `norm()` *(cartes.js)*
+Appelle : `majPropositions()` *(rechercheSection.js)*, `majResultats()` *(fenAjout.js)*
 
-Appelée par : `majResultats`
+Appelée par : `chercheScryfall`
 
-### `semeVisuelVersion()` — ligne 39
+### `chercheScryfall()` — ligne 20
+
+Appelle : `colorOK()` *(collection.js)*, `majRecherches()` *(recherches.js)*, `norm()` *(cartes.js)*
+
+Appelée par : `majResultats`, `saisieRecherche`
+
+### `semeVisuelVersion()` — ligne 47
 
 Appelle : `cleImpression()` *(impressions.js)*
 
 Appelée par : `chercheImpressions`
 
-### `visuelDepuisScryfall()` — ligne 52
+### `visuelDepuisScryfall()` — ligne 60
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `chercheImpressions`, `chercheToutesEditions`
 
-### `chercheImpressions()` — ligne 68
+### `chercheImpressions()` — ligne 76
 
 Appelle : `cleImpression()` *(impressions.js)*, `cleVersion()` *(impressions.js)*, `semeVisuelVersion()` *(recherches.js)*, `versionsCarte()` *(impressions.js)*, `visuelDepuisScryfall()` *(recherches.js)*
 
 Appelée par : `openCardModal`
 
-### `chercheToutesEditions()` — ligne 110
+### `chercheToutesEditions()` — ligne 118
 
 Appelle : `visuelDepuisScryfall()` *(recherches.js)*
 
 Appelée par : `basculerSourceVersions`
 
-### `chercheVerso()` — ligne 150
+### `chercheVerso()` — ligne 158
 
 Appelle : `applyScryfall()` *(scryfallApplique.js)*, `frontFace()` *(cartes.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `openCardModal`
 
-### `chercheTexte()` — ligne 165
+### `chercheTexte()` — ligne 173
 
 Appelle : `applyScryfall()` *(scryfallApplique.js)*, `frontFace()` *(cartes.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `openCardModal`
 
-### `carteDepuisScryfall()` — ligne 179
+### `carteDepuisScryfall()` — ligne 187
 
 Appelle : `applyScryfall()` *(scryfallApplique.js)*, `buildCard()` *(cartes.js)*
 
 Appelée par : `gestesGraphe`
 
-### `enrichAllUnknown()` — ligne 192
+### `enrichAllUnknown()` — ligne 200
 
 Appelle : `completeUnknown()` *(scryfall.js)*, `toast()` *(outils.js)*
 
@@ -1812,33 +1818,45 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `carteFiltree`, `causesCollection`, `chercheCartes`, `chercheScryfall`, `ligneCatalogue`, `selectionCandidats`, `vivierSuggestions`
 
-### `collectionCards()` — ligne 23
+### `ajoutCollection()` — ligne 29
+
+Appelle : `find()` *(cartes.js)*, `recalculerAvecProgression()` *(recalcul.js)*
+
+Appelée par : `pasRecherche`
+
+### `retraitCollection()` — ligne 36
+
+Appelle : `recalculerAvecProgression()` *(recalcul.js)*
+
+Appelée par : `pasRecherche`
+
+### `collectionCards()` — ligne 43
 
 Appelle : `find()` *(cartes.js)*
 
-Appelée par : `brancherRestauration`, `causesCollection`, `filtered`, `graphCards`, `renderB`, `renderC`, `resumeFiltres`
+Appelée par : `brancherRestauration`, `causesCollection`, `exportModal`, `filtered`, `graphCards`, `renderB`, `renderC`, `resumeFiltres`
 
-### `filtered()` — ligne 32
+### `filtered()` — ligne 52
 
 Appelle : `carteRetenue()` *(retenue.js)*, `collectionCards()` *(collection.js)*, `fmt()` *(outils.js)*, `notesCollection()` *(groupes.js)*
 
 Appelée par : `ficheHTML`, `graphCards`, `renderB`, `renderC`, `resumeFiltres`, `vivierSuggestions`
 
-### `causesCollection()` — ligne 50
+### `causesCollection()` — ligne 70
 
 Appelle : `collectionCards()` *(collection.js)*, `colorOK()` *(collection.js)*, `filtreOK()` *(retenue.js)*, `legaliteOK()` *(retenue.js)*, `roleOK()` *(filtres.js)*
 
 Appelée par : `ligneCausesCollection`
 
-### `ligneCausesCollection()` — ligne 63
+### `ligneCausesCollection()` — ligne 83
 
 Appelle : `causesCollection()` *(collection.js)*, `esc()` *(outils.js)*, `filtresActifs()` *(filtres.js)*, `fmt()` *(outils.js)*, `nomCombinaisonCouleurs()` *(couleurs.js)*, `texteFiltresActifs()` *(filtres.js)*
 
 Appelée par : `renderB`
 
-### `renderB()` — ligne 73
+### `renderB()` — ligne 93
 
-Appelle : `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `collectionCards()` *(collection.js)*, `filtered()` *(collection.js)*, `filtresActifs()` *(filtres.js)*, `groupeCartes()` *(groupes.js)*, `groupePlie()` *(barreGroupes.js)*, `ligneCausesCollection()` *(collection.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `renderTop()` *(entete.js)*, `vueDe()` *(barreGroupes.js)*
+Appelle : `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `champRecherche()` *(rechercheSection.js)*, `collectionCards()` *(collection.js)*, `filtered()` *(collection.js)*, `filtresActifs()` *(filtres.js)*, `groupeCartes()` *(groupes.js)*, `groupePlie()` *(barreGroupes.js)*, `ligneCausesCollection()` *(collection.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `renderTop()` *(entete.js)*, `restaureRecherche()` *(rechercheSection.js)*, `vueDe()` *(barreGroupes.js)*
 
 Appelée par : `appliquerAffichage`, `gestesDeck`, `gestesGraphe`, `renderAll`, `runScryQueue`
 
@@ -1880,7 +1898,7 @@ Appelée par : `gestesGraphe`
 
 Appelle : `carteTouche()` *(catalogueEtat.js)*, `colorOK()` *(collection.js)*, `getCardOrAnalyzedRec()` *(catalogueEtat.js)*, `noeudsActifs()` *(catalogueEtat.js)*, `norm()` *(cartes.js)*, `recToucheNoeuds()` *(catalogueEtat.js)*
 
-Appelée par : `resultatsHTML`
+Appelée par : `propositionsHTML`, `resultatsHTML`
 
 ### `resultatsHTML()` — ligne 61
 
@@ -1892,13 +1910,81 @@ Appelée par : `majResultats`, `openAdd`
 
 Appelle : `chercheScryfall()` *(recherches.js)*, `norm()` *(cartes.js)*, `resultatsHTML()` *(fenAjout.js)*
 
-Appelée par : `app.js (chargement)`, `chercheScryfall`, `gestesGraphe`
+Appelée par : `app.js (chargement)`, `gestesGraphe`, `majRecherches`
 
 ### `openAdd()` — ligne 107
 
 Appelle : `esc()` *(outils.js)*, `openDialog()` *(dialogue.js)*, `resultatsHTML()` *(fenAjout.js)*
 
 Appelée par : `gestesDonnees`
+
+## js/rechercheSection.js
+
+### `etatRecherche()` — ligne 30
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `champRecherche`, `pasRecherche`, `propositionsHTML`, `restaureRecherche`, `saisieRecherche`
+
+### `compteListe()` — ligne 35
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `ligneProposition`
+
+### `champRecherche()` — ligne 40
+
+Appelle : `esc()` *(outils.js)*, `etatRecherche()` *(rechercheSection.js)*, `propositionsHTML()` *(rechercheSection.js)*
+
+Appelée par : `renderB`, `renderE`
+
+### `ligneProposition()` — ligne 54
+
+Appelle : `compteListe()` *(rechercheSection.js)*, `esc()` *(outils.js)*, `manaHTML()` *(symboles.js)*
+
+Appelée par : `propositionsHTML`
+
+### `ligneEnLigne()` — ligne 82
+
+Appelle : `esc()` *(outils.js)*
+
+Appelée par : `propositionsHTML`
+
+### `propositionsHTML()` — ligne 94
+
+Appelle : `chercheCartes()` *(fenAjout.js)*, `esc()` *(outils.js)*, `etatRecherche()` *(rechercheSection.js)*, `find()` *(cartes.js)*, `ligneEnLigne()` *(rechercheSection.js)*, `ligneProposition()` *(rechercheSection.js)*, `norm()` *(cartes.js)*
+
+Appelée par : `champRecherche`, `majPropositions`
+
+### `majPropositions()` — ligne 120
+
+Appelle : `propositionsHTML()` *(rechercheSection.js)*
+
+Appelée par : `majRecherches`, `saisieRecherche`
+
+### `saisieRecherche()` — ligne 127
+
+Appelle : `chercheScryfall()` *(recherches.js)*, `etatRecherche()` *(rechercheSection.js)*, `majPropositions()` *(rechercheSection.js)*, `norm()` *(cartes.js)*
+
+Appelée par : `app.js (chargement)`
+
+### `pasRecherche()` — ligne 141
+
+Appelle : `addToDeck()` *(deck.js)*, `ajoutCollection()` *(collection.js)*, `etatRecherche()` *(rechercheSection.js)*, `removeFromDeck()` *(deck.js)*, `retraitCollection()` *(collection.js)*
+
+Appelée par : `gestesGraphe`, `molletteRecherche`
+
+### `molletteRecherche()` — ligne 156
+
+Appelle : `pasRecherche()` *(rechercheSection.js)*
+
+Appelée par : `app.js (chargement)`
+
+### `restaureRecherche()` — ligne 166
+
+Appelle : `etatRecherche()` *(rechercheSection.js)*
+
+Appelée par : `renderB`, `renderE`
 
 ## js/annexes.js
 
@@ -1912,7 +1998,7 @@ Appelée par : `annexeDe`, `annexeEntries`, `annexeSize`, `appliqueCatalogueAuxC
 
 Appelle : `annexeListe()` *(annexes.js)*, `find()` *(cartes.js)*, `mainType()` *(cartes.js)*
 
-Appelée par : `blocAnnexe`, `exportDeckModal`, `renderE`
+Appelée par : `blocAnnexe`, `exportModal`, `renderE`
 
 ### `annexeSize()` — ligne 25
 
@@ -1962,7 +2048,7 @@ Appelée par : `cardTile`, `tagsSuggestion`
 
 Appelle : `find()` *(cartes.js)*, `mainType()` *(cartes.js)*
 
-Appelée par : `cartesDuDeck`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `deckCounts`, `deckSignature`, `exportDeckModal`, `ficheHTML`, `gameChangersDuDeck`, `graphCards`, `legality`, `openImport`, `renderE`, `zoneCommandant`
+Appelée par : `cartesDuDeck`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `deckCounts`, `deckSignature`, `exportModal`, `ficheHTML`, `gameChangersDuDeck`, `graphCards`, `legality`, `openImport`, `renderE`, `zoneCommandant`
 
 ### `deckSignature()` — ligne 21
 
@@ -1980,7 +2066,7 @@ Appelée par : `contexteEvaluation`, `ficheHTML`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `brancherRestauration`, `exportDeckModal`, `legality`, `noteCarte`, `renderE`
+Appelée par : `brancherRestauration`, `exportModal`, `legality`, `noteCarte`, `renderE`
 
 ### `availableFor()` — ligne 40
 
@@ -1992,7 +2078,7 @@ Appelée par : `addToDeck`, `cardRow`, `cardTile`, `deckAdd`, `ficheHTML`, `open
 
 Appelle : `annexeDe()` *(annexes.js)*, `availableFor()` *(deck.js)*, `cmEstimate()` *(marche.js)*, `deplacerCarte()` *(annexes.js)*, `eur()` *(outils.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `toast()` *(outils.js)*
 
-Appelée par : `gestesDeck`
+Appelée par : `gestesDeck`, `pasRecherche`
 
 ### `deckAdd()` — ligne 70
 
@@ -2004,7 +2090,7 @@ Appelée par : `ajouterCarte`, `buyCard`, `openImport`
 
 Appelle : `recalculerAvecProgression()` *(recalcul.js)*
 
-Appelée par : `gestesDeck`
+Appelée par : `gestesDeck`, `pasRecherche`
 
 ### `buyCard()` — ligne 101
 
@@ -2084,7 +2170,7 @@ Appelée par : `renderE`
 
 ### `renderE()` — ligne 146
 
-Appelle : `aAcheter()` *(outils.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `spent()` *(outils.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
+Appelle : `aAcheter()` *(outils.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(outils.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
 
 Appelée par : `app.js (chargement)`, `appliquerAffichage`, `renderAll`, `runScryQueue`
 
@@ -2160,13 +2246,13 @@ Appelée par : `basculerSourceVersions`, `choisirVersion`, `faireDefilerVersion`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `champBudget`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportDeckModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCommandant`, `ligneFiltre`, `ligneGameChangers`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `majBoutonAffichage`, `montrerApercu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `refCarte`, `renderD`, `renderE`, `renderTop`, `resultatsHTML`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `zoneCommandant`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `champBudget`, `champRecherche`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCommandant`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneProposition`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `majBoutonAffichage`, `montrerApercu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `propositionsHTML`, `refCarte`, `renderD`, `renderE`, `renderTop`, `resultatsHTML`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `zoneCommandant`
 
 ### `eur()` — ligne 14
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `addToDeck`, `blocAchats`, `blocAnnexe`, `blocEdhrec`, `buyCard`, `cardRow`, `cardTile`, `exportDeckModal`, `ficheHTML`, `legality`, `ligneAchats`, `ligneBudget`, `ligneCatalogue`, `noteCarte`, `openImport`, `openWantsModal`, `renderC`, `renderE`, `renderTop`, `sugLigne`, `sugRow`
+Appelée par : `addToDeck`, `blocAchats`, `blocAnnexe`, `blocEdhrec`, `buyCard`, `cardRow`, `cardTile`, `exportModal`, `ficheHTML`, `legality`, `ligneAchats`, `ligneBudget`, `ligneCatalogue`, `noteCarte`, `openImport`, `openWantsModal`, `renderC`, `renderE`, `renderTop`, `sugLigne`, `sugRow`
 
 ### `refCarte()` — ligne 18
 
@@ -2178,7 +2264,7 @@ Appelée par : `ficheHTML`, `renderD`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `aAcheter`, `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `blocEdhrec`, `cardRow`, `cardTile`, `carteLegale`, `contexteEvaluation`, `corpsFormat`, `deckAdd`, `deplacerCarte`, `exportDeckModal`, `filtered`, `lanceEdhrecSiBesoin`, `legality`, `ligneCatalogue`, `ligneCausesCollection`, `ligneGameChangers`, `openImport`, `panneauEdhrec`, `renderC`, `renderE`, `renderH`, `renderTop`, `requeteCatalogue`, `resumeFormat`, `selectionCandidats`, `tagIllegal`, `targets`
+Appelée par : `aAcheter`, `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `blocEdhrec`, `cardRow`, `cardTile`, `carteLegale`, `contexteEvaluation`, `corpsFormat`, `deckAdd`, `deplacerCarte`, `exportModal`, `filtered`, `lanceEdhrecSiBesoin`, `legality`, `ligneCatalogue`, `ligneCausesCollection`, `ligneGameChangers`, `openImport`, `panneauEdhrec`, `renderC`, `renderE`, `renderH`, `renderTop`, `requeteCatalogue`, `resumeFormat`, `selectionCandidats`, `tagIllegal`, `targets`
 
 ### `spent()` — ligne 37
 
@@ -2196,7 +2282,7 @@ Appelée par : `blocAchats`, `ligneAchats`, `openWantsModal`, `renderE`, `spent`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `completeUnknown`, `deplacerCarte`, `enrichAllUnknown`, `exportDeckModal`, `gestesDeck`, `gestesDonnees`, `gestesReglages`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `openImport`, `openWantsModal`, `openWipeModal`, `runScryQueue`, `save`, `telechargerCatalogue`, `versAnnexe`, `viderAnnexe`
+Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `completeUnknown`, `deplacerCarte`, `enrichAllUnknown`, `exportModal`, `gestesDeck`, `gestesDonnees`, `gestesReglages`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `openImport`, `openWantsModal`, `openWipeModal`, `runScryQueue`, `save`, `telechargerCatalogue`, `versAnnexe`, `viderAnnexe`
 
 ## js/theme.js
 
@@ -2230,7 +2316,7 @@ Appelée par : `app.js (chargement)`
 
 Appelle : `esc()` *(outils.js)*
 
-Appelée par : `annonceRecalcul`, `exportDeckModal`, `gestesDeck`, `gestesDonnees`, `openAdd`, `openAffichageModal`, `openBudgetModal`, `openCardModal`, `openFiltresModal`, `openFormatModal`, `openImport`, `openParametresModal`, `openWantsModal`, `openWipeModal`, `ouvrirBoiteCatalogue`, `proposerMajCatalogue`
+Appelée par : `annonceRecalcul`, `exportModal`, `gestesDeck`, `gestesDonnees`, `openAdd`, `openAffichageModal`, `openBudgetModal`, `openCardModal`, `openFiltresModal`, `openFormatModal`, `openImport`, `openParametresModal`, `openWantsModal`, `openWipeModal`, `ouvrirBoiteCatalogue`, `proposerMajCatalogue`
 
 ### `closeDialog()` — ligne 37
 
@@ -2592,7 +2678,7 @@ Appelée par : `recalculerAvecProgression`
 
 Appelle : `annonceRecalcul()` *(recalcul.js)*, `finProgresSection()` *(recalcul.js)*, `finRecalcul()` *(recalcul.js)*, `geleSuggestions()` *(sugOrdre.js)*, `majProgression()` *(fenFiltres.js)*, `pause()` *(recalcul.js)*, `prechauffeCandidats()` *(candidats.js)*, `prepareSuggestions()` *(vivier.js)*, `progresSection()` *(recalcul.js)*, `recalculLong()` *(recalcul.js)*, `releveAncre()` *(ancre.js)*, `renderAll()` *(rendu.js)*, `restaureAncre()` *(ancre.js)*
 
-Appelée par : `addToDeck`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesDeck`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `removeFromDeck`, `retirerAnnexe`, `versAnnexe`, `viderAnnexe`
+Appelée par : `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesDeck`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
 
 ## js/entete.js
 
@@ -2968,19 +3054,19 @@ Appelée par : `brancherCatalogue`, `telechargerCatalogue`
 
 ## js/fenExport.js
 
-### `exportDeckModal()` — ligne 8
+### `exportModal()` — ligne 11
 
-Appelle : `annexeEntries()` *(annexes.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `fmt()` *(outils.js)*, `openDialog()` *(dialogue.js)*, `toast()` *(outils.js)*
+Appelle : `annexeEntries()` *(annexes.js)*, `collectionCards()` *(collection.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `fmt()` *(outils.js)*, `openDialog()` *(dialogue.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesDonnees`
 
-### `openWantsModal()` — ligne 88
+### `openWantsModal()` — ligne 106
 
 Appelle : `aAcheter()` *(outils.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `openDialog()` *(dialogue.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesDeck`
 
-### `openWipeModal()` — ligne 114
+### `openWipeModal()` — ligne 132
 
 Appelle : `annexeListe()` *(annexes.js)*, `closeDialog()` *(dialogue.js)*, `openDialog()` *(dialogue.js)*, `renderAll()` *(rendu.js)*, `toast()` *(outils.js)*
 
@@ -3014,7 +3100,7 @@ Appelée par : `app.js (chargement)`
 
 ### `gestesDonnees()` — ligne 9
 
-Appelle : `annexeListe()` *(annexes.js)*, `chargerCatalogue()` *(candidats.js)*, `closeDialog()` *(dialogue.js)*, `enrichAllUnknown()` *(recherches.js)*, `exportDeckModal()` *(fenExport.js)*, `idbVider()` *(idb.js)*, `invaliderCandidats()` *(candidats.js)*, `loadEdhrec()` *(edhrec.js)*, `majCatalogue()` *(catalogue.js)*, `openAdd()` *(fenAjout.js)*, `openDialog()` *(dialogue.js)*, `openImport()` *(fenImport.js)*, `openWipeModal()` *(fenExport.js)*, `rafraichirFenetreSauvegarde()` *(fenSauvegarde.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `renderAll()` *(rendu.js)*, `save()` *(stockage.js)*, `scheduleSave()` *(stockage.js)*, `snapshot()` *(stockage.js)*, `telechargerCatalogue()` *(catalogue.js)*, `toast()` *(outils.js)*
+Appelle : `annexeListe()` *(annexes.js)*, `chargerCatalogue()` *(candidats.js)*, `closeDialog()` *(dialogue.js)*, `enrichAllUnknown()` *(recherches.js)*, `exportModal()` *(fenExport.js)*, `idbVider()` *(idb.js)*, `invaliderCandidats()` *(candidats.js)*, `loadEdhrec()` *(edhrec.js)*, `majCatalogue()` *(catalogue.js)*, `openAdd()` *(fenAjout.js)*, `openDialog()` *(dialogue.js)*, `openImport()` *(fenImport.js)*, `openWipeModal()` *(fenExport.js)*, `rafraichirFenetreSauvegarde()` *(fenSauvegarde.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `renderAll()` *(rendu.js)*, `save()` *(stockage.js)*, `scheduleSave()` *(stockage.js)*, `snapshot()` *(stockage.js)*, `telechargerCatalogue()` *(catalogue.js)*, `toast()` *(outils.js)*
 
 Appelée par : `app.js (chargement)`
 
@@ -3022,7 +3108,7 @@ Appelée par : `app.js (chargement)`
 
 ### `gestesGraphe()` — ligne 9
 
-Appelle : `ajouterCarte()` *(fenAjout.js)*, `allerVersSection()` *(entete.js)*, `buildCard()` *(cartes.js)*, `carteDepuisScryfall()` *(recherches.js)*, `closeDialog()` *(dialogue.js)*, `find()` *(cartes.js)*, `invaliderCandidats()` *(candidats.js)*, `majResultats()` *(fenAjout.js)*, `norm()` *(cartes.js)*, `openCardModal()` *(ficheParcours.js)*, `poseParcoursFiche()` *(ficheParcours.js)*, `registerCard()` *(cartes.js)*, `renderB()` *(collection.js)*, `renderD()` *(graphe.js)*, `renderSuggestions()` *(suggestions.js)*, `renderTop()` *(entete.js)*
+Appelle : `ajouterCarte()` *(fenAjout.js)*, `allerVersSection()` *(entete.js)*, `buildCard()` *(cartes.js)*, `carteDepuisScryfall()` *(recherches.js)*, `closeDialog()` *(dialogue.js)*, `find()` *(cartes.js)*, `invaliderCandidats()` *(candidats.js)*, `majResultats()` *(fenAjout.js)*, `norm()` *(cartes.js)*, `openCardModal()` *(ficheParcours.js)*, `pasRecherche()` *(rechercheSection.js)*, `poseParcoursFiche()` *(ficheParcours.js)*, `registerCard()` *(cartes.js)*, `renderB()` *(collection.js)*, `renderD()` *(graphe.js)*, `renderSuggestions()` *(suggestions.js)*, `renderTop()` *(entete.js)*
 
 Appelée par : `app.js (chargement)`
 
@@ -3030,9 +3116,9 @@ Appelée par : `app.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `activerOnglet()` *(entete.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesDeck()` *(gestesDeck.js)*, `gestesDonnees()` *(gestesDonnees.js)*, `gestesGraphe()` *(gestesGraphe.js)*, `gestesReglages()` *(gestesReglages.js)*, `gestesVue()` *(gestesVue.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeBudget()` *(fenBudget.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `toast()` *(outils.js)*, → `majHauteurEntete()` *(entete.js)*
+Appelle : `activerOnglet()` *(entete.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesDeck()` *(gestesDeck.js)*, `gestesDonnees()` *(gestesDonnees.js)*, `gestesGraphe()` *(gestesGraphe.js)*, `gestesReglages()` *(gestesReglages.js)*, `gestesVue()` *(gestesVue.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeBudget()` *(fenBudget.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `majHauteurEntete()` *(entete.js)*
 
-### `demarrer()` — ligne 238
+### `demarrer()` — ligne 255
 
 Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*
 

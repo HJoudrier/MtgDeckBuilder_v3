@@ -129,8 +129,9 @@ function gestesDonnees(act, b) {
     return true;
   }
 
-  if (act === 'exportDeck') {
-    exportDeckModal();
+  /* Le même geste pour les deux listes : le bouton porte celle qu'il sort. */
+  if (act === 'exporter' || act === 'exportDeck') {
+    exportModal(b.dataset.cible || 'deck');
     return true;
   }
   return false;

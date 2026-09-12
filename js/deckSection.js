@@ -189,11 +189,11 @@ function renderE() {
           const qte = a.reduce((x, l) => x + l.qty, 0);
           return qte ? `<button type="button" class="pill" data-act="wants" style="border-color:var(--bad);cursor:pointer" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket"><span class="dot" style="background:var(--bad)"></span> ${qte} à acheter · ${eur(spent())}</button>` : '';
         })()}
-        <button class="btn" style="margin-left:auto" data-act="addCard" data-cible="deck">Ajouter</button>
-        <button class="btn" data-act="import" data-cible="deck">Importer MTGO</button>
-        <button class="btn" data-act="exportDeck">Exporter</button>
-        <button class="btn danger" data-act="clearDeck">Vider le deck</button>
+        <button class="btn" style="margin-left:auto" data-act="import" data-cible="deck">Importer</button>
+        <button class="btn" data-act="exporter" data-cible="deck">Exporter</button>
+        <button class="btn danger" data-act="clearDeck">Vider</button>
       </div>
+      ${champRecherche('deck')}
       ${msgs.length ? `<div class="warnbox"><b>À corriger</b><ul style="margin:5px 0 0 16px;padding:0">${msgs.slice(0,6).map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>` : `<div class="warnbox" style="border-color:var(--ok-d);background:var(--ok-bg)">Le deck respecte les contraintes du format.</div>`}
       ${ligneGameChangers()}
       ${f.commander ? zoneCommandant() : ''}
@@ -217,6 +217,8 @@ function renderE() {
         porte les mêmes gestes, et fait passer une carte d'une liste à l'autre.</div>
       ${CLES_ANNEXES.map(blocAnnexe).join('')}`;
   }
+
+  restaureRecherche('deck');
 
   const hintEl = document.getElementById('hintE');
   const horsListe = CLES_ANNEXES.map(cle => [ANNEXES[cle].titre.toLowerCase(), annexeSize(cle)]).filter(([, q]) => q);

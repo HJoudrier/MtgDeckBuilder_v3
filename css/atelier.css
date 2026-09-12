@@ -401,6 +401,31 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .tag{font-size:9.5px;letter-spacing:.04em;padding:1px 5px;border-radius:4px;background:var(--tag-bg);color:var(--tag-txt);border:1px solid var(--line)}
 .qty, .acts{display:inline-flex;align-items:center;gap:3px;margin-left:auto}
 .qty button, .acts button{width:20px;height:20px;border-radius:5px;border:1px solid var(--line2);background:var(--panel);line-height:1;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+/* ---------- le champ de recherche d'une section ----------
+   Le champ tient toute la largeur, ses propositions s'alignent dessous. Une
+   proposition est une ligne de liste ordinaire : le nom occupe toute la place
+   qui reste et se clique de bout en bout, le compteur garde la sienne à
+   droite. */
+.rech{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.rech-champ{width:100%}
+.rech-liste{max-height:min(46vh,420px);overflow:auto}
+.rech-l{gap:8px}
+.rech-n{flex:1;min-width:0;display:flex;align-items:center;gap:8px;
+  background:transparent;border:0;padding:0;text-align:left;color:inherit;font:inherit}
+.rech-n:hover .cname{color:var(--brass)}
+/* Le nom s'efface s'il est trop long, le coût de mana ne s'enroule jamais :
+   sans cela ses pastilles s'empilent et la ligne triple de hauteur. */
+.rech-n .cname{flex:0 1 auto;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rech-n .costs{flex:0 0 auto;display:flex;align-items:center;gap:2px;flex-wrap:nowrap}
+.rech-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rech-autre{flex:0 0 auto;white-space:nowrap}
+.rech-cpt{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px}
+.rech-cpt .rech-n-val{min-width:18px;text-align:center;font-size:13px}
+.rech-cpt .btn{width:22px;padding:0;text-align:center;line-height:1.5}
+.rech-pied, .rech-vide{padding:2px}
+@media (max-width:520px){
+  .rech-t, .rech-autre{display:none}
+}
 .list{display:flex;flex-direction:column;gap:4px}
 .lrow{display:flex;align-items:center;gap:8px;padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg2)}
 .lrow .cname{font-family:var(--display);font-size:13.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
