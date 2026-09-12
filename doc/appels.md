@@ -2620,19 +2620,19 @@ Appelle : `esc()` *(outils.js)*, `eur()` *(outils.js)*, `filtresActifs()` *(filt
 
 Appelée par : `brancherSauvegarde`, `gestesGraphe`, `refreshSuggestions`, `renderAll`, `renderB`
 
-### `renderOnglets()` — ligne 162
+### `renderOnglets()` — ligne 168
 
 Appelle : `majBoutonAffichage()` *(entete.js)*
 
 Appelée par : `activerOnglet`, `renderAll`
 
-### `activerOnglet()` — ligne 182
+### `activerOnglet()` — ligne 188
 
 Appelle : `renderOnglets()` *(entete.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `allerVersSection`, `app.js (chargement)`, `gestesVue`
 
-### `allerVersSection()` — ligne 197
+### `allerVersSection()` — ligne 203
 
 Appelle : `activerOnglet()` *(entete.js)*, `ongletDeSection()` *(etat.js)*
 

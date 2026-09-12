@@ -7141,7 +7141,7 @@
   {
    "nom": "renderOnglets",
    "fichier": "entete.js",
-   "ligne": 162,
+   "ligne": 168,
    "chargement": false,
    "appelle": [
     "majBoutonAffichage"
@@ -7156,7 +7156,7 @@
   {
    "nom": "activerOnglet",
    "fichier": "entete.js",
-   "ligne": 182,
+   "ligne": 188,
    "chargement": false,
    "appelle": [
     "renderOnglets",
@@ -7173,7 +7173,7 @@
   {
    "nom": "allerVersSection",
    "fichier": "entete.js",
-   "ligne": 197,
+   "ligne": 203,
    "chargement": false,
    "appelle": [
     "activerOnglet",

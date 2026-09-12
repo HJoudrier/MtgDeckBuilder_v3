@@ -129,6 +129,12 @@ L'en-tête ne se replie plus : un bouton « Stats » basculait un mode compact q
 s'allumait aussi tout seul — deux mécanismes pour une même chose, l'un en JavaScript et figé au
 chargement, l'autre en CSS et suivant le redimensionnement. Seul le second demeure, et la mise en
 page du téléphone tient désormais dans le bloc `@media (max-width:640px)`.
+Les pastilles suivent l'ordre des questions : quelles couleurs, quel format — c'est lui qui commande
+la légalité et la taille du deck —, puis les puces des filtres en vigueur et le budget. Le format
+venait après ces puces, dont le nombre change : il se déplaçait d'un rendu à l'autre. Chaque puce
+porte sa croix ; un bouton « Tout effacer » les suivait, qui doublait le « Réinitialiser » de la
+fenêtre des filtres et dont la place variait au gré des puces — on visait la croix d'un filtre, on
+effaçait les cinq autres.
 Deux pastilles disaient ici ce que la collection retenait et ce que le catalogue contenait ; les
 sections le disent déjà, et mieux — la phrase de causes de la collection énumère ce qui écarte chaque
 carte, `ligneCatalogue()` compte les candidates avec le motif des écartées. Les retirer épargne à
@@ -315,8 +321,8 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   regardant la liste. Il vise la liste de l'onglet ouvert — `ONGLETS` porte le nom de celle que
   chacun montre — et change de cible avec la page, sans que l'en-tête soit repeint
   (`majBoutonAffichage()`, `js/entete.js`). Son infobulle porte le résumé du réglage en vigueur, qui
-  n'est plus visible nulle part ailleurs ; sous 640 px, son libellé s'efface et il ne reste que la
-  grille dessinée, faute de place au coin.
+  n'est plus visible nulle part ailleurs. Son libellé reste lisible à toutes les largeurs — une
+  icône seule ne dit pas ce qu'on règle —, et c'est la réserve du coin qui s'élargit pour lui.
 - « Appliquer partout », dans la même fenêtre, pose le réglage choisi sur les cinq listes : c'est le
   geste de qui veut tout l'atelier rangé de la même façon, au lieu d'ouvrir cinq fois la même
   fenêtre. Seul un tri qu'une liste n'offre pas (`TRIS_SECTION`, `js/groupes.js` — le taux

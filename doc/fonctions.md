@@ -75,7 +75,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 251 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 195 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 207 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 213 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 127 |
@@ -86,7 +86,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
-| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 118 |
+| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 119 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 138 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 100 |
@@ -1169,7 +1169,7 @@ Les recalculs annoncés. *8 fonctions, 195 lignes, 8.3 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *7 fonctions, 207 lignes, 11 Ko.*
+L'en-tête et la barre des onglets. *7 fonctions, 213 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1329,7 +1329,7 @@ Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
 
 ## js/gestesReglages.js
 
-Les fenêtres de réglage et leurs boutons. *1 fonctions, 118 lignes, 3.9 Ko.*
+Les fenêtres de réglage et leurs boutons. *1 fonctions, 119 lignes, 4 Ko.*
 
 | Fonction | Rôle |
 |---|---|

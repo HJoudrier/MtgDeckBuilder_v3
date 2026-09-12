@@ -58,8 +58,9 @@ function gestesReglages(act, b) {
   }
 
   if (act === 'resetFiltres') {
-    /* « Réinitialiser » dans la fenêtre vide le brouillon ; « Tout effacer »
-       dans l'en-tête vide l'état, et s'applique aussitôt. */
+    /* « Réinitialiser », dans la fenêtre des filtres : elle tient un brouillon,
+       c'est donc lui qui est vidé, et « Appliquer » décide. Hors d'elle — le
+       geste reste ouvert à qui l'appelle —, l'état est vidé et s'applique. */
     modifieBrouillon(() => reinitFiltres());
     apresReglage('Filtres réinitialisés : tout l\'atelier est repris sans eux.');
     toast('Filtres réinitialisés.');

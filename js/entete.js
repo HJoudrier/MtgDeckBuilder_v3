@@ -95,14 +95,16 @@ function renderTop() {
     </button>
   `;
 
-  /* Tous les filtres en vigueur restent lisibles et retirables dans l'en-tête. */
+  /* Tous les filtres en vigueur restent lisibles et retirables dans l'en-tête,
+     un par un. Un bouton « Tout effacer » les suivait : il doublait le
+     « Réinitialiser » de la fenêtre des filtres, et sa place variait au gré des
+     puces — on visait la croix d'un filtre, on effaçait les cinq autres. */
   const filtreChipsHTML = actifs.length ? `
     <div class="head-filtres" role="group" aria-label="Filtres actifs">
       ${actifs.map(a => `<span class="filtre-chip" title="${esc(a.texte)}">
         <button type="button" class="chip-txt" data-act="filtres">${esc(a.texte)}</button>
         <button type="button" class="chip-x" data-act="dropFiltre" data-cles="${esc(a.cles.join(','))}" title="Retirer ce filtre" aria-label="Retirer le filtre ${esc(a.texte)}">✕</button>
       </span>`).join('')}
-      <button type="button" class="btn sm" data-act="resetFiltres" title="Retirer tous les filtres">Tout effacer</button>
     </div>` : '';
 
   /* Le budget se règle dans sa fenêtre, et cette pastille en est la porte :
@@ -121,10 +123,14 @@ function renderTop() {
      retirer épargne, à chaque rendu de l'entête, un filtrage complet de la
      collection et un parcours de tout le catalogue — et l'entête se rend deux
      fois par repeint, `renderB()` le redemandant après `renderAll()`. */
+  /* L'ordre des pastilles suit celui des questions : quelles couleurs, quel
+     format — c'est lui qui commande la légalité et la taille du deck —, puis
+     les filtres en vigueur et le budget. Le format venait après les puces de
+     filtres, dont le nombre change : il se déplaçait d'un rendu à l'autre. */
   topStats.innerHTML = `
     ${manaBarHTML}
-    ${filtreChipsHTML}
     ${deckPillHTML}
+    ${filtreChipsHTML}
     ${budgetPillHTML}
   `;
 

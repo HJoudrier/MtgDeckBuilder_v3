@@ -117,7 +117,7 @@ header.top{
    retombait sous eux, à gauche, dès que leur boîte prenait toute la largeur.
    La marge droite de l'entête lui réserve sa place, pour que rien ne passe
    dessous. */
-.top-in{position:relative;padding-right:246px}
+.top-in{position:relative;padding-right:240px}
 /* Les deux commandes du coin, côte à côte : le bouton des filtres puis
    l'engrenage. C'est le conteneur qui est ancré, non plus chaque bouton — un
    seul point à déplacer d'une largeur d'écran à l'autre. */
@@ -156,9 +156,9 @@ header.top{
   font-size:11.5px;padding:3px 9px;border-radius:99px;white-space:nowrap;
 }
 .head-filtre:hover{border-color:var(--brass);color:var(--brass)}
-/* Le bouton « Affichage », voisin de celui des filtres. Sous 640 px, le coin
-   n'a plus la place de trois libellés : seule la grille dessinée reste, et
-   l'infobulle dit le reste. */
+/* Le bouton « Affichage », voisin de celui des filtres. Son libellé reste
+   lisible à toutes les largeurs : une icône seule ne dit pas ce qu'on règle,
+   et c'est la réserve du coin qui s'élargit pour lui. */
 .head-affichage{gap:5px}
 .head-filtre.actif{border-color:var(--brass);color:var(--brass);background:var(--brass-a3)}
 .filtre-n{
@@ -641,7 +641,7 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
      et non à l'entête entière — une réserve sur `.top-in` amputerait aussi la
      rangée des pastilles, de cent-quarante pixels sur quatre cents. */
   .top-in{padding:6px 8px;gap:6px 8px}
-  .brand{padding-right:176px}
+  .brand{padding-right:226px}
   .head-actions{right:8px;top:6px;gap:4px}
   .head-param{width:28px;height:28px}
   .top-stats{gap:4px 6px;width:100%;justify-content:flex-start}
@@ -650,8 +650,6 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .head-mana-bar .mana-btn{width:25px;height:25px;min-width:25px;min-height:25px}
   .pill{font-size:10.5px;padding:3px 7px}
   .head-filtre{font-size:10.5px;padding:2px 8px}
-  .head-affichage .head-affichage-t{display:none}
-  .head-affichage{padding:2px 7px}
   .filtre-chip{font-size:10px;max-width:170px}
   .filtre-chip .chip-txt{max-width:135px;padding-left:8px}
 }
