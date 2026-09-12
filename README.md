@@ -18,6 +18,7 @@ js/                 modules, chargés dans cet ordre :
   — le fond —
   effets.js         lecture des effets des cartes
   cartes.js         base de cartes
+  liens.js          interaction précise ou déclencheur large
   etat.js           état et filtrage
   groupes.js        grouper et trier les listes
   marche.js         Cardmarket
@@ -89,6 +90,17 @@ les détaille. Les identifiants internes des sections
 (`secB`…`secH`, `renderB`…`renderH`) ont gardé leur lettre d'origine, que les rendus connaissent ;
 plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
 
+**Un déclencheur large compte pour un.** Toute carte non-terrain produit « lancement de sort » du
+seul fait d'être lançable, toute permanente produit « arrivée en jeu » du seul fait d'arriver
+(`analyze()`, `js/cartes.js`) : une carte qui se déclenche « quand vous lancez un sort » se relie
+ainsi à chacun des soixante sorts du deck, et affichait soixante interactions pour une seule
+propriété. `classeLiens()` (`js/liens.js`) ne nomme pourtant aucun concept — il compte : au-delà du
+quart du deck, un même déclencheur ne s'intègre plus à chaque carte mais au deck. Le décompte des
+interactions ne retient alors que les liens précis, les cartes que seul un déclencheur large atteint
+se disent entre parenthèses — « 2 (+60) » —, et le score ne touche pour elles qu'une prime bornée à
+rendement décroissant au lieu d'une interaction par carte. Le critère suit le deck qu'on construit,
+sans liste de concepts à tenir à jour.
+
 Les trois dernières lisent une **même sélection notée** : la notation ne connaît qu'une liste, et
 `selectionSuggestions()` (`js/suggestions.js`) la partitionne une fois — ce qui touche les nœuds
 isolés, ce qu'EDHREC recommande, tout le reste. `SECTIONS_SUGGESTIONS` (`js/etat.js`) les nomme ;
@@ -106,7 +118,8 @@ gestes sans effet. Le marqueur est à rehausser dès qu'un changement touche à 
 et ce qu'il charge.
 
 L'ordre de chargement compte : `effets.js` définit l'analyseur qu'utilise `cartes.js`
-au moment de construire la base livrée. Les modules partagent la portée globale ;
+au moment de construire la base livrée, et `liens.js` le tri des liens dont la notation, la fiche et
+les pastilles se servent ensuite. Les modules partagent la portée globale ;
 aucun système de modules n'est employé, afin que l'application reste utilisable
 par simple ouverture du fichier, sans serveur local.
 

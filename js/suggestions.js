@@ -84,37 +84,49 @@ function noteCarte(p, X) {
       addLink(x.nom, tt.c, 'ba', compat(x.p, tt), libelleQual(tt.q)));
   });
 
+  /* Les partenaires sont d'abord bâtis, puis triés : un déclencheur qui prend le
+     quart du deck ne s'intègre pas à chaque carte (js/liens.js), et ni le poids
+     ni le décompte ne doivent le payer soixante fois. */
+  const partners = [...linkMap.entries()].map(([nm, m]) => ({name:nm, links:[...m.values()]}));
+  const tri = classeLiens(partners, X.deck.length);
+
   /* Une carte du deck ne pèse qu'une fois, quel que soit le nombre d'effets qui
      la relient : son meilleur lien fait le poids, les suivants ne font que le
      nuancer, sans jamais dépasser une fois et demie ce meilleur lien. La somme
      de tous les arcs, elle, faisait qu'une carte branchée à deux cartes du deck
      par quatre effets chacune valait une carte qui s'intègre à huit — l'inverse
      de ce que l'on cherche à mettre en avant. */
-  const partners = [...linkMap.entries()].map(([nm, m]) => {
-    const links = [...m.values()];
-    const forces = links
-      .map(l => ((l.concept === 'ETB' || l.concept === 'LANCEMENT') ? 0.8 : (l.dir === 'ab' ? 3.2 : 2.6)) * (l.k || 1))
-      .sort((a, b) => b - a);
+  const poidsLien = l => ((l.concept === 'ETB' || l.concept === 'LANCEMENT') ? 0.8 : (l.dir === 'ab' ? 3.2 : 2.6)) * (l.k || 1);
+  tri.parts.forEach(x => {
+    const forces = x.precis.map(poidsLien).sort((a, b) => b - a);
     const meilleur = forces[0] || 0;
-    const w = Math.min(meilleur * 1.5, meilleur + 0.2 * forces.slice(1).reduce((a, f) => a + f, 0));
-    return {name:nm, links, w};
+    x.p.precis = x.precis;
+    x.p.large = !x.precis.length;
+    x.p.w = Math.min(meilleur * 1.5, meilleur + 0.2 * forces.slice(1).reduce((a, f) => a + f, 0));
   });
 
   /* Le plafond reste 26, mais on l'approche sans jamais l'atteindre : la
      coupure nette mettait à égalité une carte branchée à huit cartes du deck et
      une branchée à vingt-cinq, alors que c'est précisément l'étendue que l'on
      veut voir remonter. */
-  let weight = partners.reduce((a, p2) => a + p2.w, 0);
-  partners.sort((a, b) => b.w - a.w);
+  let weight = tri.precis.reduce((a, x) => a + x.p.w, 0);
+  /* Les vraies interactions en tête : le détail des trois premières doit nommer
+     des cartes qui apprennent quelque chose, non le premier sort venu. */
+  partners.sort((a, b) => a.large === b.large ? b.w - a.w : (a.large ? 1 : -1));
   score += 26 * (1 - Math.exp(-weight / 14));
+  score += primeLiensLarges(tri.familles);
 
-  if (partners.length) {
-    const detail = partners.slice(0, 3).map(p2 => {
-      const cs = [...new Set(p2.links.map(l => NODE[l.concept].label.toLowerCase()))].slice(0, 2).join(', ');
-      return `${p2.name} (${cs})`;
+  const nbPrecis = tri.precis.length, nbLarges = tri.larges.length;
+  if (nbPrecis) {
+    const detail = tri.precis.slice(0, 3).map(x => {
+      const cs = [...new Set(x.precis.map(l => NODE[l.concept].label.toLowerCase()))].slice(0, 2).join(', ');
+      return `${x.p.name} (${cs})`;
     }).join(', ');
-    const liens = partners.reduce((a, p2) => a + p2.links.length, 0);
-    reasons.push(`se branche à ${partners.length} carte(s) du deck (${liens} lien(s)) : ${detail}`);
+    const liens = tri.precis.reduce((a, x) => a + x.precis.length, 0);
+    reasons.push(`se branche à ${nbPrecis} carte(s) du deck (${liens} lien(s)) : ${detail}`);
+  }
+  if (tri.familles.length) {
+    reasons.push(`déclencheur large : ${libelleFamillesLarges(tri.familles)} — ${tri.familles[0].n} carte(s) du deck l'alimentent, ce qui vaut une prime, non autant d'interactions`);
   }
 
   const graph = [];
@@ -126,8 +138,10 @@ function noteCarte(p, X) {
     reasons.unshift(`ferme une boucle avec le deck : ${NODE[loopEdge.from].label} → ${NODE[loopEdge.to].label} → … → ${NODE[loopEdge.from].label}`);
   }
 
-  const hasAb = partners.some(p2 => p2.links.some(l => l.dir === 'ab'));
-  const hasBa = partners.some(p2 => p2.links.some(l => l.dir === 'ba'));
+  /* Un pont fait de deux liens de lancement n'en est pas un : seuls les liens
+     précis disent qu'elle reçoit d'une carte et fournit à une autre. */
+  const hasAb = tri.precis.some(x => x.precis.some(l => l.dir === 'ab'));
+  const hasBa = tri.precis.some(x => x.precis.some(l => l.dir === 'ba'));
   if (hasAb && hasBa) {
     graph.push('pont');
     score += 5;
@@ -197,23 +211,31 @@ function noteCarte(p, X) {
     reasons.push(`hors collection — ${eur(p.offer.price)} (${p.offer.condition || p.offer.quality || ''}, ${p.offer.lang || ''}, ${p.offer.seller || ''})`);
   }
   if (deckSize() === 0) score += (c.cats.has('ramp') || c.cats.has('pioche')) ? 4 : 0;
-  return {card:c, score, reasons, partners, source:p.source, offer:p.offer, graph, edhrec:er, combos};
+  return {card:c, score, reasons, partners, nbPrecis, nbLarges, larges:tri.familles,
+          source:p.source, offer:p.offer, graph, edhrec:er, combos};
 }
 
 /* Le nombre d'interactions d'une note est un nombre de cartes du deck, jamais
-   un nombre d'arcs : une carte reliée par quatre effets reste une carte. Le
-   dédoublonnage se fait sur le nom normalisé, pour que deux entrées du deck
-   visant la même carte n'en fassent pas deux partenaires. */
+   un nombre d'arcs : une carte reliée par quatre effets reste une carte. La
+   notation le tient déjà (`nbPrecis`) ; le dédoublonnage par nom normalisé ne
+   sert que de repli, pour une note d'avant ce décompte. */
 function nbInteractions(note) {
-  if (!note || !note.partners) return 0;
-  return new Set(note.partners.map(p => norm(p.name))).size;
+  if (!note) return 0;
+  if (typeof note.nbPrecis === 'number') return note.nbPrecis;
+  return new Set((note.partners || []).map(p => norm(p.name))).size;
+}
+
+/* Les cartes que seul un déclencheur large atteint : elles se disent à part,
+   entre parenthèses, pour ne pas gonfler le décompte des interactions. */
+function nbCartesLarges(note) {
+  return (note && note.nbLarges) || 0;
 }
 
 /* Le nombre d'arcs, lui, ne sert qu'à l'infobulle : il dit par combien d'effets
-   le lien passe, sans jamais grossir le décompte des cartes. */
+   passent les interactions précises. */
 function nbLiens(note) {
   if (!note || !note.partners) return 0;
-  return note.partners.reduce((a, p) => a + p.links.length, 0);
+  return note.partners.reduce((a, p) => a + (p.precis || p.links || []).length, 0);
 }
 
 /* La sélection se fait en deux temps : bâtir le vivier — toutes les cartes
@@ -607,7 +629,7 @@ function panneauEdhrec() {
 }
 
 function sugRow(s) {
-  const c = s.card, n = nbInteractions(s), liens = nbLiens(s);
+  const c = s.card, n = nbInteractions(s), larges = nbCartesLarges(s), liens = nbLiens(s);
   const inDeck = S.deck.get(c.name) || 0;
   const img = S.images && (c.imgN || c.img);
   const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
@@ -628,7 +650,7 @@ function sugRow(s) {
   })();
 
   const tags = [
-    n ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit — ${liens} lien(s) d'effets en tout">${n} interaction${n>1?'s':''}</span>` : '',
+    (n || larges) ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit précisément (${liens} lien(s) d'effets)${larges ? ` — et ${larges} autre(s) que seul un déclencheur large relie : ${libelleFamillesLarges(s.larges)}, que tout le deck alimente` : ''}">${n}${larges ? ` (+${larges})` : ''} interaction${n + larges > 1 ? 's' : ''}</span>` : '',
     tagIllegal(s.card),
     tagGameChanger(s.card),
     s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',

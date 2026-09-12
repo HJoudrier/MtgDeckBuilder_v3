@@ -7,12 +7,13 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**454 fonctions**, 32 modules, 511 Ko de JavaScript.
+**461 fonctions**, 33 modules, 517 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
 | [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 14 | 516 |
 | [`cartes.js`](#jscartesjs) | Base de cartes, indexation, analyse & typage | 30 | 712 |
+| [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
 | [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 621 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 16 | 358 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
@@ -21,9 +22,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`externes.js`](#jsexternesjs) | EDHREC, Commander Spellbook & Catalogue complet Scryfall | 81 | 1587 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 168 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
-| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 48 | 1143 |
+| [`suggestions.js`](#jssuggestionsjs) | Moteur d'évaluation, scoring & suggestions d'ajout | 49 | 1165 |
 | [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 504 |
-| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 39 | 904 |
+| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 39 | 922 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 6 | 68 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
 | [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 146 |
@@ -127,6 +128,19 @@ Base de cartes, indexation, analyse & typage. *30 fonctions, 712 lignes, 48 Ko.*
 | `FRONT` | — |
 | `TYPE_ORDER` | — |
 | `BUILTIN` | — |
+
+## js/liens.js
+
+Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 lignes, 3.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `seuilLiensLarges(taille)` | Le plancher de quatre évite de traiter de large le déclencheur d'un deck de six cartes, où le quart ne veut encore rien dire. |
+| `cleLien(l)` | — |
+| `classeLiens(partners, taille)` | Range les partenaires en deux tas — ceux qu'au moins un lien précis relie, ceux que seul un déclencheur large atteint — et nomme les familles larges, la plus nourrie d'abord. |
+| `libelleFamilleLarge(f)` | Le nom d'une famille large, tel qu'on le montre : « lancement de sort » suffit, le sens du lien n'apprend rien à qui lit une infobulle. |
+| `libelleFamillesLarges(familles)` | — |
+| `primeLiensLarges(familles)` | Ce qu'un déclencheur large vaut : une prime, non soixante interactions. |
 
 ## js/etat.js
 
@@ -462,14 +476,15 @@ Statistiques, répartitions & courbes de mana. *3 fonctions, 90 lignes, 4.5 Ko.*
 
 ## js/suggestions.js
 
-Moteur d'évaluation, scoring & suggestions d'ajout. *48 fonctions, 1143 lignes, 57 Ko.*
+Moteur d'évaluation, scoring & suggestions d'ajout. *49 fonctions, 1165 lignes, 58 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `contexteEvaluation()` | — |
 | `noteCarte(p, X)` | — |
 | `nbInteractions(note)` | Le nombre d'interactions d'une note est un nombre de cartes du deck, jamais un nombre d'arcs : une carte reliée par quatre effets reste une carte. |
-| `nbLiens(note)` | Le nombre d'arcs, lui, ne sert qu'à l'infobulle : il dit par combien d'effets le lien passe, sans jamais grossir le décompte des cartes. |
+| `nbCartesLarges(note)` | Les cartes que seul un déclencheur large atteint : elles se disent à part, entre parenthèses, pour ne pas gonfler le décompte des interactions. |
+| `nbLiens(note)` | Le nombre d'arcs, lui, ne sert qu'à l'infobulle : il dit par combien d'effets passent les interactions précises. |
 | `vivierSuggestions()` | La sélection se fait en deux temps : bâtir le vivier — toutes les cartes qu'on pourrait proposer — puis le noter. |
 | `noterVivier(pool, X, res, debut, fin)` | Notation d'une tranche du vivier, de `debut` inclus à `fin` exclu. |
 | `ordonneSuggestions(res)` | Les filtres de l'en-tête valent aussi pour ce qu'on propose d'ajouter. |
@@ -557,7 +572,7 @@ Gestion de la collection, filtres & imports MTGO. *18 fonctions, 504 lignes, 25 
 
 ## js/deck.js
 
-Construction du deck, légalité, commandant & fiches détaillées. *39 fonctions, 904 lignes, 50 Ko.*
+Construction du deck, légalité, commandant & fiches détaillées. *39 fonctions, 922 lignes, 51 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -707,7 +722,7 @@ Les éditions d'une même carte. *14 fonctions, 173 lignes, 6.9 Ko.*
 
 ## js/tuiles.js
 
-Les deux rendus d'une carte. *7 fonctions, 165 lignes, 10 Ko.*
+Les deux rendus d'une carte. *7 fonctions, 165 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

@@ -418,8 +418,12 @@ function ficheHTML(card) {
   const deck = cartesDuDeck();
   const dansDeck = S.deck.get(card.name) || 0;
   const tgt = targets(), cnt = deckCounts();
-  const partD = partnersFor(card, deck).slice(0, 8);
-  const partC = partnersFor(card, filtered().map(e => e.card).filter(c => !S.deck.has(c.name)).slice(0, 700)).slice(0, 6);
+  /* Les partenaires sont classés avant d'être tranchés : la liste ne montre que
+     les interactions précises, et dit à part ce qu'un déclencheur large ramasse
+     — sans quoi une liste coupée à huit paraissait contredire la pastille. */
+  const poolC = filtered().map(e => e.card).filter(c => !S.deck.has(c.name)).slice(0, 700);
+  const triD = classeLiens(partnersFor(card, deck), deck.length);
+  const triC = classeLiens(partnersFor(card, poolC), poolC.length);
   const dispo = availableFor(card);
   const offre = dispo > 0 ? null : bestOffer(card);
 
@@ -464,13 +468,27 @@ function ficheHTML(card) {
 
   const nomLien = l => NODE[l.concept].label.toLowerCase() + (l.detail ? ` (${l.detail})` : '')
     + (l.k <= 0.4 ? ' — non vérifiable, force ou coût inconnus' : (l.k < 1 ? ' — sous réserve' : ''));
-  const lien = p => {
-    const donne = [...new Set(p.links.filter(l => l.dir === 'ab').map(nomLien))];
-    const recoit = [...new Set(p.links.filter(l => l.dir === 'ba').map(nomLien))];
+  const lien = (p, links) => {
+    const l0 = links || p.links;
+    const donne = [...new Set(l0.filter(l => l.dir === 'ab').map(nomLien))];
+    const recoit = [...new Set(l0.filter(l => l.dir === 'ba').map(nomLien))];
     const bouts = [];
     if (donne.length) bouts.push(`elle lui fournit ${donne.join(', ')}`);
     if (recoit.length) bouts.push(`elle en reçoit ${recoit.join(', ')}`);
     return `<div class="arc">${refCarte(p.card.name)} — ${bouts.join(' · ')}</div>`;
+  };
+
+  /* Les interactions précises, puis une ligne pour les cartes que seul un
+     déclencheur large atteint : c'est le même « (+60) » que la pastille. */
+  const blocLiens = (tri, max, vide) => {
+    const lignes = tri.precis.slice(0, max).map(x => lien(x.p, x.precis));
+    if (tri.precis.length > max)
+      lignes.push(`<div class="arc muted">les ${max} mieux branchées sur ${tri.precis.length}</div>`);
+    if (tri.larges.length)
+      lignes.push(`<div class="arc muted">et ${tri.larges.length} carte(s) que seul un déclencheur large
+        relie — ${libelleFamillesLarges(tri.familles)} : le deck entier l'alimente, ce n'est pas une
+        interaction carte à carte</div>`);
+    return lignes.length ? lignes.join('') : `<div class="arc muted">${vide}</div>`;
   };
   const noeuds = [...new Set(card.an.edges.flatMap(e => [e.from, e.to]))];
 
@@ -540,7 +558,7 @@ function ficheHTML(card) {
       <div class="small muted" style="margin-bottom:5px">Rôles dans le deck</div>
       ${roles.join('') || '<div class="role-l"><span class="chip">Rôle non identifié</span></div>'}
       <div class="small muted" style="margin:10px 0 5px">Cartes du deck avec lesquelles elle se branche</div>
-      ${partD.length ? partD.map(lien).join('') : '<div class="arc muted">aucune pour le moment</div>'}</div>
+      ${blocLiens(triD, 8, 'aucune pour le moment')}</div>
     ${(() => {
       const cs = combosDe(card);
       if (!cs.length) return '';
@@ -572,7 +590,7 @@ function ficheHTML(card) {
         <div class="small muted">Touchez un nœud pour l'isoler dans le graphe.</div>` : ''}</div>
     <div class="bloc"><h4>Branchements possibles avec la collection</h4>
       <div class="small muted" style="margin-bottom:5px">Cartes de la collection filtrée qui ne sont pas dans le deck</div>
-      ${partC.length ? partC.map(lien).join('') : '<div class="arc muted">aucune</div>'}</div>`;
+      ${blocLiens(triC, 6, 'aucune')}</div>`;
 }
 
 /* ---------------------------------------------------------------------
