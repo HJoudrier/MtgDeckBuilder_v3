@@ -46,12 +46,15 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    reste du catalogue. Chacune a désormais sa page — on lit le graphe sans
    dérouler trois mille vignettes, et l'on revient aux recommandations
    d'EDHREC sans les chercher. */
+/* `liste` : la liste de cartes que l'onglet montre, celle que règle le bouton
+   « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). Le catalogue garde
+   la clé `suggestions`, comme partout où son rangement est en jeu. */
 const ONGLETS = {
-  collection: {label:'Collection', sections:['secC','secB']},
-  deck:       {label:'Deck',       sections:['secE']},
-  graphe:     {label:'Graphe',     sections:['secD','secG']},
-  edhrec:     {label:'EDHREC',     sections:['secH']},
-  catalogue:  {label:'Catalogue',  sections:['secF']}
+  collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
+  deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
+  graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
+  edhrec:     {label:'EDHREC',     sections:['secH'],        liste:'edhrec'},
+  catalogue:  {label:'Catalogue',  sections:['secF'],        liste:'suggestions'}
 };
 const CLES_ONGLETS = Object.keys(ONGLETS);
 
@@ -78,7 +81,8 @@ function ongletDeSection(id) {
 const COLONNES = [0, 1, 2, 3, 4, 5, 6, 8];
 
 /* Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. La
-   fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre au-dessus de chacune,
+   fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre sur celle de l'onglet
+   ouvert — `ONGLETS` ci-dessus dit laquelle —,
    et les quatre réglages — vue, colonnes, groupement, tri — valent pour les
    cinq. C'est cette table que « Appliquer partout » parcourt.
 

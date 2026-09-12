@@ -189,8 +189,7 @@ function renderE() {
           const qte = a.reduce((x, l) => x + l.qty, 0);
           return qte ? `<button type="button" class="pill" data-act="wants" style="border-color:var(--bad);cursor:pointer" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket"><span class="dot" style="background:var(--bad)"></span> ${qte} à acheter · ${eur(spent())}</button>` : '';
         })()}
-        <span style="margin-left:auto">${boutonAffichage('deck')}</span>
-        <button class="btn" data-act="addCard" data-cible="deck">Ajouter</button>
+        <button class="btn" style="margin-left:auto" data-act="addCard" data-cible="deck">Ajouter</button>
         <button class="btn" data-act="import" data-cible="deck">Importer MTGO</button>
         <button class="btn" data-act="exportDeck">Exporter</button>
         <button class="btn danger" data-act="clearDeck">Vider le deck</button>

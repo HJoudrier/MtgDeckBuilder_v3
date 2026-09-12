@@ -311,7 +311,8 @@ sequenceDiagram
     participant SEC as la section réglée
     participant GRP as groupes.js
 
-    U->>APP: clic « Affichage » (le bouton porte sa liste)
+    U->>APP: clic « Affichage » (coin haut-droit de l'entête)
+    Note over APP: le bouton vise la liste de l'onglet ouvert,<br/>et en change avec la page (majBoutonAffichage)
     APP->>AFF: openAffichageModal(liste)
     AFF->>BR: ouvreBrouillon(['vues','colonnes','groupes','tris'], majFenetreAffichage)
     Note over AFF: les quatre mêmes réglages pour les cinq listes<br/>(LISTES_AFFICHAGE, js/etat.js)

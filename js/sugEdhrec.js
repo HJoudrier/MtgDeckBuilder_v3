@@ -43,7 +43,6 @@ function blocEdhrec(sel) {
   visuelsGroupes('edhrec', groupes, mode);
 
   return `<div class="row" style="margin-bottom:10px">
-      ${boutonAffichage('edhrec')}
       <span class="small muted">${total} recommandation(s)${noteMultiple(mode)} · ${budInfo}</span>
     </div>
     ${plat ? '' : `<div class="small muted" style="margin-bottom:8px">${titreEDH}</div>`}

@@ -1,10 +1,13 @@
 /* =====================================================================
-   js/barreGroupes.js — L'enveloppe d'un groupe, et le bouton « Affichage »
+   js/barreGroupes.js — L'enveloppe d'un groupe, et la mise en page d'une liste
 
-   Le pli d'une catégorie, son en-tête et son badge, puis ce que toute liste de
-   cartes pose dans sa barre : le bouton qui ouvre sa fenêtre d'affichage, la
-   vue qu'elle suit et l'ouverture de sa grille. Chacun porte sa liste en
-   attribut — c'est elle qui dit quel réglage change, chacune gardant le sien.
+   Le pli d'une catégorie, son en-tête et son badge, puis ce qu'une liste de
+   cartes lit de son réglage d'affichage : le nombre de colonnes de sa grille et
+   la vue qu'elle suit. Chacun porte sa liste en argument — c'est elle qui dit
+   quel réglage s'applique, chacune gardant le sien. Le bouton qui ouvre la
+   fenêtre, lui, a quitté les barres pour l'entête (`js/entete.js`) : cinq
+   boutons identiques, un par page, pour un réglage qu'on ne change qu'en
+   regardant la liste.
    ===================================================================== */
 
 /* ---------------------------------------------------------------------
@@ -112,11 +115,3 @@ function vueDe(section) {
   return (S.vues && S.vues[section]) === 'list' ? 'list' : 'grid';
 }
 
-/* Le bouton que toute liste de cartes pose dans sa barre : il ouvre sa
-   fenêtre d'affichage, et son infobulle dit le réglage en vigueur — celui-ci
-   n'étant plus visible dans la barre. Cinq contrôles y tenaient autrefois
-   par liste ; la barre du deck en portait six avec ses bascules. */
-function boutonAffichage(section) {
-  return `<button class="btn" data-act="affichage" data-liste="${section}"
-    title="Régler l'affichage : ${esc(resumeAffichage(section))}">Affichage</button>`;
-}

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**476 fonctions**, 80 modules, 543 Ko de JavaScript.
+**477 fonctions**, 80 modules, 545 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,13 +21,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 176 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 180 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 62 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
-| [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et le bouton « Affichage » | 9 | 123 |
+| [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 3 | 54 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
@@ -51,17 +51,17 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugOrdre.js`](#jssugordrejs) | L'ordre gelé des propositions | 6 | 80 |
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
 | [`sugListes.js`](#jssuglistesjs) | Le fond commun des trois listes de propositions | 11 | 142 |
-| [`sugGraphe.js`](#jssuggraphejs) | La section du graphe : ce qui se branche sur les nœuds | 1 | 42 |
-| [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 53 |
-| [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 35 |
+| [`sugGraphe.js`](#jssuggraphejs) | La section du graphe : ce qui se branche sur les nœuds | 1 | 41 |
+| [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 52 |
+| [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 243 |
-| [`collection.js`](#jscollectionjs) | La section Collection | 6 | 126 |
+| [`collection.js`](#jscollectionjs) | La section Collection | 6 | 125 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 6 | 102 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 227 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 226 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -75,7 +75,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 251 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 195 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 176 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 207 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 127 |
@@ -251,7 +251,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 176 lignes, 9.6 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 180 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -262,7 +262,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 | `FORMATS` | `legal` : la lettre que `codeLegalite()` emploie pour ce format, et le nom que Scryfall lui donne dans ses recherches. |
 | `ANNEXES` | Les deux listes annexes de la section Deck : la réserve — le sideboard — et les cartes à l'étude — le considering des sites de decks. |
 | `CLES_ANNEXES` | — |
-| `ONGLETS` | Les cinq onglets de l'atelier, dans l'ordre où ils paraissent sous l'entête. |
+| `ONGLETS` | `liste` : la liste de cartes que l'onglet montre, celle que règle le bouton « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). |
 | `CLES_ONGLETS` | — |
 | `ONGLETS_ANCIENS` | L'onglet unique d'hier, tel qu'une sauvegarde le nomme encore : elle rouvrait sinon la collection, et l'on perdait la page qu'on regardait en quittant l'atelier. |
 | `SECTIONS_SUGGESTIONS` | Les trois sections que la notation alimente, dans l'ordre des onglets. |
@@ -384,7 +384,7 @@ Grouper et trier les listes de cartes. *7 fonctions, 232 lignes, 10 Ko.*
 
 ## js/barreGroupes.js
 
-L'enveloppe d'un groupe, et le bouton « Affichage ». *9 fonctions, 123 lignes, 6.2 Ko.*
+L'enveloppe d'un groupe, et la mise en page d'une liste. *8 fonctions, 118 lignes, 5.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -396,7 +396,6 @@ L'enveloppe d'un groupe, et le bouton « Affichage ». *9 fonctions, 123 lignes,
 | `colonnesDe(section)` | — |
 | `ouvreGrille(section, base)` | L'ouverture d'une grille : la classe et la variable qui portent le choix, ou la grille d'avant si l'on s'en remet à la largeur. |
 | `vueDe(section)` | La vue d'une liste : ses vignettes en grille, ou une ligne par carte. |
-| `boutonAffichage(section)` | Le bouton que toute liste de cartes pose dans sa barre : il ouvre sa fenêtre d'affichage, et son infobulle dit le réglage en vigueur — celui-ci n'étant plus visible dans la barre. |
 
 | Donnée | Rôle |
 |---|---|
@@ -810,7 +809,7 @@ Le fond commun des trois listes de propositions. *11 fonctions, 142 lignes, 6.8 
 
 ## js/sugGraphe.js
 
-La section du graphe : ce qui se branche sur les nœuds. *1 fonctions, 42 lignes, 2.2 Ko.*
+La section du graphe : ce qui se branche sur les nœuds. *1 fonctions, 41 lignes, 2.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -818,7 +817,7 @@ La section du graphe : ce qui se branche sur les nœuds. *1 fonctions, 42 lignes
 
 ## js/sugEdhrec.js
 
-La section EDHREC : ce que les decks recensés recommandent. *1 fonctions, 53 lignes, 2.8 Ko.*
+La section EDHREC : ce que les decks recensés recommandent. *1 fonctions, 52 lignes, 2.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -826,7 +825,7 @@ La section EDHREC : ce que les decks recensés recommandent. *1 fonctions, 53 li
 
 ## js/sugCatalogue.js
 
-La section du catalogue : tout le classement. *1 fonctions, 35 lignes, 2.3 Ko.*
+La section du catalogue : tout le classement. *1 fonctions, 34 lignes, 2.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -859,7 +858,7 @@ Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
 
 ## js/collection.js
 
-La section Collection. *6 fonctions, 126 lignes, 6.4 Ko.*
+La section Collection. *6 fonctions, 125 lignes, 6.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -950,7 +949,7 @@ Ce que le format exige, et l'équilibre des rôles. *6 fonctions, 102 lignes, 5.
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 227 lignes, 14 Ko.*
+La section Deck. *6 fonctions, 226 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1170,10 +1169,12 @@ Les recalculs annoncés. *8 fonctions, 195 lignes, 8.3 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *5 fonctions, 176 lignes, 9.5 Ko.*
+L'en-tête et la barre des onglets. *7 fonctions, 207 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `listeDeLOngletCourant()` | — |
+| `majBoutonAffichage()` | — |
 | `majHauteurEntete()` | La hauteur de l'entête, publiée pour le CSS : les sections s'en servent comme marge de défilement et s'arrêtent sous elle plutôt que derrière. |
 | `renderTop()` | — |
 | `renderOnglets()` | La barre ne se réécrit pas, elle change d'attributs : la réécrire emporterait le focus du bouton qu'on vient de presser, et les flèches n'auraient plus rien sous elles. |
@@ -1183,6 +1184,7 @@ L'en-tête et la barre des onglets. *5 fonctions, 176 lignes, 9.5 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `FILTRE_ICONE` | — |
+| `AFFICHAGE_ICONE` | Quatre pavés : la grille d'une liste de cartes, vue de loin. |
 | `PARAM_ICONE` | L'engrenage des paramètres : douze dents posées en couronne et un moyeu évidé, dessinés ici plutôt que chargés — l'atelier ne dépend d'aucun fichier extérieur, pas même d'une icône. |
 | `POS_ONGLETS` | Où l'on en était dans chaque onglet. Le défilement est celui du document, partagé par les trois pages : sans ce relevé, revenir au deck après une longue collection retomberait n'importe… |
 

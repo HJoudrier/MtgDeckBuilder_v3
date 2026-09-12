@@ -21,7 +21,7 @@ digraph modules {
     "retenue.js" [label="js/retenue.js\n9 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "catalogueEtat.js" [label="js/catalogueEtat.js\n5 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
     "groupes.js" [label="js/groupes.js\n7 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
-    "barreGroupes.js" [label="js/barreGroupes.js\n9 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "barreGroupes.js" [label="js/barreGroupes.js\n8 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "marche.js" [label="js/marche.js\n3 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
   subgraph "cluster_couche_1" {
@@ -78,7 +78,7 @@ digraph modules {
     "tuiles.js" [label="js/tuiles.js\n12 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "ancre.js" [label="js/ancre.js\n3 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
     "recalcul.js" [label="js/recalcul.js\n8 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
-    "entete.js" [label="js/entete.js\n5 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "entete.js" [label="js/entete.js\n7 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "rendu.js" [label="js/rendu.js\n2 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
   subgraph "cluster_couche_4" {
@@ -112,23 +112,24 @@ digraph modules {
   "fenExport.js" -> "outils.js" [penwidth=3.67, color="#8a7fa8aa", tooltip="9 appel(s)"];
   "analyse.js" -> "effets.js" [penwidth=3.50, color="#a86d8aaa", tooltip="8 appel(s)"];
   "retenue.js" -> "cartes.js" [penwidth=3.50, color="#96a86daa", tooltip="8 appel(s)"];
-  "deckSection.js" -> "barreGroupes.js" [penwidth=3.50, color="#a8846daa", tooltip="8 appel(s)"];
   "tuiles.js" -> "notation.js" [penwidth=3.50, color="#96a86daa", tooltip="8 appel(s)"];
   "edhrecThemes.js" -> "edhrecForme.js" [penwidth=3.31, color="#6da88caa", tooltip="7 appel(s)"];
   "deck.js" -> "outils.js" [penwidth=3.31, color="#6d8ca8aa", tooltip="7 appel(s)"];
   "legalite.js" -> "outils.js" [penwidth=3.31, color="#8a7fa8aa", tooltip="7 appel(s)"];
+  "deckSection.js" -> "barreGroupes.js" [penwidth=3.31, color="#a8846daa", tooltip="7 appel(s)"];
   "fiche.js" -> "versions.js" [penwidth=3.31, color="#a86d8aaa", tooltip="7 appel(s)"];
   "fenAffichage.js" -> "barreGroupes.js" [penwidth=3.31, color="#6da8a4aa", tooltip="7 appel(s)"];
   "fenAffichage.js" -> "brouillon.js" [penwidth=3.31, color="#6da8a4aa", tooltip="7 appel(s)"];
   "filtres.js" -> "archetypesSets.js" [penwidth=3.08, color="#a86d8aaa", tooltip="6 appel(s)"];
-  "collection.js" -> "barreGroupes.js" [penwidth=3.08, color="#a86d8aaa", tooltip="6 appel(s)"];
   "deckSection.js" -> "legalite.js" [penwidth=3.08, color="#a8846daa", tooltip="6 appel(s)"];
   "stockage.js" -> "cartes.js" [penwidth=2.82, color="#6da8a4aa", tooltip="5 appel(s)"];
   "fenSauvegarde.js" -> "outils.js" [penwidth=2.82, color="#a89b6daa", tooltip="5 appel(s)"];
   "catalogue.js" -> "archive.js" [penwidth=2.82, color="#a89b6daa", tooltip="5 appel(s)"];
+  "collection.js" -> "barreGroupes.js" [penwidth=2.82, color="#a86d8aaa", tooltip="5 appel(s)"];
   "fenAjout.js" -> "catalogueEtat.js" [penwidth=2.82, color="#6da8a4aa", tooltip="5 appel(s)"];
   "annexes.js" -> "outils.js" [penwidth=2.82, color="#a89b6daa", tooltip="5 appel(s)"];
   "ficheVisuel.js" -> "versions.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];
+  "entete.js" -> "outils.js" [penwidth=2.82, color="#6d8ca8aa", tooltip="5 appel(s)"];
   "fenParametres.js" -> "fenSauvegarde.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];
   "fenFiltres.js" -> "brouillon.js" [penwidth=2.82, color="#96a86daa", tooltip="5 appel(s)"];
   "fenFiltres.js" -> "archetypesSets.js" [penwidth=2.82, color="#96a86daa", tooltip="5 appel(s)"];
@@ -155,7 +156,6 @@ digraph modules {
   "legalite.js" -> "deck.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
   "deckSection.js" -> "tuiles.js" [penwidth=2.50, color="#a8846daa", tooltip="4 appel(s)"];
   "fiche.js" -> "ficheVisuel.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
-  "entete.js" -> "outils.js" [penwidth=2.50, color="#6d8ca8aa", tooltip="4 appel(s)"];
   "fenParametres.js" -> "brouillon.js" [penwidth=2.50, color="#6da88caa", tooltip="4 appel(s)"];
   "fenBudget.js" -> "brouillon.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
   "fenBudget.js" -> "suggestions.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];

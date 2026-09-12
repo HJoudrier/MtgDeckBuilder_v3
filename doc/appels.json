@@ -994,7 +994,7 @@
   {
    "nom": "ongletDeSection",
    "fichier": "etat.js",
-   "ligne": 71,
+   "ligne": 74,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1728,7 +1728,7 @@
   {
    "nom": "clePli",
    "fichier": "barreGroupes.js",
-   "ligne": 17,
+   "ligne": 20,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1741,7 +1741,7 @@
   {
    "nom": "groupePlie",
    "fichier": "barreGroupes.js",
-   "ligne": 21,
+   "ligne": 24,
    "chargement": false,
    "appelle": [
     "clePli"
@@ -1756,7 +1756,7 @@
   {
    "nom": "enveloppeGroupe",
    "fichier": "barreGroupes.js",
-   "ligne": 32,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "clePli",
@@ -1772,7 +1772,7 @@
   {
    "nom": "rendGroupes",
    "fichier": "barreGroupes.js",
-   "ligne": 55,
+   "ligne": 58,
    "chargement": false,
    "appelle": [
     "enveloppeGroupe"
@@ -1788,7 +1788,7 @@
   {
    "nom": "noteMultiple",
    "fichier": "barreGroupes.js",
-   "ligne": 71,
+   "ligne": 74,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1804,7 +1804,7 @@
   {
    "nom": "colonnesDe",
    "fichier": "barreGroupes.js",
-   "ligne": 94,
+   "ligne": 97,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1820,7 +1820,7 @@
   {
    "nom": "ouvreGrille",
    "fichier": "barreGroupes.js",
-   "ligne": 103,
+   "ligne": 106,
    "chargement": false,
    "appelle": [
     "colonnesDe"
@@ -1837,7 +1837,7 @@
   {
    "nom": "vueDe",
    "fichier": "barreGroupes.js",
-   "ligne": 111,
+   "ligne": 114,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1850,25 +1850,6 @@
     "renderB",
     "renderE",
     "resumeAffichage"
-   ]
-  },
-  {
-   "nom": "boutonAffichage",
-   "fichier": "barreGroupes.js",
-   "ligne": 119,
-   "chargement": false,
-   "appelle": [
-    "esc",
-    "resumeAffichage"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "blocEdhrec",
-    "blocGraphe",
-    "listeSuggestions",
-    "renderB",
-    "renderE"
    ]
   },
   {
@@ -4432,7 +4413,6 @@
    "ligne": 12,
    "chargement": false,
    "appelle": [
-    "boutonAffichage",
     "esc",
     "groupeCartes",
     "listesSug",
@@ -4453,7 +4433,6 @@
    "ligne": 12,
    "chargement": false,
    "appelle": [
-    "boutonAffichage",
     "commandantsSecondaires",
     "esc",
     "eur",
@@ -4477,7 +4456,6 @@
    "chargement": false,
    "appelle": [
     "bandeauReclassement",
-    "boutonAffichage",
     "groupeCartes",
     "listesSug",
     "noteMultiple",
@@ -4830,7 +4808,6 @@
    "ligne": 73,
    "chargement": false,
    "appelle": [
-    "boutonAffichage",
     "cardRow",
     "cardTile",
     "collectionCards",
@@ -5550,7 +5527,6 @@
     "aAcheter",
     "annexeSize",
     "blocAchats",
-    "boutonAffichage",
     "cardRow",
     "cardTile",
     "carteFiltree",
@@ -5811,7 +5787,6 @@
     "blocEdhrec",
     "blocGraphe",
     "blocVersions",
-    "boutonAffichage",
     "cardRow",
     "cardTile",
     "champBudget",
@@ -5839,6 +5814,7 @@
     "listeArchetypesHTML",
     "listeSetsHTML",
     "majApercu",
+    "majBoutonAffichage",
     "montrerApercu",
     "openAdd",
     "openCardModal",
@@ -7094,9 +7070,38 @@
    ]
   },
   {
+   "nom": "listeDeLOngletCourant",
+   "fichier": "entete.js",
+   "ligne": 34,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "majBoutonAffichage"
+   ]
+  },
+  {
+   "nom": "majBoutonAffichage",
+   "fichier": "entete.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "listeDeLOngletCourant",
+    "resumeAffichage"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderOnglets",
+    "renderTop"
+   ]
+  },
+  {
    "nom": "majHauteurEntete",
    "fichier": "entete.js",
-   "ligne": 26,
+   "ligne": 53,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7109,13 +7114,14 @@
   {
    "nom": "renderTop",
    "fichier": "entete.js",
-   "ligne": 31,
+   "ligne": 58,
    "chargement": false,
    "appelle": [
     "esc",
     "eur",
     "filtresActifs",
     "fmt",
+    "majBoutonAffichage",
     "majHauteurEntete",
     "nomCombinaisonCouleurs",
     "spent",
@@ -7135,9 +7141,11 @@
   {
    "nom": "renderOnglets",
    "fichier": "entete.js",
-   "ligne": 134,
+   "ligne": 162,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "majBoutonAffichage"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -7148,7 +7156,7 @@
   {
    "nom": "activerOnglet",
    "fichier": "entete.js",
-   "ligne": 151,
+   "ligne": 182,
    "chargement": false,
    "appelle": [
     "renderOnglets",
@@ -7165,7 +7173,7 @@
   {
    "nom": "allerVersSection",
    "fichier": "entete.js",
-   "ligne": 166,
+   "ligne": 197,
    "chargement": false,
    "appelle": [
     "activerOnglet",
@@ -7757,8 +7765,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "boutonAffichage",
-    "corpsAffichage"
+    "corpsAffichage",
+    "majBoutonAffichage"
    ]
   },
   {

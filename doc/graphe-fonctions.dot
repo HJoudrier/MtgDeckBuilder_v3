@@ -156,7 +156,6 @@ digraph appels {
     "colonnesDe" [label="colonnesDe", fillcolor="#6d8ca833", color="#6d8ca8"];
     "ouvreGrille" [label="ouvreGrille", fillcolor="#6d8ca833", color="#6d8ca8"];
     "vueDe" [label="vueDe", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "boutonAffichage" [label="boutonAffichage", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
   subgraph "cluster_17" {
     label="js/marche.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
@@ -600,6 +599,8 @@ digraph appels {
   }
   subgraph "cluster_64" {
     label="js/entete.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "listeDeLOngletCourant" [label="listeDeLOngletCourant", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "majBoutonAffichage" [label="majBoutonAffichage", fillcolor="#6d8ca833", color="#6d8ca8"];
     "majHauteurEntete" [label="majHauteurEntete", fillcolor="#6d8ca833", color="#6d8ca8"];
     "renderTop" [label="renderTop", fillcolor="#6d8ca833", color="#6d8ca8"];
     "renderOnglets" [label="renderOnglets", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -838,8 +839,6 @@ digraph appels {
   "enveloppeGroupe" -> "esc" [color="#6d8ca899"];
   "rendGroupes" -> "enveloppeGroupe" [color="#6d8ca899"];
   "ouvreGrille" -> "colonnesDe" [color="#6d8ca899"];
-  "boutonAffichage" -> "esc" [color="#6d8ca899"];
-  "boutonAffichage" -> "resumeAffichage" [color="#6d8ca899"];
   "bestOffer" -> "cmEstimate" [color="#8a7fa899"];
   "loadSymbology" -> "renderAll" [color="#a8846d99"];
   "symBg" -> "pipHTML" [color="#a8846d99"];
@@ -1233,7 +1232,6 @@ digraph appels {
   "blocGraphe" -> "esc" [color="#6d8ca899"];
   "blocGraphe" -> "groupeCartes" [color="#6d8ca899"];
   "blocGraphe" -> "visuelsGroupes" [color="#6d8ca899"];
-  "blocGraphe" -> "boutonAffichage" [color="#6d8ca899"];
   "blocGraphe" -> "noteMultiple" [color="#6d8ca899"];
   "blocGraphe" -> "listesSug" [color="#6d8ca899"];
   "blocGraphe" -> "renvoiCatalogue" [color="#6d8ca899"];
@@ -1243,13 +1241,11 @@ digraph appels {
   "blocEdhrec" -> "esc" [color="#8a7fa899"];
   "blocEdhrec" -> "groupeCartes" [color="#8a7fa899"];
   "blocEdhrec" -> "visuelsGroupes" [color="#8a7fa899"];
-  "blocEdhrec" -> "boutonAffichage" [color="#8a7fa899"];
   "blocEdhrec" -> "noteMultiple" [color="#8a7fa899"];
   "blocEdhrec" -> "listesSug" [color="#8a7fa899"];
   "blocEdhrec" -> "renvoiCatalogue" [color="#8a7fa899"];
   "listeSuggestions" -> "groupeCartes" [color="#a8846d99"];
   "listeSuggestions" -> "visuelsGroupes" [color="#a8846d99"];
-  "listeSuggestions" -> "boutonAffichage" [color="#a8846d99"];
   "listeSuggestions" -> "noteMultiple" [color="#a8846d99"];
   "listeSuggestions" -> "bandeauReclassement" [color="#a8846d99"];
   "listeSuggestions" -> "listesSug" [color="#a8846d99"];
@@ -1325,7 +1321,6 @@ digraph appels {
   "renderB" -> "groupeCartes" [color="#a86d8a99"];
   "renderB" -> "groupePlie" [color="#a86d8a99"];
   "renderB" -> "filtresActifs" [color="#a86d8a99"];
-  "renderB" -> "boutonAffichage" [color="#a86d8a99"];
   "renderB" -> "ligneCausesCollection" [color="#a86d8a99"];
   "renderB" -> "noteMultiple" [color="#a86d8a99"];
   "renderB" -> "rendGroupes" [color="#a86d8a99"];
@@ -1481,7 +1476,6 @@ digraph appels {
   "renderE" -> "annexeSize" [color="#a8846d99"];
   "renderE" -> "aAcheter" [color="#a8846d99"];
   "renderE" -> "spent" [color="#a8846d99"];
-  "renderE" -> "boutonAffichage" [color="#a8846d99"];
   "renderE" -> "ligneGameChangers" [color="#a8846d99"];
   "renderE" -> "zoneCommandant" [color="#a8846d99"];
   "renderE" -> "blocAchats" [color="#a8846d99"];
@@ -1712,6 +1706,9 @@ digraph appels {
   "recalculerAvecProgression" -> "prepareSuggestions" [color="#a89b6d99"];
   "recalculerAvecProgression" -> "finProgresSection" [color="#a89b6d99"];
   "recalculerAvecProgression" -> "finRecalcul" [color="#a89b6d99"];
+  "majBoutonAffichage" -> "listeDeLOngletCourant" [color="#6d8ca899"];
+  "majBoutonAffichage" -> "esc" [color="#6d8ca899"];
+  "majBoutonAffichage" -> "resumeAffichage" [color="#6d8ca899"];
   "renderTop" -> "majHauteurEntete" [color="#6d8ca899"];
   "renderTop" -> "fmt" [color="#6d8ca899"];
   "renderTop" -> "spent" [color="#6d8ca899"];
@@ -1721,6 +1718,8 @@ digraph appels {
   "renderTop" -> "filtresActifs" [color="#6d8ca899"];
   "renderTop" -> "texteFiltresActifs" [color="#6d8ca899"];
   "renderTop" -> "eur" [color="#6d8ca899"];
+  "renderTop" -> "majBoutonAffichage" [color="#6d8ca899"];
+  "renderOnglets" -> "majBoutonAffichage" [color="#6d8ca899"];
   "activerOnglet" -> "renderOnglets" [color="#6d8ca899"];
   "activerOnglet" -> "scheduleSave" [color="#6d8ca899"];
   "allerVersSection" -> "activerOnglet" [color="#6d8ca899"];

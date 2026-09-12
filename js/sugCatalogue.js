@@ -19,7 +19,6 @@ function listeSuggestions(sel) {
 
   return `
     <div class="row" style="margin-bottom:10px">
-      ${boutonAffichage('suggestions')}
       <span class="small muted">${sug.length} piste(s)${noteMultiple(mode)}</span>
     </div>
     ${bandeauReclassement()}

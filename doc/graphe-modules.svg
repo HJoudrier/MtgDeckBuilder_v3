@@ -134,9 +134,9 @@
 <text text-anchor="middle" x="857" y="-126.2" font-family="Helvetica,sans-Serif" font-size="11.00">12 fonctions</text>
 </g>
 <!-- archetypesSets.js&#45;&gt;cartes.js -->
-<g id="edge31" class="edge">
+<g id="edge32" class="edge">
 <title>archetypesSets.js&#45;&gt;cartes.js</title>
-<g id="a_edge31"><a xlink:title="4 appel(s)">
+<g id="a_edge32"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6da88c" stroke-width="2.5" stroke-opacity="0.666667" d="M866.06,-116.76C874.11,-101.42 886,-78.78 895.23,-61.21"/>
 <polygon fill="#6da88c" fill-opacity="0.666667" stroke="#6da88c" stroke-width="2.5" stroke-opacity="0.666667" points="898.49,-62.53 900.05,-52.05 892.3,-59.27 898.49,-62.53"/>
 </a>
@@ -202,7 +202,7 @@
 <title>barreGroupes.js</title>
 <path fill="#6d8ca8" fill-opacity="0.200000" stroke="#6d8ca8" stroke-width="0.8" d="M1002.5,-254C1002.5,-254 909.5,-254 909.5,-254 903.5,-254 897.5,-248 897.5,-242 897.5,-242 897.5,-230 897.5,-230 897.5,-224 903.5,-218 909.5,-218 909.5,-218 1002.5,-218 1002.5,-218 1008.5,-218 1014.5,-224 1014.5,-230 1014.5,-230 1014.5,-242 1014.5,-242 1014.5,-248 1008.5,-254 1002.5,-254"/>
 <text text-anchor="middle" x="956" y="-239.2" font-family="Helvetica,sans-Serif" font-size="11.00">js/barreGroupes.js</text>
-<text text-anchor="middle" x="956" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">9 fonctions</text>
+<text text-anchor="middle" x="956" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">8 fonctions</text>
 </g>
 <!-- marche.js -->
 <g id="node18" class="node">
@@ -242,26 +242,26 @@
 <text text-anchor="middle" x="1226" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">7 fonctions</text>
 </g>
 <!-- scryfall.js&#45;&gt;impressions.js -->
-<g id="edge32" class="edge">
+<g id="edge33" class="edge">
 <title>scryfall.js&#45;&gt;impressions.js</title>
-<g id="a_edge32"><a xlink:title="4 appel(s)">
+<g id="a_edge33"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" d="M1192.83,-217.95C1187.25,-215.22 1181.48,-212.48 1176,-210 1133.42,-190.78 1084.3,-171.05 1047.67,-156.8"/>
 <polygon fill="#a86d8a" fill-opacity="0.666667" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" points="1048.76,-153.46 1038.17,-153.11 1046.23,-159.99 1048.76,-153.46"/>
 </a>
 </g>
 </g>
 <!-- scryfall.js&#45;&gt;cartes.js -->
-<g id="edge34" class="edge">
+<g id="edge35" class="edge">
 <title>scryfall.js&#45;&gt;cartes.js</title>
-<g id="a_edge34"><a xlink:title="4 appel(s)">
+<g id="a_edge35"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" d="M1231.69,-217.69C1237.55,-196.28 1243.6,-159.75 1226,-136"/>
 </a>
 </g>
 </g>
 <!-- scryfall.js&#45;&gt;scryfallApplique.js -->
-<g id="edge33" class="edge">
+<g id="edge34" class="edge">
 <title>scryfall.js&#45;&gt;scryfallApplique.js</title>
-<g id="a_edge33"><a xlink:title="4 appel(s)">
+<g id="a_edge34"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" d="M1242.2,-217.76C1257,-202 1279.06,-178.52 1295.74,-160.76"/>
 <polygon fill="#a86d8a" fill-opacity="0.666667" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" points="1298.69,-162.73 1302.99,-153.05 1293.59,-157.94 1298.69,-162.73"/>
 </a>
@@ -275,18 +275,18 @@
 <text text-anchor="middle" x="1337" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">9 fonctions</text>
 </g>
 <!-- recherches.js&#45;&gt;impressions.js -->
-<g id="edge36" class="edge">
+<g id="edge37" class="edge">
 <title>recherches.js&#45;&gt;impressions.js</title>
-<g id="a_edge36"><a xlink:title="4 appel(s)">
+<g id="a_edge37"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="2.5" stroke-opacity="0.666667" d="M1297.58,-217.95C1290.46,-215.13 1283.06,-212.36 1276,-210 1265.48,-206.49 1137.42,-173.28 1057.21,-152.56"/>
 <polygon fill="#96a86d" fill-opacity="0.666667" stroke="#96a86d" stroke-width="2.5" stroke-opacity="0.666667" points="1057.75,-149.09 1047.2,-149.97 1056,-155.86 1057.75,-149.09"/>
 </a>
 </g>
 </g>
 <!-- recherches.js&#45;&gt;cartes.js -->
-<g id="edge35" class="edge">
+<g id="edge36" class="edge">
 <title>recherches.js&#45;&gt;cartes.js</title>
-<g id="a_edge35"><a xlink:title="4 appel(s)">
+<g id="a_edge36"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="2.5" stroke-opacity="0.666667" d="M1312.26,-217.68C1287.81,-199.57 1250.6,-169.19 1226,-136"/>
 </a>
 </g>
@@ -308,9 +308,9 @@
 <text text-anchor="middle" x="1599" y="-126.2" font-family="Helvetica,sans-Serif" font-size="11.00">8 fonctions</text>
 </g>
 <!-- stockage.js&#45;&gt;cartes.js -->
-<g id="edge22" class="edge">
+<g id="edge21" class="edge">
 <title>stockage.js&#45;&gt;cartes.js</title>
-<g id="a_edge22"><a xlink:title="5 appel(s)">
+<g id="a_edge21"><a xlink:title="5 appel(s)">
 <path fill="none" stroke="#6da8a4" stroke-width="2.82" stroke-opacity="0.666667" d="M1559.66,-116.94C1551.32,-113.87 1542.47,-111.01 1534,-109 1285,-49.87 1211.43,-104.74 961,-52 960.9,-51.98 960.8,-51.96 960.69,-51.94"/>
 <polygon fill="#6da8a4" fill-opacity="0.666667" stroke="#6da8a4" stroke-width="2.82" stroke-opacity="0.666667" points="961.62,-48.56 951.08,-49.6 959.97,-55.36 961.62,-48.56"/>
 </a>
@@ -324,9 +324,9 @@
 <text text-anchor="middle" x="1610" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">6 fonctions</text>
 </g>
 <!-- fenSauvegarde.js&#45;&gt;stockage.js -->
-<g id="edge37" class="edge">
+<g id="edge38" class="edge">
 <title>fenSauvegarde.js&#45;&gt;stockage.js</title>
-<g id="a_edge37"><a xlink:title="4 appel(s)">
+<g id="a_edge38"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" d="M1608.08,-217.76C1606.41,-202.71 1603.96,-180.62 1602.02,-163.19"/>
 <polygon fill="#a89b6d" fill-opacity="0.666667" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" points="1605.48,-162.6 1600.89,-153.05 1598.52,-163.37 1605.48,-162.6"/>
 </a>
@@ -340,9 +340,9 @@
 <text text-anchor="middle" x="2904" y="-126.2" font-family="Helvetica,sans-Serif" font-size="11.00">7 fonctions</text>
 </g>
 <!-- fenSauvegarde.js&#45;&gt;outils.js -->
-<g id="edge23" class="edge">
+<g id="edge22" class="edge">
 <title>fenSauvegarde.js&#45;&gt;outils.js</title>
-<g id="a_edge23"><a xlink:title="5 appel(s)">
+<g id="a_edge22"><a xlink:title="5 appel(s)">
 <path fill="none" stroke="#a89b6d" stroke-width="2.82" stroke-opacity="0.666667" d="M1652.87,-217.97C1662.33,-214.82 1672.4,-211.92 1682,-210 1798.38,-186.73 2641.89,-147.74 2855.13,-138.17"/>
 <polygon fill="#a89b6d" fill-opacity="0.666667" stroke="#a89b6d" stroke-width="2.82" stroke-opacity="0.666667" points="2855.55,-141.65 2865.38,-137.71 2855.24,-134.66 2855.55,-141.65"/>
 </a>
@@ -386,9 +386,9 @@
 <text text-anchor="middle" x="1468" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">10 fonctions</text>
 </g>
 <!-- edhrecThemes.js&#45;&gt;edhrecForme.js -->
-<g id="edge13" class="edge">
+<g id="edge12" class="edge">
 <title>edhrecThemes.js&#45;&gt;edhrecForme.js</title>
-<g id="a_edge13"><a xlink:title="7 appel(s)">
+<g id="a_edge12"><a xlink:title="7 appel(s)">
 <path fill="none" stroke="#6da88c" stroke-width="3.31" stroke-opacity="0.666667" d="M1468,-217.76C1468,-202.71 1468,-180.62 1468,-163.19"/>
 <polygon fill="#6da88c" fill-opacity="0.666667" stroke="#6da88c" stroke-width="3.31" stroke-opacity="0.666667" points="1471.5,-163.05 1468,-153.05 1464.5,-163.05 1471.5,-163.05"/>
 </a>
@@ -439,9 +439,9 @@
 <text text-anchor="middle" x="1768" y="-530.2" font-family="Helvetica,sans-Serif" font-size="11.00">10 fonctions</text>
 </g>
 <!-- catalogue.js&#45;&gt;archive.js -->
-<g id="edge24" class="edge">
+<g id="edge23" class="edge">
 <title>catalogue.js&#45;&gt;archive.js</title>
-<g id="a_edge24"><a xlink:title="5 appel(s)">
+<g id="a_edge23"><a xlink:title="5 appel(s)">
 <path fill="none" stroke="#a89b6d" stroke-width="2.82" stroke-opacity="0.666667" d="M1752.32,-520.76C1738,-505 1716.65,-481.52 1700.51,-463.76"/>
 <polygon fill="#a89b6d" fill-opacity="0.666667" stroke="#a89b6d" stroke-width="2.82" stroke-opacity="0.666667" points="1702.81,-461.09 1693.5,-456.05 1697.63,-465.8 1702.81,-461.09"/>
 </a>
@@ -464,9 +464,9 @@
 </g>
 </g>
 <!-- catalogue.js&#45;&gt;outils.js -->
-<g id="edge38" class="edge">
+<g id="edge39" class="edge">
 <title>catalogue.js&#45;&gt;outils.js</title>
-<g id="a_edge38"><a xlink:title="4 appel(s)">
+<g id="a_edge39"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" d="M1816.3,-523.59C1820.24,-522.63 1824.18,-521.75 1828,-521 2077.71,-471.7 2175.07,-580.65 2397,-456 2414.67,-446.07 2407.5,-430.22 2425,-420 2594.94,-320.76 2734.46,-504.02 2863,-355 2873.45,-342.88 2868.09,-334.17 2863,-319 2848.47,-275.68 2770.47,-270.99 2801,-237"/>
 </a>
 </g>
@@ -567,17 +567,17 @@
 <text text-anchor="middle" x="2060" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">4 fonctions</text>
 </g>
 <!-- sugCommandants.js&#45;&gt;cartes.js -->
-<g id="edge40" class="edge">
+<g id="edge41" class="edge">
 <title>sugCommandants.js&#45;&gt;cartes.js</title>
-<g id="a_edge40"><a xlink:title="4 appel(s)">
+<g id="a_edge41"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" d="M2066.25,-217.79C2073.01,-195.8 2080.31,-157.95 2060,-136"/>
 </a>
 </g>
 </g>
 <!-- sugCommandants.js&#45;&gt;outils.js -->
-<g id="edge39" class="edge">
+<g id="edge40" class="edge">
 <title>sugCommandants.js&#45;&gt;outils.js</title>
-<g id="a_edge39"><a xlink:title="4 appel(s)">
+<g id="a_edge40"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" d="M2109.09,-217.91C2119.21,-214.89 2129.87,-212.05 2140,-210 2406.51,-156.05 2733.56,-141.09 2855.31,-137.24"/>
 <polygon fill="#6da8a4" fill-opacity="0.666667" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" points="2855.54,-140.74 2865.43,-136.93 2855.33,-133.74 2855.54,-140.74"/>
 </a>
@@ -591,9 +591,9 @@
 <text text-anchor="middle" x="2204" y="-328.2" font-family="Helvetica,sans-Serif" font-size="11.00">11 fonctions</text>
 </g>
 <!-- sugListes.js&#45;&gt;barreGroupes.js -->
-<g id="edge41" class="edge">
+<g id="edge42" class="edge">
 <title>sugListes.js&#45;&gt;barreGroupes.js</title>
-<g id="a_edge41"><a xlink:title="4 appel(s)">
+<g id="a_edge42"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" d="M2156.88,-319.81C2155.58,-319.52 2154.28,-319.25 2153,-319 1661.59,-224.62 1524.26,-325.45 1029,-254 1027.7,-253.81 1026.38,-253.61 1025.06,-253.4"/>
 <polygon fill="#a89b6d" fill-opacity="0.666667" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" points="1025.26,-249.88 1014.8,-251.6 1024.05,-256.78 1025.26,-249.88"/>
 </a>
@@ -647,9 +647,9 @@
 <text text-anchor="middle" x="2025" y="-833.2" font-family="Helvetica,sans-Serif" font-size="11.00">1 fonction</text>
 </g>
 <!-- suggestions.js&#45;&gt;sugListes.js -->
-<g id="edge42" class="edge">
+<g id="edge43" class="edge">
 <title>suggestions.js&#45;&gt;sugListes.js</title>
-<g id="a_edge42"><a xlink:title="4 appel(s)">
+<g id="a_edge43"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6da88c" stroke-width="2.5" stroke-opacity="0.666667" d="M2307.51,-419.98C2287.12,-403.83 2256.3,-379.42 2233.59,-361.44"/>
 <polygon fill="#6da88c" fill-opacity="0.666667" stroke="#6da88c" stroke-width="2.5" stroke-opacity="0.666667" points="2235.64,-358.59 2225.63,-355.13 2231.29,-364.08 2235.64,-358.59"/>
 </a>
@@ -671,9 +671,9 @@
 <text text-anchor="middle" x="1888" y="-429.2" font-family="Helvetica,sans-Serif" font-size="11.00">6 fonctions</text>
 </g>
 <!-- collection.js&#45;&gt;filtres.js -->
-<g id="edge43" class="edge">
+<g id="edge44" class="edge">
 <title>collection.js&#45;&gt;filtres.js</title>
-<g id="a_edge43"><a xlink:title="4 appel(s)">
+<g id="a_edge44"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" d="M1885.26,-419.76C1880.65,-396.99 1869.05,-357.51 1842,-338"/>
 <path fill="none" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" d="M1842,-336C1834.06,-330.27 1836.7,-323.48 1828,-319 1642.04,-223.25 1094.3,-294.02 889,-254 888.9,-253.98 888.8,-253.96 888.69,-253.94"/>
 <polygon fill="#a86d8a" fill-opacity="0.666667" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" points="889.59,-250.55 879.05,-251.71 888.01,-257.37 889.59,-250.55"/>
@@ -690,11 +690,11 @@
 </g>
 </g>
 <!-- collection.js&#45;&gt;barreGroupes.js -->
-<g id="edge20" class="edge">
+<g id="edge24" class="edge">
 <title>collection.js&#45;&gt;barreGroupes.js</title>
-<g id="a_edge20"><a xlink:title="6 appel(s)">
-<path fill="none" stroke="#a86d8a" stroke-width="3.08" stroke-opacity="0.666667" d="M1842,-336C1834.06,-330.27 1836.67,-323.53 1828,-319 1670.11,-236.5 1205.01,-281.5 1029,-254 1027.7,-253.8 1026.39,-253.58 1025.06,-253.36"/>
-<polygon fill="#a86d8a" fill-opacity="0.666667" stroke="#a86d8a" stroke-width="3.08" stroke-opacity="0.666667" points="1025.29,-249.84 1014.82,-251.48 1024.03,-256.73 1025.29,-249.84"/>
+<g id="a_edge24"><a xlink:title="5 appel(s)">
+<path fill="none" stroke="#a86d8a" stroke-width="2.82" stroke-opacity="0.666667" d="M1842,-336C1834.06,-330.27 1836.67,-323.53 1828,-319 1670.11,-236.5 1205.01,-281.5 1029,-254 1027.7,-253.8 1026.39,-253.58 1025.06,-253.36"/>
+<polygon fill="#a86d8a" fill-opacity="0.666667" stroke="#a86d8a" stroke-width="2.82" stroke-opacity="0.666667" points="1025.29,-249.84 1014.82,-251.48 1024.03,-256.73 1025.29,-249.84"/>
 </a>
 </g>
 </g>
@@ -715,17 +715,17 @@
 <text text-anchor="middle" x="2196" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">4 fonctions</text>
 </g>
 <!-- fenImport.js&#45;&gt;cartes.js -->
-<g id="edge44" class="edge">
+<g id="edge45" class="edge">
 <title>fenImport.js&#45;&gt;cartes.js</title>
-<g id="a_edge44"><a xlink:title="4 appel(s)">
+<g id="a_edge45"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="2.5" stroke-opacity="0.666667" d="M2166.08,-217.98C2136.64,-200.21 2091.63,-170.19 2060,-136"/>
 </a>
 </g>
 </g>
 <!-- fenImport.js&#45;&gt;outils.js -->
-<g id="edge45" class="edge">
+<g id="edge46" class="edge">
 <title>fenImport.js&#45;&gt;outils.js</title>
-<g id="a_edge45"><a xlink:title="4 appel(s)">
+<g id="a_edge46"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="2.5" stroke-opacity="0.666667" d="M2243.55,-221.83C2260.06,-217.6 2278.76,-213.19 2296,-210 2502.22,-171.83 2751.56,-148.55 2855.18,-139.87"/>
 <polygon fill="#96a86d" fill-opacity="0.666667" stroke="#96a86d" stroke-width="2.5" stroke-opacity="0.666667" points="2855.66,-143.35 2865.34,-139.03 2855.08,-136.37 2855.66,-143.35"/>
 </a>
@@ -739,9 +739,9 @@
 <text text-anchor="middle" x="1927" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">5 fonctions</text>
 </g>
 <!-- fenAjout.js&#45;&gt;cartes.js -->
-<g id="edge47" class="edge">
+<g id="edge48" class="edge">
 <title>fenAjout.js&#45;&gt;cartes.js</title>
-<g id="a_edge47"><a xlink:title="4 appel(s)">
+<g id="a_edge48"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" d="M1962.12,-217.88C2007.1,-194.87 2077.3,-154.7 2060,-136"/>
 <path fill="none" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" d="M2060,-134C1989.57,-57.88 1931.32,-117.96 1828,-109 1443.28,-75.64 1340.16,-125.24 961,-52 960.9,-51.98 960.8,-51.96 960.69,-51.94"/>
 <polygon fill="#6da8a4" fill-opacity="0.666667" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" points="961.58,-48.55 951.05,-49.72 960.01,-55.38 961.58,-48.55"/>
@@ -758,9 +758,9 @@
 </g>
 </g>
 <!-- fenAjout.js&#45;&gt;outils.js -->
-<g id="edge46" class="edge">
+<g id="edge47" class="edge">
 <title>fenAjout.js&#45;&gt;outils.js</title>
-<g id="a_edge46"><a xlink:title="4 appel(s)">
+<g id="a_edge47"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" d="M1959.15,-217.88C1966.18,-214.77 1973.71,-211.92 1981,-210 2148.65,-165.98 2688.77,-143.61 2854.91,-137.66"/>
 <polygon fill="#6da8a4" fill-opacity="0.666667" stroke="#6da8a4" stroke-width="2.5" stroke-opacity="0.666667" points="2855.44,-141.14 2865.31,-137.29 2855.19,-134.14 2855.44,-141.14"/>
 </a>
@@ -774,9 +774,9 @@
 <text text-anchor="middle" x="2341" y="-530.2" font-family="Helvetica,sans-Serif" font-size="11.00">9 fonctions</text>
 </g>
 <!-- annexes.js&#45;&gt;cartes.js -->
-<g id="edge48" class="edge">
+<g id="edge49" class="edge">
 <title>annexes.js&#45;&gt;cartes.js</title>
-<g id="a_edge48"><a xlink:title="4 appel(s)">
+<g id="a_edge49"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" d="M2385.12,-537.11C2591.76,-532.64 3458.31,-510.78 3565,-456 3573.71,-451.53 3571.43,-445.2 3579,-439"/>
 <path fill="none" stroke="#a89b6d" stroke-width="2.5" stroke-opacity="0.666667" d="M3579,-437C3647.77,-380.67 3635.6,-306.35 3580,-237"/>
 </a>
@@ -816,26 +816,26 @@
 <text text-anchor="middle" x="2343" y="-631.2" font-family="Helvetica,sans-Serif" font-size="11.00">9 fonctions</text>
 </g>
 <!-- deck.js&#45;&gt;cartes.js -->
-<g id="edge49" class="edge">
+<g id="edge50" class="edge">
 <title>deck.js&#45;&gt;cartes.js</title>
-<g id="a_edge49"><a xlink:title="4 appel(s)">
+<g id="a_edge50"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6d8ca8" stroke-width="2.5" stroke-opacity="0.666667" d="M2381.76,-639.26C2580.15,-640.21 3476.06,-639.87 3564,-557 3602.48,-520.74 3537.13,-471.27 3579,-439"/>
 </a>
 </g>
 </g>
 <!-- deck.js&#45;&gt;annexes.js -->
-<g id="edge50" class="edge">
+<g id="edge51" class="edge">
 <title>deck.js&#45;&gt;annexes.js</title>
-<g id="a_edge50"><a xlink:title="4 appel(s)">
+<g id="a_edge51"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#6d8ca8" stroke-width="2.5" stroke-opacity="0.666667" d="M2342.65,-621.76C2342.35,-606.71 2341.9,-584.62 2341.55,-567.19"/>
 <polygon fill="#6d8ca8" fill-opacity="0.666667" stroke="#6d8ca8" stroke-width="2.5" stroke-opacity="0.666667" points="2345.05,-566.97 2341.34,-557.05 2338.05,-567.12 2345.05,-566.97"/>
 </a>
 </g>
 </g>
 <!-- deck.js&#45;&gt;outils.js -->
-<g id="edge14" class="edge">
+<g id="edge13" class="edge">
 <title>deck.js&#45;&gt;outils.js</title>
-<g id="a_edge14"><a xlink:title="7 appel(s)">
+<g id="a_edge13"><a xlink:title="7 appel(s)">
 <path fill="none" stroke="#6d8ca8" stroke-width="3.31" stroke-opacity="0.666667" d="M2381.62,-637.9C2562.47,-632.52 3320.82,-607.1 3413,-557 3427.49,-549.13 3490.66,-449.94 3503,-439"/>
 </a>
 </g>
@@ -866,18 +866,18 @@
 </g>
 </g>
 <!-- legalite.js&#45;&gt;deck.js -->
-<g id="edge51" class="edge">
+<g id="edge52" class="edge">
 <title>legalite.js&#45;&gt;deck.js</title>
-<g id="a_edge51"><a xlink:title="4 appel(s)">
+<g id="a_edge52"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#8a7fa8" stroke-width="2.5" stroke-opacity="0.666667" d="M2343,-722.76C2343,-707.71 2343,-685.62 2343,-668.19"/>
 <polygon fill="#8a7fa8" fill-opacity="0.666667" stroke="#8a7fa8" stroke-width="2.5" stroke-opacity="0.666667" points="2346.5,-668.05 2343,-658.05 2339.5,-668.05 2346.5,-668.05"/>
 </a>
 </g>
 </g>
 <!-- legalite.js&#45;&gt;outils.js -->
-<g id="edge15" class="edge">
+<g id="edge14" class="edge">
 <title>legalite.js&#45;&gt;outils.js</title>
-<g id="a_edge15"><a xlink:title="7 appel(s)">
+<g id="a_edge14"><a xlink:title="7 appel(s)">
 <path fill="none" stroke="#8a7fa8" stroke-width="3.31" stroke-opacity="0.666667" d="M2384.64,-738.73C2570.64,-732.81 3320.42,-706.1 3413,-658 3421.69,-653.49 3418.45,-645.76 3427,-641"/>
 <path fill="none" stroke="#8a7fa8" stroke-width="3.31" stroke-opacity="0.666667" d="M3427,-639C3466.93,-616.8 3471.94,-599.38 3489,-557 3508.72,-508.01 3463.49,-474.04 3503,-439"/>
 </a>
@@ -891,12 +891,12 @@
 <text text-anchor="middle" x="1894" y="-833.2" font-family="Helvetica,sans-Serif" font-size="11.00">6 fonctions</text>
 </g>
 <!-- deckSection.js&#45;&gt;barreGroupes.js -->
-<g id="edge11" class="edge">
+<g id="edge15" class="edge">
 <title>deckSection.js&#45;&gt;barreGroupes.js</title>
-<g id="a_edge11"><a xlink:title="8 appel(s)">
-<path fill="none" stroke="#a8846d" stroke-width="3.5" stroke-opacity="0.666667" d="M1948.3,-825.75C1951.57,-825.09 1954.82,-824.5 1958,-824 2047.03,-810.08 3532.89,-820.01 3578,-742"/>
-<path fill="none" stroke="#a8846d" stroke-width="3.5" stroke-opacity="0.666667" d="M3578,-740C3607.31,-689.31 3313.01,-345.91 3261,-319 3152.3,-262.76 1180.82,-265.8 1059,-254 1047.84,-252.92 1036.05,-251.37 1024.6,-249.64"/>
-<polygon fill="#a8846d" fill-opacity="0.666667" stroke="#a8846d" stroke-width="3.5" stroke-opacity="0.666667" points="1025.07,-246.17 1014.65,-248.08 1023.98,-253.08 1025.07,-246.17"/>
+<g id="a_edge15"><a xlink:title="7 appel(s)">
+<path fill="none" stroke="#a8846d" stroke-width="3.31" stroke-opacity="0.666667" d="M1948.3,-825.75C1951.57,-825.09 1954.82,-824.5 1958,-824 2047.03,-810.08 3532.89,-820.01 3578,-742"/>
+<path fill="none" stroke="#a8846d" stroke-width="3.31" stroke-opacity="0.666667" d="M3578,-740C3607.31,-689.31 3313.01,-345.91 3261,-319 3152.3,-262.76 1180.82,-265.8 1059,-254 1047.84,-252.92 1036.05,-251.37 1024.6,-249.64"/>
+<polygon fill="#a8846d" fill-opacity="0.666667" stroke="#a8846d" stroke-width="3.31" stroke-opacity="0.666667" points="1025.07,-246.17 1014.65,-248.08 1023.98,-253.08 1025.07,-246.17"/>
 </a>
 </g>
 </g>
@@ -920,9 +920,9 @@
 </g>
 </g>
 <!-- deckSection.js&#45;&gt;legalite.js -->
-<g id="edge21" class="edge">
+<g id="edge20" class="edge">
 <title>deckSection.js&#45;&gt;legalite.js</title>
-<g id="a_edge21"><a xlink:title="6 appel(s)">
+<g id="a_edge20"><a xlink:title="6 appel(s)">
 <path fill="none" stroke="#a8846d" stroke-width="3.08" stroke-opacity="0.666667" d="M1948.33,-825.9C1951.59,-825.2 1954.83,-824.56 1958,-824 2032.71,-810.77 2230.34,-827.32 2298,-793 2309.4,-787.22 2319.21,-777.2 2326.73,-767.57"/>
 <polygon fill="#a8846d" fill-opacity="0.666667" stroke="#a8846d" stroke-width="3.08" stroke-opacity="0.666667" points="2329.68,-769.46 2332.74,-759.32 2324.02,-765.34 2329.68,-769.46"/>
 </a>
@@ -945,9 +945,9 @@
 <text text-anchor="middle" x="3013" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">12 fonctions</text>
 </g>
 <!-- deckSection.js&#45;&gt;tuiles.js -->
-<g id="edge52" class="edge">
+<g id="edge53" class="edge">
 <title>deckSection.js&#45;&gt;tuiles.js</title>
-<g id="a_edge52"><a xlink:title="4 appel(s)">
+<g id="a_edge53"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a8846d" stroke-width="2.5" stroke-opacity="0.666667" d="M3578,-740C3645.88,-675.55 3632.89,-383.44 3565,-319 3485.8,-243.83 3190.22,-277.13 3065.25,-253.84"/>
 <polygon fill="#a8846d" fill-opacity="0.666667" stroke="#a8846d" stroke-width="2.5" stroke-opacity="0.666667" points="3065.62,-250.34 3055.12,-251.74 3064.2,-257.2 3065.62,-250.34"/>
 </a>
@@ -1021,9 +1021,9 @@
 </g>
 </g>
 <!-- fiche.js&#45;&gt;ficheVisuel.js -->
-<g id="edge53" class="edge">
+<g id="edge54" class="edge">
 <title>fiche.js&#45;&gt;ficheVisuel.js</title>
-<g id="a_edge53"><a xlink:title="4 appel(s)">
+<g id="a_edge54"><a xlink:title="4 appel(s)">
 <path fill="none" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" d="M2246.29,-722.95C2242.82,-688.19 2234.89,-608.9 2230.7,-567.04"/>
 <polygon fill="#a86d8a" fill-opacity="0.666667" stroke="#a86d8a" stroke-width="2.5" stroke-opacity="0.666667" points="2234.18,-566.61 2229.7,-557.01 2227.21,-567.31 2234.18,-566.61"/>
 </a>
@@ -1126,9 +1126,9 @@
 </g>
 </g>
 <!-- tuiles.js&#45;&gt;notation.js -->
-<g id="edge12" class="edge">
+<g id="edge11" class="edge">
 <title>tuiles.js&#45;&gt;notation.js</title>
-<g id="a_edge12"><a xlink:title="8 appel(s)">
+<g id="a_edge11"><a xlink:title="8 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="3.5" stroke-opacity="0.666667" d="M2983.33,-217.9C2976.81,-214.8 2969.82,-211.93 2963,-210 2815.9,-168.3 2346.28,-145.05 2186.11,-138.18"/>
 <polygon fill="#96a86d" fill-opacity="0.666667" stroke="#96a86d" stroke-width="3.5" stroke-opacity="0.666667" points="2186.16,-134.68 2176.02,-137.75 2185.86,-141.67 2186.16,-134.68"/>
 </a>
@@ -1180,14 +1180,14 @@
 <title>entete.js</title>
 <path fill="#6d8ca8" fill-opacity="0.200000" stroke="#6d8ca8" stroke-width="0.8" d="M3139,-254C3139,-254 3085,-254 3085,-254 3079,-254 3073,-248 3073,-242 3073,-242 3073,-230 3073,-230 3073,-224 3079,-218 3085,-218 3085,-218 3139,-218 3139,-218 3145,-218 3151,-224 3151,-230 3151,-230 3151,-242 3151,-242 3151,-248 3145,-254 3139,-254"/>
 <text text-anchor="middle" x="3112" y="-239.2" font-family="Helvetica,sans-Serif" font-size="11.00">js/entete.js</text>
-<text text-anchor="middle" x="3112" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">5 fonctions</text>
+<text text-anchor="middle" x="3112" y="-227.2" font-family="Helvetica,sans-Serif" font-size="11.00">7 fonctions</text>
 </g>
 <!-- entete.js&#45;&gt;outils.js -->
-<g id="edge54" class="edge">
+<g id="edge28" class="edge">
 <title>entete.js&#45;&gt;outils.js</title>
-<g id="a_edge54"><a xlink:title="4 appel(s)">
-<path fill="none" stroke="#6d8ca8" stroke-width="2.5" stroke-opacity="0.666667" d="M3079.83,-217.98C3074.56,-215.27 3069.14,-212.53 3064,-210 3026.5,-191.57 2983.49,-171.76 2951.52,-157.27"/>
-<polygon fill="#6d8ca8" fill-opacity="0.666667" stroke="#6d8ca8" stroke-width="2.5" stroke-opacity="0.666667" points="2952.94,-154.07 2942.39,-153.14 2950.06,-160.45 2952.94,-154.07"/>
+<g id="a_edge28"><a xlink:title="5 appel(s)">
+<path fill="none" stroke="#6d8ca8" stroke-width="2.82" stroke-opacity="0.666667" d="M3079.83,-217.98C3074.56,-215.27 3069.14,-212.53 3064,-210 3026.5,-191.57 2983.49,-171.76 2951.52,-157.27"/>
+<polygon fill="#6d8ca8" fill-opacity="0.666667" stroke="#6d8ca8" stroke-width="2.82" stroke-opacity="0.666667" points="2952.94,-154.07 2942.39,-153.14 2950.06,-160.45 2952.94,-154.07"/>
 </a>
 </g>
 </g>
@@ -1223,9 +1223,9 @@
 <text text-anchor="middle" x="2598" y="-429.2" font-family="Helvetica,sans-Serif" font-size="11.00">9 fonctions</text>
 </g>
 <!-- fenParametres.js&#45;&gt;fenSauvegarde.js -->
-<g id="edge28" class="edge">
+<g id="edge29" class="edge">
 <title>fenParametres.js&#45;&gt;fenSauvegarde.js</title>
-<g id="a_edge28"><a xlink:title="5 appel(s)">
+<g id="a_edge29"><a xlink:title="5 appel(s)">
 <path fill="none" stroke="#6da88c" stroke-width="2.82" stroke-opacity="0.666667" d="M2659.25,-427.6C2743.87,-412.23 2880.21,-377.44 2825,-319 2739.61,-228.61 1849.22,-270.31 1683,-253.73"/>
 <polygon fill="#6da88c" fill-opacity="0.666667" stroke="#6da88c" stroke-width="2.82" stroke-opacity="0.666667" points="1683.05,-250.21 1672.7,-252.49 1682.21,-257.16 1683.05,-250.21"/>
 </a>
@@ -1284,9 +1284,9 @@
 </g>
 </g>
 <!-- fenFiltres.js&#45;&gt;archetypesSets.js -->
-<g id="edge30" class="edge">
+<g id="edge31" class="edge">
 <title>fenFiltres.js&#45;&gt;archetypesSets.js</title>
-<g id="a_edge30"><a xlink:title="5 appel(s)">
+<g id="a_edge31"><a xlink:title="5 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="2.82" stroke-opacity="0.666667" d="M2436.81,-319.79C2435.53,-319.5 2434.26,-319.24 2433,-319 2282.84,-290.51 1195.05,-323.63 1059,-254 1036.76,-242.62 1043.77,-225.28 1024,-210 993.74,-186.61 954.93,-168.84 922.34,-156.58"/>
 <polygon fill="#96a86d" fill-opacity="0.666667" stroke="#96a86d" stroke-width="2.82" stroke-opacity="0.666667" points="923.48,-153.27 912.89,-153.11 921.07,-159.84 923.48,-153.27"/>
 </a>
@@ -1312,9 +1312,9 @@
 </g>
 </g>
 <!-- fenFiltres.js&#45;&gt;brouillon.js -->
-<g id="edge29" class="edge">
+<g id="edge30" class="edge">
 <title>fenFiltres.js&#45;&gt;brouillon.js</title>
-<g id="a_edge29"><a xlink:title="5 appel(s)">
+<g id="a_edge30"><a xlink:title="5 appel(s)">
 <path fill="none" stroke="#96a86d" stroke-width="2.82" stroke-opacity="0.666667" d="M2529.4,-325.22C2608.66,-306.8 2769.75,-269.36 2854.34,-249.7"/>
 <polygon fill="#96a86d" fill-opacity="0.666667" stroke="#96a86d" stroke-width="2.82" stroke-opacity="0.666667" points="2855.31,-253.07 2864.26,-247.4 2853.73,-246.25 2855.31,-253.07"/>
 </a>

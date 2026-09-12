@@ -102,7 +102,6 @@ function renderB() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        ${boutonAffichage('collection')}
         <button class="btn" data-act="addCard">Ajouter</button>
         <button class="btn" data-act="import">Importer MTGO</button>
         ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}

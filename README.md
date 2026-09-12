@@ -32,7 +32,7 @@ js/                 modules, chargés dans cet ordre :
   retenue.js        ce qui reste après les filtres : légalité, couleurs
   catalogueEtat.js  l'archive en mémoire, et les nœuds qu'elle touche
   groupes.js        grouper et trier les listes
-  barreGroupes.js   l'enveloppe d'un groupe, et le bouton « Affichage »
+  barreGroupes.js   l'enveloppe d'un groupe, et la mise en page d'une liste
   marche.js         Cardmarket
 
   — ce qui vient du dehors —
@@ -120,9 +120,9 @@ conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est tra
 `ONGLETS_ANCIENS`. Les sept sections sont rendues à chaque fois, celles qu'on ne
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
 alors aucun rendu. L'en-tête garde trois pastilles — la barre de mana et le nom de la combinaison,
-le format, le budget — et deux commandes au coin haut-droit : le bouton des **filtres** et
-l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, les données de la collection et le
-catalogue. Les deux voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
+le format, le budget — et trois commandes au coin haut-droit : le bouton de l'**affichage**, celui
+des **filtres** et l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, l'apparence et le
+catalogue. Les trois voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
 `.head-actions` les ancre, et la réserve qui leur laisse la place est portée par `.top-in` là où les
 pastilles partagent leur ligne, par `.brand` sous 640 px où les pastilles passent seules à la ligne.
 L'en-tête ne se replie plus : un bouton « Stats » basculait un mode compact qui, sous 640 px,
@@ -301,15 +301,22 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   carte possédée à zéro l'est sans être au deck.
 
 - La mise en page d'une liste de cartes — vue, nombre de colonnes, groupement, tri — se règle dans sa
-  fenêtre « Affichage » (`js/fenAffichage.js`), ouverte par le bouton du même nom que porte sa barre.
-  Les cinq listes de l'atelier en ont une : la collection, le deck (avec ses listes annexes), les
-  pistes du graphe, les recommandations d'EDHREC, le catalogue — `LISTES_AFFICHAGE` (`js/etat.js`)
-  les nomme. Les quatre réglages valent pour les cinq. Ces réglages occupaient les barres en quatre ou cinq
-  contrôles posés entre les boutons d'action, six dans celle du deck : les lignes débordaient sur un
-  écran étroit, et chaque geste repeignait aussitôt des centaines de vignettes. La fenêtre les prend
-  au brouillon et n'agit qu'à « Appliquer » — on choisit tout d'un coup, et la liste n'est redessinée
-  qu'une fois. Le bouton en porte le résumé dans son infobulle, le réglage n'étant plus visible dans
-  la barre.
+  fenêtre « Affichage » (`js/fenAffichage.js`), qu'ouvre le bouton du même nom, au coin haut-droit de
+  l'en-tête. Les cinq listes de l'atelier en ont une : la collection, le deck (avec ses listes
+  annexes), les pistes du graphe, les recommandations d'EDHREC, le catalogue —
+  `LISTES_AFFICHAGE` (`js/etat.js`) les nomme. Les quatre réglages valent pour les cinq. Ces réglages
+  occupaient les barres des sections en quatre ou cinq contrôles posés entre les boutons d'action, six
+  dans celle du deck : les lignes débordaient sur un écran étroit, et chaque geste repeignait aussitôt
+  des centaines de vignettes. La fenêtre les prend au brouillon et n'agit qu'à « Appliquer » — on
+  choisit tout d'un coup, et la liste n'est redessinée qu'une fois.
+- Le bouton est unique et vit dans l'en-tête, à côté de celui des filtres : les deux font la paire,
+  l'un choisit ce qu'on voit, l'autre comment on le voit. Cinq boutons identiques, un par page,
+  poussaient les actions de chaque section vers la droite pour un réglage qu'on ne change qu'en
+  regardant la liste. Il vise la liste de l'onglet ouvert — `ONGLETS` porte le nom de celle que
+  chacun montre — et change de cible avec la page, sans que l'en-tête soit repeint
+  (`majBoutonAffichage()`, `js/entete.js`). Son infobulle porte le résumé du réglage en vigueur, qui
+  n'est plus visible nulle part ailleurs ; sous 640 px, son libellé s'efface et il ne reste que la
+  grille dessinée, faute de place au coin.
 - « Appliquer partout », dans la même fenêtre, pose le réglage choisi sur les cinq listes : c'est le
   geste de qui veut tout l'atelier rangé de la même façon, au lieu d'ouvrir cinq fois la même
   fenêtre. Seul un tri qu'une liste n'offre pas (`TRIS_SECTION`, `js/groupes.js` — le taux

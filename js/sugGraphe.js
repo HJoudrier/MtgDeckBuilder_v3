@@ -32,7 +32,6 @@ function blocGraphe(sel) {
   const titre = `Autour de ${noms}`;
 
   return `<div class="row" style="margin-bottom:10px">
-      ${boutonAffichage('graphe')}
       <span class="small muted">${picks.length} piste(s) · ${actifs.length} nœud(s) isolé(s)${noteMultiple(mode)}</span>
     </div>
     ${plat ? '' : `<div class="small muted" style="margin-bottom:8px">${titre}</div>`}
