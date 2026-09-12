@@ -76,13 +76,18 @@ function paginationListe(cle, total, max, defaut) {
   </div>`;
 }
 
-/* Le corps d'un groupe : ses vignettes dans la grille de la section — dont le
-   nombre de colonnes est réglable comme celui des autres — et sa pagination.
-   Le tout entre dans le pli : une catégorie repliée cache aussi ses boutons. */
+/* Le corps d'un groupe : ses cartes dans la vue de la section — vignettes en
+   grille, dont le nombre de colonnes se règle, ou une ligne par carte — et sa
+   pagination. Le tout entre dans le pli : une catégorie repliée cache aussi
+   ses boutons. */
 function corpsSug(section, g, plat, defaut) {
   const max = maxSug(section, g, plat, defaut);
   const cle = cleLimiteSug(section, plat ? null : g.id);
-  return {max, html: `${ouvreGrille(section, 'sugrid')}${g.entrees.slice(0, max).map(s => sugRow(s)).join('')}</div>
+  const vues = g.entrees.slice(0, max);
+  const cartes = vueDe(section) === 'list'
+    ? `<div class="list">${vues.map(s => sugLigne(s)).join('')}</div>`
+    : `${ouvreGrille(section, 'sugrid')}${vues.map(s => sugRow(s)).join('')}</div>`;
+  return {max, html: `${cartes}
     ${paginationListe(cle, g.total, max, defaut)}`};
 }
 

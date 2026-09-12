@@ -314,7 +314,7 @@ sequenceDiagram
     U->>APP: clic « Affichage » (le bouton porte sa liste)
     APP->>AFF: openAffichageModal(liste)
     AFF->>BR: ouvreBrouillon(['vues','colonnes','groupes','tris'], majFenetreAffichage)
-    Note over AFF: la fenêtre ne propose que ce que la liste sait montrer<br/>(LISTES_AFFICHAGE, js/etat.js) : la vue liste n'existe que<br/>pour la collection et le deck
+    Note over AFF: les quatre mêmes réglages pour les cinq listes<br/>(LISTES_AFFICHAGE, js/etat.js)
     loop chaque réglage
         U->>APP: radio, case « Auto », curseur ou menu
         APP->>AFF: reglageAffichage(...) ou glisseColonnes(...)
@@ -336,7 +336,7 @@ sequenceDiagram
         U->>APP: clic « Appliquer partout »
         APP->>AFF: appliquerAffichage(true)
         AFF->>BR: modifieBrouillon(verseAffichagePartout(conf))
-        Note over AFF: la vue là où elle existe, le tri là où la liste<br/>l'offre (TRIS_SECTION) : une liste qui ne le<br/>connaît pas garde le sien
+        Note over AFF: le tri va là où la liste l'offre (TRIS_SECTION) :<br/>une liste qui ne le connaît pas garde le sien
         AFF->>BR: verseBrouillon()
         AFF->>SEC: renderAll()
     else Annuler, la croix, Échap, l'arrière-plan

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**468 fonctions**, 79 modules, 537 Ko de JavaScript.
+**472 fonctions**, 79 modules, 540 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,7 +21,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 174 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 172 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
@@ -33,7 +33,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 9 | 200 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 257 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 258 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
@@ -50,7 +50,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 195 |
 | [`sugOrdre.js`](#jssugordrejs) | L'ordre gelé des propositions | 6 | 80 |
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
-| [`sugListes.js`](#jssuglistesjs) | Le fond commun des trois listes de propositions | 11 | 137 |
+| [`sugListes.js`](#jssuglistesjs) | Le fond commun des trois listes de propositions | 11 | 142 |
 | [`sugGraphe.js`](#jssuggraphejs) | La section du graphe : ce qui se branche sur les nœuds | 1 | 42 |
 | [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 53 |
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 35 |
@@ -71,7 +71,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
-| [`tuiles.js`](#jstuilesjs) | Les deux rendus d'une carte | 8 | 213 |
+| [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 251 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 195 |
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 5 | 176 |
@@ -80,7 +80,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 129 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
-| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 184 |
+| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
@@ -250,7 +250,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 174 lignes, 9.5 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 172 lignes, 9.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -490,7 +490,7 @@ Les recherches nommées chez Scryfall. *9 fonctions, 200 lignes, 8.2 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 257 lignes, 10 Ko.*
+La sauvegarde locale. *9 fonctions, 258 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -787,7 +787,7 @@ Les commandants du deck, en tête de l'onglet EDHREC. *4 fonctions, 139 lignes, 
 
 ## js/sugListes.js
 
-Le fond commun des trois listes de propositions. *11 fonctions, 137 lignes, 6.6 Ko.*
+Le fond commun des trois listes de propositions. *11 fonctions, 142 lignes, 6.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -797,7 +797,7 @@ Le fond commun des trois listes de propositions. *11 fonctions, 137 lignes, 6.6 
 | `cleLimiteSug(section, idGroupe)` | La clé de pagination d'une catégorie. Elle porte sa section : sans cela, « Créature » partagerait son compte entre le graphe, EDHREC et le catalogue, et déplier l'une déplierait les… |
 | `maxSug(section, g, plat, defaut)` | — |
 | `paginationListe(cle, total, max, defaut)` | Les boutons de pagination d'une liste, ou rien si tout tient. |
-| `corpsSug(section, g, plat, defaut)` | Le corps d'un groupe : ses vignettes dans la grille de la section — dont le nombre de colonnes est réglable comme celui des autres — et sa pagination. |
+| `corpsSug(section, g, plat, defaut)` | Le corps d'un groupe : ses cartes dans la vue de la section — vignettes en grille, dont le nombre de colonnes se règle, ou une ligne par carte — et sa pagination. |
 | `listesSug(section, groupes, mode, titre, couleur)` | Les listes d'une section : sans groupement, un seul bloc titré ; groupée, une enveloppe repliable par catégorie. |
 | `renvoiCatalogue(quoi)` | Le renvoi au catalogue : les deux listes courtes ne montrent qu'un extrait du classement, et le dire évite de les croire exhaustives. |
 | `visuelsSuggestions(vus)` | Les visuels des vignettes qu'une section affiche. |
@@ -1101,7 +1101,7 @@ Les éditions d'une même carte. *14 fonctions, 173 lignes, 6.9 Ko.*
 
 ## js/tuiles.js
 
-Les deux rendus d'une carte. *8 fonctions, 213 lignes, 14 Ko.*
+Les rendus d'une carte dans une liste. *12 fonctions, 251 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1112,7 +1112,11 @@ Les deux rendus d'une carte. *8 fonctions, 213 lignes, 14 Ko.*
 | `cardTile(e, ctx)` | Les deux rendus d'une carte — vignette et ligne — n'offrent pas de bouton vers la fiche : un clic sur la vignette, ou n'importe où sur la ligne, l'ouvre déjà (js/app.js, la branche des… |
 | `cardRow(e, ctx)` | — |
 | `customPanel()` | — |
+| `tagEdhrec(s)` | Ce qu'EDHREC dit d'une proposition : son taux d'inclusion dans les decks du commandant et sa synergie, ou le commandant secondaire qui la recommande. |
+| `tagsSuggestion(s, edhrecTag)` | Ce qu'une proposition dit d'elle-même : ses interactions avec le deck, sa légalité, son appartenance à la collection, ce qu'EDHREC en pense. |
+| `acteSuggestion(s)` | Le bouton du pied d'une proposition : l'ajouter au deck, ou l'acheter quand elle n'est pas dans la collection et qu'une offre la porte. |
 | `sugRow(s)` | La vignette d'une proposition : la carte, sa note et ce qui la justifie — ses interactions, ce qu'EDHREC en dit, son prix. |
+| `sugLigne(s)` | La ligne d'une proposition : la même carte, lue en ligne. |
 
 ## js/ancre.js
 
@@ -1234,7 +1238,7 @@ Fenêtre « Filtres ». *10 fonctions, 207 lignes, 12 Ko.*
 
 ## js/fenAffichage.js
 
-Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 184 lignes, 9.2 Ko.*
+Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 187 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1244,7 +1248,7 @@ Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 184 lignes, 9.2 Ko
 | `majFenetreAffichage()` | — |
 | `reglageAffichage(quoi, el)` | Les quatre réglages de la fenêtre, au brouillon : rien ne bouge dans la liste avant « Appliquer ». |
 | `glisseColonnes(el)` | Le curseur des colonnes décoche « Auto » du seul fait qu'on s'en serve : imposer un nombre, c'est cesser de s'en remettre à la largeur. |
-| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les cinq listes : la vue là où elle existe, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité… |
+| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les cinq listes, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité n'en a pas pour une… |
 | `appliquerAffichage(partout)` | « Appliquer » verse le réglage d'un coup. Le groupement et le tri changent l'ordre des cartes : la pagination de la collection repart de sa première page, sinon la fin d'une liste rangée… |
 | `openAffichageModal(section)` | — |
 

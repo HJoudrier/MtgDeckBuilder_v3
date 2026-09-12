@@ -975,7 +975,7 @@
     "cardTile",
     "ficheHTML",
     "noteCarte",
-    "sugRow"
+    "tagsSuggestion"
    ]
   },
   {
@@ -1845,6 +1845,7 @@
     "appliquerAffichage",
     "blocAnnexe",
     "corpsAffichage",
+    "corpsSug",
     "renderB",
     "renderE",
     "resumeAffichage"
@@ -2002,7 +2003,8 @@
    "appeleePar": [
     "cardRow",
     "ficheTexteHTML",
-    "montrerApercu"
+    "montrerApercu",
+    "sugLigne"
    ]
   },
   {
@@ -2446,7 +2448,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 246,
+   "ligne": 247,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -3910,7 +3912,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "cardTile",
-    "sugRow"
+    "sugLigne",
+    "sugRow",
+    "tagsSuggestion"
    ]
   },
   {
@@ -3923,7 +3927,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "cardTile",
-    "sugRow"
+    "tagsSuggestion"
    ]
   },
   {
@@ -3936,7 +3940,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "cardTile",
-    "sugRow"
+    "tagsSuggestion"
    ]
   },
   {
@@ -4337,14 +4341,16 @@
   {
    "nom": "corpsSug",
    "fichier": "sugListes.js",
-   "ligne": 82,
+   "ligne": 83,
    "chargement": false,
    "appelle": [
     "cleLimiteSug",
     "maxSug",
     "ouvreGrille",
     "paginationListe",
-    "sugRow"
+    "sugLigne",
+    "sugRow",
+    "vueDe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -4355,7 +4361,7 @@
   {
    "nom": "listesSug",
    "fichier": "sugListes.js",
-   "ligne": 92,
+   "ligne": 97,
    "chargement": false,
    "appelle": [
     "corpsSug",
@@ -4373,7 +4379,7 @@
   {
    "nom": "renvoiCatalogue",
    "fichier": "sugListes.js",
-   "ligne": 111,
+   "ligne": 116,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4386,7 +4392,7 @@
   {
    "nom": "visuelsSuggestions",
    "fichier": "sugListes.js",
-   "ligne": 120,
+   "ligne": 125,
    "chargement": false,
    "appelle": [
     "queueScryfall"
@@ -4402,7 +4408,7 @@
   {
    "nom": "visuelsGroupes",
    "fichier": "sugListes.js",
-   "ligne": 129,
+   "ligne": 134,
    "chargement": false,
    "appelle": [
     "defautSug",
@@ -5175,7 +5181,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "cardTile",
-    "sugRow"
+    "tagsSuggestion"
    ]
   },
   {
@@ -5795,6 +5801,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "acteSuggestion",
     "actesAnnexe",
     "barreCatalogue",
     "blocAchats",
@@ -5846,12 +5853,14 @@
     "resultatsHTML",
     "resumeFiltres",
     "sectionParametres",
+    "sugLigne",
     "sugRow",
     "svgGraph",
     "symBg",
     "symIcon",
     "tagAnnexe",
     "tagDeck",
+    "tagEdhrec",
     "tagIllegal",
     "zoneCommandant"
    ]
@@ -5885,6 +5894,7 @@
     "renderC",
     "renderE",
     "renderTop",
+    "sugLigne",
     "sugRow"
    ]
   },
@@ -6631,7 +6641,7 @@
   {
    "nom": "tagIllegal",
    "fichier": "tuiles.js",
-   "ligne": 12,
+   "ligne": 13,
    "chargement": false,
    "appelle": [
     "carteLegale",
@@ -6643,13 +6653,13 @@
    "appeleePar": [
     "cardRow",
     "cardTile",
-    "sugRow"
+    "tagsSuggestion"
    ]
   },
   {
    "nom": "tagGameChanger",
    "fichier": "tuiles.js",
-   "ligne": 21,
+   "ligne": 22,
    "chargement": false,
    "appelle": [
     "estGameChanger"
@@ -6659,13 +6669,13 @@
    "appeleePar": [
     "cardRow",
     "cardTile",
-    "sugRow"
+    "tagsSuggestion"
    ]
   },
   {
    "nom": "tagDeck",
    "fichier": "tuiles.js",
-   "ligne": 34,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "esc"
@@ -6680,7 +6690,7 @@
   {
    "nom": "actesAnnexe",
    "fichier": "tuiles.js",
-   "ligne": 51,
+   "ligne": 52,
    "chargement": false,
    "appelle": [
     "esc"
@@ -6695,7 +6705,7 @@
   {
    "nom": "cardTile",
    "fichier": "tuiles.js",
-   "ligne": 63,
+   "ligne": 64,
    "chargement": false,
    "appelle": [
     "aDeuxFaces",
@@ -6725,7 +6735,7 @@
   {
    "nom": "cardRow",
    "fichier": "tuiles.js",
-   "ligne": 114,
+   "ligne": 115,
    "chargement": false,
    "appelle": [
     "actesAnnexe",
@@ -6749,7 +6759,7 @@
   {
    "nom": "customPanel",
    "fichier": "tuiles.js",
-   "ligne": 142,
+   "ligne": 143,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6759,13 +6769,26 @@
    ]
   },
   {
-   "nom": "sugRow",
+   "nom": "tagEdhrec",
    "fichier": "tuiles.js",
    "ligne": 167,
    "chargement": false,
    "appelle": [
-    "esc",
-    "eur",
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "sugLigne",
+    "sugRow"
+   ]
+  },
+  {
+   "nom": "tagsSuggestion",
+   "fichier": "tuiles.js",
+   "ligne": 183,
+   "chargement": false,
+   "appelle": [
     "libelleFamillesLarges",
     "nbCartesLarges",
     "nbInteractions",
@@ -6773,6 +6796,61 @@
     "tagAnnexe",
     "tagGameChanger",
     "tagIllegal"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "sugLigne",
+    "sugRow"
+   ]
+  },
+  {
+   "nom": "acteSuggestion",
+   "fichier": "tuiles.js",
+   "ligne": 197,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "sugLigne",
+    "sugRow"
+   ]
+  },
+  {
+   "nom": "sugRow",
+   "fichier": "tuiles.js",
+   "ligne": 206,
+   "chargement": false,
+   "appelle": [
+    "acteSuggestion",
+    "esc",
+    "eur",
+    "nbInteractions",
+    "tagEdhrec",
+    "tagsSuggestion"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsSug"
+   ]
+  },
+  {
+   "nom": "sugLigne",
+   "fichier": "tuiles.js",
+   "ligne": 235,
+   "chargement": false,
+   "appelle": [
+    "acteSuggestion",
+    "esc",
+    "eur",
+    "manaHTML",
+    "nbInteractions",
+    "tagEdhrec",
+    "tagsSuggestion"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -7634,7 +7712,7 @@
   {
    "nom": "corpsAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 49,
+   "ligne": 48,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
@@ -7654,7 +7732,7 @@
   {
    "nom": "majFenetreAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 96,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "corpsAffichage"
@@ -7669,7 +7747,7 @@
   {
    "nom": "reglageAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 108,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "majFenetreAffichage",
@@ -7684,7 +7762,7 @@
   {
    "nom": "glisseColonnes",
    "fichier": "fenAffichage.js",
-   "ligne": 123,
+   "ligne": 126,
    "chargement": false,
    "appelle": [
     "modifieBrouillon"
@@ -7698,7 +7776,7 @@
   {
    "nom": "verseAffichagePartout",
    "fichier": "fenAffichage.js",
-   "ligne": 138,
+   "ligne": 141,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7710,7 +7788,7 @@
   {
    "nom": "appliquerAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 151,
+   "ligne": 154,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
@@ -7735,7 +7813,7 @@
   {
    "nom": "openAffichageModal",
    "fichier": "fenAffichage.js",
-   "ligne": 174,
+   "ligne": 177,
    "chargement": false,
    "appelle": [
     "colonnesDe",

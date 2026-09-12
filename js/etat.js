@@ -78,19 +78,17 @@ function ongletDeSection(id) {
 const COLONNES = [0, 1, 2, 3, 4, 5, 6, 8];
 
 /* Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. La
-   fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre au-dessus de chacune
-   et n'y propose que ce qu'elle offre : la collection et le deck se lisent en
-   liste ou en grille, les trois listes de propositions n'ont que leurs
-   vignettes. Le reste — colonnes, groupement, tri — vaut partout, et c'est
-   cette table que « Appliquer partout » parcourt.
+   fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre au-dessus de chacune,
+   et les quatre réglages — vue, colonnes, groupement, tri — valent pour les
+   cinq. C'est cette table que « Appliquer partout » parcourt.
 
    `titre` nomme sa fenêtre, `libelle` la liste dans une phrase ; le catalogue
    garde la clé `suggestions`, comme partout où son rangement est en jeu. Les
    listes annexes du deck — la réserve, l'étude — suivent le deck, dont elles
    partagent le réglage. */
 const LISTES_AFFICHAGE = {
-  collection:  {titre:'Affichage de la collection', libelle:'la collection', vue:true},
-  deck:        {titre:'Affichage du deck',          libelle:'le deck',       vue:true},
+  collection:  {titre:'Affichage de la collection', libelle:'la collection'},
+  deck:        {titre:'Affichage du deck',          libelle:'le deck'},
   graphe:      {titre:'Affichage des pistes du graphe', libelle:'les pistes du graphe'},
   edhrec:      {titre:'Affichage des recommandations d\'EDHREC', libelle:'les recommandations d\'EDHREC'},
   suggestions: {titre:'Affichage du catalogue',     libelle:'le catalogue'}
@@ -133,9 +131,9 @@ const S = {
   /* Liste ou grille, par liste et non plus pour tout l'atelier : un seul
      champ obligeait la collection et le deck à la même vue, alors qu'on lit
      volontiers l'une en vignettes et l'autre en lignes. Les trois listes de
-     propositions n'y figurent pas : leurs vignettes n'ont pas de forme en
-     ligne, et `LISTES_AFFICHAGE` le dit. */
-  vues: {collection:'grid', deck:'grid'},
+     propositions l'ont aussi : parcourir un classement de trois cents cartes
+     en lignes tient dix fois plus de monde à l'écran que leurs vignettes. */
+  vues: {collection:'grid', deck:'grid', graphe:'grid', edhrec:'grid', suggestions:'grid'},
   /* Le nombre de colonnes de chaque grille, chacune gardant le sien comme elle
      garde son groupement et son tri. Zéro laisse le navigateur en poser autant
      que la largeur en permet, ce qu'il a toujours fait ; une valeur choisie

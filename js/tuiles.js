@@ -1,9 +1,10 @@
 /* =====================================================================
-   js/tuiles.js — Les deux rendus d'une carte
+   js/tuiles.js — Les rendus d'une carte dans une liste
 
    Vignette et ligne : les deux façons dont une carte paraît dans une liste, avec
    ses étiquettes — illégale au format, Game Changer — et les gestes des listes
-   annexes. Ni l'une ni l'autre n'offre de bouton pour la fiche : le clic sur la
+   annexes. Les propositions ont les leurs, qui portent en plus la note et ce
+   qui la justifie. Aucune n'offre de bouton pour la fiche : le clic sur la
    carte y mène déjà.
    ===================================================================== */
 
@@ -161,38 +162,54 @@ function customPanel() {
   </div>`;
 }
 
-/* La vignette d'une proposition : la carte, sa note et ce qui la justifie —
-   ses interactions, ce qu'EDHREC en dit, son prix. Elle ne paraît que dans les
-   trois sections des propositions, qui seules ont un score à montrer. */
-function sugRow(s) {
-  const c = s.card, n = nbInteractions(s), larges = nbCartesLarges(s), liens = nbLiens(s);
-  const inDeck = S.deck.get(c.name) || 0;
-  const img = c.imgN || c.img;
-  const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
+/* Ce qu'EDHREC dit d'une proposition : son taux d'inclusion dans les decks du
+   commandant et sa synergie, ou le commandant secondaire qui la recommande. */
+function tagEdhrec(s) {
+  if (!s.edhrec) return '';
+  const pct = Math.round(s.edhrec.inclusion * 100);
+  const syn = (s.edhrec.synergy >= 0 ? '+' : '−') + Math.abs(Math.round(s.edhrec.synergy * 100)) + ' %';
+  const secs = s.edhrec.secondaires || [];
+  if (s.edhrec.role !== 'principal')
+    return `<span class="tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.12)" title="EDHREC (Commandant secondaire ${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}">★ ${esc(s.edhrec.commandant)} ${pct} %</span>`;
+  const secTxt = secs.length ? ` (+${secs.length} 2nd)` : '';
+  const secTitle = secs.length ? ` · Également recommandé par : ${secs.map(x => x.commandant).join(', ')}` : '';
+  return `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="EDHREC (${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}${secTitle}">edhrec ${pct} % / ${syn}${secTxt}</span>`;
+}
 
-  const edhrecTag = (() => {
-    if (!s.edhrec) return '';
-    const isPrim = s.edhrec.role === 'principal';
-    const pct = Math.round(s.edhrec.inclusion * 100);
-    const syn = (s.edhrec.synergy >= 0 ? '+' : '−') + Math.abs(Math.round(s.edhrec.synergy * 100)) + ' %';
-    const secCount = (s.edhrec.secondaires || []).length;
-    if (isPrim) {
-      const secTxt = secCount > 0 ? ` (+${secCount} 2nd)` : '';
-      const secTitle = secCount > 0 ? ` · Également recommandé par : ${s.edhrec.secondaires.map(x=>x.commandant).join(', ')}` : '';
-      return `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="EDHREC (${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}${secTitle}">edhrec ${pct} % / ${syn}${secTxt}</span>`;
-    } else {
-      return `<span class="tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.12)" title="EDHREC (Commandant secondaire ${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}">★ ${esc(s.edhrec.commandant)} ${pct} %</span>`;
-    }
-  })();
-
-  const tags = [
+/* Ce qu'une proposition dit d'elle-même : ses interactions avec le deck, sa
+   légalité, son appartenance à la collection, ce qu'EDHREC en pense. La
+   vignette et la ligne montrent les mêmes — c'est la carte qui les porte, non
+   la façon dont on la regarde. */
+function tagsSuggestion(s, edhrecTag) {
+  const n = nbInteractions(s), larges = nbCartesLarges(s), liens = nbLiens(s);
+  return [
     (n || larges) ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit précisément (${liens} lien(s) d'effets)${larges ? ` — et ${larges} autre(s) que seul un déclencheur large relie : ${libelleFamillesLarges(s.larges)}, que tout le deck alimente` : ''}">${n}${larges ? ` (+${larges})` : ''} interaction${n + larges > 1 ? 's' : ''}</span>` : '',
     tagIllegal(s.card),
     tagGameChanger(s.card),
     s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
-    tagAnnexe(c),
+    tagAnnexe(s.card),
     edhrecTag
   ].filter(Boolean).join('');
+}
+
+/* Le bouton du pied d'une proposition : l'ajouter au deck, ou l'acheter quand
+   elle n'est pas dans la collection et qu'une offre la porte. */
+function acteSuggestion(s) {
+  return `<button class="btn sm ${s.source === 'achat' ? '' : 'pri'}"
+    data-act="${s.source === 'achat' ? 'buy' : 'toDeck'}" data-name="${esc(s.card.name)}">
+    ${s.source === 'achat' ? 'Acheter' : 'Ajouter'}</button>`;
+}
+
+/* La vignette d'une proposition : la carte, sa note et ce qui la justifie —
+   ses interactions, ce qu'EDHREC en dit, son prix. Elle ne paraît que dans les
+   trois sections des propositions, qui seules ont un score à montrer. */
+function sugRow(s) {
+  const c = s.card, n = nbInteractions(s);
+  const inDeck = S.deck.get(c.name) || 0;
+  const img = c.imgN || c.img;
+  const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
+
+  const tags = tagsSuggestion(s, tagEdhrec(s));
 
   return `<div class="sugT ${n?'lie':''} ${s.source!=='collection'?'hors':''}" data-card="${esc(c.name)}" data-ctx="suggestion"
       title="Cliquez pour la fiche complète">
@@ -204,9 +221,30 @@ function sugRow(s) {
     <div class="foot bot">
       ${inDeck ? `<span title="${inDeck} exemplaire(s) dans le deck">×${inDeck}</span>` : ''}
       <span class="mono">${s.source==='achat'?'≈ ':''}${eur(prix)}</span>
-      <button class="btn sm ${s.source==='achat'?'':'pri'}" style="margin-left:auto"
-        data-act="${s.source==='achat'?'buy':'toDeck'}" data-name="${esc(c.name)}">
-        ${s.source === 'achat' ? 'Acheter' : 'Ajouter'}</button>
+      <span style="margin-left:auto">${acteSuggestion(s)}</span>
     </div>
+  </div>`;
+}
+
+/* La ligne d'une proposition : la même carte, lue en ligne. Les trois sections
+   des propositions n'avaient que leurs vignettes — trois cents visuels pour
+   parcourir un classement, là où une ligne par carte tient dix fois plus de
+   monde à l'écran et se compare d'un coup d'œil. Elle reprend la ligne d'une
+   carte (`cardRow`) et lui ajoute ce qui appartient à une proposition : ses
+   étiquettes, sa note, son bouton. */
+function sugLigne(s) {
+  const c = s.card, n = nbInteractions(s);
+  const inDeck = S.deck.get(c.name) || 0;
+  const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
+  return `<div class="lrow ${n ? 'lie' : ''} ${s.source !== 'collection' ? 'hors' : ''}"
+      data-card="${esc(c.name)}" data-ctx="suggestion" title="Cliquez pour la fiche complète">
+    <span class="cname" data-act="fiche" data-name="${esc(c.name)}">${esc(c.name)}</span>
+    <span class="costs">${manaHTML(c, true)}</span>
+    <span class="small muted" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.type)}</span>
+    <span class="tags">${tagsSuggestion(s, tagEdhrec(s))}</span>
+    <span class="mono small muted" style="margin-left:auto">score ${s.score.toFixed(1)}</span>
+    ${inDeck ? `<span class="mono small" title="${inDeck} exemplaire(s) dans le deck">×${inDeck}</span>` : ''}
+    <span class="mono small">${s.source === 'achat' ? '≈ ' : ''}${eur(prix)}</span>
+    <div class="acts qty" style="margin-left:0">${acteSuggestion(s)}</div>
   </div>`;
 }

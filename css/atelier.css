@@ -214,6 +214,9 @@ label.lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(
 /* une case ou un bouton radio suivi de son libellé, sur une ligne cliquable
    de bout en bout — la fenêtre « Affichage » les empile en colonne */
 .choix{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--txt);cursor:pointer}
+/* deux choix exclusifs côte à côte — Liste ou Grille : les empiler laissait
+   croire à deux réglages séparés */
+.choix-ligne{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px}
 .choix input{width:auto;margin:0;accent-color:var(--brass)}
 input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea{
   background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0
@@ -312,6 +315,9 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .cardT .achatbadge, .card .achatbadge{position:absolute;right:4px;bottom:4px;font-size:9px;padding:1px 4px;border-radius:4px;
   background:rgba(20,16,30,.88);border:1px solid var(--bad);color:#e39a90}
 .lrow.achat{border-color:var(--bad)}
+/* les lignes des propositions, aux mêmes liserés que leurs vignettes */
+.lrow.lie{border-color:var(--brass-d)}
+.lrow.hors{border-color:#6d3030}
 .lrow.audeck{border-color:var(--ok)}
 .cardT.withimg .cname, .card.withimg .cname{font-size:11.5px;line-height:1.15}
 .imgwrap{position:relative}

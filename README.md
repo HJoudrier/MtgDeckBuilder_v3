@@ -82,7 +82,7 @@ js/                 modules, chargés dans cet ordre :
   couleurs.js       le nom des combinaisons de mana
   apercu.js         l'aperçu volant sous le curseur
   versions.js       les éditions d'une même carte
-  tuiles.js         vignette et ligne d'une carte
+  tuiles.js         vignette et ligne d'une carte, et celles d'une proposition
   ancre.js          garder sa place dans le défilement
   recalcul.js       les recalculs annoncés, par tranches
   entete.js         l'en-tête et la barre des onglets
@@ -279,7 +279,7 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   fenêtre « Affichage » (`js/fenAffichage.js`), ouverte par le bouton du même nom que porte sa barre.
   Les cinq listes de l'atelier en ont une : la collection, le deck (avec ses listes annexes), les
   pistes du graphe, les recommandations d'EDHREC, le catalogue — `LISTES_AFFICHAGE` (`js/etat.js`)
-  les nomme, et dit ce que chacune sait montrer. Ces réglages occupaient les barres en quatre ou cinq
+  les nomme. Les quatre réglages valent pour les cinq. Ces réglages occupaient les barres en quatre ou cinq
   contrôles posés entre les boutons d'action, six dans celle du deck : les lignes débordaient sur un
   écran étroit, et chaque geste repeignait aussitôt des centaines de vignettes. La fenêtre les prend
   au brouillon et n'agit qu'à « Appliquer » — on choisit tout d'un coup, et la liste n'est redessinée
@@ -287,13 +287,15 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   la barre.
 - « Appliquer partout », dans la même fenêtre, pose le réglage choisi sur les cinq listes : c'est le
   geste de qui veut tout l'atelier rangé de la même façon, au lieu d'ouvrir cinq fois la même
-  fenêtre. Chaque liste ne retient que ce qu'elle sait montrer — la vue liste n'existe que pour la
-  collection et le deck, les vignettes des propositions n'ayant pas de forme en ligne, et un tri
-  qu'une liste n'offre pas (`TRIS_SECTION`, `js/groupes.js` — le taux d'inclusion d'EDHREC pour la
-  collection, la quantité pour une proposition) la laisse avec le sien.
+  fenêtre. Seul un tri qu'une liste n'offre pas (`TRIS_SECTION`, `js/groupes.js` — le taux
+  d'inclusion d'EDHREC pour la collection, la quantité pour une proposition) la laisse avec le sien.
 - La vue appartient à la liste (`S.vues`), non plus à l'atelier : un seul champ `view` obligeait la
   collection et le deck à la même, alors qu'on lit volontiers l'une en vignettes et l'autre en
-  lignes. Une sauvegarde d'hier ne porte que `view` : elle devient celle des deux.
+  lignes. Les trois listes de propositions l'ont aussi : `sugLigne()` (`js/tuiles.js`) donne à une
+  proposition la ligne que seule la collection et le deck avaient — nom, coût, type, étiquettes,
+  note, prix, bouton —, et parcourir un classement de trois cents cartes en lignes tient dix fois
+  plus de monde à l'écran que leurs vignettes. Une sauvegarde d'hier ne porte que `view`, qui ne
+  valait que pour la collection et le deck : les trois autres gardent leurs vignettes.
 - Les pistes du graphe se groupent et se trient comme le reste depuis qu'elles ont leur fenêtre :
   elles ne montraient que l'ordre de la notation, et trente pistes autour de deux nœuds se lisent
   mieux rangées par type ou par coût. La pagination d'une catégorie porte désormais sa section —

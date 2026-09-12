@@ -41,8 +41,7 @@ function resumeAffichage(section) {
   const g = GROUPES[S.groupes[section]] || GROUPES.aucun;
   const t = TRIS[S.tris[section]] || TRIS.cmc;
   const cols = n ? `${n} colonne${n > 1 ? 's' : ''}` : 'colonnes auto';
-  const vue = !LISTES_AFFICHAGE[section].vue ? cols
-    : vueDe(section) === 'grid' ? `grille, ${cols}` : 'liste';
+  const vue = vueDe(section) === 'grid' ? `grille, ${cols}` : 'liste';
   return `${vue} · ${g.plat ? 'sans groupe' : `groupé par ${g.label.toLowerCase()}`} · trié par ${t.label.toLowerCase()}`;
 }
 
@@ -53,14 +52,18 @@ function corpsAffichage() {
     const n = colonnesDe(section);
     const auto = n === 0;
     const pos = indexColonnes(n);
-    const grille = !liste.vue || vueDe(section) === 'grid';
+    const grille = vueDe(section) === 'grid';
     const tris = TRIS_SECTION[section] || Object.keys(TRIS);
-    return `${liste.vue ? `<div class="field">
+    /* Les deux dispositions sur une seule ligne : c'est un choix entre deux,
+       et les empiler laissait croire à deux réglages séparés. */
+    return `<div class="field">
       <label class="lab">Disposition</label>
-      <label class="choix"><input type="radio" name="affVue" value="list" data-aff="vue" ${vueDe(section) === 'list' ? 'checked' : ''}> Liste</label>
-      <label class="choix"><input type="radio" name="affVue" value="grid" data-aff="vue" ${vueDe(section) === 'grid' ? 'checked' : ''}> Grille</label>
+      <div class="choix-ligne">
+        <label class="choix"><input type="radio" name="affVue" value="list" data-aff="vue" ${vueDe(section) === 'list' ? 'checked' : ''}> Liste</label>
+        <label class="choix"><input type="radio" name="affVue" value="grid" data-aff="vue" ${vueDe(section) === 'grid' ? 'checked' : ''}> Grille</label>
+      </div>
       <div class="small muted">La liste donne une ligne par carte, la grille des vignettes.</div>
-    </div>` : ''}
+    </div>
     <div class="field">
       <label class="lab">Nombre de colonnes</label>
       <label class="choix"><input type="checkbox" id="affAuto" data-aff="auto" ${auto ? 'checked' : ''}> Auto</label>
@@ -130,14 +133,14 @@ function glisseColonnes(el) {
   if (dit) dit.textContent = `${n} vignette(s) par ligne, quelle que soit la largeur.`;
 }
 
-/* Le réglage choisi, recopié dans les cinq listes : la vue là où elle existe,
-   le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de
+/* Le réglage choisi, recopié dans les cinq listes, le tri là où la liste
+   l'offre — le taux d'inclusion d'EDHREC n'a pas de
    sens pour la collection, la quantité n'en a pas pour une proposition, et
    `TRIS_SECTION` (js/groupes.js) le dit déjà. Une liste qui n'offre pas ce tri garde
    le sien plutôt qu'un ordre qu'elle ne saurait pas nommer. */
 function verseAffichagePartout(conf) {
   CLES_AFFICHAGE.forEach(sec => {
-    if (LISTES_AFFICHAGE[sec].vue && conf.vue) S.vues[sec] = conf.vue;
+    S.vues[sec] = conf.vue;
     S.colonnes[sec] = conf.colonnes;
     S.groupes[sec] = conf.groupe;
     if ((TRIS_SECTION[sec] || Object.keys(TRIS)).indexOf(conf.tri) >= 0) S.tris[sec] = conf.tri;
@@ -153,8 +156,8 @@ function appliquerAffichage(partout) {
   const avant = `${S.groupes.collection}|${S.tris.collection}`;
   if (partout) {
     const conf = avecBrouillon(() => ({
-      vue: LISTES_AFFICHAGE[section].vue ? vueDe(section) : null,
-      colonnes: colonnesDe(section), groupe: S.groupes[section], tri: S.tris[section]
+      vue: vueDe(section), colonnes: colonnesDe(section),
+      groupe: S.groupes[section], tri: S.tris[section]
     }));
     modifieBrouillon(() => verseAffichagePartout(conf));
   }

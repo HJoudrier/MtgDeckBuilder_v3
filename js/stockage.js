@@ -190,11 +190,12 @@ function restore(d) {
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
   ['colorMode','format','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
   /* La vue de chaque liste. Une sauvegarde d'hier n'en porte qu'une, `view`,
-     commune à la collection et au deck : elle devient celle des deux. */
+     et elle ne valait que pour la collection et le deck : les trois listes de
+     propositions n'avaient pas le choix, et gardent donc leurs vignettes. */
   if (d.vues && typeof d.vues === 'object')
     Object.keys(S.vues).forEach(sec => { if (d.vues[sec]) S.vues[sec] = d.vues[sec]; });
   else if (d.view)
-    Object.keys(S.vues).forEach(sec => { S.vues[sec] = d.view; });
+    ['collection', 'deck'].forEach(sec => { S.vues[sec] = d.view; });
   /* Le nombre de colonnes de chaque grille. Les premières sauvegardes n'en
      portaient qu'un, celui de la collection, en nombre nu : il devient le
      sien. Une valeur qui n'est plus offerte — une sauvegarde d'une autre

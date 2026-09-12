@@ -568,7 +568,11 @@ digraph appels {
     "cardTile" [label="cardTile", fillcolor="#a86d8a33", color="#a86d8a"];
     "cardRow" [label="cardRow", fillcolor="#a86d8a33", color="#a86d8a"];
     "customPanel" [label="customPanel", fillcolor="#a86d8a33", color="#a86d8a"];
+    "tagEdhrec" [label="tagEdhrec", fillcolor="#a86d8a33", color="#a86d8a"];
+    "tagsSuggestion" [label="tagsSuggestion", fillcolor="#a86d8a33", color="#a86d8a"];
+    "acteSuggestion" [label="acteSuggestion", fillcolor="#a86d8a33", color="#a86d8a"];
     "sugRow" [label="sugRow", fillcolor="#a86d8a33", color="#a86d8a"];
+    "sugLigne" [label="sugLigne", fillcolor="#a86d8a33", color="#a86d8a"];
   }
   subgraph "cluster_61" {
     label="js/ancre.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
@@ -1204,6 +1208,8 @@ digraph appels {
   "paginationListe" -> "esc" [color="#a89b6d99"];
   "corpsSug" -> "maxSug" [color="#a89b6d99"];
   "corpsSug" -> "cleLimiteSug" [color="#a89b6d99"];
+  "corpsSug" -> "vueDe" [color="#a89b6d99"];
+  "corpsSug" -> "sugLigne" [color="#a89b6d99"];
   "corpsSug" -> "ouvreGrille" [color="#a89b6d99"];
   "corpsSug" -> "sugRow" [color="#a89b6d99"];
   "corpsSug" -> "paginationListe" [color="#a89b6d99"];
@@ -1649,15 +1655,28 @@ digraph appels {
   "cardRow" -> "eur" [color="#a86d8a99"];
   "cardRow" -> "actesAnnexe" [color="#a86d8a99"];
   "cardRow" -> "fmt" [color="#a86d8a99"];
+  "tagEdhrec" -> "esc" [color="#a86d8a99"];
+  "tagsSuggestion" -> "nbInteractions" [color="#a86d8a99"];
+  "tagsSuggestion" -> "nbCartesLarges" [color="#a86d8a99"];
+  "tagsSuggestion" -> "nbLiens" [color="#a86d8a99"];
+  "tagsSuggestion" -> "libelleFamillesLarges" [color="#a86d8a99"];
+  "tagsSuggestion" -> "tagIllegal" [color="#a86d8a99"];
+  "tagsSuggestion" -> "tagGameChanger" [color="#a86d8a99"];
+  "tagsSuggestion" -> "tagAnnexe" [color="#a86d8a99"];
+  "acteSuggestion" -> "esc" [color="#a86d8a99"];
   "sugRow" -> "nbInteractions" [color="#a86d8a99"];
-  "sugRow" -> "nbCartesLarges" [color="#a86d8a99"];
-  "sugRow" -> "nbLiens" [color="#a86d8a99"];
+  "sugRow" -> "tagsSuggestion" [color="#a86d8a99"];
+  "sugRow" -> "tagEdhrec" [color="#a86d8a99"];
   "sugRow" -> "esc" [color="#a86d8a99"];
-  "sugRow" -> "libelleFamillesLarges" [color="#a86d8a99"];
-  "sugRow" -> "tagIllegal" [color="#a86d8a99"];
-  "sugRow" -> "tagGameChanger" [color="#a86d8a99"];
-  "sugRow" -> "tagAnnexe" [color="#a86d8a99"];
   "sugRow" -> "eur" [color="#a86d8a99"];
+  "sugRow" -> "acteSuggestion" [color="#a86d8a99"];
+  "sugLigne" -> "nbInteractions" [color="#a86d8a99"];
+  "sugLigne" -> "esc" [color="#a86d8a99"];
+  "sugLigne" -> "manaHTML" [color="#a86d8a99"];
+  "sugLigne" -> "tagsSuggestion" [color="#a86d8a99"];
+  "sugLigne" -> "tagEdhrec" [color="#a86d8a99"];
+  "sugLigne" -> "eur" [color="#a86d8a99"];
+  "sugLigne" -> "acteSuggestion" [color="#a86d8a99"];
   "releveAncre" -> "candidatsAncre" [color="#96a86d99"];
   "recalculLong" -> "suggestionsAJour" [color="#6da8a499"];
   "recalculLong" -> "signatureCandidats" [color="#6da8a499"];

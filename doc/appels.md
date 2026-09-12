@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**467 fonctions** dans 79 modules, **1317 appels** relevés.
+**471 fonctions** dans 79 modules, **1332 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -350,7 +350,7 @@ Appelée par : `libelleFamillesLarges`
 
 Appelle : → `libelleFamilleLarge()` *(liens.js)*
 
-Appelée par : `cardTile`, `ficheHTML`, `noteCarte`, `sugRow`
+Appelée par : `cardTile`, `ficheHTML`, `noteCarte`, `tagsSuggestion`
 
 ### `primeLiensLarges()` — ligne 71
 
@@ -704,7 +704,7 @@ Appelée par : `blocAnnexe`, `corpsSug`, `renderB`, `renderE`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `appliquerAffichage`, `blocAnnexe`, `corpsAffichage`, `renderB`, `renderE`, `resumeAffichage`
+Appelée par : `appliquerAffichage`, `blocAnnexe`, `corpsAffichage`, `corpsSug`, `renderB`, `renderE`, `resumeAffichage`
 
 ### `boutonAffichage()` — ligne 119
 
@@ -768,7 +768,7 @@ Appelée par : `symIcon`
 
 Appelle : `symIcon()` *(symboles.js)*
 
-Appelée par : `cardRow`, `ficheTexteHTML`, `montrerApercu`
+Appelée par : `cardRow`, `ficheTexteHTML`, `montrerApercu`, `sugLigne`
 
 ### `stripeColor()` — ligne 66
 
@@ -934,7 +934,7 @@ Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*, `impressionRestor
 
 Appelée par : `brancherRestauration`, `demarrer`
 
-### `chargerSauvegarde()` — ligne 246
+### `chargerSauvegarde()` — ligne 247
 
 N'appelle aucune fonction du projet.
 
@@ -1504,19 +1504,19 @@ Appelée par : `evalueDeck`, `noterVivier`, `notesCollection`
 
 Appelle : `norm()` *(cartes.js)*
 
-Appelée par : `cardTile`, `sugRow`
+Appelée par : `cardTile`, `sugLigne`, `sugRow`, `tagsSuggestion`
 
 ### `nbCartesLarges()` — ligne 229
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `cardTile`, `sugRow`
+Appelée par : `cardTile`, `tagsSuggestion`
 
 ### `nbLiens()` — ligne 235
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `cardTile`, `sugRow`
+Appelée par : `cardTile`, `tagsSuggestion`
 
 ## js/vivier.js
 
@@ -1676,31 +1676,31 @@ Appelle : `esc()` *(outils.js)*
 
 Appelée par : `corpsSug`
 
-### `corpsSug()` — ligne 82
+### `corpsSug()` — ligne 83
 
-Appelle : `cleLimiteSug()` *(sugListes.js)*, `maxSug()` *(sugListes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `paginationListe()` *(sugListes.js)*, `sugRow()` *(tuiles.js)*
+Appelle : `cleLimiteSug()` *(sugListes.js)*, `maxSug()` *(sugListes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `paginationListe()` *(sugListes.js)*, `sugLigne()` *(tuiles.js)*, `sugRow()` *(tuiles.js)*, `vueDe()` *(barreGroupes.js)*
 
 Appelée par : `listesSug`
 
-### `listesSug()` — ligne 92
+### `listesSug()` — ligne 97
 
 Appelle : `corpsSug()` *(sugListes.js)*, `defautSug()` *(sugListes.js)*, `enveloppeGroupe()` *(barreGroupes.js)*
 
 Appelée par : `blocEdhrec`, `blocGraphe`, `listeSuggestions`
 
-### `renvoiCatalogue()` — ligne 111
+### `renvoiCatalogue()` — ligne 116
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `blocEdhrec`, `blocGraphe`
 
-### `visuelsSuggestions()` — ligne 120
+### `visuelsSuggestions()` — ligne 125
 
 Appelle : `queueScryfall()` *(scryfall.js)*, → `chargeVisuelsClasses()` *(suggestions.js)*
 
 Appelée par : `visuelsGroupes`
 
-### `visuelsGroupes()` — ligne 129
+### `visuelsGroupes()` — ligne 134
 
 Appelle : `defautSug()` *(sugListes.js)*, `groupePlie()` *(barreGroupes.js)*, `maxSug()` *(sugListes.js)*, `visuelsSuggestions()` *(sugListes.js)*
 
@@ -1960,7 +1960,7 @@ Appelée par : `gestesDeck`
 
 Appelle : `annexeDe()` *(annexes.js)*, `annexeListe()` *(annexes.js)*, `esc()` *(outils.js)*
 
-Appelée par : `cardTile`, `sugRow`
+Appelée par : `cardTile`, `tagsSuggestion`
 
 ## js/deck.js
 
@@ -2166,13 +2166,13 @@ Appelée par : `basculerSourceVersions`, `choisirVersion`, `faireDefilerVersion`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `boutonAffichage`, `cardRow`, `cardTile`, `champBudget`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportDeckModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCommandant`, `ligneFiltre`, `ligneGameChangers`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `montrerApercu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `refCarte`, `renderD`, `renderE`, `renderTop`, `resultatsHTML`, `resumeFiltres`, `sectionParametres`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagIllegal`, `zoneCommandant`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `boutonAffichage`, `cardRow`, `cardTile`, `champBudget`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportDeckModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCommandant`, `ligneFiltre`, `ligneGameChangers`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `montrerApercu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `refCarte`, `renderD`, `renderE`, `renderTop`, `resultatsHTML`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `zoneCommandant`
 
 ### `eur()` — ligne 14
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `addToDeck`, `blocAchats`, `blocAnnexe`, `blocEdhrec`, `buyCard`, `cardRow`, `cardTile`, `corpsCollectionParam`, `exportDeckModal`, `ficheHTML`, `legality`, `ligneAchats`, `ligneBudget`, `ligneCatalogue`, `noteCarte`, `openImport`, `openWantsModal`, `renderC`, `renderE`, `renderTop`, `sugRow`
+Appelée par : `addToDeck`, `blocAchats`, `blocAnnexe`, `blocEdhrec`, `buyCard`, `cardRow`, `cardTile`, `corpsCollectionParam`, `exportDeckModal`, `ficheHTML`, `legality`, `ligneAchats`, `ligneBudget`, `ligneCatalogue`, `noteCarte`, `openImport`, `openWantsModal`, `renderC`, `renderE`, `renderTop`, `sugLigne`, `sugRow`
 
 ### `refCarte()` — ligne 18
 
@@ -2432,51 +2432,75 @@ Appelée par : `gestesVue`
 
 ## js/tuiles.js
 
-### `tagIllegal()` — ligne 12
+### `tagIllegal()` — ligne 13
 
 Appelle : `carteLegale()` *(retenue.js)*, `esc()` *(outils.js)*, `fmt()` *(outils.js)*
 
-Appelée par : `cardRow`, `cardTile`, `sugRow`
+Appelée par : `cardRow`, `cardTile`, `tagsSuggestion`
 
-### `tagGameChanger()` — ligne 21
+### `tagGameChanger()` — ligne 22
 
 Appelle : `estGameChanger()` *(retenue.js)*
 
-Appelée par : `cardRow`, `cardTile`, `sugRow`
+Appelée par : `cardRow`, `cardTile`, `tagsSuggestion`
 
-### `tagDeck()` — ligne 34
-
-Appelle : `esc()` *(outils.js)*
-
-Appelée par : `cardRow`, `cardTile`
-
-### `actesAnnexe()` — ligne 51
+### `tagDeck()` — ligne 35
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `cardRow`, `cardTile`
 
-### `cardTile()` — ligne 63
+### `actesAnnexe()` — ligne 52
+
+Appelle : `esc()` *(outils.js)*
+
+Appelée par : `cardRow`, `cardTile`
+
+### `cardTile()` — ligne 64
 
 Appelle : `aDeuxFaces()` *(versions.js)*, `actesAnnexe()` *(tuiles.js)*, `availableFor()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `faceVisible()` *(versions.js)*, `fmt()` *(outils.js)*, `libelleFamillesLarges()` *(liens.js)*, `nbCartesLarges()` *(notation.js)*, `nbInteractions()` *(notation.js)*, `nbLiens()` *(notation.js)*, `tagAnnexe()` *(annexes.js)*, `tagDeck()` *(tuiles.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
 
 Appelée par : `blocAnnexe`, `renderB`, `renderE`
 
-### `cardRow()` — ligne 114
+### `cardRow()` — ligne 115
 
 Appelle : `actesAnnexe()` *(tuiles.js)*, `availableFor()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `fmt()` *(outils.js)*, `manaHTML()` *(symboles.js)*, `tagDeck()` *(tuiles.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
 
 Appelée par : `blocAnnexe`, `renderB`, `renderE`
 
-### `customPanel()` — ligne 142
+### `customPanel()` — ligne 143
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `corpsFormat`
 
-### `sugRow()` — ligne 167
+### `tagEdhrec()` — ligne 167
 
-Appelle : `esc()` *(outils.js)*, `eur()` *(outils.js)*, `libelleFamillesLarges()` *(liens.js)*, `nbCartesLarges()` *(notation.js)*, `nbInteractions()` *(notation.js)*, `nbLiens()` *(notation.js)*, `tagAnnexe()` *(annexes.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
+Appelle : `esc()` *(outils.js)*
+
+Appelée par : `sugLigne`, `sugRow`
+
+### `tagsSuggestion()` — ligne 183
+
+Appelle : `libelleFamillesLarges()` *(liens.js)*, `nbCartesLarges()` *(notation.js)*, `nbInteractions()` *(notation.js)*, `nbLiens()` *(notation.js)*, `tagAnnexe()` *(annexes.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
+
+Appelée par : `sugLigne`, `sugRow`
+
+### `acteSuggestion()` — ligne 197
+
+Appelle : `esc()` *(outils.js)*
+
+Appelée par : `sugLigne`, `sugRow`
+
+### `sugRow()` — ligne 206
+
+Appelle : `acteSuggestion()` *(tuiles.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `nbInteractions()` *(notation.js)*, `tagEdhrec()` *(tuiles.js)*, `tagsSuggestion()` *(tuiles.js)*
+
+Appelée par : `corpsSug`
+
+### `sugLigne()` — ligne 235
+
+Appelle : `acteSuggestion()` *(tuiles.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `manaHTML()` *(symboles.js)*, `nbInteractions()` *(notation.js)*, `tagEdhrec()` *(tuiles.js)*, `tagsSuggestion()` *(tuiles.js)*
 
 Appelée par : `corpsSug`
 
@@ -2792,43 +2816,43 @@ Appelle : `colonnesDe()` *(barreGroupes.js)*, `vueDe()` *(barreGroupes.js)*
 
 Appelée par : `boutonAffichage`, `corpsAffichage`
 
-### `corpsAffichage()` — ligne 49
+### `corpsAffichage()` — ligne 48
 
 Appelle : `avecBrouillon()` *(brouillon.js)*, `colonnesDe()` *(barreGroupes.js)*, `esc()` *(outils.js)*, `indexColonnes()` *(fenAffichage.js)*, `resumeAffichage()` *(fenAffichage.js)*, `vueDe()` *(barreGroupes.js)*
 
 Appelée par : `majFenetreAffichage`, `openAffichageModal`
 
-### `majFenetreAffichage()` — ligne 96
+### `majFenetreAffichage()` — ligne 99
 
 Appelle : `corpsAffichage()` *(fenAffichage.js)*
 
 Appelée par : `openAffichageModal`, `reglageAffichage`
 
-### `reglageAffichage()` — ligne 108
+### `reglageAffichage()` — ligne 111
 
 Appelle : `majFenetreAffichage()` *(fenAffichage.js)*, `modifieBrouillon()` *(brouillon.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `glisseColonnes()` — ligne 123
+### `glisseColonnes()` — ligne 126
 
 Appelle : `modifieBrouillon()` *(brouillon.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `verseAffichagePartout()` — ligne 138
+### `verseAffichagePartout()` — ligne 141
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `appliquerAffichage`
 
-### `appliquerAffichage()` — ligne 151
+### `appliquerAffichage()` — ligne 154
 
 Appelle : `avecBrouillon()` *(brouillon.js)*, `closeDialog()` *(dialogue.js)*, `colonnesDe()` *(barreGroupes.js)*, `modifieBrouillon()` *(brouillon.js)*, `refreshSuggestions()` *(suggestions.js)*, `renderAll()` *(rendu.js)*, `renderB()` *(collection.js)*, `renderE()` *(deckSection.js)*, `scheduleSave()` *(stockage.js)*, `verseAffichagePartout()` *(fenAffichage.js)*, `verseBrouillon()` *(brouillon.js)*, `vueDe()` *(barreGroupes.js)*
 
 Appelée par : `gestesReglages`
 
-### `openAffichageModal()` — ligne 174
+### `openAffichageModal()` — ligne 177
 
 Appelle : `colonnesDe()` *(barreGroupes.js)*, `corpsAffichage()` *(fenAffichage.js)*, `indexColonnes()` *(fenAffichage.js)*, `openDialog()` *(dialogue.js)*, `ouvreBrouillon()` *(brouillon.js)*, → `majFenetreAffichage()` *(fenAffichage.js)*
 
