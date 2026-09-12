@@ -1945,10 +1945,11 @@ digraph appels {
   "openWantsModal" -> "openDialog" [color="#a8846d99"];
   "openWantsModal" -> "eur" [color="#a8846d99"];
   "openWantsModal" -> "esc" [color="#a8846d99"];
+  "openWipeModal" -> "collectionCards" [color="#a8846d99"];
+  "openWipeModal" -> "deckEntries" [color="#a8846d99"];
   "openWipeModal" -> "openDialog" [color="#a8846d99"];
-  "openWipeModal" -> "annexeListe" [color="#a8846d99"];
   "openWipeModal" -> "closeDialog" [color="#a8846d99"];
-  "openWipeModal" -> "renderAll" [color="#a8846d99"];
+  "openWipeModal" -> "recalculerAvecProgression" [color="#a8846d99"];
   "openWipeModal" -> "toast" [color="#a8846d99"];
   "gestesVue" -> "closeDialog" [color="#6da88c99"];
   "gestesVue" -> "modifieBrouillon" [color="#6da88c99"];

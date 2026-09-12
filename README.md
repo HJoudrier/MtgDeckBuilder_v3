@@ -341,6 +341,11 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   `cleLimiteSug()` (`js/sugListes.js`) rend « graphe », « edhrec » ou « suggestions » pour une liste
   sans groupe, « section:catégorie » pour une catégorie —, sans quoi « Créature » partagerait son
   compte entre les trois pages.
+- « Vider » ne vide que la liste de sa section : celui de la collection emportait aussi le deck, la
+  réserve et l'étude. Le deck survit donc à sa collection — il n'a jamais eu besoin d'elle pour
+  exister, une carte qu'on ne possède pas y est comptée à l'achat —, et la fenêtre de confirmation
+  annonce ce qu'elle retire, ce qu'elle garde, et combien de cartes du deck passeront à l'achat. Le
+  geste qui prend tout reste « Effacer les données locales », dans la fenêtre des paramètres.
 - La collection et le deck portent les mêmes trois boutons — **Importer**, **Exporter**, **Vider** —
   et le même champ de recherche sous eux. Les deux barres divergeaient : « Ajouter » ouvrait une
   fenêtre, « Importer MTGO » n'était nommé que d'un côté, « Exporter » n'existait que pour le deck,

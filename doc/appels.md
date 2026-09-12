@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**490 fonctions** dans 81 modules, **1373 appels** relevés.
+**490 fonctions** dans 81 modules, **1374 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1834,7 +1834,7 @@ Appelée par : `pasRecherche`
 
 Appelle : `find()` *(cartes.js)*
 
-Appelée par : `brancherRestauration`, `causesCollection`, `exportModal`, `filtered`, `graphCards`, `renderB`, `renderC`, `resumeFiltres`
+Appelée par : `brancherRestauration`, `causesCollection`, `exportModal`, `filtered`, `graphCards`, `openWipeModal`, `renderB`, `renderC`, `resumeFiltres`
 
 ### `filtered()` — ligne 52
 
@@ -1992,7 +1992,7 @@ Appelée par : `renderB`, `renderE`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `annexeDe`, `annexeEntries`, `annexeSize`, `appliqueCatalogueAuxCartes`, `deckAdd`, `deplacerCarte`, `ficheHTML`, `gestesDonnees`, `majPrix`, `mergeInto`, `openImport`, `openWipeModal`, `renameCard`, `retirerAnnexe`, `tagAnnexe`, `versAnnexe`, `viderAnnexe`
+Appelée par : `annexeDe`, `annexeEntries`, `annexeSize`, `appliqueCatalogueAuxCartes`, `deckAdd`, `deplacerCarte`, `ficheHTML`, `gestesDonnees`, `majPrix`, `mergeInto`, `openImport`, `renameCard`, `retirerAnnexe`, `tagAnnexe`, `versAnnexe`, `viderAnnexe`
 
 ### `annexeEntries()` — ligne 16
 
@@ -2048,7 +2048,7 @@ Appelée par : `cardTile`, `tagsSuggestion`
 
 Appelle : `find()` *(cartes.js)*, `mainType()` *(cartes.js)*
 
-Appelée par : `cartesDuDeck`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `deckCounts`, `deckSignature`, `exportModal`, `ficheHTML`, `gameChangersDuDeck`, `graphCards`, `legality`, `openImport`, `renderE`, `zoneCommandant`
+Appelée par : `cartesDuDeck`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `deckCounts`, `deckSignature`, `exportModal`, `ficheHTML`, `gameChangersDuDeck`, `graphCards`, `legality`, `openImport`, `openWipeModal`, `renderE`, `zoneCommandant`
 
 ### `deckSignature()` — ligne 21
 
@@ -2678,7 +2678,7 @@ Appelée par : `recalculerAvecProgression`
 
 Appelle : `annonceRecalcul()` *(recalcul.js)*, `finProgresSection()` *(recalcul.js)*, `finRecalcul()` *(recalcul.js)*, `geleSuggestions()` *(sugOrdre.js)*, `majProgression()` *(fenFiltres.js)*, `pause()` *(recalcul.js)*, `prechauffeCandidats()` *(candidats.js)*, `prepareSuggestions()` *(vivier.js)*, `progresSection()` *(recalcul.js)*, `recalculLong()` *(recalcul.js)*, `releveAncre()` *(ancre.js)*, `renderAll()` *(rendu.js)*, `restaureAncre()` *(ancre.js)*
 
-Appelée par : `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesDeck`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
+Appelée par : `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesDeck`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `openWipeModal`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
 
 ## js/entete.js
 
@@ -2736,7 +2736,7 @@ Appelée par : `finProgresSection`, `progresSection`
 
 Appelle : `renderB()` *(collection.js)*, `renderC()` *(stats.js)*, `renderD()` *(graphe.js)*, `renderE()` *(deckSection.js)*, `renderOnglets()` *(entete.js)*, `renderSuggestions()` *(suggestions.js)*, `renderTop()` *(entete.js)*, `scheduleSave()` *(stockage.js)*
 
-Appelée par : `app.js (chargement)`, `appliquerAffichage`, `brancherCatalogue`, `brancherRestauration`, `chargerCatalogue`, `chargerGameChangers`, `choisirVersion`, `completeUnknown`, `demarrer`, `filtrerAvecProgression`, `gestesDonnees`, `loadSymbology`, `majCatalogue`, `majPrix`, `openWipeModal`, `recalculerAvecProgression`, `renderAllSiApplique`
+Appelée par : `app.js (chargement)`, `appliquerAffichage`, `brancherCatalogue`, `brancherRestauration`, `chargerCatalogue`, `chargerGameChangers`, `choisirVersion`, `completeUnknown`, `demarrer`, `filtrerAvecProgression`, `gestesDonnees`, `loadSymbology`, `majCatalogue`, `majPrix`, `recalculerAvecProgression`, `renderAllSiApplique`
 
 ## js/fenFormat.js
 
@@ -3066,9 +3066,9 @@ Appelle : `aAcheter()` *(outils.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js
 
 Appelée par : `gestesDeck`
 
-### `openWipeModal()` — ligne 132
+### `openWipeModal()` — ligne 139
 
-Appelle : `annexeListe()` *(annexes.js)*, `closeDialog()` *(dialogue.js)*, `openDialog()` *(dialogue.js)*, `renderAll()` *(rendu.js)*, `toast()` *(outils.js)*
+Appelle : `closeDialog()` *(dialogue.js)*, `collectionCards()` *(collection.js)*, `deckEntries()` *(deck.js)*, `openDialog()` *(dialogue.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesDonnees`
 

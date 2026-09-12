@@ -4790,6 +4790,7 @@
     "exportModal",
     "filtered",
     "graphCards",
+    "openWipeModal",
     "renderB",
     "renderC",
     "resumeFiltres"
@@ -5244,7 +5245,6 @@
     "majPrix",
     "mergeInto",
     "openImport",
-    "openWipeModal",
     "renameCard",
     "retirerAnnexe",
     "tagAnnexe",
@@ -5416,6 +5416,7 @@
     "graphCards",
     "legality",
     "openImport",
+    "openWipeModal",
     "renderE",
     "zoneCommandant"
    ]
@@ -7303,6 +7304,7 @@
     "gestesVue",
     "lireCatalogueFichier",
     "openImport",
+    "openWipeModal",
     "removeFromDeck",
     "retirerAnnexe",
     "retraitCollection",
@@ -7473,7 +7475,6 @@
     "loadSymbology",
     "majCatalogue",
     "majPrix",
-    "openWipeModal",
     "recalculerAvecProgression",
     "renderAllSiApplique"
    ]
@@ -8356,13 +8357,14 @@
   {
    "nom": "openWipeModal",
    "fichier": "fenExport.js",
-   "ligne": 132,
+   "ligne": 139,
    "chargement": false,
    "appelle": [
-    "annexeListe",
     "closeDialog",
+    "collectionCards",
+    "deckEntries",
     "openDialog",
-    "renderAll",
+    "recalculerAvecProgression",
     "toast"
    ],
    "appelleDiffere": [],

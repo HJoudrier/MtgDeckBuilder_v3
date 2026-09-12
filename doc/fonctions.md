@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**491 fonctions**, 81 modules, 557 Ko de JavaScript.
+**491 fonctions**, 81 modules, 559 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -85,7 +85,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
-| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 151 |
+| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 166 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 119 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
@@ -1338,13 +1338,13 @@ Boîte de chargement de l'archive Scryfall. *6 fonctions, 75 lignes, 3.6 Ko.*
 
 ## js/fenExport.js
 
-Fenêtres d'export et d'effacement. *3 fonctions, 151 lignes, 7.9 Ko.*
+Fenêtres d'export et d'effacement. *3 fonctions, 166 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `exportModal(cible)` | — |
 | `openWantsModal()` | — |
-| `openWipeModal()` | — |
+| `openWipeModal()` | Vider la collection, et elle seule. Ce bouton emportait aussi le deck, la réserve et l'étude : « Vider » d'une section ne doit vider que ce que cette section montre, comme celui du deck… |
 
 ## js/gestesVue.js
 

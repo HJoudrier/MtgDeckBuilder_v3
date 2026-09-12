@@ -129,22 +129,37 @@ function openWantsModal() {
   };
 }
 
+/* Vider la collection, et elle seule. Ce bouton emportait aussi le deck, la
+   réserve et l'étude : « Vider » d'une section ne doit vider que ce que cette
+   section montre, comme celui du deck qui ne touche qu'à la liste principale.
+   Le deck survit donc à sa collection — il n'a jamais eu besoin d'elle pour
+   exister, une carte qu'on ne possède pas y est simplement comptée à l'achat,
+   et c'est ce que la fenêtre annonce. Pour tout reprendre à zéro, la fenêtre
+   des paramètres a « Effacer les données locales ». */
 function openWipeModal() {
+  const cartes = collectionCards();
+  const ex = cartes.reduce((n, e) => n + e.qty, 0);
+  const auDeck = deckEntries().filter(e => (S.collection.get(e.card.name) || 0) > 0).length;
   openDialog('Vider la collection',
-    `<p class="small">Cette action effacera toutes les cartes de votre collection. Le deck, la réserve et les cartes à l'étude seront également vidés.</p>
-     <p class="small muted">Pensez à faire une sauvegarde avant si vous souhaitez conserver vos listes.</p>`,
+    `<p class="small">Cette action retire les ${ex.toLocaleString('fr-FR')} exemplaire(s) de votre collection,
+       soit ${cartes.length.toLocaleString('fr-FR')} carte(s) différente(s). Le deck, la réserve et les cartes
+       à l'étude sont conservés.</p>
+     ${auDeck ? `<p class="small muted">${auDeck} carte(s) du deck viennent de votre collection : elles y restent,
+       et seront désormais comptées à l'achat.</p>` : ''}
+     <p class="small muted">Pensez à faire une sauvegarde avant si vous souhaitez conserver la liste de vos cartes.
+       Pour tout reprendre à zéro — collection, deck et listes annexes —, la fenêtre des paramètres a
+       « Effacer les données locales ».</p>`,
     `<button class="btn" value="cancel">Annuler</button>
-     <button class="btn danger" id="confirmWipe" value="ok">Oui, tout effacer</button>`);
+     <button class="btn danger" id="confirmWipe" value="ok">Vider la collection</button>`);
 
   const confirmWipe = document.getElementById('confirmWipe');
   if (confirmWipe) confirmWipe.onclick = () => {
     S.collection.clear();
-    S.deck.clear();
-    CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
-    S.commander = null;
     closeDialog();
-    renderAll();
-    toast('Collection, deck et listes annexes effacés.');
+    /* La collection commande les candidates — ce qu'on possède, ce qu'il faut
+       acheter : elles sont à rebâtir, comme après un import. */
+    recalculerAvecProgression('Collection vidée : les cartes retenues et les suggestions sont reprises.');
+    toast('Collection vidée. Le deck et les listes annexes sont conservés.');
   };
 }
 

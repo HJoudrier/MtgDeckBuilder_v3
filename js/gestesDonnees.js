@@ -124,7 +124,7 @@ function gestesDonnees(act, b) {
       S.commander = null;
       closeDialog();
       recalculerAvecProgression('Liste principale vidée : les suggestions repartent d\'un deck vide.');
-      toast('Deck vidé.');
+      toast('Deck vidé. La collection et les listes annexes sont conservées.');
     };
     return true;
   }
