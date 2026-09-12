@@ -7,12 +7,12 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**461 fonctions**, 33 modules, 517 Ko de JavaScript.
+**463 fonctions**, 33 modules, 520 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
-| [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 14 | 516 |
-| [`cartes.js`](#jscartesjs) | Base de cartes, indexation, analyse & typage | 30 | 712 |
+| [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 16 | 570 |
+| [`cartes.js`](#jscartesjs) | Base de cartes, indexation, analyse & typage | 30 | 717 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
 | [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 42 | 621 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 16 | 358 |
@@ -47,10 +47,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 
 ## js/effets.js
 
-Ontologie des capacités, analyse d'effets & synergies. *14 fonctions, 516 lignes, 28 Ko.*
+Ontologie des capacités, analyse d'effets & synergies. *16 fonctions, 570 lignes, 31 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `sousTypesDeSort(clause)` | Les sous-types d'un sort lancé, lus entre « cast » et « spell ». |
+| `memeSousType(a, b)` | Deux sous-types se comparent au singulier : la phrase dit « turtle spells » là où la ligne de type dit « Turtle ». |
 | `qualifieDeclencheur(clause, selfNames)` | — |
 | `qualifieProduction(clause, card)` | — |
 | `libelleQual(q)` | — |
@@ -75,13 +77,14 @@ Ontologie des capacités, analyse d'effets & synergies. *14 fonctions, 516 ligne
 | `EFFECT_RULES` | Règles d'extraction : effets produits |
 | `TRIGGER_RULES` | Règles d'extraction : déclencheurs |
 | `SUJETS` | 2. Qualification et analyse contextuelle |
+| `MOTS_NON_SOUSTYPE` | Ce qui qualifie un sort sans être un sous-type : les types de carte, les tournures de compte, de couleur et de nombre. |
 | `DEBUTS_EFFET` | — |
 | `COUTS` | — |
 | `EQUIV` | 3. Synergies & équivalences entre effets |
 
 ## js/cartes.js
 
-Base de cartes, indexation, analyse & typage. *30 fonctions, 712 lignes, 48 Ko.*
+Base de cartes, indexation, analyse & typage. *30 fonctions, 717 lignes, 49 Ko.*
 
 | Fonction | Rôle |
 |---|---|

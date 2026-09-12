@@ -258,9 +258,14 @@ function analyze(card) {
   if (isPermanent) ajouteP('ETB', 'self', {jeton:false, force:card.force, cmc:card.cmc,
     types:card.sousTypes||[], sujets:card.typesSort||[], creature:!!card.isCreature});
 
+  /* `intrinseque` : cette production n'est pas un effet, c'est la carte elle-même
+     qui est lançable. Ses sous-types sont donc connus et complets — un déclencheur
+     restreint à un sous-type peut l'écarter sans hésiter, là où une production
+     d'effet laisse ignorer ce qui sera lancé (`compat()`, js/effets.js). */
   if (!card.isLand && !card.isToken)
     ajouteP('LANCEMENT', 'self', {jeton:false, cmc:card.cmc, sorts:card.typesSort||[],
-      types:card.sousTypes||[], sujets:card.typesSort||[], force:card.force, creature:!!card.isCreature});
+      types:card.sousTypes||[], sujets:card.typesSort||[], force:card.force,
+      creature:!!card.isCreature, intrinseque:true});
 
   return {abilities, edges, triggers, produces, isSpell, isPermanent};
 }

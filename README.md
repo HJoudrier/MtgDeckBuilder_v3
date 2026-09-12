@@ -101,6 +101,16 @@ se disent entre parenthèses — « 2 (+60) » —, et le score ne touche pour e
 rendement décroissant au lieu d'une interaction par carte. Le critère suit le deck qu'on construit,
 sans liste de concepts à tenir à jour.
 
+Encore faut-il que le déclencheur soit lu en entier. Les sous-types venaient d'une liste de
+vingt-et-un mots codée dans `qualifieDeclencheur()` (`js/effets.js`) : Magic en compte près de trois
+cents, et « whenever you cast a **turtle** spell » n'y trouvait pas son compte — la restriction était
+perdue, et la carte se reliait à tous les sorts du deck. Le sous-type se lit désormais à sa **place**,
+entre « cast » et « spell » : ce qui n'est ni un type de carte, ni une négation, ni une tournure de
+compte est un sous-type, sans liste à tenir. Le lien devient alors strict, car la carte lancée porte
+ses sous-types sur sa ligne de type — sa production de lancement est marquée `intrinseque`
+(`js/cartes.js`) — tandis qu'une production d'effet, qui ne dit pas ce qui sera lancé, garde son
+demi-crédit.
+
 Les trois dernières lisent une **même sélection notée** : la notation ne connaît qu'une liste, et
 `selectionSuggestions()` (`js/suggestions.js`) la partitionne une fois — ce qui touche les nœuds
 isolés, ce qu'EDHREC recommande, tout le reste. `SECTIONS_SUGGESTIONS` (`js/etat.js`) les nomme ;

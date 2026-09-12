@@ -273,6 +273,45 @@ const SUJETS = [
   ['token',/token/],['permanent',/permanent/],['spell',/spell/],['card',/\bcard\b/],['player',/player|opponent/]
 ];
 
+/* Ce qui qualifie un sort sans être un sous-type : les types de carte, les
+   tournures de compte, de couleur et de nombre. Magic compte près de trois cents
+   sous-types de créature — les tenir en liste était le défaut : « whenever you
+   cast a turtle spell » n'y trouvait pas « turtle », perdait la restriction, et
+   la carte se reliait alors à tous les sorts du deck. On lit donc la place plutôt
+   que le mot : devant « spell », ce qui n'est pas de cette liste est un sous-type. */
+const MOTS_NON_SOUSTYPE = new Set([
+  'creature','instant','sorcery','artifact','enchantment','planeswalker','battle','land','kindred','tribal',
+  'permanent','token','spell','spells','card','cards','copy','copies','legendary','historic','multicolored',
+  'monocolored','colorless','white','blue','black','red','green','first','second','third','fourth',
+  'another','other','each','every','any','all','one','two','three','the','this','that','your','you',
+  'from','with','without','and','not','only','same','different','cheapest','most','least','expensive',
+  'tapped','untapped','modified','enchanted','equipped','attacking','blocking','face','down','up',
+  'snow','basic','target','targeted','opponent','opponents','player','players','hand','exile','graveyard'
+]);
+
+/* Les sous-types d'un sort lancé, lus entre « cast » et « spell ». Un mot trop
+   court, un type de carte, une négation (« noncreature ») ne comptent pas ; ce
+   qui reste est un sous-type, que la carte lancée portera ou non. */
+function sousTypesDeSort(clause) {
+  const out = [];
+  const re = /\bcasts?\s+((?:[a-z][a-z'-]*\s+){0,4}?)spells?\b/g;
+  let m;
+  while ((m = re.exec(clause))) {
+    m[1].split(/\s+/).forEach(mot => {
+      const x = mot.replace(/[^a-z'-]/g, '');
+      if (x.length > 2 && !/^non/.test(x) && !MOTS_NON_SOUSTYPE.has(x)) out.push(x);
+    });
+  }
+  return [...new Set(out)];
+}
+
+/* Deux sous-types se comparent au singulier : la phrase dit « turtle spells »
+   là où la ligne de type dit « Turtle ». */
+function memeSousType(a, b) {
+  const r = x => String(x).toLowerCase().replace(/s$/, '');
+  return r(a) === r(b);
+}
+
 function qualifieDeclencheur(clause, selfNames) {
   const q = {portee:'tous', sujet:'', filtres:[], mode:'declencheur'};
   if (/an opponent|each opponent|opponents|target player|that player|your opponents/.test(clause)) q.portee = 'adversaire';
@@ -289,7 +328,12 @@ function qualifieDeclencheur(clause, selfNames) {
   if (/\banother\b/.test(clause)) q.filtres.push({t:'autre'});
   if (/\blegendary\b/.test(clause)) q.filtres.push({t:'legendaire'});
   if (/first .{0,30}each turn|only once each turn/.test(clause)) q.filtres.push({t:'unefois'});
-  if ((m = clause.match(/\b(goblin|zombie|elf|elves|spirit|dragon|angel|wizard|vampire|plant|insect|golem|drake|bird|human|cat|faerie|treasure)\b/)))
+  /* Le sous-type d'un sort primait autrefois cette liste de vingt-et-un types,
+     et le manquait dès qu'il n'y figurait pas. La place le donne mieux ; la liste
+     ne sert plus qu'aux déclencheurs qui ne parlent pas de sort. */
+  const stSort = sousTypesDeSort(clause);
+  if (stSort.length) q.filtres.push({t:'sousTypeSort', v:stSort});
+  else if ((m = clause.match(/\b(goblin|zombie|elf|elves|spirit|dragon|angel|wizard|vampire|plant|insect|golem|drake|bird|human|cat|faerie|treasure)\b/)))
     q.filtres.push({t:'type', v:m[1]});
   if (/\bspell\b/.test(clause)) {
     q.sujet = 'spell';
@@ -324,7 +368,7 @@ function libelleQual(q) {
                permanent:'permanente', spell:'sort', card:'carte', player:'joueur'}[q.sujet] || '';
   const f = (q.filtres||[]).map(x => ({force:`force ${x.op} ${x.v}`, cmc:`valeur de mana ${x.op} ${x.v}`,
     nonjeton:'non-jeton', autre:'une autre', legendaire:'légendaire', unefois:'une fois par tour',
-    type:'type '+(x.v||'')}[x.t] || x.t));
+    type:'type '+(x.v||''), sousTypeSort:'type '+[].concat(x.v||[]).join(' ou ')}[x.t] || x.t));
   if (q.mode === 'cout') f.unshift('payé en coût');
   return [suj, p, ...f].filter(Boolean).join(', ');
 }
@@ -358,6 +402,16 @@ function compat(prod, trig) {
     else if (f.t === 'type') {
       if (p.types && p.types.length) { if (!p.types.some(t => t.toLowerCase().startsWith(f.v.slice(0,4)))) return 0; }
       else k *= 0.5;
+    } else if (f.t === 'sousTypeSort') {
+      /* La carte lancée porte ses sous-types sur sa ligne de type : un sort qui
+         n'en a aucun n'est pas un sort de ce type, et le lien n'existe pas. Une
+         production d'effet — « vous pouvez le lancer depuis l'exil » — ne dit pas
+         ce qui sera lancé : le doute vaut demi-crédit, non l'exclusion. */
+      const ts = p.types || [];
+      if (!ts.some(t => f.v.some(v => memeSousType(t, v)))) {
+        if (p.intrinseque || ts.length) return 0;
+        k *= 0.5;
+      }
     } else if (f.t === 'force' || f.t === 'cmc') { k *= 0.35; }
     else if (f.t === 'unefois') k *= 0.8;
   }
