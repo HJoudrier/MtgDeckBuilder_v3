@@ -51,18 +51,3 @@ function bestOffer(card) {
   };
 }
 
-function spent() {
-  return aAcheter().reduce((t, l) => t + l.total, 0);
-}
-
-function aAcheter() {
-  const out = [];
-  deckEntries().forEach(e => {
-    const manque = e.qty - (S.collection.get(e.card.name) || 0);
-    if (manque > 0) {
-      const prix = cmEstimate(e.card);
-      out.push({card:e.card, qty:manque, prix:prix||0, total:(prix||0)*manque, inconnu:prix===null});
-    }
-  });
-  return out.sort((a, b) => b.total - a.total);
-}

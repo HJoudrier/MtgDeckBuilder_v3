@@ -161,3 +161,52 @@ function customPanel() {
   </div>`;
 }
 
+/* La vignette d'une proposition : la carte, sa note et ce qui la justifie —
+   ses interactions, ce qu'EDHREC en dit, son prix. Elle ne paraît que dans les
+   trois sections des propositions, qui seules ont un score à montrer. */
+function sugRow(s) {
+  const c = s.card, n = nbInteractions(s), larges = nbCartesLarges(s), liens = nbLiens(s);
+  const inDeck = S.deck.get(c.name) || 0;
+  const img = c.imgN || c.img;
+  const prix = (s.source === 'achat' && s.offer && s.offer.price) ? s.offer.price : c.price;
+
+  const edhrecTag = (() => {
+    if (!s.edhrec) return '';
+    const isPrim = s.edhrec.role === 'principal';
+    const pct = Math.round(s.edhrec.inclusion * 100);
+    const syn = (s.edhrec.synergy >= 0 ? '+' : '−') + Math.abs(Math.round(s.edhrec.synergy * 100)) + ' %';
+    const secCount = (s.edhrec.secondaires || []).length;
+    if (isPrim) {
+      const secTxt = secCount > 0 ? ` (+${secCount} 2nd)` : '';
+      const secTitle = secCount > 0 ? ` · Également recommandé par : ${s.edhrec.secondaires.map(x=>x.commandant).join(', ')}` : '';
+      return `<span class="tag" style="border-color:#57c9c4;color:#57c9c4" title="EDHREC (${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}${secTitle}">edhrec ${pct} % / ${syn}${secTxt}</span>`;
+    } else {
+      return `<span class="tag" style="border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.12)" title="EDHREC (Commandant secondaire ${esc(s.edhrec.commandant)}) : inclusion ${pct} %, synergie ${syn}">★ ${esc(s.edhrec.commandant)} ${pct} %</span>`;
+    }
+  })();
+
+  const tags = [
+    (n || larges) ? `<span class="tag" style="border-color:var(--brass);color:var(--brass)" title="${n} carte(s) du deck avec lesquelles elle interagit précisément (${liens} lien(s) d'effets)${larges ? ` — et ${larges} autre(s) que seul un déclencheur large relie : ${libelleFamillesLarges(s.larges)}, que tout le deck alimente` : ''}">${n}${larges ? ` (+${larges})` : ''} interaction${n + larges > 1 ? 's' : ''}</span>` : '',
+    tagIllegal(s.card),
+    tagGameChanger(s.card),
+    s.source !== 'collection' ? `<span class="tag" style="border-color:var(--bad);color:#e39a90">hors collection</span>` : '',
+    tagAnnexe(c),
+    edhrecTag
+  ].filter(Boolean).join('');
+
+  return `<div class="sugT ${n?'lie':''} ${s.source!=='collection'?'hors':''}" data-card="${esc(c.name)}" data-ctx="suggestion"
+      title="Cliquez pour la fiche complète">
+    ${img ? (VISUELS_CHARGES.has(c.name)
+      ? `<img class="cimg" src="${esc(c.imgN||c.img)}" alt="${esc(c.name)}" decoding="async" onerror="this.remove()">`
+      : `<img class="cimg attente" data-src="${esc(c.imgN||c.img)}" data-nom="${esc(c.name)}" alt="${esc(c.name)}" decoding="async" onerror="this.remove()">`) : `<div class="titre">${esc(c.name)}</div>`}
+    <div class="score-line mono small muted">score ${s.score.toFixed(1)}</div>
+    ${tags ? `<div class="tags">${tags}</div>` : ''}
+    <div class="foot bot">
+      ${inDeck ? `<span title="${inDeck} exemplaire(s) dans le deck">×${inDeck}</span>` : ''}
+      <span class="mono">${s.source==='achat'?'≈ ':''}${eur(prix)}</span>
+      <button class="btn sm ${s.source==='achat'?'':'pri'}" style="margin-left:auto"
+        data-act="${s.source==='achat'?'buy':'toDeck'}" data-name="${esc(c.name)}">
+        ${s.source === 'achat' ? 'Acheter' : 'Ajouter'}</button>
+    </div>
+  </div>`;
+}
