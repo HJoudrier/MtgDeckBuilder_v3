@@ -60,6 +60,14 @@ document.addEventListener('input', ev => {
     glisseColonnes(t);
     return;
   }
+  /* Un objectif de rôle qu'on règle au pinceau : seule sa jauge bouge, la
+     section entière emporterait le champ qu'on est en train de remplir. Les
+     suggestions, elles, attendent la sortie du mode. */
+  if (t.dataset.roleCible) {
+    reglerCible(t.dataset.roleCible, t.value);
+    majJauge(t.dataset.roleCible);
+    return;
+  }
   /* Le champ de recherche d'une section : seules ses propositions sont
      réécrites, la section entière volerait le curseur qu'on est en train de
      remplir. */

@@ -2377,7 +2377,7 @@
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 108,
+   "ligne": 109,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2389,7 +2389,7 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 112,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "ecrire",
@@ -2408,7 +2408,7 @@
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 139,
+   "ligne": 140,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -2426,6 +2426,8 @@
     "choisirVersion",
     "gestesDeck",
     "gestesDonnees",
+    "reglerCible",
+    "reinitCibles",
     "renderAll",
     "runScryQueue"
    ]
@@ -2433,7 +2435,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 145,
+   "ligne": 146,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -2453,7 +2455,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 251,
+   "ligne": 267,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5564,7 +5566,7 @@
   {
    "nom": "gameChangersDuDeck",
    "fichier": "legalite.js",
-   "ligne": 15,
+   "ligne": 16,
    "chargement": false,
    "appelle": [
     "deckEntries",
@@ -5580,7 +5582,7 @@
   {
    "nom": "ligneGameChangers",
    "fichier": "legalite.js",
-   "ligne": 20,
+   "ligne": 21,
    "chargement": false,
    "appelle": [
     "esc",
@@ -5595,12 +5597,43 @@
    ]
   },
   {
-   "nom": "targets",
+   "nom": "ciblesParDefaut",
    "fichier": "legalite.js",
-   "ligne": 32,
+   "ligne": 36,
    "chargement": false,
    "appelle": [
     "fmt"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reglerCible",
+    "targets"
+   ]
+  },
+  {
+   "nom": "ciblesReglees",
+   "fichier": "legalite.js",
+   "ligne": 47,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boutonEditionCibles",
+    "gauge",
+    "ligneEditionCibles",
+    "targets"
+   ]
+  },
+  {
+   "nom": "targets",
+   "fichier": "legalite.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "ciblesParDefaut",
+    "ciblesReglees"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5609,13 +5642,44 @@
     "corpsFiltres",
     "deckCounts",
     "ficheHTML",
+    "majJauge",
     "renderE"
+   ]
+  },
+  {
+   "nom": "reglerCible",
+   "fichier": "legalite.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [
+    "ciblesParDefaut",
+    "fmt",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "reinitCibles",
+   "fichier": "legalite.js",
+   "ligne": 77,
+   "chargement": false,
+   "appelle": [
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages"
    ]
   },
   {
    "nom": "deckCounts",
    "fichier": "legalite.js",
-   "ligne": 42,
+   "ligne": 82,
    "chargement": false,
    "appelle": [
     "deckEntries",
@@ -5626,16 +5690,76 @@
    "appeleePar": [
     "contexteEvaluation",
     "ficheHTML",
+    "majJauge",
     "renderE"
+   ]
+  },
+  {
+   "nom": "boutonEditionCibles",
+   "fichier": "legalite.js",
+   "ligne": 102,
+   "chargement": false,
+   "appelle": [
+    "ciblesReglees"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderE"
+   ]
+  },
+  {
+   "nom": "ligneEditionCibles",
+   "fichier": "legalite.js",
+   "ligne": 114,
+   "chargement": false,
+   "appelle": [
+    "ciblesReglees",
+    "esc",
+    "fmt"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderE"
+   ]
+  },
+  {
+   "nom": "remplissageJauge",
+   "fichier": "legalite.js",
+   "ligne": 124,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gauge",
+    "majJauge"
+   ]
+  },
+  {
+   "nom": "ecartJauge",
+   "fichier": "legalite.js",
+   "ligne": 131,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gauge"
    ]
   },
   {
    "nom": "gauge",
    "fichier": "legalite.js",
-   "ligne": 49,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
+    "ciblesReglees",
+    "ecartJauge",
     "esc",
+    "fmt",
+    "remplissageJauge",
     "rolesFiltre"
    ],
    "appelleDiffere": [],
@@ -5645,9 +5769,25 @@
    ]
   },
   {
+   "nom": "majJauge",
+   "fichier": "legalite.js",
+   "ligne": 166,
+   "chargement": false,
+   "appelle": [
+    "deckCounts",
+    "remplissageJauge",
+    "targets"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
    "nom": "legality",
    "fichier": "legalite.js",
-   "ligne": 60,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "carteLegale",
@@ -5761,6 +5901,7 @@
     "aAcheter",
     "annexeSize",
     "blocAchats",
+    "boutonEditionCibles",
     "cardRow",
     "cardTile",
     "carteFiltree",
@@ -5778,6 +5919,7 @@
     "groupeCartes",
     "histogram",
     "legality",
+    "ligneEditionCibles",
     "ligneGameChangers",
     "noteMultiple",
     "ouvreGrille",
@@ -5798,6 +5940,7 @@
    "appeleePar": [
     "app.js (chargement)",
     "appliquerAffichage",
+    "gestesReglages",
     "renderAll",
     "runScryQueue"
    ]
@@ -6046,6 +6189,7 @@
     "ligneCatalogue",
     "ligneCausesCollection",
     "ligneCommandant",
+    "ligneEditionCibles",
     "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
@@ -6146,19 +6290,24 @@
     "cardRow",
     "cardTile",
     "carteLegale",
+    "ciblesParDefaut",
     "contexteEvaluation",
     "corpsFormat",
     "deckAdd",
     "deplacerCarte",
     "exportModal",
     "filtered",
+    "gauge",
+    "gestesReglages",
     "lanceEdhrecSiBesoin",
     "legality",
     "ligneCatalogue",
     "ligneCausesCollection",
+    "ligneEditionCibles",
     "ligneGameChangers",
     "openImport",
     "panneauEdhrec",
+    "reglerCible",
     "renderC",
     "renderE",
     "renderH",
@@ -6166,8 +6315,7 @@
     "requeteCatalogue",
     "resumeFormat",
     "selectionCandidats",
-    "tagIllegal",
-    "targets"
+    "tagIllegal"
    ]
   },
   {
@@ -7301,6 +7449,7 @@
     "filetSuggestions",
     "gestesDeck",
     "gestesDonnees",
+    "gestesReglages",
     "gestesVue",
     "lireCatalogueFichier",
     "openImport",
@@ -8421,6 +8570,7 @@
     "basculerRole",
     "cleLimiteSug",
     "defautSug",
+    "fmt",
     "groupeCartes",
     "interrompreCatalogue",
     "listeSug",
@@ -8429,8 +8579,11 @@
     "openBudgetModal",
     "openFormatModal",
     "openParametresModal",
+    "recalculerAvecProgression",
     "refreshSuggestions",
+    "reinitCibles",
     "reinitFiltres",
+    "renderE",
     "selectionSuggestions",
     "toast"
    ],
@@ -8568,6 +8721,7 @@
     "glisseColonnes",
     "invaliderCandidats",
     "majFiltre",
+    "majJauge",
     "majListeArchetypes",
     "majListeSets",
     "majResultats",
@@ -8580,6 +8734,7 @@
     "placerApercu",
     "refreshSuggestions",
     "reglageAffichage",
+    "reglerCible",
     "renderAll",
     "renderE",
     "saisieRecherche",
@@ -8594,7 +8749,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 255,
+   "ligne": 263,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",

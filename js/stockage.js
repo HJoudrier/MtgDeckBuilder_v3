@@ -90,6 +90,7 @@ function snapshot() {
     filtres: S.filtres,
     vues: {...S.vues},
     sombre: S.sombre,
+    ciblesRoles: S.ciblesRoles,
     onglet: S.onglet,
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
@@ -220,6 +221,21 @@ function restore(d) {
     Object.keys(S[k]).forEach(sec => { if (table[src[sec]]) S[k][sec] = src[sec]; });
   });
   if (!d.tris && TRIS[d.sort]) S.tris.collection = d.sort;
+  /* Les objectifs par rôle réglés à la main, format par format : une valeur
+     qui n'est pas un nombre positif est écartée, et le rôle reprend la cible
+     que le format lui donne. */
+  if (d.ciblesRoles && typeof d.ciblesRoles === 'object') {
+    Object.keys(d.ciblesRoles).forEach(f => {
+      const src = d.ciblesRoles[f];
+      if (!src || typeof src !== 'object') return;
+      const propre = {};
+      Object.keys(src).forEach(r => {
+        const v = Math.round(Number(src[r]));
+        if (Number.isFinite(v) && v >= 0) propre[r] = v;
+      });
+      if (Object.keys(propre).length) S.ciblesRoles[f] = propre;
+    });
+  }
   /* Le thème. Une sauvegarde d'hier ne le porte pas : `null` laisse le
      démarrage suivre la clé du thème, puis la préférence du système. */
   if (typeof d.sombre === 'boolean') S.sombre = d.sombre;

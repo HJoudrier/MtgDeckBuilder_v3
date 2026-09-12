@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**491 fonctions**, 81 modules, 559 Ko de JavaScript.
+**500 fonctions**, 81 modules, 566 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,7 +21,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 180 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 185 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
@@ -33,7 +33,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 262 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 278 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
@@ -61,8 +61,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`rechercheSection.js`](#jsrecherchesectionjs) | Le champ de recherche d'une section | 11 | 178 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
-| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 6 | 102 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 228 |
+| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 15 | 217 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 229 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -87,11 +87,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 166 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
-| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 119 |
+| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 135 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 139 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 289 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 297 |
 
 ## js/reglesEffets.js
 
@@ -252,7 +252,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 180 lignes, 10 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 185 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -492,7 +492,7 @@ Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 262 lignes, 11 Ko.*
+La sauvegarde locale. *9 fonctions, 278 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -963,20 +963,34 @@ Ce qu'il y a dans le deck, et les gestes qui l'y mettent. *9 fonctions, 114 lign
 
 ## js/legalite.js
 
-Ce que le format exige, et l'équilibre des rôles. *6 fonctions, 102 lignes, 5.3 Ko.*
+Ce que le format exige, et l'équilibre des rôles. *15 fonctions, 217 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `gameChangersDuDeck()` | Les Game Changers de la liste principale. Leur nombre décide du palier qu'un deck Commander peut revendiquer : aucun aux paliers 1 et 2, jusqu'à trois au palier 3, sans limite aux… |
 | `ligneGameChangers()` | Ce que ce décompte dit du palier, en une phrase. |
-| `targets()` | — |
+| `ciblesParDefaut()` | Ce que le format propose, à la taille du deck. |
+| `ciblesReglees()` | Les objectifs réglés à la main pour le format en cours. |
+| `targets()` | Les cibles en vigueur : celles du format, et par-dessus celles qu'on a réglées. |
+| `reglerCible(role, valeur)` | Poser un objectif, ou le rendre au format quand il retrouve sa valeur : l'état ne garde que ce qui s'écarte, et « Rétablir » n'a rien à défaire de ce qui n'a pas bougé. |
+| `reinitCibles()` | — |
 | `deckCounts()` | — |
+| `boutonEditionCibles()` | Le bouton qui fait passer d'un mode à l'autre, posé contre le titre. |
+| `ligneEditionCibles()` | La phrase du mode, sous le titre : ce qu'on peut faire, et ce qui attend qu'on en sorte. |
+| `remplissageJauge(val, tgt)` | Le remplissage d'une jauge : la part atteinte, et la couleur qui la juge. |
+| `ecartJauge(val, tgt)` | — |
 | `gauge(label, val, tgt, role)` | — |
+| `majJauge(role)` | Une cible qui change pendant qu'on la règle : seule sa jauge bouge. |
 | `legality()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `editionCibles` | Le mode modification des objectifs. Il ne vit que le temps où on l'ouvre : on ne rouvre pas l'atelier en train d'éditer, et rien n'est à conserver — ce qui compte, ce sont les cibles,… |
+| `PINCEAU_ICONE` | Un pinceau : six poils, une virole, un manche. |
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 228 lignes, 14 Ko.*
+La section Deck. *6 fonctions, 229 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1356,7 +1370,7 @@ Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
 
 ## js/gestesReglages.js
 
-Les fenêtres de réglage et leurs boutons. *1 fonctions, 119 lignes, 4 Ko.*
+Les fenêtres de réglage et leurs boutons. *1 fonctions, 135 lignes, 4.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1388,7 +1402,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 289 lignes, 11 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 297 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

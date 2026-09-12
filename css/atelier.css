@@ -476,7 +476,17 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
   border-radius:8px;background:var(--bg2);cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit}
 .gauge:hover{border-color:var(--brass)}
 .gauge.actif{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset}
-.gauge .top{display:flex;justify-content:space-between;font-size:12.5px}
+.gauge .top{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;gap:6px}
+/* Le mode modification des objectifs : la jauge cesse d'être un bouton — elle
+   porte un champ —, et son cadre le dit. */
+.gauge.edition{cursor:default;border-style:dashed;border-color:var(--brass-d);gap:5px}
+/* Le champ sous la barre, précédé de son étiquette : dans l'en-tête, il
+   poussait le nom du rôle à la ligne. */
+.cible-ligne{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.gauge .cible-champ{width:62px;padding:2px 5px;font-family:var(--mono);font-size:12.5px;text-align:right}
+.cible-marque{color:var(--brass)}
+.titre-cibles{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cible-edit{display:inline-flex;align-items:center;gap:5px}
 .track{height:6px;border-radius:99px;background:var(--piste);overflow:hidden}
 .fill{height:100%;border-radius:99px}
 

@@ -481,9 +481,18 @@ digraph appels {
     label="js/legalite.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "gameChangersDuDeck" [label="gameChangersDuDeck", fillcolor="#a8846d33", color="#a8846d"];
     "ligneGameChangers" [label="ligneGameChangers", fillcolor="#a8846d33", color="#a8846d"];
+    "ciblesParDefaut" [label="ciblesParDefaut", fillcolor="#a8846d33", color="#a8846d"];
+    "ciblesReglees" [label="ciblesReglees", fillcolor="#a8846d33", color="#a8846d"];
     "targets" [label="targets", fillcolor="#a8846d33", color="#a8846d"];
+    "reglerCible" [label="reglerCible", fillcolor="#a8846d33", color="#a8846d"];
+    "reinitCibles" [label="reinitCibles", fillcolor="#a8846d33", color="#a8846d"];
     "deckCounts" [label="deckCounts", fillcolor="#a8846d33", color="#a8846d"];
+    "boutonEditionCibles" [label="boutonEditionCibles", fillcolor="#a8846d33", color="#a8846d"];
+    "ligneEditionCibles" [label="ligneEditionCibles", fillcolor="#a8846d33", color="#a8846d"];
+    "remplissageJauge" [label="remplissageJauge", fillcolor="#a8846d33", color="#a8846d"];
+    "ecartJauge" [label="ecartJauge", fillcolor="#a8846d33", color="#a8846d"];
     "gauge" [label="gauge", fillcolor="#a8846d33", color="#a8846d"];
+    "majJauge" [label="majJauge", fillcolor="#a8846d33", color="#a8846d"];
     "legality" [label="legality", fillcolor="#a8846d33", color="#a8846d"];
   }
   subgraph "cluster_51" {
@@ -1475,11 +1484,28 @@ digraph appels {
   "ligneGameChangers" -> "gameChangersConnus" [color="#a8846d99"];
   "ligneGameChangers" -> "gameChangersDuDeck" [color="#a8846d99"];
   "ligneGameChangers" -> "esc" [color="#a8846d99"];
-  "targets" -> "fmt" [color="#a8846d99"];
+  "ciblesParDefaut" -> "fmt" [color="#a8846d99"];
+  "targets" -> "ciblesParDefaut" [color="#a8846d99"];
+  "targets" -> "ciblesReglees" [color="#a8846d99"];
+  "reglerCible" -> "ciblesParDefaut" [color="#a8846d99"];
+  "reglerCible" -> "fmt" [color="#a8846d99"];
+  "reglerCible" -> "scheduleSave" [color="#a8846d99"];
+  "reinitCibles" -> "scheduleSave" [color="#a8846d99"];
   "deckCounts" -> "targets" [color="#a8846d99"];
   "deckCounts" -> "deckEntries" [color="#a8846d99"];
-  "gauge" -> "rolesFiltre" [color="#a8846d99"];
+  "boutonEditionCibles" -> "ciblesReglees" [color="#a8846d99"];
+  "ligneEditionCibles" -> "ciblesReglees" [color="#a8846d99"];
+  "ligneEditionCibles" -> "esc" [color="#a8846d99"];
+  "ligneEditionCibles" -> "fmt" [color="#a8846d99"];
+  "gauge" -> "remplissageJauge" [color="#a8846d99"];
+  "gauge" -> "ciblesReglees" [color="#a8846d99"];
   "gauge" -> "esc" [color="#a8846d99"];
+  "gauge" -> "fmt" [color="#a8846d99"];
+  "gauge" -> "rolesFiltre" [color="#a8846d99"];
+  "gauge" -> "ecartJauge" [color="#a8846d99"];
+  "majJauge" -> "deckCounts" [color="#a8846d99"];
+  "majJauge" -> "remplissageJauge" [color="#a8846d99"];
+  "majJauge" -> "targets" [color="#a8846d99"];
   "legality" -> "fmt" [color="#a8846d99"];
   "legality" -> "deckSize" [color="#a8846d99"];
   "legality" -> "deckEntries" [color="#a8846d99"];
@@ -1531,6 +1557,8 @@ digraph appels {
   "renderE" -> "zoneCommandant" [color="#6da88c99"];
   "renderE" -> "blocAchats" [color="#6da88c99"];
   "renderE" -> "histogram" [color="#6da88c99"];
+  "renderE" -> "boutonEditionCibles" [color="#6da88c99"];
+  "renderE" -> "ligneEditionCibles" [color="#6da88c99"];
   "renderE" -> "gauge" [color="#6da88c99"];
   "renderE" -> "partieDeck" [color="#6da88c99"];
   "renderE" -> "noteMultiple" [color="#6da88c99"];
@@ -1985,6 +2013,10 @@ digraph appels {
   "gestesReglages" -> "apresReglage" [color="#a86d8a99"];
   "gestesReglages" -> "toast" [color="#a86d8a99"];
   "gestesReglages" -> "openFormatModal" [color="#a86d8a99"];
+  "gestesReglages" -> "renderE" [color="#a86d8a99"];
+  "gestesReglages" -> "recalculerAvecProgression" [color="#a86d8a99"];
+  "gestesReglages" -> "reinitCibles" [color="#a86d8a99"];
+  "gestesReglages" -> "fmt" [color="#a86d8a99"];
   "gestesReglages" -> "basculerRole" [color="#a86d8a99"];
   "gestesReglages" -> "listeSug" [color="#a86d8a99"];
   "gestesReglages" -> "selectionSuggestions" [color="#a86d8a99"];
@@ -2084,6 +2116,8 @@ digraph appels {
   "app.js (chargement)" -> "majFiltre" [color="#6d8ca899"];
   "app.js (chargement)" -> "majResumeFiltres" [color="#6d8ca899"];
   "app.js (chargement)" -> "glisseColonnes" [color="#6d8ca899"];
+  "app.js (chargement)" -> "reglerCible" [color="#6d8ca899"];
+  "app.js (chargement)" -> "majJauge" [color="#6d8ca899"];
   "app.js (chargement)" -> "saisieRecherche" [color="#6d8ca899"];
   "app.js (chargement)" -> "majResultats" [color="#6d8ca899"];
   "app.js (chargement)" -> "majResumeFormat" [color="#6d8ca899"];

@@ -200,7 +200,8 @@ function renderE() {
       ${blocAchats()}
       <h3 style="margin:12px 0 6px;font-size:15px">Courbe de mana</h3>
       ${histogram(cmcSplit, true)}
-      <h3 style="margin:14px 0 6px;font-size:15px">Équilibre des rôles</h3>
+      <h3 class="titre-cibles" style="margin:14px 0 6px;font-size:15px">Équilibre des rôles ${boutonEditionCibles()}</h3>
+      ${ligneEditionCibles()}
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       ${partieDeck('liste', 'Liste',
         `${n} carte(s)${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}${price ? ` · ${eur(price)}` : ''}${noteMultiple(mode)}`,

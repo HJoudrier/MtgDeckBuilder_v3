@@ -5,7 +5,8 @@
    couleur, le palier que les « Game Changers » autorisent : `legality()` rend
    la liste de ce qui cloche, phrase par phrase. À côté, les cibles par rôle et
    les jauges qui les montrent — des filtres à part entière, que cocher agit
-   partout.
+   partout, et qu'un pinceau fait passer en mode modification pour régler les
+   objectifs à la main.
    ===================================================================== */
 
 /* Les Game Changers de la liste principale. Leur nombre décide du palier
@@ -29,7 +30,10 @@ function ligneGameChangers() {
             : 'Le palier 2 n\'en admet aucune, le palier 3 jusqu\'à trois.'}</div>`;
 }
 
-function targets() {
+/* Ce que le format propose, à la taille du deck. C'est le point de départ :
+   des repères tirés de l'usage, non une règle — d'où le pinceau qui les laisse
+   régler. */
+function ciblesParDefaut() {
   const f = fmt(), k = f.size / 100;
   if (S.format === 'limite') return {terrains:17, creatures:15, interaction:4, pioche:2, ramp:1, tuteurs:0, wipe:0, protection:1};
   if (S.format === 'standard') return {terrains:24, creatures:18, interaction:8, pioche:6, ramp:2, tuteurs:1, wipe:2, protection:2};
@@ -39,6 +43,42 @@ function targets() {
   };
 }
 
+/* Les objectifs réglés à la main pour le format en cours. */
+function ciblesReglees() {
+  return (S.ciblesRoles && S.ciblesRoles[S.format]) || {};
+}
+
+/* Les cibles en vigueur : celles du format, et par-dessus celles qu'on a
+   réglées. Tout l'atelier passe par ici — les jauges, la fiche d'une carte, et
+   la notation, qui mesure ce qui manque au deck. */
+function targets() {
+  const base = ciblesParDefaut();
+  const perso = ciblesReglees();
+  Object.keys(base).forEach(r => {
+    if (typeof perso[r] === 'number' && perso[r] >= 0) base[r] = perso[r];
+  });
+  return base;
+}
+
+/* Poser un objectif, ou le rendre au format quand il retrouve sa valeur :
+   l'état ne garde que ce qui s'écarte, et « Rétablir » n'a rien à défaire de
+   ce qui n'a pas bougé. */
+function reglerCible(role, valeur) {
+  const base = ciblesParDefaut();
+  if (!(role in base)) return;
+  const v = Math.max(0, Math.min(fmt().size, Math.round(Number(valeur))));
+  if (!Number.isFinite(v)) return;
+  const perso = S.ciblesRoles[S.format] || (S.ciblesRoles[S.format] = {});
+  if (v === base[role]) delete perso[role]; else perso[role] = v;
+  if (!Object.keys(perso).length) delete S.ciblesRoles[S.format];
+  scheduleSave();
+}
+
+function reinitCibles() {
+  delete S.ciblesRoles[S.format];
+  scheduleSave();
+}
+
 function deckCounts() {
   const c = {};
   Object.keys(targets()).forEach(k => c[k] = 0);
@@ -46,15 +86,90 @@ function deckCounts() {
   return c;
 }
 
-function gauge(label, val, tgt, role) {
-  const pct = Math.min(100, Math.round(val / Math.max(1, tgt) * 100));
-  const col = val >= tgt ? 'var(--ok)' : (val >= tgt * 0.6 ? 'var(--warn)' : 'var(--bad)');
+/* Le mode modification des objectifs. Il ne vit que le temps où on l'ouvre :
+   on ne rouvre pas l'atelier en train d'éditer, et rien n'est à conserver — ce
+   qui compte, ce sont les cibles, qui le sont. */
+let editionCibles = false;
+
+/* Un pinceau : six poils, une virole, un manche. Dessiné ici comme l'engrenage
+   et l'entonnoir des filtres — l'atelier ne dépend d'aucun fichier extérieur. */
+const PINCEAU_ICONE = `<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" style="vertical-align:-2px">
+  <path fill="currentColor" d="M14.1 1.9a1.4 1.4 0 0 0-2 0L7 7l1.9 1.9 5.2-5a1.4 1.4 0 0 0 0-2z"/>
+  <path fill="currentColor" d="M5.6 8.2c-1 0-1.8.5-2.2 1.3-.4.8-.5 2.2-1.3 2.9 1 .9 2.4 1.1 3.6.6 1.2-.5 1.9-1.7 1.8-2.9a2 2 0 0 0-1.9-1.9z"/>
+</svg>`;
+
+/* Le bouton qui fait passer d'un mode à l'autre, posé contre le titre. */
+function boutonEditionCibles() {
+  return `<button type="button" class="btn sm cible-edit ${editionCibles ? 'actif' : ''}" data-act="editerCibles"
+    aria-pressed="${editionCibles}"
+    title="${editionCibles ? 'Terminer et reprendre les suggestions' : 'Modifier les objectifs par rôle'}">
+    ${PINCEAU_ICONE} ${editionCibles ? 'Terminer' : 'Modifier'}</button>
+    ${editionCibles && Object.keys(ciblesReglees()).length
+      ? `<button type="button" class="btn sm" data-act="reinitCibles"
+          title="Rendre à ce format les objectifs qu'il propose">Rétablir</button>` : ''}`;
+}
+
+/* La phrase du mode, sous le titre : ce qu'on peut faire, et ce qui attend
+   qu'on en sorte. */
+function ligneEditionCibles() {
+  if (!editionCibles) return '';
+  const n = Object.keys(ciblesReglees()).length;
+  return `<div class="small muted" style="margin-bottom:6px">Réglez chaque objectif : les jauges suivent aussitôt.
+    ${n ? `${n} objectif(s) réglé(s) à la main pour ${esc(fmt().label)}. ` : ''}Les suggestions, elles, sont reprises
+    en sortant du mode — elles pèsent ce qui manque au deck, et le recalcul coûte plus qu'un trait de jauge.
+    Les jauges ne filtrent pas tant que ce mode est ouvert.</div>`;
+}
+
+/* Le remplissage d'une jauge : la part atteinte, et la couleur qui la juge. */
+function remplissageJauge(val, tgt) {
+  return {
+    pct: Math.min(100, Math.round(val / Math.max(1, tgt) * 100)),
+    col: val >= tgt ? 'var(--ok)' : (val >= tgt * 0.6 ? 'var(--warn)' : 'var(--bad)')
+  };
+}
+
+function ecartJauge(val, tgt) {
   const diff = val - tgt;
+  return diff < 0 ? `<span style="color:var(--bad)">${diff}</span>` : '<span style="color:var(--ok)">ok</span>';
+}
+
+function gauge(label, val, tgt, role) {
+  const {pct, col} = remplissageJauge(val, tgt);
+  const barre = `<div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div>`;
+  if (editionCibles) {
+    /* En modification, la jauge n'est plus un bouton : un champ ne se met pas
+       dans un bouton, et cocher un rôle pendant qu'on règle sa cible serait
+       un geste pour deux intentions. */
+    const regle = typeof ciblesReglees()[role] === 'number';
+    const id = `cible-${esc(role || '')}`;
+    /* Le champ prend sa propre ligne, sous la barre : glissé dans l'en-tête, il
+       poussait le nom du rôle à la ligne et la jauge grandissait de travers. */
+    return `<div class="gauge edition" data-jauge="${esc(role||'')}">
+      <div class="top"><span>${label}${regle ? ' <span class="cible-marque" title="Objectif réglé à la main">•</span>' : ''}</span>
+        <span class="mono">${val}</span></div>
+      ${barre}
+      <div class="cible-ligne">
+        <label class="lab" for="${id}">objectif</label>
+        <input type="number" id="${id}" class="cible-champ" data-role-cible="${esc(role||'')}"
+          min="0" max="${fmt().size}" step="1" value="${tgt}" aria-label="Objectif : ${esc(label)}">
+      </div></div>`;
+  }
   const actif = rolesFiltre().includes(role);
   return `<button type="button" class="gauge ${actif?'actif':''}" data-act="toggleRole" data-role="${esc(role||'')}"
       aria-pressed="${actif}" title="${actif ? 'Retirer ce rôle des filtres' : 'Ne garder que les cartes tenant ce rôle, partout'}">
-    <div class="top"><span>${label}</span><span class="mono">${val} / ${tgt} ${diff<0?`<span style="color:var(--bad)">${diff}</span>`:'<span style="color:var(--ok)">ok</span>'}</span></div>
-    <div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div></button>`;
+    <div class="top"><span>${label}</span><span class="mono">${val} / ${tgt} ${ecartJauge(val, tgt)}</span></div>
+    ${barre}</button>`;
+}
+
+/* Une cible qui change pendant qu'on la règle : seule sa jauge bouge. Réécrire
+   la section emporterait le champ qu'on est en train de remplir. */
+function majJauge(role) {
+  const bloc = document.querySelector(`[data-jauge="${CSS.escape(role)}"]`);
+  if (!bloc) return;
+  const val = deckCounts()[role] || 0;
+  const {pct, col} = remplissageJauge(val, targets()[role]);
+  const fill = bloc.querySelector('.fill');
+  if (fill) { fill.style.width = pct + '%'; fill.style.background = col; }
 }
 
 function legality() {

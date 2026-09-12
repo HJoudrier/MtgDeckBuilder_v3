@@ -158,6 +158,11 @@ const S = {
      dans la fenêtre « Achats sur Cardmarket ». Le prix maximum par carte, lui,
      est déjà posé : il n'attend que le budget pour valoir. */
   budget: {total:0, perCard:5, condition:'GD', lang:'any', sellerType:'any', country:'any'},
+  /* Les objectifs par rôle réglés à la main, par format : `{edh:{terrains:38}}`.
+     Seuls les rôles qu'on a touchés y figurent, les autres gardant la cible que
+     le format donne. Par format, parce qu'une cible de terrains pensée pour un
+     deck de cent cartes n'a rien à dire d'un deck de soixante. */
+  ciblesRoles: {},
   limitB: 200,
   limiteType: {},
   exploreEtat: '',

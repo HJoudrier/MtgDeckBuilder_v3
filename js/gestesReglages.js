@@ -72,6 +72,22 @@ function gestesReglages(act, b) {
     return true;
   }
 
+  /* Le pinceau : on entre dans le mode, on en sort. En sortir reprend les
+     suggestions — elles pèsent ce qui manque au deck, donc les cibles. */
+  if (act === 'editerCibles') {
+    editionCibles = !editionCibles;
+    if (editionCibles) { renderE(); return true; }
+    recalculerAvecProgression('Objectifs par rôle modifiés : les suggestions sont reprises d\'après ce qui manque au deck.');
+    return true;
+  }
+
+  if (act === 'reinitCibles') {
+    reinitCibles();
+    renderE();
+    toast(`Objectifs rendus à ceux du format ${fmt().label}.`);
+    return true;
+  }
+
   if (act === 'toggleRole') {
     /* Les mêmes rôles se cochent depuis les jauges de la section Deck :
        hors de la fenêtre, `modifieFiltres` agit sur l'état lui-même. */

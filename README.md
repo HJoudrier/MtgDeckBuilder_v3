@@ -367,6 +367,17 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   ailleurs ne doit pas l'arracher à autre chose.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
+- Leurs objectifs se règlent à la main. Le pinceau posé contre le titre ouvre un mode où chaque jauge
+  porte un champ sous sa barre ; les jauges cessent alors d'être des filtres — un champ ne se met pas
+  dans un bouton, et cocher un rôle pendant qu'on règle sa cible serait un geste pour deux
+  intentions. `ciblesParDefaut()` donne ce que le format propose, `targets()` y superpose ce qu'on a
+  réglé (`js/legalite.js`), et tout l'atelier passe par cette seconde : les jauges, la fiche d'une
+  carte et la notation, qui pèse ce qui manque au deck. Les réglages tiennent dans `S.ciblesRoles`,
+  **par format** — une cible de terrains pensée pour cent cartes n'a rien à dire d'un deck de
+  soixante —, et l'état ne garde que ce qui s'écarte : une valeur rendue à celle du format disparaît,
+  et « Rétablir » n'a rien à défaire de ce qui n'a pas bougé. La jauge suit la frappe sans que la
+  section soit réécrite, qui emporterait le champ ; les suggestions, elles, sont reprises à la sortie
+  du mode — un recalcul complet coûte bien plus qu'un trait de jauge.
 - La fiche d'une carte feuillette ses éditions, sous deux listes. « Mes éditions » vient de `card.impressions`,
   relevées à l'import, dont `chercheImpressions()` rapporte les visuels en une requête à l'ouverture de la fiche.
   « Toutes » vient de `chercheToutesEditions()`, une recherche Scryfall en « unique=prints » limitée au papier et
