@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**464 fonctions**, 76 modules, 534 Ko de JavaScript.
+**468 fonctions**, 79 modules, 537 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,19 +21,19 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 150 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 174 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 62 |
-| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 231 |
-| [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et les trois menus | 9 | 129 |
+| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
+| [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et le bouton « Affichage » | 9 | 123 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 3 | 54 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 9 | 200 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 251 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 257 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
@@ -50,7 +50,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 195 |
 | [`sugOrdre.js`](#jssugordrejs) | L'ordre gelé des propositions | 6 | 80 |
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
-| [`sugListes.js`](#jssuglistesjs) | Les trois lectures d'une même sélection | 11 | 246 |
+| [`sugListes.js`](#jssuglistesjs) | Le fond commun des trois listes de propositions | 11 | 137 |
+| [`sugGraphe.js`](#jssuggraphejs) | La section du graphe : ce qui se branche sur les nœuds | 1 | 42 |
+| [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 53 |
+| [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 35 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 243 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 6 | 126 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
@@ -58,7 +61,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 6 | 102 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 230 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 227 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -77,16 +80,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 129 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
-| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » de la collection | 8 | 139 |
+| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 184 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
-| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 119 |
-| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 126 |
+| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
+| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 118 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 138 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 100 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 282 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 263 |
 
 ## js/reglesEffets.js
 
@@ -247,7 +250,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 150 lignes, 7.9 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 174 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -263,6 +266,8 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 | `ONGLETS_ANCIENS` | L'onglet unique d'hier, tel qu'une sauvegarde le nomme encore : elle rouvrait sinon la collection, et l'on perdait la page qu'on regardait en quittant l'atelier. |
 | `SECTIONS_SUGGESTIONS` | Les trois sections que la notation alimente, dans l'ordre des onglets. |
 | `COLONNES` | Les nombres de colonnes offerts par les grilles, zéro valant « autant que la largeur en permet ». |
+| `LISTES_AFFICHAGE` | Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. |
+| `CLES_AFFICHAGE` | — |
 | `RETOURNEES` | — |
 | `apercuEl` | — |
 | `apercuCardName` | — |
@@ -353,7 +358,7 @@ L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 62 lignes, 2.
 
 ## js/groupes.js
 
-Grouper et trier les listes de cartes. *7 fonctions, 231 lignes, 10 Ko.*
+Grouper et trier les listes de cartes. *7 fonctions, 232 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -378,7 +383,7 @@ Grouper et trier les listes de cartes. *7 fonctions, 231 lignes, 10 Ko.*
 
 ## js/barreGroupes.js
 
-L'enveloppe d'un groupe, et les trois menus. *9 fonctions, 129 lignes, 6.4 Ko.*
+L'enveloppe d'un groupe, et le bouton « Affichage ». *9 fonctions, 123 lignes, 6.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -388,9 +393,9 @@ L'enveloppe d'un groupe, et les trois menus. *9 fonctions, 129 lignes, 6.4 Ko.*
 | `rendGroupes(section, groupes, modeId, rendEntrees, compte)` | — |
 | `noteMultiple(modeId)` | Un regroupement où une carte compte plusieurs fois le dit, sans quoi la somme des en-têtes contredirait le total affiché juste au-dessus. |
 | `colonnesDe(section)` | — |
-| `menuColonnes(section)` | — |
 | `ouvreGrille(section, base)` | L'ouverture d'une grille : la classe et la variable qui portent le choix, ou la grille d'avant si l'on s'en remet à la largeur. |
-| `barreGroupeTri(section)` | — |
+| `vueDe(section)` | La vue d'une liste : ses vignettes en grille, ou une ligne par carte. |
+| `boutonAffichage(section)` | Le bouton que toute liste de cartes pose dans sa barre : il ouvre sa fenêtre d'affichage, et son infobulle dit le réglage en vigueur — celui-ci n'étant plus visible dans la barre. |
 
 | Donnée | Rôle |
 |---|---|
@@ -485,7 +490,7 @@ Les recherches nommées chez Scryfall. *9 fonctions, 200 lignes, 8.2 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 251 lignes, 9.9 Ko.*
+La sauvegarde locale. *9 fonctions, 257 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -782,25 +787,49 @@ Les commandants du deck, en tête de l'onglet EDHREC. *4 fonctions, 139 lignes, 
 
 ## js/sugListes.js
 
-Les trois lectures d'une même sélection. *11 fonctions, 246 lignes, 13 Ko.*
+Le fond commun des trois listes de propositions. *11 fonctions, 137 lignes, 6.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `selectionSuggestions()` | — |
-| `paginationListe(cle, total, max, defaut)` | Les boutons de pagination d'une liste hors catalogue, ou rien si tout tient. |
+| `listeSug(section, sel)` | La liste d'une section, dans la sélection partitionnée : c'est la même table que lisent la pagination et les rendus. |
+| `defautSug(section, plat)` | — |
+| `cleLimiteSug(section, idGroupe)` | La clé de pagination d'une catégorie. Elle porte sa section : sans cela, « Créature » partagerait son compte entre le graphe, EDHREC et le catalogue, et déplier l'une déplierait les… |
+| `maxSug(section, g, plat, defaut)` | — |
+| `paginationListe(cle, total, max, defaut)` | Les boutons de pagination d'une liste, ou rien si tout tient. |
+| `corpsSug(section, g, plat, defaut)` | Le corps d'un groupe : ses vignettes dans la grille de la section — dont le nombre de colonnes est réglable comme celui des autres — et sa pagination. |
+| `listesSug(section, groupes, mode, titre, couleur)` | Les listes d'une section : sans groupement, un seul bloc titré ; groupée, une enveloppe repliable par catégorie. |
 | `renvoiCatalogue(quoi)` | Le renvoi au catalogue : les deux listes courtes ne montrent qu'un extrait du classement, et le dire évite de les croire exhaustives. |
-| `blocGraphe(sel)` | La section du graphe : ce qui se branche sur les nœuds qu'on y a isolés. |
-| `cleLimiteEdhrec(idGroupe)` | La clé de pagination d'une catégorie d'EDHREC. |
-| `corpsEdhrec(g, plat)` | Le compte affiché d'une catégorie d'EDHREC, et sa pagination : sans groupe, c'est la liste entière sous la clé « edhrec » ; groupée, chaque catégorie a la sienne. |
-| `visuelsEdhrec(groupes, mode)` | Les visuels des recommandations affichées, catégorie par catégorie : une catégorie repliée ne montre rien, et ne demande donc rien. |
-| `blocEdhrec(sel)` | La section EDHREC : le panneau du commandant est rendu à part (il ne dépend pas de la sélection), et voici les cartes que les decks recensés recommandent parmi celles qu'on pourrait ajouter. |
-| `listeSuggestions(sel)` | La section du catalogue : tout le classement, groupé et paginé selon la barre de la section. |
 | `visuelsSuggestions(vus)` | Les visuels des vignettes qu'une section affiche. |
-| `visuelsCatalogue(groupes)` | Celles du catalogue, groupe par groupe : une catégorie repliée ne montre rien, et demander les visuels de vignettes que personne ne voit serait autant de requêtes pour rien. |
+| `visuelsGroupes(section, groupes, mode)` | Ceux d'une section groupe par groupe : une catégorie repliée ne montre rien, et demander les visuels de vignettes que personne ne voit serait autant de requêtes pour rien. |
 
 | Donnée | Rôle |
 |---|---|
-| `LISTES_SUG` | La pagination d'une liste qui n'est pas un groupe du catalogue : celle du graphe et celle d'EDHREC, chacune sur sa page, avec son compte par défaut. |
+| `DEFAUT_SUG` | Le nombre de vignettes qu'une liste montre d'abord. |
+
+## js/sugGraphe.js
+
+La section du graphe : ce qui se branche sur les nœuds. *1 fonctions, 42 lignes, 2.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `blocGraphe(sel)` | — |
+
+## js/sugEdhrec.js
+
+La section EDHREC : ce que les decks recensés recommandent. *1 fonctions, 53 lignes, 2.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `blocEdhrec(sel)` | — |
+
+## js/sugCatalogue.js
+
+La section du catalogue : tout le classement. *1 fonctions, 35 lignes, 2.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `listeSuggestions(sel)` | — |
 
 ## js/suggestions.js
 
@@ -829,7 +858,7 @@ Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
 
 ## js/collection.js
 
-La section Collection. *6 fonctions, 126 lignes, 6.5 Ko.*
+La section Collection. *6 fonctions, 126 lignes, 6.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -920,7 +949,7 @@ Ce que le format exige, et l'équilibre des rôles. *6 fonctions, 102 lignes, 5.
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 230 lignes, 15 Ko.*
+La section Deck. *6 fonctions, 227 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1205,21 +1234,23 @@ Fenêtre « Filtres ». *10 fonctions, 207 lignes, 12 Ko.*
 
 ## js/fenAffichage.js
 
-Fenêtre « Affichage » de la collection. *8 fonctions, 139 lignes, 6.7 Ko.*
+Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 184 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `indexColonnes(n)` | — |
-| `resumeAffichage()` | La phrase qui dit, sous le bouton comme dans la fenêtre, ce qui est en vigueur : le réglage n'est plus visible dans la barre, il doit se lire quelque part. |
+| `resumeAffichage(section)` | La phrase qui dit, dans l'infobulle du bouton comme dans la fenêtre, ce qui est en vigueur pour une liste : le réglage n'est plus visible dans la barre, il doit se lire quelque part. |
 | `corpsAffichage()` | — |
 | `majFenetreAffichage()` | — |
-| `reglageAffichage(quoi, el)` | Les quatre réglages de la fenêtre, au brouillon : rien ne bouge dans la collection avant « Appliquer ». |
+| `reglageAffichage(quoi, el)` | Les quatre réglages de la fenêtre, au brouillon : rien ne bouge dans la liste avant « Appliquer ». |
 | `glisseColonnes(el)` | Le curseur des colonnes décoche « Auto » du seul fait qu'on s'en serve : imposer un nombre, c'est cesser de s'en remettre à la largeur. |
-| `appliquerAffichage()` | « Appliquer » verse les quatre réglages d'un coup. |
-| `openAffichageModal()` | — |
+| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les cinq listes : la vue là où elle existe, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité… |
+| `appliquerAffichage(partout)` | « Appliquer » verse le réglage d'un coup. Le groupement et le tri changent l'ordre des cartes : la pagination de la collection repart de sa première page, sinon la fin d'une liste rangée… |
+| `openAffichageModal(section)` | — |
 
 | Donnée | Rôle |
 |---|---|
+| `sectionAffichage` | La liste que la fenêtre ouverte règle. Il n'y en a qu'une à la fois, la fenêtre étant modale — comme le brouillon qu'elle tient. |
 | `COLONNES_IMPOSEES` | Les nombres de colonnes qu'on impose, « auto » mis à part : c'est la case à cocher qui porte ce choix-là, et le curseur ne parcourt que les autres. |
 | `positionColonnes` | La position du curseur quand « Auto » est cochée : l'état ne retient alors aucun nombre, et le curseur doit tout de même se poser quelque part — là où on l'avait laissé, sans quoi… |
 
@@ -1268,7 +1299,7 @@ Fenêtres d'export et d'effacement. *3 fonctions, 133 lignes, 6.8 Ko.*
 
 ## js/gestesVue.js
 
-Les gestes qui règlent la vue. *1 fonctions, 119 lignes, 4.4 Ko.*
+Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1276,7 +1307,7 @@ Les gestes qui règlent la vue. *1 fonctions, 119 lignes, 4.4 Ko.*
 
 ## js/gestesReglages.js
 
-Les fenêtres de réglage et leurs boutons. *1 fonctions, 126 lignes, 4.2 Ko.*
+Les fenêtres de réglage et leurs boutons. *1 fonctions, 118 lignes, 3.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1308,7 +1339,7 @@ Les gestes du graphe et des listes. *1 fonctions, 100 lignes, 3.1 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 282 lignes, 11 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 263 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|

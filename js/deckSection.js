@@ -131,8 +131,9 @@ function blocAnnexe(cle) {
     </div>
     ${entries.length
       ? rendGroupes('deck', groupeCartes(entries, S.groupes.deck, S.tris.deck), S.groupes.deck,
-          ents => S.view === 'grid' ? `<div class="grid">${ents.map(e => cardTile(e, cle)).join('')}</div>`
-                                    : `<div class="list">${ents.map(e => cardRow(e, cle)).join('')}</div>`,
+          ents => vueDe('deck') === 'grid'
+            ? `${ouvreGrille('deck', 'grid')}${ents.map(e => cardTile(e, cle)).join('')}</div>`
+            : `<div class="list">${ents.map(e => cardRow(e, cle)).join('')}</div>`,
           g => g.entrees.reduce((x, e) => x + e.qty, 0))
       : `<div class="empty">${n ? `Les filtres de l'en-tête masquent les ${n} carte(s) de cette liste.` : esc(a.vide)}</div>`}`;
 
@@ -188,11 +189,7 @@ function renderE() {
           const qte = a.reduce((x, l) => x + l.qty, 0);
           return qte ? `<button type="button" class="pill" data-act="wants" style="border-color:var(--bad);cursor:pointer" title="Cartes à acquérir : cliquer pour ouvrir la Wants list Cardmarket"><span class="dot" style="background:var(--bad)"></span> ${qte} à acheter · ${eur(spent())}</button>` : '';
         })()}
-        <div class="seg" style="margin-left:auto">
-          <button data-view="grid" aria-pressed="${S.view==='grid'}">Grille</button>
-          <button data-view="list" aria-pressed="${S.view==='list'}">Liste</button>
-        </div>
-        ${barreGroupeTri('deck')}
+        <span style="margin-left:auto">${boutonAffichage('deck')}</span>
         <button class="btn" data-act="addCard" data-cible="deck">Ajouter</button>
         <button class="btn" data-act="import" data-cible="deck">Importer MTGO</button>
         <button class="btn" data-act="exportDeck">Exporter</button>
@@ -208,8 +205,8 @@ function renderE() {
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       ${partieDeck('liste', 'Liste',
         `${n} carte(s)${masquees ? ` · ${masquees} masquée(s) par les filtres` : ''}${price ? ` · ${eur(price)}` : ''}${noteMultiple(mode)}`,
-        entries.length ? rendGroupes('deck', groupes, mode, ents => S.view==='grid'
-          ? `<div class="grid">${ents.map(e=>cardTile(e,'deck')).join('')}</div>`
+        entries.length ? rendGroupes('deck', groupes, mode, ents => vueDe('deck')==='grid'
+          ? `${ouvreGrille('deck', 'grid')}${ents.map(e=>cardTile(e,'deck')).join('')}</div>`
           : `<div class="list">${ents.map(e=>cardRow(e,'deck')).join('')}</div>`,
           g => g.entrees.reduce((a,e)=>a+e.qty,0))
         : (n ? `<div class="empty">Les filtres de l'en-tête masquent les ${n} carte(s) du deck. Élargissez-les ou effacez-les pour revoir la liste.</div>`

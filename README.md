@@ -32,7 +32,7 @@ js/                 modules, chargés dans cet ordre :
   retenue.js        ce qui reste après les filtres : légalité, couleurs
   catalogueEtat.js  l'archive en mémoire, et les nœuds qu'elle touche
   groupes.js        grouper et trier les listes
-  barreGroupes.js   l'enveloppe d'un groupe, et les trois menus
+  barreGroupes.js   l'enveloppe d'un groupe, et le bouton « Affichage »
   marche.js         Cardmarket
 
   — ce qui vient du dehors —
@@ -59,7 +59,10 @@ js/                 modules, chargés dans cet ordre :
   vivier.js         le vivier des candidates, et son empreinte
   sugOrdre.js       l'ordre gelé des propositions
   sugCommandants.js les commandants du deck, en tête de l'onglet EDHREC
-  sugListes.js      les trois lectures d'une même sélection
+  sugListes.js      le fond commun des trois listes de propositions
+  sugGraphe.js      la section du graphe : ce qui se branche sur les nœuds
+  sugEdhrec.js      la section EDHREC : ce que les decks recensés recommandent
+  sugCatalogue.js   la section du catalogue : tout le classement
   suggestions.js    les trois sections des propositions
   collection.js     la section Collection
   fenImport.js      importer une liste de cartes
@@ -90,7 +93,7 @@ js/                 modules, chargés dans cet ordre :
   fenParametres.js  sauvegarde locale, collection, catalogue
   fenBudget.js      budget et achats
   fenFiltres.js     filtres de la collection
-  fenAffichage.js   liste ou grille, colonnes, groupement et tri de la collection
+  fenAffichage.js   vue, colonnes, groupement et tri d'une liste de cartes
   fenListes.js      listes déroulantes des archétypes et des éditions
   boiteCatalogue.js progression du chargement de l'archive Scryfall
   fenExport.js      export du deck, liste d'achats, effacement
@@ -272,15 +275,31 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   sans style : une carte possédée en quatre exemplaires dont un est monté n'est pas `zero`, et une
   carte possédée à zéro l'est sans être au deck.
 
-- La mise en page de la collection — liste ou grille, nombre de colonnes, groupement, tri — se règle
-  dans la fenêtre « Affichage » (`js/fenAffichage.js`), ouverte par le bouton du même nom. Ces quatre
-  réglages occupaient la barre de la section en quatre contrôles posés entre les boutons d'action :
-  la ligne débordait sur un écran étroit, et chaque geste repeignait aussitôt toute la collection.
-  La fenêtre les prend au brouillon et n'agit qu'à « Appliquer » — on choisit les quatre d'un coup,
-  et la collection n'est redessinée qu'une fois. Le bouton en porte le résumé dans son infobulle,
-  le réglage n'étant plus visible dans la barre. Le deck, le catalogue et EDHREC gardent les leurs
-  dans leur barre, où ils agissent toujours au premier geste : la fenêtre ne règle que la collection.
-  `S.view` est pourtant commun à la collection et au deck — « Appliquer » repeint donc les deux.
+- La mise en page d'une liste de cartes — vue, nombre de colonnes, groupement, tri — se règle dans sa
+  fenêtre « Affichage » (`js/fenAffichage.js`), ouverte par le bouton du même nom que porte sa barre.
+  Les cinq listes de l'atelier en ont une : la collection, le deck (avec ses listes annexes), les
+  pistes du graphe, les recommandations d'EDHREC, le catalogue — `LISTES_AFFICHAGE` (`js/etat.js`)
+  les nomme, et dit ce que chacune sait montrer. Ces réglages occupaient les barres en quatre ou cinq
+  contrôles posés entre les boutons d'action, six dans celle du deck : les lignes débordaient sur un
+  écran étroit, et chaque geste repeignait aussitôt des centaines de vignettes. La fenêtre les prend
+  au brouillon et n'agit qu'à « Appliquer » — on choisit tout d'un coup, et la liste n'est redessinée
+  qu'une fois. Le bouton en porte le résumé dans son infobulle, le réglage n'étant plus visible dans
+  la barre.
+- « Appliquer partout », dans la même fenêtre, pose le réglage choisi sur les cinq listes : c'est le
+  geste de qui veut tout l'atelier rangé de la même façon, au lieu d'ouvrir cinq fois la même
+  fenêtre. Chaque liste ne retient que ce qu'elle sait montrer — la vue liste n'existe que pour la
+  collection et le deck, les vignettes des propositions n'ayant pas de forme en ligne, et un tri
+  qu'une liste n'offre pas (`TRIS_SECTION`, `js/groupes.js` — le taux d'inclusion d'EDHREC pour la
+  collection, la quantité pour une proposition) la laisse avec le sien.
+- La vue appartient à la liste (`S.vues`), non plus à l'atelier : un seul champ `view` obligeait la
+  collection et le deck à la même, alors qu'on lit volontiers l'une en vignettes et l'autre en
+  lignes. Une sauvegarde d'hier ne porte que `view` : elle devient celle des deux.
+- Les pistes du graphe se groupent et se trient comme le reste depuis qu'elles ont leur fenêtre :
+  elles ne montraient que l'ordre de la notation, et trente pistes autour de deux nœuds se lisent
+  mieux rangées par type ou par coût. La pagination d'une catégorie porte désormais sa section —
+  `cleLimiteSug()` (`js/sugListes.js`) rend « graphe », « edhrec » ou « suggestions » pour une liste
+  sans groupe, « section:catégorie » pour une catégorie —, sans quoi « Créature » partagerait son
+  compte entre les trois pages.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
 - La fiche d'une carte feuillette ses éditions, sous deux listes. « Mes éditions » vient de `card.impressions`,

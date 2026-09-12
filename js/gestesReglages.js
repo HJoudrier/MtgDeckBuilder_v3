@@ -17,15 +17,16 @@ function gestesReglages(act, b) {
     return true;
   }
 
-  /* Les quatre réglages de mise en page de la collection, réunis en fenêtre :
-     ils n'agissent qu'à « Appliquer », comme les filtres. */
+  /* Les réglages de mise en page d'une liste, réunis en fenêtre : ils
+     n'agissent qu'à « Appliquer », comme les filtres. Le bouton porte la liste
+     qu'il règle — les cinq ont la leur. */
   if (act === 'affichage') {
-    openAffichageModal();
+    openAffichageModal(b.dataset.liste);
     return true;
   }
 
-  if (act === 'appliquerAffichage') {
-    appliquerAffichage();
+  if (act === 'appliquerAffichage' || act === 'appliquerAffichagePartout') {
+    appliquerAffichage(act === 'appliquerAffichagePartout');
     return true;
   }
 
@@ -80,32 +81,23 @@ function gestesReglages(act, b) {
 
   if (act === 'pageType') {
     const t = b.dataset.type, pas = b.dataset.pas;
-    const all = currentSuggestions();
-    /* Trois familles de listes paginées, chacune sachant dire son total et son
-       compte par défaut :
-       — les deux listes courtes du graphe et d'EDHREC sans groupe
-         (`LISTES_SUG`, js/sugListes.js) ;
-       — les catégories d'EDHREC quand cet onglet est groupé, sous des clés
-         préfixées « edhrec: » pour ne pas partager leur compte avec celles du
-         catalogue ;
-       — les catégories du catalogue, où le groupe est celui du rangement en
-         cours, non plus le seul type principal. */
-    let total = 0, defaultLim = 6;
-    if (LISTES_SUG[t]) {
-      const sel = selectionSuggestions();
-      total = t === 'graphe' ? sel.graphPicks.length : sel.edhrecPicks.length;
-      defaultLim = LISTES_SUG[t].defaut;
-    } else if (t.indexOf('edhrec:') === 0) {
-      const g = groupeCartes(selectionSuggestions().edhrecPicks, S.groupes.edhrec, null)
-        .find(x => cleLimiteEdhrec(x.id) === t);
-      total = g ? g.total : 0;
-    } else {
-      const g = groupeCartes(all, S.groupes.suggestions, null).find(x => x.id === t);
+    /* La clé dit tout : « graphe », « edhrec » ou « suggestions » pour une
+       liste sans groupe, et « section:catégorie » pour une catégorie de l'une
+       d'elles (`cleLimiteSug`, js/sugListes.js). La section donne la liste où compter,
+       le groupement en cours la catégorie où s'arrêter. */
+    const i = t.indexOf(':');
+    const section = i > 0 ? t.slice(0, i) : t;
+    const plat = i < 0;
+    const liste = listeSug(section, selectionSuggestions());
+    const defaut = defautSug(section, plat);
+    let total = liste.length;
+    if (!plat) {
+      const g = groupeCartes(liste, S.groupes[section], null).find(x => cleLimiteSug(section, x.id) === t);
       total = g ? g.total : 0;
     }
     if (pas === 'tout') S.limiteType[t] = total;
-    else if (pas === 'reduire') S.limiteType[t] = defaultLim;
-    else S.limiteType[t] = Math.min(total, (S.limiteType[t] || defaultLim) + parseInt(pas, 10));
+    else if (pas === 'reduire') S.limiteType[t] = defaut;
+    else S.limiteType[t] = Math.min(total, (S.limiteType[t] || defaut) + parseInt(pas, 10));
     refreshSuggestions();
     return true;
   }

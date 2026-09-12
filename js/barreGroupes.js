@@ -1,10 +1,10 @@
 /* =====================================================================
-   js/barreGroupes.js — L'enveloppe d'un groupe, et les trois menus
+   js/barreGroupes.js — L'enveloppe d'un groupe, et le bouton « Affichage »
 
-   Le pli d'une catégorie, son en-tête et son badge, puis les menus identiques
-   dans les trois sections : grouper, trier, et le nombre de cartes par ligne.
-   Chacun porte sa section en attribut — c'est elle qui dit quel réglage
-   change, chacune gardant le sien.
+   Le pli d'une catégorie, son en-tête et son badge, puis ce que toute liste de
+   cartes pose dans sa barre : le bouton qui ouvre sa fenêtre d'affichage, la
+   vue qu'elle suit et l'ouverture de sa grille. Chacun porte sa liste en
+   attribut — c'est elle qui dit quel réglage change, chacune gardant le sien.
    ===================================================================== */
 
 /* ---------------------------------------------------------------------
@@ -81,48 +81,42 @@ function noteMultiple(modeId) {
 
    Les grilles posaient autant de colonnes que la largeur en permettait,
    chacune d'une largeur minimale : sur un téléphone, cela fait deux ou trois
-   vignettes par ligne, où l'on ne lit plus rien. Le menu laisse imposer un
-   nombre — une seule carte par ligne pour la lire vraiment, deux ou trois
-   pour comparer, davantage pour embrasser la liste d'un coup d'œil.
+   vignettes par ligne, où l'on ne lit plus rien. Le curseur de la fenêtre
+   d'affichage laisse imposer un nombre — une seule carte par ligne pour la
+   lire vraiment, deux ou trois pour comparer, davantage pour embrasser la
+   liste d'un coup d'œil.
 
    « Auto » est le choix de départ : c'est le comportement d'avant, et rien ne
    change pour qui n'y touche pas. Comme le groupement et le tri, le réglage
-   appartient à la liste qui le porte — la collection et le catalogue ont
-   chacun le sien — et se conserve d'une séance à l'autre.
+   appartient à la liste qui le porte — les cinq ont chacune le sien — et se
+   conserve d'une séance à l'autre.
    --------------------------------------------------------------------- */
 function colonnesDe(section) {
   const n = (S.colonnes && S.colonnes[section]) | 0;
   return COLONNES.indexOf(n) >= 0 ? n : 0;
 }
 
-function menuColonnes(section) {
-  const n = colonnesDe(section);
-  return `<select data-colonnes="${section}" aria-label="Nombre de cartes par ligne"
-      title="Nombre de cartes par ligne, quelle que soit la largeur de l'écran">
-    ${COLONNES.map(v =>
-      `<option value="${v}" ${n === v ? 'selected' : ''}>Colonnes : ${v === 0 ? 'auto' : v}</option>`).join('')}
-  </select>`;
-}
-
 /* L'ouverture d'une grille : la classe et la variable qui portent le choix,
    ou la grille d'avant si l'on s'en remet à la largeur. `base` est la classe
-   de la grille — `grid` pour les tuiles de la collection, `sugrid` pour les
-   vignettes du catalogue. */
+   de la grille — `grid` pour les tuiles de la collection et du deck, `sugrid`
+   pour les vignettes des trois listes de propositions. */
 function ouvreGrille(section, base) {
   const n = colonnesDe(section);
   return n > 0 ? `<div class="${base} cols" style="--cols:${n}">` : `<div class="${base}">`;
 }
 
-function barreGroupeTri(section) {
-  const g = (S.groupes && S.groupes[section]) || 'aucun';
-  const t = (S.tris && S.tris[section]) || 'alpha';
-  const tris = TRIS_SECTION[section] || Object.keys(TRIS);
-  return `<select data-groupe="${section}" title="Ranger les cartes par catégorie">
-      ${Object.keys(GROUPES).map(k =>
-        `<option value="${k}" ${g === k ? 'selected' : ''}>Grouper : ${GROUPES[k].label}</option>`).join('')}
-    </select>
-    <select data-tri="${section}" title="Ordonner les cartes à l'intérieur de chaque groupe">
-      ${tris.map(k =>
-        `<option value="${k}" ${t === k ? 'selected' : ''}>Trier : ${TRIS[k].label}</option>`).join('')}
-    </select>`;
+/* La vue d'une liste : ses vignettes en grille, ou une ligne par carte. Les
+   trois listes de propositions n'en ont pas — leurs vignettes n'ont pas de
+   forme en ligne —, et la grille est la réponse par défaut. */
+function vueDe(section) {
+  return (S.vues && S.vues[section]) === 'list' ? 'list' : 'grid';
+}
+
+/* Le bouton que toute liste de cartes pose dans sa barre : il ouvre sa
+   fenêtre d'affichage, et son infobulle dit le réglage en vigueur — celui-ci
+   n'étant plus visible dans la barre. Cinq contrôles y tenaient autrefois
+   par liste ; la barre du deck en portait six avec ses bascules. */
+function boutonAffichage(section) {
+  return `<button class="btn" data-act="affichage" data-liste="${section}"
+    title="Régler l'affichage : ${esc(resumeAffichage(section))}">Affichage</button>`;
 }

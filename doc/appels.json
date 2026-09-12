@@ -41,6 +41,9 @@
   "sugOrdre.js",
   "sugCommandants.js",
   "sugListes.js",
+  "sugGraphe.js",
+  "sugEdhrec.js",
+  "sugCatalogue.js",
   "suggestions.js",
   "collection.js",
   "fenImport.js",
@@ -1663,7 +1666,7 @@
   {
    "nom": "scoreEntree",
    "fichier": "groupes.js",
-   "ligne": 166,
+   "ligne": 167,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1675,7 +1678,7 @@
   {
    "nom": "notesCollectionAJour",
    "fichier": "groupes.js",
-   "ligne": 185,
+   "ligne": 186,
    "chargement": false,
    "appelle": [
     "signatureSuggestions"
@@ -1689,7 +1692,7 @@
   {
    "nom": "notesCollection",
    "fichier": "groupes.js",
-   "ligne": 189,
+   "ligne": 190,
    "chargement": false,
    "appelle": [
     "contexteEvaluation",
@@ -1706,7 +1709,7 @@
   {
    "nom": "groupeCartes",
    "fichier": "groupes.js",
-   "ligne": 210,
+   "ligne": 211,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1714,6 +1717,7 @@
    "appeleePar": [
     "blocAnnexe",
     "blocEdhrec",
+    "blocGraphe",
     "gestesReglages",
     "listeSuggestions",
     "renderB",
@@ -1745,8 +1749,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "renderB",
-    "visuelsCatalogue",
-    "visuelsEdhrec"
+    "visuelsGroupes"
    ]
   },
   {
@@ -1761,8 +1764,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "blocEdhrec",
-    "listeSuggestions",
+    "listesSug",
     "rendGroupes"
    ]
   },
@@ -1792,6 +1794,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "blocEdhrec",
+    "blocGraphe",
     "listeSuggestions",
     "renderB",
     "renderE"
@@ -1800,37 +1803,23 @@
   {
    "nom": "colonnesDe",
    "fichier": "barreGroupes.js",
-   "ligne": 93,
+   "ligne": 94,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "appliquerAffichage",
     "corpsAffichage",
-    "menuColonnes",
     "openAffichageModal",
     "ouvreGrille",
     "resumeAffichage"
    ]
   },
   {
-   "nom": "menuColonnes",
-   "fichier": "barreGroupes.js",
-   "ligne": 98,
-   "chargement": false,
-   "appelle": [
-    "colonnesDe"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "listeSuggestions"
-   ]
-  },
-  {
    "nom": "ouvreGrille",
    "fichier": "barreGroupes.js",
-   "ligne": 111,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "colonnesDe"
@@ -1838,21 +1827,45 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "listeSuggestions",
-    "renderB"
+    "blocAnnexe",
+    "corpsSug",
+    "renderB",
+    "renderE"
    ]
   },
   {
-   "nom": "barreGroupeTri",
+   "nom": "vueDe",
    "fichier": "barreGroupes.js",
-   "ligne": 116,
+   "ligne": 111,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "appliquerAffichage",
+    "blocAnnexe",
+    "corpsAffichage",
+    "renderB",
+    "renderE",
+    "resumeAffichage"
+   ]
+  },
+  {
+   "nom": "boutonAffichage",
+   "fichier": "barreGroupes.js",
+   "ligne": 119,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "resumeAffichage"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
     "blocEdhrec",
+    "blocGraphe",
     "listeSuggestions",
+    "renderB",
     "renderE"
    ]
   },
@@ -2398,7 +2411,6 @@
    "appelleParHtml": [],
    "appeleePar": [
     "activerOnglet",
-    "app.js (chargement)",
     "appliqueCatalogueAuxCartes",
     "appliquerAffichage",
     "brancherCatalogue",
@@ -2434,7 +2446,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 240,
+   "ligne": 246,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4059,7 +4071,6 @@
    "appelleParHtml": [],
    "appeleePar": [
     "classementDecale",
-    "gestesReglages",
     "graphCards",
     "suggestionsAffichees"
    ]
@@ -4239,7 +4250,7 @@
   {
    "nom": "selectionSuggestions",
    "fichier": "sugListes.js",
-   "ligne": 22,
+   "ligne": 29,
    "chargement": false,
    "appelle": [
     "suggestionsAffichees"
@@ -4255,9 +4266,64 @@
    ]
   },
   {
+   "nom": "listeSug",
+   "fichier": "sugListes.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages"
+   ]
+  },
+  {
+   "nom": "defautSug",
+   "fichier": "sugListes.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages",
+    "listesSug",
+    "visuelsGroupes"
+   ]
+  },
+  {
+   "nom": "cleLimiteSug",
+   "fichier": "sugListes.js",
+   "ligne": 60,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsSug",
+    "gestesReglages",
+    "maxSug"
+   ]
+  },
+  {
+   "nom": "maxSug",
+   "fichier": "sugListes.js",
+   "ligne": 64,
+   "chargement": false,
+   "appelle": [
+    "cleLimiteSug"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsSug",
+    "visuelsGroupes"
+   ]
+  },
+  {
    "nom": "paginationListe",
    "fichier": "sugListes.js",
-   "ligne": 41,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "esc"
@@ -4265,14 +4331,49 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "corpsSug"
+   ]
+  },
+  {
+   "nom": "corpsSug",
+   "fichier": "sugListes.js",
+   "ligne": 82,
+   "chargement": false,
+   "appelle": [
+    "cleLimiteSug",
+    "maxSug",
+    "ouvreGrille",
+    "paginationListe",
+    "sugRow"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "listesSug"
+   ]
+  },
+  {
+   "nom": "listesSug",
+   "fichier": "sugListes.js",
+   "ligne": 92,
+   "chargement": false,
+   "appelle": [
+    "corpsSug",
+    "defautSug",
+    "enveloppeGroupe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocEdhrec",
     "blocGraphe",
-    "corpsEdhrec"
+    "listeSuggestions"
    ]
   },
   {
    "nom": "renvoiCatalogue",
    "fichier": "sugListes.js",
-   "ligne": 53,
+   "ligne": 111,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4283,121 +4384,9 @@
    ]
   },
   {
-   "nom": "blocGraphe",
-   "fichier": "sugListes.js",
-   "ligne": 61,
-   "chargement": false,
-   "appelle": [
-    "esc",
-    "noeudsActifs",
-    "paginationListe",
-    "renvoiCatalogue",
-    "sugRow",
-    "visuelsSuggestions"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "renderG"
-   ]
-  },
-  {
-   "nom": "cleLimiteEdhrec",
-   "fichier": "sugListes.js",
-   "ligne": 88,
-   "chargement": false,
-   "appelle": [],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "corpsEdhrec",
-    "gestesReglages"
-   ]
-  },
-  {
-   "nom": "corpsEdhrec",
-   "fichier": "sugListes.js",
-   "ligne": 95,
-   "chargement": false,
-   "appelle": [
-    "cleLimiteEdhrec",
-    "paginationListe",
-    "sugRow"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "blocEdhrec",
-    "visuelsEdhrec"
-   ]
-  },
-  {
-   "nom": "visuelsEdhrec",
-   "fichier": "sugListes.js",
-   "ligne": 105,
-   "chargement": false,
-   "appelle": [
-    "corpsEdhrec",
-    "groupePlie",
-    "visuelsSuggestions"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "blocEdhrec"
-   ]
-  },
-  {
-   "nom": "blocEdhrec",
-   "fichier": "sugListes.js",
-   "ligne": 122,
-   "chargement": false,
-   "appelle": [
-    "barreGroupeTri",
-    "commandantsSecondaires",
-    "corpsEdhrec",
-    "enveloppeGroupe",
-    "esc",
-    "eur",
-    "fmt",
-    "groupeCartes",
-    "noteMultiple",
-    "renvoiCatalogue",
-    "visuelsEdhrec"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "renderH"
-   ]
-  },
-  {
-   "nom": "listeSuggestions",
-   "fichier": "sugListes.js",
-   "ligne": 179,
-   "chargement": false,
-   "appelle": [
-    "bandeauReclassement",
-    "barreGroupeTri",
-    "enveloppeGroupe",
-    "esc",
-    "groupeCartes",
-    "menuColonnes",
-    "noteMultiple",
-    "ouvreGrille",
-    "sugRow",
-    "visuelsCatalogue"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "renderF"
-   ]
-  },
-  {
    "nom": "visuelsSuggestions",
    "fichier": "sugListes.js",
-   "ligne": 228,
+   "ligne": 120,
    "chargement": false,
    "appelle": [
     "queueScryfall"
@@ -4407,24 +4396,89 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
-    "blocGraphe",
-    "visuelsCatalogue",
-    "visuelsEdhrec"
+    "visuelsGroupes"
    ]
   },
   {
-   "nom": "visuelsCatalogue",
+   "nom": "visuelsGroupes",
    "fichier": "sugListes.js",
-   "ligne": 237,
+   "ligne": 129,
    "chargement": false,
    "appelle": [
+    "defautSug",
     "groupePlie",
+    "maxSug",
     "visuelsSuggestions"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "blocEdhrec",
+    "blocGraphe",
     "listeSuggestions"
+   ]
+  },
+  {
+   "nom": "blocGraphe",
+   "fichier": "sugGraphe.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "boutonAffichage",
+    "esc",
+    "groupeCartes",
+    "listesSug",
+    "noeudsActifs",
+    "noteMultiple",
+    "renvoiCatalogue",
+    "visuelsGroupes"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderG"
+   ]
+  },
+  {
+   "nom": "blocEdhrec",
+   "fichier": "sugEdhrec.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "boutonAffichage",
+    "commandantsSecondaires",
+    "esc",
+    "eur",
+    "fmt",
+    "groupeCartes",
+    "listesSug",
+    "noteMultiple",
+    "renvoiCatalogue",
+    "visuelsGroupes"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderH"
+   ]
+  },
+  {
+   "nom": "listeSuggestions",
+   "fichier": "sugCatalogue.js",
+   "ligne": 9,
+   "chargement": false,
+   "appelle": [
+    "bandeauReclassement",
+    "boutonAffichage",
+    "groupeCartes",
+    "listesSug",
+    "noteMultiple",
+    "visuelsGroupes"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderF"
    ]
   },
   {
@@ -4643,6 +4697,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliquerAffichage",
     "gestesReglages"
    ]
   },
@@ -4768,10 +4823,10 @@
    "ligne": 73,
    "chargement": false,
    "appelle": [
+    "boutonAffichage",
     "cardRow",
     "cardTile",
     "collectionCards",
-    "esc",
     "filtered",
     "filtresActifs",
     "groupeCartes",
@@ -4782,16 +4837,14 @@
     "queueScryfall",
     "rendGroupes",
     "renderTop",
-    "resumeAffichage"
+    "vueDe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "app.js (chargement)",
     "appliquerAffichage",
     "gestesDeck",
     "gestesGraphe",
-    "gestesVue",
     "renderAll",
     "runScryQueue"
    ]
@@ -5470,8 +5523,10 @@
     "esc",
     "eur",
     "groupeCartes",
+    "ouvreGrille",
     "partieDeck",
-    "rendGroupes"
+    "rendGroupes",
+    "vueDe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5482,13 +5537,13 @@
   {
    "nom": "renderE",
    "fichier": "deckSection.js",
-   "ligne": 145,
+   "ligne": 146,
    "chargement": false,
    "appelle": [
     "aAcheter",
     "annexeSize",
-    "barreGroupeTri",
     "blocAchats",
+    "boutonAffichage",
     "cardRow",
     "cardTile",
     "carteFiltree",
@@ -5507,11 +5562,13 @@
     "legality",
     "ligneGameChangers",
     "noteMultiple",
+    "ouvreGrille",
     "partieDeck",
     "queueScryfall",
     "rendGroupes",
     "spent",
     "targets",
+    "vueDe",
     "zoneCommandant"
    ],
    "appelleDiffere": [
@@ -5522,7 +5579,6 @@
    "appeleePar": [
     "app.js (chargement)",
     "appliquerAffichage",
-    "gestesVue",
     "renderAll",
     "runScryQueue"
    ]
@@ -5747,6 +5803,7 @@
     "blocEdhrec",
     "blocGraphe",
     "blocVersions",
+    "boutonAffichage",
     "cardRow",
     "cardTile",
     "champBudget",
@@ -5773,7 +5830,6 @@
     "ligneGameChangers",
     "listeArchetypesHTML",
     "listeSetsHTML",
-    "listeSuggestions",
     "majApercu",
     "montrerApercu",
     "openAdd",
@@ -5784,7 +5840,6 @@
     "panneauEdhrec",
     "proposerMajCatalogue",
     "refCarte",
-    "renderB",
     "renderD",
     "renderE",
     "renderTop",
@@ -6091,6 +6146,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "appliquerAffichage",
     "corpsAffichage",
     "corpsBudget",
     "corpsCatalogue",
@@ -6117,6 +6173,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliquerAffichage",
     "gestesReglages",
     "gestesVue",
     "glisseColonnes",
@@ -6720,9 +6777,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "blocGraphe",
-    "corpsEdhrec",
-    "listeSuggestions"
+    "corpsSug"
    ]
   },
   {
@@ -7023,6 +7078,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliquerAffichage",
     "brancherCatalogue",
     "brancherRestauration",
     "chargerCatalogue",
@@ -7549,7 +7605,7 @@
   {
    "nom": "indexColonnes",
    "fichier": "fenAffichage.js",
-   "ligne": 23,
+   "ligne": 31,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7562,29 +7618,31 @@
   {
    "nom": "resumeAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 31,
+   "ligne": 39,
    "chargement": false,
    "appelle": [
-    "colonnesDe"
+    "colonnesDe",
+    "vueDe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "corpsAffichage",
-    "renderB"
+    "boutonAffichage",
+    "corpsAffichage"
    ]
   },
   {
    "nom": "corpsAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 39,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
     "colonnesDe",
     "esc",
     "indexColonnes",
-    "resumeAffichage"
+    "resumeAffichage",
+    "vueDe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -7596,7 +7654,7 @@
   {
    "nom": "majFenetreAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 81,
+   "ligne": 96,
    "chargement": false,
    "appelle": [
     "corpsAffichage"
@@ -7611,7 +7669,7 @@
   {
    "nom": "reglageAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 93,
+   "ligne": 108,
    "chargement": false,
    "appelle": [
     "majFenetreAffichage",
@@ -7626,7 +7684,7 @@
   {
    "nom": "glisseColonnes",
    "fichier": "fenAffichage.js",
-   "ligne": 107,
+   "ligne": 123,
    "chargement": false,
    "appelle": [
     "modifieBrouillon"
@@ -7638,16 +7696,35 @@
    ]
   },
   {
+   "nom": "verseAffichagePartout",
+   "fichier": "fenAffichage.js",
+   "ligne": 138,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliquerAffichage"
+   ]
+  },
+  {
    "nom": "appliquerAffichage",
    "fichier": "fenAffichage.js",
-   "ligne": 121,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
+    "avecBrouillon",
     "closeDialog",
+    "colonnesDe",
+    "modifieBrouillon",
+    "refreshSuggestions",
+    "renderAll",
     "renderB",
     "renderE",
     "scheduleSave",
-    "verseBrouillon"
+    "verseAffichagePartout",
+    "verseBrouillon",
+    "vueDe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -7658,7 +7735,7 @@
   {
    "nom": "openAffichageModal",
    "fichier": "fenAffichage.js",
-   "ligne": 131,
+   "ligne": 174,
    "chargement": false,
    "appelle": [
     "colonnesDe",
@@ -7938,9 +8015,7 @@
     "modifieBrouillon",
     "openFiltresModal",
     "recalculerAvecProgression",
-    "renderB",
     "renderD",
-    "renderE",
     "setsACharger"
    ],
    "appelleDiffere": [],
@@ -7962,10 +8037,11 @@
     "appliquerParametres",
     "apresReglage",
     "basculerRole",
-    "cleLimiteEdhrec",
-    "currentSuggestions",
+    "cleLimiteSug",
+    "defautSug",
     "groupeCartes",
     "interrompreCatalogue",
+    "listeSug",
     "modifieBrouillon",
     "openAffichageModal",
     "openBudgetModal",
@@ -8120,9 +8196,7 @@
     "refreshSuggestions",
     "reglageAffichage",
     "renderAll",
-    "renderB",
     "renderE",
-    "scheduleSave",
     "toast"
    ],
    "appelleDiffere": [
@@ -8134,7 +8208,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 251,
+   "ligne": 232,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",

@@ -153,6 +153,7 @@ const TRIS = {
 const TRIS_SECTION = {
   collection: ['cmc', 'alpha', 'price', 'type', 'qty', 'score'],
   deck:       ['type', 'cmc', 'alpha', 'price', 'qty', 'score'],
+  graphe:     ['score', 'cmc', 'alpha', 'price', 'type'],
   suggestions:['score', 'cmc', 'alpha', 'price', 'type'],
   edhrec:     ['inclusion', 'synergie', 'score', 'cmc', 'alpha', 'price', 'type']
 };

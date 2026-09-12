@@ -88,7 +88,7 @@ function snapshot() {
     groupes: S.groupes,
     tris: S.tris,
     filtres: S.filtres,
-    view: S.view,
+    vues: {...S.vues},
     onglet: S.onglet,
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
@@ -188,7 +188,13 @@ function restore(d) {
   });
   S.commander = d.commander && find(d.commander) ? d.commander : null;
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
-  ['colorMode','format','view','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  ['colorMode','format','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  /* La vue de chaque liste. Une sauvegarde d'hier n'en porte qu'une, `view`,
+     commune à la collection et au deck : elle devient celle des deux. */
+  if (d.vues && typeof d.vues === 'object')
+    Object.keys(S.vues).forEach(sec => { if (d.vues[sec]) S.vues[sec] = d.vues[sec]; });
+  else if (d.view)
+    Object.keys(S.vues).forEach(sec => { S.vues[sec] = d.view; });
   /* Le nombre de colonnes de chaque grille. Les premières sauvegardes n'en
      portaient qu'un, celui de la collection, en nombre nu : il devient le
      sien. Une valeur qui n'est plus offerte — une sauvegarde d'une autre

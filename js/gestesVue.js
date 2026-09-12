@@ -31,13 +31,6 @@ function gestesVue(act, b) {
     return true;
   }
 
-  if (b.dataset.view) {
-    S.view = b.dataset.view;
-    renderB();
-    renderE();
-    return true;
-  }
-
   /* Le nœud cliqué à même le graphe : une bascule, rien de plus. Les boutons
      qui nomment leur geste — « retirer », « isoler dans le graphe » — passent
      outre et gagnent leur propre branche, plus bas : sans cette réserve, la

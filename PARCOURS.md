@@ -295,34 +295,11 @@ sequenceDiagram
     end
 ```
 
-### 3.6 Grouper et trier
+### 3.6 Régler l'affichage d'une liste
 
-Le deck, le catalogue et EDHREC gardent leurs menus dans leur barre, et chaque choix agit au
-premier geste.
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as Utilisateur
-    participant APP as app.js
-    participant GRP as groupes.js
-    participant SEC as deck.js / suggestions.js
-
-    U->>APP: choix dans « Grouper : … » ou « Trier : … »
-    APP->>APP: S.groupes[liste] ou S.tris[liste] = valeur
-    alt section = deck
-        APP->>SEC: renderE()
-        SEC->>GRP: groupeCartes(list, mode, tri)
-        SEC->>GRP: rendGroupes(section, groupes, mode, rendu)
-    else liste = suggestions (catalogue) ou edhrec
-        APP->>SEC: refreshSuggestions()
-        Note over SEC: deux barres, deux réglages : le catalogue et EDHREC<br/>se rangent chacun de son côté — EDHREC offrant en plus<br/>le taux d'inclusion et la synergie. Le tri « score » ne retrie pas :<br/>la liste arrive déjà ordonnée, ou gelée
-    end
-    APP->>APP: scheduleSave()
-```
-
-La collection, elle, règle les quatre d'un coup dans la fenêtre « Affichage » : rien ne bouge avant
-« Appliquer ».
+Les cinq listes de cartes — la collection, le deck, les pistes du graphe, les recommandations
+d'EDHREC, le catalogue — se règlent chacune dans sa fenêtre « Affichage », et rien ne bouge avant
+« Appliquer ». « Appliquer partout » pose le même réglage sur les cinq.
 
 ```mermaid
 sequenceDiagram
@@ -331,12 +308,13 @@ sequenceDiagram
     participant APP as app.js
     participant AFF as fenAffichage.js
     participant BR as brouillon.js
-    participant COL as collection.js / deckSection.js
+    participant SEC as la section réglée
     participant GRP as groupes.js
 
-    U->>APP: clic « Affichage »
-    APP->>AFF: openAffichageModal()
-    AFF->>BR: ouvreBrouillon(['view','colonnes','groupes','tris'], majFenetreAffichage)
+    U->>APP: clic « Affichage » (le bouton porte sa liste)
+    APP->>AFF: openAffichageModal(liste)
+    AFF->>BR: ouvreBrouillon(['vues','colonnes','groupes','tris'], majFenetreAffichage)
+    Note over AFF: la fenêtre ne propose que ce que la liste sait montrer<br/>(LISTES_AFFICHAGE, js/etat.js) : la vue liste n'existe que<br/>pour la collection et le deck
     loop chaque réglage
         U->>APP: radio, case « Auto », curseur ou menu
         APP->>AFF: reglageAffichage(...) ou glisseColonnes(...)
@@ -346,25 +324,30 @@ sequenceDiagram
     end
     alt « Appliquer »
         U->>APP: clic « Appliquer »
-        APP->>AFF: appliquerAffichage()
+        APP->>AFF: appliquerAffichage(false)
         AFF->>BR: verseBrouillon()
-        opt le groupement ou le tri a changé
+        opt le groupement ou le tri de la collection a changé
             AFF->>AFF: S.limitB = PAGE
         end
-        AFF->>COL: renderB()
-        opt tri « score »
-            COL->>GRP: notesCollection(list)
-            Note over GRP: notée à la demande, mémorisée sous<br/>l'empreinte des suggestions
-        end
-        COL->>GRP: groupeCartes(), rendGroupes()
-        AFF->>COL: renderE()
-        Note over AFF: liste ou grille est commun au deck,<br/>qui est donc repeint aussi
-        AFF->>AFF: scheduleSave(), closeDialog()
+        AFF->>SEC: renderB(), renderE() ou refreshSuggestions()
+        SEC->>GRP: groupeCartes(), rendGroupes() ou listesSug()
+        AFF->>AFF: scheduleSave()
+    else « Appliquer partout »
+        U->>APP: clic « Appliquer partout »
+        APP->>AFF: appliquerAffichage(true)
+        AFF->>BR: modifieBrouillon(verseAffichagePartout(conf))
+        Note over AFF: la vue là où elle existe, le tri là où la liste<br/>l'offre (TRIS_SECTION) : une liste qui ne le<br/>connaît pas garde le sien
+        AFF->>BR: verseBrouillon()
+        AFF->>SEC: renderAll()
     else Annuler, la croix, Échap, l'arrière-plan
         APP->>BR: fermetureBrouillon()
         Note over BR: rien n'ayant été appliqué,<br/>il n'y a rien à défaire
     end
 ```
+
+Le tri par score ne retrie pas les propositions : la liste arrive dans l'ordre des scores, ou dans
+l'ordre gelé qu'un ajout a retenu. Le tri par score de la collection, lui, demande une notation —
+`renderB()` l'obtient par `filtered()`, et la mémorise sous l'empreinte des suggestions.
 
 ### 3.7 Replier une catégorie
 

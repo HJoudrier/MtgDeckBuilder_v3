@@ -77,6 +77,26 @@ function ongletDeSection(id) {
    sur une vignette de timbre. */
 const COLONNES = [0, 1, 2, 3, 4, 5, 6, 8];
 
+/* Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. La
+   fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre au-dessus de chacune
+   et n'y propose que ce qu'elle offre : la collection et le deck se lisent en
+   liste ou en grille, les trois listes de propositions n'ont que leurs
+   vignettes. Le reste — colonnes, groupement, tri — vaut partout, et c'est
+   cette table que « Appliquer partout » parcourt.
+
+   `titre` nomme sa fenêtre, `libelle` la liste dans une phrase ; le catalogue
+   garde la clé `suggestions`, comme partout où son rangement est en jeu. Les
+   listes annexes du deck — la réserve, l'étude — suivent le deck, dont elles
+   partagent le réglage. */
+const LISTES_AFFICHAGE = {
+  collection:  {titre:'Affichage de la collection', libelle:'la collection', vue:true},
+  deck:        {titre:'Affichage du deck',          libelle:'le deck',       vue:true},
+  graphe:      {titre:'Affichage des pistes du graphe', libelle:'les pistes du graphe'},
+  edhrec:      {titre:'Affichage des recommandations d\'EDHREC', libelle:'les recommandations d\'EDHREC'},
+  suggestions: {titre:'Affichage du catalogue',     libelle:'le catalogue'}
+};
+const CLES_AFFICHAGE = Object.keys(LISTES_AFFICHAGE);
+
 const RETOURNEES = new Set();
 let apercuEl = null;
 let apercuCardName = null;
@@ -87,7 +107,7 @@ const S = {
   sideboard: new Map(),      // la réserve, hors de la liste principale
   considering: new Map(),    // les cartes à l'étude, hors de la liste principale
   deckPlie: new Set(),       // les parties repliées de la section Deck : 'liste', 'sideboard', 'considering'
-  /* Les catégories repliées des trois sections, par clé « section|mode|groupe »
+  /* Les catégories repliées des cinq listes, par clé « section|mode|groupe »
      (js/groupes.js) : le pli d'un groupement ne vaut que pour lui. */
   groupesPlies: new Set(),
   commander: null,
@@ -102,23 +122,27 @@ const S = {
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
-  /* Le rangement des quatre listes qui montrent des cartes : chacune garde
+  /* Le rangement des cinq listes qui montrent des cartes : chacune garde
      son groupe et son tri. Les valeurs de départ reproduisent ce que les
      sections faisaient avant tout réglage — la collection triée par coût sans
      groupe, le deck et le catalogue groupés par type. Les recommandations
      d'EDHREC arrivent sans groupe et par taux d'inclusion décroissant :
      c'est l'ordre dans lequel le site lui-même les présente. */
-  groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun'},
-  tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion'},
-  view: 'grid',
-  /* Le nombre de colonnes des grilles qui l'offrent — la collection et le
-     catalogue —, chacune gardant le sien comme elle garde son groupement et
-     son tri. Zéro laisse le navigateur en poser autant que la largeur en
-     permet, ce qu'il a toujours fait ; une valeur choisie s'impose à toutes
-     les largeurs, et c'est ainsi qu'on lit une carte par ligne sur un
-     téléphone. Le catalogue est nommé « suggestions », comme partout où son
-     rangement est en jeu. */
-  colonnes: {collection:0, suggestions:0},
+  groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun', graphe:'aucun'},
+  tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion', graphe:'score'},
+  /* Liste ou grille, par liste et non plus pour tout l'atelier : un seul
+     champ obligeait la collection et le deck à la même vue, alors qu'on lit
+     volontiers l'une en vignettes et l'autre en lignes. Les trois listes de
+     propositions n'y figurent pas : leurs vignettes n'ont pas de forme en
+     ligne, et `LISTES_AFFICHAGE` le dit. */
+  vues: {collection:'grid', deck:'grid'},
+  /* Le nombre de colonnes de chaque grille, chacune gardant le sien comme elle
+     garde son groupement et son tri. Zéro laisse le navigateur en poser autant
+     que la largeur en permet, ce qu'il a toujours fait ; une valeur choisie
+     s'impose à toutes les largeurs, et c'est ainsi qu'on lit une carte par
+     ligne sur un téléphone. Le catalogue est nommé « suggestions », comme
+     partout où son rangement est en jeu. */
+  colonnes: {collection:0, deck:0, graphe:0, edhrec:0, suggestions:0},
   onglet: 'collection',      // l'onglet ouvert : une préférence d'affichage, conservée
   graphSource: 'collection',
   showImplicit: true,

@@ -8,7 +8,7 @@
    ===================================================================== */
 
 document.addEventListener('click', ev => {
-  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-view], [data-gsrc], [data-cmode], [data-color], [data-col]');
+  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-gsrc], [data-cmode], [data-color], [data-col]');
   if (!b) return;
 
   const act = b.dataset.act;
@@ -121,32 +121,13 @@ document.addEventListener('change', ev => {
     apresReglage('Filtre de légalité modifié : les cartes retenues et les suggestions sont recalculées.');
     return;
   }
-  /* La fenêtre « Affichage » de la collection : ses quatre réglages vont au
-     brouillon, et seule la fenêtre se redessine — la collection attend
-     « Appliquer ». */
+  /* La fenêtre « Affichage » d'une liste : ses réglages vont au brouillon, et
+     seule la fenêtre se redessine — la liste attend « Appliquer ». C'est le
+     seul chemin par lequel une vue, un nombre de colonnes, un groupement ou un
+     tri se règle : les menus posés dans les barres agissaient au premier geste
+     et repeignaient des centaines de vignettes à chaque essai. */
   if (t.dataset.aff) {
     reglageAffichage(t.dataset.aff, t);
-    return;
-  }
-  /* Le rangement d'une section : chacune garde le sien, et seule celle qu'on
-     règle est redessinée. Le tri par score de la collection peut demander une
-     notation : `renderB` s'en charge par `filtered()`, et la mémorise. */
-  /* Le nombre de colonnes d'une grille : rien n'est recalculé, la liste est
-     simplement redessinée — c'est une mise en page, non une sélection. */
-  if (t.dataset.colonnes) {
-    const liste = t.dataset.colonnes, n = parseInt(t.value, 10);
-    S.colonnes[liste] = COLONNES.indexOf(n) >= 0 ? n : 0;
-    if (liste === 'collection') renderB(); else refreshSuggestions();
-    scheduleSave();
-    return;
-  }
-  if (t.dataset.groupe || t.dataset.tri) {
-    const section = t.dataset.groupe || t.dataset.tri;
-    (t.dataset.groupe ? S.groupes : S.tris)[section] = t.value;
-    if (section === 'collection') { S.limitB = PAGE; renderB(); }
-    else if (section === 'deck') renderE();
-    else refreshSuggestions();
-    scheduleSave();
     return;
   }
   if (t.dataset.act === 'format') {

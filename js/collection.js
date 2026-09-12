@@ -102,7 +102,7 @@ function renderB() {
   if (bodyEl) {
     bodyEl.innerHTML = `
       <div class="row" style="margin-bottom:10px">
-        <button class="btn" data-act="affichage" title="Disposition, colonnes, groupement et tri — ${esc(resumeAffichage())}">Affichage</button>
+        ${boutonAffichage('collection')}
         <button class="btn" data-act="addCard">Ajouter</button>
         <button class="btn" data-act="import">Importer MTGO</button>
         ${unk ? `<button class="btn" data-act="enrich">Compléter ${unk} carte${unk>1?'s':''}</button>` : ''}
@@ -110,7 +110,7 @@ function renderB() {
       </div>
       <div class="small muted" style="margin-bottom:8px">${list.length} carte(s) différente(s) retenue(s) sur ${collectionCards().length} · ${shown} exemplaires sur ${total} dans la collection · ${ligneCausesCollection()}${rest>0?` · <b>${page.length} affichées</b> ici, les autres au bouton du bas`:''}${noteMultiple(mode)}</div>
       ${unk ? `<div class="warnbox">${unk} carte${unk>1?'s ont':' a'} été importée${unk>1?'s':''} sans coût de mana ni texte : leur couleur, leur courbe et leurs capacités restent inconnues tant qu'elles ne sont pas complétées.</div>` : ''}
-      ${pageGroupes.length ? rendGroupes('collection', pageGroupes, mode, ents => S.view === 'grid'
+      ${pageGroupes.length ? rendGroupes('collection', pageGroupes, mode, ents => vueDe('collection') === 'grid'
         ? `${ouvreGrille('collection', 'grid')}${ents.map(e => cardTile(e, 'collection')).join('')}</div>`
         : `<div class="list">${ents.map(e => cardRow(e, 'collection')).join('')}</div>`)
         : (total === 0
