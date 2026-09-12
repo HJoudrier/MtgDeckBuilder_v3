@@ -44,7 +44,7 @@ function noterLegalArchive(c, rec) {
 }
 
 /* Ce que l'archive sait des éditions d'une carte, gardé sur la carte pour que
-   le filtre par set réponde sans réseau. `setsCarte()` (js/etat.js) le réunit
+   le filtre par set réponde sans réseau. `setsCarte()` (js/archetypesSets.js) le réunit
    à ce que Scryfall rapporte et aux éditions possédées. */
 function noterSetsArchive(c, rec) {
   const codes = String(rec[CH.SET] || '').split(',').filter(Boolean);

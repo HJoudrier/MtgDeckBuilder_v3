@@ -3,7 +3,7 @@
 
    La liste des thèmes tient en une requête ; les cartes d'un thème ne sont
    cherchées qu'à sa première utilisation. Le tout alimente `ARCH_BASE`
-   (js/etat.js) et dort dans IndexedDB. EDHREC ne publiant aucun manifeste
+   (js/archetypesSets.js) et dort dans IndexedDB. EDHREC ne publiant aucun manifeste
    daté, la liste est relue une fois par semaine et n'est remplacée que si
    elle diffère vraiment.
    ===================================================================== */

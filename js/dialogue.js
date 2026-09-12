@@ -8,7 +8,7 @@
 
 /* `entete` : un entête tout fait, quand la fenêtre en veut un autre que le
    titre suivi de sa croix — c'est celui de la fiche d'une carte, où deux
-   boutons de parcours encadrent le nom (`enteteFiche`, js/deck.js). Toute
+   boutons de parcours encadrent le nom (`enteteFiche`, js/ficheParcours.js). Toute
    fenêtre garde ses autres sorties : Échap, l'arrière-plan, le pied. */
 function openDialog(title, bodyHTML, actionsHTML, grande, entete) {
   const dlg = document.getElementById('dlg');

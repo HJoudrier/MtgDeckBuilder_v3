@@ -35,6 +35,17 @@ function estGameChanger(card) {
   return GC_BASE.noms.has(norm(card.name)) || GC_BASE.noms.has(norm(frontFace(card.name)));
 }
 
+/* Légalité d'une carte telle que Scryfall la publie, réduite aux formats que
+   l'atelier connaît : une chaîne de lettres — « c » pour Commander, « s » pour
+   Standard. La chaîne vide dit « légale dans aucun des deux » ; `undefined`
+   dit « nous l'ignorons », ce qui n'est pas la même chose et ne doit jamais
+   faire écarter une carte. */
+function codeLegalite(legalities) {
+  if (!legalities || typeof legalities !== 'object') return undefined;
+  return (legalities.commander === 'legal' ? 'c' : '')
+       + (legalities.standard === 'legal' ? 's' : '');
+}
+
 /* Légalité d'une carte dans le format en cours. Trois réponses, pas deux :
    `true`, `false`, ou `null` quand nous l'ignorons — carte que ni l'archive ni
    Scryfall n'ont renseignée. Une carte qu'on ne sait pas juger n'est ni

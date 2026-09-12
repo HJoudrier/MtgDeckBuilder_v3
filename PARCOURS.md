@@ -81,7 +81,7 @@ sequenceDiagram
     participant CARTES as cartes.js
     participant STOCK as stockage.js
     participant UI as interface
-    participant EXT as externes.js
+    participant EXT as catalogue.js
 
     NAV->>APP: DOMContentLoaded
     APP->>APP: demarrer()
@@ -117,7 +117,7 @@ sequenceDiagram
     participant SUG as suggestions.js
     participant DECK as deck.js
     participant UI as interface
-    participant EXT as externes.js
+    participant EXT as catalogue.js
     participant STOCK as stockage.js
     participant S as S (état)
 
@@ -218,7 +218,7 @@ sequenceDiagram
     participant APP as app.js
     participant UI as interface
     participant S as S (état)
-    participant EXT as externes.js
+    participant EXT as catalogue.js
     participant SUG as suggestions.js
 
     U->>APP: clic sur la pastille « Filtres »
@@ -268,7 +268,7 @@ sequenceDiagram
     participant UI as interface
     participant SUG as suggestions.js
     participant ETAT as etat.js
-    participant EXT as externes.js
+    participant EXT as catalogue.js
     participant MARCHE as marche.js
 
     UI->>SUG: prepareSuggestions(onProgress)
@@ -511,8 +511,8 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 
 | Mémo | Ce qu'il garde | Son empreinte | Ce qui la change |
 |---|---|---|---|
-| `CAND` (`js/externes.js`) | Le vivier tiré du catalogue | `signatureCandidats()` | Format, couleurs, filtres, prix maximum, plafond des candidates, légalité, effets isolés |
-| `SUG_MEMO` (`js/suggestions.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget, `MAJ_CARTES`, les données EDHREC |
+| `CAND` (`js/candidats.js`) | Le vivier tiré du catalogue | `signatureCandidats()` | Format, couleurs, filtres, prix maximum, plafond des candidates, légalité, effets isolés |
+| `SUG_MEMO` (`js/vivier.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget, `MAJ_CARTES`, les données EDHREC |
 | `NOTES_COLLECTION` (`js/groupes.js`) | Les notes de la collection, pour le tri par score | `signatureSuggestions()` | Les mêmes |
 
 Deux conséquences pratiques :
@@ -524,7 +524,7 @@ Deux conséquences pratiques :
   redessinent, et rien de plus. Seul le premier tri par score de la collection paie une notation,
   une fois.
 
-`invaliderCandidats()` (`js/externes.js`) vide le premier mémo à la main, quand un réglage
+`invaliderCandidats()` (`js/candidats.js`) vide le premier mémo à la main, quand un réglage
 change le vivier sans que l'empreinte suffise à le dire. `apresReglage()` l'appelle pour tout
 réglage venu d'une fenêtre, et `degeleSuggestions()` lève au passage l'ordre gelé : un nouveau
 filtre demande une autre liste, pas l'ancienne dans son ancien ordre.

@@ -16,22 +16,61 @@ outils/genDoc.js    écrit doc/fonctions.md à partir des sources
 js/                 modules, chargés dans cet ordre :
 
   — le fond —
-  effets.js         lecture des effets des cartes
-  cartes.js         base de cartes
+  reglesEffets.js   le vocabulaire du graphe : nœuds, effets, déclencheurs
+  effets.js         qualifier un déclencheur, un effet, et les accorder
+  synergies.js      ce qu'une carte apporte à une autre
+  cartesBrutes.js   la base livrée avec l'atelier
+  analyse.js        lire une carte : coût, capacités, déclencheurs, effets
+  archetypesLibelles.js  le nom français des thèmes EDHREC
+  categories.js     les rôles d'une carte
+  impressions.js    les éditions d'une carte, et celle qu'on possède
+  cartes.js         la base de cartes et ses index
   liens.js          interaction précise ou déclencheur large
-  etat.js           état et filtrage
+  etat.js           l'état : `S` et les tables de l'atelier
+  archetypesSets.js deux vocabulaires venus du dehors, et leurs filtres
+  filtres.js        les critères de la fenêtre « Filtres »
+  retenue.js        ce qui reste après les filtres : légalité, couleurs
+  catalogueEtat.js  l'archive en mémoire, et les nœuds qu'elle touche
   groupes.js        grouper et trier les listes
+  barreGroupes.js   l'enveloppe d'un groupe, et les trois menus
   marche.js         Cardmarket
-  scryfall.js       accès à Scryfall
-  stockage.js       sauvegarde locale
-  externes.js       EDHREC et catalogue Scryfall
+
+  — ce qui vient du dehors —
+  symboles.js       les symboles de mana
+  scryfallApplique.js  verser une réponse de Scryfall dans une carte
+  scryfall.js       la file d'attente vers Scryfall
+  recherches.js     les recherches nommées chez Scryfall
+  stockage.js       la sauvegarde locale
+  fenSauvegarde.js  les sections « Sauvegarde » et « Catalogue »
+  idb.js            le magasin IndexedDB
+  edhrec.js         les statistiques d'EDHREC pour un commandant
+  edhrecForme.js    deviner la forme des pages de thèmes d'EDHREC
+  edhrecThemes.js   l'index des thèmes EDHREC
+  sets.js           les sets publiés par Scryfall
+  gameChangers.js   la liste des « Game Changers »
+  archive.js        lire l'archive Scryfall
+  catalogue.js      tenir le catalogue à jour
+  candidats.js      des enregistrements de l'archive aux cartes candidates
 
   — les sections —
   graphe.js         graphe des capacités
   stats.js          statistiques
-  suggestions.js    suggestions d'ajout (Graphe, EDHREC, Catalogue)
-  collection.js     collection
-  deck.js           deck et fiche détaillée
+  notation.js       la note d'une carte candidate
+  vivier.js         le vivier des candidates, et son empreinte
+  sugOrdre.js       l'ordre gelé des propositions
+  sugCommandants.js les commandants du deck, en tête de l'onglet EDHREC
+  sugListes.js      les trois lectures d'une même sélection
+  suggestions.js    les trois sections des propositions
+  collection.js     la section Collection
+  fenImport.js      importer une liste de cartes
+  fenAjout.js       ajouter une carte à la main
+  annexes.js        la réserve et l'étude
+  deck.js           ce qu'il y a dans le deck, et les gestes qui l'y mettent
+  legalite.js       ce que le format exige, et l'équilibre des rôles
+  deckSection.js    la section Deck
+  ficheVisuel.js    le visuel de la fiche, et ses éditions
+  fiche.js          la fiche détaillée d'une carte
+  ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
 
   — l'interface commune —
   outils.js         échapper, formater un prix, souffler un mot
@@ -55,7 +94,14 @@ js/                 modules, chargés dans cet ordre :
   boiteCatalogue.js progression du chargement de l'archive Scryfall
   fenExport.js      export du deck, liste d'achats, effacement
 
-  app.js            démarrage et évènements
+  — les gestes —
+  gestesVue.js      fermer, cocher une couleur, changer d'onglet
+  gestesReglages.js « Appliquer » des quatre fenêtres, jauges, pagination
+  gestesDeck.js     monter, démonter, garer, ouvrir une fiche
+  gestesDonnees.js  sauvegarde, archive, EDHREC, import
+  gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
+
+  app.js            l'aiguillage et le démarrage
 ```
 
 Les sept sections de la page se répartissent en cinq onglets, posés au bas de l'en-tête et
@@ -90,7 +136,7 @@ plus aucune lettre n'est affichée, les onglets ayant pris ce rôle.
 
 **Un déclencheur large compte pour un.** Toute carte non-terrain produit « lancement de sort » du
 seul fait d'être lançable, toute permanente produit « arrivée en jeu » du seul fait d'arriver
-(`analyze()`, `js/cartes.js`) : une carte qui se déclenche « quand vous lancez un sort » se relie
+(`analyze()`, `js/analyse.js`) : une carte qui se déclenche « quand vous lancez un sort » se relie
 ainsi à chacun des soixante sorts du deck, et affichait soixante interactions pour une seule
 propriété. `classeLiens()` (`js/liens.js`) ne nomme pourtant aucun concept — il compte : au-delà du
 quart du deck, un même déclencheur ne s'intègre plus à chaque carte mais au deck. Le décompte des
@@ -106,11 +152,11 @@ perdue, et la carte se reliait à tous les sorts du deck. Le sous-type se lit d�
 entre « cast » et « spell » : ce qui n'est ni un type de carte, ni une négation, ni une tournure de
 compte est un sous-type, sans liste à tenir. Le lien devient alors strict, car la carte lancée porte
 ses sous-types sur sa ligne de type — sa production de lancement est marquée `intrinseque`
-(`js/cartes.js`) — tandis qu'une production d'effet, qui ne dit pas ce qui sera lancé, garde son
+(`js/analyse.js`) — tandis qu'une production d'effet, qui ne dit pas ce qui sera lancé, garde son
 demi-crédit.
 
 Les trois dernières lisent une **même sélection notée** : la notation ne connaît qu'une liste, et
-`selectionSuggestions()` (`js/suggestions.js`) la partitionne une fois — ce qui touche les nœuds
+`selectionSuggestions()` (`js/sugListes.js`) la partitionne une fois — ce qui touche les nœuds
 isolés, ce qu'EDHREC recommande, tout le reste. `SECTIONS_SUGGESTIONS` (`js/etat.js`) les nomme ;
 `renderSuggestions()` les peint ensemble et sert de point d'entrée aux autres modules, si bien
 qu'une donnée qui arrive — d'EDHREC, du catalogue, de Scryfall — met les trois pages à jour d'un

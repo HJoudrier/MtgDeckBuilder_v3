@@ -1,20 +1,13 @@
 /* =====================================================================
    js/impressions.js — Les éditions d'une carte, et celle qu'on possède
 
-   Une carte paraît dans plusieurs sets, sous plusieurs numéros : l'import en
-   relève ce qu'il peut (`card.impressions`), et l'affichage retient celle que
-   l'on a choisie, sinon celle qu'on possède.
+   Une liste exportée par MTGO, Moxfield, Archidekt ou Deckstats donne le code
+   d'édition entre parenthèses puis le numéro de collection : « 1 Sol Ring
+   (LTC) 344 ». Ce couple désigne une impression précise, donc son visuel, son
+   illustrateur et son prix ; il est relevé à l'import, conservé sur la carte
+   et redemandé tel quel à Scryfall. La collection reste comptée par nom : les
+   éditions relevées s'ajoutent les unes aux autres sur la même carte.
    ===================================================================== */
-
-/* Légalité d'une carte, réduite aux formats que l'atelier connaît : une
-   chaîne de lettres — « c » pour Commander, « s » pour Standard. La chaîne
-   vide dit « légale dans aucun des deux » ; `undefined` dit « nous l'ignorons »,
-   ce qui n'est pas la même chose et ne doit jamais faire écarter une carte. */
-function codeLegalite(legalities) {
-  if (!legalities || typeof legalities !== 'object') return undefined;
-  return (legalities.commander === 'legal' ? 'c' : '')
-       + (legalities.standard === 'legal' ? 's' : '');
-}
 
 function cleImpression(set, num) {
   const s = String(set == null ? '' : set).trim().toLowerCase();

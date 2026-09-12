@@ -3,7 +3,7 @@
 
    La liste des sets tient en une requête ; la composition d'un set n'est
    cherchée qu'au moment où on le coche. Les noms retenus alimentent
-   `SETS_BASE` (js/etat.js) et sont conservés dans IndexedDB, exactement comme
+   `SETS_BASE` (js/archetypesSets.js) et sont conservés dans IndexedDB, exactement comme
    les thèmes EDHREC.
    ===================================================================== */
 

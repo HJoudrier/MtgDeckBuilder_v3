@@ -1,12 +1,10 @@
 /* =====================================================================
    js/archetypesLibelles.js — Le nom français des thèmes EDHREC
-   ===================================================================== */
 
-/* =====================================================================
-   Archétypes de deck. La liste et l'appartenance des cartes viennent
-   d'EDHREC (js/externes.js) ; les tables ci-dessous ne servent qu'à
-   l'affichage : un libellé français pour les thèmes les plus courants,
-   et une phrase disant ce que l'archétype fait.
+   La liste des thèmes et l'appartenance des cartes viennent d'EDHREC
+   (js/edhrecThemes.js) ; les deux tables ci-dessous ne servent qu'à
+   l'affichage : un libellé français pour les thèmes les plus courants, et une
+   phrase disant ce que l'archétype fait.
    ===================================================================== */
 
 const ARCH_LABELS = {

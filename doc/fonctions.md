@@ -7,27 +7,34 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**451 fonctions**, 59 modules, 518 Ko de JavaScript.
+**456 fonctions**, 75 modules, 526 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
-| [`effets.js`](#jseffetsjs) | Ontologie des capacités, analyse d'effets & synergies | 16 | 570 |
+| [`reglesEffets.js`](#jsregleseffetsjs) | Le vocabulaire du graphe : nœuds, effets, déclencheurs | 0 | 273 |
+| [`effets.js`](#jseffetsjs) | Qualifier un déclencheur, un effet, et les accorder | 11 | 258 |
+| [`synergies.js`](#jssynergiesjs) | Ce qu'une carte apporte à une autre | 5 | 61 |
 | [`cartesBrutes.js`](#jscartesbrutesjs) | La base livrée avec l'atelier | 0 | 140 |
 | [`analyse.js`](#jsanalysejs) | Lire une carte : coût, capacités, déclencheurs, effets | 5 | 148 |
-| [`archetypesLibelles.js`](#jsarchetypeslibellesjs) | Le nom français des thèmes EDHREC | 0 | 85 |
+| [`archetypesLibelles.js`](#jsarchetypeslibellesjs) | Le nom français des thèmes EDHREC | 0 | 83 |
 | [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 126 |
-| [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 8 | 81 |
-| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 15 | 174 |
+| [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
+| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
 | [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 150 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
-| [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 8 | 112 |
+| [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 62 |
-| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 16 | 358 |
+| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 231 |
+| [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et les trois menus | 9 | 129 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 3 | 54 |
-| [`scryfall.js`](#jsscryfalljs) | Intégration Scryfall, symboles, visuels & complétion | 25 | 563 |
-| [`stockage.js`](#jsstockagejs) | Persistance locale (localStorage) & gestion des sauvegardes | 15 | 437 |
+| [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
+| [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
+| [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
+| [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 9 | 200 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 251 |
+| [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
 | [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
@@ -45,9 +52,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
 | [`sugListes.js`](#jssuglistesjs) | Les trois lectures d'une même sélection | 11 | 246 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 243 |
-| [`collection.js`](#jscollectionjs) | Gestion de la collection, filtres & imports MTGO | 18 | 502 |
+| [`collection.js`](#jscollectionjs) | La section Collection | 6 | 131 |
+| [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
+| [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
-| [`deck.js`](#jsdeckjs) | Construction du deck, légalité, commandant & fiches détaillées | 21 | 429 |
+| [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
+| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 6 | 102 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 230 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -69,11 +80,29 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 133 |
-| [`app.js`](#jsappjs) | Point d'entrée : gestionnaires d'évènements, initialisation et démarrage | 1 | 870 |
+| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 119 |
+| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 113 |
+| [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
+| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 138 |
+| [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 100 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 271 |
+
+## js/reglesEffets.js
+
+Le vocabulaire du graphe : nœuds, effets, déclencheurs. *0 fonctions, 273 lignes, 14 Ko.*
+
+| Donnée | Rôle |
+|---|---|
+| `GROUPS` | 1. Nœuds et groupes du graphe |
+| `NODES` | — |
+| `NODE` | — |
+| `IMPLICIT` | Arcs "règles du jeu" : ce qu'un effet permet mécaniquement d'enchaîner |
+| `EFFECT_RULES` | Règles d'extraction : effets produits |
+| `TRIGGER_RULES` | Règles d'extraction : déclencheurs |
 
 ## js/effets.js
 
-Ontologie des capacités, analyse d'effets & synergies. *16 fonctions, 570 lignes, 31 Ko.*
+Qualifier un déclencheur, un effet, et les accorder. *11 fonctions, 258 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -88,6 +117,20 @@ Ontologie des capacités, analyse d'effets & synergies. *16 fonctions, 570 ligne
 | `refineTriggers(list, clause)` | — |
 | `scopeOf(s)` | — |
 | `refineEffects(list, clause)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `SUJETS` | 2. Qualification et analyse contextuelle |
+| `MOTS_NON_SOUSTYPE` | Ce qui qualifie un sort sans être un sous-type : les types de carte, les tournures de compte, de couleur et de nombre. |
+| `DEBUTS_EFFET` | — |
+| `COUTS` | — |
+
+## js/synergies.js
+
+Ce qu'une carte apporte à une autre. *5 fonctions, 61 lignes, 2.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `feeds(concept)` | — |
 | `feedsDe(p)` | — |
 | `croise(prods, trigs, dir, out)` | — |
@@ -96,16 +139,6 @@ Ontologie des capacités, analyse d'effets & synergies. *16 fonctions, 570 ligne
 
 | Donnée | Rôle |
 |---|---|
-| `GROUPS` | 1. Nœuds et groupes du graphe |
-| `NODES` | — |
-| `NODE` | — |
-| `IMPLICIT` | Arcs "règles du jeu" : ce qu'un effet permet mécaniquement d'enchaîner |
-| `EFFECT_RULES` | Règles d'extraction : effets produits |
-| `TRIGGER_RULES` | Règles d'extraction : déclencheurs |
-| `SUJETS` | 2. Qualification et analyse contextuelle |
-| `MOTS_NON_SOUSTYPE` | Ce qui qualifie un sort sans être un sous-type : les types de carte, les tournures de compte, de couleur et de nombre. |
-| `DEBUTS_EFFET` | — |
-| `COUTS` | — |
 | `EQUIV` | 3. Synergies & équivalences entre effets |
 
 ## js/cartesBrutes.js
@@ -130,7 +163,7 @@ Lire une carte : coût, capacités, déclencheurs, effets. *5 fonctions, 148 lig
 
 ## js/archetypesLibelles.js
 
-Le nom français des thèmes EDHREC. *0 fonctions, 85 lignes, 6.9 Ko.*
+Le nom français des thèmes EDHREC. *0 fonctions, 83 lignes, 6.7 Ko.*
 
 | Donnée | Rôle |
 |---|---|
@@ -152,11 +185,10 @@ Les rôles d'une carte. *2 fonctions, 126 lignes, 6.8 Ko.*
 
 ## js/impressions.js
 
-Les éditions d'une carte, et celle qu'on possède. *8 fonctions, 81 lignes, 3.2 Ko.*
+Les éditions d'une carte, et celle qu'on possède. *7 fonctions, 74 lignes, 2.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `codeLegalite(legalities)` | Légalité d'une carte, réduite aux formats que l'atelier connaît : une chaîne de lettres — « c » pour Commander, « s » pour Standard. |
 | `cleImpression(set, num)` | — |
 | `noterImpression(card, set, num, qty)` | Édition lue dans une liste importée. La première qui porte un numéro devient l'édition de référence de la carte : c'est elle qui sera demandée à Scryfall. |
 | `completeImpression(card, sc)` | Édition rapportée par Scryfall : elle ne prend la place de celle relevée à l'import que si la carte n'en avait pas. |
@@ -167,7 +199,7 @@ Les éditions d'une carte, et celle qu'on possède. *8 fonctions, 81 lignes, 3.2
 
 ## js/cartes.js
 
-La base de cartes et ses index. *15 fonctions, 174 lignes, 6.9 Ko.*
+La base de cartes et ses index. *18 fonctions, 207 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -186,6 +218,9 @@ La base de cartes et ses index. *15 fonctions, 174 lignes, 6.9 Ko.*
 | `commandantsSecondaires()` | Celles qu'on traite effectivement comme commandants secondaires : les autres ont été décochées dans l'onglet EDHREC (`S.secondairesOff`). |
 | `mainType(c)` | — |
 | `initBuiltin()` | — |
+| `frontFace(n)` | — |
+| `mergeInto(card, canonical)` | — |
+| `renameCard(card, newName)` | — |
 
 | Donnée | Rôle |
 |---|---|
@@ -280,12 +315,13 @@ Les critères de la fenêtre « Filtres ». *13 fonctions, 148 lignes, 6.2 Ko.*
 
 ## js/retenue.js
 
-Ce qui reste après les filtres. *8 fonctions, 112 lignes, 4.7 Ko.*
+Ce qui reste après les filtres. *9 fonctions, 123 lignes, 5.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `gameChangersConnus()` | — |
 | `estGameChanger(card)` | Vrai, faux, ou `null` quand la liste n'est pas là : une carte qu'on ne sait pas juger n'est pas déclarée ordinaire pour autant. |
+| `codeLegalite(legalities)` | Légalité d'une carte telle que Scryfall la publie, réduite aux formats que l'atelier connaît : une chaîne de lettres — « c » pour Commander, « s » pour Standard. |
 | `carteLegale(card)` | Légalité d'une carte dans le format en cours. |
 | `legaliteOK(card)` | Le filtre de légalité, tel que la case de la fenêtre Format le règle. |
 | `carteRetenue(card)` | Ce que la collection et les suggestions retiennent : les critères de la fenêtre, plus la légalité. |
@@ -316,7 +352,7 @@ L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 62 lignes, 2.
 
 ## js/groupes.js
 
-Grouper et trier les listes de cartes. *16 fonctions, 358 lignes, 17 Ko.*
+Grouper et trier les listes de cartes. *7 fonctions, 231 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -327,15 +363,6 @@ Grouper et trier les listes de cartes. *16 fonctions, 358 lignes, 17 Ko.*
 | `notesCollectionAJour()` | — |
 | `notesCollection(entrees)` | — |
 | `groupeCartes(entrees, modeId, triId)` | `triId` valant `null`, l'ordre reçu est gardé tel quel : c'est ce dont les suggestions ont besoin pour leur ordre gelé, qui n'est celui d'aucun tri. |
-| `clePli(section, modeId, id)` | — |
-| `groupePlie(section, modeId, id)` | — |
-| `enveloppeGroupe(section, modeId, g, titre, badge, corps)` | Une catégorie, repliable, sur le patron des parties de la section Deck (`partieDeck`, js/deck.js) : mêmes classes, même chevron, même geste. |
-| `rendGroupes(section, groupes, modeId, rendEntrees, compte)` | — |
-| `noteMultiple(modeId)` | Un regroupement où une carte compte plusieurs fois le dit, sans quoi la somme des en-têtes contredirait le total affiché juste au-dessus. |
-| `colonnesDe(section)` | — |
-| `menuColonnes(section)` | — |
-| `ouvreGrille(section, base)` | L'ouverture d'une grille : la classe et la variable qui portent le choix, ou la grille d'avant si l'on s'en remet à la largeur. |
-| `barreGroupeTri(section)` | — |
 
 | Donnée | Rôle |
 |---|---|
@@ -347,6 +374,25 @@ Grouper et trier les listes de cartes. *16 fonctions, 358 lignes, 17 Ko.*
 | `TRIS` | — |
 | `TRIS_SECTION` | Les tris proposés par chaque section : la quantité n'a pas de sens pour une suggestion, qui n'est encore nulle part, et les deux taux d'EDHREC n'en ont que là où toute carte en porte —… |
 | `NOTES_COLLECTION` | — |
+
+## js/barreGroupes.js
+
+L'enveloppe d'un groupe, et les trois menus. *9 fonctions, 129 lignes, 6.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `clePli(section, modeId, id)` | — |
+| `groupePlie(section, modeId, id)` | — |
+| `enveloppeGroupe(section, modeId, g, titre, badge, corps)` | Une catégorie, repliable, sur le patron des parties de la section Deck (`partieDeck`, js/deckSection.js) : mêmes classes, même chevron, même geste. |
+| `rendGroupes(section, groupes, modeId, rendEntrees, compte)` | — |
+| `noteMultiple(modeId)` | Un regroupement où une carte compte plusieurs fois le dit, sans quoi la somme des en-têtes contredirait le total affiché juste au-dessus. |
+| `colonnesDe(section)` | — |
+| `menuColonnes(section)` | — |
+| `ouvreGrille(section, base)` | L'ouverture d'une grille : la classe et la variable qui portent le choix, ou la grille d'avant si l'on s'en remet à la largeur. |
+| `barreGroupeTri(section)` | — |
+
+| Donnée | Rôle |
+|---|---|
 | `COMPTEUR_GROUPE` | L'identifiant que le bouton commande, tiré d'un compteur de rendu : un libellé de sous-type ou d'édition n'a pas à être un identifiant HTML. |
 
 ## js/marche.js
@@ -369,9 +415,9 @@ Marché Cardmarket, estimations & panier d'achat. *3 fonctions, 54 lignes, 2.1 K
 | `SELLER_MULT` | — |
 | `CM_COUNTRIES` | — |
 
-## js/scryfall.js
+## js/symboles.js
 
-Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 563 lignes, 24 Ko.*
+Les symboles de mana. *7 fonctions, 72 lignes, 2.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -382,8 +428,27 @@ Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 563 ligne
 | `manaFb(img)` | — |
 | `manaHTML(card, sm)` | — |
 | `stripeColor(card)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `SYMS` | — |
+| `MAJ_CARTES` | Chaque carte complétée par Scryfall — texte, coût, prix, légalité — peut changer sa note. |
+
+## js/scryfallApplique.js
+
+Verser une réponse de Scryfall dans une carte. *2 fonctions, 141 lignes, 6.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `scryTarget(sc, map)` | — |
 | `applyScryfall(sc, requested, imagesOnly)` | — |
+
+## js/scryfall.js
+
+La file d'attente vers Scryfall. *7 fonctions, 181 lignes, 7.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `identScryfall(c)` | Identifiant demandé à Scryfall : l'édition relevée à l'import quand la carte en a une, le nom sinon. |
 | `cibleImpression(sc, parImpression)` | Retrouve la carte visée par une réponse, d'abord par l'édition demandée. |
 | `indexImpressions(cartes)` | — |
@@ -391,6 +456,18 @@ Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 563 ligne
 | `queueScryfall(cards)` | — |
 | `runScryQueue()` | — |
 | `completeUnknown(names)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `scryQueue` | — |
+| `scryBusy` | — |
+
+## js/recherches.js
+
+Les recherches nommées chez Scryfall. *9 fonctions, 200 lignes, 8.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `chercheScryfall(q, cible)` | — |
 | `semeVisuelVersion(card)` | Visuels de chaque édition possédée, pour les faire défiler dans la fiche. |
 | `visuelDepuisScryfall(sc)` | — |
@@ -403,15 +480,11 @@ Intégration Scryfall, symboles, visuels & complétion. *25 fonctions, 563 ligne
 
 | Donnée | Rôle |
 |---|---|
-| `SYMS` | — |
-| `MAJ_CARTES` | Chaque carte complétée par Scryfall — texte, coût, prix, légalité — peut changer sa note. |
-| `scryQueue` | — |
-| `scryBusy` | — |
 | `scrySeq` | — |
 
 ## js/stockage.js
 
-Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 437 lignes, 21 Ko.*
+La sauvegarde locale. *9 fonctions, 251 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -424,12 +497,6 @@ Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 437 
 | `scheduleSave()` | — |
 | `restore(d)` | — |
 | `chargerSauvegarde()` | — |
-| `corpsSauvegarde()` | — |
-| `blocCatalogue()` | — |
-| `rafraichirFenetreSauvegarde()` | La fenêtre des paramètres reste ouverte pendant qu'une archive se charge : son contenu est réécrit sur place quand l'état du catalogue a bougé. |
-| `brancherSauvegarde()` | L'interrupteur de la sauvegarde, dans la section « Sauvegarde locale » de la fenêtre des paramètres : cocher réactive et réécrit tout, décocher efface sur-le-champ ce que cet appareil… |
-| `brancherCatalogue()` | — |
-| `brancherRestauration()` | — |
 
 | Donnée | Rôle |
 |---|---|
@@ -439,6 +506,19 @@ Persistance locale (localStorage) & gestion des sauvegardes. *15 fonctions, 437 
 | `saveState` | — |
 | `saveError` | — |
 | `dernierEtatSignale` | — |
+
+## js/fenSauvegarde.js
+
+Les sections « Sauvegarde » et « Catalogue » des paramètres. *6 fonctions, 201 lignes, 12 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `corpsSauvegarde()` | — |
+| `blocCatalogue()` | — |
+| `rafraichirFenetreSauvegarde()` | La fenêtre des paramètres reste ouverte pendant qu'une archive se charge : son contenu est réécrit sur place quand l'état du catalogue a bougé. |
+| `brancherSauvegarde()` | L'interrupteur de la sauvegarde, dans la section « Sauvegarde locale » de la fenêtre des paramètres : cocher réactive et réécrit tout, décocher efface sur-le-champ ce que cet appareil… |
+| `brancherCatalogue()` | — |
+| `brancherRestauration()` | — |
 
 ## js/idb.js
 
@@ -555,7 +635,7 @@ La liste des « Game Changers ». *4 fonctions, 77 lignes, 2.9 Ko.*
 
 ## js/archive.js
 
-Lire l'archive Scryfall. *11 fonctions, 219 lignes, 9.8 Ko.*
+Lire l'archive Scryfall. *11 fonctions, 219 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -748,7 +828,7 @@ Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
 
 ## js/collection.js
 
-Gestion de la collection, filtres & imports MTGO. *18 fonctions, 502 lignes, 25 Ko.*
+La section Collection. *6 fonctions, 131 lignes, 6.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -757,26 +837,40 @@ Gestion de la collection, filtres & imports MTGO. *18 fonctions, 502 lignes, 25 
 | `filtered()` | — |
 | `causesCollection()` | Ce qui écarte des cartes de la collection affichée, cause par cause, dans l'ordre où les critères s'appliquent. |
 | `ligneCausesCollection()` | La phrase qui les nomme, chacune avec le geste qui la lève. |
-| `frontFace(n)` | — |
-| `mergeInto(card, canonical)` | — |
-| `renameCard(card, newName)` | — |
+| `renderB()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `PAGE` | — |
+
+## js/fenImport.js
+
+Importer une liste de cartes. *4 fonctions, 222 lignes, 12 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `retireExtrait(s, i, n)` | — |
 | `extraitEdition(texte)` | — |
 | `parseMtgoList(txt)` | — |
-| `renderB()` | — |
 | `openImport(cible)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `RE_ED_DIESE` | — |
+| `RE_ED` | — |
+| `RE_NUMERO` | — |
+
+## js/fenAjout.js
+
+Ajouter une carte à la main. *5 fonctions, 126 lignes, 6.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `ajouterCarte(c, q, cible, completer)` | — |
 | `chercheCartes(q)` | — |
 | `resultatsHTML(q, cible)` | — |
 | `majResultats(cible, sansRelancer)` | — |
 | `openAdd(cible)` | — |
-
-| Donnée | Rôle |
-|---|---|
-| `PAGE` | — |
-| `RE_ED_DIESE` | — |
-| `RE_ED` | — |
-| `RE_NUMERO` | — |
 
 ## js/annexes.js
 
@@ -796,7 +890,7 @@ La réserve et l'étude. *9 fonctions, 117 lignes, 5 Ko.*
 
 ## js/deck.js
 
-Construction du deck, légalité, commandant & fiches détaillées. *21 fonctions, 429 lignes, 24 Ko.*
+Ce qu'il y a dans le deck, et les gestes qui l'y mettent. *9 fonctions, 114 lignes, 4.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -805,16 +899,30 @@ Construction du deck, légalité, commandant & fiches détaillées. *21 fonction
 | `cartesDuDeck()` | Les cartes du deck, une fois chacune. Deux clés de `S.deck` peuvent viser la même carte — un import l'a nommée autrement et `find()` la rattrape, avant que `mergeInto()` ne fusionne les… |
 | `deckSize()` | — |
 | `availableFor(card)` | — |
+| `addToDeck(name)` | — |
+| `deckAdd(card, qty, opts)` | — |
+| `removeFromDeck(name)` | — |
+| `buyCard(name)` | — |
+
+## js/legalite.js
+
+Ce que le format exige, et l'équilibre des rôles. *6 fonctions, 102 lignes, 5.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `gameChangersDuDeck()` | Les Game Changers de la liste principale. Leur nombre décide du palier qu'un deck Commander peut revendiquer : aucun aux paliers 1 et 2, jusqu'à trois au palier 3, sans limite aux… |
 | `ligneGameChangers()` | Ce que ce décompte dit du palier, en une phrase. |
 | `targets()` | — |
 | `deckCounts()` | — |
 | `gauge(label, val, tgt, role)` | — |
 | `legality()` | — |
-| `addToDeck(name)` | — |
-| `deckAdd(card, qty, opts)` | — |
-| `removeFromDeck(name)` | — |
-| `buyCard(name)` | — |
+
+## js/deckSection.js
+
+La section Deck. *6 fonctions, 230 lignes, 15 Ko.*
+
+| Fonction | Rôle |
+|---|---|
 | `blocAchats()` | — |
 | `zoneCommandant()` | — |
 | `evalueDeck(entries)` | — |
@@ -1137,9 +1245,49 @@ Fenêtres d'export et d'effacement. *3 fonctions, 133 lignes, 6.8 Ko.*
 | `openWantsModal()` | — |
 | `openWipeModal()` | — |
 
+## js/gestesVue.js
+
+Les gestes qui règlent la vue. *1 fonctions, 119 lignes, 4.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesVue(act, b)` | — |
+
+## js/gestesReglages.js
+
+Les fenêtres de réglage et leurs boutons. *1 fonctions, 113 lignes, 3.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesReglages(act, b)` | — |
+
+## js/gestesDeck.js
+
+Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 193 lignes, 7.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesDeck(act, b)` | — |
+
+## js/gestesDonnees.js
+
+Les gestes qui touchent aux données. *1 fonctions, 138 lignes, 4.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesDonnees(act, b)` | — |
+
+## js/gestesGraphe.js
+
+Les gestes du graphe et des listes. *1 fonctions, 100 lignes, 3.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesGraphe(act, b)` | — |
+
 ## js/app.js
 
-Point d'entrée : gestionnaires d'évènements, initialisation et démarrage. *1 fonctions, 870 lignes, 31 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 271 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|

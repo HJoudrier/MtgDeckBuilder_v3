@@ -3,7 +3,7 @@
 
    L'archive pèse plus de cent mégaoctets de JSON. On ne la garde pas telle
    quelle : chaque carte est réduite à un tableau de champs (`compacte()`,
-   les indices sont dans `CH`, js/etat.js), et le fichier est lu en flux pour
+   les indices sont dans `CH`, js/catalogueEtat.js), et le fichier est lu en flux pour
    que la progression se voie et que la mémoire ne double pas.
    ===================================================================== */
 

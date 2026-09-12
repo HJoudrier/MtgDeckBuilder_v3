@@ -87,16 +87,6 @@ function registerCard(card) {
   return card;
 }
 
-/* ---------------------------------------------------------------------
-   Éditions. Une liste exportée par MTGO, Moxfield, Archidekt ou
-   Deckstats donne le code d'édition entre parenthèses puis le numéro de
-   collection : « 1 Sol Ring (LTC) 344 ». Ce couple désigne une
-   impression précise, donc son visuel, son illustrateur et son prix ; il
-   est relevé à l'import, conservé sur la carte et redemandé tel quel à
-   Scryfall. La collection reste comptée par nom : les éditions relevées
-   s'ajoutent les unes aux autres sur la même carte.
-   --------------------------------------------------------------------- */
-
 function find(name) {
   if (!name) return null;
   const n = norm(name);
@@ -170,4 +160,47 @@ function initBuiltin() {
       registerCard(buildCard(name, cost, type, price, text));
     });
   }
+}
+
+function frontFace(n) {
+  return String(n||'').split(' // ')[0].trim();
+}
+
+function mergeInto(card, canonical) {
+  const q = S.collection.get(card.name) || 0, d = S.deck.get(card.name) || 0;
+  if (q) S.collection.set(canonical.name, (S.collection.get(canonical.name) || 0) + q);
+  if (d) S.deck.set(canonical.name, (S.deck.get(canonical.name) || 0) + d);
+  S.collection.delete(card.name);
+  S.deck.delete(card.name);
+  /* La réserve et l'étude portent les mêmes noms : elles suivent la fusion,
+     sans quoi la carte y resterait sous un nom que la base ne connaît plus. */
+  CLES_ANNEXES.forEach(cle => {
+    const l = annexeListe(cle), n = l.get(card.name) || 0;
+    if (!n) return;
+    l.set(canonical.name, (l.get(canonical.name) || 0) + n);
+    l.delete(card.name);
+  });
+  const i = DB.indexOf(card);
+  if (i >= 0) DB.splice(i, 1);
+  unindexCard(card);
+  if (S.commander === card.name) S.commander = canonical.name;
+  return canonical;
+}
+
+function renameCard(card, newName) {
+  if (card.name === newName) return card;
+  const existing = BY_NAME[norm(newName)];
+  if (existing && existing !== card) return mergeInto(card, existing);
+  const old = card.name;
+  unindexCard(card);
+  card.name = newName;
+  indexCard(card);
+  [S.collection, S.deck, ...CLES_ANNEXES.map(annexeListe)].forEach(m => {
+    if (m.has(old)) {
+      m.set(newName, (m.get(newName) || 0) + m.get(old));
+      m.delete(old);
+    }
+  });
+  if (S.commander === old) S.commander = newName;
+  return card;
 }

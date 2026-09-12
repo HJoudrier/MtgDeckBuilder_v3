@@ -37,7 +37,7 @@ function lienDecksEdhrec(nom, actif) {
 
 /* Une ligne : la marque à gauche — l'étoile d'un principal, la case d'un
    secondaire —, le nom au milieu, le décompte à droite. Le nom ouvre la fiche
-   au clic et montre le visuel au survol (`montrerApercu`, js/app.js, qui suit
+   au clic et montre le visuel au survol (`montrerApercu`, js/apercu.js, qui suit
    les éléments portant `data-act="fiche"`). */
 function ligneCommandant(carte, principal) {
   const nom = carte.name;

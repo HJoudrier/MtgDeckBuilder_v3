@@ -31,7 +31,7 @@ const FILTRES_BORNES = [
 
 /* ---------------------------------------------------------------------
    Archétypes établis par une base extérieure (thèmes EDHREC). L'index
-   est rempli par `chargerArchetypesEdhrec()` dans js/externes.js et
+   est rempli par `chargerArchetypesEdhrec()` (js/edhrecThemes.js) et
    conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
    --------------------------------------------------------------------- */
 
@@ -47,7 +47,7 @@ const ARCH_BASE = {
 /* ---------------------------------------------------------------------
    Sets, sur le même principe que les archétypes : la liste vient de
    Scryfall et les cartes d'un set ne sont cherchées qu'au moment où on le
-   coche. Le tout est conservé dans IndexedDB par js/externes.js et reste
+   coche. Le tout est conservé dans IndexedDB par js/sets.js et reste
    vide tant qu'il n'a pas été chargé.
    --------------------------------------------------------------------- */
 
