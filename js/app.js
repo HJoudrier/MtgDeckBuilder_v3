@@ -8,11 +8,13 @@
    ===================================================================== */
 
 document.addEventListener('click', ev => {
-  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-gsrc], [data-cmode], [data-color], [data-col]');
+  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-gsrc], [data-cmode], [data-color], [data-col], [data-restrcoul], [data-restrrole]');
   if (!b) return;
 
   const act = b.dataset.act;
 
+  if (gestesDeckConfig(act, b)) return;
+  if (gestesDecks(act, b)) return;
   if (gestesVue(act, b)) return;
   if (gestesReglages(act, b)) return;
   if (gestesDeck(act, b)) return;
@@ -109,25 +111,19 @@ document.addEventListener('input', ev => {
     refreshSuggestions();
     return;
   }
-  if (t.dataset.bud) {
-    const k = t.dataset.bud;
-    modifieBrouillon(() => {
-      S.budget[k] = t.type === 'number' ? (parseFloat(t.value) || 0) : t.value;
-    });
-    /* Dans la fenêtre « Budget », rien n'est appliqué avant le bouton :
-       seul le résumé suit, réécrire le corps volerait le curseur du champ
-       qu'on est en train de régler. */
-    if (brouillon) { majResumeBudget(); return; }
-    if (k === 'perCard' || k === 'total') invaliderCandidats();
-    refreshSuggestions();
-    return;
-  }
+  /* Les deux fenêtres d'achat : celle du budget, celle d'un deck. Leur saisie
+     vit avec elles, comme celle de la synchronisation. */
+  if (saisieBudget(t)) return;
+  if (saisieDeck(t)) return;
 });
 
 document.addEventListener('change', ev => {
   const t = ev.target;
   /* La section « Synchronisation » : ses champs agissent sur place. */
   if (gestesNuageChange(t)) return;
+  /* Les sélecteurs et les cases de la fenêtre d'un deck : ils ne lèvent pas
+     d'évènement `input` sur tous les navigateurs. */
+  if (saisieDeck(t)) return;
   if (t.dataset.act === 'catNumeriques') {
     modifieBrouillon(() => { S.catalogueNumeriques = !!t.checked; });
     apresReglage('Réglage des cartes numériques modifié : les candidates sont rebâties.');

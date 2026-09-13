@@ -107,6 +107,70 @@ function fusionneCache(local, distant) {
   return {valeurs: [...parNom.values()], venu, manque};
 }
 
+/* Les decks, dossier par dossier puis carte par carte.
+
+   La base à trois côtés tranche seule les deux cas qui comptent : un dossier
+   présent dans la base et absent d'un côté y a été **supprimé**, un dossier
+   absent de la base et présent d'un côté y a été **créé**. Aucun marqueur de
+   suppression n'est donc nécessaire — c'est précisément ce pour quoi cette
+   base existe, et sans elle un deck créé là-bas serait indiscernable d'un
+   deck supprimé ici. */
+const DECK_CHAMPS_SIMPLES = ['nom', 'format', 'statut', 'commander', 'budget',
+                             'exemplairesPropres', 'restrictions', 'ciblesRoles'];
+
+function indexDecks(liste) {
+  const m = new Map();
+  (liste || []).forEach(o => { if (o && o.cle) m.set(o.cle, o); });
+  return m;
+}
+
+function fusionneDecks(base, local, distant) {
+  const b = indexDecks(base), l = indexDecks(local), d = indexDecks(distant);
+  const decks = [], conflits = [];
+  new Set([...b.keys(), ...l.keys(), ...d.keys()]).forEach(cle => {
+    const ob = b.get(cle), ol = l.get(cle), od = d.get(cle);
+    /* Absent d'un côté : créé de l'autre si la base l'ignore, supprimé de
+       celui-ci si elle le connaît. */
+    if (!ol && !od) return;
+    if (!ol) { if (!ob) decks.push(od); return; }
+    if (!od) { if (!ob) decks.push(ol); return; }
+    const o = {...ol, cle};
+    const quoi = ol.nom || od.nom || cle;
+    ['deck', ...CLES_ANNEXES].forEach(k => {
+      const r = fusionneQuantites(ob && ob[k], ol[k], od[k]);
+      o[k] = r.valeurs;
+      r.conflits.forEach(c => conflits.push({...c, liste: k, deck: quoi}));
+    });
+    o.secondairesOff = fusionneEnsemble(ob && ob.secondairesOff, ol.secondairesOff, od.secondairesOff);
+    DECK_CHAMPS_SIMPLES.forEach(k => {
+      const r = fusionneValeur(ob ? ob[k] : undefined, ol[k], od[k], k);
+      o[k] = r.valeur;
+      if (r.conflit) conflits.push({...r.conflit, deck: quoi});
+    });
+    /* La date de création est celle du plus ancien des deux : c'est elle qui
+       range les decks, et elle ne doit pas bouger d'une synchronisation à
+       l'autre. */
+    o.cree = Math.min(ol.cree || Infinity, od.cree || Infinity);
+    if (!Number.isFinite(o.cree)) o.cree = Date.now();
+    o.maj = Math.max(ol.maj || 0, od.maj || 0);
+    decks.push(o);
+  });
+  return {decks: decks.sort((x, y) => (x.cree || 0) - (y.cree || 0)), conflits};
+}
+
+/* L'empreinte d'un dossier, aux listes ordonnées : sans quoi deux dossiers
+   identiques aux paires rangées autrement passeraient pour différents, et
+   chaque tour pousserait pour rien. */
+function empreinteDeck(o) {
+  if (!o) return '';
+  const parts = [o.cle || ''];
+  ['deck', ...CLES_ANNEXES].forEach(k => parts.push(k + ':' +
+    [...(o[k] || [])].map(([n, q]) => n + '=' + q).sort().join(',')));
+  parts.push('secondairesOff:' + [...(o.secondairesOff || [])].sort().join(','));
+  DECK_CHAMPS_SIMPLES.forEach(k => parts.push(k + ':' + nuageStable(o[k])));
+  return parts.join('|');
+}
+
 /* L'empreinte du fond, ordonnée : deux fonds égaux la partagent, quel que
    soit l'ordre où leurs tables ont été bâties. C'est elle qui dit s'il y a
    lieu de repeindre, et s'il y a lieu de pousser. */
@@ -117,6 +181,7 @@ function empreinteFond(fond) {
     [...(fond[k] || [])].map(([n, q]) => n + '=' + q).sort().join(',')));
   NUAGE_ENSEMBLES.forEach(k => parts.push(k + ':' + [...(fond[k] || [])].sort().join(',')));
   [...NUAGE_SCALAIRES, ...NUAGE_OBJETS].forEach(k => parts.push(k + ':' + nuageStable(fond[k])));
+  parts.push('decks:' + (fond.decks || []).map(empreinteDeck).sort().join(';'));
   return parts.join('|');
 }
 
@@ -140,6 +205,9 @@ function fusionnePaquets(base, local, distant) {
     fond[k] = r.valeur;
     if (r.conflit) conflits.push(r.conflit);
   });
+  const rd = fusionneDecks(base && base.decks, local.fond.decks, distant.fond.decks);
+  fond.decks = rd.decks;
+  rd.conflits.forEach(c => conflits.push(c));
 
   const lc = local.cache || {}, dc = distant.cache || {};
   const cartes = fusionneCache(lc.cartes, dc.cartes);

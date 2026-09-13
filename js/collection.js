@@ -7,17 +7,23 @@
 
 const PAGE = 200;
 
-function colorOK(card) {
+/* Une carte tient dans une sélection de couleurs, selon le mode voulu. Sorti
+   de `colorOK()` pour que la restriction d'un deck, qui porte sa propre
+   sélection, emprunte la même règle plutôt que d'en écrire une seconde. */
+function couleursOK(card, sel, mode) {
   const id = card && card.identity ? card.identity : [];
-  const sel = S.colors;
   if (id.length === 0) {
     if (sel.has('C')) return true;
-    if (S.colorMode === 'identity' && ['W','U','B','R','G'].every(c => sel.has(c))) return true;
+    if (mode === 'identity' && ['W','U','B','R','G'].every(c => sel.has(c))) return true;
     return false;
   }
-  if (S.colorMode === 'identity') return id.every(c => sel.has(c));
-  if (S.colorMode === 'atleast') return id.some(c => sel.has(c));
+  if (mode === 'identity') return id.every(c => sel.has(c));
+  if (mode === 'atleast') return id.some(c => sel.has(c));
   return id.length === [...sel].filter(c => c !== 'C').length && id.every(c => sel.has(c));
+}
+
+function colorOK(card) {
+  return couleursOK(card, S.colors, S.colorMode);
 }
 
 /* Un exemplaire de plus ou de moins dans la collection. Le deck a les siens
@@ -68,12 +74,13 @@ function filtered() {
    nulle part : la ligne annonçait « aucun filtre » devant une collection
    visiblement amputée, et l'on cherchait un filtre resté en place. */
 function causesCollection() {
-  const out = {couleurs:0, legalite:0, filtres:0, retenues:0};
+  const out = {couleurs:0, legalite:0, filtres:0, restriction:0, retenues:0};
   collectionCards().forEach(e => {
     const c = e.card;
     if (!colorOK(c)) out.couleurs++;
     else if (!legaliteOK(c)) out.legalite++;
     else if (!roleOK(c) || !filtreOK(c)) out.filtres++;
+    else if (!restrictionOK(c)) out.restriction++;
     else out.retenues++;
   });
   return out;
@@ -87,6 +94,7 @@ function ligneCausesCollection() {
   if (st.couleurs) causes.push(`${n(st.couleurs)} par vos couleurs (${esc(nomCombinaisonCouleurs(S.colors))}, barre de mana de l'en-tête)`);
   if (st.legalite) causes.push(`${n(st.legalite)} par la légalité ${esc(fmt().label)} (fenêtre « Format »)`);
   if (st.filtres) causes.push(`${n(st.filtres)} par vos filtres (bouton « Filtres »${filtresActifs().length ? ` : ${esc(texteFiltresActifs(', '))}` : ''})`);
+  if (st.restriction) causes.push(`${n(st.restriction)} par les restrictions de « ${esc(deckCourant().nom)} » (${esc(texteRestrictionsActives(', '))}, configuration du deck)`);
   return causes.length ? `écartées : ${causes.join(', ')}` : 'rien n\'est écarté';
 }
 

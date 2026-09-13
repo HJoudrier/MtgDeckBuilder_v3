@@ -34,26 +34,6 @@ function fmt() {
   return FORMATS[S.format];
 }
 
-function spent() {
-  return aAcheter().reduce((t, l) => t + l.total, 0);
-}
-
-function aAcheter() {
-  const f = fmt();
-  const lignes = [];
-  S.deck.forEach((q, nom) => {
-    const c = find(nom); if (!c) return;
-    const possede = S.collection.get(nom) || 0;
-    const aAcheterNb = Math.max(0, q - possede);
-    if (aAcheterNb > 0) {
-      const o = bestOffer(c);
-      const pu = o ? o.price : (c.price || 0);
-      lignes.push({card:c, qty:aAcheterNb, unit:pu, total:pu * aAcheterNb, inconnu:!pu, offer:o});
-    }
-  });
-  return lignes.sort((a, b) => b.total - a.total);
-}
-
 function toast(msg) {
   const t = document.getElementById('toast');
   if (!t) return;

@@ -101,14 +101,20 @@ function archetypesCarte(card) {
   return s ? [...s] : [];
 }
 
-/* Un thème coché dont les cartes ne sont pas encore chargées. */
+/* Un thème coché dont les cartes ne sont pas encore chargées. Ceux de la
+   restriction du deck comptent autant que ceux de l'en-tête : une restriction
+   dont les cartes ne sont pas chargées n'écarterait rien. */
 function archetypesAChargerEdhrec() {
-  return archetypesFiltre().filter(slug => !ARCH_BASE.themes[slug] && !ARCH_BASE.enCours.has(slug));
+  const tous = new Set([...archetypesFiltre(), ...archetypesFiltre(restrictionsDuDeck())]);
+  return [...tous].filter(slug => !ARCH_BASE.themes[slug] && !ARCH_BASE.enCours.has(slug));
 }
 
-/* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
-function archetypesFiltre() {
-  return String((S.filtres && S.filtres.archetypes) || '').split(',').filter(Boolean);
+/* Archétypes cochés, conservés sous forme de liste séparée par des virgules.
+   `crit` permet de lire la même liste ailleurs que dans les filtres de
+   l'en-tête — les restrictions d'un deck ont la même forme. */
+function archetypesFiltre(crit) {
+  const f = crit || S.filtres;
+  return String((f && f.archetypes) || '').split(',').filter(Boolean);
 }
 
 function basculerArchetype(id) {
@@ -119,8 +125,9 @@ function basculerArchetype(id) {
 
 /* Sets cochés, conservés comme les archétypes : une liste de codes séparés
    par des virgules. */
-function setsFiltre() {
-  return String((S.filtres && S.filtres.sets) || '').split(',').filter(Boolean);
+function setsFiltre(crit) {
+  const f = crit || S.filtres;
+  return String((f && f.sets) || '').split(',').filter(Boolean);
 }
 
 function basculerSet(code) {
@@ -137,9 +144,11 @@ function libelleSet(code) {
   return (t && t.nom) || code;
 }
 
-/* Un set coché dont les cartes ne sont pas encore chargées. */
+/* Un set coché dont les cartes ne sont pas encore chargées, ceux de la
+   restriction du deck compris. */
 function setsACharger() {
-  return setsFiltre().filter(c => !SETS_BASE.charges[c] && !SETS_BASE.enCours.has(c));
+  const tous = new Set([...setsFiltre(), ...setsFiltre(restrictionsDuDeck())]);
+  return [...tous].filter(c => !SETS_BASE.charges[c] && !SETS_BASE.enCours.has(c));
 }
 
 /* Sets d'une carte. Scryfall fait autorité pour les sets déjà chargés, mais

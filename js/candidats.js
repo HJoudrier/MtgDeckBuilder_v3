@@ -84,10 +84,11 @@ function invaliderCandidats() { CAND = {sig:null, liste:[], stats:null}; }
 /* Les critères de la fenêtre entrent dans la signature : sans eux, le
    décompte annoncé resservirait celui d'avant le filtre. */
 function signatureCandidats() {
-  return [S.format, S.commander, [...S.colors].join(''), S.colorMode, S.budget.perCard,
+  return [S.deckActif, S.format, S.commander, [...S.colors].join(''), S.colorMode, S.budget.perCard,
           CAT.cartes.length, S.collection.size, S.candidatsMax, S.filtreLegal,
           S.catalogueNumeriques, noeudsActifs().sort().join(','),
-          JSON.stringify(S.filtres || {})].join('|');
+          JSON.stringify(S.filtres || {}), JSON.stringify(S.achats || {}),
+          JSON.stringify(restrictionsDuDeck())].join('|');
 }
 
 /* Le catalogue local porte le texte oracle complet et les prix à jour : on en
@@ -129,7 +130,11 @@ function selectionCandidats() {
   const ident = cmd ? cmd.identity : null;
   const noeuds = noeudsActifs();
   const st = {total:CAT.cartes.length, legalite:0, identite:0, couleurs:0, possedees:0,
-              prix:0, sansPrix:0, filtres:0, noeuds:0, numeriques:0, retenus:0, coupes:0};
+              prix:0, sansPrix:0, filtres:0, restriction:0, noeuds:0, numeriques:0, retenus:0, coupes:0};
+  /* Le plafond par carte se compare ici à un prix de tendance, alors que
+     `bestOffer()` le compare au prix ajusté par les préférences d'achat : le
+     ramener au brut aligne les deux étages sur un seul seuil. */
+  const brutMax = prixBrutMax();
   const retenus = [];
   for (const rec of CAT.cartes) {
     if (!rec || rec.length <= CH.LEGAL) continue;
@@ -145,8 +150,9 @@ function selectionCandidats() {
        Scryfall ne publie pas le prix reste candidate, même si la branche
        « achat » ne saura pas la chiffrer. */
     const prix = rec[CH.PRIX];
-    if (prix > 0 && prix > S.budget.perCard) { st.prix++; continue; }
+    if (prix > 0 && prix > brutMax) { st.prix++; continue; }
     if (!filtreOKRec(rec)) { st.filtres++; continue; }
+    if (!restrictionOKRec(rec)) { st.restriction++; continue; }
     if (noeuds.length && !recToucheNoeuds(rec, noeuds)) { st.noeuds++; continue; }
     /* Compté sur les seules retenues : c'est d'elles que la phrase parle. */
     if (!(prix > 0)) st.sansPrix++;

@@ -8,8 +8,9 @@
    ===================================================================== */
 
 /* Rôles cochés dans la section Deck, conservés comme les archétypes. */
-function rolesFiltre() {
-  return String((S.filtres && S.filtres.roles) || '').split(',').filter(Boolean);
+function rolesFiltre(crit) {
+  const f = crit || S.filtres;
+  return String((f && f.roles) || '').split(',').filter(Boolean);
 }
 
 function basculerRole(role) {
@@ -20,8 +21,8 @@ function basculerRole(role) {
 }
 
 /* Une carte tient au moins un des rôles cochés. */
-function roleOK(card) {
-  const roles = rolesFiltre();
+function roleOK(card, crit) {
+  const roles = rolesFiltre(crit);
   if (!roles.length) return true;
   return !!card && !!card.cats && roles.some(r => card.cats.has(r));
 }
@@ -48,22 +49,22 @@ function effacerFiltre(cles) {
 
 /* Filtres en vigueur : un libellé et les clés à effacer pour chacun.
    Sert au décompte, aux puces de l'en-tête et aux infobulles. */
-function filtresActifs() {
-  const f = S.filtres || FILTRES_VIDE;
+function filtresActifs(crit) {
+  const f = crit || S.filtres || FILTRES_VIDE;
   const actifs = [];
   const nom = String(f.nom || '').trim();
   if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
   const type = String(f.type || '').trim();
   if (type) actifs.push({cles:['type'], texte:`Type « ${type} »`});
-  const sets = setsFiltre();
+  const sets = setsFiltre(f);
   if (sets.length) actifs.push({cles:['sets'],
     texte:`Set${sets.length > 1 ? 's' : ''} : ${sets.map(libelleSet).join(', ')}`});
   const texte = String(f.texte || '').trim();
   if (texte) actifs.push({cles:['texte'], texte:`Texte « ${texte} »`});
-  const arch = archetypesFiltre();
+  const arch = archetypesFiltre(f);
   if (arch.length) actifs.push({cles:['archetypes'],
     texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
-  const roles = rolesFiltre();
+  const roles = rolesFiltre(f);
   if (roles.length) actifs.push({cles:['roles'],
     texte:`Rôle${roles.length > 1 ? 's' : ''} : ${roles.map(r => CATLABEL[r] || r).join(', ')}`});
   FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
@@ -91,6 +92,14 @@ function carteFiltree(card) {
   return !!card && colorOK(card) && roleOK(card) && filtreOK(card);
 }
 
+/* La même chose, plus la restriction du deck ouvert. C'est ce que retiennent
+   la collection, le vivier et le catalogue ; la liste du deck s'en tient à
+   `carteFiltree()`, car une carte déjà posée qui enfreint la restriction doit
+   rester visible pour être retirée — `legality()` la signale. */
+function carteFiltreeEtRestreinte(card) {
+  return carteFiltree(card) && restrictionOK(card);
+}
+
 /* Une valeur peut être donnée telle quelle ou par une fonction, pour que
    les critères coûteux — sets, archétypes, type développé — ne soient
    calculés que si le filtre correspondant est posé. */
@@ -115,13 +124,13 @@ function motsFiltre(valeur, saisie, cle) {
   return mots.every(m => v.includes(m));
 }
 
-function filtresValeursOK(v) {
-  const f = S.filtres || FILTRES_VIDE;
+function filtresValeursOK(v, crit) {
+  const f = crit || S.filtres || FILTRES_VIDE;
   const nom = String(f.nom || '').trim();
   if (nom && !motsFiltre(valeurFiltre(v.name, ''), nom, norm)) return false;
   const type = String(f.type || '').trim();
   if (type && !motsFiltre(valeurFiltre(v.type, ''), type, loose)) return false;
-  const sets = setsFiltre();
+  const sets = setsFiltre(f);
   if (sets.length) {
     const ceux = valeurFiltre(v.sets, []);
     if (!sets.some(c => ceux.includes(c))) return false;
@@ -130,7 +139,7 @@ function filtresValeursOK(v) {
   if (texte && !motsFiltre(valeurFiltre(v.text, ''), texte, norm)) return false;
   const artiste = String(f.artiste || '').trim();
   if (artiste && !motsFiltre(valeurFiltre(v.artist, ''), artiste, loose)) return false;
-  const arch = archetypesFiltre();
+  const arch = archetypesFiltre(f);
   if (arch.length) {
     const ceux = valeurFiltre(v.archetypes, []);
     if (!arch.some(id => ceux.includes(id))) return false;

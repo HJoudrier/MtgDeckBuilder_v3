@@ -39,6 +39,10 @@ function majBoutonAffichage() {
   const lucarne = document.getElementById('headAffichage');
   if (!lucarne) return;
   const liste = listeDeLOngletCourant();
+  /* Un onglet peut ne montrer aucune des cinq listes de cartes — la page
+     « Decks » porte des vignettes de deck et un tableau d'achats. Le bouton
+     disparaît alors, plutôt que de régler une liste qu'on ne voit pas. */
+  if (!liste) { lucarne.innerHTML = ''; return; }
   lucarne.innerHTML = `<button type="button" class="btn sm head-filtre head-affichage" data-act="affichage" data-liste="${liste}"
     title="${esc(LISTES_AFFICHAGE[liste].titre)} : ${esc(resumeAffichage(liste))}">
     ${AFFICHAGE_ICONE} <span class="head-affichage-t">Affichage</span>
@@ -80,6 +84,16 @@ function renderTop() {
     </div>
   `;
 
+  /* Sur quel deck travaille-t-on : la question précède celle des couleurs et
+     celle du format, et la pastille la précède donc. Elle mène à la page
+     « Decks », où l'on change de deck, où l'on en crée, et où se lit la liste
+     d'achats de tous. */
+  const nbDecks = clesDecks().length;
+  const deckActifPillHTML = `
+    <button type="button" class="pill head-deck" id="pillDeckActif" data-act="ongletDecks"
+      title="Vous travaillez sur « ${esc(deckCourant().nom)} »${nbDecks > 1 ? ` — ${nbDecks} decks en tout` : ''} (cliquer pour la page des decks)">Deck <b>${esc(deckCourant().nom)}</b>${nbDecks > 1 ? ` <span class="filtre-n">${nbDecks}</span>` : ''}</button>
+  `;
+
   /* Le format seul. La taille du deck et sa conformité vivaient ici aussi ;
      l'onglet Deck les dit mieux — son indice porte le décompte, et son encadré
      énumère ce qu'il reste à corriger au lieu d'un seul glyphe. */
@@ -99,21 +113,33 @@ function renderTop() {
      un par un. Un bouton « Tout effacer » les suivait : il doublait le
      « Réinitialiser » de la fenêtre des filtres, et sa place variait au gré des
      puces — on visait la croix d'un filtre, on effaçait les cinq autres. */
-  const filtreChipsHTML = actifs.length ? `
-    <div class="head-filtres" role="group" aria-label="Filtres actifs">
-      ${actifs.map(a => `<span class="filtre-chip" title="${esc(a.texte)}">
-        <button type="button" class="chip-txt" data-act="filtres">${esc(a.texte)}</button>
-        <button type="button" class="chip-x" data-act="dropFiltre" data-cles="${esc(a.cles.join(','))}" title="Retirer ce filtre" aria-label="Retirer le filtre ${esc(a.texte)}">✕</button>
-      </span>`).join('')}
+  /* Les restrictions du deck se lisent ici comme les filtres, et ne s'y
+     effacent pas : elles portent un cadenas au lieu d'une croix et mènent à la
+     configuration du deck. C'est structurel — `restrictionsActives()` ne rend
+     aucune clé à effacer, là où `filtresActifs()` en rend. */
+  const restrictions = restrictionsActives();
+  const chips = [
+    ...restrictions.map(a => `<span class="filtre-chip verrou" title="Restriction de « ${esc(deckCourant().nom)} » : ${esc(a.texte)} — se règle dans la configuration du deck">
+      <button type="button" class="chip-txt" data-act="configDeck">${esc(a.texte)}</button>
+      <span class="chip-cadenas" aria-hidden="true">🔒</span>
+    </span>`),
+    ...actifs.map(a => `<span class="filtre-chip" title="${esc(a.texte)}">
+      <button type="button" class="chip-txt" data-act="filtres">${esc(a.texte)}</button>
+      <button type="button" class="chip-x" data-act="dropFiltre" data-cles="${esc(a.cles.join(','))}" title="Retirer ce filtre" aria-label="Retirer le filtre ${esc(a.texte)}">✕</button>
+    </span>`)
+  ];
+  const filtreChipsHTML = chips.length ? `
+    <div class="head-filtres" role="group" aria-label="Filtres et restrictions en vigueur">
+      ${chips.join('')}
     </div>` : '';
 
   /* Le budget se règle dans sa fenêtre, et cette pastille en est la porte :
      elle reste donc affichée même à zéro, sans quoi un budget une fois remis
      à zéro ne serait plus jamais atteignable. */
   const budgetPillHTML = `
-    <button type="button" class="pill" id="pillBudget" data-act="budgetDialog" style="cursor:pointer" title="${S.budget.total > 0
-        ? `Budget restant sur ${esc(eur(S.budget.total))} — cliquer pour régler le budget et les préférences d'achat Cardmarket`
-        : 'Aucun budget : seules les cartes de votre collection sont proposées — cliquer pour en fixer un'}">Budget <b>${S.budget.total > 0 ? eur(Math.max(0, left)) : '—'}</b></button>
+    <button type="button" class="pill${S.budget.total > 0 && sp > S.budget.total ? ' depasse' : ''}" id="pillBudget" data-act="budgetDialog" style="cursor:pointer" title="${S.budget.total > 0
+        ? `« ${esc(deckCourant().nom)} » : ${esc(eur(sp))} engagés sur ${esc(eur(S.budget.total))}${sp > S.budget.total ? ` — ${esc(eur(sp - S.budget.total))} de trop` : `, reste ${esc(eur(left))}`} (cliquer pour régler le budget de ce deck et les préférences d'achat Cardmarket)`
+        : `Aucun budget pour « ${esc(deckCourant().nom)} » : seules les cartes de votre collection sont proposées — cliquer pour en fixer un`}">Budget <b>${S.budget.total > 0 ? `${eur(sp)} / ${eur(S.budget.total)}` : '—'}</b></button>
   `;
 
   /* Deux pastilles disaient ici ce que la collection retenait et ce que le
@@ -128,6 +154,7 @@ function renderTop() {
      les filtres en vigueur et le budget. Le format venait après les puces de
      filtres, dont le nombre change : il se déplaçait d'un rendu à l'autre. */
   topStats.innerHTML = `
+    ${deckActifPillHTML}
     ${manaBarHTML}
     ${deckPillHTML}
     ${filtreChipsHTML}

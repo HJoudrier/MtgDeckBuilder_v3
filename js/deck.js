@@ -19,7 +19,8 @@ function deckEntries() {
 /* L'empreinte du deck, dont l'empreinte des suggestions se sert pour savoir si
    la notation vaut encore. */
 function deckSignature() {
-  return deckEntries().map(e => e.card.name + '×' + e.qty).sort().join('|') + '||' + (S.commander || '');
+  return S.deckActif + '||' + deckEntries().map(e => e.card.name + '×' + e.qty).sort().join('|')
+       + '||' + (S.commander || '');
 }
 
 /* Les cartes du deck, une fois chacune. Deux clés de `S.deck` peuvent viser la

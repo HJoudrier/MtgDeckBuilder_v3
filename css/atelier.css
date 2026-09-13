@@ -726,3 +726,49 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
    tournait. */
 .filtre-progres[hidden]{display:none}
 .dlg-f .btn:disabled{opacity:.45;cursor:default}
+
+/* ---------------------------------------------------------------------
+   La page « Decks » : les vignettes des decks, et la liste d'achats.
+   Aucune couleur en dur — les variables disent le rôle, et les deux thèmes
+   les définissent chacun de son côté.
+   --------------------------------------------------------------------- */
+.decks-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.deck-carte{
+  border:1px solid var(--line2);border-radius:10px;background:var(--bg2);
+  padding:10px 12px;display:flex;flex-direction:column;gap:6px
+}
+/* Le deck ouvert se reconnaît au premier regard : c'est celui que tout le
+   reste de l'atelier montre. */
+.deck-carte.actif{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass-a2) inset}
+.deck-tete{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.deck-tete h4{margin:0;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.deck-chiffres{line-height:1.5}
+.deck-gestes{flex-wrap:wrap;gap:6px;margin-top:2px}
+/* Un deck rangé ou seulement pensé se dit d'une teinte plus sourde : c'est un
+   état, non une alerte. */
+.pill.statut-abouti{border-color:var(--ok-d);color:var(--ok-txt)}
+.pill.statut-archive{opacity:.7}
+.pill.statut-idee{border-color:var(--line2);color:var(--dim)}
+
+/* Les decks qui réclament une carte, sur sa ligne de la liste d'achats. */
+.wl-decks{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
+.wl-decks .pill{cursor:pointer}
+.pill.actif{border-color:var(--brass);color:var(--brass)}
+
+/* La pastille du deck ouvert, en tête de l'en-tête, et celle du budget quand
+   il est dépassé. */
+.pill.head-deck{cursor:pointer;border-color:var(--brass-d)}
+.pill.head-deck b{color:var(--brass)}
+.pill.depasse{border-color:var(--bad);color:var(--bad-txt)}
+
+/* Une puce de restriction se lit comme une puce de filtre, mais ne s'efface
+   pas ici : le cadenas remplace la croix, et le texte mène à la configuration
+   du deck. La distinction est structurelle — `restrictionsActives()` ne rend
+   aucune clé à effacer — et cette règle ne fait que la rendre visible. */
+.filtre-chip.verrou{border-style:dashed}
+.filtre-chip .chip-cadenas{padding:3px 8px 3px 4px;font-size:10px;line-height:1;opacity:.7}
+
+@media (max-width:640px){
+  .decks-grille{grid-template-columns:1fr}
+  .deck-carte{padding:8px 10px}
+}

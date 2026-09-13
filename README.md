@@ -27,19 +27,23 @@ js/                 modules, chargés dans cet ordre :
   cartes.js         la base de cartes et ses index
   liens.js          interaction précise ou déclencheur large
   etat.js           l'état : `S` et les tables de l'atelier
+  decks.js          les decks, et celui sur lequel on travaille
   archetypesSets.js deux vocabulaires venus du dehors, et leurs filtres
   filtres.js        les critères de la fenêtre « Filtres »
+  restrictions.js   le filtre que porte un deck, et qu'on n'efface pas d'une puce
   retenue.js        ce qui reste après les filtres : légalité, couleurs
   catalogueEtat.js  l'archive en mémoire, et les nœuds qu'elle touche
   groupes.js        grouper et trier les listes
   barreGroupes.js   l'enveloppe d'un groupe, et la mise en page d'une liste
   marche.js         Cardmarket
+  achats.js         le panier d'un deck, et la liste d'achats de tous
 
   — ce qui vient du dehors —
   symboles.js       les symboles de mana
   scryfallApplique.js  verser une réponse de Scryfall dans une carte
   scryfall.js       la file d'attente vers Scryfall
   recherches.js     les recherches nommées chez Scryfall
+  decksStockage.js  les dossiers de deck, rangés et relus
   stockage.js       la sauvegarde locale
   fenSauvegarde.js  les sections « Sauvegarde » et « Catalogue »
   idb.js            le magasin IndexedDB
@@ -58,6 +62,8 @@ js/                 modules, chargés dans cet ordre :
   candidats.js      des enregistrements de l'archive aux cartes candidates
 
   — les sections —
+  decksSection.js   la section « Mes decks »
+  wishlistSection.js la section « Liste d'achats »
   graphe.js         graphe des capacités
   stats.js          statistiques
   notation.js       la note d'une carte candidate
@@ -99,7 +105,8 @@ js/                 modules, chargés dans cet ordre :
   fenFormat.js      format de jeu
   fenParametres.js  sauvegarde locale, synchronisation, apparence, catalogue
   fenNuage.js       la section « Synchronisation » de cette fenêtre
-  fenBudget.js      budget et achats
+  fenBudget.js      budget du deck et préférences d'achat
+  fenDeck.js        la configuration d'un deck : nom, règles, budget, restrictions
   fenFiltres.js     filtres de la collection
   fenAffichage.js   vue, colonnes, groupement et tri d'une liste de cartes
   fenCibles.js      les objectifs par rôle du deck
@@ -108,6 +115,7 @@ js/                 modules, chargés dans cet ordre :
   fenExport.js      export du deck, liste d'achats, effacement
 
   — les gestes —
+  gestesDecks.js    créer, ouvrir, configurer, dupliquer, supprimer un deck
   gestesVue.js      fermer, cocher une couleur, changer d'onglet
   gestesReglages.js « Appliquer » des fenêtres de réglage, jauges, pagination
   gestesDeck.js     monter, démonter, garer, ouvrir une fiche
@@ -118,18 +126,19 @@ js/                 modules, chargés dans cet ordre :
   app.js            l'aiguillage et le démarrage
 ```
 
-Les sept sections de la page se répartissent en cinq onglets, posés au bas de l'en-tête et
-toujours visibles : **Collection** porte les statistiques puis la collection, **Deck** porte le
+Les neuf sections de la page se répartissent en six onglets, posés au bas de l'en-tête et
+toujours visibles : **Decks** porte la liste des decks puis la liste d'achats commune,
+**Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
 recommandent — groupées et triées à part, avec deux tris qui n'existent que là : le taux
 d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé. La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
-`ONGLETS_ANCIENS`. Les sept sections sont rendues à chaque fois, celles qu'on ne
+`ONGLETS_ANCIENS`. Les neuf sections sont rendues à chaque fois, celles qu'on ne
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
-alors aucun rendu. L'en-tête garde trois pastilles — la barre de mana et le nom de la combinaison,
-le format, le budget — et trois commandes au coin haut-droit : le bouton de l'**affichage**, celui
+alors aucun rendu. L'en-tête garde quatre pastilles — le deck ouvert, la barre de mana et le nom de la
+combinaison, le format, le budget — et trois commandes au coin haut-droit : le bouton de l'**affichage**, celui
 des **filtres** et l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, l'apparence et le
 catalogue. Les trois voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
 `.head-actions` les ancre, et la réserve qui leur laisse la place est portée par `.top-in` là où les
@@ -138,8 +147,9 @@ L'en-tête ne se replie plus : un bouton « Stats » basculait un mode compact q
 s'allumait aussi tout seul — deux mécanismes pour une même chose, l'un en JavaScript et figé au
 chargement, l'autre en CSS et suivant le redimensionnement. Seul le second demeure, et la mise en
 page du téléphone tient désormais dans le bloc `@media (max-width:640px)`.
-Les pastilles suivent l'ordre des questions : quelles couleurs, quel format — c'est lui qui commande
-la légalité et la taille du deck —, puis les puces des filtres en vigueur et le budget. Le format
+Les pastilles suivent l'ordre des questions : sur quel deck travaille-t-on — elle précède tout, le
+format, les couleurs, le budget et les objectifs étant désormais ceux de ce deck-là —, puis quelles
+couleurs, quel format, puis les puces en vigueur et le budget. Le format
 venait après ces puces, dont le nombre change : il se déplaçait d'un rendu à l'autre. Chaque puce
 porte sa croix ; un bouton « Tout effacer » les suivait, qui doublait le « Réinitialiser » de la
 fenêtre des filtres et dont la place variait au gré des puces — on visait la croix d'un filtre, on
@@ -202,15 +212,70 @@ qu'on cherche à éviter, et sans elles un atelier réglé en sombre clignerait 
 visite. Tant que rien n'a été choisi, `S.sombre` vaut `null` et l'atelier suit la préférence du
 système.
 
+## Plusieurs decks, un seul atelier
+
+Un deck est un **dossier** : son nom, son avancement, ses trois listes, son commandant, son format,
+son budget, ses restrictions et ses objectifs par rôle. `S.decks` les tient tous, `S.deckActif` dit
+lequel est ouvert, et la collection reste commune — c'est l'inventaire physique, elle n'appartient à
+personne.
+
+Les champs que l'atelier lisait dans `S` — `S.deck`, `S.commander`, `S.format`, `S.budget`,
+`S.ciblesRoles`, `S.secondairesOff` et les deux annexes — sont lus ou écrits dans cent cinquante
+endroits. Aucun n'a été repris : ils ont quitté le littéral de `js/etat.js` et sont devenus des
+**propriétés d'accès** posées sur `S` par `js/decks.js`, qui lisent et écrivent dans le dossier
+ouvert. `S.deck` reste `S.deck` partout, et ce fichier est le seul à savoir qu'il y en a plusieurs.
+Le recopiage — ranger le dossier dans `S` à chaque bascule — aurait laissé exister des instants où
+le rangé et l'affiché divergent, et un oubli de rangement avant une sauvegarde aurait perdu un
+commandant en silence ; une vue, elle, ne se désynchronise pas. Le lecteur rend la **référence**
+rangée et jamais une copie, sans quoi `S.deck.set(...)` écrirait dans un double.
+
+Ce qui reste global est ce qui relève de la **vue** ou de l'appareil : les filtres de l'en-tête, les
+vues, colonnes, groupements et tris, l'onglet, les plis, le thème, le catalogue. `S.ciblesRoles`, en
+revanche, est descendu dans le dossier tout en gardant son indexation par format à l'intérieur : le
+format est désormais une propriété du deck, et deux decks du même format n'ont pas les mêmes
+objectifs. `ciblesReglees()` (`js/legalite.js`) n'a pas changé d'une lettre.
+
+**Le budget se scinde selon sa nature.** Le plafond et le prix maximum par carte sont une intention
+propre au deck et vivent dans son dossier (`S.budget`) ; l'état, la langue, le type de vendeur et le
+pays disent *comment* on achète, valent pour tous les decks, et vivent dans `S.achats`. La même
+fenêtre règle les deux, sous deux titres.
+
+**Une restriction est un filtre que le deck porte lui-même.** Elle a la forme de `FILTRES_VIDE`,
+plus les couleurs — qu'elle peut déduire du commandant, ce qui évite de reposer la barre de mana à
+chaque fois qu'on revient sur un deck. Elle porte partout où porte un filtre : `carteRetenue()`
+(`js/retenue.js`) l'applique à la collection et au vivier, `restrictionOKRec()` au catalogue brut.
+Partout **sauf sur la liste du deck lui-même**, qui s'en tient à `carteFiltree()` — une restriction
+« coût ≤ 3 » masquerait sinon le commandant qu'elle est censée servir ; les cartes fautives sont
+signalées par `legality()`, comme l'est déjà une carte illégale. Ses puces paraissent dans l'en-tête
+avec un cadenas au lieu d'une croix, et cette différence est **structurelle** : `filtresActifs()`
+rend les clés à effacer, `restrictionsActives()` n'en rend aucune. Un seul paramètre l'a rendue
+possible sans rien réécrire — `filtresValeursOK(v, crit)`, dont le second argument vaut `S.filtres`
+par défaut.
+
+**La liste d'achats additionne ce que réclament tous les decks.** Un deck marqué « exemplaires
+propres » exige ses copies : sa demande s'ajoute. Ceux qui ne le sont pas se partagent la collection
+— ils ne sont jamais montés en même temps — et il suffit de satisfaire le plus gourmand d'entre eux.
+Ce que l'on possède se retranche du total, et chaque ligne dit quels decks réclament la carte, ce qui
+rend la règle lisible sans l'expliquer. `spent()` appelle `aAcheter()`, donc une estimation d'offre
+par carte manquante, et l'en-tête le fait à chaque rendu : sur huit decks, la liste referait ce
+travail autant de fois, d'où le mémo `ACHATS` sous `signatureAchats()`. Seule la section `secJ` la
+demande, si bien que l'en-tête ne paie rien de plus qu'avant.
+
 ## La synchronisation entre appareils
 
 Un même atelier sur deux PC, par un dossier d'application Dropbox — aucun serveur de l'atelier
 n'est en jeu, les données vont de ce navigateur au nuage et en reviennent. Trois décisions la
 gouvernent.
 
-**Trois étages, fusionnés différemment** (`js/nuagePaquet.js`). Le **fond** — collection, deck,
-réserve, étude, commandant, format, cibles, budget — est l'intention du joueur, et se fusionne carte
-par carte. La **vue** — vues, colonnes, groupements, tris, filtres, barre de mana, onglet, plis,
+**Trois étages, fusionnés différemment** (`js/nuagePaquet.js`). Le **fond** — la collection, les
+decks avec tout ce qu'ils portent, le format personnalisé, les préférences d'achat — est l'intention
+du joueur, et se fusionne carte par carte. Les decks y forment un étage à eux, fusionné **dossier par
+dossier puis carte par carte** (`fusionneDecks()`, `js/nuageFusion.js`) ; **aucun marqueur de
+suppression n'est nécessaire**, la base à trois côtés tranchant seule les deux cas qui comptent — un
+dossier présent dans la base et absent d'un côté y a été supprimé, un dossier absent de la base et
+présent d'un côté y a été créé. Les clés de deck sont tirées au sort et non numérotées : deux
+appareils qui créent chacun un deck hors ligne ne doivent pas se réclamer la même. Le deck **ouvert**
+ne voyage pas — c'est de la vue, comme l'onglet. La **vue** — vues, colonnes, groupements, tris, filtres, barre de mana, onglet, plis,
 thème, et les réglages qui dépendent de la machine comme le nombre de cartes examinées ou
 l'archivage du catalogue — **ne voyage pas** : un vingt-sept pouces et un portable ne veulent pas le
 même nombre de colonnes. Le **cache** des cartes complétées par Scryfall — visuels, textes, prix —
@@ -234,6 +299,15 @@ croit remplacer, refusant en 409 si l'autre appareil a écrit entre-temps. L'API
 pas d'équivalent depuis qu'elle a retiré les `ETag`, et son jeton ne vit qu'une heure. Un tour se
 fait toujours dans le même ordre — **tirer, fusionner, verser, pousser** — et un conflit de `rev` se
 rejoue une fois sur le nouveau distant.
+
+La sauvegarde locale, elle, garde son marqueur `v: 1`. Le passer à 2 ferait qu'un atelier resté sur
+le code d'hier rejetterait la sauvegarde — `restore()` refuse `d.v !== 1` — puis l'écraserait par un
+état vide à la première sauvegarde différée : une perte de données. La migration se reconnaît donc à
+l'**absence de `d.decks`**, comme celle de `d.view`, `d.colonnes` et `d.sort` avant elle ; le deck
+d'hier devient « Mon deck », avec ses cartes, son commandant, son format, son budget et ses
+objectifs. Par la même prudence, `snapshot()` recopie le deck ouvert sous les anciennes clés le temps
+d'une version : quelques centaines d'octets, négligeables devant `cartes` et `enrich`, qui rendent
+son deck à un atelier resté en arrière au lieu d'une page vide.
 
 La configuration — jetons, chemin, `rev`, nom de l'appareil — vit dans une **clé à elle**,
 `mtg-atelier-nuage`, et non dans `snapshot()` : versée dans l'instantané, elle voyagerait jusqu'à
@@ -356,6 +430,30 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   sans style : une carte possédée en quatre exemplaires dont un est monté n'est pas `zero`, et une
   carte possédée à zéro l'est sans être au deck.
 
+- La page **Decks** répond à la question qui précède toutes les autres : sur quoi travaille-t-on.
+  « Mes decks » montre une vignette par deck — avancement, taille visée, part possédée, reste à
+  acheter, budget, restrictions — et porte les gestes : *Nouveau*, *Travailler dessus*, *Configurer*,
+  *Dupliquer*, *Supprimer*. « Liste d'achats » montre le total consolidé. La pastille de l'en-tête y
+  mène et dit le deck ouvert. Cet onglet ne montre aucune des cinq listes de cartes — des vignettes
+  de deck et un tableau d'achats ne se règlent ni en colonnes ni en groupes —, d'où son `liste` nul
+  dans `ONGLETS` : le bouton « Affichage » s'efface alors, plutôt que de régler une liste
+  qu'on ne voit pas.
+- Le dernier deck ne se supprime pas : l'atelier n'a pas d'état sans deck ouvert, et « supprimer »
+  vaudrait « vider », qui a son propre bouton. Deux decks ne peuvent pas porter le même nom — un
+  doublon reçoit un numéro —, sans quoi ils seraient indiscernables dans la pastille comme dans
+  chaque ligne de la liste d'achats.
+- `copieEtat()` et `memeEtat()` (`js/brouillon.js`) descendent désormais dans les `Map` et les `Set`.
+  `JSON` ne sait rendre ni l'un ni l'autre — une `Map` en ressortait vide —, et la fenêtre de
+  configuration d'un deck met au brouillon un dossier entier, listes comprises.
+- Deux seuils voisins ont été ramenés à un : le plafond par carte se comparait au **prix de
+  tendance** dans `js/candidats.js` et au **prix ajusté** dans `bestOffer()`, si bien qu'une carte à
+  5,00 € passait le pré-filtre avec un plafond à 5 € pour être rejetée ensuite dès que l'état
+  recherché la portait à 6,75 €. `prixBrutMax()` (`js/marche.js`) ramène le plafond au brut, et les
+  deux étages écartent au même endroit.
+- `aAcheter()` lisait la collection à la clé brute du deck, là où `deckEntries()` passe par `find()` :
+  une carte importée sous un autre nom passait pour manquante. `quantiteCollection()` (`js/achats.js`)
+  fait le détour, et la liste d'achats — qui rendait ce décalage bien plus visible — ne réclame plus
+  ce qu'on possède.
 - La mise en page d'une liste de cartes — vue, nombre de colonnes, groupement, tri — se règle dans sa
   fenêtre « Affichage » (`js/fenAffichage.js`), qu'ouvre le bouton du même nom, au coin haut-droit de
   l'en-tête. Les cinq listes de l'atelier en ont une : la collection, le deck (avec ses listes

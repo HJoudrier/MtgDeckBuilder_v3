@@ -25,12 +25,20 @@ function ouvreBrouillon(cles, redessine) {
   cles.forEach(k => brouillon.val[k] = copieEtat(S[k]));
 }
 
-/* Copie profonde d'un champ de `S` : le `Set` des couleurs comme le
-   `S.custom` imbriqué doivent être détachés, sans quoi le brouillon
-   modifierait l'état appliqué. */
+/* Copie profonde d'un champ de `S` : le `Set` des couleurs, le `S.custom`
+   imbriqué et les `Map` de cartes d'un dossier de deck doivent être détachés,
+   sans quoi le brouillon modifierait l'état appliqué. `JSON` ne sait rendre
+   ni l'un ni l'autre — une `Map` en ressortait vide —, d'où cette descente à
+   la main. */
 function copieEtat(v) {
   if (v instanceof Set) return new Set(v);
-  if (v && typeof v === 'object') return JSON.parse(JSON.stringify(v));
+  if (v instanceof Map) return new Map(v);
+  if (Array.isArray(v)) return v.map(copieEtat);
+  if (v && typeof v === 'object') {
+    const out = {};
+    Object.keys(v).forEach(k => { out[k] = copieEtat(v[k]); });
+    return out;
+  }
   return v;
 }
 
@@ -79,13 +87,19 @@ function brouillonModifie() {
   return brouillon.cles.some(k => !memeEtat(brouillon.val[k], a[k]));
 }
 
+/* Une valeur rendue comparable, `Map` et `Set` compris — `JSON.stringify` les
+   rend toutes deux `{}`, si bien que deux decks aux listes différentes se
+   seraient dits identiques. L'ordre est neutralisé : un ensemble n'en a pas. */
+function texteEtat(v) {
+  if (v instanceof Set) return 'E(' + [...v].map(texteEtat).sort().join(',') + ')';
+  if (v instanceof Map) return 'T(' + [...v].map(([k, x]) => k + '=' + texteEtat(x)).sort().join(',') + ')';
+  if (Array.isArray(v)) return '[' + v.map(texteEtat).join(',') + ']';
+  if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(k => k + ':' + texteEtat(v[k])).join(',') + '}';
+  return JSON.stringify(v);
+}
+
 function memeEtat(x, y) {
-  if (x instanceof Set || y instanceof Set) {
-    if (!(x instanceof Set) || !(y instanceof Set) || x.size !== y.size) return false;
-    return [...x].every(v => y.has(v));
-  }
-  if (x && y && typeof x === 'object') return JSON.stringify(x) === JSON.stringify(y);
-  return x === y;
+  return texteEtat(x) === texteEtat(y);
 }
 
 /* Ce qui suit un réglage : dans une fenêtre à brouillon, seule elle se

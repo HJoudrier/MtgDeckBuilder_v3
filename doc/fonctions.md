@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**561 fonctions**, 89 modules, 618 Ko de JavaScript.
+**626 fonctions**, 97 modules, 678 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -21,23 +21,27 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 185 |
-| [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 164 |
-| [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 13 | 148 |
-| [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 9 | 123 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 183 |
+| [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
+| [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
+| [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
+| [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
+| [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 11 | 135 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 62 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
-| [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 3 | 54 |
+| [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
+| [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 282 |
+| [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 270 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 68 |
-| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 113 |
-| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 8 | 166 |
+| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 121 |
+| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 234 |
 | [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
 | [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 275 |
 | [`nuageDiagnostic.js`](#jsnuagediagnosticjs) | Éprouver la connexion, étape par étape | 3 | 86 |
@@ -48,58 +52,62 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gameChangers.js`](#jsgamechangersjs) | La liste des « Game Changers » | 4 | 77 |
 | [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 219 |
 | [`catalogue.js`](#jscataloguejs) | Tenir le catalogue à jour | 10 | 232 |
-| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 252 |
+| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 258 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 169 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
 | [`notation.js`](#jsnotationjs) | La note d'une carte candidate | 5 | 239 |
-| [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 195 |
+| [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 196 |
 | [`sugOrdre.js`](#jssugordrejs) | L'ordre gelé des propositions | 6 | 80 |
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
 | [`sugListes.js`](#jssuglistesjs) | Le fond commun des trois listes de propositions | 11 | 142 |
 | [`sugGraphe.js`](#jssuggraphejs) | La section du graphe : ce qui se branche sur les nœuds | 1 | 41 |
 | [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 52 |
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
-| [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 243 |
-| [`collection.js`](#jscollectionjs) | La section Collection | 8 | 148 |
+| [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 244 |
+| [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
+| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 3 | 68 |
+| [`collection.js`](#jscollectionjs) | La section Collection | 9 | 156 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
 | [`rechercheSection.js`](#jsrecherchesectionjs) | Le champ de recherche d'une section | 11 | 178 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
-| [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
-| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 174 |
+| [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 115 |
+| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 180 |
 | [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 228 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
-| [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 7 | 72 |
+| [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
-| [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 12 | 139 |
+| [`brouillon.js`](#jsbrouillonjs) | Le brouillon des fenêtres à « Appliquer » | 13 | 153 |
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
 | [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 251 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 195 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 213 |
-| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 240 |
+| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 35 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
-| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 8 | 151 |
+| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 130 |
-| [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
+| [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 6 | 107 |
+| [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 207 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
 | [`fenCibles.js`](#jsfenciblesjs) | Fenêtre « Objectifs par rôle » | 5 | 82 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
-| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 166 |
+| [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 179 |
+| [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 301 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 297 |
 
 ## js/reglesEffets.js
 
@@ -260,7 +268,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 185 lignes, 10 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 183 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -283,9 +291,33 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 | `apercuCardName` | — |
 | `S` | — |
 
+## js/decks.js
+
+Les decks, et celui sur lequel on travaille. *12 fonctions, 196 lignes, 8.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `cleDeckNeuve()` | Une clé tirée au sort plutôt qu'un compteur : deux appareils qui créent chacun un deck hors ligne ne doivent pas se réclamer la même, sans quoi la synchronisation fusionnerait deux decks… |
+| `deckNeuf(nom, modele)` | Un dossier neuf, ou la copie d'un dossier existant quand `modele` est donné. |
+| `clesDecks()` | Les decks dans l'ordre où ils ont été créés : un deck ne doit pas changer de place dans la liste parce qu'on y a touché. |
+| `deckCourant()` | Le dossier ouvert. Il en existe toujours un : une sauvegarde abîmée, une suppression mal menée ou un tout premier lancement en trouvent un ou en font un, plutôt que de rendre `undefined`… |
+| `nomDeckLibre(base)` | Un nom libre : « Deck », puis « Deck 2 ». Deux decks du même nom seraient indiscernables dans la pastille comme dans la liste d'achats. |
+| `creerDeck(nom, modele)` | — |
+| `activerDeck(cle)` | Changer de deck, c'est changer tout ce que l'atelier propose : les candidates du catalogue, la notation, les listes. |
+| `renommerDeck(cle, nom)` | — |
+| `dupliquerDeck(cle)` | — |
+| `supprimerDeck(cle)` | Le dernier deck ne se supprime pas : l'atelier n'a pas d'état sans deck ouvert, et « supprimer » vaudrait « vider », qui a son propre bouton. |
+| `carteDansUnDeck(nom)` | Une carte tenue par l'un quelconque des decks — liste, réserve ou étude. |
+| `bilanDeck(cle)` | Ce qu'un deck pèse, pour les vignettes de la page « Decks » et la pastille de l'en-tête. |
+
+| Donnée | Rôle |
+|---|---|
+| `DECK_STATUTS` | Où en est un deck. C'est du suivi, non une règle : rien n'en dépend que l'affichage et le rangement de la page « Decks ». Un deck archivé ne disparaît pas de la liste d'achats — on le… |
+| `CHAMPS_DECK` | Les huit champs du dossier que `S` montre sous leur ancien nom. |
+
 ## js/archetypesSets.js
 
-Deux vocabulaires venus du dehors. *12 fonctions, 164 lignes, 7.2 Ko.*
+Deux vocabulaires venus du dehors. *12 fonctions, 173 lignes, 7.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -294,12 +326,12 @@ Deux vocabulaires venus du dehors. *12 fonctions, 164 lignes, 7.2 Ko.*
 | `archetypesDisponibles()` | Les archétypes proposés : ceux qu'EDHREC publie. |
 | `archetypesCarte(card)` | Archétypes d'une carte, d'après les thèmes EDHREC chargés. |
 | `archetypesAChargerEdhrec()` | Un thème coché dont les cartes ne sont pas encore chargées. |
-| `archetypesFiltre()` | Archétypes cochés, conservés sous forme de liste séparée par des virgules. |
+| `archetypesFiltre(crit)` | Archétypes cochés, conservés sous forme de liste séparée par des virgules. |
 | `basculerArchetype(id)` | — |
-| `setsFiltre()` | Sets cochés, conservés comme les archétypes : une liste de codes séparés par des virgules. |
+| `setsFiltre(crit)` | Sets cochés, conservés comme les archétypes : une liste de codes séparés par des virgules. |
 | `basculerSet(code)` | — |
 | `libelleSet(code)` | Nom du set, s'il figure dans la liste Scryfall ; sinon son code. |
-| `setsACharger()` | Un set coché dont les cartes ne sont pas encore chargées. |
+| `setsACharger()` | Un set coché dont les cartes ne sont pas encore chargées, ceux de la restriction du deck compris. |
 | `setsCarte(card)` | Sets d'une carte. Scryfall fait autorité pour les sets déjà chargés, mais on y joint ce que l'appareil sait déjà : le set relevé dans l'archive, les éditions possédées et celles que la… |
 
 | Donnée | Rôle |
@@ -311,27 +343,51 @@ Deux vocabulaires venus du dehors. *12 fonctions, 164 lignes, 7.2 Ko.*
 
 ## js/filtres.js
 
-Les critères de la fenêtre « Filtres ». *13 fonctions, 148 lignes, 6.2 Ko.*
+Les critères de la fenêtre « Filtres ». *14 fonctions, 157 lignes, 6.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `rolesFiltre()` | Rôles cochés dans la section Deck, conservés comme les archétypes. |
+| `rolesFiltre(crit)` | Rôles cochés dans la section Deck, conservés comme les archétypes. |
 | `basculerRole(role)` | — |
-| `roleOK(card)` | Une carte tient au moins un des rôles cochés. |
+| `roleOK(card, crit)` | Une carte tient au moins un des rôles cochés. |
 | `nombreFiltre(v)` | — |
 | `reinitFiltres()` | — |
 | `majFiltre(cle, valeur)` | Écrit un champ de la fenêtre dans l'état. |
 | `effacerFiltre(cles)` | Efface un filtre depuis sa puce dans l'en-tête. |
-| `filtresActifs()` | Filtres en vigueur : un libellé et les clés à effacer pour chacun. |
+| `filtresActifs(crit)` | Filtres en vigueur : un libellé et les clés à effacer pour chacun. |
 | `texteFiltresActifs(sep)` | Libellés seuls, pour les infobulles et les phrases de résumé. |
 | `carteFiltree(card)` | Prédicat unique de l'atelier : couleurs, rôles et critères de la fenêtre. |
+| `carteFiltreeEtRestreinte(card)` | La même chose, plus la restriction du deck ouvert. |
 | `valeurFiltre(x, vide)` | Une valeur peut être donnée telle quelle ou par une fonction, pour que les critères coûteux — sets, archétypes, type développé — ne soient calculés que si le filtre correspondant est posé. |
 | `motsFiltre(valeur, saisie, cle)` | Chaque mot de la saisie doit se retrouver dans la valeur, dans n'importe quel ordre. |
-| `filtresValeursOK(v)` | — |
+| `filtresValeursOK(v, crit)` | — |
+
+## js/restrictions.js
+
+La restriction d'un deck. *12 fonctions, 128 lignes, 5.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `restrictionsDuDeck()` | La restriction du deck ouvert. Toujours un objet : un dossier d'hier qui n'en porte pas se lit comme un dossier sans restriction. |
+| `couleursRestriction(r)` | Les couleurs que la restriction impose, ou `null` si elle n'en impose aucune. |
+| `couleursRestrictionOK(card)` | — |
+| `restrictionOK(card)` | Le prédicat, sur une carte bâtie. Les rôles demandent l'analyse du texte : ils ne valent donc que de ce côté-ci, comme pour les filtres. |
+| `restrictionOKRec(rec)` | Le même, sur un enregistrement brut du catalogue : c'est ce qui évite de bâtir des dizaines de milliers de cartes pour les écarter ensuite. |
+| `restrictionPosee()` | Y a-t-il quoi que ce soit à restreindre ? Sert à ne pas parcourir le deck pour rien, et à ne pas afficher une rangée de puces vide. |
+| `restrictionsActives()` | Les restrictions en vigueur, sous la même forme que `filtresActifs()` mais **sans clés** : c'est l'absence de `cles` qui fait qu'aucune croix n'est dessinée, et non une exception dans le… |
+| `texteRestrictionsActives(sep)` | — |
+| `cartesHorsRestriction()` | Les cartes du deck que sa propre restriction écarterait. |
+| `poseCouleursCommandant(rest)` | Un deck neuf peut hériter de l'identité couleur de son commandant sans qu'on ait à cocher six cases : c'est le geste de la fenêtre de configuration, et le seul endroit où la restriction… |
+| `majRestriction(cle, valeur)` | — |
+| `reinitRestrictions()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `RESTRICTION_CHAMPS` | Rien ne s'y écrit hors de la fenêtre de configuration, mais le garde-fou est le même que celui de `majFiltre()` : une clé inconnue ne doit pas s'installer en silence dans le dossier. |
 
 ## js/retenue.js
 
-Ce qui reste après les filtres. *9 fonctions, 123 lignes, 5.3 Ko.*
+Ce qui reste après les filtres. *11 fonctions, 135 lignes, 5.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -341,9 +397,11 @@ Ce qui reste après les filtres. *9 fonctions, 123 lignes, 5.3 Ko.*
 | `carteLegale(card)` | Légalité d'une carte dans le format en cours. |
 | `legaliteOK(card)` | Le filtre de légalité, tel que la case de la fenêtre Format le règle. |
 | `carteRetenue(card)` | Ce que la collection et les suggestions retiennent : les critères de la fenêtre, plus la légalité. |
+| `valeursCarte(card)` | Les valeurs d'une carte que les critères comparent. |
 | `filtreOK(card)` | Applique les filtres avancés à une carte. |
 | `setsRec(rec)` | Sets d'un enregistrement du catalogue : ceux que porte l'archive, réunis à ce que Scryfall a rapporté pour les sets déjà chargés. |
 | `filtreOKRec(rec)` | Les mêmes critères, lus sur un enregistrement du catalogue : c'est ce qui permet de filtrer les dizaines de milliers de cartes de l'archive sans en construire autant d'objets. |
+| `valeursRec(rec)` | Les mêmes valeurs, lues sur un enregistrement du catalogue. |
 
 | Donnée | Rôle |
 |---|---|
@@ -412,11 +470,13 @@ L'enveloppe d'un groupe, et la mise en page d'une liste. *8 fonctions, 118 ligne
 
 ## js/marche.js
 
-Marché Cardmarket, estimations & panier d'achat. *3 fonctions, 54 lignes, 2.1 Ko.*
+Marché Cardmarket, estimations & panier d'achat. *5 fonctions, 69 lignes, 2.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `cmLink(card)` | — |
+| `multiplicateurAchat()` | Ce que les préférences d'achat font au prix de tendance. |
+| `prixBrutMax()` | Le prix de tendance au-delà duquel l'estimation dépasserait le plafond par carte du deck ouvert. |
 | `cmEstimate(card)` | — |
 | `bestOffer(card)` | — |
 
@@ -429,6 +489,26 @@ Marché Cardmarket, estimations & panier d'achat. *3 fonctions, 54 lignes, 2.1 K
 | `SELLER_TYPES` | — |
 | `SELLER_MULT` | — |
 | `CM_COUNTRIES` | — |
+
+## js/achats.js
+
+Ce qu'il reste à acheter. *9 fonctions, 143 lignes, 5.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `quantiteCollection(nom)` | Ce que la collection porte d'une carte. Le nom du deck et celui de la collection peuvent différer — un import a pu nommer la carte autrement — et `find()` les ramène au même objet : sans… |
+| `nomCanonique(nom)` | Le nom sous lequel une carte se compte, quel que soit celui par lequel on y arrive : sans quoi deux decks qui l'orthographient différemment demanderaient deux lignes d'achat pour une… |
+| `aAcheter(cle)` | Le panier d'un deck : ce qui lui manque, à lui seul. |
+| `spent(cle)` | — |
+| `demandesTousDecks()` | La demande de chaque carte, deck par deck. |
+| `invaliderAchats()` | — |
+| `signatureAchats()` | `spent()` fait déjà une estimation d'offre par carte manquante, et l'en-tête l'appelle à chaque rendu. |
+| `wishlist()` | — |
+| `bilanWishlist()` | Le pied de la liste : ce qu'elle coûte, combien d'exemplaires elle porte, et ce que les decks se sont fixé comme plafonds — à titre d'information, rien ne le contraint. |
+
+| Donnée | Rôle |
+|---|---|
+| `ACHATS` | — |
 
 ## js/symboles.js
 
@@ -498,9 +578,19 @@ Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
 |---|---|
 | `scrySeq` | — |
 
+## js/decksStockage.js
+
+Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `deckSnap(cle)` | Un dossier de deck tel qu'il se range : les Map en paires, les Set en tableaux, comme le reste de la sauvegarde. |
+| `ciblesPropres(src)` | Les objectifs par rôle, format par format : une valeur qui n'est pas un nombre positif est écartée, et le rôle reprend la cible que le format lui donne. |
+| `restaureDecks(d)` | Les decks, et la sauvegarde d'hier qui n'en connaissait qu'un. |
+
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 282 lignes, 12 Ko.*
+La sauvegarde locale. *9 fonctions, 270 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -555,7 +645,7 @@ Le magasin IndexedDB. *5 fonctions, 68 lignes, 2.6 Ko.*
 
 ## js/nuagePaquet.js
 
-Ce qui voyage d'un appareil à l'autre. *7 fonctions, 113 lignes, 4.8 Ko.*
+Ce qui voyage d'un appareil à l'autre. *7 fonctions, 121 lignes, 5.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -570,14 +660,14 @@ Ce qui voyage d'un appareil à l'autre. *7 fonctions, 113 lignes, 4.8 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `NUAGE_PAQUET_V` | — |
-| `NUAGE_QTES` | Les quantités par nom de carte : quatre tables qui se fusionnent entrée par entrée. |
+| `NUAGE_QTES` | Les quantités par nom de carte, qui se fusionnent entrée par entrée. |
 | `NUAGE_SCALAIRES` | Ce qui ne vaut qu'une valeur, et se tranche en bloc. |
-| `NUAGE_OBJETS` | — |
+| `NUAGE_OBJETS` | `achats` — comment on achète — voyage ; le plafond, lui, appartient au deck et part avec son dossier. |
 | `NUAGE_ENSEMBLES` | — |
 
 ## js/nuageFusion.js
 
-Fusionner deux appareils sans rien perdre. *8 fonctions, 166 lignes, 7.5 Ko.*
+Fusionner deux appareils sans rien perdre. *11 fonctions, 234 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -587,8 +677,15 @@ Fusionner deux appareils sans rien perdre. *8 fonctions, 166 lignes, 7.5 Ko.*
 | `fusionneValeur(base, local, distant, champ)` | Une valeur qui ne se coupe pas en deux — le commandant, le format, le budget. |
 | `nuageGarniture(o)` | Combien de champs une entrée de cache porte vraiment : c'est ce qui tranche entre deux versions d'une même carte, l'une complétée par Scryfall et l'autre non. |
 | `fusionneCache(local, distant)` | Le cache des cartes : une union, jamais un conflit. |
+| `indexDecks(liste)` | — |
+| `fusionneDecks(base, local, distant)` | — |
+| `empreinteDeck(o)` | L'empreinte d'un dossier, aux listes ordonnées : sans quoi deux dossiers identiques aux paires rangées autrement passeraient pour différents, et chaque tour pousserait pour rien. |
 | `empreinteFond(fond)` | L'empreinte du fond, ordonnée : deux fonds égaux la partagent, quel que soit l'ordre où leurs tables ont été bâties. |
 | `fusionnePaquets(base, local, distant)` | La fusion entière. `base` est le fond du dernier accord, et peut manquer : au premier accord, ou après un effacement des données locales. On retombe alors sur une fusion à deux côtés —… |
+
+| Donnée | Rôle |
+|---|---|
+| `DECK_CHAMPS_SIMPLES` | Les decks, dossier par dossier puis carte par carte. |
 
 ## js/nuageDropbox.js
 
@@ -805,7 +902,7 @@ Tenir le catalogue à jour. *10 fonctions, 232 lignes, 11 Ko.*
 
 ## js/candidats.js
 
-Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 252 lignes, 11 Ko.*
+Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 258 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -863,7 +960,7 @@ La note d'une carte candidate. *5 fonctions, 239 lignes, 11 Ko.*
 
 ## js/vivier.js
 
-Le vivier des candidates, et son empreinte. *9 fonctions, 195 lignes, 8.2 Ko.*
+Le vivier des candidates, et son empreinte. *9 fonctions, 196 lignes, 8.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -957,7 +1054,7 @@ La section du catalogue : tout le classement. *1 fonctions, 34 lignes, 2.2 Ko.*
 
 ## js/suggestions.js
 
-Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
+Les trois sections des propositions. *13 fonctions, 244 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -980,12 +1077,34 @@ Les trois sections des propositions. *13 fonctions, 243 lignes, 12 Ko.*
 | `visuelsEnCours` | — |
 | `VISUELS_CHARGES` | — |
 
-## js/collection.js
+## js/decksSection.js
 
-La section Collection. *8 fonctions, 148 lignes, 7.4 Ko.*
+La section « Mes decks ». *4 fonctions, 103 lignes, 5.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `coutDeck(cle)` | Ce que coûte encore un deck, sans passer par `aAcheter()` : on ne veut pas d'une estimation d'offre par carte manquante pour chacun des huit decks à chaque rendu de la page. |
+| `puceStatut(d)` | — |
+| `vignetteDeck(cle)` | — |
+| `renderI()` | — |
+
+## js/wishlistSection.js
+
+La section « Liste d'achats ». *3 fonctions, 68 lignes, 3.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `decksDemandeurs(l)` | Les decks qui réclament une carte, du plus gourmand au moins. |
+| `ligneWishlist(l)` | — |
+| `renderJ()` | — |
+
+## js/collection.js
+
+La section Collection. *9 fonctions, 156 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `couleursOK(card, sel, mode)` | Une carte tient dans une sélection de couleurs, selon le mode voulu. |
 | `colorOK(card)` | — |
 | `ajoutCollection(nom)` | Un exemplaire de plus ou de moins dans la collection. |
 | `retraitCollection(nom)` | — |
@@ -1069,7 +1188,7 @@ La réserve et l'étude. *9 fonctions, 117 lignes, 5 Ko.*
 
 ## js/deck.js
 
-Ce qu'il y a dans le deck, et les gestes qui l'y mettent. *9 fonctions, 114 lignes, 4.9 Ko.*
+Ce qu'il y a dans le deck, et les gestes qui l'y mettent. *9 fonctions, 115 lignes, 4.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1085,7 +1204,7 @@ Ce qu'il y a dans le deck, et les gestes qui l'y mettent. *9 fonctions, 114 lign
 
 ## js/legalite.js
 
-Ce que le format exige, et l'équilibre des rôles. *13 fonctions, 174 lignes, 8.5 Ko.*
+Ce que le format exige, et l'équilibre des rôles. *13 fonctions, 180 lignes, 8.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1161,7 +1280,7 @@ Ouvrir une fiche, et feuilleter la liste d'où elle vient. *4 fonctions, 110 lig
 
 ## js/outils.js
 
-Menue monnaie de l'atelier. *7 fonctions, 72 lignes, 2.4 Ko.*
+Menue monnaie de l'atelier. *5 fonctions, 52 lignes, 1.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1169,8 +1288,6 @@ Menue monnaie de l'atelier. *7 fonctions, 72 lignes, 2.4 Ko.*
 | `eur(n)` | — |
 | `refCarte(nom)` | — |
 | `fmt()` | — |
-| `spent()` | — |
-| `aAcheter()` | — |
 | `toast(msg)` | — |
 
 ## js/theme.js
@@ -1199,17 +1316,18 @@ La fenêtre modale, une à la fois. *2 fonctions, 42 lignes, 2.1 Ko.*
 
 ## js/brouillon.js
 
-Le brouillon des fenêtres à « Appliquer ». *12 fonctions, 139 lignes, 6.1 Ko.*
+Le brouillon des fenêtres à « Appliquer ». *13 fonctions, 153 lignes, 6.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `ouvreBrouillon(cles, redessine)` | — |
-| `copieEtat(v)` | Copie profonde d'un champ de `S` : le `Set` des couleurs comme le `S.custom` imbriqué doivent être détachés, sans quoi le brouillon modifierait l'état appliqué. |
+| `copieEtat(v)` | Copie profonde d'un champ de `S` : le `Set` des couleurs, le `S.custom` imbriqué et les `Map` de cartes d'un dossier de deck doivent être détachés, sans quoi le brouillon modifierait… |
 | `echangeBrouillon()` | Met le brouillon à la place de l'état appliqué, et rend de quoi revenir. |
 | `reprendEtat(memo, garder)` | Repose l'état appliqué. `garder` reverse au brouillon ce qui vient d'être modifié — y compris quand un champ a été réassigné plutôt que muté. |
 | `avecBrouillon(fn)` | Lit comme si le brouillon était appliqué : c'est ainsi que la fenêtre se peint et que son décompte annonce ce que « Appliquer » donnerait. |
 | `modifieBrouillon(fn)` | Le jumeau écrivain : ce que `fn` modifie reste dans le brouillon. |
 | `brouillonModifie()` | Le brouillon diffère-t-il de ce qui est appliqué ? |
+| `texteEtat(v)` | Une valeur rendue comparable, `Map` et `Set` compris — `JSON.stringify` les rend toutes deux `{}`, si bien que deux decks aux listes différentes se seraient dits identiques. |
 | `memeEtat(x, y)` | — |
 | `apresReglage(raison)` | La pagination de la collection n'est pas remise à sa première page : elle suit ce qu'on a demandé à voir. |
 | `renderAllSiApplique()` | Un rendu global n'a de sens que si l'état appliqué a changé. |
@@ -1329,7 +1447,7 @@ Les recalculs annoncés. *8 fonctions, 195 lignes, 8.3 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *7 fonctions, 213 lignes, 12 Ko.*
+L'en-tête et la barre des onglets. *7 fonctions, 240 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1350,7 +1468,7 @@ L'en-tête et la barre des onglets. *7 fonctions, 213 lignes, 12 Ko.*
 
 ## js/rendu.js
 
-Le rendu d'ensemble. *2 fonctions, 33 lignes, 1.1 Ko.*
+Le rendu d'ensemble. *2 fonctions, 35 lignes, 1.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1371,11 +1489,12 @@ Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 
 ## js/fenNuage.js
 
-La section « Synchronisation » de la fenêtre des paramètres. *8 fonctions, 151 lignes, 8.5 Ko.*
+La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 159 lignes, 8.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `nuageQuand(t)` | « il y a trois minutes » se lit mieux qu'un horodatage quand on vient de cliquer, et une date quand cela remonte à hier. |
+| `nuageOu(c)` | Un désaccord porte le deck où il a eu lieu : « Sol Ring » ne dit rien si l'on en joue dans trois decks. |
 | `nuageConflits()` | Les désaccords que la fusion n'a pas pu trancher seule. |
 | `nuageEtatLigne()` | L'état en une ligne, avec sa pastille. |
 | `nuageDetail()` | Ce que Dropbox a répondu mot pour mot, quand il a refusé. |
@@ -1407,15 +1526,36 @@ Fenêtre « Paramètres ». *9 fonctions, 130 lignes, 5.9 Ko.*
 
 ## js/fenBudget.js
 
-Fenêtre « Budget ». *5 fonctions, 78 lignes, 4.4 Ko.*
+Fenêtre « Budget ». *6 fonctions, 107 lignes, 6.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `champBudget(id, label, cle, liste)` | — |
 | `corpsBudget()` | — |
+| `saisieBudget(t)` | La saisie de la fenêtre. Le plafond et le prix maximum par carte appartiennent au deck ouvert ; l'état, la langue, le vendeur et le pays disent comment on achète et valent pour tous les… |
 | `majResumeBudget()` | Un chiffre saisi ne réécrit pas la fenêtre — le curseur y serait perdu : seuls le budget restant et la liste des achats suivent, sous le brouillon. |
 | `appliquerBudget()` | « Appliquer » verse le brouillon puis recalcule : le prix maximum par carte entre dans la signature des candidates, tout est à reprendre. |
 | `openBudgetModal()` | — |
+
+## js/fenDeck.js
+
+Fenêtre « Configuration du deck ». *9 fonctions, 207 lignes, 12 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `dossierEnConfig()` | — |
+| `champDeck(cle, label, aide, attrs)` | — |
+| `ligneRestriction(kMin, kMax, label, aide, pas)` | — |
+| `corpsDeck()` | — |
+| `resumeDeckConfig()` | Ce que « Appliquer » donnerait, en une phrase. |
+| `majResumeDeck()` | — |
+| `majFenetreDeck()` | Réécrit la fenêtre entière : cocher une couleur, un rôle ou « suivre le commandant » change ce que les autres champs doivent montrer. |
+| `appliquerDeck()` | — |
+| `openDeckModal(cle)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `deckEnConfig` | Le deck que la fenêtre règle. Ouverte depuis une vignette, elle porte sa clé ; ouverte depuis une puce de restriction, c'est le deck ouvert. |
 
 ## js/fenFiltres.js
 
@@ -1503,13 +1643,23 @@ Boîte de chargement de l'archive Scryfall. *6 fonctions, 75 lignes, 3.6 Ko.*
 
 ## js/fenExport.js
 
-Fenêtres d'export et d'effacement. *3 fonctions, 166 lignes, 9.2 Ko.*
+Fenêtres d'export et d'effacement. *3 fonctions, 179 lignes, 9.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `exportModal(cible)` | — |
-| `openWantsModal()` | — |
+| `openWantsModal(tout)` | La fenêtre des wants sert deux comptes : celui du deck ouvert, depuis sa section, et celui de tous les decks, depuis la page « Decks ». |
 | `openWipeModal()` | Vider la collection, et elle seule. Ce bouton emportait aussi le deck, la réserve et l'étude : « Vider » d'une section ne doit vider que ce que cette section montre, comme celui du deck… |
+
+## js/gestesDecks.js
+
+Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesDecks(act, b)` | — |
+| `saisieDeck(t)` | La frappe et les cases de la fenêtre de configuration. |
+| `gestesDeckConfig(act, b)` | Les deux bascules de la fenêtre : une couleur, un rôle. |
 
 ## js/gestesVue.js
 
@@ -1562,7 +1712,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 301 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 297 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

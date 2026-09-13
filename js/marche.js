@@ -28,25 +28,40 @@ function cmLink(card) {
   return card.cmUrl || 'https://www.cardmarket.com/fr/Magic/Products/Search?searchString=' + encodeURIComponent(card.name);
 }
 
+/* Ce que les préférences d'achat font au prix de tendance. Sorti de
+   `cmEstimate()` pour que le pré-filtre du catalogue puisse s'en servir : il
+   compare des prix bruts, là où `bestOffer()` compare des prix ajustés, et
+   les deux étages écartaient des cartes à deux seuils différents — une carte
+   à 5,00 € passait le premier avec un plafond à 5 €, pour être rejetée par le
+   second dès que l'état recherché la portait à 6,75 €. */
+function multiplicateurAchat() {
+  return (COND_MULT[S.achats.condition] || 1) * (LANG_MULT[S.achats.lang] || 1)
+       * (SELLER_MULT[S.achats.sellerType] || 1) * (S.achats.country === 'any' ? 1 : 1.02);
+}
+
+/* Le prix de tendance au-delà duquel l'estimation dépasserait le plafond
+   par carte du deck ouvert. */
+function prixBrutMax() {
+  return (S.budget.perCard || 0) / (multiplicateurAchat() || 1);
+}
+
 function cmEstimate(card) {
   const base = card.price || 0;
   if (base <= 0) return null;
-  const m = (COND_MULT[S.budget.condition] || 1) * (LANG_MULT[S.budget.lang] || 1)
-          * (SELLER_MULT[S.budget.sellerType] || 1) * (S.budget.country === 'any' ? 1 : 1.02);
-  return Math.max(0.02, Math.round(base * m * 100) / 100);
+  return Math.max(0.02, Math.round(base * multiplicateurAchat() * 100) / 100);
 }
 
 function bestOffer(card) {
   const price = cmEstimate(card);
   if (price === null || price > S.budget.perCard) return null;
-  const langLabel = (CM_LANGS.find(l => l[0] === S.budget.lang) || ['','Indifférente'])[1];
-  const typeLabel = (SELLER_TYPES.find(t => t[0] === S.budget.sellerType) || ['','Indifférent'])[1];
+  const langLabel = (CM_LANGS.find(l => l[0] === S.achats.lang) || ['','Indifférente'])[1];
+  const typeLabel = (SELLER_TYPES.find(t => t[0] === S.achats.sellerType) || ['','Indifférent'])[1];
   return {
     price,
-    condition: S.budget.condition,
+    condition: S.achats.condition,
     lang: langLabel,
     seller: typeLabel,
-    country: (CM_COUNTRIES.find(c => c[0] === S.budget.country) || ['','Indifférent'])[1],
+    country: (CM_COUNTRIES.find(c => c[0] === S.achats.country) || ['','Indifférent'])[1],
     estimate: true
   };
 }

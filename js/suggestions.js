@@ -26,6 +26,7 @@ function ligneCatalogue() {
     if (st.prix) causes.push(`${n(st.prix)} au-dessus de ${eur(S.budget.perCard)}`);
     if (st.numeriques) causes.push(`${n(st.numeriques)} numériques`);
     if (st.filtres) causes.push(`${n(st.filtres)} par vos filtres`);
+    if (st.restriction) causes.push(`${n(st.restriction)} par les restrictions de « ${esc(deckCourant().nom)} »`);
     if (st.noeuds) causes.push(`${n(st.noeuds)} par les effets sélectionnés (${noeuds.map(x =>
       (typeof NODE !== 'undefined' && NODE[x] && NODE[x].label) || x).join(' + ')})`);
 

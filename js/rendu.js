@@ -22,6 +22,8 @@ function renderAll() {
      qu'on ne demande pas. */
   renderOnglets();
   renderTop();
+  renderI();
+  renderJ();
   renderB();
   renderC();
   renderD();

@@ -48,8 +48,14 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    d'EDHREC sans les chercher. */
 /* `liste` : la liste de cartes que l'onglet montre, celle que règle le bouton
    « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). Le catalogue garde
-   la clé `suggestions`, comme partout où son rangement est en jeu. */
+   la clé `suggestions`, comme partout où son rangement est en jeu.
+
+   L'onglet « Decks » n'en montre aucune — des vignettes de deck et un tableau
+   d'achats ne se règlent ni en colonnes ni en groupes —, d'où son `liste`
+   nul : le bouton « Affichage » s'efface alors. Il vient en tête parce qu'il
+   répond à la première des questions : sur quel deck travaille-t-on. */
 const ONGLETS = {
+  decks:      {label:'Decks',      sections:['secI','secJ'], liste:null},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
@@ -105,23 +111,20 @@ let apercuCardName = null;
 
 const S = {
   collection: new Map(),
-  deck: new Map(),
-  sideboard: new Map(),      // la réserve, hors de la liste principale
-  considering: new Map(),    // les cartes à l'étude, hors de la liste principale
+  /* Les decks, par clé, et celui sur lequel on travaille. Les trois listes
+     d'un deck, son commandant, son format, son budget, ses restrictions et
+     ses objectifs vivent dans son dossier ; `js/decks.js` pose sur `S` les
+     propriétés d'accès — `S.deck`, `S.commander`, `S.format`, `S.budget` —
+     qui les y lisent et les y écrivent, si bien que le reste de l'atelier
+     n'a pas à savoir qu'il y en a plusieurs. */
+  decks: {},
+  deckActif: '',
   deckPlie: new Set(),       // les parties repliées de la section Deck : 'liste', 'sideboard', 'considering'
   /* Les catégories repliées des cinq listes, par clé « section|mode|groupe »
      (js/groupes.js) : le pli d'un groupement ne vaut que pour lui. */
   groupesPlies: new Set(),
-  commander: null,
-  /* Les créatures légendaires du deck qu'on ne veut pas voir traitées comme
-     commandants par EDHREC : la liste se coche et se décoche dans l'onglet
-     EDHREC. Ce sont les écartées qu'on retient, non les retenues — le deck
-     change, et une carte qu'on n'a jamais décochée doit compter dès qu'elle
-     arrive. */
-  secondairesOff: new Set(),
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',
-  format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
   /* Le rangement des cinq listes qui montrent des cartes : chacune garde
@@ -153,16 +156,11 @@ const S = {
   graphSource: 'collection',
   showImplicit: true,
   focusNodes: new Set(),
-  /* Budget nul au démarrage : l'atelier ne propose alors que les cartes de la
-     collection, et n'engage aucun achat tant qu'un budget n'a pas été fixé
-     dans la fenêtre « Achats sur Cardmarket ». Le prix maximum par carte, lui,
-     est déjà posé : il n'attend que le budget pour valoir. */
-  budget: {total:0, perCard:5, condition:'GD', lang:'any', sellerType:'any', country:'any'},
-  /* Les objectifs par rôle réglés à la main, par format : `{edh:{terrains:38}}`.
-     Seuls les rôles qu'on a touchés y figurent, les autres gardant la cible que
-     le format donne. Par format, parce qu'une cible de terrains pensée pour un
-     deck de cent cartes n'a rien à dire d'un deck de soixante. */
-  ciblesRoles: {},
+  /* Les préférences d'achat sur Cardmarket : elles disent comment on achète,
+     non ce qu'on achète, et valent donc pour tous les decks à la fois. Le
+     plafond et le prix maximum par carte, eux, sont une intention propre au
+     deck et vivent dans son dossier (`S.budget`, par `js/decks.js`). */
+  achats: {condition:'GD', lang:'any', sellerType:'any', country:'any'},
   limitB: 200,
   limiteType: {},
   exploreEtat: '',

@@ -12,20 +12,29 @@
   "cartes.js",
   "liens.js",
   "etat.js",
+  "decks.js",
   "archetypesSets.js",
   "filtres.js",
+  "restrictions.js",
   "retenue.js",
   "catalogueEtat.js",
   "groupes.js",
   "barreGroupes.js",
   "marche.js",
+  "achats.js",
   "symboles.js",
   "scryfallApplique.js",
   "scryfall.js",
   "recherches.js",
+  "decksStockage.js",
   "stockage.js",
   "fenSauvegarde.js",
   "idb.js",
+  "nuagePaquet.js",
+  "nuageFusion.js",
+  "nuageDropbox.js",
+  "nuage.js",
+  "nuageDiagnostic.js",
   "edhrec.js",
   "edhrecForme.js",
   "edhrecThemes.js",
@@ -45,6 +54,8 @@
   "sugEdhrec.js",
   "sugCatalogue.js",
   "suggestions.js",
+  "decksSection.js",
+  "wishlistSection.js",
   "collection.js",
   "fenImport.js",
   "fenAjout.js",
@@ -69,18 +80,22 @@
   "entete.js",
   "rendu.js",
   "fenFormat.js",
+  "fenNuage.js",
   "fenParametres.js",
   "fenBudget.js",
+  "fenDeck.js",
   "fenFiltres.js",
   "fenAffichage.js",
   "fenCibles.js",
   "fenListes.js",
   "boiteCatalogue.js",
   "fenExport.js",
+  "gestesDecks.js",
   "gestesVue.js",
   "gestesReglages.js",
   "gestesDeck.js",
   "gestesDonnees.js",
+  "gestesNuage.js",
   "gestesGraphe.js",
   "app.js"
  ],
@@ -551,7 +566,6 @@
     "estGameChanger",
     "fetchEdhrecCommander",
     "ficheHTML",
-    "filtreOKRec",
     "filtresValeursOK",
     "find",
     "gestesGraphe",
@@ -573,7 +587,8 @@
     "setsCarte",
     "setsRec",
     "snapshot",
-    "unindexCard"
+    "unindexCard",
+    "valeursRec"
    ]
   },
   {
@@ -720,7 +735,10 @@
     "commandantsPrincipaux",
     "completeUnknown",
     "contexteEvaluation",
+    "couleursRestriction",
+    "coutDeck",
     "deckEntries",
+    "demandesTousDecks",
     "deplacerCarte",
     "faireDefilerVersion",
     "ficheImageKO",
@@ -732,17 +750,22 @@
     "majApercu",
     "majPrix",
     "montrerApercu",
+    "nomCanonique",
     "openCardModal",
     "openImport",
     "panneauEdhrec",
+    "poseCouleursCommandant",
     "propositionsHTML",
+    "quantiteCollection",
     "requeteCatalogue",
+    "restaureDecks",
     "restore",
     "resultatsHTML",
     "selectionCandidats",
     "signatureCommandants",
     "versAnnexe",
     "vivierSuggestions",
+    "wishlist",
     "zoneCommandant"
    ]
   },
@@ -835,10 +858,10 @@
    "appeleePar": [
     "annexeEntries",
     "deckEntries",
-    "filtreOK",
-    "filtreOKRec",
     "groupes.js (chargement)",
-    "statsOf"
+    "statsOf",
+    "valeursCarte",
+    "valeursRec"
    ]
   },
   {
@@ -876,10 +899,10 @@
     "edhrecSlug",
     "estGameChanger",
     "fetchEdhrecCommander",
-    "filtreOKRec",
     "scryTarget",
     "setsCarte",
-    "setsRec"
+    "setsRec",
+    "valeursRec"
    ]
   },
   {
@@ -1000,14 +1023,223 @@
   {
    "nom": "ongletDeSection",
    "fichier": "etat.js",
-   "ligne": 74,
+   "ligne": 80,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "allerVersSection",
+    "entete.js (chargement)",
     "signalerTravail"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "decks.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "deckCourant"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "cleDeckNeuve",
+   "fichier": "decks.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creerDeck",
+    "deckCourant",
+    "restaureDecks"
+   ]
+  },
+  {
+   "nom": "deckNeuf",
+   "fichier": "decks.js",
+   "ligne": 49,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creerDeck",
+    "deckCourant",
+    "restaureDecks"
+   ]
+  },
+  {
+   "nom": "clesDecks",
+   "fichier": "decks.js",
+   "ligne": 75,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bilanWishlist",
+    "deckCourant",
+    "demandesTousDecks",
+    "renderI",
+    "renderJ",
+    "renderTop",
+    "restaureDecks",
+    "signatureAchats",
+    "snapshot",
+    "supprimerDeck",
+    "vignetteDeck"
+   ]
+  },
+  {
+   "nom": "deckCourant",
+   "fichier": "decks.js",
+   "ligne": 82,
+   "chargement": false,
+   "appelle": [
+    "cleDeckNeuve",
+    "clesDecks",
+    "deckNeuf"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "aAcheter",
+    "corpsBudget",
+    "decks.js (chargement)",
+    "dossierEnConfig",
+    "entete.js (chargement)",
+    "gestesDecks",
+    "ligneCatalogue",
+    "ligneCausesCollection",
+    "openWantsModal",
+    "reinitRestrictions",
+    "renderTop",
+    "restrictionsDuDeck"
+   ]
+  },
+  {
+   "nom": "nomDeckLibre",
+   "fichier": "decks.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creerDeck",
+    "renommerDeck"
+   ]
+  },
+  {
+   "nom": "creerDeck",
+   "fichier": "decks.js",
+   "ligne": 117,
+   "chargement": false,
+   "appelle": [
+    "cleDeckNeuve",
+    "deckNeuf",
+    "nomDeckLibre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dupliquerDeck",
+    "gestesDecks"
+   ]
+  },
+  {
+   "nom": "activerDeck",
+   "fichier": "decks.js",
+   "ligne": 126,
+   "chargement": false,
+   "appelle": [
+    "degeleSuggestions",
+    "invaliderAchats",
+    "invaliderCandidats",
+    "recalculerAvecProgression",
+    "renderAll"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks"
+   ]
+  },
+  {
+   "nom": "renommerDeck",
+   "fichier": "decks.js",
+   "ligne": 137,
+   "chargement": false,
+   "appelle": [
+    "nomDeckLibre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliquerDeck"
+   ]
+  },
+  {
+   "nom": "dupliquerDeck",
+   "fichier": "decks.js",
+   "ligne": 148,
+   "chargement": false,
+   "appelle": [
+    "creerDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks"
+   ]
+  },
+  {
+   "nom": "supprimerDeck",
+   "fichier": "decks.js",
+   "ligne": 158,
+   "chargement": false,
+   "appelle": [
+    "clesDecks",
+    "degeleSuggestions",
+    "invaliderAchats",
+    "invaliderCandidats"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks"
+   ]
+  },
+  {
+   "nom": "carteDansUnDeck",
+   "fichier": "decks.js",
+   "ligne": 172,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "snapshot"
+   ]
+  },
+  {
+   "nom": "bilanDeck",
+   "fichier": "decks.js",
+   "ligne": 180,
+   "chargement": false,
+   "appelle": [
+    "quantiteCollection"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks",
+    "vignetteDeck"
    ]
   },
   {
@@ -1070,16 +1302,17 @@
    "appelleParHtml": [],
    "appeleePar": [
     "ficheHTML",
-    "filtreOK"
+    "valeursCarte"
    ]
   },
   {
    "nom": "archetypesAChargerEdhrec",
    "fichier": "archetypesSets.js",
-   "ligne": 105,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
-    "archetypesFiltre"
+    "archetypesFiltre",
+    "restrictionsDuDeck"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -1091,7 +1324,7 @@
   {
    "nom": "archetypesFiltre",
    "fichier": "archetypesSets.js",
-   "ligne": 110,
+   "ligne": 115,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1108,7 +1341,7 @@
   {
    "nom": "basculerArchetype",
    "fichier": "archetypesSets.js",
-   "ligne": 114,
+   "ligne": 120,
    "chargement": false,
    "appelle": [
     "archetypesFiltre"
@@ -1122,7 +1355,7 @@
   {
    "nom": "setsFiltre",
    "fichier": "archetypesSets.js",
-   "ligne": 122,
+   "ligne": 128,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1139,7 +1372,7 @@
   {
    "nom": "basculerSet",
    "fichier": "archetypesSets.js",
-   "ligne": 126,
+   "ligne": 133,
    "chargement": false,
    "appelle": [
     "setsFiltre"
@@ -1153,7 +1386,7 @@
   {
    "nom": "libelleSet",
    "fichier": "archetypesSets.js",
-   "ligne": 135,
+   "ligne": 142,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1166,9 +1399,10 @@
   {
    "nom": "setsACharger",
    "fichier": "archetypesSets.js",
-   "ligne": 141,
+   "ligne": 149,
    "chargement": false,
    "appelle": [
+    "restrictionsDuDeck",
     "setsFiltre"
    ],
    "appelleDiffere": [],
@@ -1180,7 +1414,7 @@
   {
    "nom": "setsCarte",
    "fichier": "archetypesSets.js",
-   "ligne": 150,
+   "ligne": 159,
    "chargement": false,
    "appelle": [
     "frontFace",
@@ -1189,7 +1423,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "filtreOK"
+    "valeursCarte"
    ]
   },
   {
@@ -1202,16 +1436,18 @@
    "appelleParHtml": [],
    "appeleePar": [
     "basculerRole",
+    "corpsDeck",
     "corpsFiltres",
     "filtresActifs",
     "gauge",
+    "gestesDeckConfig",
     "roleOK"
    ]
   },
   {
    "nom": "basculerRole",
    "fichier": "filtres.js",
-   "ligne": 15,
+   "ligne": 16,
    "chargement": false,
    "appelle": [
     "rolesFiltre"
@@ -1225,7 +1461,7 @@
   {
    "nom": "roleOK",
    "fichier": "filtres.js",
-   "ligne": 23,
+   "ligne": 24,
    "chargement": false,
    "appelle": [
     "rolesFiltre"
@@ -1234,13 +1470,14 @@
    "appelleParHtml": [],
    "appeleePar": [
     "carteFiltree",
-    "causesCollection"
+    "causesCollection",
+    "restrictionOK"
    ]
   },
   {
    "nom": "nombreFiltre",
    "fichier": "filtres.js",
-   "ligne": 29,
+   "ligne": 30,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1253,7 +1490,7 @@
   {
    "nom": "reinitFiltres",
    "fichier": "filtres.js",
-   "ligne": 35,
+   "ligne": 36,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1265,7 +1502,7 @@
   {
    "nom": "majFiltre",
    "fichier": "filtres.js",
-   "ligne": 40,
+   "ligne": 41,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1278,7 +1515,7 @@
   {
    "nom": "effacerFiltre",
    "fichier": "filtres.js",
-   "ligne": 45,
+   "ligne": 46,
    "chargement": false,
    "appelle": [
     "majFiltre"
@@ -1292,7 +1529,7 @@
   {
    "nom": "filtresActifs",
    "fichier": "filtres.js",
-   "ligne": 51,
+   "ligne": 52,
    "chargement": false,
    "appelle": [
     "archetypesFiltre",
@@ -1309,14 +1546,17 @@
     "ligneCausesCollection",
     "renderB",
     "renderTop",
+    "restrictionsActives",
+    "resumeDeckConfig",
     "resumeFiltres",
-    "texteFiltresActifs"
+    "texteFiltresActifs",
+    "vignetteDeck"
    ]
   },
   {
    "nom": "texteFiltresActifs",
    "fichier": "filtres.js",
-   "ligne": 83,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "filtresActifs"
@@ -1332,7 +1572,7 @@
   {
    "nom": "carteFiltree",
    "fichier": "filtres.js",
-   "ligne": 90,
+   "ligne": 91,
    "chargement": false,
    "appelle": [
     "colorOK",
@@ -1343,14 +1583,29 @@
    "appelleParHtml": [],
    "appeleePar": [
     "blocAnnexe",
-    "carteRetenue",
+    "carteFiltreeEtRestreinte",
     "renderE"
+   ]
+  },
+  {
+   "nom": "carteFiltreeEtRestreinte",
+   "fichier": "filtres.js",
+   "ligne": 99,
+   "chargement": false,
+   "appelle": [
+    "carteFiltree",
+    "restrictionOK"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "carteRetenue"
    ]
   },
   {
    "nom": "valeurFiltre",
    "fichier": "filtres.js",
-   "ligne": 97,
+   "ligne": 106,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1362,7 +1617,7 @@
   {
    "nom": "motsFiltre",
    "fichier": "filtres.js",
-   "ligne": 111,
+   "ligne": 120,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1374,7 +1629,7 @@
   {
    "nom": "filtresValeursOK",
    "fichier": "filtres.js",
-   "ligne": 118,
+   "ligne": 127,
    "chargement": false,
    "appelle": [
     "archetypesFiltre",
@@ -1390,7 +1645,210 @@
    "appelleParHtml": [],
    "appeleePar": [
     "filtreOK",
-    "filtreOKRec"
+    "filtreOKRec",
+    "restrictionOK",
+    "restrictionOKRec"
+   ]
+  },
+  {
+   "nom": "restrictionsDuDeck",
+   "fichier": "restrictions.js",
+   "ligne": 20,
+   "chargement": false,
+   "appelle": [
+    "deckCourant"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "archetypesAChargerEdhrec",
+    "couleursRestriction",
+    "couleursRestrictionOK",
+    "gestesDeckConfig",
+    "majRestriction",
+    "restrictionOK",
+    "restrictionOKRec",
+    "restrictionsActives",
+    "setsACharger",
+    "signatureCandidats"
+   ]
+  },
+  {
+   "nom": "couleursRestriction",
+   "fichier": "restrictions.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "find",
+    "restrictionsDuDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsDeck",
+    "couleursRestrictionOK",
+    "restrictionOKRec",
+    "restrictionsActives",
+    "resumeDeckConfig"
+   ]
+  },
+  {
+   "nom": "couleursRestrictionOK",
+   "fichier": "restrictions.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "couleursOK",
+    "couleursRestriction",
+    "restrictionsDuDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "restrictionOK"
+   ]
+  },
+  {
+   "nom": "restrictionOK",
+   "fichier": "restrictions.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [
+    "couleursRestrictionOK",
+    "filtresValeursOK",
+    "restrictionsDuDeck",
+    "roleOK",
+    "valeursCarte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "carteFiltreeEtRestreinte",
+    "cartesHorsRestriction",
+    "causesCollection"
+   ]
+  },
+  {
+   "nom": "restrictionOKRec",
+   "fichier": "restrictions.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "couleursOK",
+    "couleursRestriction",
+    "filtresValeursOK",
+    "restrictionsDuDeck",
+    "valeursRec"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "selectionCandidats"
+   ]
+  },
+  {
+   "nom": "restrictionPosee",
+   "fichier": "restrictions.js",
+   "ligne": 74,
+   "chargement": false,
+   "appelle": [
+    "restrictionsActives"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cartesHorsRestriction"
+   ]
+  },
+  {
+   "nom": "restrictionsActives",
+   "fichier": "restrictions.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [
+    "couleursRestriction",
+    "filtresActifs",
+    "nomCombinaisonCouleurs",
+    "restrictionsDuDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderTop",
+    "restrictionPosee",
+    "texteRestrictionsActives",
+    "vignetteDeck"
+   ]
+  },
+  {
+   "nom": "texteRestrictionsActives",
+   "fichier": "restrictions.js",
+   "ligne": 95,
+   "chargement": false,
+   "appelle": [
+    "restrictionsActives"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "legality",
+    "ligneCausesCollection"
+   ]
+  },
+  {
+   "nom": "cartesHorsRestriction",
+   "fichier": "restrictions.js",
+   "ligne": 102,
+   "chargement": false,
+   "appelle": [
+    "deckEntries",
+    "restrictionOK",
+    "restrictionPosee"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "legality"
+   ]
+  },
+  {
+   "nom": "poseCouleursCommandant",
+   "fichier": "restrictions.js",
+   "ligne": 110,
+   "chargement": false,
+   "appelle": [
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "majRestriction",
+   "fichier": "restrictions.js",
+   "ligne": 121,
+   "chargement": false,
+   "appelle": [
+    "restrictionsDuDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "saisieDeck"
+   ]
+  },
+  {
+   "nom": "reinitRestrictions",
+   "fichier": "restrictions.js",
+   "ligne": 125,
+   "chargement": false,
+   "appelle": [
+    "deckCourant"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks"
    ]
   },
   {
@@ -1475,7 +1933,7 @@
    "ligne": 69,
    "chargement": false,
    "appelle": [
-    "carteFiltree",
+    "carteFiltreeEtRestreinte",
     "legaliteOK"
    ],
    "appelleDiffere": [],
@@ -1486,15 +1944,30 @@
    ]
   },
   {
-   "nom": "filtreOK",
+   "nom": "valeursCarte",
    "fichier": "retenue.js",
-   "ligne": 74,
+   "ligne": 76,
    "chargement": false,
    "appelle": [
     "archetypesCarte",
-    "filtresValeursOK",
     "mainType",
     "setsCarte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "filtreOK",
+    "restrictionOK"
+   ]
+  },
+  {
+   "nom": "filtreOK",
+   "fichier": "retenue.js",
+   "ligne": 89,
+   "chargement": false,
+   "appelle": [
+    "filtresValeursOK",
+    "valeursCarte"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -1506,7 +1979,7 @@
   {
    "nom": "setsRec",
    "fichier": "retenue.js",
-   "ligne": 89,
+   "ligne": 96,
    "chargement": false,
    "appelle": [
     "frontFace",
@@ -1515,16 +1988,30 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "filtreOKRec"
+    "valeursRec"
    ]
   },
   {
    "nom": "filtreOKRec",
    "fichier": "retenue.js",
-   "ligne": 104,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "filtresValeursOK",
+    "valeursRec"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "selectionCandidats"
+   ]
+  },
+  {
+   "nom": "valeursRec",
+   "fichier": "retenue.js",
+   "ligne": 117,
+   "chargement": false,
+   "appelle": [
     "frontFace",
     "mainType",
     "norm",
@@ -1533,7 +2020,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "selectionCandidats"
+    "filtreOKRec",
+    "restrictionOKRec"
    ]
   },
   {
@@ -1869,15 +2357,47 @@
    "appeleePar": [
     "blocAchats",
     "ligneAchats",
+    "ligneWishlist",
     "openCardModal"
+   ]
+  },
+  {
+   "nom": "multiplicateurAchat",
+   "fichier": "marche.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cmEstimate",
+    "coutDeck",
+    "prixBrutMax",
+    "wishlist"
+   ]
+  },
+  {
+   "nom": "prixBrutMax",
+   "fichier": "marche.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [
+    "multiplicateurAchat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "selectionCandidats"
    ]
   },
   {
    "nom": "cmEstimate",
    "fichier": "marche.js",
-   "ligne": 31,
+   "ligne": 48,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "multiplicateurAchat"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -1888,7 +2408,7 @@
   {
    "nom": "bestOffer",
    "fichier": "marche.js",
-   "ligne": 39,
+   "ligne": 54,
    "chargement": false,
    "appelle": [
     "cmEstimate"
@@ -1902,6 +2422,159 @@
     "ligneCatalogue",
     "openCardModal",
     "vivierSuggestions"
+   ]
+  },
+  {
+   "nom": "quantiteCollection",
+   "fichier": "achats.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "aAcheter",
+    "bilanDeck",
+    "coutDeck",
+    "wishlist"
+   ]
+  },
+  {
+   "nom": "nomCanonique",
+   "fichier": "achats.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demandesTousDecks"
+   ]
+  },
+  {
+   "nom": "aAcheter",
+   "fichier": "achats.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "bestOffer",
+    "deckCourant",
+    "find",
+    "quantiteCollection"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocAchats",
+    "ligneAchats",
+    "openWantsModal",
+    "renderE",
+    "spent"
+   ]
+  },
+  {
+   "nom": "spent",
+   "fichier": "achats.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "aAcheter"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "buyCard",
+    "legality",
+    "ligneBudget",
+    "ligneCatalogue",
+    "openImport",
+    "renderE",
+    "renderTop",
+    "vivierSuggestions"
+   ]
+  },
+  {
+   "nom": "demandesTousDecks",
+   "fichier": "achats.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [
+    "clesDecks",
+    "find",
+    "nomCanonique"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "wishlist"
+   ]
+  },
+  {
+   "nom": "invaliderAchats",
+   "fichier": "achats.js",
+   "ligne": 86,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "activerDeck",
+    "appliquerDeck",
+    "saisieBudget",
+    "supprimerDeck"
+   ]
+  },
+  {
+   "nom": "signatureAchats",
+   "fichier": "achats.js",
+   "ligne": 93,
+   "chargement": false,
+   "appelle": [
+    "clesDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "wishlist"
+   ]
+  },
+  {
+   "nom": "wishlist",
+   "fichier": "achats.js",
+   "ligne": 106,
+   "chargement": false,
+   "appelle": [
+    "demandesTousDecks",
+    "find",
+    "multiplicateurAchat",
+    "quantiteCollection",
+    "signatureAchats"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bilanWishlist",
+    "openWantsModal",
+    "renderJ"
+   ]
+  },
+  {
+   "nom": "bilanWishlist",
+   "fichier": "achats.js",
+   "ligne": 133,
+   "chargement": false,
+   "appelle": [
+    "clesDecks",
+    "wishlist"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderJ"
    ]
   },
   {
@@ -1943,6 +2616,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "corpsDeck",
     "corpsFiltres",
     "renderTop"
    ]
@@ -2005,7 +2679,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "blocAchats"
+    "blocAchats",
+    "ligneWishlist"
    ]
   },
   {
@@ -2335,6 +3010,48 @@
    ]
   },
   {
+   "nom": "deckSnap",
+   "fichier": "decksStockage.js",
+   "ligne": 13,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "snapshot"
+   ]
+  },
+  {
+   "nom": "ciblesPropres",
+   "fichier": "decksStockage.js",
+   "ligne": 28,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "restaureDecks"
+   ]
+  },
+  {
+   "nom": "restaureDecks",
+   "fichier": "decksStockage.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [
+    "ciblesPropres",
+    "cleDeckNeuve",
+    "clesDecks",
+    "deckNeuf",
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "restore"
+   ]
+  },
+  {
    "nom": "impressionSnap",
    "fichier": "stockage.js",
    "ligne": 33,
@@ -2364,21 +3081,25 @@
    "ligne": 53,
    "chargement": false,
    "appelle": [
-    "annexeDe",
+    "carteDansUnDeck",
+    "clesDecks",
     "impressionSnap",
     "norm"
    ],
-   "appelleDiffere": [],
+   "appelleDiffere": [
+    "deckSnap"
+   ],
    "appelleParHtml": [],
    "appeleePar": [
     "gestesDonnees",
+    "nuagePaquet",
     "save"
    ]
   },
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 109,
+   "ligne": 118,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2390,10 +3111,11 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 113,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
     "ecrire",
+    "nuagePousseeDifferee",
     "snapshot",
     "toast"
    ],
@@ -2403,13 +3125,15 @@
     "brancherRestauration",
     "brancherSauvegarde",
     "gestesDonnees",
+    "gestesNuage",
+    "nuageTour",
     "scheduleSave"
    ]
   },
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 140,
+   "ligne": 153,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -2417,7 +3141,6 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
-    "activerOnglet",
     "appliqueCatalogueAuxCartes",
     "appliquerAffichage",
     "basculeTheme",
@@ -2425,7 +3148,9 @@
     "chercheTexte",
     "chercheVerso",
     "choisirVersion",
+    "entete.js (chargement)",
     "gestesDeck",
+    "gestesDecks",
     "gestesDonnees",
     "renderAll",
     "runScryQueue"
@@ -2434,7 +3159,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 146,
+   "ligne": 159,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -2442,19 +3167,21 @@
     "impressionRestore",
     "majTexteOracle",
     "reanalyser",
-    "registerCard"
+    "registerCard",
+    "restaureDecks"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "brancherRestauration",
-    "demarrer"
+    "demarrer",
+    "nuageVerse"
    ]
   },
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 267,
+   "ligne": 259,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2495,7 +3222,7 @@
   {
    "nom": "rafraichirFenetreSauvegarde",
    "fichier": "fenSauvegarde.js",
-   "ligne": 107,
+   "ligne": 106,
    "chargement": false,
    "appelle": [
     "majFenetreParametres"
@@ -2512,7 +3239,7 @@
   {
    "nom": "brancherSauvegarde",
    "fichier": "fenSauvegarde.js",
-   "ligne": 115,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "idbVider",
@@ -2530,7 +3257,7 @@
   {
    "nom": "brancherCatalogue",
    "fichier": "fenSauvegarde.js",
-   "ligne": 136,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
     "chargerCatalogueComplet",
@@ -2555,7 +3282,7 @@
   {
    "nom": "brancherRestauration",
    "fichier": "fenSauvegarde.js",
-   "ligne": 184,
+   "ligne": 183,
    "chargement": false,
    "appelle": [
     "collectionCards",
@@ -2574,7 +3301,7 @@
   {
    "nom": "idb",
    "fichier": "idb.js",
-   "ligne": 11,
+   "ligne": 20,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2582,13 +3309,14 @@
    "appeleePar": [
     "idbEcrire",
     "idbLire",
+    "idbOublier",
     "idbVider"
    ]
   },
   {
    "nom": "idbLire",
    "fichier": "idb.js",
-   "ligne": 21,
+   "ligne": 30,
    "chargement": false,
    "appelle": [
     "idb"
@@ -2597,6 +3325,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "chargerCatalogueComplet",
+    "nuageBaseLire",
     "reprendreArchetypesEdhrec",
     "reprendreGameChangers",
     "reprendreSets"
@@ -2605,7 +3334,7 @@
   {
    "nom": "idbEcrire",
    "fichier": "idb.js",
-   "ligne": 29,
+   "ligne": 38,
    "chargement": false,
    "appelle": [
     "idb"
@@ -2614,15 +3343,31 @@
    "appelleParHtml": [],
    "appeleePar": [
     "lireCatalogueFichier",
+    "nuageBaseEcrire",
     "sauverArchetypesEdhrec",
     "sauverGameChangers",
     "sauverSets"
    ]
   },
   {
+   "nom": "idbOublier",
+   "fichier": "idb.js",
+   "ligne": 47,
+   "chargement": false,
+   "appelle": [
+    "idb"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDonnees",
+    "nuageDeconnecte"
+   ]
+  },
+  {
    "nom": "idbVider",
    "fichier": "idb.js",
-   "ligne": 37,
+   "ligne": 57,
    "chargement": false,
    "appelle": [
     "idb"
@@ -2633,6 +3378,776 @@
     "brancherCatalogue",
     "brancherSauvegarde",
     "gestesDonnees"
+   ]
+  },
+  {
+   "nom": "nuagePaquet",
+   "fichier": "nuagePaquet.js",
+   "ligne": 47,
+   "chargement": false,
+   "appelle": [
+    "snapshot"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageFond",
+   "fichier": "nuagePaquet.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "nuageVerse",
+   "fichier": "nuagePaquet.js",
+   "ligne": 76,
+   "chargement": false,
+   "appelle": [
+    "restore"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageComprime",
+   "fichier": "nuagePaquet.js",
+   "ligne": 92,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageEmballe"
+   ]
+  },
+  {
+   "nom": "nuageDecomprime",
+   "fichier": "nuagePaquet.js",
+   "ligne": 100,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDeballe"
+   ]
+  },
+  {
+   "nom": "nuageEmballe",
+   "fichier": "nuagePaquet.js",
+   "ligne": 110,
+   "chargement": false,
+   "appelle": [
+    "nuageComprime"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageDeballe",
+   "fichier": "nuagePaquet.js",
+   "ligne": 114,
+   "chargement": false,
+   "appelle": [
+    "nuageDecomprime"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxLire"
+   ]
+  },
+  {
+   "nom": "nuageStable",
+   "fichier": "nuageFusion.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "empreinteDeck",
+    "empreinteFond",
+    "fusionneValeur"
+   ]
+  },
+  {
+   "nom": "fusionneQuantites",
+   "fichier": "nuageFusion.js",
+   "ligne": 33,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionneDecks",
+    "fusionnePaquets"
+   ]
+  },
+  {
+   "nom": "fusionneEnsemble",
+   "fichier": "nuageFusion.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionneDecks",
+    "fusionnePaquets"
+   ]
+  },
+  {
+   "nom": "fusionneValeur",
+   "fichier": "nuageFusion.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [
+    "nuageStable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionneDecks",
+    "fusionnePaquets"
+   ]
+  },
+  {
+   "nom": "nuageGarniture",
+   "fichier": "nuageFusion.js",
+   "ligne": 78,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionneCache"
+   ]
+  },
+  {
+   "nom": "fusionneCache",
+   "fichier": "nuageFusion.js",
+   "ligne": 93,
+   "chargement": false,
+   "appelle": [
+    "nuageGarniture"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionnePaquets"
+   ]
+  },
+  {
+   "nom": "indexDecks",
+   "fichier": "nuageFusion.js",
+   "ligne": 121,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionneDecks"
+   ]
+  },
+  {
+   "nom": "fusionneDecks",
+   "fichier": "nuageFusion.js",
+   "ligne": 127,
+   "chargement": false,
+   "appelle": [
+    "fusionneEnsemble",
+    "fusionneQuantites",
+    "fusionneValeur",
+    "indexDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionnePaquets"
+   ]
+  },
+  {
+   "nom": "empreinteDeck",
+   "fichier": "nuageFusion.js",
+   "ligne": 164,
+   "chargement": false,
+   "appelle": [
+    "nuageStable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "empreinteFond"
+   ]
+  },
+  {
+   "nom": "empreinteFond",
+   "fichier": "nuageFusion.js",
+   "ligne": 177,
+   "chargement": false,
+   "appelle": [
+    "nuageStable"
+   ],
+   "appelleDiffere": [
+    "empreinteDeck"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionnePaquets"
+   ]
+  },
+  {
+   "nom": "fusionnePaquets",
+   "fichier": "nuageFusion.js",
+   "ligne": 193,
+   "chargement": false,
+   "appelle": [
+    "empreinteFond",
+    "fusionneCache",
+    "fusionneDecks",
+    "fusionneEnsemble",
+    "fusionneQuantites",
+    "fusionneValeur"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "dbxRetour",
+   "fichier": "nuageDropbox.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxConnexion",
+    "dbxEchange",
+    "dbxRetourConnexion"
+   ]
+  },
+  {
+   "nom": "dbxBase64Url",
+   "fichier": "nuageDropbox.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxConnexion",
+    "dbxDefi"
+   ]
+  },
+  {
+   "nom": "dbxDefi",
+   "fichier": "nuageDropbox.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [
+    "dbxBase64Url"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxConnexion"
+   ]
+  },
+  {
+   "nom": "dbxErreurReseau",
+   "fichier": "nuageDropbox.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxAppel",
+    "dbxPoste"
+   ]
+  },
+  {
+   "nom": "dbxJson",
+   "fichier": "nuageDropbox.js",
+   "ligne": 71,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxCompte",
+    "dbxEcrire",
+    "dbxLire",
+    "dbxPoste",
+    "nuageEffaceTemoin"
+   ]
+  },
+  {
+   "nom": "dbxErreur",
+   "fichier": "nuageDropbox.js",
+   "ligne": 83,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxCompte",
+    "dbxEcrire",
+    "dbxLire",
+    "dbxPoste",
+    "nuageEffaceTemoin"
+   ]
+  },
+  {
+   "nom": "dbxConnexion",
+   "fichier": "nuageDropbox.js",
+   "ligne": 106,
+   "chargement": false,
+   "appelle": [
+    "dbxBase64Url",
+    "dbxDefi",
+    "dbxRetour",
+    "nuageEcrire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesNuage"
+   ]
+  },
+  {
+   "nom": "dbxRetourConnexion",
+   "fichier": "nuageDropbox.js",
+   "ligne": 128,
+   "chargement": false,
+   "appelle": [
+    "dbxEchange",
+    "dbxRetour"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDemarrer"
+   ]
+  },
+  {
+   "nom": "dbxPoste",
+   "fichier": "nuageDropbox.js",
+   "ligne": 141,
+   "chargement": false,
+   "appelle": [
+    "dbxErreur",
+    "dbxErreurReseau",
+    "dbxJson"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxEchange",
+    "dbxJetonValide"
+   ]
+  },
+  {
+   "nom": "dbxEchange",
+   "fichier": "nuageDropbox.js",
+   "ligne": 155,
+   "chargement": false,
+   "appelle": [
+    "dbxNoteJeton",
+    "dbxPoste",
+    "dbxRetour"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxRetourConnexion"
+   ]
+  },
+  {
+   "nom": "dbxNoteJeton",
+   "fichier": "nuageDropbox.js",
+   "ligne": 164,
+   "chargement": false,
+   "appelle": [
+    "nuageEcrire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxEchange",
+    "dbxJetonValide"
+   ]
+  },
+  {
+   "nom": "dbxJetonValide",
+   "fichier": "nuageDropbox.js",
+   "ligne": 174,
+   "chargement": false,
+   "appelle": [
+    "dbxNoteJeton",
+    "dbxPoste"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxAppel",
+    "nuageDiagnostic"
+   ]
+  },
+  {
+   "nom": "dbxArg",
+   "fichier": "nuageDropbox.js",
+   "ligne": 188,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxEcrire",
+    "dbxLire"
+   ]
+  },
+  {
+   "nom": "dbxAppel",
+   "fichier": "nuageDropbox.js",
+   "ligne": 193,
+   "chargement": false,
+   "appelle": [
+    "dbxErreurReseau",
+    "dbxJetonValide"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxCompte",
+    "dbxEcrire",
+    "dbxLire",
+    "nuageEffaceTemoin"
+   ]
+  },
+  {
+   "nom": "dbxLire",
+   "fichier": "nuageDropbox.js",
+   "ligne": 204,
+   "chargement": false,
+   "appelle": [
+    "dbxAppel",
+    "dbxArg",
+    "dbxErreur",
+    "dbxJson",
+    "nuageDeballe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDiagnostic",
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "dbxEcrire",
+   "fichier": "nuageDropbox.js",
+   "ligne": 222,
+   "chargement": false,
+   "appelle": [
+    "dbxAppel",
+    "dbxArg",
+    "dbxErreur",
+    "dbxJson"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDiagnostic",
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "dbxCompte",
+   "fichier": "nuageDropbox.js",
+   "ligne": 234,
+   "chargement": false,
+   "appelle": [
+    "dbxAppel",
+    "dbxErreur",
+    "dbxJson"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDemarrer",
+    "nuageDiagnostic"
+   ]
+  },
+  {
+   "nom": "nuageLire",
+   "fichier": "nuage.js",
+   "ligne": 59,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDemarrer"
+   ]
+  },
+  {
+   "nom": "nuageEcrire",
+   "fichier": "nuage.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "dbxConnexion",
+    "dbxNoteJeton",
+    "gestesNuageChange",
+    "nuageDeconnecte",
+    "nuageDemarrer",
+    "nuageDiagnostic",
+    "nuageSynchro",
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageConnecte",
+   "fichier": "nuage.js",
+   "ligne": 76,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsNuage",
+    "gestesDonnees",
+    "nuageDemarrer",
+    "nuagePousseeDifferee",
+    "nuageSynchro"
+   ]
+  },
+  {
+   "nom": "nuageNomParDefaut",
+   "fichier": "nuage.js",
+   "ligne": 82,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesNuageChange",
+    "nuageDemarrer"
+   ]
+  },
+  {
+   "nom": "nuageBaseLire",
+   "fichier": "nuage.js",
+   "ligne": 95,
+   "chargement": false,
+   "appelle": [
+    "idbLire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageBaseEcrire",
+   "fichier": "nuage.js",
+   "ligne": 99,
+   "chargement": false,
+   "appelle": [
+    "idbEcrire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageTour",
+   "fichier": "nuage.js",
+   "ligne": 109,
+   "chargement": false,
+   "appelle": [
+    "dbxEcrire",
+    "dbxLire",
+    "fusionnePaquets",
+    "nuageBaseEcrire",
+    "nuageBaseLire",
+    "nuageEcrire",
+    "nuageEmballe",
+    "nuagePaquet",
+    "nuagePoids",
+    "nuageVerse",
+    "releveAncre",
+    "renderAll",
+    "restaureAncre",
+    "save"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageSynchro"
+   ]
+  },
+  {
+   "nom": "nuagePoids",
+   "fichier": "nuage.js",
+   "ligne": 176,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageCorpsConnecte",
+    "nuageDiagnostic",
+    "nuageTour"
+   ]
+  },
+  {
+   "nom": "nuageSynchro",
+   "fichier": "nuage.js",
+   "ligne": 182,
+   "chargement": false,
+   "appelle": [
+    "majFenetreParametres",
+    "nuageConnecte",
+    "nuageEcrire",
+    "nuageTour",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesNuage",
+    "gestesNuageChange",
+    "nuageDemarrer",
+    "nuagePousseeDifferee"
+   ]
+  },
+  {
+   "nom": "nuagePousseeDifferee",
+   "fichier": "nuage.js",
+   "ligne": 218,
+   "chargement": false,
+   "appelle": [
+    "nuageConnecte",
+    "nuageSynchro"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "save"
+   ]
+  },
+  {
+   "nom": "nuageDemarrer",
+   "fichier": "nuage.js",
+   "ligne": 234,
+   "chargement": false,
+   "appelle": [
+    "dbxCompte",
+    "dbxRetourConnexion",
+    "nuageConnecte",
+    "nuageEcrire",
+    "nuageLire",
+    "nuageNomParDefaut",
+    "nuageSynchro",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarrer"
+   ]
+  },
+  {
+   "nom": "nuageDeconnecte",
+   "fichier": "nuage.js",
+   "ligne": 266,
+   "chargement": false,
+   "appelle": [
+    "idbOublier",
+    "nuageEcrire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDonnees",
+    "gestesNuage"
+   ]
+  },
+  {
+   "nom": "nuageEtape",
+   "fichier": "nuageDiagnostic.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDiagnostic"
+   ]
+  },
+  {
+   "nom": "nuageEffaceTemoin",
+   "fichier": "nuageDiagnostic.js",
+   "ligne": 36,
+   "chargement": false,
+   "appelle": [
+    "dbxAppel",
+    "dbxErreur",
+    "dbxJson"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageDiagnostic"
+   ]
+  },
+  {
+   "nom": "nuageDiagnostic",
+   "fichier": "nuageDiagnostic.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [
+    "dbxCompte",
+    "dbxEcrire",
+    "dbxJetonValide",
+    "dbxLire",
+    "majFenetreParametres",
+    "nuageEcrire",
+    "nuageEtape",
+    "nuagePoids",
+    "toast"
+   ],
+   "appelleDiffere": [
+    "nuageEffaceTemoin"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesNuage"
    ]
   },
   {
@@ -3577,6 +5092,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activerDeck",
     "app.js (chargement)",
     "apresReglage",
     "brancherCatalogue",
@@ -3586,6 +5102,8 @@
     "gestesGraphe",
     "gestesVue",
     "lireCatalogueFichier",
+    "saisieBudget",
+    "supprimerDeck",
     "verseBrouillon"
    ]
   },
@@ -3595,7 +5113,8 @@
    "ligne": 86,
    "chargement": false,
    "appelle": [
-    "noeudsActifs"
+    "noeudsActifs",
+    "restrictionsDuDeck"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -3609,7 +5128,7 @@
   {
    "nom": "appliqueCatalogueAuxCartes",
    "fichier": "candidats.js",
-   "ligne": 96,
+   "ligne": 97,
    "chargement": false,
    "appelle": [
     "annexeListe",
@@ -3630,7 +5149,7 @@
   {
    "nom": "selectionCandidats",
    "fichier": "candidats.js",
-   "ligne": 126,
+   "ligne": 127,
    "chargement": false,
    "appelle": [
     "colorOK",
@@ -3638,7 +5157,9 @@
     "find",
     "fmt",
     "noeudsActifs",
-    "recToucheNoeuds"
+    "prixBrutMax",
+    "recToucheNoeuds",
+    "restrictionOKRec"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -3650,7 +5171,7 @@
   {
    "nom": "candidatsCatalogue",
    "fichier": "candidats.js",
-   "ligne": 164,
+   "ligne": 170,
    "chargement": false,
    "appelle": [
     "selectionCandidats",
@@ -3668,7 +5189,7 @@
   {
    "nom": "prechauffeCandidats",
    "fichier": "candidats.js",
-   "ligne": 177,
+   "ligne": 183,
    "chargement": false,
    "appelle": [
     "carteDuCatalogue",
@@ -3685,7 +5206,7 @@
   {
    "nom": "statsCandidats",
    "fichier": "candidats.js",
-   "ligne": 200,
+   "ligne": 206,
    "chargement": false,
    "appelle": [
     "candidatsCatalogue"
@@ -3699,7 +5220,7 @@
   {
    "nom": "requeteCatalogue",
    "fichier": "candidats.js",
-   "ligne": 206,
+   "ligne": 212,
    "chargement": false,
    "appelle": [
     "find",
@@ -3715,7 +5236,7 @@
   {
    "nom": "signatureCatalogue",
    "fichier": "candidats.js",
-   "ligne": 215,
+   "ligne": 221,
    "chargement": false,
    "appelle": [
     "requeteCatalogue"
@@ -3729,7 +5250,7 @@
   {
    "nom": "chargerCatalogue",
    "fichier": "candidats.js",
-   "ligne": 217,
+   "ligne": 223,
    "chargement": false,
    "appelle": [
     "applyScryfall",
@@ -4051,7 +5572,7 @@
   {
    "nom": "suggestionsAJour",
    "fichier": "vivier.js",
-   "ligne": 156,
+   "ligne": 157,
    "chargement": false,
    "appelle": [
     "signatureSuggestions"
@@ -4068,7 +5589,7 @@
   {
    "nom": "currentSuggestions",
    "fichier": "vivier.js",
-   "ligne": 160,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "noterVivier",
@@ -4088,7 +5609,7 @@
   {
    "nom": "prepareSuggestions",
    "fichier": "vivier.js",
-   "ligne": 175,
+   "ligne": 176,
    "chargement": false,
    "appelle": [
     "noterVivier",
@@ -4142,8 +5663,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activerDeck",
     "apresReglage",
-    "gestesDeck"
+    "gestesDeck",
+    "supprimerDeck"
    ]
   },
   {
@@ -4499,6 +6022,7 @@
     "bestOffer",
     "catalogueObsolete",
     "colorOK",
+    "deckCourant",
     "esc",
     "eur",
     "fmt",
@@ -4515,7 +6039,7 @@
   {
    "nom": "ligneBudget",
    "fichier": "suggestions.js",
-   "ligne": 87,
+   "ligne": 88,
    "chargement": false,
    "appelle": [
     "eur",
@@ -4531,7 +6055,7 @@
   {
    "nom": "ligneAchats",
    "fichier": "suggestions.js",
-   "ligne": 94,
+   "ligne": 95,
    "chargement": false,
    "appelle": [
     "aAcheter",
@@ -4549,7 +6073,7 @@
   {
    "nom": "chargeVisuelsClasses",
    "fichier": "suggestions.js",
-   "ligne": 112,
+   "ligne": 113,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4561,7 +6085,7 @@
   {
    "nom": "majHint",
    "fichier": "suggestions.js",
-   "ligne": 140,
+   "ligne": 141,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4575,7 +6099,7 @@
   {
    "nom": "poseCorps",
    "fichier": "suggestions.js",
-   "ligne": 151,
+   "ligne": 152,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4589,7 +6113,7 @@
   {
    "nom": "filetSuggestions",
    "fichier": "suggestions.js",
-   "ligne": 169,
+   "ligne": 170,
    "chargement": false,
    "appelle": [
     "recalculLong",
@@ -4608,7 +6132,7 @@
   {
    "nom": "renderSuggestions",
    "fichier": "suggestions.js",
-   "ligne": 181,
+   "ligne": 182,
    "chargement": false,
    "appelle": [
     "filetSuggestions",
@@ -4637,7 +6161,7 @@
   {
    "nom": "renderG",
    "fichier": "suggestions.js",
-   "ligne": 193,
+   "ligne": 194,
    "chargement": false,
    "appelle": [
     "blocGraphe",
@@ -4656,7 +6180,7 @@
   {
    "nom": "renderH",
    "fichier": "suggestions.js",
-   "ligne": 205,
+   "ligne": 206,
    "chargement": false,
    "appelle": [
     "blocEdhrec",
@@ -4677,7 +6201,7 @@
   {
    "nom": "renderF",
    "fichier": "suggestions.js",
-   "ligne": 218,
+   "ligne": 219,
    "chargement": false,
    "appelle": [
     "filetSuggestions",
@@ -4696,7 +6220,7 @@
   {
    "nom": "refreshSuggestions",
    "fichier": "suggestions.js",
-   "ligne": 228,
+   "ligne": 229,
    "chargement": false,
    "appelle": [
     "renderSuggestions",
@@ -4707,13 +6231,14 @@
    "appeleePar": [
     "app.js (chargement)",
     "appliquerAffichage",
-    "gestesReglages"
+    "gestesReglages",
+    "saisieBudget"
    ]
   },
   {
    "nom": "lanceEdhrecSiBesoin",
    "fichier": "suggestions.js",
-   "ligne": 235,
+   "ligne": 236,
    "chargement": false,
    "appelle": [
     "commandantsSecondaires",
@@ -4729,11 +6254,149 @@
    ]
   },
   {
-   "nom": "colorOK",
+   "nom": "coutDeck",
+   "fichier": "decksSection.js",
+   "ligne": 17,
+   "chargement": false,
+   "appelle": [
+    "find",
+    "multiplicateurAchat",
+    "quantiteCollection"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsDeck",
+    "vignetteDeck"
+   ]
+  },
+  {
+   "nom": "puceStatut",
+   "fichier": "decksSection.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "vignetteDeck"
+   ]
+  },
+  {
+   "nom": "vignetteDeck",
+   "fichier": "decksSection.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "bilanDeck",
+    "clesDecks",
+    "coutDeck",
+    "esc",
+    "eur",
+    "filtresActifs",
+    "puceStatut",
+    "remplissageJauge",
+    "restrictionsActives"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderI"
+   ]
+  },
+  {
+   "nom": "renderI",
+   "fichier": "decksSection.js",
+   "ligne": 86,
+   "chargement": false,
+   "appelle": [
+    "clesDecks"
+   ],
+   "appelleDiffere": [
+    "vignetteDeck"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks",
+    "renderAll"
+   ]
+  },
+  {
+   "nom": "decksDemandeurs",
+   "fichier": "wishlistSection.js",
+   "ligne": 15,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ligneWishlist"
+   ]
+  },
+  {
+   "nom": "ligneWishlist",
+   "fichier": "wishlistSection.js",
+   "ligne": 21,
+   "chargement": false,
+   "appelle": [
+    "cmLink",
+    "decksDemandeurs",
+    "esc",
+    "eur",
+    "stripeColor"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderJ"
+   ]
+  },
+  {
+   "nom": "renderJ",
+   "fichier": "wishlistSection.js",
+   "ligne": 34,
+   "chargement": false,
+   "appelle": [
+    "bilanWishlist",
+    "clesDecks",
+    "esc",
+    "eur",
+    "wishlist"
+   ],
+   "appelleDiffere": [
+    "ligneWishlist"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderAll"
+   ]
+  },
+  {
+   "nom": "couleursOK",
    "fichier": "collection.js",
-   "ligne": 10,
+   "ligne": 13,
    "chargement": false,
    "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "colorOK",
+    "couleursRestrictionOK",
+    "restrictionOKRec"
+   ]
+  },
+  {
+   "nom": "colorOK",
+   "fichier": "collection.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [
+    "couleursOK"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -4749,7 +6412,7 @@
   {
    "nom": "ajoutCollection",
    "fichier": "collection.js",
-   "ligne": 29,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "find",
@@ -4764,7 +6427,7 @@
   {
    "nom": "retraitCollection",
    "fichier": "collection.js",
-   "ligne": 36,
+   "ligne": 42,
    "chargement": false,
    "appelle": [
     "recalculerAvecProgression"
@@ -4778,7 +6441,7 @@
   {
    "nom": "collectionCards",
    "fichier": "collection.js",
-   "ligne": 43,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "find"
@@ -4800,7 +6463,7 @@
   {
    "nom": "filtered",
    "fichier": "collection.js",
-   "ligne": 52,
+   "ligne": 58,
    "chargement": false,
    "appelle": [
     "carteRetenue",
@@ -4822,13 +6485,14 @@
   {
    "nom": "causesCollection",
    "fichier": "collection.js",
-   "ligne": 70,
+   "ligne": 76,
    "chargement": false,
    "appelle": [
     "collectionCards",
     "colorOK",
     "filtreOK",
     "legaliteOK",
+    "restrictionOK",
     "roleOK"
    ],
    "appelleDiffere": [],
@@ -4840,15 +6504,17 @@
   {
    "nom": "ligneCausesCollection",
    "fichier": "collection.js",
-   "ligne": 83,
+   "ligne": 90,
    "chargement": false,
    "appelle": [
     "causesCollection",
+    "deckCourant",
     "esc",
     "filtresActifs",
     "fmt",
     "nomCombinaisonCouleurs",
-    "texteFiltresActifs"
+    "texteFiltresActifs",
+    "texteRestrictionsActives"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -4859,7 +6525,7 @@
   {
    "nom": "renderB",
    "fichier": "collection.js",
-   "ligne": 93,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "cardRow",
@@ -5302,7 +6968,6 @@
     "deplacerCarte",
     "ficheHTML",
     "openCardModal",
-    "snapshot",
     "tagAnnexe",
     "versAnnexe"
    ]
@@ -5407,6 +7072,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "cartesDuDeck",
+    "cartesHorsRestriction",
     "commandantsPossibles",
     "commandantsSecondairesPossibles",
     "deckCounts",
@@ -5439,7 +7105,7 @@
   {
    "nom": "cartesDuDeck",
    "fichier": "deck.js",
-   "ligne": 30,
+   "ligne": 31,
    "chargement": false,
    "appelle": [
     "deckEntries"
@@ -5454,7 +7120,7 @@
   {
    "nom": "deckSize",
    "fichier": "deck.js",
-   "ligne": 34,
+   "ligne": 35,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5470,7 +7136,7 @@
   {
    "nom": "availableFor",
    "fichier": "deck.js",
-   "ligne": 40,
+   "ligne": 41,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5488,7 +7154,7 @@
   {
    "nom": "addToDeck",
    "fichier": "deck.js",
-   "ligne": 44,
+   "ligne": 45,
    "chargement": false,
    "appelle": [
     "annexeDe",
@@ -5511,7 +7177,7 @@
   {
    "nom": "deckAdd",
    "fichier": "deck.js",
-   "ligne": 70,
+   "ligne": 71,
    "chargement": false,
    "appelle": [
     "annexeDe",
@@ -5530,7 +7196,7 @@
   {
    "nom": "removeFromDeck",
    "fichier": "deck.js",
-   "ligne": 92,
+   "ligne": 93,
    "chargement": false,
    "appelle": [
     "recalculerAvecProgression"
@@ -5545,7 +7211,7 @@
   {
    "nom": "buyCard",
    "fichier": "deck.js",
-   "ligne": 101,
+   "ligne": 102,
    "chargement": false,
    "appelle": [
     "bestOffer",
@@ -5640,6 +7306,7 @@
    "appeleePar": [
     "contexteEvaluation",
     "corpsCibles",
+    "corpsDeck",
     "corpsFiltres",
     "deckCounts",
     "ficheHTML",
@@ -5714,7 +7381,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "gauge"
+    "gauge",
+    "vignetteDeck"
    ]
   },
   {
@@ -5754,12 +7422,14 @@
    "chargement": false,
    "appelle": [
     "carteLegale",
+    "cartesHorsRestriction",
     "deckEntries",
     "deckSize",
     "eur",
     "find",
     "fmt",
-    "spent"
+    "spent",
+    "texteRestrictionsActives"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -6130,13 +7800,17 @@
     "cardRow",
     "cardTile",
     "champBudget",
+    "champDeck",
     "champRecherche",
     "corpsAffichage",
     "corpsBoiteRecalcul",
+    "corpsBudget",
     "corpsCibles",
+    "corpsDeck",
     "corpsFiltres",
     "corpsFormat",
     "corpsSauvegarde",
+    "decksDemandeurs",
     "enteteFiche",
     "enveloppeGroupe",
     "etatArchetypes",
@@ -6146,6 +7820,7 @@
     "ficheTexteHTML",
     "gauge",
     "gestesDeck",
+    "gestesDecks",
     "lienDecksEdhrec",
     "ligneAchats",
     "ligneCatalogue",
@@ -6156,11 +7831,19 @@
     "ligneFiltre",
     "ligneGameChangers",
     "ligneProposition",
+    "ligneRestriction",
+    "ligneWishlist",
     "listeArchetypesHTML",
     "listeSetsHTML",
     "majApercu",
     "majBoutonAffichage",
     "montrerApercu",
+    "nuageConflits",
+    "nuageCorpsConnecte",
+    "nuageCorpsDeconnecte",
+    "nuageDetail",
+    "nuageEtatLigne",
+    "nuageOu",
     "openAdd",
     "openCardModal",
     "openDialog",
@@ -6169,11 +7852,14 @@
     "panneauEdhrec",
     "proposerMajCatalogue",
     "propositionsHTML",
+    "puceStatut",
     "refCarte",
     "renderD",
     "renderE",
+    "renderJ",
     "renderTop",
     "resultatsHTML",
+    "resumeDeckConfig",
     "resumeFiltres",
     "sectionParametres",
     "sugLigne",
@@ -6185,6 +7871,7 @@
     "tagDeck",
     "tagEdhrec",
     "tagIllegal",
+    "vignetteDeck",
     "zoneCommandant"
    ]
   },
@@ -6204,20 +7891,25 @@
     "buyCard",
     "cardRow",
     "cardTile",
+    "corpsDeck",
+    "entete.js (chargement)",
     "exportModal",
     "ficheHTML",
     "legality",
     "ligneAchats",
     "ligneBudget",
     "ligneCatalogue",
+    "ligneWishlist",
     "noteCarte",
     "openImport",
     "openWantsModal",
     "renderC",
     "renderE",
-    "renderTop",
+    "renderJ",
+    "resumeDeckConfig",
     "sugLigne",
-    "sugRow"
+    "sugRow",
+    "vignetteDeck"
    ]
   },
   {
@@ -6244,7 +7936,6 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "aAcheter",
     "addToDeck",
     "ajouterCarte",
     "app.js (chargement)",
@@ -6281,50 +7972,9 @@
    ]
   },
   {
-   "nom": "spent",
-   "fichier": "outils.js",
-   "ligne": 37,
-   "chargement": false,
-   "appelle": [
-    "aAcheter"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "buyCard",
-    "legality",
-    "ligneBudget",
-    "ligneCatalogue",
-    "openImport",
-    "renderE",
-    "renderTop",
-    "vivierSuggestions"
-   ]
-  },
-  {
-   "nom": "aAcheter",
-   "fichier": "outils.js",
-   "ligne": 41,
-   "chargement": false,
-   "appelle": [
-    "bestOffer",
-    "find",
-    "fmt"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "blocAchats",
-    "ligneAchats",
-    "openWantsModal",
-    "renderE",
-    "spent"
-   ]
-  },
-  {
    "nom": "toast",
    "fichier": "outils.js",
-   "ligne": 57,
+   "ligne": 37,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6344,12 +7994,17 @@
     "enrichAllUnknown",
     "exportModal",
     "gestesDeck",
+    "gestesDecks",
     "gestesDonnees",
+    "gestesNuage",
     "gestesReglages",
     "lireCatalogueFichier",
     "loadEdhrec",
     "majCatalogue",
     "majPrix",
+    "nuageDemarrer",
+    "nuageDiagnostic",
+    "nuageSynchro",
     "openImport",
     "openWantsModal",
     "openWipeModal",
@@ -6429,12 +8084,15 @@
     "annonceRecalcul",
     "exportModal",
     "gestesDeck",
+    "gestesDecks",
     "gestesDonnees",
+    "gestesNuage",
     "openAdd",
     "openAffichageModal",
     "openBudgetModal",
     "openCardModal",
     "openCiblesModal",
+    "openDeckModal",
     "openFiltresModal",
     "openFormatModal",
     "openImport",
@@ -6458,14 +8116,17 @@
     "appliquerAffichage",
     "appliquerBudget",
     "appliquerCibles",
+    "appliquerDeck",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres",
     "fermerBoiteCatalogue",
     "finRecalcul",
     "gestesDeck",
+    "gestesDecks",
     "gestesDonnees",
     "gestesGraphe",
+    "gestesNuage",
     "gestesVue",
     "openImport",
     "openWipeModal"
@@ -6485,6 +8146,7 @@
     "openAffichageModal",
     "openBudgetModal",
     "openCiblesModal",
+    "openDeckModal",
     "openFiltresModal",
     "openFormatModal",
     "openParametresModal"
@@ -6493,7 +8155,7 @@
   {
    "nom": "copieEtat",
    "fichier": "brouillon.js",
-   "ligne": 31,
+   "ligne": 33,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6505,7 +8167,7 @@
   {
    "nom": "echangeBrouillon",
    "fichier": "brouillon.js",
-   "ligne": 42,
+   "ligne": 50,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6518,7 +8180,7 @@
   {
    "nom": "reprendEtat",
    "fichier": "brouillon.js",
-   "ligne": 51,
+   "ligne": 59,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6531,7 +8193,7 @@
   {
    "nom": "avecBrouillon",
    "fichier": "brouillon.js",
-   "ligne": 61,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "echangeBrouillon",
@@ -6545,6 +8207,7 @@
     "corpsBudget",
     "corpsCatalogue",
     "corpsCibles",
+    "corpsDeck",
     "corpsFiltres",
     "corpsFormat",
     "gestesVue",
@@ -6552,13 +8215,14 @@
     "majListeSets",
     "majResumeBudget",
     "majResumeFormat",
+    "resumeDeckConfig",
     "resumeFiltres"
    ]
   },
   {
    "nom": "modifieBrouillon",
    "fichier": "brouillon.js",
-   "ligne": 69,
+   "ligne": 77,
    "chargement": false,
    "appelle": [
     "echangeBrouillon",
@@ -6569,16 +8233,20 @@
    "appeleePar": [
     "app.js (chargement)",
     "appliquerAffichage",
+    "gestesDeckConfig",
+    "gestesDecks",
     "gestesReglages",
     "gestesVue",
     "glisseColonnes",
-    "reglageAffichage"
+    "reglageAffichage",
+    "saisieBudget",
+    "saisieDeck"
    ]
   },
   {
    "nom": "brouillonModifie",
    "fichier": "brouillon.js",
-   "ligne": 76,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "memeEtat"
@@ -6590,11 +8258,25 @@
    ]
   },
   {
-   "nom": "memeEtat",
+   "nom": "texteEtat",
    "fichier": "brouillon.js",
-   "ligne": 82,
+   "ligne": 93,
    "chargement": false,
    "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "memeEtat"
+   ]
+  },
+  {
+   "nom": "memeEtat",
+   "fichier": "brouillon.js",
+   "ligne": 101,
+   "chargement": false,
+   "appelle": [
+    "texteEtat"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -6604,7 +8286,7 @@
   {
    "nom": "apresReglage",
    "fichier": "brouillon.js",
-   "ligne": 99,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "degeleSuggestions",
@@ -6617,6 +8299,7 @@
    "appeleePar": [
     "app.js (chargement)",
     "gestesDeck",
+    "gestesDecks",
     "gestesReglages",
     "gestesVue"
    ]
@@ -6624,7 +8307,7 @@
   {
    "nom": "renderAllSiApplique",
    "fichier": "brouillon.js",
-   "ligne": 114,
+   "ligne": 128,
    "chargement": false,
    "appelle": [
     "majResumeFiltres",
@@ -6641,7 +8324,7 @@
   {
    "nom": "verseBrouillon",
    "fichier": "brouillon.js",
-   "ligne": 125,
+   "ligne": 139,
    "chargement": false,
    "appelle": [
     "invaliderCandidats"
@@ -6652,6 +8335,7 @@
     "appliquerAffichage",
     "appliquerBudget",
     "appliquerCibles",
+    "appliquerDeck",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres"
@@ -6660,7 +8344,7 @@
   {
    "nom": "fermetureBrouillon",
    "fichier": "brouillon.js",
-   "ligne": 135,
+   "ligne": 149,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6678,9 +8362,11 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "corpsDeck",
     "corpsFiltres",
     "ligneCausesCollection",
-    "renderTop"
+    "renderTop",
+    "restrictionsActives"
    ]
   },
   {
@@ -7267,6 +8953,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "nuageTour",
     "recalculerAvecProgression"
    ]
   },
@@ -7279,6 +8966,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "nuageTour",
     "recalculerAvecProgression"
    ]
   },
@@ -7407,6 +9095,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activerDeck",
     "addToDeck",
     "ajoutCollection",
     "ajouterCarte",
@@ -7415,6 +9104,7 @@
     "chargerCatalogueComplet",
     "filetSuggestions",
     "gestesDeck",
+    "gestesDecks",
     "gestesDonnees",
     "gestesVue",
     "lireCatalogueFichier",
@@ -7426,6 +9116,24 @@
     "versAnnexe",
     "viderAnnexe"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "entete.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "deckCourant",
+    "eur",
+    "majBoutonAffichage",
+    "majHauteurEntete",
+    "ongletDeSection",
+    "renderOnglets",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "listeDeLOngletCourant",
@@ -7452,36 +9160,38 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "renderOnglets",
-    "renderTop"
+    "entete.js (chargement)",
+    "renderOnglets"
    ]
   },
   {
    "nom": "majHauteurEntete",
    "fichier": "entete.js",
-   "ligne": 53,
+   "ligne": 57,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "entete.js (chargement)",
     "renderTop"
    ]
   },
   {
    "nom": "renderTop",
    "fichier": "entete.js",
-   "ligne": 58,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
+    "clesDecks",
+    "deckCourant",
     "esc",
-    "eur",
     "filtresActifs",
     "fmt",
-    "majBoutonAffichage",
     "majHauteurEntete",
     "nomCombinaisonCouleurs",
+    "restrictionsActives",
     "spent",
     "symBg",
     "texteFiltresActifs"
@@ -7499,7 +9209,7 @@
   {
    "nom": "renderOnglets",
    "fichier": "entete.js",
-   "ligne": 168,
+   "ligne": 195,
    "chargement": false,
    "appelle": [
     "majBoutonAffichage"
@@ -7507,40 +9217,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "activerOnglet",
+    "entete.js (chargement)",
     "renderAll"
-   ]
-  },
-  {
-   "nom": "activerOnglet",
-   "fichier": "entete.js",
-   "ligne": 188,
-   "chargement": false,
-   "appelle": [
-    "renderOnglets",
-    "scheduleSave"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "allerVersSection",
-    "app.js (chargement)",
-    "gestesVue"
-   ]
-  },
-  {
-   "nom": "allerVersSection",
-   "fichier": "entete.js",
-   "ligne": 203,
-   "chargement": false,
-   "appelle": [
-    "activerOnglet",
-    "ongletDeSection"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "gestesGraphe"
    ]
   },
   {
@@ -7568,6 +9246,8 @@
     "renderC",
     "renderD",
     "renderE",
+    "renderI",
+    "renderJ",
     "renderOnglets",
     "renderSuggestions",
     "renderTop",
@@ -7576,6 +9256,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activerDeck",
     "app.js (chargement)",
     "appliquerAffichage",
     "brancherCatalogue",
@@ -7586,10 +9267,12 @@
     "completeUnknown",
     "demarrer",
     "filtrerAvecProgression",
+    "gestesDecks",
     "gestesDonnees",
     "loadSymbology",
     "majCatalogue",
     "majPrix",
+    "nuageTour",
     "recalculerAvecProgression",
     "renderAllSiApplique"
    ]
@@ -7678,6 +9361,137 @@
    ]
   },
   {
+   "nom": "nuageQuand",
+   "fichier": "fenNuage.js",
+   "ligne": 16,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageCorpsConnecte"
+   ]
+  },
+  {
+   "nom": "nuageOu",
+   "fichier": "fenNuage.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageConflits"
+   ]
+  },
+  {
+   "nom": "nuageConflits",
+   "fichier": "fenNuage.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "nuageOu"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageCorpsConnecte"
+   ]
+  },
+  {
+   "nom": "nuageEtatLigne",
+   "fichier": "fenNuage.js",
+   "ligne": 59,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageCorpsConnecte"
+   ]
+  },
+  {
+   "nom": "nuageDetail",
+   "fichier": "fenNuage.js",
+   "ligne": 71,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageCorpsConnecte"
+   ]
+  },
+  {
+   "nom": "nuageAvertissementOrigine",
+   "fichier": "fenNuage.js",
+   "ligne": 80,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nuageCorpsDeconnecte"
+   ]
+  },
+  {
+   "nom": "nuageCorpsDeconnecte",
+   "fichier": "fenNuage.js",
+   "ligne": 96,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "nuageAvertissementOrigine"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsNuage"
+   ]
+  },
+  {
+   "nom": "nuageCorpsConnecte",
+   "fichier": "fenNuage.js",
+   "ligne": 120,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "nuageConflits",
+    "nuageDetail",
+    "nuageEtatLigne",
+    "nuagePoids",
+    "nuageQuand"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsNuage"
+   ]
+  },
+  {
+   "nom": "corpsNuage",
+   "fichier": "fenNuage.js",
+   "ligne": 156,
+   "chargement": false,
+   "appelle": [
+    "nuageConnecte",
+    "nuageCorpsConnecte",
+    "nuageCorpsDeconnecte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsParametres"
+   ]
+  },
+  {
    "nom": "sectionParametres",
    "fichier": "fenParametres.js",
    "ligne": 18,
@@ -7726,6 +9540,7 @@
    "appelle": [
     "corpsApparence",
     "corpsCatalogue",
+    "corpsNuage",
     "corpsSauvegarde",
     "sectionParametres"
    ],
@@ -7739,7 +9554,7 @@
   {
    "nom": "majFenetreParametres",
    "fichier": "fenParametres.js",
-   "ligne": 87,
+   "ligne": 90,
    "chargement": false,
    "appelle": [
     "brancherParametres",
@@ -7749,6 +9564,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "brancherSauvegarde",
+    "gestesNuageChange",
+    "nuageDiagnostic",
+    "nuageSynchro",
     "openParametresModal",
     "rafraichirFenetreSauvegarde"
    ]
@@ -7756,7 +9574,7 @@
   {
    "nom": "brancherParametres",
    "fichier": "fenParametres.js",
-   "ligne": 98,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "brancherCatalogue",
@@ -7773,7 +9591,7 @@
   {
    "nom": "appliquerParametres",
    "fichier": "fenParametres.js",
-   "ligne": 104,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -7789,7 +9607,7 @@
   {
    "nom": "openParametresModal",
    "fichier": "fenParametres.js",
-   "ligne": 110,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "brancherParametres",
@@ -7803,13 +9621,14 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
+    "gestesNuage",
     "gestesReglages"
    ]
   },
   {
    "nom": "appliquerFormat",
    "fichier": "fenParametres.js",
-   "ligne": 121,
+   "ligne": 124,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -7825,7 +9644,7 @@
   {
    "nom": "champBudget",
    "fichier": "fenBudget.js",
-   "ligne": 16,
+   "ligne": 19,
    "chargement": false,
    "appelle": [
     "esc"
@@ -7839,11 +9658,13 @@
   {
    "nom": "corpsBudget",
    "fichier": "fenBudget.js",
-   "ligne": 22,
+   "ligne": 25,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
     "champBudget",
+    "deckCourant",
+    "esc",
     "ligneAchats",
     "ligneBudget"
    ],
@@ -7851,12 +9672,30 @@
    "appelleParHtml": [],
    "appeleePar": [
     "openBudgetModal"
+   ]
+  },
+  {
+   "nom": "saisieBudget",
+   "fichier": "fenBudget.js",
+   "ligne": 62,
+   "chargement": false,
+   "appelle": [
+    "invaliderAchats",
+    "invaliderCandidats",
+    "majResumeBudget",
+    "modifieBrouillon",
+    "refreshSuggestions"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
    ]
   },
   {
    "nom": "majResumeBudget",
    "fichier": "fenBudget.js",
-   "ligne": 51,
+   "ligne": 80,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
@@ -7866,14 +9705,14 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "app.js (chargement)",
-    "openBudgetModal"
+    "openBudgetModal",
+    "saisieBudget"
    ]
   },
   {
    "nom": "appliquerBudget",
    "fichier": "fenBudget.js",
-   "ligne": 63,
+   "ligne": 92,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -7890,7 +9729,7 @@
   {
    "nom": "openBudgetModal",
    "fichier": "fenBudget.js",
-   "ligne": 69,
+   "ligne": 98,
    "chargement": false,
    "appelle": [
     "corpsBudget",
@@ -7904,6 +9743,167 @@
    "appelleParHtml": [],
    "appeleePar": [
     "gestesReglages"
+   ]
+  },
+  {
+   "nom": "dossierEnConfig",
+   "fichier": "fenDeck.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [
+    "deckCourant"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsDeck",
+    "ligneRestriction",
+    "resumeDeckConfig",
+    "saisieDeck"
+   ]
+  },
+  {
+   "nom": "champDeck",
+   "fichier": "fenDeck.js",
+   "ligne": 27,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsDeck"
+   ]
+  },
+  {
+   "nom": "ligneRestriction",
+   "fichier": "fenDeck.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "dossierEnConfig",
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsDeck"
+   ]
+  },
+  {
+   "nom": "corpsDeck",
+   "fichier": "fenDeck.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [
+    "avecBrouillon",
+    "champDeck",
+    "couleursRestriction",
+    "coutDeck",
+    "dossierEnConfig",
+    "esc",
+    "eur",
+    "ligneRestriction",
+    "nomCombinaisonCouleurs",
+    "resumeDeckConfig",
+    "rolesFiltre",
+    "symBg",
+    "targets"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "majFenetreDeck",
+    "openDeckModal"
+   ]
+  },
+  {
+   "nom": "resumeDeckConfig",
+   "fichier": "fenDeck.js",
+   "ligne": 155,
+   "chargement": false,
+   "appelle": [
+    "avecBrouillon",
+    "couleursRestriction",
+    "dossierEnConfig",
+    "esc",
+    "eur",
+    "filtresActifs"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsDeck",
+    "majResumeDeck"
+   ]
+  },
+  {
+   "nom": "majResumeDeck",
+   "fichier": "fenDeck.js",
+   "ligne": 166,
+   "chargement": false,
+   "appelle": [
+    "resumeDeckConfig"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks",
+    "saisieDeck"
+   ]
+  },
+  {
+   "nom": "majFenetreDeck",
+   "fichier": "fenDeck.js",
+   "ligne": 173,
+   "chargement": false,
+   "appelle": [
+    "corpsDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDeckConfig",
+    "openDeckModal",
+    "saisieDeck"
+   ]
+  },
+  {
+   "nom": "appliquerDeck",
+   "fichier": "fenDeck.js",
+   "ligne": 183,
+   "chargement": false,
+   "appelle": [
+    "closeDialog",
+    "filtrerAvecProgression",
+    "invaliderAchats",
+    "renommerDeck",
+    "verseBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks"
+   ]
+  },
+  {
+   "nom": "openDeckModal",
+   "fichier": "fenDeck.js",
+   "ligne": 195,
+   "chargement": false,
+   "appelle": [
+    "corpsDeck",
+    "openDialog",
+    "ouvreBrouillon",
+    "zoneProgression"
+   ],
+   "appelleDiffere": [
+    "majFenetreDeck"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks"
    ]
   },
   {
@@ -8002,6 +10002,7 @@
     "corpsBoiteRecalcul",
     "openBudgetModal",
     "openCiblesModal",
+    "openDeckModal",
     "openFiltresModal",
     "openFormatModal",
     "openParametresModal"
@@ -8037,6 +10038,7 @@
    "appeleePar": [
     "appliquerBudget",
     "appliquerCibles",
+    "appliquerDeck",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres"
@@ -8543,25 +10545,28 @@
   {
    "nom": "openWantsModal",
    "fichier": "fenExport.js",
-   "ligne": 106,
+   "ligne": 109,
    "chargement": false,
    "appelle": [
     "aAcheter",
+    "deckCourant",
     "esc",
     "eur",
     "openDialog",
-    "toast"
+    "toast",
+    "wishlist"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "gestesDeck"
+    "gestesDeck",
+    "gestesDecks"
    ]
   },
   {
    "nom": "openWipeModal",
    "fichier": "fenExport.js",
-   "ligne": 139,
+   "ligne": 152,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -8578,12 +10583,80 @@
    ]
   },
   {
+   "nom": "gestesDecks",
+   "fichier": "gestesDecks.js",
+   "ligne": 11,
+   "chargement": false,
+   "appelle": [
+    "activerDeck",
+    "appliquerDeck",
+    "apresReglage",
+    "bilanDeck",
+    "closeDialog",
+    "creerDeck",
+    "deckCourant",
+    "dupliquerDeck",
+    "esc",
+    "majResumeDeck",
+    "modifieBrouillon",
+    "openDeckModal",
+    "openDialog",
+    "openWantsModal",
+    "recalculerAvecProgression",
+    "reinitRestrictions",
+    "renderAll",
+    "renderI",
+    "scheduleSave",
+    "supprimerDeck",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "saisieDeck",
+   "fichier": "gestesDecks.js",
+   "ligne": 87,
+   "chargement": false,
+   "appelle": [
+    "dossierEnConfig",
+    "majFenetreDeck",
+    "majRestriction",
+    "majResumeDeck",
+    "modifieBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "gestesDeckConfig",
+   "fichier": "gestesDecks.js",
+   "ligne": 113,
+   "chargement": false,
+   "appelle": [
+    "majFenetreDeck",
+    "modifieBrouillon",
+    "restrictionsDuDeck",
+    "rolesFiltre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
    "nom": "gestesVue",
    "fichier": "gestesVue.js",
    "ligne": 10,
    "chargement": false,
    "appelle": [
-    "activerOnglet",
     "apresReglage",
     "archetypesAChargerEdhrec",
     "avecBrouillon",
@@ -8699,10 +10772,13 @@
     "closeDialog",
     "enrichAllUnknown",
     "exportModal",
+    "idbOublier",
     "idbVider",
     "invaliderCandidats",
     "loadEdhrec",
     "majCatalogue",
+    "nuageConnecte",
+    "nuageDeconnecte",
     "openAdd",
     "openDialog",
     "openImport",
@@ -8723,13 +10799,52 @@
    ]
   },
   {
+   "nom": "gestesNuage",
+   "fichier": "gestesNuage.js",
+   "ligne": 9,
+   "chargement": false,
+   "appelle": [
+    "closeDialog",
+    "dbxConnexion",
+    "nuageDeconnecte",
+    "nuageDiagnostic",
+    "nuageSynchro",
+    "openDialog",
+    "openParametresModal",
+    "save",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "gestesNuageChange",
+   "fichier": "gestesNuage.js",
+   "ligne": 64,
+   "chargement": false,
+   "appelle": [
+    "nuageEcrire",
+    "nuageNomParDefaut",
+    "nuageSynchro"
+   ],
+   "appelleDiffere": [
+    "majFenetreParametres"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
    "nom": "gestesGraphe",
    "fichier": "gestesGraphe.js",
    "ligne": 9,
    "chargement": false,
    "appelle": [
     "ajouterCarte",
-    "allerVersSection",
     "buildCard",
     "carteDepuisScryfall",
     "closeDialog",
@@ -8758,7 +10873,6 @@
    "ligne": null,
    "chargement": true,
    "appelle": [
-    "activerOnglet",
     "appliquerBudget",
     "appliquerFiltres",
     "apresReglage",
@@ -8770,8 +10884,12 @@
     "ficheVoisine",
     "fmt",
     "gestesDeck",
+    "gestesDeckConfig",
+    "gestesDecks",
     "gestesDonnees",
     "gestesGraphe",
+    "gestesNuage",
+    "gestesNuageChange",
     "gestesReglages",
     "gestesVue",
     "glisseColonnes",
@@ -8780,7 +10898,6 @@
     "majListeArchetypes",
     "majListeSets",
     "majResultats",
-    "majResumeBudget",
     "majResumeFiltres",
     "majResumeFormat",
     "modifieBrouillon",
@@ -8792,6 +10909,8 @@
     "reglerCible",
     "renderAll",
     "renderE",
+    "saisieBudget",
+    "saisieDeck",
     "saisieRecherche",
     "toast"
    ],
@@ -8804,7 +10923,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 262,
+   "ligne": 261,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",
@@ -8815,6 +10934,7 @@
     "gameChangersARevoir",
     "initBuiltin",
     "loadSymbology",
+    "nuageDemarrer",
     "renderAll",
     "reprendTheme",
     "reprendreArchetypesEdhrec",

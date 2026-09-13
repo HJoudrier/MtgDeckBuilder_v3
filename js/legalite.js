@@ -145,6 +145,12 @@ function legality() {
   const illegales = deckEntries().filter(e => carteLegale(e.card) === false);
   if (illegales.length) msgs.push(`${illegales.length} carte(s) non légale(s) en ${f.label} : ${
     illegales.slice(0,3).map(e => e.card.name).join(', ')}${illegales.length > 3 ? '…' : ''}.`);
+  /* Pour la même raison, la restriction du deck ne masque pas ses propres
+     cartes : elle les signale ici. */
+  const hors = cartesHorsRestriction();
+  if (hors.length) msgs.push(`${hors.length} carte(s) hors des restrictions de ce deck (${
+    texteRestrictionsActives(', ')}) : ${
+    hors.slice(0,3).map(e => e.card.name).join(', ')}${hors.length > 3 ? '…' : ''}.`);
   deckEntries().forEach(e => {
     const possede = S.collection.get(e.card.name) || 0;
     if (e.qty > possede && S.budget.total <= 0)

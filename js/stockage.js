@@ -56,7 +56,7 @@ function snapshot() {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
       if (c.img || c.cmUrl || c.artist || c.textFull || c.set) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...impressionSnap(c)});
-    } else if (c.externe && !(S.collection.get(c.name) > 0) && !S.deck.has(c.name) && !annexeDe(c.name)) {
+    } else if (c.externe && !(S.collection.get(c.name) > 0) && !carteDansUnDeck(c.name)) {
       // vivier d'exploration : non conservé
     } else {
       cartes.push({
@@ -73,16 +73,27 @@ function snapshot() {
     v: 1,
     date: Date.now(),
     collection: [...S.collection],
+    decks: clesDecks().map(deckSnap),
+    deckActif: S.deckActif,
+    achats: S.achats,
+    /* Le temps d'une version, le deck ouvert est aussi recopié sous les
+       anciennes clés. Le marqueur `v` reste à 1 — le passer à 2 ferait qu'un
+       atelier resté sur le code d'hier rejetterait la sauvegarde, puis
+       l'écraserait par un état vide à la première sauvegarde différée ; ces
+       quelques centaines d'octets lui rendent son deck au lieu d'une page
+       vide. Rien ici ne les relit : `restore()` part de `decks`. */
     deck: [...S.deck],
     sideboard: [...S.sideboard],
     considering: [...S.considering],
-    deckPlie: [...S.deckPlie],
-    secondairesOff: [...S.secondairesOff],
-    groupesPlies: [...S.groupesPlies],
     commander: S.commander,
+    format: S.format,
+    budget: {...S.budget, ...S.achats},
+    ciblesRoles: S.ciblesRoles,
+    secondairesOff: [...S.secondairesOff],
+    deckPlie: [...S.deckPlie],
+    groupesPlies: [...S.groupesPlies],
     colors: [...S.colors],
     colorMode: S.colorMode,
-    format: S.format,
     custom: S.custom,
     colonnes: {...S.colonnes},
     groupes: S.groupes,
@@ -90,11 +101,9 @@ function snapshot() {
     filtres: S.filtres,
     vues: {...S.vues},
     sombre: S.sombre,
-    ciblesRoles: S.ciblesRoles,
     onglet: S.onglet,
     graphSource: S.graphSource,
     showImplicit: S.showImplicit,
-    budget: S.budget,
     candidatsMax: S.candidatsMax,
     catalogueNumeriques: S.catalogueNumeriques,
     filtreLegal: S.filtreLegal,
@@ -185,16 +194,13 @@ function restore(d) {
   });
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));
-  S.deck = new Map((d.deck || []).filter(([n]) => find(n)));
-  /* Les listes annexes suivent le deck, et la même règle : un nom que la base
-     ne connaît plus ne revient pas. Une sauvegarde antérieure n'en a pas, et
-     les listes restent vides. */
-  CLES_ANNEXES.forEach(cle => {
-    S[cle] = new Map((d[cle] || []).filter(([n]) => find(n) && !S.deck.has(n)));
-  });
-  S.commander = d.commander && find(d.commander) ? d.commander : null;
+  /* Les dossiers avant tout le reste : `S.deck`, `S.commander`, `S.format` et
+     `S.budget` sont des vues sur le deck ouvert, et une écriture faite avant
+     qu'il y en ait un irait dans un dossier créé pour rien. */
+  restaureDecks(d);
   if (d.colors && d.colors.length !== undefined) S.colors = new Set(d.colors);
-  ['colorMode','format','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  ['colorMode','graphSource'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  if (d.achats) S.achats = {...S.achats, ...d.achats};
   /* La vue de chaque liste. Une sauvegarde d'hier n'en porte qu'une, `view`,
      et elle ne valait que pour la collection et le deck : les trois listes de
      propositions n'avaient pas le choix, et gardent donc leurs vignettes. */
@@ -225,28 +231,12 @@ function restore(d) {
     Object.keys(S[k]).forEach(sec => { if (table[src[sec]]) S[k][sec] = src[sec]; });
   });
   if (!d.tris && TRIS[d.sort]) S.tris.collection = d.sort;
-  /* Les objectifs par rôle réglés à la main, format par format : une valeur
-     qui n'est pas un nombre positif est écartée, et le rôle reprend la cible
-     que le format lui donne. */
-  if (d.ciblesRoles && typeof d.ciblesRoles === 'object') {
-    Object.keys(d.ciblesRoles).forEach(f => {
-      const src = d.ciblesRoles[f];
-      if (!src || typeof src !== 'object') return;
-      const propre = {};
-      Object.keys(src).forEach(r => {
-        const v = Math.round(Number(src[r]));
-        if (Number.isFinite(v) && v >= 0) propre[r] = v;
-      });
-      if (Object.keys(propre).length) S.ciblesRoles[f] = propre;
-    });
-  }
   /* Le thème. Une sauvegarde d'hier ne le porte pas : `null` laisse le
      démarrage suivre la clé du thème, puis la préférence du système. */
   if (typeof d.sombre === 'boolean') S.sombre = d.sombre;
   if (typeof d.showImplicit === 'boolean') S.showImplicit = d.showImplicit;
   if (d.custom) S.custom = {...S.custom, ...d.custom, colorLimits:{...S.custom.colorLimits, ...(d.custom.colorLimits||{})}};
   if (d.filtres) S.filtres = {...FILTRES_VIDE, ...d.filtres};
-  if (d.budget) S.budget = {...S.budget, ...d.budget};
   if (typeof d.candidatsMax === 'number' && d.candidatsMax > 0) S.candidatsMax = d.candidatsMax;
   if (typeof d.filtreLegal === 'boolean') S.filtreLegal = d.filtreLegal;
   if (typeof d.catalogueNumeriques === 'boolean') S.catalogueNumeriques = d.catalogueNumeriques;
@@ -263,8 +253,6 @@ function restore(d) {
      retrouve d'une séance à l'autre, comme l'onglet ouvert. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
-  /* Les commandants secondaires écartés : une préférence, comme les plis. */
-  if (Array.isArray(d.secondairesOff)) S.secondairesOff = new Set(d.secondairesOff);
   return true;
 }
 

@@ -27,13 +27,20 @@
 
 const NUAGE_PAQUET_V = 1;
 
-/* Les quantités par nom de carte : quatre tables qui se fusionnent entrée par
-   entrée. `snapshot()` les rend déjà en tableaux de paires. */
-const NUAGE_QTES = ['collection', 'deck', ...CLES_ANNEXES];
+/* Les quantités par nom de carte, qui se fusionnent entrée par entrée.
+   `snapshot()` les rend déjà en tableaux de paires. La collection y est seule
+   depuis que les trois listes d'un deck vivent dans son dossier : les decks
+   forment un étage à eux, fusionné dossier par dossier puis carte par carte
+   (`fusionneDecks()`, js/nuageFusion.js). */
+const NUAGE_QTES = ['collection'];
 /* Ce qui ne vaut qu'une valeur, et se tranche en bloc. */
-const NUAGE_SCALAIRES = ['commander', 'format'];
-const NUAGE_OBJETS = ['custom', 'budget', 'ciblesRoles'];
-const NUAGE_ENSEMBLES = ['secondairesOff'];
+const NUAGE_SCALAIRES = [];
+/* `achats` — comment on achète — voyage ; le plafond, lui, appartient au deck
+   et part avec son dossier. */
+const NUAGE_OBJETS = ['custom', 'achats'];
+const NUAGE_ENSEMBLES = [];
+/* Le deck ouvert ne voyage pas : c'est de la vue, comme l'onglet. Un
+   vingt-sept pouces et un portable peuvent regarder deux decks différents. */
 
 /* Le paquet tel qu'il part : le fond, le cache, et de quoi dire qui a écrit
    quand — un conflit se raconte mal sans nom d'appareil. */
@@ -42,6 +49,7 @@ function nuagePaquet(appareil) {
   const fond = {};
   [...NUAGE_QTES, ...NUAGE_SCALAIRES, ...NUAGE_OBJETS, ...NUAGE_ENSEMBLES]
     .forEach(k => { fond[k] = s[k]; });
+  fond.decks = s.decks;
   return {
     v: NUAGE_PAQUET_V,
     maj: Date.now(),

@@ -67,13 +67,14 @@ function legaliteOK(card) {
    une carte déjà posée doit rester visible pour pouvoir être retirée, et
    `legality()` la signale. */
 function carteRetenue(card) {
-  return carteFiltree(card) && legaliteOK(card);
+  return carteFiltreeEtRestreinte(card) && legaliteOK(card);
 }
 
-/* Applique les filtres avancés à une carte. */
-function filtreOK(card) {
-  if (!card) return false;
-  return filtresValeursOK({
+/* Les valeurs d'une carte que les critères comparent. Sorties de `filtreOK()`
+   pour que la restriction d'un deck les lise sans que le calcul soit écrit
+   deux fois ; les coûteuses restent paresseuses. */
+function valeursCarte(card) {
+  return {
     name: card.name,
     type: () => card.type + ' ' + mainType(card),
     text: card.text || '',
@@ -81,7 +82,13 @@ function filtreOK(card) {
     sets: () => setsCarte(card),
     archetypes: () => archetypesCarte(card),
     force: card.force, endurance: card.endurance, cmc: card.cmc, price: card.price
-  });
+  };
+}
+
+/* Applique les filtres avancés à une carte. */
+function filtreOK(card) {
+  if (!card) return false;
+  return filtresValeursOK(valeursCarte(card));
 }
 
 /* Sets d'un enregistrement du catalogue : ceux que porte l'archive, réunis
@@ -103,8 +110,13 @@ function setsRec(rec) {
    ils restent appliqués en aval, sur les seules cartes retenues. */
 function filtreOKRec(rec) {
   if (!rec) return false;
+  return filtresValeursOK(valeursRec(rec));
+}
+
+/* Les mêmes valeurs, lues sur un enregistrement du catalogue. */
+function valeursRec(rec) {
   const nom = rec[CH.NOM];
-  return filtresValeursOK({
+  return {
     name: nom,
     type: () => (rec[CH.TYPE] || '') + ' ' + mainType({type: rec[CH.TYPE] || '', isToken: false}),
     text: rec[CH.TEXTE] || '',
@@ -118,5 +130,5 @@ function filtreOKRec(rec) {
     },
     force: rec[CH.FORCE], endurance: rec[CH.ENDURANCE],
     cmc: rec[CH.CMC], price: rec[CH.PRIX]
-  });
+  };
 }

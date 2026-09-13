@@ -103,20 +103,33 @@ function exportModal(cible) {
   };
 }
 
-function openWantsModal() {
-  const buys = aAcheter();
-  if (!buys.length) { toast('Aucune carte à acheter : toutes les cartes du deck sont déjà dans votre collection.'); return; }
+/* La fenêtre des wants sert deux comptes : celui du deck ouvert, depuis sa
+   section, et celui de tous les decks, depuis la page « Decks ». Les deux
+   donnent les mêmes lignes — un nombre et un nom —, seule la phrase change. */
+function openWantsModal(tout) {
+  const buys = tout
+    ? wishlist().map(l => ({card:l.card, qty:l.manque, total:l.total}))
+    : aAcheter();
+  if (!buys.length) {
+    toast(tout
+      ? 'Aucune carte à acheter : tout ce que vos decks demandent, vous le possédez déjà.'
+      : 'Aucune carte à acheter : toutes les cartes du deck sont déjà dans votre collection.');
+    return;
+  }
   const total = buys.reduce((t, l) => t + l.total, 0);
   const nb = buys.reduce((n, l) => n + l.qty, 0);
   const txt = buys.map(l => `${l.qty} ${l.card.name}`).join('\n');
 
-  openDialog('Liste d\'achats Cardmarket (Wants)',
+  openDialog(tout ? 'Liste d\'achats de tous les decks (Wants)' : `Liste d\'achats de « ${deckCourant().nom} » (Wants)`,
     `<div class="row" style="margin-bottom:8px">
        <span class="pill"><b>${nb}</b> exemplaire(s)</span>
        <span class="pill"><b>${buys.length}</b> carte(s) différentes</span>
        <span class="pill">Estimation <b>${eur(total)}</b></span>
      </div>
-     <p class="small muted">Copiez cette liste et collez-la directement dans une Wants List sur Cardmarket, ou utilisez le lien direct de chaque carte.</p>
+     <p class="small muted">${tout
+       ? 'Tous decks confondus, ce que vous possédez déjà déduit.'
+       : `Pour « ${esc(deckCourant().nom)} » seul.`}
+       Copiez cette liste et collez-la directement dans une Wants List sur Cardmarket, ou utilisez le lien direct de chaque carte.</p>
      <textarea id="wantsArea" readonly style="height:180px">${esc(txt)}</textarea>
      <div class="small muted" style="margin-top:6px">Format reconnu : « 1 Sol Ring » (une carte par ligne).</div>`,
     `<button class="btn" id="wantsCopy">Copier la liste</button>

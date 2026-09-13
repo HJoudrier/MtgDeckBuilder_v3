@@ -26,7 +26,15 @@ function nuageQuand(t) {
 
 const NUAGE_LISTES = {collection: 'collection', deck: 'deck', sideboard: 'réserve', considering: 'étude'};
 const NUAGE_CHAMPS = {commander: 'commandant', format: 'format', custom: 'format personnalisé',
-  budget: 'budget', ciblesRoles: 'objectifs par rôle'};
+  budget: 'budget', ciblesRoles: 'objectifs par rôle', achats: 'préférences d\'achat',
+  nom: 'nom du deck', statut: 'avancement', restrictions: 'restrictions',
+  exemplairesPropres: 'exemplaires propres'};
+
+/* Un désaccord porte le deck où il a eu lieu : « Sol Ring » ne dit rien si
+   l'on en joue dans trois decks. */
+function nuageOu(c) {
+  return c.deck ? ` <span class="muted">— ${esc(c.deck)}</span>` : '';
+}
 
 /* Les désaccords que la fusion n'a pas pu trancher seule. On les nomme : la
    carte, ce que chaque appareil en disait, et ce qui a été retenu. Sans cette
@@ -34,9 +42,9 @@ const NUAGE_CHAMPS = {commander: 'commandant', format: 'format', custom: 'format
 function nuageConflits() {
   if (!NUAGE.conflits.length) return '';
   const lignes = NUAGE.conflits.slice(0, 10).map(c => c.nom
-    ? `<div class="puce">${esc(c.nom)} <span class="muted">(${esc(NUAGE_LISTES[c.liste] || c.liste)})</span> :
+    ? `<div class="puce">${esc(c.nom)} <span class="muted">(${esc(NUAGE_LISTES[c.liste] || c.liste)})</span>${nuageOu(c)} :
         ici ${c.local}, là-bas ${c.distant} — retenu <b>${c.retenu}</b></div>`
-    : `<div class="puce">${esc(NUAGE_CHAMPS[c.champ] || c.champ)} : les deux appareils en donnaient
+    : `<div class="puce">${esc(NUAGE_CHAMPS[c.champ] || c.champ)}${nuageOu(c)} : les deux appareils en donnaient
         un différent — celui de cet appareil est conservé</div>`);
   const reste = NUAGE.conflits.length - 10;
   return `<div class="warnbox">

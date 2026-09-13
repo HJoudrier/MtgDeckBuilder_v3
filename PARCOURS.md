@@ -46,6 +46,13 @@ propre : le HTML est réécrit sans cesse, des gestionnaires attachés ne surviv
 listes annexes sont des `Map` ; les couleurs et les plis, des `Set`. Rien n'est immuable, rien
 n'est copié — sauf le brouillon d'une fenêtre de réglage, qui met de côté ce qu'il modifie.
 
+**Le deck ouvert.** `S.deck`, `S.commander`, `S.format`, `S.budget`, `S.ciblesRoles`,
+`S.secondairesOff` et les deux annexes ne sont plus des champs de `S` mais des **propriétés d'accès**
+posées par `js/decks.js` : elles lisent et écrivent dans `S.decks[S.deckActif]`. Les diagrammes qui
+suivent nomment donc `S.deck` comme avant — le chemin est le même —, mais toute écriture atterrit
+dans le dossier ouvert, et changer de deck change ce que lisent les cent cinquante appelants d'un
+coup, sans qu'aucun recopiage n'ait lieu.
+
 **Le recalcul.** `recalculerAvecProgression(raison)` (`js/recalcul.js`) est le passage obligé de
 tout geste qui change le deck ou les filtres. Il relève l'ancre de défilement, demande à
 `recalculLong()` (`js/recalcul.js`) si le travail vaut une barre de progression, puis :
@@ -55,10 +62,11 @@ tout geste qui change le deck ou les filtres. Il relève l'ancre de défilement,
   navigateur entre chacune, une boîte ouverte seulement si le travail dure plus que `DELAI_BOITE`.
 
 **Le rendu.** `renderAll()` (`js/rendu.js`) pose d'abord l'onglet ouvert — `renderOnglets` —, puis
-repeint l'en-tête et les sept sections — `renderTop`, `renderB` (collection), `renderC`
+repeint l'en-tête et les neuf sections — `renderTop`, `renderB` (collection), `renderC`
 (statistiques), `renderD` (graphe), `renderE` (deck), puis `renderSuggestions`, qui peint d'un
 coup les trois sections nées d'une même notation : `renderG` (les pistes du graphe), `renderH`
-(EDHREC), `renderF` (le catalogue) — et programme la sauvegarde. Chaque section réécrit
+(EDHREC), `renderF` (le catalogue) — et programme la sauvegarde. `renderI` (les decks) et `renderJ`
+(la liste d'achats) viennent juste après l'en-tête, la page « Decks » étant la première. Chaque section réécrit
 l'`innerHTML` de ses conteneurs nommés, jamais celui de son corps entier : c'est ce qui garde sa
 place au lecteur. Les sections des onglets qu'on ne regarde pas sont rendues elles aussi : leur
 page est masquée, donc jamais mise en page, et changer d'onglet ne demande alors aucun rendu.
@@ -621,6 +629,79 @@ celui d'accès se renouvelle tout seul.
 
 ---
 
+### 3.16 Changer de deck
+
+Le geste le plus large de l'atelier : le deck ouvert commande la liste, le commandant, le format, le
+budget, les objectifs et les restrictions — donc tout ce qui est retenu, proposé et noté.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant GD as gestesDecks.js
+    participant DK as decks.js
+    participant S as S (état)
+    participant SUG as sugOrdre.js
+    participant CAND as candidats.js
+    participant UI as interface
+
+    U->>APP: clic « Travailler dessus » sur une vignette
+    APP->>GD: gestesDecks('activerDeck', b)
+    GD->>DK: activerDeck(cle)
+    DK->>S: S.deckActif = cle
+    Note over S: rien n'est recopié — `S.deck`, `S.commander`,<br/>`S.format`, `S.budget` sont des vues sur le dossier,<br/>et désignent désormais le nouveau
+    DK->>SUG: degeleSuggestions()
+    DK->>CAND: invaliderCandidats()
+    DK->>DK: invaliderAchats()
+    DK->>UI: recalculerAvecProgression(raison)
+    Note over UI: le format, les couleurs du commandant et la<br/>restriction du deck entrent dans `signatureCandidats()` :<br/>le vivier est rebâti, la sélection renotée
+    UI->>UI: renderAll()
+```
+
+Le même enchaînement que `apresReglage()` (`js/brouillon.js`), pour la même raison : changer de deck,
+c'est demander une autre liste. Ce que le geste **ne** fait pas : toucher à la collection, aux
+filtres de l'en-tête, au rangement des listes ni à l'onglet ouvert — tout cela est commun ou relève
+de la vue.
+
+### 3.17 Poser une restriction sur un deck
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant FD as fenDeck.js
+    participant BR as brouillon.js
+    participant GD as gestesDecks.js
+    participant RE as restrictions.js
+    participant UI as interface
+
+    U->>APP: clic « Configurer » sur une vignette
+    APP->>GD: gestesDecks('configDeck', b)
+    GD->>FD: openDeckModal(cle)
+    FD->>BR: ouvreBrouillon(['decks'], majFenetreDeck)
+    Note over BR: `copieEtat()` descend dans les Map et les Set :<br/>le dossier entier est mis de côté, listes comprises
+    U->>APP: saisie dans « Coût de mana max »
+    APP->>GD: saisieDeck(t)
+    GD->>BR: modifieBrouillon(() => majRestriction(cle, valeur))
+    GD->>FD: majResumeDeck()
+    Note over FD: seul le résumé bouge — réécrire le corps<br/>volerait le curseur du champ qu'on remplit
+    U->>APP: clic « Appliquer »
+    APP->>GD: gestesDecks('appliquerDeck', b)
+    GD->>FD: appliquerDeck()
+    FD->>BR: verseBrouillon()
+    FD->>UI: filtrerAvecProgression()
+    Note over UI: `restrictionOK()` écarte de la collection, du vivier<br/>et du catalogue ; la liste du deck, elle, n'est pas masquée —<br/>`legality()` nomme les cartes fautives
+    UI->>UI: renderAll()
+```
+
+Dans l'en-tête, la restriction paraît en puce **verrouillée** : `restrictionsActives()` rend un
+libellé sans clés à effacer, là où `filtresActifs()` en rend — le rendu n'a donc pas de croix à
+dessiner, et le texte mène à cette fenêtre plutôt qu'à celle des filtres.
+
+---
+
 ## 4. Ce qui périme quoi
 
 Un même clic coûte parfois rien, parfois la notation de vingt mille cartes. Trois mémos l'expliquent,
@@ -628,15 +709,21 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 
 | Mémo | Ce qu'il garde | Son empreinte | Ce qui la change |
 |---|---|---|---|
-| `CAND` (`js/candidats.js`) | Le vivier tiré du catalogue | `signatureCandidats()` | Format, couleurs, filtres, prix maximum, plafond des candidates, légalité, effets isolés |
-| `SUG_MEMO` (`js/vivier.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget, `MAJ_CARTES`, les données EDHREC |
+| `CAND` (`js/candidats.js`) | Le vivier tiré du catalogue | `signatureCandidats()` | **Le deck ouvert**, format, couleurs, filtres, **restrictions du deck**, prix maximum, plafond des candidates, légalité, effets isolés |
+| `SUG_MEMO` (`js/vivier.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget du deck, les préférences d'achat, `MAJ_CARTES`, les données EDHREC |
 | `NOTES_COLLECTION` (`js/groupes.js`) | Les notes de la collection, pour le tri par score | `signatureSuggestions()` | Les mêmes |
+| `ACHATS` (`js/achats.js`) | La liste d'achats de tous les decks | `signatureAchats()` | Les listes de chaque deck et leur drapeau « exemplaires propres », la collection, les préférences d'achat |
 
 Deux conséquences pratiques :
 
 - **Ajouter ou retirer une carte du deck renote tout.** Le deck fait partie de l'empreinte des
   suggestions ; il n'y a pas de renotation partielle. C'est pourquoi ces gestes passent par le
   recalcul à tranches plutôt que par un rendu direct.
+- **Changer de deck renote tout aussi.** `S.deckActif` entre dans l'empreinte des candidates, et le
+  format, le commandant et la restriction du deck avec lui.
+- **La liste d'achats ne coûte rien à l'en-tête.** `spent()` y est appelé à chaque rendu et fait une
+  estimation d'offre par carte manquante ; la liste consolidée referait ce travail pour chaque deck,
+  d'où son mémo — et seule la section `secJ` la demande.
 - **Replier, grouper, trier ne renotent rien.** Ces gestes ne touchent aucune empreinte : ils
   redessinent, et rien de plus. Seul le premier tri par score de la collection paie une notation,
   une fois.

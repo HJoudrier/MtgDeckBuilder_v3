@@ -131,7 +131,8 @@ function signatureSuggestions() {
     signatureCandidats(),
     deckSignature(),                 // le deck et son commandant
     empreinteCollection(),
-    JSON.stringify(S.budget),        // l'estimation des offres en dépend en entier
+    JSON.stringify(S.budget),        // le plafond du deck ouvert
+    JSON.stringify(S.achats),        // l'estimation des offres en dépend en entier
     JSON.stringify(S.custom),
     S.showImplicit ? 1 : 0,
     DB.length,                       // une carte créée à l'import entre au vivier
