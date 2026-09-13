@@ -1,0 +1,126 @@
+/* =====================================================================
+   js/fenParametres.js — Fenêtre « Paramètres »
+
+   Ouverte par l'engrenage de l'en-tête. Des réglages généraux vivaient dans
+   deux fenêtres ouvertes par des étiquettes qu'on ne devinait pas cliquables :
+   la sauvegarde locale, l'apparence et le catalogue sont désormais trois
+   sections d'une seule fenêtre.
+
+   Elle mêle deux natures, et le dit : les réglages du catalogue attendent
+   « Appliquer » — filtrer coûte près d'une seconde sur un grand catalogue —,
+   tandis que les actions — enregistrer, exporter, mettre à jour, effacer —
+   agissent au clic. Différer « effacer l'archive » derrière un bouton de
+   validation serait déroutant.
+   ===================================================================== */
+
+/* Une section de la fenêtre : un titre, une phrase qui dit ce qu'elle règle,
+   et son contenu. */
+function sectionParametres(titre, chapeau, corps) {
+  return `<div class="param-sec">
+    <h4>${esc(titre)}</h4>
+    ${chapeau ? `<div class="small muted param-chapeau">${chapeau}</div>` : ''}
+    ${corps}
+  </div>`;
+}
+
+/* L'apparence : le thème sombre, le dessin d'origine de l'atelier, ou le
+   papier clair. La case agit au clic — un thème se juge à l'œil, et le faire
+   attendre « Appliquer » obligerait à fermer la fenêtre pour voir ce qu'on
+   essaie. */
+function corpsApparence() {
+  return `<label class="choix">
+      <input type="checkbox" data-act="modeSombre" ${S.sombre ? 'checked' : ''}>
+      Mode sombre
+    </label>
+    <div class="small muted">L'atelier s'ouvre sur un papier clair. Cochée, il reprend ses teintes
+      sombres — le laiton sur fond d'encre. Le choix est conservé d'une séance à l'autre ; tant que
+      vous n'en faites aucun, l'atelier suit la préférence de votre système.</div>`;
+}
+
+function corpsCatalogue() {
+  return avecBrouillon(() => `<div class="field">
+      <label class="lab" for="catMax">Cartes examinées au maximum</label>
+      <input id="catMax" type="number" min="100" step="1000" value="${S.candidatsMax}" data-cand style="width:120px">
+      <div class="small muted">Nombre de cartes du catalogue que les suggestions examinent au plus, une fois vos
+        filtres appliqués — les mieux classées par EDHREC passent en premier. Plus haut, la recherche est plus
+        large et le recalcul plus long.</div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--txt);cursor:pointer">
+        <input type="checkbox" data-act="catNumeriques" ${S.catalogueNumeriques ? 'checked' : ''} style="width:auto;margin:0">
+        Autoriser les cartes numériques
+      </label>
+      <div class="small muted">Les cartes qui n'existent que sur Arena ou MTGO — Alchemy, rééquilibrages —
+        et qu'on ne peut pas posséder sur papier. Cochée, elles entrent dans les suggestions, les éditions
+        numériques apparaissent dans le filtre par set, et la fiche d'une carte en montre les visuels.</div>
+    </div>
+    <div class="warnbox">Ces deux réglages attendent « Appliquer ». Tout le reste de cette fenêtre agit immédiatement.</div>
+    ${blocCatalogue()}`);
+}
+
+/* Le corps entier, les trois sections à la suite. La sauvegarde vient en
+   tête : c'est d'elle que dépend tout ce qui suit.
+
+   Une section « Collection » y tenait le décompte des cartes, des exemplaires
+   et leur valeur, avec trois boutons : les chiffres, la section Collection les
+   donne déjà et mieux — sa phrase de causes dit en plus ce que chaque filtre
+   écarte —, et les trois boutons sont ceux de sa barre. Deux endroits pour une
+   même chose, dont l'un obligeait à ouvrir une fenêtre pour lire ce qui était
+   affiché derrière. */
+function corpsParametres() {
+  return `<div class="params">
+    ${sectionParametres('Sauvegarde locale',
+      "Où vivent vos données, et comment les emporter d'un appareil à l'autre.",
+      corpsSauvegarde())}
+    ${sectionParametres('Apparence',
+      "La teinte de l'atelier.",
+      corpsApparence())}
+    ${sectionParametres('Catalogue des cartes',
+      "L'archive de toutes les cartes existantes, et ce que les suggestions y puisent.",
+      corpsCatalogue())}
+  </div>`;
+}
+
+/* La fenêtre reste ouverte pendant qu'une archive se charge ou qu'un réglage
+   change : son corps est réécrit sur place, le défilement gardé, et les
+   champs de fichier rebranchés — l'ancien HTML emportait leurs écouteurs. */
+function majFenetreParametres() {
+  const dlg = document.getElementById('dlg');
+  if (!dlg || !dlg.open) return;
+  const corps = document.getElementById('dlgBody');
+  if (!corps || !document.getElementById('blocCatalogue')) return;
+  const y = corps.scrollTop;
+  corps.innerHTML = corpsParametres();
+  corps.scrollTop = y;
+  brancherParametres();
+}
+
+function brancherParametres() {
+  if (typeof brancherSauvegarde === 'function') brancherSauvegarde();
+  if (typeof brancherRestauration === 'function') brancherRestauration();
+  if (typeof brancherCatalogue === 'function') brancherCatalogue();
+}
+
+async function appliquerParametres() {
+  verseBrouillon();
+  await filtrerAvecProgression();
+  closeDialog();
+}
+
+function openParametresModal() {
+  openDialog('Paramètres', corpsParametres(),
+    `<button type="button" class="btn" data-act="closeDialog">Fermer</button>
+     <button type="button" class="btn pri" data-act="appliquerParametres">Appliquer</button>
+     ${zoneProgression()}`, true);
+  ouvreBrouillon(['candidatsMax', 'catalogueNumeriques'], majFenetreParametres);
+  brancherParametres();
+}
+
+/* « Appliquer » verse le brouillon puis recalcule, comme pour les filtres :
+   changer de format reprend l'atelier tout autant qu'un critère. */
+async function appliquerFormat() {
+  verseBrouillon();
+  await filtrerAvecProgression();
+  closeDialog();
+}
+

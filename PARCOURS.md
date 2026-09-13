@@ -1,0 +1,594 @@
+# Parcours de l'atelier
+
+Le [README](README.md) dit **ce que fait** chaque fonction, module par module. Ce document dit
+**dans quel ordre elles s'appellent** : qui déclenche quoi, quand on clique, et ce que le geste
+coûte.
+
+Les deux se complètent sans se recopier. Le rôle d'une fonction ne se lit qu'au README ; le chemin
+d'un geste ne se lit qu'ici. Les diagrammes ne nomment donc que les fonctions qui font avancer le
+parcours — le reste est dans les tableaux du README, où chaque module a sa section.
+
+Pourquoi un tel document : l'application n'a ni framework, ni modules, ni build. Quinze scripts
+partagent une portée globale, un unique écouteur de clic délégué aiguille tous les gestes, et
+l'état tient dans un seul objet. Rien, dans cette forme, ne rend un chemin d'exécution visible ; il
+faut le reconstituer à la lecture. C'est ce travail-là, fait une fois.
+
+---
+
+## 1. Les modules
+
+Dans l'ordre où `index.html` les charge — l'ordre compte, `effets.js` définissant l'analyseur dont
+`cartes.js` se sert pour bâtir la base livrée.
+
+Le plan des modules — leur famille et leur rôle — est dans le
+[README](README.md#organisation) ; l'inventaire de leurs fonctions dans
+[doc/fonctions.md](doc/fonctions.md), que `node outils/genDoc.js` réécrit à partir des sources.
+Les diagrammes qui suivent nomment `interface` l'ensemble des modules communs — `dialogue.js`,
+`brouillon.js`, `recalcul.js`, `rendu.js`, `entete.js`, `outils.js` et les `fen*.js` : un seul
+participant, parce qu'un parcours en traverse plusieurs sans que la couture importe.
+
+`js/app.js` ne déclare qu'une fonction — `demarrer()`. Tout le reste y est écouteurs : le module
+est un aiguillage, non une bibliothèque. C'est le point d'entrée de presque tous les parcours qui
+suivent.
+
+---
+
+## 2. Le vocabulaire commun
+
+Cinq pièces reviennent dans presque tous les diagrammes. Les connaître dispense de les réexpliquer
+treize fois.
+
+**La délégation.** Un seul `click` posé sur `document`, en tête de `js/app.js`. Il remonte au premier
+ancêtre porteur d'un `data-act`, lit cet attribut, et aiguille. Aucun bouton n'a de gestionnaire
+propre : le HTML est réécrit sans cesse, des gestionnaires attachés ne survivraient pas.
+
+**L'état.** Un objet global `S`, déclaré en tête de `js/etat.js`, muté sur place. La collection, le deck, les
+listes annexes sont des `Map` ; les couleurs et les plis, des `Set`. Rien n'est immuable, rien
+n'est copié — sauf le brouillon d'une fenêtre de réglage, qui met de côté ce qu'il modifie.
+
+**Le recalcul.** `recalculerAvecProgression(raison)` (`js/recalcul.js`) est le passage obligé de
+tout geste qui change le deck ou les filtres. Il relève l'ancre de défilement, demande à
+`recalculLong()` (`js/recalcul.js`) si le travail vaut une barre de progression, puis :
+
+- **court** — `renderAll()` sur-le-champ ;
+- **long** — `prechauffeCandidats()` puis `prepareSuggestions()` par tranches, la main rendue au
+  navigateur entre chacune, une boîte ouverte seulement si le travail dure plus que `DELAI_BOITE`.
+
+**Le rendu.** `renderAll()` (`js/rendu.js`) pose d'abord l'onglet ouvert — `renderOnglets` —, puis
+repeint l'en-tête et les sept sections — `renderTop`, `renderB` (collection), `renderC`
+(statistiques), `renderD` (graphe), `renderE` (deck), puis `renderSuggestions`, qui peint d'un
+coup les trois sections nées d'une même notation : `renderG` (les pistes du graphe), `renderH`
+(EDHREC), `renderF` (le catalogue) — et programme la sauvegarde. Chaque section réécrit
+l'`innerHTML` de ses conteneurs nommés, jamais celui de son corps entier : c'est ce qui garde sa
+place au lecteur. Les sections des onglets qu'on ne regarde pas sont rendues elles aussi : leur
+page est masquée, donc jamais mise en page, et changer d'onglet ne demande alors aucun rendu.
+
+**La sauvegarde.** `scheduleSave()` (`js/stockage.js`) attend 700 ms, puis `save()` sérialise
+tout l'état par `snapshot()` dans `localStorage`. Différée, elle absorbe une rafale de gestes en
+une seule écriture.
+
+---
+
+## 3. Les parcours
+
+### 3.1 Démarrage
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant NAV as Navigateur
+    participant APP as app.js
+    participant CARTES as cartes.js
+    participant STOCK as stockage.js
+    participant UI as interface
+    participant EXT as catalogue.js
+
+    NAV->>APP: DOMContentLoaded
+    APP->>APP: demarrer()
+    APP->>CARTES: initBuiltin()
+    Note over CARTES: RAW → buildCard() → analyze() → categories()<br/>la base livrée est bâtie et analysée
+    APP->>STOCK: chargerSauvegarde()
+    STOCK-->>APP: instantané, ou rien
+    APP->>STOCK: restore(s)
+    Note over STOCK: cartes, collection, deck, réglages<br/>un nom que la base ne connaît plus est écarté
+    APP->>UI: renderAll()
+    APP->>EXT: reprendreArchetypesEdhrec()
+    APP->>EXT: reprendreSets()
+    APP->>EXT: reprendreGameChangers()
+    Note over EXT: trois caches IndexedDB, lus en parallèle
+    EXT-->>UI: renderAll() si un cache a livré
+    APP->>EXT: demarrerCatalogue()
+    Note over EXT: le catalogue complet arrive ensuite,<br/>l'atelier fonctionne déjà sans lui
+```
+
+L'application est utilisable avant que le réseau ait répondu : la base intégrée suffit, et chaque
+source extérieure ne provoque un nouveau rendu que si elle apporte quelque chose.
+
+### 3.2 Ajouter une carte des suggestions au deck
+
+Le parcours le plus coûteux de l'atelier : le deck change, donc tout le classement des suggestions
+qui en dépend doit être refait.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant SUG as suggestions.js
+    participant DECK as deck.js
+    participant UI as interface
+    participant EXT as catalogue.js
+    participant STOCK as stockage.js
+    participant S as S (état)
+
+    U->>APP: clic « Ajouter » sur une vignette
+    APP->>SUG: geleSuggestions()
+    Note over SUG: SUG_ORDRE retient l'ordre affiché ;<br/>les sections ne réécrivent que leurs listes, jamais leur corps
+    APP->>DECK: addToDeck(nom)
+    DECK->>DECK: find(nom), fmt(), annexeDe(nom)
+
+    alt la carte attendait en réserve ou à l'étude
+        DECK->>DECK: deplacerCarte(nom, 'deck')
+    else carte ordinaire
+        DECK->>DECK: availableFor(carte)
+        DECK->>S: S.deck.set(nom, n + 1)
+        opt hors collection
+            DECK->>UI: toast(« comptée à l'achat »)
+        end
+    end
+    opt commandant vacant et créature légendaire
+        DECK->>S: S.commander = nom
+    end
+
+    DECK->>UI: recalculerAvecProgression(raison)
+    UI->>UI: releveAncre()
+    UI->>UI: recalculLong() ?
+
+    alt travail court
+        UI->>UI: renderAll()
+    else travail long
+        UI->>EXT: prechauffeCandidats(onProgress)
+        UI->>SUG: prepareSuggestions(onProgress)
+        loop tranches de 800 cartes
+            SUG->>SUG: noterVivier() → noteCarte()
+            SUG-->>UI: onProgress(fait, total)
+        end
+        SUG->>SUG: SUG_MEMO = {sig, ordonneSuggestions(res)}
+        UI->>UI: renderAll()
+    end
+
+    UI->>SUG: renderSuggestions()
+    Note over SUG: une seule partition de la sélection, trois sections peintes ;<br/>seules leurs listes sont réécrites — la page ne remonte pas au début
+    UI->>UI: restaureAncre()
+    UI->>STOCK: scheduleSave()
+```
+
+Trois précautions que le diagramme rend visibles :
+
+- **Le gel** est posé *avant* l'ajout, non après : c'est le classement affiché qu'il faut retenir,
+  pas celui qui sortira de la notation.
+- **L'ancre** est relevée avant tout rendu, et restaurée après : sans elle, la vignette qu'on
+  regardait descendrait de quelques centaines de pixels.
+- **La notation** ne repart que si l'empreinte a changé (§4). Ajouter une carte la change toujours
+  — le deck fait partie de l'empreinte.
+
+### 3.3 Ajouter une carte par le champ de recherche
+
+Le champ vit dans la section — la collection ou le deck —, et la frappe ne réécrit que ses
+propositions : réécrire la section volerait le curseur du champ qu'on remplit.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant RECH as rechercheSection.js
+    participant AJOUT as fenAjout.js
+    participant EXT as recherches.js
+    participant SEC as collection.js / deckSection.js
+
+    U->>APP: frappe dans le champ
+    APP->>RECH: saisieRecherche(cible, valeur)
+    RECH->>AJOUT: chercheCartes(q)
+    Note over AJOUT: le catalogue local d'abord, la base livrée à défaut ;<br/>filtré par les couleurs retenues et les nœuds isolés
+    RECH->>RECH: majPropositions(cible)
+    Note over RECH: seules les propositions sont réécrites
+    opt trois lettres, et une pause de 350 ms
+        RECH->>EXT: chercheScryfall(q, cible)
+        EXT->>RECH: majRecherches(cible) — les cartes absentes du catalogue
+    end
+
+    U->>APP: clic sur un nom, sur « + » ou « − », ou molette sur le compteur
+    APP->>RECH: pasRecherche(nom, cible, pas)
+    alt cible = deck
+        RECH->>RECH: addToDeck(nom) / removeFromDeck(nom)
+    else cible = collection
+        RECH->>RECH: ajoutCollection(nom) / retraitCollection(nom)
+    end
+    Note over RECH: mêmes fonctions que les vignettes :<br/>même limite de format, même recalcul annoncé
+    RECH->>SEC: recalculerAvecProgression(...) → renderAll()
+    SEC->>RECH: restaureRecherche(cible)
+    Note over RECH: la frappe revient, et le curseur si<br/>plus rien ne l'a pris entre-temps
+```
+
+### 3.4 Retirer une carte du deck
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant DECK as deck.js
+    participant S as S (état)
+    participant UI as interface
+
+    U->>APP: clic « − » sur une tuile du deck
+    APP->>DECK: removeFromDeck(nom)
+    DECK->>S: S.deck.get(nom)
+    alt dernier exemplaire
+        DECK->>S: S.deck.delete(nom)
+        opt c'était le commandant
+            DECK->>S: S.commander = null
+        end
+    else plusieurs exemplaires
+        DECK->>S: S.deck.set(nom, n − 1)
+    end
+    DECK->>UI: recalculerAvecProgression(raison)
+    Note over UI: même suite qu'en 3.2 — ancre, recalculLong(),<br/>notation par tranches s'il le faut, renderAll()
+    opt la fiche est ouverte
+        APP->>UI: openCardModal(nom)
+        Note over UI: la fenêtre se réécrit pour montrer le nouveau compte
+    end
+```
+
+Le retrait n'est pas le symétrique exact de l'ajout : il ne gèle pas l'ordre des suggestions. Le
+geste part d'une tuile du deck, non d'une vignette de la section F ; il n'y a pas de place à
+perdre dans une liste qu'on ne parcourait pas.
+
+### 3.5 Filtrer
+
+Le seul parcours à deux temps : la fenêtre travaille sur un brouillon, et rien ne s'applique avant
+« Appliquer ».
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant UI as interface
+    participant S as S (état)
+    participant EXT as catalogue.js
+    participant SUG as suggestions.js
+
+    U->>APP: clic sur la pastille « Filtres »
+    APP->>UI: openFiltresModal()
+    UI->>EXT: chargerListeSets()
+    UI->>UI: openDialog(titre, corpsFiltres(), boutons)
+    UI->>UI: ouvreBrouillon(['filtres','colors','colorMode'])
+    Note over UI: copieEtat() détache Set et objets :<br/>le brouillon ne touche pas l'état appliqué
+
+    loop chaque frappe, chaque case cochée
+        U->>APP: saisie dans un champ
+        APP->>UI: modifieBrouillon(fn)
+        UI->>UI: echangeBrouillon() → fn() → reprendEtat(garder)
+        APP->>UI: majResumeFiltres()
+        Note over UI: le décompte annonce ce que « Appliquer » donnerait,<br/>lu par avecBrouillon() — l'atelier n'a pas bougé
+    end
+
+    alt « Appliquer »
+        U->>APP: clic « Appliquer »
+        APP->>UI: appliquerFiltres()
+        UI->>UI: verseBrouillon()
+        UI->>EXT: invaliderCandidats()
+        UI->>UI: filtrerAvecProgression()
+        UI->>EXT: prechauffeCandidats(onProgress)
+        UI->>SUG: prepareSuggestions(onProgress)
+        UI->>UI: renderAll()
+        UI->>UI: closeDialog()
+    else Annuler, Échap, la croix, l'arrière-plan
+        U->>APP: fermeture
+        APP->>UI: fermetureBrouillon()
+        Note over UI: brouillon = null — rien n'ayant été appliqué,<br/>il n'y a rien à défaire
+    end
+```
+
+Un filtre appliqué hors fenêtre — une couleur cliquée dans l'en-tête, un rôle basculé — passe par
+`apresReglage(raison)` (`js/brouillon.js`), qui dégèle les suggestions, invalide les candidates et
+appelle le même recalcul. C'est le point commun de tous les réglages : **un filtre change le
+vivier, donc tout le classement.**
+
+### 3.6 Noter les suggestions
+
+Le moteur appelé par les parcours précédents, vu de près.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as interface
+    participant SUG as suggestions.js
+    participant ETAT as etat.js
+    participant EXT as catalogue.js
+    participant MARCHE as marche.js
+
+    UI->>SUG: prepareSuggestions(onProgress)
+    SUG->>SUG: suggestionsAJour() ?
+    alt l'empreinte n'a pas bougé
+        SUG-->>UI: SUG_MEMO.liste, telle quelle
+    else il faut renoter
+        SUG->>SUG: vivierSuggestions()
+        SUG->>SUG: contexteEvaluation()
+        Note over SUG: le deck, ses arcs, sa courbe, ses rôles manquants,<br/>l'identité du commandant : calculés une fois
+        SUG->>ETAT: filtered() — la collection retenue
+        opt budget disponible
+            SUG->>EXT: candidatsCatalogue()
+            SUG->>MARCHE: bestOffer(carte)
+        end
+        loop tranches de 800
+            SUG->>SUG: noterVivier(pool, X, res, i, fin)
+            SUG->>SUG: noteCarte({card, source}, X)
+            Note over SUG: branchements avec le deck, rôles manquants,<br/>courbe, densité de capacités, pénalité hors collection
+            SUG-->>UI: onProgress(fait, total)
+        end
+        SUG->>SUG: ordonneSuggestions(res)
+        SUG->>SUG: SUG_MEMO = {sig: signatureSuggestions(), liste}
+    end
+```
+
+### 3.7 Régler l'affichage d'une liste
+
+Les cinq listes de cartes — la collection, le deck, les pistes du graphe, les recommandations
+d'EDHREC, le catalogue — se règlent chacune dans sa fenêtre « Affichage », et rien ne bouge avant
+« Appliquer ». « Appliquer partout » pose le même réglage sur les cinq.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant AFF as fenAffichage.js
+    participant BR as brouillon.js
+    participant SEC as la section réglée
+    participant GRP as groupes.js
+
+    U->>APP: clic « Affichage » (coin haut-droit de l'entête)
+    Note over APP: le bouton vise la liste de l'onglet ouvert,<br/>et en change avec la page (majBoutonAffichage)
+    APP->>AFF: openAffichageModal(liste)
+    AFF->>BR: ouvreBrouillon(['vues','colonnes','groupes','tris'], majFenetreAffichage)
+    Note over AFF: les quatre mêmes réglages pour les cinq listes<br/>(LISTES_AFFICHAGE, js/etat.js)
+    loop chaque réglage
+        U->>APP: radio, case « Auto », curseur ou menu
+        APP->>AFF: reglageAffichage(...) ou glisseColonnes(...)
+        AFF->>BR: modifieBrouillon(...)
+        Note over AFF: le curseur décoche « Auto » et ne réécrit<br/>que la phrase sous lui — réécrire la fenêtre<br/>emporterait le curseur qu'on tient
+        AFF->>AFF: majFenetreAffichage()
+    end
+    alt « Appliquer »
+        U->>APP: clic « Appliquer »
+        APP->>AFF: appliquerAffichage(false)
+        AFF->>BR: verseBrouillon()
+        opt le groupement ou le tri de la collection a changé
+            AFF->>AFF: S.limitB = PAGE
+        end
+        AFF->>SEC: renderB(), renderE() ou refreshSuggestions()
+        SEC->>GRP: groupeCartes(), rendGroupes() ou listesSug()
+        AFF->>AFF: scheduleSave()
+    else « Appliquer partout »
+        U->>APP: clic « Appliquer partout »
+        APP->>AFF: appliquerAffichage(true)
+        AFF->>BR: modifieBrouillon(verseAffichagePartout(conf))
+        Note over AFF: le tri va là où la liste l'offre (TRIS_SECTION) :<br/>une liste qui ne le connaît pas garde le sien
+        AFF->>BR: verseBrouillon()
+        AFF->>SEC: renderAll()
+    else Annuler, la croix, Échap, l'arrière-plan
+        APP->>BR: fermetureBrouillon()
+        Note over BR: rien n'ayant été appliqué,<br/>il n'y a rien à défaire
+    end
+```
+
+Le tri par score ne retrie pas les propositions : la liste arrive dans l'ordre des scores, ou dans
+l'ordre gelé qu'un ajout a retenu. Le tri par score de la collection, lui, demande une notation —
+`renderB()` l'obtient par `filtered()`, et la mémorise sous l'empreinte des suggestions.
+
+### 3.8 Replier une catégorie
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant S as S (état)
+    participant COL as collection.js
+    participant DOM as Le document
+
+    U->>APP: clic sur l'en-tête d'une catégorie
+    APP->>S: S.groupesPlies ajoute ou retire « section|mode|groupe »
+    APP->>APP: scheduleSave()
+    alt collection
+        APP->>COL: renderB()
+        COL->>COL: la boucle de page saute les catégories repliées
+        Note over COL: une catégorie repliée ne consomme aucune place :<br/>les suivantes en profitent
+    else deck ou suggestions
+        APP->>DOM: bloc.classList.toggle('ouverte')
+        Note over DOM: bascule sur place — repasser par renderE()<br/>renoterait tout le deck pour un pli
+    end
+```
+
+### 3.9 Importer une liste MTGO
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant COL as collection.js
+    participant CARTES as cartes.js
+    participant DECK as deck.js
+    participant SCRY as scryfall.js
+    participant UI as interface
+
+    U->>APP: clic « Importer MTGO »
+    APP->>COL: openImport(cible)
+    U->>COL: fichier déposé, ou liste collée
+    U->>COL: clic « Importer »
+    COL->>COL: parseMtgoList(txt)
+    Note over COL: quantité, nom, édition entre parenthèses,<br/>section (deck, sideboard, maybeboard, commandant)
+    loop chaque ligne
+        COL->>CARTES: find(nom)
+        alt carte inconnue
+            COL->>CARTES: registerCard(buildCard(...)) — marquée unknown
+        end
+        opt édition relevée
+            COL->>CARTES: noterImpression(carte, set, num, qty)
+        end
+        alt vers la collection
+            COL->>COL: S.collection.set(...)
+        else vers le deck
+            COL->>DECK: deckAdd(carte, qty, options)
+        end
+    end
+    COL->>UI: recalculerAvecProgression(raison)
+    COL->>SCRY: completeUnknown(fresh)
+    SCRY-->>UI: applyScryfall() puis nouveau rendu
+```
+
+### 3.10 Désigner un commandant
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant S as S (état)
+    participant UI as interface
+    participant SUG as suggestions.js
+
+    U->>APP: clic « ★ » sur une créature légendaire
+    APP->>S: S.commander = nom
+    APP->>UI: recalculerAvecProgression(raison)
+    Note over UI: le commandant entre dans contexteEvaluation() :<br/>son identité couleur écarte des candidates entières
+    UI->>SUG: prepareSuggestions() — tout est renoté
+    UI->>SUG: renderSuggestions() → lanceEdhrecSiBesoin()
+    SUG->>SUG: loadEdhrec() si la signature du commandant a changé
+```
+
+### 3.11 Enrichir par Scryfall
+
+Le seul parcours que l'utilisateur ne déclenche pas : il part du rendu lui-même.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant SEC as renderB / renderE / renderSuggestions
+    participant SCRY as scryfall.js
+    participant API as api.scryfall.com
+    participant UI as interface
+
+    SEC->>SCRY: queueScryfall(cartes affichées)
+    SCRY->>SCRY: besoinScryfall(c) — visuel, texte ou édition manquants
+    loop paquets de 75
+        SCRY->>API: POST /cards/collection
+        alt réponse
+            API-->>SCRY: cartes
+            SCRY->>SCRY: applyScryfall(sc, cible, imagesOnly)
+            Note over SCRY: ce qui change la note incrémente MAJ_CARTES —<br/>un simple visuel ne fait rien recalculer
+            SCRY->>UI: renderB(), renderE(), scheduleSave()
+        else échec réseau
+            API-->>SCRY: erreur
+            SCRY->>SCRY: S.scryHS = true
+            SCRY->>UI: toast(« Visuels indisponibles »)
+        end
+    end
+    Note over UI: MAJ_CARTES entre dans signatureSuggestions() :<br/>filetSuggestions() constate la péremption et lance<br/>recalculerAvecProgression(raison, {fond:true})
+```
+
+Le recalcul de fond ne montre pas de boîte : il gèle l'ordre affiché, avance par tranches et
+signale son travail par le liseré des trois sections des propositions. Une carte complétée pendant
+qu'on lit ne doit pas interrompre la lecture.
+
+### 3.12 EDHREC
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant F as renderH / renderF (propositions)
+    participant SUG as suggestions.js
+    participant NET as EDHREC
+
+    F->>SUG: lanceEdhrecSiBesoin()
+    SUG->>SUG: signature du commandant et des commandants secondaires
+    SUG->>NET: json.edhrec.com/pages/commanders/<slug>.json
+    NET-->>SUG: taux d'inclusion et synergies
+    SUG->>F: renderSuggestions() — le panneau EDHREC, ses recommandations<br/>et les étiquettes edhrec paraissent
+```
+
+La source est attendue, jamais bloquante : une signature l'empêche de repartir pour un commandant
+inchangé, et son absence ne retire rien au classement, qui repose d'abord sur l'analyse des textes.
+
+### 3.13 Acheter sur Cardmarket
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant DECK as deck.js
+    participant MARCHE as marche.js
+    participant UI as interface
+
+    U->>APP: clic « Acheter » sur une vignette hors collection
+    APP->>DECK: buyCard(nom)
+    DECK->>DECK: budget à zéro ? — refus annoncé
+    DECK->>MARCHE: bestOffer(carte)
+    Note over MARCHE: l'offre la moins chère qui passe état,<br/>langue, vendeur, pays et prix maximum
+    DECK->>DECK: spent() + offre > budget ? — refus annoncé
+    DECK->>DECK: deckAdd(carte, 1, {force:true})
+    DECK->>UI: recalculerAvecProgression(raison)
+```
+
+### 3.14 Sauvegarder
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as renderAll / un geste
+    participant STOCK as stockage.js
+    participant LS as localStorage
+
+    UI->>STOCK: scheduleSave()
+    STOCK->>STOCK: minuterie de 700 ms, relancée à chaque appel
+    STOCK->>STOCK: save() → snapshot()
+    Note over STOCK: état, cartes importées, enrichissements Scryfall,<br/>réglages, plis, groupements
+    STOCK->>LS: setItem(STORE_KEY, JSON)
+    alt quota dépassé
+        LS-->>STOCK: QuotaExceededError
+        STOCK->>LS: nouvel essai sans visuels ni textes importés
+        STOCK->>UI: toast(« espace de stockage limité »)
+    end
+```
+
+---
+
+## 4. Ce qui périme quoi
+
+Un même clic coûte parfois rien, parfois la notation de vingt mille cartes. Trois mémos l'expliquent,
+chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail n'est pas refait.
+
+| Mémo | Ce qu'il garde | Son empreinte | Ce qui la change |
+|---|---|---|---|
+| `CAND` (`js/candidats.js`) | Le vivier tiré du catalogue | `signatureCandidats()` | Format, couleurs, filtres, prix maximum, plafond des candidates, légalité, effets isolés |
+| `SUG_MEMO` (`js/vivier.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget, `MAJ_CARTES`, les données EDHREC |
+| `NOTES_COLLECTION` (`js/groupes.js`) | Les notes de la collection, pour le tri par score | `signatureSuggestions()` | Les mêmes |
+
+Deux conséquences pratiques :
+
+- **Ajouter ou retirer une carte du deck renote tout.** Le deck fait partie de l'empreinte des
+  suggestions ; il n'y a pas de renotation partielle. C'est pourquoi ces gestes passent par le
+  recalcul à tranches plutôt que par un rendu direct.
+- **Replier, grouper, trier ne renotent rien.** Ces gestes ne touchent aucune empreinte : ils
+  redessinent, et rien de plus. Seul le premier tri par score de la collection paie une notation,
+  une fois.
+
+`invaliderCandidats()` (`js/candidats.js`) vide le premier mémo à la main, quand un réglage
+change le vivier sans que l'empreinte suffise à le dire. `apresReglage()` l'appelle pour tout
+réglage venu d'une fenêtre, et `degeleSuggestions()` lève au passage l'ordre gelé : un nouveau
+filtre demande une autre liste, pas l'ancienne dans son ancien ordre.

@@ -1,495 +1,23 @@
 /* =====================================================================
-   js/app.js — Point d'entrée : gestionnaires d'évènements, initialisation et démarrage
-   Atelier MTG — voir README.md pour l'architecture.
+   js/app.js — L'aiguillage et le démarrage
+
+   Un seul écouteur par geste, posé ici et nulle part ailleurs : le clic passe
+   par les cinq maillons `gestes*`, dans l'ordre, jusqu'à ce que l'un dise
+   l'avoir traité. Le reste — la frappe, les sélecteurs, le clavier, la
+   fermeture d'une fenêtre — tient dans les écouteurs qui suivent.
    ===================================================================== */
 
 document.addEventListener('click', ev => {
-  const head = ev.target.closest('.sec-head');
-  if (head) {
-    const sec = head.closest('section.sec');
-    if (sec) {
-      sec.classList.toggle('open');
-      head.setAttribute('aria-expanded', String(sec.classList.contains('open')));
-      return;
-    }
-  }
-
-  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-view], [data-gsrc], [data-cmode], [data-color], [data-col]');
+  const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-gsrc], [data-cmode], [data-color], [data-col]');
   if (!b) return;
 
   const act = b.dataset.act;
 
-  // Fermeture explicite des fenêtres modales
-  if (act === 'closeDialog' || b.classList.contains('dlg-close') || b.getAttribute('value') === 'cancel' || (b.closest('#dlg') && (b.getAttribute('value') === 'ok' || b.textContent.trim() === 'Fermer' || b.textContent.trim() === 'Annuler') && !act && !b.id)) {
-    closeDialog();
-    return;
-  }
-  if (b.dataset.color || b.dataset.col) {
-    const c = b.dataset.color || b.dataset.col;
-    if (S.colors.has(c)) S.colors.delete(c); else S.colors.add(c);
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
-    return;
-  }
-
-  if (b.dataset.cmode) {
-    S.colorMode = b.dataset.cmode;
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
-    return;
-  }
-
-  if (b.dataset.gsrc) {
-    S.graphSource = b.dataset.gsrc;
-    renderD();
-    return;
-  }
-
-  if (b.dataset.view) {
-    S.view = b.dataset.view;
-    renderB();
-    renderE();
-    return;
-  }
-
-  if (b.dataset.node || b.dataset.node2) {
-    const id = b.dataset.node || b.dataset.node2;
-    if (S.focusNodes.has(id)) S.focusNodes.delete(id);
-    else S.focusNodes.add(id);
-    invaliderCandidats();
-    renderD();
-    renderF();
-    renderTop();
-    return;
-  }
-
-  if (act === 'toggleHeader') {
-    S.headerCompact = !S.headerCompact;
-    try {
-      localStorage.setItem('mtg_compact_header', S.headerCompact ? '1' : '0');
-    } catch(e) {}
-    renderTop();
-    return;
-  }
-
-  if (act === 'filtres') {
-    openFiltresModal();
-    return;
-  }
-
-  if (act === 'chargerArch') {
-    chargerArchetypesEdhrec(true);
-    return;
-  }
-
-  if (act === 'archMenu') {
-    archOuvert = !archOuvert;
-    majFenetreFiltres();
-    return;
-  }
-
-  if (act === 'toggleArch') {
-    basculerArchetype(b.dataset.arch);
-    // les cartes du thème coché sont cherchées à la demande
-    archetypesAChargerEdhrec().forEach(slug => chargerThemeEdhrec(slug));
-    majFenetreFiltres();
-    majResumeFiltres();
-    S.limitB = PAGE;
-    renderAll();
-    return;
-  }
-
-  if (act === 'dropFiltre') {
-    effacerFiltre((b.dataset.cles || '').split(',').filter(Boolean));
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
-    return;
-  }
-
-  if (act === 'resetFiltres') {
-    reinitFiltres();
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
-    toast('Filtres réinitialisés.');
-    return;
-  }
-
-  if (act === 'formatDialog') {
-    openFormatModal();
-    return;
-  }
-
-  if (act === 'toggleRole') {
-    basculerRole(b.dataset.role || '');
-    majFenetreFiltres();
-    S.limitB = PAGE;
-    renderAll();
-    return;
-  }
-
-  if (act === 'pageType') {
-    const t = b.dataset.type, pas = b.dataset.pas;
-    const all = currentSuggestions();
-    const total = (t === 'edhrec')
-      ? all.filter(s => s.edhrec).length
-      : all.filter(s => mainType(s.card) === t).length;
-    const defaultLim = (t === 'edhrec') ? 8 : 6;
-    if (pas === 'tout') S.limiteType[t] = total;
-    else if (pas === 'reduire') S.limiteType[t] = defaultLim;
-    else S.limiteType[t] = Math.min(total, (S.limiteType[t] || defaultLim) + parseInt(pas, 10));
-    refreshSuggestions();
-    return;
-  }
-
-  if (act === 'allColors') {
-    S.colors = new Set(['W','U','B','R','G','C']);
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
-    return;
-  }
-
-  if (act === 'clearColors' || act === 'noColors') {
-    S.colors = new Set();
-    invaliderCandidats();
-    renderAll();
-    majFenetreFiltres();
-    return;
-  }
-
-  if (act === 'inc') {
-    const n = b.dataset.name;
-    S.collection.set(n, (S.collection.get(n) || 0) + 1);
-    renderAll();
-    return;
-  }
-
-  if (act === 'dec') {
-    const n = b.dataset.name;
-    const c = S.collection.get(n) || 0;
-    if (c <= 1) S.collection.delete(n); else S.collection.set(n, c - 1);
-    renderAll();
-    return;
-  }
-
-  if (act === 'toDeck') {
-    addToDeck(b.dataset.name);
-    if (document.getElementById('dlg') && document.getElementById('dlg').open) {
-      openCardModal(b.dataset.name);
-    }
-    return;
-  }
-
-  if (act === 'fromDeck') {
-    removeFromDeck(b.dataset.name);
-    if (document.getElementById('dlg') && document.getElementById('dlg').open) {
-      openCardModal(b.dataset.name);
-    }
-    return;
-  }
-
-  if (act === 'deckDrop') {
-    S.deck.delete(b.dataset.name);
-    if (S.commander === b.dataset.name) S.commander = null;
-    renderAll();
-    return;
-  }
-
-  if (act === 'buy') {
-    buyCard(b.dataset.name);
-    return;
-  }
-
-  if (act === 'wants') {
-    openWantsModal();
-    return;
-  }
-
-  if (act === 'ownIt') {
-    const n = b.dataset.name;
-    S.collection.set(n, (S.collection.get(n) || 0) + 1);
-    toast(`${n} : 1 exemplaire ajouté à la collection.`);
-    renderAll();
-    return;
-  }
-
-  if (act === 'setCmd') {
-    S.commander = b.dataset.name;
-    renderAll();
-    return;
-  }
-
-  if (act === 'unsetCmd') {
-    S.commander = null;
-    renderAll();
-    return;
-  }
-
-  if (act === 'cmdColors') {
-    const cmd = S.commander ? find(S.commander) : null;
-    if (cmd) {
-      S.colors = new Set(cmd.identity.length ? cmd.identity : ['C']);
-      S.colorMode = 'identity';
-      invaliderCandidats();
-      renderAll();
-      toast(`Filtres alignés sur l'identité de ${cmd.name} : ${[...S.colors].join('')||'C'}.`);
-    }
-    return;
-  }
-
-  if (act === 'fiche') {
-    openCardModal(b.dataset.name);
-    return;
-  }
-
-  if (act === 'flip') {
-    const n = b.dataset.name;
-    if (RETOURNEES.has(n)) RETOURNEES.delete(n); else RETOURNEES.add(n);
-    if (document.getElementById('dlg') && document.getElementById('dlg').open) openCardModal(n);
-    majApercu();
-    return;
-  }
-
-  if (act === 'saveDialog') {
-    openSaveDialog();
-    return;
-  }
-
-  if (act === 'saveNow') {
-    save();
-    toast(saveState === 'ok' ? 'Données enregistrées dans ce navigateur.' : (saveError || 'Enregistré.'));
-    return;
-  }
-
-  if (act === 'saveExport') {
-    const txt = JSON.stringify(snapshot(), null, 2);
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([txt], {type:'application/json'}));
-    a.download = 'atelier-mtg-' + new Date().toISOString().slice(0, 10) + '.json';
-    a.click();
-    return;
-  }
-
-  if (act === 'saveWipe') {
-    openDialog('Effacer les données locales',
-      `<p class="small">Cette action supprime la collection, le deck et les préférences enregistrés dans ce navigateur. Elle est irréversible, sauf si vous avez exporté un fichier.</p>`,
-      '<button class="btn" value="cancel" onclick="closeDialog()">Annuler</button><button class="btn danger" id="okWipeLocal" value="ok">Effacer définitivement</button>');
-    const okWipeLocal = document.getElementById('okWipeLocal');
-    if (okWipeLocal) okWipeLocal.onclick = () => {
-      try { localStorage.removeItem(STORE_KEY); } catch(e) {}
-      idbVider();
-      S.collection.clear();
-      S.deck.clear();
-      S.commander = null;
-      saveState = storageOK ? 'ok' : 'off';
-      saveError = '';
-      closeDialog();
-      renderAll();
-      toast('Données locales effacées.');
-    };
-    return;
-  }
-
-  if (act === 'catalogueTelecharger') {
-    telechargerCatalogue();
-    return;
-  }
-
-  if (act === 'catalogueVerifier') {
-    verifierMajCatalogue().then(j => {
-      if (j) toast(`Dernière mise à jour Scryfall : ${new Date(j.updated_at).toLocaleDateString('fr-FR')}.`);
-      else toast('Vérification Scryfall impossible.');
-    });
-    return;
-  }
-
-  if (act === 'catalogueEffacer') {
-    idbVider().then(() => {
-      CAT.etat = '';
-      CAT.cartes = [];
-      CAT.octets = 0;
-      CAT.date = null;
-      invaliderCandidats();
-      renderAll();
-      const corps = document.getElementById('dlgBody');
-      if (corps) {
-        corps.innerHTML = corpsSauvegarde();
-        brancherRestauration();
-        brancherCatalogue();
-      }
-      toast("Archive du catalogue effacée.");
-    });
-    return;
-  }
-
-  if (act === 'prixMaj') {
-    toast('Rafraîchissement des prix Cardmarket en cours…');
-    majPrix(true).then(() => {
-      renderAll();
-      const corps = document.getElementById('dlgBody');
-      if (corps) {
-        corps.innerHTML = corpsSauvegarde();
-        brancherRestauration();
-        brancherCatalogue();
-      }
-    }).catch(err => toast(`Échec : ${err.message||'erreur réseau'}.`));
-    return;
-  }
-
-  if (act === 'edhrec') {
-    loadEdhrec(b.dataset.force === '1');
-    return;
-  }
-
-  if (act === 'combos') {
-    const rel = document.getElementById('csbRelay');
-    if (rel) S.csbRelay = rel.value.trim();
-    loadCombos(true);
-    return;
-  }
-
-  if (act === 'catalogueSuite') {
-    chargerCatalogue();
-    return;
-  }
-
-  if (act === 'addCard') {
-    openAdd(b.dataset.cible || 'collection');
-    return;
-  }
-
-  if (act === 'import') {
-    openImport(b.dataset.cible || 'collection');
-    return;
-  }
-
-  if (act === 'enrich') {
-    enrichAllUnknown();
-    return;
-  }
-
-  if (act === 'wipe') {
-    openWipeModal();
-    return;
-  }
-
-  if (act === 'clearDeck') {
-    openDialog('Vider le deck',
-      '<p class="small">Cette action retire toutes les cartes du deck. La collection est conservée.</p>',
-      '<button class="btn" value="cancel" onclick="closeDialog()">Annuler</button><button class="btn danger" id="okClear" value="ok">Vider</button>');
-    const okClear = document.getElementById('okClear');
-    if (okClear) okClear.onclick = () => {
-      S.deck.clear();
-      S.commander = null;
-      closeDialog();
-      renderAll();
-      toast('Deck vidé.');
-    };
-    return;
-  }
-
-  if (act === 'exportDeck') {
-    exportDeckModal();
-    return;
-  }
-
-  if (act === 'toggleImages') {
-    S.images = !S.images;
-    // Nouvelle tentative d'accès à Scryfall : l'échec précédent portait
-    // peut-être sur l'autre mode d'affichage.
-    S.scryHS = false;
-    S.imagesFailed = false;
-    b.setAttribute('aria-pressed', String(S.images));
-    renderAll();
-    return;
-  }
-
-  if (act === 'toggleImplicit') {
-    S.showImplicit = !S.showImplicit;
-    b.setAttribute('aria-pressed', String(S.showImplicit));
-    renderD();
-    return;
-  }
-
-  if (act === 'clearFocus') {
-    S.focusNodes.clear();
-    invaliderCandidats();
-    renderD();
-    renderF();
-    renderTop();
-    return;
-  }
-
-  if (act === 'unfocusNode') {
-    S.focusNodes.delete(b.dataset.node2);
-    invaliderCandidats();
-    renderD();
-    renderF();
-    renderTop();
-    return;
-  }
-
-  if (act === 'focusNodeFrom') {
-    const n = b.dataset.node2;
-    if (n) {
-      S.focusNodes.clear();
-      S.focusNodes.add(n);
-      closeDialog();
-      document.getElementById('secD').scrollIntoView({behavior:'smooth'});
-      invaliderCandidats();
-      renderD();
-      renderF();
-      renderTop();
-    }
-    return;
-  }
-
-  if (act === 'graphToF') {
-    const secF = document.getElementById('secF');
-    if (secF) secF.scrollIntoView({behavior:'smooth'});
-    return;
-  }
-
-  if (act === 'addPick') {
-    const q = parseInt(document.getElementById('addQ').value, 10) || 1;
-    const c = find(b.dataset.name);
-    const comp = document.getElementById('addStock') && document.getElementById('addStock').checked;
-    if (c) ajouterCarte(c, q, b.dataset.cible, comp);
-    majResultats(b.dataset.cible, true);
-    return;
-  }
-
-  if (act === 'addScry') {
-    const n = b.dataset.name, q = parseInt(document.getElementById('addQ').value, 10) || 1;
-    const info = scryRes.get(norm(n)) || scryRes.get(n);
-    const comp = document.getElementById('addStock') && document.getElementById('addStock').checked;
-    let c = find(n);
-    if (!c) {
-      c = registerCard(info ? carteDepuisScryfall(info) : buildCard(n, '—', 'Inconnu', 0, ''));
-      if (!info) c.unknown = true;
-    }
-    ajouterCarte(c, q, b.dataset.cible, comp);
-    majResultats(b.dataset.cible, true);
-    return;
-  }
-
-  if (act === 'moreB') {
-    S.limitB += PAGE;
-    renderB();
-    return;
-  }
-
-  // clic sur une carte (grille ou liste) : ouverture de la fiche
-  const tile = b.closest('[data-card]');
-  if (tile) {
-    const nom = tile.dataset.card;
-    if (nom) openCardModal(nom);
-    return;
-  }
+  if (gestesVue(act, b)) return;
+  if (gestesReglages(act, b)) return;
+  if (gestesDeck(act, b)) return;
+  if (gestesDonnees(act, b)) return;
+  gestesGraphe(act, b);
 });
 
 /* Aperçu flottant : suit la souris sur les noms de cartes. */
@@ -516,10 +44,34 @@ document.addEventListener('input', ev => {
     majListeArchetypes();
     return;
   }
+  if (t.dataset.setq !== undefined) {
+    setRecherche = t.value;
+    majListeSets();
+    return;
+  }
   if (t.dataset.filtre) {
-    majFiltre(t.dataset.filtre, t.value);
+    /* La frappe va au brouillon : rien n'est appliqué avant « Appliquer ».
+       Seul le décompte de la fenêtre suit, il ne coûte que la collection. */
+    modifieBrouillon(() => majFiltre(t.dataset.filtre, t.value));
     majResumeFiltres();
-    planifierRenduFiltres();
+    return;
+  }
+  if (t.dataset.affglisse !== undefined) {
+    glisseColonnes(t);
+    return;
+  }
+  /* Un objectif de rôle, dans sa fenêtre : la frappe va au brouillon, et rien
+     n'est appliqué avant le bouton. La fenêtre n'est pas réécrite — elle
+     emporterait le champ qu'on est en train de remplir. */
+  if (t.dataset.roleCible) {
+    modifieBrouillon(() => reglerCible(t.dataset.roleCible, t.value));
+    return;
+  }
+  /* Le champ de recherche d'une section : seules ses propositions sont
+     réécrites, la section entière volerait le curseur qu'on est en train de
+     remplir. */
+  if (t.dataset.rech) {
+    saisieRecherche(t.dataset.rech, t.value);
     return;
   }
   if (t.dataset.recherche) {
@@ -528,7 +80,12 @@ document.addEventListener('input', ev => {
   }
   if (t.dataset.cst || t.dataset.cust) {
     const k = t.dataset.cst || t.dataset.cust;
-    S.custom[k] = t.type === 'checkbox' ? t.checked : (t.type === 'number' ? (parseInt(t.value, 10) || 0) : t.value);
+    modifieBrouillon(() => {
+      S.custom[k] = t.type === 'checkbox' ? t.checked : (t.type === 'number' ? (parseInt(t.value, 10) || 0) : t.value);
+    });
+    /* Seul le résumé bouge : réécrire la fenêtre volerait le curseur du
+       champ qu'on est en train de régler. */
+    if (brouillon) { majResumeFormat(); return; }
     renderAll();
     majResumeFormat();
     return;
@@ -536,13 +93,30 @@ document.addEventListener('input', ev => {
   if (t.dataset.clim || t.dataset.lim) {
     const c = t.dataset.clim || t.dataset.lim;
     const s = t.dataset.k || t.dataset.side;
-    S.custom.colorLimits[c][s] = parseInt(t.value, 10) || 0;
+    modifieBrouillon(() => { S.custom.colorLimits[c][s] = parseInt(t.value, 10) || 0; });
+    if (brouillon) return;
     renderE();
+    return;
+  }
+  if (t.dataset.cand !== undefined) {
+    /* Le plafond des candidats : il ne borne que le catalogue local, jamais
+       le chargement paginé par l'API (`S.exploreMax`). */
+    modifieBrouillon(() => { S.candidatsMax = Math.max(100, parseInt(t.value, 10) || 0); });
+    /* Réécrire la fenêtre volerait le curseur du champ qu'on règle. */
+    if (brouillon) return;
+    invaliderCandidats();
+    refreshSuggestions();
     return;
   }
   if (t.dataset.bud) {
     const k = t.dataset.bud;
-    S.budget[k] = t.type === 'number' ? (parseFloat(t.value) || 0) : t.value;
+    modifieBrouillon(() => {
+      S.budget[k] = t.type === 'number' ? (parseFloat(t.value) || 0) : t.value;
+    });
+    /* Dans la fenêtre « Budget », rien n'est appliqué avant le bouton :
+       seul le résumé suit, réécrire le corps volerait le curseur du champ
+       qu'on est en train de régler. */
+    if (brouillon) { majResumeBudget(); return; }
     if (k === 'perCard' || k === 'total') invaliderCandidats();
     refreshSuggestions();
     return;
@@ -551,23 +125,37 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
-  if (t.dataset.filtre) {
-    majFiltre(t.dataset.filtre, t.value);
-    majResumeFiltres();
-    planifierRenduFiltres();
+  if (t.dataset.act === 'catNumeriques') {
+    modifieBrouillon(() => { S.catalogueNumeriques = !!t.checked; });
+    apresReglage('Réglage des cartes numériques modifié : les candidates sont rebâties.');
     return;
   }
-  if (t.dataset.act === 'sort') {
-    S.sort = t.value;
-    renderB();
+  /* Le thème : il agit au clic, et rien n'est à repeindre — les deux palettes
+     vivent dans la feuille de style, le navigateur recalcule les couleurs. */
+  if (t.dataset.act === 'modeSombre') {
+    basculeTheme(t.checked);
+    return;
+  }
+  if (t.dataset.act === 'filtreLegal') {
+    modifieBrouillon(() => { S.filtreLegal = !!t.checked; });
+    apresReglage('Filtre de légalité modifié : les cartes retenues et les suggestions sont recalculées.');
+    return;
+  }
+  /* La fenêtre « Affichage » d'une liste : ses réglages vont au brouillon, et
+     seule la fenêtre se redessine — la liste attend « Appliquer ». C'est le
+     seul chemin par lequel une vue, un nombre de colonnes, un groupement ou un
+     tri se règle : les menus posés dans les barres agissaient au premier geste
+     et repeignaient des centaines de vignettes à chaque essai. */
+  if (t.dataset.aff) {
+    reglageAffichage(t.dataset.aff, t);
     return;
   }
   if (t.dataset.act === 'format') {
-    S.format = t.value;
-    if (S.format === 'perso') S.custom.commander = fmt().commander;
-    invaliderCandidats();
-    renderAll();
-    majFenetreFormat();
+    modifieBrouillon(() => {
+      S.format = t.value;
+      if (S.format === 'perso') S.custom.commander = fmt().commander;
+    });
+    apresReglage('Format changé : légalité, taille et suggestions sont repris.');
     return;
   }
   if (t.dataset.act === 'chooseCmd') {
@@ -583,6 +171,15 @@ document.addEventListener('change', ev => {
 // Fermeture au clic sur l'arrière-plan (backdrop)
 const dlgEl = document.getElementById('dlg');
 if (dlgEl) {
+  /* Une fenêtre de filtres fermée autrement que par « Appliquer » revient
+     à l'état d'avant son ouverture, quel qu'ait été le geste. */
+  dlgEl.addEventListener('close', () => {
+    fermetureBrouillon();
+    /* Le toast a pu être glissé dans la fenêtre pour passer au-dessus
+       d'elle : refermée, elle l'emporterait hors de vue. */
+    const t = document.getElementById('toast');
+    if (t && t.parentElement === dlgEl) document.body.appendChild(t);
+  });
   dlgEl.addEventListener('click', ev => {
     if (ev.target === dlgEl) {
       const rect = dlgEl.getBoundingClientRect();
@@ -597,11 +194,65 @@ if (dlgEl) {
   });
 }
 
+/* La molette au-dessus du compteur d'une proposition : elle fait défiler les
+   exemplaires plutôt que la page. Le seul endroit où l'atelier retienne la
+   molette, et il le dit dans l'infobulle du compteur. */
+document.addEventListener('wheel', ev => {
+  const el = ev.target.closest && ev.target.closest('[data-molette]');
+  if (!el) return;
+  ev.preventDefault();
+  molletteRecherche(el, ev.deltaY);
+}, {passive:false});
+
+/* L'entête s'enroule autrement selon la largeur : sa hauteur est relevée à
+   nouveau, sans rien redessiner, pour que les sections gardent la bonne marge
+   de défilement. */
+window.addEventListener('resize', majHauteurEntete);
+
 // Clavier : Échap ferme la modale et l'aperçu
 document.addEventListener('keydown', ev => {
   if (ev.key === 'Escape') {
     cacherApercu();
     closeDialog();
+  }
+  /* Entrée dans un champ de filtre vaut « Appliquer » : la saisie ne
+     s'appliquant plus d'elle-même, il faut un geste au clavier. */
+  if (ev.key === 'Enter' && ev.target && ev.target.dataset && ev.target.dataset.filtre) {
+    ev.preventDefault();
+    appliquerFiltres();
+  }
+  /* Et de même dans la fenêtre « Budget », dont les deux champs chiffrés
+     attendent aussi « Appliquer ». */
+  if (ev.key === 'Enter' && ev.target && ev.target.dataset && ev.target.dataset.bud) {
+    ev.preventDefault();
+    appliquerBudget();
+  }
+  /* Les flèches, une fiche ouverte : la carte précédente, la suivante — les
+     mêmes que les deux boutons de son entête. Un champ de saisie garde ses
+     flèches, et la barre d'onglets les siennes : la fiche est modale, elle
+     n'a pas le focus en même temps qu'eux. */
+  const dlgFiche = document.getElementById('dlg');
+  if (dlgFiche && dlgFiche.open && dlgFiche.querySelector('.fiche[data-fiche]')
+      && (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight')
+      && !(ev.target && ev.target.closest && ev.target.closest('input, textarea, select'))) {
+    ev.preventDefault();
+    ficheVoisine(ev.key === 'ArrowLeft' ? -1 : 1);
+    return;
+  }
+
+  /* La barre d'onglets au clavier, selon le motif « tablist » : les flèches
+     parcourent les onglets, Origine et Fin vont aux extrémités, et la page
+     suit le focus. La tabulation, elle, n'entre qu'une fois dans la barre. */
+  const ongletFocus = ev.target && ev.target.closest && ev.target.closest('#onglets [data-onglet]');
+  if (ongletFocus && ['ArrowLeft','ArrowRight','Home','End'].includes(ev.key)) {
+    ev.preventDefault();
+    const boutons = [...document.querySelectorAll('#onglets [data-onglet]')];
+    const i = boutons.indexOf(ongletFocus);
+    const j = ev.key === 'Home' ? 0
+      : ev.key === 'End' ? boutons.length - 1
+      : (i + (ev.key === 'ArrowRight' ? 1 : -1) + boutons.length) % boutons.length;
+    activerOnglet(boutons[j].dataset.onglet);
+    boutons[j].focus();
   }
 });
 
@@ -616,11 +267,25 @@ function demarrer() {
     const s = chargerSauvegarde();
     if (s) restore(s);
   }
+  /* Le thème d'abord : le petit script de `index.html` a déjà peint la page du
+     bon côté, mais la sauvegarde peut porter un autre choix que sa clé. */
+  reprendTheme();
   renderAll();
   loadSymbology();
-  reprendreArchetypesEdhrec().then(trouve => { if (trouve) renderAll(); });
-  verifierMajCatalogue();
-  if (autoCatalogue()) chargerCatalogueComplet();
+  reprendreArchetypesEdhrec().then(trouve => {
+    if (trouve) renderAll();
+    if (archetypesARevoir()) chargerArchetypesEdhrec();
+  });
+  /* Les sets déjà connus reviennent du cache : un set coché avant le
+     rechargement filtre de nouveau sans attendre Scryfall. */
+  reprendreSets().then(trouve => { if (trouve) renderAll(); });
+  /* Les Game Changers du Commander : la liste revient du cache, et n'est
+     redemandée à Scryfall qu'une fois la semaine passée. */
+  reprendreGameChangers().then(trouve => {
+    if (trouve) renderAll();
+    if (gameChangersARevoir()) chargerGameChangers();
+  });
+  demarrerCatalogue();
 }
 
 if (document.readyState === 'loading') {

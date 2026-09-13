@@ -2,12 +2,102 @@
    js/etat.js — État global de l'application & utilitaires
    ===================================================================== */
 
+/* `legal` : la lettre que `codeLegalite()` emploie pour ce format, et le nom
+   que Scryfall lui donne dans ses recherches. Limité et Personnalisé
+   n'imposent aucune légalité — leur `legal` est vide. */
 const FORMATS = {
-  edh:      {label:'Commander (EDH)', size:100, commander:true,  maxCopies:1,  lands:36},
-  standard: {label:'Standard',        size:60,  commander:false, maxCopies:4,  lands:24},
-  limite:   {label:'Limité',          size:40,  commander:false, maxCopies:99, lands:17},
-  perso:    {label:'Personnalisé',    size:100, commander:false, maxCopies:1,  lands:36}
+  edh:      {label:'Commander (EDH)', size:100, commander:true,  maxCopies:1,  lands:36, legal:'c', scry:'commander'},
+  standard: {label:'Standard',        size:60,  commander:false, maxCopies:4,  lands:24, legal:'s', scry:'standard'},
+  limite:   {label:'Limité',          size:40,  commander:false, maxCopies:99, lands:17, legal:'',  scry:''},
+  perso:    {label:'Personnalisé',    size:100, commander:false, maxCopies:1,  lands:36, legal:'',  scry:''}
 };
+
+/* Les deux listes annexes de la section Deck : la réserve — le sideboard —
+   et les cartes à l'étude — le considering des sites de decks. Elles tiennent
+   les cartes qu'on garde à côté sans les jouer, et le deck, la réserve et
+   l'étude s'excluent : une carte vit dans l'une des trois, jamais dans deux à
+   la fois, si bien que l'y poser l'en retire ailleurs. Rien de ce qu'elles
+   portent ne compte dans la taille du deck, sa légalité, sa courbe, ses rôles
+   ni ses achats : ce sont des listes d'attente, pas le deck. */
+const ANNEXES = {
+  sideboard: {
+    titre: 'Réserve', anglais: 'sideboard', article: 'la réserve',
+    poser: 'Mettre en réserve', retirer: 'Retirer de la réserve',
+    aide: "Les cartes tenues prêtes à côté du deck, comme la réserve d'un tournoi.",
+    vide: "La réserve est vide : les cartes envoyées ici quittent la liste principale sans quitter le deck des yeux."
+  },
+  considering: {
+    titre: "À l'étude", anglais: 'considering', article: "l'étude",
+    poser: "Mettre à l'étude", retirer: "Retirer de l'étude",
+    aide: "Les cartes qu'on hésite à jouer : elles attendent ici sans peser sur le deck.",
+    vide: "Aucune carte à l'étude : posez-y les pistes que vous n'avez pas encore tranchées."
+  }
+};
+const CLES_ANNEXES = Object.keys(ANNEXES);
+
+/* Les cinq onglets de l'atelier, dans l'ordre où ils paraissent sous
+   l'entête. Chacun nomme les sections qu'il porte : c'est la seule table qui
+   les répartisse, et tout le reste — la barre, le passage d'un onglet à
+   l'autre, le signal d'un travail de fond — s'y réfère.
+
+   Les propositions occupaient un seul onglet, où trois lectures d'une même
+   notation se suivaient sans se distinguer : ce qui se branche sur les nœuds
+   isolés du graphe, ce que les decks recensés par EDHREC recommandent, et le
+   reste du catalogue. Chacune a désormais sa page — on lit le graphe sans
+   dérouler trois mille vignettes, et l'on revient aux recommandations
+   d'EDHREC sans les chercher. */
+/* `liste` : la liste de cartes que l'onglet montre, celle que règle le bouton
+   « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). Le catalogue garde
+   la clé `suggestions`, comme partout où son rangement est en jeu. */
+const ONGLETS = {
+  collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
+  deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
+  graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
+  edhrec:     {label:'EDHREC',     sections:['secH'],        liste:'edhrec'},
+  catalogue:  {label:'Catalogue',  sections:['secF'],        liste:'suggestions'}
+};
+const CLES_ONGLETS = Object.keys(ONGLETS);
+
+/* L'onglet unique d'hier, tel qu'une sauvegarde le nomme encore : elle
+   rouvrait sinon la collection, et l'on perdait la page qu'on regardait en
+   quittant l'atelier. */
+const ONGLETS_ANCIENS = {suggestions: 'graphe'};
+
+/* Les trois sections que la notation alimente, dans l'ordre des onglets. Un
+   recalcul les concerne toutes les trois à la fois : elles partagent la même
+   sélection notée, et c'est cette table que le liseré de progression et le
+   rendu des propositions parcourent. */
+const SECTIONS_SUGGESTIONS = ['secG', 'secH', 'secF'];
+
+/* L'onglet qui porte une section, pour les gestes qui traversent l'atelier —
+   la fiche d'une carte qui renvoie au graphe, par exemple. */
+function ongletDeSection(id) {
+  return CLES_ONGLETS.find(cle => ONGLETS[cle].sections.includes(id)) || CLES_ONGLETS[0];
+}
+
+/* Les nombres de colonnes offerts par les grilles, zéro valant « autant que la
+   largeur en permet ». Au-delà de huit, les cartes d'une grille tiendraient
+   sur une vignette de timbre. */
+const COLONNES = [0, 1, 2, 3, 4, 5, 6, 8];
+
+/* Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. La
+   fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre sur celle de l'onglet
+   ouvert — `ONGLETS` ci-dessus dit laquelle —,
+   et les quatre réglages — vue, colonnes, groupement, tri — valent pour les
+   cinq. C'est cette table que « Appliquer partout » parcourt.
+
+   `titre` nomme sa fenêtre, `libelle` la liste dans une phrase ; le catalogue
+   garde la clé `suggestions`, comme partout où son rangement est en jeu. Les
+   listes annexes du deck — la réserve, l'étude — suivent le deck, dont elles
+   partagent le réglage. */
+const LISTES_AFFICHAGE = {
+  collection:  {titre:'Affichage de la collection', libelle:'la collection'},
+  deck:        {titre:'Affichage du deck',          libelle:'le deck'},
+  graphe:      {titre:'Affichage des pistes du graphe', libelle:'les pistes du graphe'},
+  edhrec:      {titre:'Affichage des recommandations d\'EDHREC', libelle:'les recommandations d\'EDHREC'},
+  suggestions: {titre:'Affichage du catalogue',     libelle:'le catalogue'}
+};
+const CLES_AFFICHAGE = Object.keys(LISTES_AFFICHAGE);
 
 const RETOURNEES = new Set();
 let apercuEl = null;
@@ -16,328 +106,79 @@ let apercuCardName = null;
 const S = {
   collection: new Map(),
   deck: new Map(),
+  sideboard: new Map(),      // la réserve, hors de la liste principale
+  considering: new Map(),    // les cartes à l'étude, hors de la liste principale
+  deckPlie: new Set(),       // les parties repliées de la section Deck : 'liste', 'sideboard', 'considering'
+  /* Les catégories repliées des cinq listes, par clé « section|mode|groupe »
+     (js/groupes.js) : le pli d'un groupement ne vaut que pour lui. */
+  groupesPlies: new Set(),
   commander: null,
+  /* Les créatures légendaires du deck qu'on ne veut pas voir traitées comme
+     commandants par EDHREC : la liste se coche et se décoche dans l'onglet
+     EDHREC. Ce sont les écartées qu'on retient, non les retenues — le deck
+     change, et une carte qu'on n'a jamais décochée doit compter dès qu'elle
+     arrive. */
+  secondairesOff: new Set(),
   colors: new Set(['W','U','B','R','G','C']),
   colorMode: 'identity',
   format: 'edh',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
-  search: '',
-  typeFilter: '',
-  filtres: {nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
-  sort: 'cmc',
-  view: 'grid',
+  filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
+  /* Le rangement des cinq listes qui montrent des cartes : chacune garde
+     son groupe et son tri. Les valeurs de départ reproduisent ce que les
+     sections faisaient avant tout réglage — la collection triée par coût sans
+     groupe, le deck et le catalogue groupés par type. Les recommandations
+     d'EDHREC arrivent sans groupe et par taux d'inclusion décroissant :
+     c'est l'ordre dans lequel le site lui-même les présente. */
+  groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun', graphe:'aucun'},
+  tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion', graphe:'score'},
+  /* Liste ou grille, par liste et non plus pour tout l'atelier : un seul
+     champ obligeait la collection et le deck à la même vue, alors qu'on lit
+     volontiers l'une en vignettes et l'autre en lignes. Les trois listes de
+     propositions l'ont aussi : parcourir un classement de trois cents cartes
+     en lignes tient dix fois plus de monde à l'écran que leurs vignettes. */
+  vues: {collection:'grid', deck:'grid', graphe:'grid', edhrec:'grid', suggestions:'grid'},
+  /* Le nombre de colonnes de chaque grille, chacune gardant le sien comme elle
+     garde son groupement et son tri. Zéro laisse le navigateur en poser autant
+     que la largeur en permet, ce qu'il a toujours fait ; une valeur choisie
+     s'impose à toutes les largeurs, et c'est ainsi qu'on lit une carte par
+     ligne sur un téléphone. Le catalogue est nommé « suggestions », comme
+     partout où son rangement est en jeu. */
+  colonnes: {collection:0, deck:0, graphe:0, edhrec:0, suggestions:0},
+  /* Le thème sombre — le dessin d'origine de l'atelier — ou le papier clair.
+     `null` tant que rien n'a été choisi : le démarrage suit alors la
+     préférence du système (`js/theme.js`). */
+  sombre: null,
+  onglet: 'collection',      // l'onglet ouvert : une préférence d'affichage, conservée
   graphSource: 'collection',
   showImplicit: true,
   focusNodes: new Set(),
-  budget: {total:30, perCard:12, condition:'GD', lang:'any', sellerType:'any', country:'any'},
-  selected: null,
-  selectedCtx: 'collection',
+  /* Budget nul au démarrage : l'atelier ne propose alors que les cartes de la
+     collection, et n'engage aucun achat tant qu'un budget n'a pas été fixé
+     dans la fenêtre « Achats sur Cardmarket ». Le prix maximum par carte, lui,
+     est déjà posé : il n'attend que le budget pour valoir. */
+  budget: {total:0, perCard:5, condition:'GD', lang:'any', sellerType:'any', country:'any'},
+  /* Les objectifs par rôle réglés à la main, par format : `{edh:{terrains:38}}`.
+     Seuls les rôles qu'on a touchés y figurent, les autres gardant la cible que
+     le format donne. Par format, parce qu'une cible de terrains pensée pour un
+     deck de cent cartes n'a rien à dire d'un deck de soixante. */
+  ciblesRoles: {},
   limitB: 200,
   limiteType: {},
   exploreEtat: '',
-  exploreSig: null,
-  exploreMax: 6000,
+  exploreMax: 6000,        // plafond du chargement paginé par l'API Scryfall
+  candidatsMax: 20000,     // plafond des candidats tirés du catalogue local
+  catalogueNumeriques: false,  // cartes d'Alchemy, d'Arena, de MTGO : écartées par défaut
   exploreTotal: 0,
   exploreCharge: 0,
   exploreReste: false,
   catalogueActif: true,
+  filtreLegal: true,
   prixMaj: null,
+  majIgnoree: null,
   enriching: false,
-  images: true,
-  imagesFailed: false,
   scryHS: false,
-  edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
-  csb: {sig:null, status:'idle', data:null, error:null},
-  csbRelay: '',
-  headerCompact: (typeof localStorage !== 'undefined' && localStorage.getItem('mtg_compact_header') === '1') || (typeof window !== 'undefined' && window.innerWidth <= 640)
+  edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null}
 };
 
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});
-
-/* ---------------------------------------------------------------------
-   Filtres de la fenêtre « Filtres » (en-tête) : couleurs, recherche libre,
-   type de carte, archétype, nom, illustrateur, force, endurance, coût de
-   mana et prix. Chaque champ vide est neutre. Les couleurs vivent dans `S.colors`
-   et `S.colorMode`, la recherche et le type dans `S.search` et
-   `S.typeFilter` ; les autres critères dans `S.filtres`.
-   --------------------------------------------------------------------- */
-
-const FILTRES_VIDE = {
-  nom:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'',
-  cmcMin:'', cmcMax:'', prixMin:'', prixMax:''
-};
-
-/* Bornes numériques : [clé min, clé max, champ de la carte, libellé]. */
-const FILTRES_BORNES = [
-  ['forceMin', 'forceMax', 'force', 'Force'],
-  ['enduranceMin', 'enduranceMax', 'endurance', 'Endurance'],
-  ['cmcMin', 'cmcMax', 'cmc', 'Coût de mana'],
-  ['prixMin', 'prixMax', 'price', 'Prix']
-];
-
-/* ---------------------------------------------------------------------
-   Archétypes établis par une base extérieure (thèmes EDHREC). L'index
-   est rempli par `chargerArchetypesEdhrec()` dans js/externes.js et
-   conservé dans IndexedDB ; il reste vide tant qu'il n'a pas été chargé.
-   --------------------------------------------------------------------- */
-
-const ARCH_BASE = {
-  etat:'idle',        // idle | chargement | ok | erreur
-  maj:null, erreur:'', forme:null, essais:[],
-  liste:[],           // thèmes publiés par EDHREC : {slug, label, n}
-  themes:{},          // thèmes dont la liste de cartes est chargée : slug -> {n}
-  index:new Map(),    // nom normalisé -> Set(slug)
-  enCours:new Set()   // thèmes en cours de chargement
-};
-
-/* Libellé d'un thème : le nôtre s'il en existe un, sinon celui d'EDHREC. */
-function libelleArchetype(slug) {
-  if (ARCH_LABELS[slug]) return ARCH_LABELS[slug];
-  const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
-  return (t && t.label) || slug;
-}
-
-/* Court résumé du fonctionnement d'un archétype. Chaque thème en a un,
-   sans exception : le nôtre pour les thèmes courants, sinon celui
-   qu'EDHREC publie, sinon une phrase formée sur son nom. */
-function resumeArchetype(slug) {
-  // le nôtre d'abord : il est en français, comme le reste de la liste
-  if (ARCH_RESUMES[slug]) return ARCH_RESUMES[slug];
-  const charge = ARCH_BASE.themes[slug];
-  if (charge && charge.desc) return charge.desc;
-  const t = (ARCH_BASE.liste || []).find(x => x.slug === slug);
-  if (t && t.desc) return t.desc;
-
-  const nom = libelleArchetype(slug);
-  const famille = nom.replace(/\s*(tribal|typal|deck[s]?)\s*/ig, '').trim();
-  if (/tribal|typal/i.test(nom) || /-(tribal|typal)$/i.test(slug))
-    return `Decks bâtis autour des créatures ${famille} et de ce qui les renforce.`;
-  return `Les cartes les plus jouées dans les decks ${famille || nom}.`;
-}
-
-/* Les archétypes proposés : ceux qu'EDHREC publie. */
-function archetypesDisponibles() {
-  return (ARCH_BASE.liste || []).map(t => ({
-    slug:t.slug, label:libelleArchetype(t.slug), n:t.n || 0, aide:resumeArchetype(t.slug)
-  }));
-}
-
-/* Archétypes d'une carte, d'après les thèmes EDHREC chargés. */
-function archetypesCarte(card) {
-  if (!card || !ARCH_BASE.index.size) return [];
-  const avant = typeof frontFace === 'function' ? frontFace(card.name) : card.name;
-  const s = ARCH_BASE.index.get(norm(card.name)) || ARCH_BASE.index.get(norm(avant));
-  return s ? [...s] : [];
-}
-
-/* Un thème coché dont les cartes ne sont pas encore chargées. */
-function archetypesAChargerEdhrec() {
-  return archetypesFiltre().filter(slug => !ARCH_BASE.themes[slug] && !ARCH_BASE.enCours.has(slug));
-}
-
-/* Archétypes cochés, conservés sous forme de liste séparée par des virgules. */
-function archetypesFiltre() {
-  return String((S.filtres && S.filtres.archetypes) || '').split(',').filter(Boolean);
-}
-
-function basculerArchetype(id) {
-  const sel = new Set(archetypesFiltre());
-  if (sel.has(id)) sel.delete(id); else sel.add(id);
-  S.filtres.archetypes = [...sel].join(',');
-}
-
-/* Rôles cochés dans la section Deck, conservés comme les archétypes. */
-function rolesFiltre() {
-  return String((S.filtres && S.filtres.roles) || '').split(',').filter(Boolean);
-}
-
-function basculerRole(role) {
-  if (!role) { S.filtres.roles = ''; return; }
-  const sel = new Set(rolesFiltre());
-  if (sel.has(role)) sel.delete(role); else sel.add(role);
-  S.filtres.roles = [...sel].join(',');
-}
-
-/* Une carte tient au moins un des rôles cochés. */
-function roleOK(card) {
-  const roles = rolesFiltre();
-  if (!roles.length) return true;
-  return !!card && !!card.cats && roles.some(r => card.cats.has(r));
-}
-
-function nombreFiltre(v) {
-  if (v === '' || v === null || v === undefined) return null;
-  const n = parseFloat(String(v).replace(',', '.'));
-  return isNaN(n) ? null : n;
-}
-
-function reinitFiltres() {
-  S.filtres = {...FILTRES_VIDE};
-  S.search = '';
-  S.typeFilter = '';
-}
-
-/* Écrit un champ de la fenêtre dans l'état, quelle que soit sa maison. */
-function majFiltre(cle, valeur) {
-  if (cle === 'search') S.search = valeur;
-  else if (cle === 'typeFilter') S.typeFilter = valeur;
-  else if (cle in FILTRES_VIDE) S.filtres[cle] = valeur;
-}
-
-/* Efface un filtre depuis sa puce dans l'en-tête. */
-function effacerFiltre(cles) {
-  (cles || []).forEach(k => majFiltre(k, ''));
-}
-
-/* Filtres en vigueur : un libellé et les clés à effacer pour chacun.
-   Sert au décompte, aux puces de l'en-tête et aux infobulles. */
-function filtresActifs() {
-  const f = S.filtres || FILTRES_VIDE;
-  const actifs = [];
-  const recherche = String(S.search || '').trim();
-  if (recherche) actifs.push({cles:['search'], texte:`Recherche « ${recherche} »`});
-  if (S.typeFilter) actifs.push({cles:['typeFilter'], texte:`Type : ${S.typeFilter}`});
-  const nom = String(f.nom || '').trim();
-  if (nom) actifs.push({cles:['nom'], texte:`Nom « ${nom} »`});
-  const artiste = String(f.artiste || '').trim();
-  if (artiste) actifs.push({cles:['artiste'], texte:`Illustrateur « ${artiste} »`});
-  const arch = archetypesFiltre();
-  if (arch.length) actifs.push({cles:['archetypes'],
-    texte:`Archétype${arch.length > 1 ? 's' : ''} : ${arch.map(libelleArchetype).join(', ')}`});
-  const roles = rolesFiltre();
-  if (roles.length) actifs.push({cles:['roles'],
-    texte:`Rôle${roles.length > 1 ? 's' : ''} : ${roles.map(r => CATLABEL[r] || r).join(', ')}`});
-  FILTRES_BORNES.forEach(([kMin, kMax, champ, label]) => {
-    const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
-    if (min === null && max === null) return;
-    const unite = champ === 'price' ? ' €' : '';
-    const texte = (min !== null && max !== null) ? `${label} ${min}${unite} → ${max}${unite}`
-      : (min !== null ? `${label} ≥ ${min}${unite}` : `${label} ≤ ${max}${unite}`);
-    actifs.push({cles:[kMin, kMax], texte});
-  });
-  return actifs;
-}
-
-/* Libellés seuls, pour les infobulles et les phrases de résumé. */
-function texteFiltresActifs(sep) {
-  return filtresActifs().map(a => a.texte).join(sep || ' · ');
-}
-
-/* La recherche libre : nom, type ou texte de la carte. */
-function rechercheOK(card) {
-  const q = String(S.search || '').trim().toLowerCase();
-  if (!q) return true;
-  if (!card) return false;
-  return String(card.name || '').toLowerCase().includes(q)
-    || String(card.text || '').toLowerCase().includes(q)
-    || String(card.type || '').toLowerCase().includes(q);
-}
-
-/* Le type principal retenu dans la fenêtre des filtres. */
-function typeOK(card) {
-  if (!S.typeFilter) return true;
-  return !!card && mainType(card) === S.typeFilter;
-}
-
-/* Prédicat unique de l'atelier : couleurs, recherche, type et critères de
-   la fenêtre. Il vaut pour la collection, le deck, la courbe de mana et
-   les suggestions, afin qu'un filtre posé une fois vaille partout. */
-function carteFiltree(card) {
-  return !!card && colorOK(card) && typeOK(card) && rechercheOK(card) && roleOK(card) && filtreOK(card);
-}
-
-/* Applique les filtres avancés à une carte. Une carte dont la valeur est
-   inconnue (créature non renseignée, prix absent) est écartée dès qu'une
-   borne est posée sur ce critère. */
-function filtreOK(card) {
-  if (!card) return false;
-  const f = S.filtres || FILTRES_VIDE;
-  const nom = String(f.nom || '').trim();
-  if (nom && !norm(card.name).includes(norm(nom))) return false;
-  const artiste = String(f.artiste || '').trim();
-  if (artiste && !loose(card.artist || '').includes(loose(artiste))) return false;
-  const arch = archetypesFiltre();
-  if (arch.length) {
-    const ceux = archetypesCarte(card);
-    if (!arch.some(id => ceux.includes(id))) return false;
-  }
-  for (const [kMin, kMax, champ] of FILTRES_BORNES) {
-    const min = nombreFiltre(f[kMin]), max = nombreFiltre(f[kMax]);
-    if (min === null && max === null) continue;
-    const val = card[champ];
-    if (typeof val !== 'number' || isNaN(val)) return false;
-    if (min !== null && val < min) return false;
-    if (max !== null && val > max) return false;
-  }
-  return true;
-}
-
-function seedCollection() {
-  DB.forEach(c => {
-    let q = c.price > 20 ? 1 : (c.price > 6 ? 2 : 3);
-    if (/^basic land/i.test(c.type)) q = 12;
-    S.collection.set(c.name, q);
-  });
-}
-
-function fmt() {
-  const f = FORMATS[S.format];
-  return S.format === 'perso'
-    ? {label:'Personnalisé', size:S.custom.deckSize, commander:S.custom.commander, maxCopies:S.custom.maxCopies, lands:Math.round(S.custom.deckSize*0.36)}
-    : f;
-}
-
-function eur(n) {
-  return (Math.round(n*100)/100).toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
-}
-
-function esc(s) {
-  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-}
-
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14};
-
-const CAT = {
-  etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
-  majDispo:null, uri:'', taille:0, impressions:0
-};
-
-function noeudsActifs() {
-  return [...S.focusNodes];
-}
-
-function carteTouche(c, noeuds) {
-  if (!noeuds || !noeuds.length) return true;
-  if (!c || !c.an) return false;
-  return noeuds.every(n => {
-    if (c.an.edges && c.an.edges.some(e => e.from === n || e.to === n)) return true;
-    if (c.an.triggers && c.an.triggers.some(t => t.c === n)) return true;
-    if (c.an.produces && c.an.produces.some(p => p.c === n)) return true;
-    if (c.an.abilities && c.an.abilities.some(a => (a.from && a.from.includes(n)) || (a.to && a.to.includes(n)))) return true;
-    return false;
-  });
-}
-
-function getCardOrAnalyzedRec(rec) {
-  if (rec._card) return rec._card;
-  const nom = rec[CH.NOM];
-  let c = typeof find === 'function' ? find(nom) : null;
-  if (c && c.an) {
-    rec._card = c;
-    return c;
-  }
-  const card = buildCard(nom, rec[CH.COUT] || '—', rec[CH.TYPE], rec[CH.PRIX], rec[CH.TEXTE]);
-  if (rec[CH.ID_COUL] !== undefined) card.identity = rec[CH.ID_COUL] ? String(rec[CH.ID_COUL]).split('') : [];
-  card.cmc = rec[CH.CMC];
-  if (rec[CH.FORCE] != null) card.force = rec[CH.FORCE];
-  if (rec[CH.ENDURANCE] != null) card.endurance = rec[CH.ENDURANCE];
-  if (rec[CH.ARTISTE]) card.artist = rec[CH.ARTISTE];
-  rec._card = card;
-  return card;
-}
-
-function recToucheNoeuds(rec, noeuds) {
-  if (!noeuds || !noeuds.length) return true;
-  const card = getCardOrAnalyzedRec(rec);
-  return carteTouche(card, noeuds);
-}

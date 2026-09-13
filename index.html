@@ -7,7 +7,28 @@
   <meta name="description" content="Application d'aide à la construction et à l'optimisation de decks Magic: The Gathering (EDH / Commander, Standard, Limité, Cube)." />
   <meta property="og:title" content="Atelier MTG" />
   <meta property="og:description" content="Application d'aide à la construction et à l'optimisation de decks Magic: The Gathering (EDH / Commander, Standard, Limité, Cube)." />
-  <link rel="stylesheet" href="css/atelier.css">
+  <!-- Le marqueur de version : sans lui, un navigateur garde la feuille et les
+       modules en cache pendant qu'il relit cette page. Tant que les trois
+       tenaient chacun leur rôle, la dérive passait inaperçue ; depuis que la
+       coque des onglets vit ici, un cache en retard donne des boutons nus et
+       des gestes sans effet. À rehausser dès qu'un changement touche à la fois
+       cette page et ce qu'elle charge. -->
+  <link rel="stylesheet" href="css/atelier.css?v=20260913b">
+  <script>
+    /* Le thème, posé avant le premier pixel. Il vit dans `S.sombre` comme le
+       reste de l'état (js/theme.js), mais est aussi noté dans une clé à lui :
+       ouvrir ici la sauvegarde entière — des centaines de kilo-octets de
+       cartes — pour une seule valeur coûterait ce qu'on cherche à éviter.
+       Sans ces quatre lignes, un atelier réglé en sombre s'ouvrirait en clair
+       le temps que les modules se chargent, et clignerait à chaque visite.
+       C'est le seul script en ligne de la page : il ne pose aucun écouteur, il
+       n'écrit qu'un attribut. */
+    try {
+      var theme = localStorage.getItem('mtg-atelier-theme');
+      if (!theme) theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'sombre' : 'clair';
+      document.documentElement.dataset.theme = theme;
+    } catch (e) { }
+  </script>
 </head>
 <body>
   <header class="top" id="topHeader">
@@ -17,64 +38,133 @@
         <span class="sub">Constructeur &amp; Optimiseur</span>
       </div>
       <div class="top-stats" id="topStats"></div>
+      <!-- Le coin haut-droit : ce qui règle la vue, non ce qu'elle montre.
+           « Affichage » et « Filtres » sont peints dans leurs lucarnes — le
+           premier change de liste avec l'onglet, le second porte un compte et
+           une infobulle qui changent à chaque rendu. L'engrenage, lui, vit dans
+           le HTML : rien n'y change jamais, et un rendu de moins le laisse sous
+           le doigt. -->
+      <div class="head-actions">
+        <span id="headAffichage"></span>
+        <span id="headFiltre"></span>
+        <button type="button" class="head-param" id="btnParametres" data-act="parametres"
+                title="Paramètres : sauvegarde locale, apparence, catalogue" aria-label="Paramètres"></button>
+      </div>
+    </div>
+
+    <!-- Les cinq onglets, dans l'entête même : la barre est collante avec
+         elle, et l'on passe d'un pan de l'atelier à l'autre sans remonter.
+         Les propositions se lisaient sous un seul onglet ; elles en ont
+         désormais trois — le graphe et ce qu'il branche, EDHREC et ses
+         recommandations, le catalogue et tout le reste. -->
+    <div class="onglets" id="onglets" role="tablist" aria-label="Pans de l'atelier">
+      <button type="button" class="onglet" id="ongletCollection" role="tab"
+              data-onglet="collection" aria-selected="true" aria-controls="pageCollection" tabindex="0">
+        Collection<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletDeck" role="tab"
+              data-onglet="deck" aria-selected="false" aria-controls="pageDeck" tabindex="-1">
+        Deck<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletGraphe" role="tab"
+              data-onglet="graphe" aria-selected="false" aria-controls="pageGraphe" tabindex="-1">
+        Graphe<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletEdhrec" role="tab"
+              data-onglet="edhrec" aria-selected="false" aria-controls="pageEdhrec" tabindex="-1">
+        EDHREC<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="onglet" id="ongletCatalogue" role="tab"
+              data-onglet="catalogue" aria-selected="false" aria-controls="pageCatalogue" tabindex="-1">
+        Catalogue<span class="onglet-pt" aria-hidden="true"></span>
+      </button>
     </div>
   </header>
 
   <main class="wrap">
-    <!-- Section A : Collection — les identifiants restent secB…secF, la lettre affichée seule change -->
-    <section class="sec open" id="secB">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">A</span>
-        <h2>Collection</h2>
-        <span class="hint" id="hintB"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyB"></div>
-    </section>
+    <!-- Les sept sections se répartissent en cinq onglets. Leurs identifiants
+         — secB…secH, bodyB…hintH — ont gardé la lettre d'origine que les
+         rendus connaissent ; plus aucune lettre n'est affichée. Les deux
+         dernières, secG et secH, sont nées de la division de l'onglet des
+         suggestions : elles poursuivent la série sans rien renommer. -->
 
-    <!-- Section B : Statistiques -->
-    <section class="sec open" id="secC">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">B</span>
-        <h2>Statistiques</h2>
-        <span class="hint" id="hintC"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyC"></div>
-    </section>
+    <!-- Onglet 1 — ce que la collection pèse, et la collection -->
+    <div class="page" id="pageCollection" data-page="collection"
+         role="tabpanel" aria-labelledby="ongletCollection" tabindex="0">
+      <section class="sec" id="secC">
+        <div class="sec-head">
+          <h2>Statistiques</h2>
+          <span class="hint" id="hintC"></span>
+        </div>
+        <div class="sec-body" id="bodyC"></div>
+      </section>
+      <section class="sec" id="secB">
+        <div class="sec-head">
+          <h2>Collection</h2>
+          <span class="hint" id="hintB"></span>
+        </div>
+        <div class="sec-body" id="bodyB"></div>
+      </section>
+    </div>
 
-    <!-- Section C : Graphe des capacités -->
-    <section class="sec open" id="secD">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">C</span>
-        <h2>Graphe des capacités</h2>
-        <span class="hint" id="hintD"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyD"></div>
-    </section>
+    <!-- Onglet 2 — le deck en construction -->
+    <div class="page" id="pageDeck" data-page="deck"
+         role="tabpanel" aria-labelledby="ongletDeck" tabindex="0" hidden>
+      <section class="sec" id="secE">
+        <div class="sec-head">
+          <h2>Deck</h2>
+          <span class="hint" id="hintE"></span>
+        </div>
+        <div class="sec-body" id="bodyE"></div>
+      </section>
+    </div>
 
-    <!-- Section D : Deck -->
-    <section class="sec open" id="secE">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">D</span>
-        <h2>Deck</h2>
-        <span class="hint" id="hintE"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyE"></div>
-    </section>
+    <!-- Onglet 3 — le graphe, et les cartes qui se branchent sur les nœuds
+         qu'on y isole : on choisit un effet, on voit aussitôt quoi l'alimenter -->
+    <div class="page" id="pageGraphe" data-page="graphe"
+         role="tabpanel" aria-labelledby="ongletGraphe" tabindex="0" hidden>
+      <section class="sec" id="secD">
+        <div class="sec-head">
+          <h2>Graphe des capacités</h2>
+          <span class="hint" id="hintD"></span>
+        </div>
+        <div class="sec-body" id="bodyD"></div>
+      </section>
+      <section class="sec" id="secG">
+        <div class="sec-head">
+          <h2>Pistes autour des nœuds</h2>
+          <span class="hint" id="hintG"></span>
+        </div>
+        <div class="sec-body" id="bodyG"></div>
+      </section>
+    </div>
 
-    <!-- Section E : Suggestions -->
-    <section class="sec open" id="secF">
-      <button class="sec-head" type="button" aria-expanded="true">
-        <span class="letter">E</span>
-        <h2>Suggestions d'ajout</h2>
-        <span class="hint" id="hintF"></span>
-        <span class="chev">›</span>
-      </button>
-      <div class="sec-body" id="bodyF"></div>
-    </section>
+    <!-- Onglet 4 — tout ce qui vient d'EDHREC : les statistiques du
+         commandant, celles des commandants secondaires, et les cartes que les
+         decks recensés recommandent -->
+    <div class="page" id="pageEdhrec" data-page="edhrec"
+         role="tabpanel" aria-labelledby="ongletEdhrec" tabindex="0" hidden>
+      <section class="sec" id="secH">
+        <div class="sec-head">
+          <h2>EDHREC</h2>
+          <span class="hint" id="hintH"></span>
+        </div>
+        <div class="sec-body" id="bodyH"></div>
+      </section>
+    </div>
+
+    <!-- Onglet 5 — les suggestions tirées de tout le catalogue, groupées et
+         paginées, et l'état du catalogue qui les nourrit -->
+    <div class="page" id="pageCatalogue" data-page="catalogue"
+         role="tabpanel" aria-labelledby="ongletCatalogue" tabindex="0" hidden>
+      <section class="sec" id="secF">
+        <div class="sec-head">
+          <h2>Suggestions du catalogue</h2>
+          <span class="hint" id="hintF"></span>
+        </div>
+        <div class="sec-body" id="bodyF"></div>
+      </section>
+    </div>
   </main>
 
   <!-- Fenêtre modale commune -->
@@ -89,19 +179,87 @@
   <div id="cardPreview"></div>
 
   <!-- Modules chargés dans l'ordre strict défini par l'architecture -->
-  <script src="js/effets.js"></script>
-  <script src="js/cartes.js"></script>
-  <script src="js/etat.js"></script>
-  <script src="js/marche.js"></script>
-  <script src="js/scryfall.js"></script>
-  <script src="js/stockage.js"></script>
-  <script src="js/externes.js"></script>
-  <script src="js/graphe.js"></script>
-  <script src="js/stats.js"></script>
-  <script src="js/suggestions.js"></script>
-  <script src="js/collection.js"></script>
-  <script src="js/deck.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/reglesEffets.js?v=20260913b"></script>
+  <script src="js/effets.js?v=20260913b"></script>
+  <script src="js/synergies.js?v=20260913b"></script>
+  <script src="js/cartesBrutes.js?v=20260913b"></script>
+  <script src="js/analyse.js?v=20260913b"></script>
+  <script src="js/archetypesLibelles.js?v=20260913b"></script>
+  <script src="js/categories.js?v=20260913b"></script>
+  <script src="js/impressions.js?v=20260913b"></script>
+  <script src="js/cartes.js?v=20260913b"></script>
+  <script src="js/liens.js?v=20260913b"></script>
+  <script src="js/etat.js?v=20260913b"></script>
+  <script src="js/archetypesSets.js?v=20260913b"></script>
+  <script src="js/filtres.js?v=20260913b"></script>
+  <script src="js/retenue.js?v=20260913b"></script>
+  <script src="js/catalogueEtat.js?v=20260913b"></script>
+  <script src="js/groupes.js?v=20260913b"></script>
+  <script src="js/barreGroupes.js?v=20260913b"></script>
+  <script src="js/marche.js?v=20260913b"></script>
+  <script src="js/symboles.js?v=20260913b"></script>
+  <script src="js/scryfallApplique.js?v=20260913b"></script>
+  <script src="js/scryfall.js?v=20260913b"></script>
+  <script src="js/recherches.js?v=20260913b"></script>
+  <script src="js/stockage.js?v=20260913b"></script>
+  <script src="js/fenSauvegarde.js?v=20260913b"></script>
+  <script src="js/idb.js?v=20260913b"></script>
+  <script src="js/edhrec.js?v=20260913b"></script>
+  <script src="js/edhrecForme.js?v=20260913b"></script>
+  <script src="js/edhrecThemes.js?v=20260913b"></script>
+  <script src="js/sets.js?v=20260913b"></script>
+  <script src="js/gameChangers.js?v=20260913b"></script>
+  <script src="js/archive.js?v=20260913b"></script>
+  <script src="js/catalogue.js?v=20260913b"></script>
+  <script src="js/candidats.js?v=20260913b"></script>
+  <script src="js/graphe.js?v=20260913b"></script>
+  <script src="js/stats.js?v=20260913b"></script>
+  <script src="js/notation.js?v=20260913b"></script>
+  <script src="js/vivier.js?v=20260913b"></script>
+  <script src="js/sugOrdre.js?v=20260913b"></script>
+  <script src="js/sugCommandants.js?v=20260913b"></script>
+  <script src="js/sugListes.js?v=20260913b"></script>
+  <script src="js/sugGraphe.js?v=20260913b"></script>
+  <script src="js/sugEdhrec.js?v=20260913b"></script>
+  <script src="js/sugCatalogue.js?v=20260913b"></script>
+  <script src="js/suggestions.js?v=20260913b"></script>
+  <script src="js/collection.js?v=20260913b"></script>
+  <script src="js/fenImport.js?v=20260913b"></script>
+  <script src="js/fenAjout.js?v=20260913b"></script>
+  <script src="js/rechercheSection.js?v=20260913b"></script>
+  <script src="js/annexes.js?v=20260913b"></script>
+  <script src="js/deck.js?v=20260913b"></script>
+  <script src="js/legalite.js?v=20260913b"></script>
+  <script src="js/deckSection.js?v=20260913b"></script>
+  <script src="js/ficheVisuel.js?v=20260913b"></script>
+  <script src="js/fiche.js?v=20260913b"></script>
+  <script src="js/ficheParcours.js?v=20260913b"></script>
+  <script src="js/outils.js?v=20260913b"></script>
+  <script src="js/theme.js?v=20260913b"></script>
+  <script src="js/dialogue.js?v=20260913b"></script>
+  <script src="js/brouillon.js?v=20260913b"></script>
+  <script src="js/couleurs.js?v=20260913b"></script>
+  <script src="js/apercu.js?v=20260913b"></script>
+  <script src="js/versions.js?v=20260913b"></script>
+  <script src="js/tuiles.js?v=20260913b"></script>
+  <script src="js/ancre.js?v=20260913b"></script>
+  <script src="js/recalcul.js?v=20260913b"></script>
+  <script src="js/entete.js?v=20260913b"></script>
+  <script src="js/rendu.js?v=20260913b"></script>
+  <script src="js/fenFormat.js?v=20260913b"></script>
+  <script src="js/fenParametres.js?v=20260913b"></script>
+  <script src="js/fenBudget.js?v=20260913b"></script>
+  <script src="js/fenFiltres.js?v=20260913b"></script>
+  <script src="js/fenAffichage.js?v=20260913b"></script>
+  <script src="js/fenCibles.js?v=20260913b"></script>
+  <script src="js/fenListes.js?v=20260913b"></script>
+  <script src="js/boiteCatalogue.js?v=20260913b"></script>
+  <script src="js/fenExport.js?v=20260913b"></script>
+  <script src="js/gestesVue.js?v=20260913b"></script>
+  <script src="js/gestesReglages.js?v=20260913b"></script>
+  <script src="js/gestesDeck.js?v=20260913b"></script>
+  <script src="js/gestesDonnees.js?v=20260913b"></script>
+  <script src="js/gestesGraphe.js?v=20260913b"></script>
+  <script src="js/app.js?v=20260913b"></script>
 </body>
 </html>

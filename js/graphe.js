@@ -69,7 +69,7 @@ function svgGraph(g) {
       if (!p || !q) return;
       const mx = (p.x + q.x) / 2, my = (p.y + q.y) / 2;
       paths += `<path d="M${p.x.toFixed(1)},${p.y.toFixed(1)} Q${(cx+(mx-cx)*0.28).toFixed(1)},${(cy+(my-cy)*0.28).toFixed(1)} ${q.x.toFixed(1)},${q.y.toFixed(1)}"
-        fill="none" stroke="#6f6690" stroke-width="1" stroke-dasharray="4 6" opacity=".5"><title>Règle du jeu : ${esc(NODE[a].label)} permet ${esc(NODE[b].label)}</title></path>`;
+        fill="none" stroke-width="1" stroke-dasharray="4 6" opacity=".5" style="stroke:var(--line2)"><title>Règle du jeu : ${esc(NODE[a].label)} permet ${esc(NODE[b].label)}</title></path>`;
     });
   }
 
@@ -79,19 +79,20 @@ function svgGraph(g) {
     const r = 6 + Math.min(16, Math.sqrt(d) * 2.6);
     const col = GROUPS[n[2]].color;
     dots += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${col}" fill-opacity="${d?0.9:0.25}"
-      stroke="${on ? '#fff' : '#171322'}" stroke-width="${on ? 3 : 1.5}" data-node="${id}" style="cursor:pointer">
+      stroke-width="${on ? 3 : 1.5}" data-node="${id}" style="cursor:pointer;stroke:${on ? 'var(--txt-vif)' : 'var(--graph2)'}">
       <title>${esc(n[1])} — ${d} connexion(s)</title></circle>`;
     if (!d && !on) return;
     const deg2 = p.a * 180 / Math.PI, flip = Math.cos(p.a) < 0;
     const lx = cx + (R + 22) * Math.cos(p.a), ly = cy + (R + 22) * Math.sin(p.a);
-    labels += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" fill="${d ? '#e8e3f2' : '#6d6486'}" font-size="14" font-family="ui-sans-serif,system-ui"
+    labels += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="14" font-family="ui-sans-serif,system-ui"
       text-anchor="${flip ? 'end' : 'start'}" dominant-baseline="middle"
-      transform="rotate(${flip ? deg2+180 : deg2},${lx.toFixed(1)},${ly.toFixed(1)})" data-node="${id}" style="cursor:pointer">${esc(n[1])}</text>`;
+      transform="rotate(${flip ? deg2+180 : deg2},${lx.toFixed(1)},${ly.toFixed(1)})" data-node="${id}"
+      style="cursor:pointer;fill:${d ? 'var(--txt)' : 'var(--dim2)'}">${esc(n[1])}</text>`;
   });
 
   return `<svg viewBox="0 0 1000 1000" role="img" aria-label="Graphe circulaire des capacités">
     <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M0,1 L9,5 L0,9 z" fill="#cfc7e4" opacity=".85"/></marker></defs>
+      <path d="M0,1 L9,5 L0,9 z" opacity=".85" style="fill:var(--dim)"/></marker></defs>
     ${arcs}${paths}${dots}${labels}</svg>`;
 }
 
@@ -133,7 +134,7 @@ function renderD() {
 
   const emptyMsg = {
     collection: 'Aucune carte ne passe les filtres en cours.',
-    all: 'Votre collection est vide : ajoutez ou importez des cartes en section A.',
+    all: 'Votre collection est vide : ajoutez ou importez des cartes depuis <button type="button" class="btn sm" data-onglet="collection">l\'onglet Collection</button>.',
     deck: 'Le deck est vide.',
     suggestions: 'Aucune suggestion pour le moment.'
   }[S.graphSource] || 'Aucune carte.';
@@ -154,7 +155,10 @@ function renderD() {
       <div class="graphbox">${svgGraph(g)}</div>
       <div class="legend">${Object.entries(GROUPS).map(([k,v]) => `<span class="lg"><span class="dot" style="background:${v.color}"></span>${v.label}</span>`).join('')}</div>
       ${focusInfo}
-      <div style="margin-top:8px"><button class="btn" data-act="graphToF">${actifs.length ? 'Proposer des cartes branchées sur ces nœuds' : 'Voir les suggestions d\'ajout'}</button></div>
+      <!-- Les pistes branchées sur les nœuds isolés sont juste dessous, dans
+           la même page (secG) ; sans nœud isolé, il n'y a rien à y distinguer
+           et le bouton mène au classement complet, dans l'onglet Catalogue. -->
+      <div style="margin-top:8px"><button class="btn" data-act="allerSection" data-sec="${actifs.length ? 'secG' : 'secF'}">${actifs.length ? 'Voir les pistes branchées sur ces nœuds' : 'Voir les suggestions du catalogue'}</button></div>
       <div class="small muted" style="margin-top:8px">${NODES.length} évènements possibles ; seuls ceux que vos cartes touchent sont nommés. Cliquez un nœud pour le détail.
         Chaque arc va d'un déclencheur vers un effet produit. Une carte peut poser plusieurs arcs. Les arcs pointillés sont les enchaînements permis par les règles (un jeton qui arrive déclenche les effets d'arrivée en jeu, un trésor sacrifié produit du mana…).</div>`;
   }

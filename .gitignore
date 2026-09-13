@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Le grand graphe se régénère (node outils/genAppels.js) ; son SVG pèse plus d'un mégaoctet.
+doc/graphe-fonctions.svg

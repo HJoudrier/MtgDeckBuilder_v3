@@ -1,13 +1,80 @@
+/* =====================================================================
+   Les deux teintes de l'atelier.
+
+   Tout ce qui dépend du thème passe par une variable, et rien d'autre : une
+   couleur écrite en dur dans une règle — ou dans un style en ligne du
+   JavaScript — resterait sombre sur fond clair. Les deux palettes portent donc
+   les mêmes noms, et c'est l'attribut `data-theme` de la racine qui choisit
+   (`js/theme.js`).
+
+   Les noms disent le rôle, jamais la couleur : `--sur-brass` est l'encre qu'on
+   pose sur du laiton, `--vide-img` le fond d'un visuel qui manque, `--voile` le
+   verre dépoli d'une étiquette posée sur une image. Un nom de teinte
+   — « or clair », « rouge pâle » — mentirait dans l'autre thème.
+   ===================================================================== */
+
+/* Le clair, celui de départ : un papier d'atelier, et le laiton assombri pour
+   qu'il s'y lise. */
 :root{
+  color-scheme:light;
+  --bg:#f1ede4; --bg2:#fbf9f4; --panel:#fffefb; --panel2:#f2ece0;
+  --line:#dcd3c1; --line2:#c3b69a;
+  --txt:#241f2c; --dim:#5b5370; --dim2:#6f6688;
+  --txt-vif:#100c18;
+  --halo:#e4d9c0;
+  --top1:#fbf8f1; --top2:rgba(251,248,241,.96);
+  --brass:#7b5c10; --brass-d:#c3a05a; --sur-brass:#fffdf7;
+  --brass-a1:rgba(123,92,16,.07); --brass-a2:rgba(123,92,16,.1); --brass-a3:rgba(123,92,16,.16);
+  --W:#dcc78e; --U:#3f82c6; --B:#7d5bb0; --R:#c84a32; --G:#3f8f58; --C:#8a92a6;
+  /* Les mêmes couleurs, mais en encre : un jaune de plaine se lit sur une
+     pastille, jamais sur du papier — les décomptes par couleur en sont écrits. */
+  --W-txt:#8a6f28; --U-txt:#2c68a8; --B-txt:#6a46a0; --R-txt:#ab3821; --G-txt:#2c7044; --C-txt:#5c6476;
+  --ok:#3f8a57; --warn:#b3821e; --bad:#c0442c;
+  --ok-txt:#2c6b40; --ok-bg:rgba(63,138,87,.12); --ok-d:#7fb992;
+  --bad-txt:#a4351f; --bad-line:#d79b8c; --bad-a:rgba(192,68,44,.28);
+  --edh:#12817b; --edh-d:#7fc0bc; --edh-txt:#0f6a65; --edh-bg:rgba(18,129,123,.1);
+  --gc:#7a45a6; --gc-txt:#663a8c; --gc-bg:rgba(122,69,166,.1);
+  --annexe:#4a55a8; --annexe-txt:#3d4795;
+  --tag-bg:#efe9dc; --tag-txt:#4f4763;
+  --vide-img:#ebe5d9; --att1:#eee8dc; --att2:#e2dbc9;
+  --voile:rgba(255,253,247,.9); --voile-modal:rgba(60,52,38,.42);
+  --graph1:#fbf8f1; --graph2:#e8e1d0;
+  --piste:#e0d9c7; --toast-bg:#fffdf7; --ombre:rgba(60,50,30,.22);
+}
+
+/* Le sombre : le dessin d'origine de l'atelier, conservé tel quel et offert en
+   option (l'engrenage de l'entête, section « Apparence »). */
+:root[data-theme="sombre"]{
+  color-scheme:dark;
   --bg:#15121c; --bg2:#1c1826; --panel:#221d2e; --panel2:#2a2439;
   --line:#3a3350; --line2:#4b4268;
   --txt:#e8e3f2; --dim:#a49bbd; --dim2:#7d7398;
-}
-:root{
-  --brass:#d3a441; --brass-d:#8a6c22;
+  --txt-vif:#fff;
+  --halo:#2a2340;
+  --top1:#1b1728; --top2:rgba(27,23,40,.96);
+  --brass:#d3a441; --brass-d:#8a6c22; --sur-brass:#1a1526;
+  --brass-a1:var(--brass-a1); --brass-a2:rgba(211,164,65,.14); --brass-a3:var(--brass-a3);
   --W:#efe0bc; --U:#4b8fd0; --B:#8f6fc0; --R:#d3573f; --G:#4f9f68; --C:#98a0b2;
+  --W-txt:#efe0bc; --U-txt:#4b8fd0; --B-txt:#8f6fc0; --R-txt:#d3573f; --G-txt:#4f9f68; --C-txt:#98a0b2;
   --ok:#4f9f68; --warn:#d3a441; --bad:#d3573f;
+  --ok-txt:#7fc98f; --ok-bg:rgba(79,159,104,.12); --ok-d:#2f6b46;
+  --bad-txt:#e39a90; --bad-line:#6d3030; --bad-a:rgba(211,87,63,.35);
+  --edh:#57c9c4; --edh-d:#2f6b68; --edh-txt:#85deda; --edh-bg:rgba(87,201,196,.12);
+  --gc:#b07cd8; --gc-txt:#cba6e8; --gc-bg:rgba(176,124,216,.12);
+  --annexe:#6f7bd0; --annexe-txt:#9aa4e6;
+  --tag-bg:#332c47; --tag-txt:#c3b8dd;
+  --vide-img:#191524; --att1:#1d1829; --att2:#221c31;
+  --voile:rgba(20,16,30,.86); --voile-modal:rgba(8,6,14,.7);
+  --graph1:#221c31; --graph2:#171322;
+  --piste:#2f2942; --toast-bg:#1f1a2e; --ombre:rgba(0,0,0,.6);
+}
+
+/* Ce qui ne dépend pas du thème : les fontes, le rayon des cadres, et l'encre
+   d'une pastille de mana — son fond est la couleur elle-même, sombre ou
+   claire, et le noir s'y lit dans les deux. */
+:root{
   --r:10px;
+  --sur-mana:#1a1526;
   --display:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
   --body:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -16,7 +83,7 @@
 html,body{margin:0;padding:0}
 body{
   background:
-    radial-gradient(1200px 600px at 50% -10%, #2a2340 0%, transparent 60%),
+    radial-gradient(1200px 600px at 50% -10%, var(--halo) 0%, transparent 60%),
     var(--bg);
   color:var(--txt); font-family:var(--body); font-size:15px; line-height:1.45;
   -webkit-text-size-adjust:100%;
@@ -29,20 +96,38 @@ button{cursor:pointer}
 /* ---------- en-tête ---------- */
 header.top{
   position:sticky; top:0; z-index:40;
-  background:linear-gradient(180deg,#1b1728 0%,rgba(27,23,40,.96) 100%);
+  background:linear-gradient(180deg,var(--top1) 0%,var(--top2) 100%);
   border-bottom:1px solid var(--line);
   backdrop-filter:blur(8px);
   transition:padding .2s ease, background .2s ease;
 }
 .top-in{max-width:1180px;margin:0 auto;padding:8px 12px;display:flex;gap:8px 12px;align-items:center;flex-wrap:wrap}
-header.top.compact .top-in{padding:5px 10px;gap:6px 10px}
 .brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand h1{font-size:18px;letter-spacing:.3px;white-space:nowrap}
 .brand .sub{color:var(--dim2);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
-header.top.compact .brand h1{font-size:15px}
-header.top.compact .brand .sub{display:none}
 
-.top-stats{margin-left:auto;display:flex;gap:6px 8px;align-items:center;flex-wrap:wrap}
+/* `min-width:0` : les décomptes s'enroulent d'eux-mêmes, et leur boîte peut
+   donc se rétrécir pour laisser l'engrenage sur la même ligne qu'eux. Sans
+   cela, elle occupait toute la largeur restante et le bouton tombait seul sur
+   une ligne, à gauche. */
+.top-stats{margin-left:auto;min-width:0;display:flex;gap:6px 8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+/* L'engrenage des paramètres, ancré au coin haut-droit de l'entête. Il est
+   posé hors du flux : les décomptes s'enroulent sur autant de lignes qu'il
+   leur en faut, et le bouton reste à la même place — dans le flux, il
+   retombait sous eux, à gauche, dès que leur boîte prenait toute la largeur.
+   La marge droite de l'entête lui réserve sa place, pour que rien ne passe
+   dessous. */
+.top-in{position:relative;padding-right:240px}
+/* Les deux commandes du coin, côte à côte : le bouton des filtres puis
+   l'engrenage. C'est le conteneur qui est ancré, non plus chaque bouton — un
+   seul point à déplacer d'une largeur d'écran à l'autre. */
+.head-actions{position:absolute;right:12px;top:8px;display:flex;align-items:center;gap:6px}
+.head-param{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:30px;height:30px;padding:0;border-radius:99px;border:1px solid var(--line2);
+  background:var(--panel);color:var(--dim);cursor:pointer;transition:color .15s ease,border-color .15s ease
+}
+.head-param:hover{color:var(--brass);border-color:var(--brass)}
 .pill{
   font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:99px;
   border:1px solid var(--line2); background:var(--panel); color:var(--dim);white-space:nowrap;
@@ -59,10 +144,10 @@ header.top.compact .brand .sub{display:none}
 }
 .head-mana-bar .mana-btn img.msym, .head-mana-bar .mana-btn span.mana{font-size:11px}
 .head-combo{
-  background:rgba(211,164,65,.12);border-color:var(--brass-d);color:var(--brass);
+  background:var(--brass-a2);border-color:var(--brass-d);color:var(--brass);
   font-size:11px;padding:3px 8px;cursor:pointer;
 }
-.head-combo:hover{background:rgba(211,164,65,.22);border-color:var(--brass)}
+.head-combo:hover{background:var(--brass-a3);border-color:var(--brass)}
 .head-format{cursor:pointer}
 .head-format:hover{border-color:var(--brass);color:var(--txt)}
 /* bouton et fenêtre des filtres avancés */
@@ -71,16 +156,20 @@ header.top.compact .brand .sub{display:none}
   font-size:11.5px;padding:3px 9px;border-radius:99px;white-space:nowrap;
 }
 .head-filtre:hover{border-color:var(--brass);color:var(--brass)}
-.head-filtre.actif{border-color:var(--brass);color:var(--brass);background:rgba(211,164,65,.16)}
+/* Le bouton « Affichage », voisin de celui des filtres. Son libellé reste
+   lisible à toutes les largeurs : une icône seule ne dit pas ce qu'on règle,
+   et c'est la réserve du coin qui s'élargit pour lui. */
+.head-affichage{gap:5px}
+.head-filtre.actif{border-color:var(--brass);color:var(--brass);background:var(--brass-a3)}
 .filtre-n{
   font-family:var(--mono);font-size:10px;line-height:1;padding:2px 5px;border-radius:99px;
-  background:var(--brass);color:#1a1526;font-weight:700
+  background:var(--brass);color:var(--sur-brass);font-weight:700
 }
 /* puces des filtres en vigueur, dans l'en-tête */
 .head-filtres{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap;min-width:0}
 .filtre-chip{
   display:inline-flex;align-items:center;
-  border:1px solid var(--brass-d);border-radius:99px;background:rgba(211,164,65,.12);
+  border:1px solid var(--brass-d);border-radius:99px;background:var(--brass-a2);
   font-family:var(--mono);font-size:10.5px;color:var(--brass);max-width:230px;overflow:hidden
 }
 .filtre-chip .chip-txt{
@@ -104,9 +193,9 @@ header.top.compact .brand .sub{display:none}
   padding:4px 10px;font-size:12px;color:var(--dim);line-height:1.2
 }
 .arch-btn:hover{border-color:var(--brass);color:var(--txt)}
-.arch-btn[aria-pressed=true]{background:rgba(211,164,65,.16);border-color:var(--brass);color:var(--brass);font-weight:600}
-.chip.arch{border-color:var(--brass-d);color:var(--brass);background:rgba(211,164,65,.1)}
-.chip.arch.base{border-color:#48a9a6;color:#85deda;background:rgba(87,201,196,.1)}
+.arch-btn[aria-pressed=true]{background:var(--brass-a3);border-color:var(--brass);color:var(--brass);font-weight:600}
+.chip.arch{border-color:var(--brass-d);color:var(--brass);background:var(--brass-a1)}
+.chip.arch.base{border-color:var(--edh-d);color:var(--edh-txt);background:var(--edh-bg)}
 
 /* liste déroulante des archétypes */
 .arch-menu-b{
@@ -130,7 +219,7 @@ header.top.compact .brand .sub{display:none}
 }
 .arch-row:last-child{border-bottom:0}
 .arch-row:hover{background:var(--panel2)}
-.arch-row[aria-pressed=true]{background:rgba(211,164,65,.12)}
+.arch-row[aria-pressed=true]{background:var(--brass-a2)}
 .arch-row .arch-row-h{display:flex;align-items:baseline;gap:6px;width:100%}
 .arch-row .arch-row-t{font-size:13px;color:var(--txt)}
 .arch-row[aria-pressed=true] .arch-row-t{color:var(--brass);font-weight:600}
@@ -147,53 +236,76 @@ header.top.compact .brand .sub{display:none}
   .filtre-ligne .filtre-nom{grid-column:1 / -1;font-size:12px;color:var(--dim)}
 }
 
-.head-toggle{
-  display:inline-flex;align-items:center;gap:4px;padding:3px 9px;
-  font-size:11.5px;font-weight:600;border-color:var(--brass-d);
-  color:var(--brass);background:rgba(211,164,65,.1);border-radius:6px;
+/* ---------- onglets ---------- */
+/* La barre vit dans l'entête collante : elle ne quitte jamais l'écran, et
+   passer d'un pan de l'atelier à l'autre ne demande pas de remonter. */
+.onglets{
+  max-width:1180px;margin:0 auto;padding:0 12px;
+  display:flex;gap:4px;align-items:stretch;border-top:1px solid var(--line);
+  overflow-x:auto;scrollbar-width:none
 }
-.head-toggle:hover{background:rgba(211,164,65,.22);border-color:var(--brass)}
-.head-toggle.is-compact{color:var(--dim);border-color:var(--line2);background:var(--panel)}
-.head-toggle.is-compact:hover{color:var(--txt);border-color:var(--brass)}
+.onglets::-webkit-scrollbar{display:none}
+.onglet{
+  position:relative;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;
+  padding:9px 14px 7px;font-family:var(--display);font-size:14.5px;color:var(--dim);
+  transition:color .15s ease, background .15s ease
+}
+.onglet:hover{color:var(--txt)}
+.onglet[aria-selected=true]{color:var(--brass);border-bottom-color:var(--brass);background:var(--brass-a1)}
+/* Le point d'attente : un travail de fond dans une page qu'on ne regarde
+   pas — le liseré de la section, lui, y resterait invisible. */
+.onglet .onglet-pt{width:6px;height:6px;border-radius:99px;background:var(--brass);opacity:0;transition:opacity .2s ease}
+.onglet.travaille .onglet-pt{opacity:1;animation:battement 1.2s ease-in-out infinite}
+@keyframes battement{0%,100%{opacity:1}50%{opacity:.25}}
 
-/* ---------- sections repliables ---------- */
-section.sec{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:14px 0;overflow:hidden}
+/* Une page masquée n'est pas mise en page : rien n'y est mesuré, et son
+   contenu reste rendu, prêt à paraître d'un seul attribut. */
+.page[hidden]{display:none}
+
+/* ---------- sections ---------- */
+section.sec{position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:14px 0;overflow:hidden;scroll-margin-top:var(--h-entete,110px)}
+/* Le liseré d'un recalcul de fond : posé par-dessus le bord haut de la
+   section, il n'entre pas dans le flux — rien ne bouge sous lui. */
+.sec-progres{position:absolute;left:0;top:0;width:100%;height:3px;background:var(--brass-a3);pointer-events:none;z-index:2}
+.sec-progres i{display:block;height:100%;width:0;background:var(--brass);transition:width .2s ease}
 .sec-head{
   display:flex;align-items:center;gap:10px;width:100%;
   padding:12px 14px;background:linear-gradient(180deg,var(--panel2),var(--panel));
-  border:0;border-bottom:1px solid transparent;text-align:left
-}
-.sec.open .sec-head{border-bottom-color:var(--line)}
-.sec-head .letter{
-  font-family:var(--display);font-size:14px;width:26px;height:26px;flex:0 0 26px;
-  display:grid;place-items:center;border-radius:6px;
-  background:var(--brass-d);color:#1a1526;font-weight:700
+  border:0;border-bottom:1px solid var(--line);text-align:left
 }
 .sec-head h2{font-size:16px;flex:1;min-width:0}
 .sec-head .hint{color:var(--dim2);font-size:12px;font-family:var(--mono)}
-.chev{transition:transform .18s ease;color:var(--dim);flex:0 0 auto}
-.sec.open .chev{transform:rotate(90deg)}
-.sec-body{display:none;padding:14px}
-.sec.open .sec-body{display:block}
+.sec-body{display:block;padding:14px}
 
 /* ---------- contrôles ---------- */
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .field{display:flex;flex-direction:column;gap:4px}
 label.lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2)}
-input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{
+/* une case ou un bouton radio suivi de son libellé, sur une ligne cliquable
+   de bout en bout — la fenêtre « Affichage » les empile en colonne */
+.choix{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--txt);cursor:pointer}
+/* deux choix exclusifs côte à côte — Liste ou Grille : les empiler laissait
+   croire à deux réglages séparés */
+.choix-ligne{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px}
+.choix input{width:auto;margin:0;accent-color:var(--brass)}
+input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea{
   background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0
 }
+/* le curseur des colonnes : pas de cadre ni de fond, le navigateur dessine
+   sa glissière — la teinte de l'atelier suffit à l'y rattacher */
+input[type=range]{width:100%;accent-color:var(--brass)}
 input::placeholder,textarea::placeholder{color:var(--dim2);opacity:1}
 input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{
   background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;font-size:13.5px;
   color:var(--txt);text-decoration:none
 }
-.btn:hover{border-color:var(--brass);color:#fff}
-.btn.pri{background:var(--brass);border-color:var(--brass);color:#1a1526;font-weight:600}
-.btn.danger{border-color:#6d3030;color:#e39a90}
+.btn:hover{border-color:var(--brass);color:var(--txt-vif)}
+.btn.pri{background:var(--brass);border-color:var(--brass);color:var(--sur-brass);font-weight:600}
+.btn.danger{border-color:var(--bad-line);color:var(--bad-txt)}
 .btn.sm{padding:3px 8px;font-size:12px;border-radius:6px}
-.btn[aria-pressed=true]{background:var(--brass);border-color:var(--brass);color:#1a1526;font-weight:600}
+.btn[aria-pressed=true]{background:var(--brass);border-color:var(--brass);color:var(--sur-brass);font-weight:600}
 .seg{display:inline-flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
 .seg button{background:transparent;border:0;padding:6px 11px;font-size:13px;color:var(--dim)}
 .seg button[aria-pressed=true]{background:var(--panel2);color:var(--txt);box-shadow:inset 0 -2px 0 var(--brass)}
@@ -206,12 +318,12 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 /* pastilles de mana (repli) */
 .mana{
   width:24px;height:24px;border-radius:99px;display:grid;place-items:center;
-  font-family:var(--display);font-weight:700;font-size:13px;color:#1a1526;
+  font-family:var(--display);font-weight:700;font-size:13px;color:var(--sur-mana);
   border:1px solid rgba(0,0,0,.35)
 }
 .mana.W{background:var(--W)} .mana.U{background:var(--U)} .mana.B{background:var(--B)}
 .mana.R{background:var(--R)} .mana.G{background:var(--G)} .mana.C{background:var(--C)}
-.mana.gen{background:#c8c3d4}
+.mana.gen{background:var(--C)}
 .mana.sm{width:17px;height:17px;font-size:10px}
 .mana-btn{width:40px;height:40px;padding:2px;border:2px solid transparent;border-radius:99px;
   background:transparent;line-height:0;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
@@ -221,11 +333,29 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
   background-size:contain;background-position:center;background-repeat:no-repeat}
 .mana-btn img.msym, .mana-btn span.mana{
   width:100%;height:100%;min-width:0;min-height:0;vertical-align:middle;font-size:19px}
-.mana-btn[aria-pressed=true]{border-color:var(--brass);background:rgba(211,164,65,.16)}
+.mana-btn[aria-pressed=true]{border-color:var(--brass);background:var(--brass-a3)}
 .mana-btn[aria-pressed=false]{opacity:.42;filter:saturate(.5)}
 
 /* ---------- cartes ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px}
+/* Un nombre de colonnes choisi (`S.colonnes`) : la grille de la collection et
+   celle du catalogue le portent chacune. La règle a deux classes, elle
+   l'emporte donc sur les `.grid` et `.sugrid` des requêtes de média : le choix
+   vaut à toutes les largeurs, y compris sur un téléphone où l'on veut
+   justement une seule carte par ligne.
+
+   La largeur d'une colonne est bornée par `--col-max` : à une ou deux
+   colonnes sur un écran large, le visuel serait sans cela agrandi bien
+   au-delà de sa définition (488 px de large chez Scryfall), et l'on gagnerait
+   du flou, non de la lisibilité. `--col-gap` reprend l'écart de la grille
+   qu'on borne, sans quoi la borne tomberait à côté de quelques pixels. */
+.grid.cols, .sugrid.cols{
+  --col-max:460px;
+  --col-gap:7px;
+  grid-template-columns:repeat(var(--cols),minmax(0,1fr));
+  max-width:calc(var(--cols) * var(--col-max) + (var(--cols) - 1) * var(--col-gap))
+}
+.sugrid.cols{--col-gap:9px}
 .cardT, .card{
   position:relative;border:1px solid var(--line);border-radius:8px;padding:6px 7px 5px;
   background:linear-gradient(160deg,var(--panel2),var(--bg2));text-align:left;width:100%;
@@ -233,47 +363,72 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 }
 .cardT:hover, .card:hover{border-color:var(--brass)}
 .cardT.sel, .card.sel{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset}
-.cimg{width:100%;aspect-ratio:488/680;object-fit:cover;border-radius:5px;background:#191524;display:block}
+.cimg{width:100%;aspect-ratio:488/680;object-fit:cover;border-radius:5px;background:var(--vide-img);display:block}
 .cardT.withimg, .card.withimg{padding:4px;gap:3px}
-.cardT.achat, .card.achat{border-color:var(--bad);box-shadow:0 0 0 1px rgba(211,87,63,.35) inset}
+.cardT.achat, .card.achat{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad-a) inset}
+.cardT.audeck, .card.audeck{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok-bg) inset}
 .sugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px}
 .sugT{display:flex;flex-direction:column;gap:4px;padding:7px;border:1px solid var(--line);border-radius:9px;
   background:linear-gradient(160deg,var(--panel2),var(--bg2));cursor:pointer;text-align:left;position:relative}
 .sugT:hover{border-color:var(--brass)}
 .sugT.lie{border-color:var(--brass-d)}
-.sugT.hors{border-color:#6d3030}
+.sugT.hors{border-color:var(--bad-line)}
 .sugT .cimg{border-radius:6px}
 .sugT .score-line{font-family:var(--mono);font-size:10.5px;color:var(--dim2);margin-top:2px}
 .sugT .tags{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
-.cimg.attente{background:repeating-linear-gradient(135deg,#1d1829,#1d1829 8px,#221c31 8px,#221c31 16px)}
+.cimg.attente{background:repeating-linear-gradient(135deg,var(--att1),var(--att1) 8px,var(--att2) 8px,var(--att2) 16px)}
 .sugT .titre{font-family:var(--display);font-size:13px;line-height:1.2}
-.sugT .why{font-size:10.5px;color:var(--dim);line-height:1.3}
 .sugT .bas{margin-top:auto;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 @media (max-width:640px){
   .grid{grid-template-columns:repeat(auto-fill,minmax(114px,1fr));gap:6px}
   .sugrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:7px}
 }
 .cardT .achatbadge, .card .achatbadge{position:absolute;right:4px;bottom:4px;font-size:9px;padding:1px 4px;border-radius:4px;
-  background:rgba(20,16,30,.88);border:1px solid var(--bad);color:#e39a90}
+  background:var(--voile);border:1px solid var(--bad);color:var(--bad-txt)}
 .lrow.achat{border-color:var(--bad)}
+/* les lignes des propositions, aux mêmes liserés que leurs vignettes */
+.lrow.lie{border-color:var(--brass-d)}
+.lrow.hors{border-color:var(--bad-line)}
+.lrow.audeck{border-color:var(--ok)}
 .cardT.withimg .cname, .card.withimg .cname{font-size:11.5px;line-height:1.15}
-.detail .dimg{float:right;width:min(190px,38%);border-radius:9px;margin:0 0 8px 12px;background:#191524}
 .imgwrap{position:relative}
 .imgwrap .badge{position:absolute;left:4px;top:4px;font-size:9px;padding:1px 4px;border-radius:4px;
-  background:rgba(20,16,30,.85);border:1px solid var(--brass);color:var(--brass);cursor:pointer}
+  background:var(--voile);border:1px solid var(--brass);color:var(--brass);cursor:pointer}
 .cardT .cname, .card .cname{font-family:var(--display);font-size:12.5px;line-height:1.15;padding-right:2px;overflow:hidden;text-overflow:ellipsis}
-.cardT .ctype, .card .ctype{font-size:10px;color:var(--dim2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cardT .costs, .card .costs{display:flex;gap:2px;flex-wrap:wrap}
 .cardT .foot, .card .foot, .card .bot, .sugT .foot, .sugT .bot{margin-top:auto;display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10.5px;color:var(--dim)}
-.stripe{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:8px 0 0 8px}
 .tags{display:flex;gap:3px;flex-wrap:wrap}
-.tag{font-size:9.5px;letter-spacing:.04em;padding:1px 5px;border-radius:4px;background:#332c47;color:#c3b8dd;border:1px solid var(--line)}
+.tag{font-size:9.5px;letter-spacing:.04em;padding:1px 5px;border-radius:4px;background:var(--tag-bg);color:var(--tag-txt);border:1px solid var(--line)}
 .qty, .acts{display:inline-flex;align-items:center;gap:3px;margin-left:auto}
 .qty button, .acts button{width:20px;height:20px;border-radius:5px;border:1px solid var(--line2);background:var(--panel);line-height:1;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+/* ---------- le champ de recherche d'une section ----------
+   Le champ tient toute la largeur, ses propositions s'alignent dessous. Une
+   proposition est une ligne de liste ordinaire : le nom occupe toute la place
+   qui reste et se clique de bout en bout, le compteur garde la sienne à
+   droite. */
+.rech{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.rech-champ{width:100%}
+.rech-liste{max-height:min(46vh,420px);overflow:auto}
+.rech-l{gap:8px}
+.rech-n{flex:1;min-width:0;display:flex;align-items:center;gap:8px;
+  background:transparent;border:0;padding:0;text-align:left;color:inherit;font:inherit}
+.rech-n:hover .cname{color:var(--brass)}
+/* Le nom s'efface s'il est trop long, le coût de mana ne s'enroule jamais :
+   sans cela ses pastilles s'empilent et la ligne triple de hauteur. */
+.rech-n .cname{flex:0 1 auto;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rech-n .costs{flex:0 0 auto;display:flex;align-items:center;gap:2px;flex-wrap:nowrap}
+.rech-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rech-autre{flex:0 0 auto;white-space:nowrap}
+.rech-cpt{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px}
+.rech-cpt .rech-n-val{min-width:18px;text-align:center;font-size:13px}
+.rech-cpt .btn{width:22px;padding:0;text-align:center;line-height:1.5}
+.rech-pied, .rech-vide{padding:2px}
+@media (max-width:520px){
+  .rech-t, .rech-autre{display:none}
+}
 .list{display:flex;flex-direction:column;gap:4px}
 .lrow{display:flex;align-items:center;gap:8px;padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg2)}
 .lrow .cname{font-family:var(--display);font-size:13.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.score-deck{font-size:9.5px;padding:1px 4px;border-radius:4px;background:rgba(211,164,65,.15);color:var(--brass);border:1px solid var(--brass-d)}
 .muted{color:var(--dim2)}
 .small{font-size:12px}
 .mono{font-family:var(--mono)}
@@ -296,7 +451,7 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* ---------- graphe ---------- */
-.graphbox{background:radial-gradient(circle at 50% 50%,#221c31 0%,#171322 70%);border:1px solid var(--line);border-radius:var(--r);padding:4px}
+.graphbox{background:radial-gradient(circle at 50% 50%,var(--graph1) 0%,var(--graph2) 70%);border:1px solid var(--line);border-radius:var(--r);padding:4px}
 .graphbox svg{width:100%;height:auto;display:block;touch-action:manipulation}
 .legend{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .lg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim);background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:2px 8px}
@@ -308,27 +463,36 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
   padding:0;margin:0;font:inherit;color:var(--brass);cursor:pointer;
   border-radius:0;text-align:left
 }
-.cardref:hover, .cref:hover{color:#f0cd77;border-bottom-color:var(--brass)}
+.cardref:hover, .cref:hover{color:var(--brass-d);border-bottom-color:var(--brass)}
 .cref:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 #cardPreview{position:fixed;z-index:120;pointer-events:none;display:none;width:236px;max-width:60vw;
-  border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.6);border:1px solid var(--line2);overflow:hidden;background:var(--panel)}
+  border-radius:12px;box-shadow:0 12px 34px var(--ombre);border:1px solid var(--line2);overflow:hidden;background:var(--panel)}
 #cardPreview img{width:100%;display:block}
 #cardPreview .txt{padding:9px 11px}
 #cardPreview .txt .n{font-family:var(--display);font-size:14px}
-.combo{border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:8px;padding:8px 10px;background:var(--bg2);margin-bottom:6px}
-.combo .path{font-family:var(--mono);font-size:11.5px;color:var(--brass)}
 
 /* ---------- jauges ---------- */
 .gauge{display:grid;grid-template-columns:1fr;gap:3px;padding:7px 9px;border:1px solid var(--line);
   border-radius:8px;background:var(--bg2);cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit}
 .gauge:hover{border-color:var(--brass)}
 .gauge.actif{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset}
-.gauge .top{display:flex;justify-content:space-between;font-size:12.5px}
-.track{height:6px;border-radius:99px;background:#2f2942;overflow:hidden}
+.gauge .top{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;gap:6px}
+/* Le mode modification des objectifs : la jauge cesse d'être un bouton — elle
+   porte un champ —, et son cadre le dit. */
+/* La fenêtre des objectifs : une ligne par rôle, le champ contre le bord. */
+.cibles-grille{display:flex;flex-direction:column;gap:6px}
+.cible-l{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:1px solid var(--line);border-radius:8px;padding:6px 9px;background:var(--bg2)}
+.cible-l .cible-nom label{font-size:13.5px;color:var(--txt);cursor:pointer}
+.cible-champ{width:74px;padding:4px 6px;font-family:var(--mono);text-align:right}
+.cible-marque{color:var(--brass)}
+.titre-cibles{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cible-edit{display:inline-flex;align-items:center;gap:5px}
+.track{height:6px;border-radius:99px;background:var(--piste);overflow:hidden}
 .fill{height:100%;border-radius:99px}
 
 /* ---------- panneau détail ---------- */
-.detail{border:1px solid var(--brass-d);border-radius:var(--r);background:linear-gradient(180deg,#241f33,#1c1826);padding:12px;margin-top:10px}
+.detail{border:1px solid var(--brass-d);border-radius:var(--r);background:linear-gradient(180deg,var(--panel2),var(--bg2));padding:12px;margin-top:10px}
 .detail h3{font-size:16px;margin-bottom:2px}
 .chips{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}
 .chip{font-size:11px;padding:2px 7px;border-radius:99px;border:1px solid var(--line2);background:var(--panel2);color:var(--dim)}
@@ -337,33 +501,150 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .arc b{color:var(--txt);font-weight:500}
 
 .cmdbox{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--brass-d);border-radius:10px;
-  padding:10px;background:linear-gradient(180deg,#241f33,#1c1826);margin:10px 0;flex-wrap:wrap}
-.cmdbox .visu{width:104px;border-radius:7px;background:#191524;flex:0 0 auto}
+  padding:10px;background:linear-gradient(180deg,var(--panel2),var(--bg2));margin:10px 0;flex-wrap:wrap}
+.cmdbox .visu{width:104px;border-radius:7px;background:var(--vide-img);flex:0 0 auto}
 .cmdbox .vide{width:104px;height:145px;border-radius:7px;border:1px dashed var(--line2);
   display:grid;place-items:center;color:var(--dim2);font-size:11px;text-align:center;padding:6px;flex:0 0 auto}
 .cmdbox .corps{flex:1;min-width:210px}
 .cardT .cmdbadge{position:absolute;right:5px;top:5px;font-size:9.5px;padding:1px 5px;border-radius:4px;
-  background:var(--brass);color:#1a1526;font-weight:600}
+  background:var(--brass);color:var(--sur-brass);font-weight:600}
+/* Les parties repliables de la section Deck : liste, réserve, étude. Le
+   chevron reprend celui des sections, à la même bascule. */
+.partie{margin:14px 0 0}
+.partie-tete{display:flex;align-items:center;gap:8px;width:100%;padding:2px 0;background:none;border:0;
+  color:var(--txt);cursor:pointer;text-align:left;font-family:inherit}
+.partie-tete h3{margin:0;font-size:15px;font-family:var(--display);flex:0 0 auto}
+/* Le titre d'une catégorie repliable : celui de `.group>h4`, glissé dans le
+   bouton de pli, qui porte désormais la disposition. */
+.partie-tete h4{margin:0;font-size:14px;font-family:var(--display);flex:0 0 auto}
+.partie-tete .small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.partie-tete:hover h3, .partie-tete:hover .chev-partie{color:var(--brass)}
+/* Son propre nom : les sections ne se replient plus — les onglets ont pris
+   ce rôle — mais le chevron d'une partie, lui, garde le sien. */
+.partie-tete .chev-partie{transition:transform .18s ease;color:var(--dim);flex:0 0 auto}
+.partie.ouverte>.partie-tete .chev-partie{transform:rotate(90deg)}
+.partie-corps{display:none}
+.partie.ouverte>.partie-corps{display:block;margin-top:6px}
+.partie.group{padding:8px 10px 10px}
+.partie.group>.partie-tete{padding:0}
+
 .group{border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--bg2);margin-bottom:9px}
 .group>h4{margin:0 0 7px;font-family:var(--display);font-size:14px;display:flex;gap:8px;align-items:center}
-.why{font-size:11.5px;color:var(--dim);margin-top:3px}
 .buy{color:var(--brass);font-family:var(--mono);font-size:11px}
-.warnbox{border:1px solid var(--brass-d);background:rgba(211,164,65,.09);border-radius:8px;padding:8px 10px;font-size:12.5px;margin:8px 0}
+.warnbox{border:1px solid var(--brass-d);background:var(--brass-a1);border-radius:8px;padding:8px 10px;font-size:12.5px;margin:8px 0}
 .empty{color:var(--dim2);font-size:13px;padding:14px;text-align:center;border:1px dashed var(--line);border-radius:8px}
 dialog{border:1px solid var(--line2);border-radius:var(--r);background:var(--panel);color:var(--txt);max-width:min(560px,94vw);padding:0}
-dialog::backdrop{background:rgba(8,6,14,.7)}
+dialog::backdrop{background:var(--voile-modal)}
 .dlg-h{padding:12px 14px;border-bottom:1px solid var(--line);font-family:var(--display);font-size:16px}
+/* L'entête d'une fiche de carte : le nom au centre, une flèche de chaque côté
+   — celle de droite a pris la place de la croix. Un bouton inerte reste
+   visible plutôt que de disparaître : le titre garderait sinon son centre au
+   prix d'un saut, aux deux extrémités de la liste parcourue. */
+/* La liste des commandants du deck, en tête de l'onglet EDHREC : deux listes
+   — les principaux, puis les secondaires —, une ligne par carte. La marque à
+   gauche (l'étoile d'un principal, la case d'un secondaire), le nom au milieu,
+   le nombre de decks à droite, qui est aussi le lien vers EDHREC. Une ligne
+   décochée pâlit sans disparaître : c'est par elle qu'on la rétablit. */
+.cmd-bloc{margin:8px 0;padding-top:6px;border-top:1px dashed var(--line2)}
+.cmd-titre{margin-bottom:2px}
+.cmd-rows{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.cmd-l{display:flex;align-items:center;gap:9px;padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg2)}
+.cmd-l.on{border-color:var(--edh-d)}
+.cmd-l .cmd-b{flex:0 0 auto;width:17px;text-align:center;font-size:13px}
+.cmd-l .etoile{color:var(--brass)}
+.cmd-l .cmd-n{flex:1;min-width:0;padding:0;border:0;background:none;text-align:left;cursor:pointer;
+  font-family:var(--display);font-size:13.5px;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmd-l .cmd-n:hover{color:var(--brass)}
+.cmd-l.off .cmd-n{color:var(--dim2)}
+.cmd-l .cmd-d{flex:0 0 auto;font-family:var(--mono);font-size:11px;color:var(--edh);text-decoration:none;white-space:nowrap}
+.cmd-l .cmd-d:hover{text-decoration:underline}
+.cmd-l.off .cmd-d{color:var(--dim2)}
+
+/* La case à cocher, dessinée plutôt qu'empruntée au navigateur : un carré
+   arrondi qui se remplit du vert d'EDHREC, et la coche tracée en deux traits.
+   Celle du navigateur ne se colore pas, ne s'arrondit pas, et jurait au milieu
+   d'une ligne sombre. */
+.coche{
+  appearance:none;-webkit-appearance:none;flex:0 0 auto;margin:0;
+  width:17px;height:17px;border:1.5px solid var(--line2);border-radius:5px;
+  background:var(--panel);cursor:pointer;position:relative;
+  transition:background .15s ease,border-color .15s ease
+}
+.coche:hover{border-color:var(--edh)}
+.coche:checked{background:var(--edh);border-color:var(--edh)}
+.coche:checked::after{
+  content:'';position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid var(--sur-brass);border-width:0 2px 2px 0;transform:rotate(42deg)
+}
+.coche:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+@media (max-width:520px){
+  .cmd-l{flex-wrap:wrap}
+  .cmd-l .cmd-d{width:100%;padding-left:26px}
+}
+
+/* Les sections de la fenêtre des paramètres : un filet et un titre séparent
+   chaque groupe de réglages du suivant, la fenêtre en portant trois. */
+.params{display:flex;flex-direction:column;gap:14px}
+.param-sec{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:var(--bg2)}
+.param-sec>h4{margin:0 0 4px;font-family:var(--display);font-size:15px;color:var(--brass)}
+.param-sec .param-chapeau{margin-bottom:8px}
+.param-sec .bloc{border-top:0!important;margin-top:0!important}
+
+.dlg-h-nav{display:flex;align-items:center;gap:10px;width:100%}
+.dlg-titre{flex:1;min-width:0;margin:0;text-align:center;font-family:var(--display);font-size:17px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dlg-nav{flex:0 0 auto;padding:1px 11px;line-height:1;font-size:19px}
+.dlg-nav[disabled]{opacity:.3;cursor:default}
+.dlg-nav[disabled]:hover{border-color:var(--line2);color:inherit}
 .dlg-b{padding:14px;display:flex;flex-direction:column;gap:10px;max-height:min(68vh,620px);overflow:auto}
 dialog.wide{max-width:min(760px,96vw)}
+/* Un champ de fichier qu'on n'affiche pas : c'est son étiquette, dessinée en
+   bouton, qui l'ouvre. Il est hors flux, mais ancré au coin de son bloc
+   conteneur plutôt que laissé à sa position statique : en mode modal le
+   navigateur pose le <dialog> en `position:fixed`, si bien qu'un absolu sans
+   ancêtre positionné s'accroche à la fenêtre entière et non au corps qui
+   défile. Posé au fond des paramètres, il y creusait une hauteur de mille deux
+   cents pixels pour sept cents de contenu — une seconde barre de défilement,
+   et du vide sous les boutons quand on la descendait. */
+.fichier-cache{position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none}
 .fiche{display:flex;gap:14px;flex-wrap:wrap}
+.fiche .visucol{display:flex;flex-direction:column;gap:7px;width:min(300px,50%);flex:0 0 auto}
+.fiche .visucol .visuwrap{width:100%}
 .fiche .visuwrap{display:flex;gap:7px;align-items:flex-start;width:min(300px,50%);flex:0 0 auto}
-.fiche .visu{flex:1;min-width:0;border-radius:10px;background:#191524;display:block}
+/* Défilement des éditions possédées, sous le visuel de la fiche. */
+.vers{display:flex;flex-direction:column;gap:4px}
+.vers-src{display:flex;gap:0;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.vers-s{flex:1;padding:4px 6px;font-size:11.5px;border:0;background:var(--panel2);color:var(--dim);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vers-s+.vers-s{border-left:1px solid var(--line2)}
+.vers-s:hover:not(:disabled){color:var(--txt)}
+.vers-s[aria-pressed=true]{background:var(--brass);color:var(--sur-brass);font-weight:600}
+.vers-s:disabled{opacity:.45;cursor:default}
+.vers-nav{display:flex;align-items:center;gap:6px}
+.vers-b{flex:0 0 auto;width:26px;height:26px;line-height:1;padding:0;font-size:16px;
+  border:1px solid var(--line2);border-radius:7px;background:var(--panel2);color:var(--txt)}
+.vers-b:hover{border-color:var(--brass);color:var(--txt-vif)}
+.vers-cap{flex:1;min-width:0;display:flex;align-items:baseline;justify-content:center;gap:6px;
+  font-size:12.5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.vers-det{min-height:15px}
+.vers-ok{color:var(--brass)}
+.vers-pick{align-self:flex-start}
+.fiche .visu{flex:1;min-width:0;border-radius:10px;background:var(--vide-img);display:block}
+/* Visuel en cours de recherche : une carte vide, à ses proportions, et son
+   icône de chargement au centre. */
+.visu-attente{flex:1;min-width:0;aspect-ratio:5/7;border-radius:10px;background:var(--vide-img);
+  border:1px solid var(--line2);display:flex;align-items:center;justify-content:center}
+.spin{width:26px;height:26px;border-radius:50%;border:2px solid var(--line2);
+  border-top-color:var(--brass);animation:tourne .8s linear infinite}
+@keyframes tourne{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .spin{animation-duration:2.4s} }
 .miniface{flex:0 0 62px;padding:3px;border:1px solid var(--line2);border-radius:7px;background:var(--panel);
   cursor:pointer;display:block;text-align:center;line-height:1}
 .miniface:hover{border-color:var(--brass)}
-.miniface img{width:100%;border-radius:4px;display:block;background:#191524}
+.miniface img{width:100%;border-radius:4px;display:block;background:var(--vide-img)}
 .miniface span{font-size:9.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:.04em}
-@media (max-width:520px){ .fiche .visuwrap{width:100%;max-width:300px;margin:0 auto} }
+@media (max-width:520px){ .fiche .visucol,.fiche .visuwrap{width:100%;max-width:300px;margin:0 auto} }
 /* carte rendue en texte, quand le visuel manque */
 .carte-texte{
   flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;
@@ -386,26 +667,49 @@ dialog.wide{max-width:min(760px,96vw)}
 .puce::before{content:'▸';position:absolute;left:0;color:var(--brass)}
 @media (max-width:520px){ .fiche .visu{width:100%;max-width:260px;margin:0 auto} }
 .dlg-f{padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+/* Un bouton poussé à gauche, le reste restant groupé à droite. */
+.dlg-f .foot-g{margin-right:auto}
 textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
 @media (max-width:640px){
   .wrap{padding:8px 8px 70px}
   .grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:7px}
   .brand h1{font-size:16px} .brand .sub{display:none}
   .sec-head{padding:11px 10px} .sec-body{padding:10px}
+  .onglets{padding:0 6px;gap:0;border-top-color:var(--line2)}
+  /* Cinq onglets sur un écran de téléphone : ils se partagent la largeur tant
+     qu'ils y tiennent, et la barre glisse latéralement quand ils n'y tiennent
+     plus — sans jamais couper un nom. */
+  .onglet{flex:1 0 auto;justify-content:center;padding:8px 6px 6px;font-size:12.5px}
   .bars{height:120px}
+  /* Ici les pastilles passent à la ligne (`width:100%` plus bas), si bien que
+     la première ligne ne porte que le titre : c'est à lui de réserver le coin,
+     et non à l'entête entière — une réserve sur `.top-in` amputerait aussi la
+     rangée des pastilles, de cent-quarante pixels sur quatre cents. */
   .top-in{padding:6px 8px;gap:6px 8px}
+  .brand{padding-right:226px}
+  .head-actions{right:8px;top:6px;gap:4px}
+  .head-param{width:28px;height:28px}
   .top-stats{gap:4px 6px;width:100%;justify-content:flex-start}
   .head-colors{gap:4px}
   .head-mana-bar{gap:2px}
   .head-mana-bar .mana-btn{width:25px;height:25px;min-width:25px;min-height:25px}
   .pill{font-size:10.5px;padding:3px 7px}
-  .head-toggle{font-size:10.5px;padding:2px 8px;margin-left:auto}
   .head-filtre{font-size:10.5px;padding:2px 8px}
   .filtre-chip{font-size:10px;max-width:170px}
   .filtre-chip .chip-txt{max-width:135px;padding-left:8px}
 }
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f1a2e;color:var(--txt);border:1px solid var(--brass);padding:9px 18px;border-radius:99px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.6);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:var(--txt);border:1px solid var(--brass);padding:9px 18px;border-radius:99px;font-size:13px;box-shadow:0 8px 24px var(--ombre);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
-#cardPreview{position:fixed;z-index:1000;pointer-events:none;display:none;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.7);background:var(--panel);border:1px solid var(--brass-d);max-width:250px;overflow:hidden}
+#cardPreview{position:fixed;z-index:1000;pointer-events:none;display:none;border-radius:10px;box-shadow:0 10px 30px var(--ombre);background:var(--panel);border:1px solid var(--brass-d);max-width:250px;overflow:hidden}
 #cardPreview img{display:block;width:240px;height:auto;border-radius:8px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Barre de progression du filtrage, dans le pied de la fenêtre des filtres :
+   elle occupe sa propre ligne sous les boutons. */
+.dlg-f{flex-wrap:wrap}
+.filtre-progres{flex:1 1 100%;display:flex;flex-direction:column;gap:4px}
+/* Le `display:flex` ci-dessus l'emportait sur le `hidden` du navigateur : la
+   zone se réservait une ligne vide sous les boutons tant qu'aucun filtrage ne
+   tournait. */
+.filtre-progres[hidden]{display:none}
+.dlg-f .btn:disabled{opacity:.45;cursor:default}

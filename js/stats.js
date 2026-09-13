@@ -70,7 +70,7 @@ function renderC() {
       </div>
       <h3 style="margin:14px 0 6px;font-size:15px">Répartition par couleur</h3>
       <div class="statgrid">
-        ${['W','U','B','R','G','C'].map(c => `<div class="stat"><div class="v" style="color:var(--${c})">${fl.byColor[c]}</div><div class="k">${symIcon(c,'sm')} ${all.byColor[c]} au total</div></div>`).join('')}
+        ${['W','U','B','R','G','C'].map(c => `<div class="stat"><div class="v" style="color:var(--${c}-txt)">${fl.byColor[c]}</div><div class="k">${symIcon(c,'sm')} ${all.byColor[c]} au total</div></div>`).join('')}
       </div>
       <h3 style="margin:14px 0 6px;font-size:15px">Types × couleurs (collection filtrée)</h3>
       <div class="scroll"><table class="tbl">
