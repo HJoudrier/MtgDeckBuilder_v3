@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**500 fonctions**, 81 modules, 566 Ko de JavaScript.
+**503 fonctions**, 82 modules, 568 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -61,8 +61,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`rechercheSection.js`](#jsrecherchesectionjs) | Le champ de recherche d'une section | 11 | 178 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 114 |
-| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 15 | 217 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 229 |
+| [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 174 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 228 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -83,15 +83,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
+| [`fenCibles.js`](#jsfenciblesjs) | Fenêtre « Objectifs par rôle » | 5 | 82 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 166 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
-| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 135 |
+| [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 139 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 297 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 296 |
 
 ## js/reglesEffets.js
 
@@ -963,7 +964,7 @@ Ce qu'il y a dans le deck, et les gestes qui l'y mettent. *9 fonctions, 114 lign
 
 ## js/legalite.js
 
-Ce que le format exige, et l'équilibre des rôles. *15 fonctions, 217 lignes, 11 Ko.*
+Ce que le format exige, et l'équilibre des rôles. *13 fonctions, 174 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -975,22 +976,19 @@ Ce que le format exige, et l'équilibre des rôles. *15 fonctions, 217 lignes, 1
 | `reglerCible(role, valeur)` | Poser un objectif, ou le rendre au format quand il retrouve sa valeur : l'état ne garde que ce qui s'écarte, et « Rétablir » n'a rien à défaire de ce qui n'a pas bougé. |
 | `reinitCibles()` | — |
 | `deckCounts()` | — |
-| `boutonEditionCibles()` | Le bouton qui fait passer d'un mode à l'autre, posé contre le titre. |
-| `ligneEditionCibles()` | La phrase du mode, sous le titre : ce qu'on peut faire, et ce qui attend qu'on en sorte. |
+| `boutonCibles()` | Le bouton du titre : il ouvre la fenêtre des objectifs (`js/fenCibles.js`). |
 | `remplissageJauge(val, tgt)` | Le remplissage d'une jauge : la part atteinte, et la couleur qui la juge. |
 | `ecartJauge(val, tgt)` | — |
 | `gauge(label, val, tgt, role)` | — |
-| `majJauge(role)` | Une cible qui change pendant qu'on la règle : seule sa jauge bouge. |
 | `legality()` | — |
 
 | Donnée | Rôle |
 |---|---|
-| `editionCibles` | Le mode modification des objectifs. Il ne vit que le temps où on l'ouvre : on ne rouvre pas l'atelier en train d'éditer, et rien n'est à conserver — ce qui compte, ce sont les cibles,… |
 | `PINCEAU_ICONE` | Un pinceau : six poils, une virole, un manche. |
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 229 lignes, 14 Ko.*
+La section Deck. *6 fonctions, 228 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1317,6 +1315,18 @@ Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 187 lignes, 9.2 Ko
 | `COLONNES_IMPOSEES` | Les nombres de colonnes qu'on impose, « auto » mis à part : c'est la case à cocher qui porte ce choix-là, et le curseur ne parcourt que les autres. |
 | `positionColonnes` | La position du curseur quand « Auto » est cochée : l'état ne retient alors aucun nombre, et le curseur doit tout de même se poser quelque part — là où on l'avait laissé, sans quoi… |
 
+## js/fenCibles.js
+
+Fenêtre « Objectifs par rôle ». *5 fonctions, 82 lignes, 4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ligneCible(role, val, tgt, defaut)` | Une ligne : le rôle, ce que le deck en porte, ce que le format propose, et le champ. |
+| `corpsCibles()` | — |
+| `majFenetreCibles()` | Réécrite après « Réinitialiser » : les champs reprennent les valeurs du format. |
+| `appliquerCibles()` | « Appliquer » verse le brouillon, puis renote : les suggestions pèsent ce qui manque au deck, et ce qui manque vient de changer. |
+| `openCiblesModal()` | — |
+
 ## js/fenListes.js
 
 Les deux listes déroulantes des filtres. *6 fonctions, 125 lignes, 6.7 Ko.*
@@ -1370,7 +1380,7 @@ Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
 
 ## js/gestesReglages.js
 
-Les fenêtres de réglage et leurs boutons. *1 fonctions, 135 lignes, 4.6 Ko.*
+Les fenêtres de réglage et leurs boutons. *1 fonctions, 140 lignes, 4.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1402,7 +1412,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 297 lignes, 11 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 296 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

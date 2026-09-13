@@ -2,8 +2,8 @@
    js/gestesReglages.js — Les fenêtres de réglage et leurs boutons
 
    « Appliquer » et « Réinitialiser » des fenêtres de réglage — filtres,
-   affichage, format, paramètres, budget —, les jauges de rôle et la
-   pagination par type.
+   affichage, objectifs par rôle, format, paramètres, budget —, les jauges de
+   rôle et la pagination par type.
    ===================================================================== */
 
 function gestesReglages(act, b) {
@@ -72,19 +72,24 @@ function gestesReglages(act, b) {
     return true;
   }
 
-  /* Le pinceau : on entre dans le mode, on en sort. En sortir reprend les
-     suggestions — elles pèsent ce qui manque au deck, donc les cibles. */
-  if (act === 'editerCibles') {
-    editionCibles = !editionCibles;
-    if (editionCibles) { renderE(); return true; }
-    recalculerAvecProgression('Objectifs par rôle modifiés : les suggestions sont reprises d\'après ce qui manque au deck.');
+  /* Le pinceau du titre « Équilibre des rôles » : les objectifs se règlent en
+     fenêtre, et n'agissent qu'à « Appliquer ». */
+  if (act === 'cibles') {
+    openCiblesModal();
+    return true;
+  }
+
+  if (act === 'appliquerCibles') {
+    appliquerCibles();
     return true;
   }
 
   if (act === 'reinitCibles') {
-    reinitCibles();
-    renderE();
-    toast(`Objectifs rendus à ceux du format ${fmt().label}.`);
+    /* Comme « Réinitialiser » des filtres : c'est le brouillon qu'on vide, et
+       « Appliquer » décide. */
+    modifieBrouillon(() => reinitCibles());
+    majFenetreCibles();
+    toast(`Objectifs rendus à ceux du format ${fmt().label}. « Appliquer » pour les poser.`);
     return true;
   }
 

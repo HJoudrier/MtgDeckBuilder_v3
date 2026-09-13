@@ -60,12 +60,11 @@ document.addEventListener('input', ev => {
     glisseColonnes(t);
     return;
   }
-  /* Un objectif de rôle qu'on règle au pinceau : seule sa jauge bouge, la
-     section entière emporterait le champ qu'on est en train de remplir. Les
-     suggestions, elles, attendent la sortie du mode. */
+  /* Un objectif de rôle, dans sa fenêtre : la frappe va au brouillon, et rien
+     n'est appliqué avant le bouton. La fenêtre n'est pas réécrite — elle
+     emporterait le champ qu'on est en train de remplir. */
   if (t.dataset.roleCible) {
-    reglerCible(t.dataset.roleCible, t.value);
-    majJauge(t.dataset.roleCible);
+    modifieBrouillon(() => reglerCible(t.dataset.roleCible, t.value));
     return;
   }
   /* Le champ de recherche d'une section : seules ses propositions sont

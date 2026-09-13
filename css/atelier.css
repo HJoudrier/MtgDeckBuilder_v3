@@ -479,11 +479,12 @@ table.tbl th{color:var(--dim2);font-weight:500;font-size:11px;text-transform:upp
 .gauge .top{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;gap:6px}
 /* Le mode modification des objectifs : la jauge cesse d'être un bouton — elle
    porte un champ —, et son cadre le dit. */
-.gauge.edition{cursor:default;border-style:dashed;border-color:var(--brass-d);gap:5px}
-/* Le champ sous la barre, précédé de son étiquette : dans l'en-tête, il
-   poussait le nom du rôle à la ligne. */
-.cible-ligne{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.gauge .cible-champ{width:62px;padding:2px 5px;font-family:var(--mono);font-size:12.5px;text-align:right}
+/* La fenêtre des objectifs : une ligne par rôle, le champ contre le bord. */
+.cibles-grille{display:flex;flex-direction:column;gap:6px}
+.cible-l{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:1px solid var(--line);border-radius:8px;padding:6px 9px;background:var(--bg2)}
+.cible-l .cible-nom label{font-size:13.5px;color:var(--txt);cursor:pointer}
+.cible-champ{width:74px;padding:4px 6px;font-family:var(--mono);text-align:right}
 .cible-marque{color:var(--brass)}
 .titre-cibles{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .cible-edit{display:inline-flex;align-items:center;gap:5px}

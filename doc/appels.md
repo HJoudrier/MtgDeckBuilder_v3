@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**499 fonctions** dans 81 modules, **1399 appels** relevés.
+**502 fonctions** dans 82 modules, **1408 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -926,7 +926,7 @@ Appelée par : `brancherRestauration`, `brancherSauvegarde`, `gestesDonnees`, `s
 
 Appelle : → `save()` *(stockage.js)*
 
-Appelée par : `activerOnglet`, `appliqueCatalogueAuxCartes`, `appliquerAffichage`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `gestesDeck`, `gestesDonnees`, `reglerCible`, `reinitCibles`, `renderAll`, `runScryQueue`
+Appelée par : `activerOnglet`, `appliqueCatalogueAuxCartes`, `appliquerAffichage`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `gestesDeck`, `gestesDonnees`, `renderAll`, `runScryQueue`
 
 ### `restore()` — ligne 146
 
@@ -2116,75 +2116,63 @@ Appelée par : `renderE`
 
 Appelle : `fmt()` *(outils.js)*
 
-Appelée par : `reglerCible`, `targets`
+Appelée par : `corpsCibles`, `reglerCible`, `targets`
 
 ### `ciblesReglees()` — ligne 47
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `boutonEditionCibles`, `gauge`, `ligneEditionCibles`, `targets`
+Appelée par : `boutonCibles`, `corpsCibles`, `gauge`, `targets`
 
 ### `targets()` — ligne 54
 
 Appelle : `ciblesParDefaut()` *(legalite.js)*, `ciblesReglees()` *(legalite.js)*
 
-Appelée par : `contexteEvaluation`, `corpsFiltres`, `deckCounts`, `ficheHTML`, `majJauge`, `renderE`
+Appelée par : `contexteEvaluation`, `corpsCibles`, `corpsFiltres`, `deckCounts`, `ficheHTML`, `renderE`
 
 ### `reglerCible()` — ligne 66
 
-Appelle : `ciblesParDefaut()` *(legalite.js)*, `fmt()` *(outils.js)*, `scheduleSave()` *(stockage.js)*
+Appelle : `ciblesParDefaut()` *(legalite.js)*, `fmt()` *(outils.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `reinitCibles()` — ligne 77
+### `reinitCibles()` — ligne 76
 
-Appelle : `scheduleSave()` *(stockage.js)*
+N'appelle aucune fonction du projet.
 
 Appelée par : `gestesReglages`
 
-### `deckCounts()` — ligne 82
+### `deckCounts()` — ligne 80
 
 Appelle : `deckEntries()` *(deck.js)*, `targets()` *(legalite.js)*
 
-Appelée par : `contexteEvaluation`, `ficheHTML`, `majJauge`, `renderE`
+Appelée par : `contexteEvaluation`, `corpsCibles`, `ficheHTML`, `renderE`
 
-### `boutonEditionCibles()` — ligne 102
+### `boutonCibles()` — ligne 99
 
 Appelle : `ciblesReglees()` *(legalite.js)*
 
 Appelée par : `renderE`
 
-### `ligneEditionCibles()` — ligne 114
-
-Appelle : `ciblesReglees()` *(legalite.js)*, `esc()` *(outils.js)*, `fmt()` *(outils.js)*
-
-Appelée par : `renderE`
-
-### `remplissageJauge()` — ligne 124
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `gauge`, `majJauge`
-
-### `ecartJauge()` — ligne 131
+### `remplissageJauge()` — ligne 107
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `gauge`
 
-### `gauge()` — ligne 136
+### `ecartJauge()` — ligne 114
 
-Appelle : `ciblesReglees()` *(legalite.js)*, `ecartJauge()` *(legalite.js)*, `esc()` *(outils.js)*, `fmt()` *(outils.js)*, `remplissageJauge()` *(legalite.js)*, `rolesFiltre()` *(filtres.js)*
+N'appelle aucune fonction du projet.
+
+Appelée par : `gauge`
+
+### `gauge()` — ligne 119
+
+Appelle : `ciblesReglees()` *(legalite.js)*, `ecartJauge()` *(legalite.js)*, `esc()` *(outils.js)*, `remplissageJauge()` *(legalite.js)*, `rolesFiltre()` *(filtres.js)*
 
 Appelée par : `renderE`
 
-### `majJauge()` — ligne 166
-
-Appelle : `deckCounts()` *(legalite.js)*, `remplissageJauge()` *(legalite.js)*, `targets()` *(legalite.js)*
-
-Appelée par : `app.js (chargement)`
-
-### `legality()` — ligne 175
+### `legality()` — ligne 132
 
 Appelle : `carteLegale()` *(retenue.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `eur()` *(outils.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `spent()` *(outils.js)*
 
@@ -2224,9 +2212,9 @@ Appelée par : `renderE`
 
 ### `renderE()` — ligne 146
 
-Appelle : `aAcheter()` *(outils.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `boutonEditionCibles()` *(legalite.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneEditionCibles()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(outils.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
+Appelle : `aAcheter()` *(outils.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `boutonCibles()` *(legalite.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(outils.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
 
-Appelée par : `app.js (chargement)`, `appliquerAffichage`, `gestesReglages`, `renderAll`, `runScryQueue`
+Appelée par : `app.js (chargement)`, `appliquerAffichage`, `renderAll`, `runScryQueue`
 
 ## js/ficheVisuel.js
 
@@ -2300,7 +2288,7 @@ Appelée par : `basculerSourceVersions`, `choisirVersion`, `faireDefilerVersion`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `champBudget`, `champRecherche`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCommandant`, `ligneEditionCibles`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneProposition`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `majBoutonAffichage`, `montrerApercu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `propositionsHTML`, `refCarte`, `renderD`, `renderE`, `renderTop`, `resultatsHTML`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `zoneCommandant`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `champBudget`, `champRecherche`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsCibles`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneProposition`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `majBoutonAffichage`, `montrerApercu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `propositionsHTML`, `refCarte`, `renderD`, `renderE`, `renderTop`, `resultatsHTML`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `zoneCommandant`
 
 ### `eur()` — ligne 14
 
@@ -2318,7 +2306,7 @@ Appelée par : `ficheHTML`, `renderD`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `aAcheter`, `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `blocEdhrec`, `cardRow`, `cardTile`, `carteLegale`, `ciblesParDefaut`, `contexteEvaluation`, `corpsFormat`, `deckAdd`, `deplacerCarte`, `exportModal`, `filtered`, `gauge`, `gestesReglages`, `lanceEdhrecSiBesoin`, `legality`, `ligneCatalogue`, `ligneCausesCollection`, `ligneEditionCibles`, `ligneGameChangers`, `openImport`, `panneauEdhrec`, `reglerCible`, `renderC`, `renderE`, `renderH`, `renderTop`, `requeteCatalogue`, `resumeFormat`, `selectionCandidats`, `tagIllegal`
+Appelée par : `aAcheter`, `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `blocEdhrec`, `cardRow`, `cardTile`, `carteLegale`, `ciblesParDefaut`, `contexteEvaluation`, `corpsCibles`, `corpsFormat`, `deckAdd`, `deplacerCarte`, `exportModal`, `filtered`, `gestesReglages`, `lanceEdhrecSiBesoin`, `legality`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneGameChangers`, `openImport`, `panneauEdhrec`, `reglerCible`, `renderC`, `renderE`, `renderH`, `renderTop`, `requeteCatalogue`, `resumeFormat`, `selectionCandidats`, `tagIllegal`
 
 ### `spent()` — ligne 37
 
@@ -2370,13 +2358,13 @@ Appelée par : `app.js (chargement)`
 
 Appelle : `esc()` *(outils.js)*
 
-Appelée par : `annonceRecalcul`, `exportModal`, `gestesDeck`, `gestesDonnees`, `openAdd`, `openAffichageModal`, `openBudgetModal`, `openCardModal`, `openFiltresModal`, `openFormatModal`, `openImport`, `openParametresModal`, `openWantsModal`, `openWipeModal`, `ouvrirBoiteCatalogue`, `proposerMajCatalogue`
+Appelée par : `annonceRecalcul`, `exportModal`, `gestesDeck`, `gestesDonnees`, `openAdd`, `openAffichageModal`, `openBudgetModal`, `openCardModal`, `openCiblesModal`, `openFiltresModal`, `openFormatModal`, `openImport`, `openParametresModal`, `openWantsModal`, `openWipeModal`, `ouvrirBoiteCatalogue`, `proposerMajCatalogue`
 
 ### `closeDialog()` — ligne 37
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `app.js (chargement)`, `appliquerAffichage`, `appliquerBudget`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`, `fermerBoiteCatalogue`, `finRecalcul`, `gestesDeck`, `gestesDonnees`, `gestesGraphe`, `gestesVue`, `openImport`, `openWipeModal`
+Appelée par : `app.js (chargement)`, `appliquerAffichage`, `appliquerBudget`, `appliquerCibles`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`, `fermerBoiteCatalogue`, `finRecalcul`, `gestesDeck`, `gestesDonnees`, `gestesGraphe`, `gestesVue`, `openImport`, `openWipeModal`
 
 ## js/brouillon.js
 
@@ -2384,7 +2372,7 @@ Appelée par : `app.js (chargement)`, `appliquerAffichage`, `appliquerBudget`, `
 
 Appelle : `copieEtat()` *(brouillon.js)*
 
-Appelée par : `openAffichageModal`, `openBudgetModal`, `openFiltresModal`, `openFormatModal`, `openParametresModal`
+Appelée par : `openAffichageModal`, `openBudgetModal`, `openCiblesModal`, `openFiltresModal`, `openFormatModal`, `openParametresModal`
 
 ### `copieEtat()` — ligne 31
 
@@ -2408,7 +2396,7 @@ Appelée par : `avecBrouillon`, `modifieBrouillon`
 
 Appelle : `echangeBrouillon()` *(brouillon.js)*, `reprendEtat()` *(brouillon.js)*
 
-Appelée par : `appliquerAffichage`, `corpsAffichage`, `corpsBudget`, `corpsCatalogue`, `corpsFiltres`, `corpsFormat`, `gestesVue`, `majListeArchetypes`, `majListeSets`, `majResumeBudget`, `majResumeFormat`, `resumeFiltres`
+Appelée par : `appliquerAffichage`, `corpsAffichage`, `corpsBudget`, `corpsCatalogue`, `corpsCibles`, `corpsFiltres`, `corpsFormat`, `gestesVue`, `majListeArchetypes`, `majListeSets`, `majResumeBudget`, `majResumeFormat`, `resumeFiltres`
 
 ### `modifieBrouillon()` — ligne 69
 
@@ -2444,7 +2432,7 @@ Appelée par : `chargerArchetypesEdhrec`, `chargerSetScryfall`, `chargerThemeEdh
 
 Appelle : `invaliderCandidats()` *(candidats.js)*
 
-Appelée par : `appliquerAffichage`, `appliquerBudget`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`
+Appelée par : `appliquerAffichage`, `appliquerBudget`, `appliquerCibles`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`
 
 ### `fermetureBrouillon()` — ligne 135
 
@@ -2732,7 +2720,7 @@ Appelée par : `recalculerAvecProgression`
 
 Appelle : `annonceRecalcul()` *(recalcul.js)*, `finProgresSection()` *(recalcul.js)*, `finRecalcul()` *(recalcul.js)*, `geleSuggestions()` *(sugOrdre.js)*, `majProgression()` *(fenFiltres.js)*, `pause()` *(recalcul.js)*, `prechauffeCandidats()` *(candidats.js)*, `prepareSuggestions()` *(vivier.js)*, `progresSection()` *(recalcul.js)*, `recalculLong()` *(recalcul.js)*, `releveAncre()` *(ancre.js)*, `renderAll()` *(rendu.js)*, `restaureAncre()` *(ancre.js)*
 
-Appelée par : `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesDeck`, `gestesDonnees`, `gestesReglages`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `openWipeModal`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
+Appelée par : `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesDeck`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `openWipeModal`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
 
 ## js/entete.js
 
@@ -2942,7 +2930,7 @@ Appelée par : `app.js (chargement)`, `chargerSetScryfall`, `openFiltresModal`, 
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `annonceRecalcul`, `corpsBoiteRecalcul`, `openBudgetModal`, `openFiltresModal`, `openFormatModal`, `openParametresModal`
+Appelée par : `annonceRecalcul`, `corpsBoiteRecalcul`, `openBudgetModal`, `openCiblesModal`, `openFiltresModal`, `openFormatModal`, `openParametresModal`
 
 ### `majProgression()` — ligne 133
 
@@ -2954,7 +2942,7 @@ Appelée par : `filtrerAvecProgression`, `recalculerAvecProgression`
 
 Appelle : `majProgression()` *(fenFiltres.js)*, `pause()` *(recalcul.js)*, `prechauffeCandidats()` *(candidats.js)*, `prepareSuggestions()` *(vivier.js)*, `renderAll()` *(rendu.js)*
 
-Appelée par : `appliquerBudget`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`
+Appelée par : `appliquerBudget`, `appliquerCibles`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`
 
 ### `majFenetreFiltres()` — ligne 166
 
@@ -3027,6 +3015,38 @@ Appelée par : `gestesReglages`
 ### `openAffichageModal()` — ligne 177
 
 Appelle : `colonnesDe()` *(barreGroupes.js)*, `corpsAffichage()` *(fenAffichage.js)*, `indexColonnes()` *(fenAffichage.js)*, `openDialog()` *(dialogue.js)*, `ouvreBrouillon()` *(brouillon.js)*, → `majFenetreAffichage()` *(fenAffichage.js)*
+
+Appelée par : `gestesReglages`
+
+## js/fenCibles.js
+
+### `ligneCible()` — ligne 20
+
+Appelle : `esc()` *(outils.js)*, `fmt()` *(outils.js)*
+
+Appelée par : `corpsCibles`
+
+### `corpsCibles()` — ligne 34
+
+Appelle : `avecBrouillon()` *(brouillon.js)*, `ciblesParDefaut()` *(legalite.js)*, `ciblesReglees()` *(legalite.js)*, `deckCounts()` *(legalite.js)*, `esc()` *(outils.js)*, `fmt()` *(outils.js)*, `ligneCible()` *(fenCibles.js)*, `targets()` *(legalite.js)*
+
+Appelée par : `majFenetreCibles`, `openCiblesModal`
+
+### `majFenetreCibles()` — ligne 55
+
+Appelle : `corpsCibles()` *(fenCibles.js)*
+
+Appelée par : `gestesReglages`, `openCiblesModal`
+
+### `appliquerCibles()` — ligne 67
+
+Appelle : `closeDialog()` *(dialogue.js)*, `filtrerAvecProgression()` *(fenFiltres.js)*, `verseBrouillon()` *(brouillon.js)*
+
+Appelée par : `gestesReglages`
+
+### `openCiblesModal()` — ligne 73
+
+Appelle : `corpsCibles()` *(fenCibles.js)*, `openDialog()` *(dialogue.js)*, `ouvreBrouillon()` *(brouillon.js)*, `zoneProgression()` *(fenFiltres.js)*, → `majFenetreCibles()` *(fenCibles.js)*
 
 Appelée par : `gestesReglages`
 
@@ -3138,7 +3158,7 @@ Appelée par : `app.js (chargement)`
 
 ### `gestesReglages()` — ligne 9
 
-Appelle : `appliquerAffichage()` *(fenAffichage.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `appliquerFormat()` *(fenParametres.js)*, `appliquerParametres()` *(fenParametres.js)*, `apresReglage()` *(brouillon.js)*, `basculerRole()` *(filtres.js)*, `cleLimiteSug()` *(sugListes.js)*, `defautSug()` *(sugListes.js)*, `fmt()` *(outils.js)*, `groupeCartes()` *(groupes.js)*, `interrompreCatalogue()` *(catalogue.js)*, `listeSug()` *(sugListes.js)*, `modifieBrouillon()` *(brouillon.js)*, `openAffichageModal()` *(fenAffichage.js)*, `openBudgetModal()` *(fenBudget.js)*, `openFormatModal()` *(fenFormat.js)*, `openParametresModal()` *(fenParametres.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `refreshSuggestions()` *(suggestions.js)*, `reinitCibles()` *(legalite.js)*, `reinitFiltres()` *(filtres.js)*, `renderE()` *(deckSection.js)*, `selectionSuggestions()` *(sugListes.js)*, `toast()` *(outils.js)*
+Appelle : `appliquerAffichage()` *(fenAffichage.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerCibles()` *(fenCibles.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `appliquerFormat()` *(fenParametres.js)*, `appliquerParametres()` *(fenParametres.js)*, `apresReglage()` *(brouillon.js)*, `basculerRole()` *(filtres.js)*, `cleLimiteSug()` *(sugListes.js)*, `defautSug()` *(sugListes.js)*, `fmt()` *(outils.js)*, `groupeCartes()` *(groupes.js)*, `interrompreCatalogue()` *(catalogue.js)*, `listeSug()` *(sugListes.js)*, `majFenetreCibles()` *(fenCibles.js)*, `modifieBrouillon()` *(brouillon.js)*, `openAffichageModal()` *(fenAffichage.js)*, `openBudgetModal()` *(fenBudget.js)*, `openCiblesModal()` *(fenCibles.js)*, `openFormatModal()` *(fenFormat.js)*, `openParametresModal()` *(fenParametres.js)*, `refreshSuggestions()` *(suggestions.js)*, `reinitCibles()` *(legalite.js)*, `reinitFiltres()` *(filtres.js)*, `selectionSuggestions()` *(sugListes.js)*, `toast()` *(outils.js)*
 
 Appelée par : `app.js (chargement)`
 
@@ -3170,9 +3190,9 @@ Appelée par : `app.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `activerOnglet()` *(entete.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesDeck()` *(gestesDeck.js)*, `gestesDonnees()` *(gestesDonnees.js)*, `gestesGraphe()` *(gestesGraphe.js)*, `gestesReglages()` *(gestesReglages.js)*, `gestesVue()` *(gestesVue.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `majFiltre()` *(filtres.js)*, `majJauge()` *(legalite.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeBudget()` *(fenBudget.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `reglerCible()` *(legalite.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `majHauteurEntete()` *(entete.js)*
+Appelle : `activerOnglet()` *(entete.js)*, `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesDeck()` *(gestesDeck.js)*, `gestesDonnees()` *(gestesDonnees.js)*, `gestesGraphe()` *(gestesGraphe.js)*, `gestesReglages()` *(gestesReglages.js)*, `gestesVue()` *(gestesVue.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeBudget()` *(fenBudget.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `reglerCible()` *(legalite.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `majHauteurEntete()` *(entete.js)*
 
-### `demarrer()` — ligne 263
+### `demarrer()` — ligne 262
 
 Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*
 

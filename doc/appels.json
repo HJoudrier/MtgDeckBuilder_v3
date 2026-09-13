@@ -73,6 +73,7 @@
   "fenBudget.js",
   "fenFiltres.js",
   "fenAffichage.js",
+  "fenCibles.js",
   "fenListes.js",
   "boiteCatalogue.js",
   "fenExport.js",
@@ -2426,8 +2427,6 @@
     "choisirVersion",
     "gestesDeck",
     "gestesDonnees",
-    "reglerCible",
-    "reinitCibles",
     "renderAll",
     "runScryQueue"
    ]
@@ -5607,6 +5606,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "corpsCibles",
     "reglerCible",
     "targets"
    ]
@@ -5620,9 +5620,9 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "boutonEditionCibles",
+    "boutonCibles",
+    "corpsCibles",
     "gauge",
-    "ligneEditionCibles",
     "targets"
    ]
   },
@@ -5639,10 +5639,10 @@
    "appelleParHtml": [],
    "appeleePar": [
     "contexteEvaluation",
+    "corpsCibles",
     "corpsFiltres",
     "deckCounts",
     "ficheHTML",
-    "majJauge",
     "renderE"
    ]
   },
@@ -5653,8 +5653,7 @@
    "chargement": false,
    "appelle": [
     "ciblesParDefaut",
-    "fmt",
-    "scheduleSave"
+    "fmt"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5665,11 +5664,9 @@
   {
    "nom": "reinitCibles",
    "fichier": "legalite.js",
-   "ligne": 77,
+   "ligne": 76,
    "chargement": false,
-   "appelle": [
-    "scheduleSave"
-   ],
+   "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -5679,7 +5676,7 @@
   {
    "nom": "deckCounts",
    "fichier": "legalite.js",
-   "ligne": 82,
+   "ligne": 80,
    "chargement": false,
    "appelle": [
     "deckEntries",
@@ -5689,15 +5686,15 @@
    "appelleParHtml": [],
    "appeleePar": [
     "contexteEvaluation",
+    "corpsCibles",
     "ficheHTML",
-    "majJauge",
     "renderE"
    ]
   },
   {
-   "nom": "boutonEditionCibles",
+   "nom": "boutonCibles",
    "fichier": "legalite.js",
-   "ligne": 102,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "ciblesReglees"
@@ -5709,38 +5706,21 @@
    ]
   },
   {
-   "nom": "ligneEditionCibles",
-   "fichier": "legalite.js",
-   "ligne": 114,
-   "chargement": false,
-   "appelle": [
-    "ciblesReglees",
-    "esc",
-    "fmt"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "renderE"
-   ]
-  },
-  {
    "nom": "remplissageJauge",
    "fichier": "legalite.js",
-   "ligne": 124,
+   "ligne": 107,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "gauge",
-    "majJauge"
+    "gauge"
    ]
   },
   {
    "nom": "ecartJauge",
    "fichier": "legalite.js",
-   "ligne": 131,
+   "ligne": 114,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5752,13 +5732,12 @@
   {
    "nom": "gauge",
    "fichier": "legalite.js",
-   "ligne": 136,
+   "ligne": 119,
    "chargement": false,
    "appelle": [
     "ciblesReglees",
     "ecartJauge",
     "esc",
-    "fmt",
     "remplissageJauge",
     "rolesFiltre"
    ],
@@ -5769,25 +5748,9 @@
    ]
   },
   {
-   "nom": "majJauge",
-   "fichier": "legalite.js",
-   "ligne": 166,
-   "chargement": false,
-   "appelle": [
-    "deckCounts",
-    "remplissageJauge",
-    "targets"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "app.js (chargement)"
-   ]
-  },
-  {
    "nom": "legality",
    "fichier": "legalite.js",
-   "ligne": 175,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "carteLegale",
@@ -5901,7 +5864,7 @@
     "aAcheter",
     "annexeSize",
     "blocAchats",
-    "boutonEditionCibles",
+    "boutonCibles",
     "cardRow",
     "cardTile",
     "carteFiltree",
@@ -5919,7 +5882,6 @@
     "groupeCartes",
     "histogram",
     "legality",
-    "ligneEditionCibles",
     "ligneGameChangers",
     "noteMultiple",
     "ouvreGrille",
@@ -5940,7 +5902,6 @@
    "appeleePar": [
     "app.js (chargement)",
     "appliquerAffichage",
-    "gestesReglages",
     "renderAll",
     "runScryQueue"
    ]
@@ -6172,6 +6133,7 @@
     "champRecherche",
     "corpsAffichage",
     "corpsBoiteRecalcul",
+    "corpsCibles",
     "corpsFiltres",
     "corpsFormat",
     "corpsSauvegarde",
@@ -6188,8 +6150,8 @@
     "ligneAchats",
     "ligneCatalogue",
     "ligneCausesCollection",
+    "ligneCible",
     "ligneCommandant",
-    "ligneEditionCibles",
     "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
@@ -6292,18 +6254,18 @@
     "carteLegale",
     "ciblesParDefaut",
     "contexteEvaluation",
+    "corpsCibles",
     "corpsFormat",
     "deckAdd",
     "deplacerCarte",
     "exportModal",
     "filtered",
-    "gauge",
     "gestesReglages",
     "lanceEdhrecSiBesoin",
     "legality",
     "ligneCatalogue",
     "ligneCausesCollection",
-    "ligneEditionCibles",
+    "ligneCible",
     "ligneGameChangers",
     "openImport",
     "panneauEdhrec",
@@ -6472,6 +6434,7 @@
     "openAffichageModal",
     "openBudgetModal",
     "openCardModal",
+    "openCiblesModal",
     "openFiltresModal",
     "openFormatModal",
     "openImport",
@@ -6494,6 +6457,7 @@
     "app.js (chargement)",
     "appliquerAffichage",
     "appliquerBudget",
+    "appliquerCibles",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres",
@@ -6520,6 +6484,7 @@
    "appeleePar": [
     "openAffichageModal",
     "openBudgetModal",
+    "openCiblesModal",
     "openFiltresModal",
     "openFormatModal",
     "openParametresModal"
@@ -6579,6 +6544,7 @@
     "corpsAffichage",
     "corpsBudget",
     "corpsCatalogue",
+    "corpsCibles",
     "corpsFiltres",
     "corpsFormat",
     "gestesVue",
@@ -6685,6 +6651,7 @@
    "appeleePar": [
     "appliquerAffichage",
     "appliquerBudget",
+    "appliquerCibles",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres"
@@ -7449,7 +7416,6 @@
     "filetSuggestions",
     "gestesDeck",
     "gestesDonnees",
-    "gestesReglages",
     "gestesVue",
     "lireCatalogueFichier",
     "openImport",
@@ -8035,6 +8001,7 @@
     "annonceRecalcul",
     "corpsBoiteRecalcul",
     "openBudgetModal",
+    "openCiblesModal",
     "openFiltresModal",
     "openFormatModal",
     "openParametresModal"
@@ -8069,6 +8036,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliquerBudget",
+    "appliquerCibles",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres"
@@ -8275,6 +8243,93 @@
    ],
    "appelleDiffere": [
     "majFenetreAffichage"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages"
+   ]
+  },
+  {
+   "nom": "ligneCible",
+   "fichier": "fenCibles.js",
+   "ligne": 20,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "fmt"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsCibles"
+   ]
+  },
+  {
+   "nom": "corpsCibles",
+   "fichier": "fenCibles.js",
+   "ligne": 34,
+   "chargement": false,
+   "appelle": [
+    "avecBrouillon",
+    "ciblesParDefaut",
+    "ciblesReglees",
+    "deckCounts",
+    "esc",
+    "fmt",
+    "ligneCible",
+    "targets"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "majFenetreCibles",
+    "openCiblesModal"
+   ]
+  },
+  {
+   "nom": "majFenetreCibles",
+   "fichier": "fenCibles.js",
+   "ligne": 55,
+   "chargement": false,
+   "appelle": [
+    "corpsCibles"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages",
+    "openCiblesModal"
+   ]
+  },
+  {
+   "nom": "appliquerCibles",
+   "fichier": "fenCibles.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [
+    "closeDialog",
+    "filtrerAvecProgression",
+    "verseBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesReglages"
+   ]
+  },
+  {
+   "nom": "openCiblesModal",
+   "fichier": "fenCibles.js",
+   "ligne": 73,
+   "chargement": false,
+   "appelle": [
+    "corpsCibles",
+    "openDialog",
+    "ouvreBrouillon",
+    "zoneProgression"
+   ],
+   "appelleDiffere": [
+    "majFenetreCibles"
    ],
    "appelleParHtml": [],
    "appeleePar": [
@@ -8563,6 +8618,7 @@
    "appelle": [
     "appliquerAffichage",
     "appliquerBudget",
+    "appliquerCibles",
     "appliquerFiltres",
     "appliquerFormat",
     "appliquerParametres",
@@ -8574,16 +8630,16 @@
     "groupeCartes",
     "interrompreCatalogue",
     "listeSug",
+    "majFenetreCibles",
     "modifieBrouillon",
     "openAffichageModal",
     "openBudgetModal",
+    "openCiblesModal",
     "openFormatModal",
     "openParametresModal",
-    "recalculerAvecProgression",
     "refreshSuggestions",
     "reinitCibles",
     "reinitFiltres",
-    "renderE",
     "selectionSuggestions",
     "toast"
    ],
@@ -8721,7 +8777,6 @@
     "glisseColonnes",
     "invaliderCandidats",
     "majFiltre",
-    "majJauge",
     "majListeArchetypes",
     "majListeSets",
     "majResultats",
@@ -8749,7 +8804,7 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 263,
+   "ligne": 262,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",
