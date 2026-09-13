@@ -566,6 +566,59 @@ sequenceDiagram
     end
 ```
 
+### 3.15 Synchroniser avec Dropbox
+
+Le tour se fait toujours dans cet ordre : **tirer, fusionner, verser, pousser**. Pousser d'abord
+écraserait ce qu'on n'a pas encore lu.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant APP as app.js / un geste
+    participant NU as nuage.js
+    participant DBX as nuageDropbox.js
+    participant DROP as Dropbox
+    participant FUS as nuageFusion.js
+    participant IDB as IndexedDB
+    participant STOCK as stockage.js
+    participant UI as interface
+
+    APP->>NU: nuageSynchro()
+    Note over NU: à l'ouverture, au retour sur l'onglet,<br/>ou au plus une fois toutes les 15 s après un geste
+    NU->>DBX: dbxLire(chemin)
+    DBX->>DBX: dbxJetonValide() — rafraîchit 1 min avant l'échéance
+    DBX->>DROP: files/download
+    DROP-->>DBX: octets gzip + rev
+    DBX-->>NU: paquet distant, rev
+    alt aucun fichier là-bas
+        NU->>DBX: dbxEcrire(chemin, octets, rev vide)
+        Note over DBX: mode « add » : refuse d'écraser<br/>si un fichier est apparu entre-temps
+    else le fichier existe
+        NU->>IDB: nuageBaseLire() — le fond du dernier accord
+        NU->>FUS: fusionnePaquets(base, local, distant)
+        Note over FUS: quantités carte par carte, ensembles, scalaires,<br/>cache en union ; les désaccords sont relevés
+        alt le distant avait quelque chose à nous apprendre
+            NU->>STOCK: nuageVerse() → restore(), puis save()
+            NU->>UI: releveAncre() / renderAll() / restaureAncre()
+        end
+        alt nous avons quelque chose à lui donner
+            NU->>DBX: dbxEcrire(chemin, octets, rev lu)
+            DBX->>DROP: files/upload, mode update : rev
+            alt l'autre appareil a écrit pendant l'aller-retour
+                DROP-->>DBX: 409 path/conflict
+                NU->>NU: nuageTour() rejoué une fois sur le nouveau distant
+            end
+        end
+        NU->>IDB: nuageBaseEcrire(le fond tel qu'il a atterri)
+    end
+    NU->>UI: majFenetreParametres() — état, dernier accord, désaccords
+```
+
+La connexion, elle, ne passe qu'une fois par appareil : `dbxConnexion()` quitte la page vers
+Dropbox avec l'empreinte du code de preuve, et `dbxRetourConnexion()` échange le code contre les
+deux jetons au rechargement, puis nettoie l'adresse. Le jeton de rafraîchissement ne meurt pas ;
+celui d'accès se renouvelle tout seul.
+
 ---
 
 ## 4. Ce qui périme quoi

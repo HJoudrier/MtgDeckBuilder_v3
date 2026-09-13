@@ -24,12 +24,19 @@ function gestesDonnees(act, b) {
 
   if (act === 'saveWipe') {
     openDialog('Effacer les données locales',
-      `<p class="small">Cette action supprime la collection, le deck et les préférences enregistrés dans ce navigateur. Elle est irréversible, sauf si vous avez exporté un fichier.</p>`,
+      `<p class="small">Cette action supprime la collection, le deck et les préférences enregistrés dans ce navigateur. Elle est irréversible, sauf si vous avez exporté un fichier.</p>
+       ${nuageConnecte() ? `<div class="warnbox">La synchronisation est branchée sur Dropbox. Elle sera
+         <b>déconnectée</b> en même temps : sans cela, l'effacement se propagerait à votre autre
+         appareil, ou tout reviendrait au prochain accord. Le fichier de là-bas, lui, reste
+         intact.</div>` : ''}`,
       '<button class="btn" value="cancel" onclick="closeDialog()">Annuler</button><button class="btn danger" id="okWipeLocal" value="ok">Effacer définitivement</button>');
     const okWipeLocal = document.getElementById('okWipeLocal');
     if (okWipeLocal) okWipeLocal.onclick = () => {
+      /* Avant tout le reste : un effacement local ne doit pas voyager. */
+      if (nuageConnecte()) nuageDeconnecte();
       try { localStorage.removeItem(STORE_KEY); } catch(e) {}
       idbVider();
+      idbOublier(IDB_NUAGE_BASE);
       S.collection.clear();
       S.deck.clear();
       CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());

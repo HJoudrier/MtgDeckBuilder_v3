@@ -43,6 +43,10 @@ js/                 modules, chargés dans cet ordre :
   stockage.js       la sauvegarde locale
   fenSauvegarde.js  les sections « Sauvegarde » et « Catalogue »
   idb.js            le magasin IndexedDB
+  nuagePaquet.js    ce qui voyage d'un appareil à l'autre, et sous quelle forme
+  nuageFusion.js    fusionner deux appareils sans rien perdre
+  nuageDropbox.js   l'adaptateur Dropbox : PKCE, et le `rev` comme verrou
+  nuage.js          la synchronisation : sa configuration, et son calendrier
   edhrec.js         les statistiques d'EDHREC pour un commandant
   edhrecForme.js    deviner la forme des pages de thèmes d'EDHREC
   edhrecThemes.js   l'index des thèmes EDHREC
@@ -92,7 +96,8 @@ js/                 modules, chargés dans cet ordre :
 
   — les fenêtres —
   fenFormat.js      format de jeu
-  fenParametres.js  sauvegarde locale, collection, catalogue
+  fenParametres.js  sauvegarde locale, synchronisation, apparence, catalogue
+  fenNuage.js       la section « Synchronisation » de cette fenêtre
   fenBudget.js      budget et achats
   fenFiltres.js     filtres de la collection
   fenAffichage.js   vue, colonnes, groupement et tri d'une liste de cartes
@@ -106,6 +111,7 @@ js/                 modules, chargés dans cet ordre :
   gestesReglages.js « Appliquer » des fenêtres de réglage, jauges, pagination
   gestesDeck.js     monter, démonter, garer, ouvrir une fiche
   gestesDonnees.js  sauvegarde, archive, EDHREC, import
+  gestesNuage.js    connecter, synchroniser, déconnecter
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
 
   app.js            l'aiguillage et le démarrage
@@ -194,6 +200,47 @@ que les modules ne soient chargés — ouvrir là toute la sauvegarde pour une s
 qu'on cherche à éviter, et sans elles un atelier réglé en sombre clignerait en clair à chaque
 visite. Tant que rien n'a été choisi, `S.sombre` vaut `null` et l'atelier suit la préférence du
 système.
+
+## La synchronisation entre appareils
+
+Un même atelier sur deux PC, par un dossier d'application Dropbox — aucun serveur de l'atelier
+n'est en jeu, les données vont de ce navigateur au nuage et en reviennent. Trois décisions la
+gouvernent.
+
+**Trois étages, fusionnés différemment** (`js/nuagePaquet.js`). Le **fond** — collection, deck,
+réserve, étude, commandant, format, cibles, budget — est l'intention du joueur, et se fusionne carte
+par carte. La **vue** — vues, colonnes, groupements, tris, filtres, barre de mana, onglet, plis,
+thème, et les réglages qui dépendent de la machine comme le nombre de cartes examinées ou
+l'archivage du catalogue — **ne voyage pas** : un vingt-sept pouces et un portable ne veulent pas le
+même nombre de colonnes. Le **cache** des cartes complétées par Scryfall — visuels, textes, prix —
+voyage en union sans conflit possible, et c'est lui qui fait le vrai gain : sans lui, le second
+appareil refait des centaines d'appels pour retrouver ce que le premier savait déjà. Le paquet est
+une projection de `snapshot()` et se verse par `restore()` : la vue reste locale **par son absence
+du paquet**, non par une liste d'exceptions à tenir à jour.
+
+**Une fusion à trois côtés** (`js/nuageFusion.js`) : le local, le distant, et la **base** — le fond
+au dernier accord, gardée dans IndexedDB. Sans elle, trois exemplaires d'un côté et deux de l'autre
+sont indiscernables d'une suppression. Un seul cas reste indécidable — les deux côtés ont bougé
+différemment sur la même carte —, la plus grande quantité est retenue et la carte est **nommée**
+dans la fenêtre : une fusion qui tranche en silence est une perte de données polie. `idbVider()`
+épargne cette base, sans quoi décocher l'archivage du catalogue effacerait la mémoire des accords.
+
+**Un vrai verrou d'écriture** (`js/nuageDropbox.js`). Dropbox a été préféré à Google Drive pour
+trois raisons tenant à ce qu'une page sans serveur peut faire : le flux PKCE n'exige aucun secret
+d'application, `token_access_type=offline` rend un jeton de rafraîchissement sans échéance — on se
+connecte une fois par appareil —, et `files/upload` en mode `update` exige le `rev` du fichier qu'on
+croit remplacer, refusant en 409 si l'autre appareil a écrit entre-temps. L'API de Google Drive n'a
+pas d'équivalent depuis qu'elle a retiré les `ETag`, et son jeton ne vit qu'une heure. Un tour se
+fait toujours dans le même ordre — **tirer, fusionner, verser, pousser** — et un conflit de `rev` se
+rejoue une fois sur le nouveau distant.
+
+La configuration — jetons, chemin, `rev`, nom de l'appareil — vit dans une **clé à elle**,
+`mtg-atelier-nuage`, et non dans `snapshot()` : versée dans l'instantané, elle voyagerait jusqu'à
+l'autre PC et y écraserait son jeton et son `rev`, les deux appareils se battant alors pour le même
+verrou. C'est la seconde exception à la règle, après le thème. Se connecter demande une origine
+`http` — Dropbox ne revient que sur une adresse qu'il a pu enregistrer, et `file://` n'en est pas
+une : la section le dit et propose GitHub Pages ou `python3 -m http.server`. Tout le reste de
+l'atelier fonctionne sans cela.
 
 La feuille de style et les modules portent un marqueur de version dans leur adresse
 (`?v=…`, `index.html`). Sans lui, un navigateur relit la page en gardant en cache ce qu'elle

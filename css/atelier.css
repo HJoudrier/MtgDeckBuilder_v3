@@ -590,6 +590,11 @@ dialog::backdrop{background:var(--voile-modal)}
 .param-sec>h4{margin:0 0 4px;font-family:var(--display);font-size:15px;color:var(--brass)}
 .param-sec .param-chapeau{margin-bottom:8px}
 .param-sec .bloc{border-top:0!important;margin-top:0!important}
+/* La section « Synchronisation » cite des adresses et des noms de réglages
+   qu'il faut recopier à l'identique chez Dropbox : ils se lisent en
+   caractères fixes, sur un fond qui les détache sans les colorer. */
+.param-sec code, .dlg-b code{font-family:var(--mono);font-size:11.5px;background:var(--panel2);
+  border:1px solid var(--line);border-radius:5px;padding:1px 5px;white-space:nowrap}
 
 .dlg-h-nav{display:flex;align-items:center;gap:10px;width:100%}
 .dlg-titre{flex:1;min-width:0;margin:0;text-align:center;font-family:var(--display);font-size:17px;

@@ -17,6 +17,7 @@ document.addEventListener('click', ev => {
   if (gestesReglages(act, b)) return;
   if (gestesDeck(act, b)) return;
   if (gestesDonnees(act, b)) return;
+  if (gestesNuage(act, b)) return;
   gestesGraphe(act, b);
 });
 
@@ -125,6 +126,8 @@ document.addEventListener('input', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target;
+  /* La section « Synchronisation » : ses champs agissent sur place. */
+  if (gestesNuageChange(t)) return;
   if (t.dataset.act === 'catNumeriques') {
     modifieBrouillon(() => { S.catalogueNumeriques = !!t.checked; });
     apresReglage('Réglage des cartes numériques modifié : les candidates sont rebâties.');
@@ -286,6 +289,8 @@ function demarrer() {
     if (gameChangersARevoir()) chargerGameChangers();
   });
   demarrerCatalogue();
+  /* Le retour de connexion que l'adresse peut porter, puis un tirage de fond. */
+  nuageDemarrer();
 }
 
 if (document.readyState === 'loading') {

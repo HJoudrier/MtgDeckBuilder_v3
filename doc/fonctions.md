@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**503 fonctions**, 82 modules, 568 Ko de JavaScript.
+**557 fonctions**, 88 modules, 612 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -33,9 +33,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 278 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 282 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
-| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
+| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 68 |
+| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 113 |
+| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 8 | 166 |
+| [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 228 |
+| [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 270 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
 | [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
 | [`edhrecThemes.js`](#jsedhrecthemesjs) | L'index des thèmes EDHREC | 10 | 179 |
@@ -79,7 +83,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 213 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
-| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 127 |
+| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 7 | 137 |
+| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 130 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
@@ -90,9 +95,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
-| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 139 |
+| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
+| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 87 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 296 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 301 |
 
 ## js/reglesEffets.js
 
@@ -493,7 +499,7 @@ Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 278 lignes, 11 Ko.*
+La sauvegarde locale. *9 fonctions, 282 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -531,18 +537,118 @@ Les sections « Sauvegarde » et « Catalogue » des paramètres. *6 fonctions, 
 
 ## js/idb.js
 
-Le magasin IndexedDB. *4 fonctions, 44 lignes, 1.5 Ko.*
+Le magasin IndexedDB. *5 fonctions, 68 lignes, 2.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `idb()` | — |
 | `idbLire(cle)` | — |
 | `idbEcrire(cle, val)` | — |
-| `idbVider()` | — |
+| `idbOublier(cle)` | Oublier une seule entrée, quand on sait laquelle. |
+| `idbVider()` | Vider le magasin, sauf ce qui doit survivre : on efface entrée par entrée plutôt que d'un `clear()`, seul moyen d'en épargner une. |
 
 | Donnée | Rôle |
 |---|---|
 | `IDB_NOM` | — |
+| `IDB_NUAGE_BASE` | La base de fusion de la synchronisation (js/nuage.js) dort ici, faute de place dans `localStorage`. |
+
+## js/nuagePaquet.js
+
+Ce qui voyage d'un appareil à l'autre. *7 fonctions, 113 lignes, 4.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuagePaquet(appareil)` | Le paquet tel qu'il part : le fond, le cache, et de quoi dire qui a écrit quand — un conflit se raconte mal sans nom d'appareil. |
+| `nuageFond(paquet)` | Le fond seul, pour la base de fusion : les quantités et les réglages de deck, sans le cache des cartes. |
+| `nuageVerse(paquet)` | Verser un paquet fusionné dans l'état. Le passer à `restore()` plutôt que d'écrire une seconde application : celui-là sait déjà inscrire une carte inconnue dans la base, écarter un nom… |
+| `nuageComprime(txt)` | Le gzip du navigateur, sans dépendance : un instantané de quatre mille cartes passe de trois mégaoctets à moins de cinq cents kilo-octets, et part en octets bruts — Dropbox prend le… |
+| `nuageDecomprime(octets)` | — |
+| `nuageEmballe(paquet)` | Un paquet vers les octets qui partent, et l'inverse. |
+| `nuageDeballe(octets)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `NUAGE_PAQUET_V` | — |
+| `NUAGE_QTES` | Les quantités par nom de carte : quatre tables qui se fusionnent entrée par entrée. |
+| `NUAGE_SCALAIRES` | Ce qui ne vaut qu'une valeur, et se tranche en bloc. |
+| `NUAGE_OBJETS` | — |
+| `NUAGE_ENSEMBLES` | — |
+
+## js/nuageFusion.js
+
+Fusionner deux appareils sans rien perdre. *8 fonctions, 166 lignes, 7.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuageStable(v)` | Une écriture JSON aux clés ordonnées : les deux appareils ne construisent pas forcément leurs objets dans le même ordre, et une comparaison naïve verrait une différence là où il n'y en a… |
+| `fusionneQuantites(base, local, distant)` | Les quantités d'une liste, entrée par entrée. |
+| `fusionneEnsemble(base, local, distant)` | Un ensemble — les commandants secondaires écartés, par exemple. |
+| `fusionneValeur(base, local, distant, champ)` | Une valeur qui ne se coupe pas en deux — le commandant, le format, le budget. |
+| `nuageGarniture(o)` | Combien de champs une entrée de cache porte vraiment : c'est ce qui tranche entre deux versions d'une même carte, l'une complétée par Scryfall et l'autre non. |
+| `fusionneCache(local, distant)` | Le cache des cartes : une union, jamais un conflit. |
+| `empreinteFond(fond)` | L'empreinte du fond, ordonnée : deux fonds égaux la partagent, quel que soit l'ordre où leurs tables ont été bâties. |
+| `fusionnePaquets(base, local, distant)` | La fusion entière. `base` est le fond du dernier accord, et peut manquer : au premier accord, ou après un effacement des données locales. On retombe alors sur une fusion à deux côtés —… |
+
+## js/nuageDropbox.js
+
+L'adaptateur Dropbox. *17 fonctions, 228 lignes, 9.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `dbxRetour()` | Ce que Dropbox doit retrouver à l'identique dans sa liste d'adresses autorisées. |
+| `dbxBase64Url(octets)` | — |
+| `dbxDefi()` | Le code de preuve : un secret tiré au hasard qu'on garde, et son empreinte qu'on annonce. |
+| `dbxErreurReseau(err)` | Un échec de `fetch` sans réponse est presque toujours la barrière CORS ou l'absence de réseau, jamais un refus de Dropbox : le dire ainsi épargne une heure de recherche du côté du jeton. |
+| `dbxJson(reponse)` | — |
+| `dbxErreur(reponse, corps)` | Le message que Dropbox renvoie est un chemin d'erreur — « path/conflict/file » — plus parlant pour nous que pour le lecteur : on garde les deux. |
+| `dbxConnexion(cle)` | Premier temps : on part chez Dropbox. Le vérifieur et l'état attendent dans la clé de configuration — la page va être quittée puis rechargée, rien ne survit en mémoire. |
+| `dbxRetourConnexion()` | Second temps, au rechargement : l'adresse porte le code. |
+| `dbxPoste(url, corps)` | — |
+| `dbxEchange(code, verifieur)` | — |
+| `dbxNoteJeton(j)` | — |
+| `dbxJetonValide()` | Le jeton d'accès vit quatre heures ; celui de rafraîchissement ne meurt pas. |
+| `dbxArg(o)` | L'en-tête `Dropbox-API-Arg` ne passe qu'en ASCII : tout ce qui dépasse s'y écrit en échappement JSON. |
+| `dbxAppel(url, entetes, corps)` | — |
+| `dbxLire(chemin)` | Lire le paquet. Un fichier absent n'est pas une erreur : c'est le premier accord, et l'on part alors de ce que cet appareil connaît. |
+| `dbxEcrire(chemin, octets, rev)` | Écrire le paquet. Un `rev` vide veut dire « ce fichier n'existait pas » et l'écriture est alors un ajout qui refuse d'écraser ; sinon c'est une mise à jour conditionnée au `rev` lu, que… |
+| `dbxCompte()` | De quoi nommer le compte connecté dans la fenêtre : on ne synchronise pas à l'aveugle vers un compte dont on n'est pas sûr. |
+
+| Donnée | Rôle |
+|---|---|
+| `NUAGE_DBX_CLE` | La clé de l'application Dropbox. Publique par nature dans un flux PKCE — elle paraît dans chaque adresse de redirection —, elle peut donc être inscrite ici une fois pour toutes : les… |
+| `DBX_AUTORISE` | — |
+| `DBX_JETON` | — |
+| `DBX_API` | — |
+| `DBX_CONTENU` | — |
+
+## js/nuage.js
+
+La synchronisation : sa configuration, et son calendrier. *12 fonctions, 270 lignes, 9.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuageLire()` | — |
+| `nuageEcrire()` | — |
+| `nuageConnecte()` | — |
+| `nuageNomParDefaut()` | Un nom d'appareil qu'on puisse reconnaître dans un message de conflit, sans rien demander à l'ouverture. |
+| `nuageBaseLire()` | La base : le fond du dernier accord. Une lecture qui échoue rend `null`, et la fusion retombe d'elle-même sur deux côtés — dégradée, mais jamais bloquée. |
+| `nuageBaseEcrire(fond)` | — |
+| `nuageTour(rejoue)` | Tirer, fusionner, verser, pousser. Un conflit de `rev` — l'autre appareil a écrit pendant notre aller-retour — se rejoue une fois : on relit, on refusionne sur le nouveau distant, on… |
+| `nuagePoids(o)` | — |
+| `nuageSynchro(manuel)` | Le tour, habillé : un seul à la fois, l'état rendu à la fenêtre si elle est ouverte, et un mot au lecteur quand c'est lui qui a demandé. |
+| `nuagePousseeDifferee()` | — |
+| `nuageDemarrer()` | — |
+| `nuageDeconnecte()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `NUAGE_CLE` | — |
+| `NUAGE_ETRANGLE` | Une poussée au plus toutes les quinze secondes : `scheduleSave()` se déclenche à chaque geste, et l'on ne va pas chez Dropbox à chaque carte ajoutée. |
+| `NUAGE_FRAICHEUR` | Au retour sur l'onglet, on ne retire que si le dernier accord a plus d'une minute : revenir d'un autre onglet trois fois de suite ne vaut pas trois allers-retours. |
+| `NUAGE` | — |
+| `NUAGE_DURABLE` | — |
+| `nuageMinuteur` | La poussée qui suit un geste. Étranglée, et toujours différée : on ne part pas chez Dropbox au milieu d'un ajout de carte. |
+| `nuageDerniereAuto` | — |
 
 ## js/edhrec.js
 
@@ -1248,9 +1354,28 @@ Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 | `majFenetreFormat()` | Réécrit la fenêtre si elle est ouverte : changement de format, apparition ou disparition du panneau « Personnalisé ». |
 | `openFormatModal()` | — |
 
+## js/fenNuage.js
+
+La section « Synchronisation » de la fenêtre des paramètres. *7 fonctions, 137 lignes, 7.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuageQuand(t)` | « il y a trois minutes » se lit mieux qu'un horodatage quand on vient de cliquer, et une date quand cela remonte à hier. |
+| `nuageConflits()` | Les désaccords que la fusion n'a pas pu trancher seule. |
+| `nuageEtatLigne()` | L'état en une ligne, avec sa pastille. |
+| `nuageAvertissementOrigine()` | Sans origine http, la connexion est impossible : Dropbox n'accepte de revenir que sur une adresse qu'il a pu enregistrer, et `file://` n'en est pas une. |
+| `nuageCorpsDeconnecte()` | Non connecté : la clé de l'application, et de quoi la créer. |
+| `nuageCorpsConnecte()` | Connecté : qui, quand, combien, et les gestes. |
+| `corpsNuage()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `NUAGE_LISTES` | — |
+| `NUAGE_CHAMPS` | — |
+
 ## js/fenParametres.js
 
-Fenêtre « Paramètres ». *9 fonctions, 127 lignes, 5.8 Ko.*
+Fenêtre « Paramètres ». *9 fonctions, 130 lignes, 5.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1396,11 +1521,20 @@ Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 193 lignes, 7.5
 
 ## js/gestesDonnees.js
 
-Les gestes qui touchent aux données. *1 fonctions, 139 lignes, 4.4 Ko.*
+Les gestes qui touchent aux données. *1 fonctions, 146 lignes, 4.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `gestesDonnees(act, b)` | — |
+
+## js/gestesNuage.js
+
+Les gestes de la synchronisation. *2 fonctions, 87 lignes, 3.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesNuage(act, b)` | — |
+| `gestesNuageChange(t)` | Les trois champs de la section. Rendu `true`, l'écouteur `change` d'`app.js` s'arrête là. |
 
 ## js/gestesGraphe.js
 
@@ -1412,7 +1546,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 296 lignes, 11 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 301 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

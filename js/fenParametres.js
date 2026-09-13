@@ -72,6 +72,9 @@ function corpsParametres() {
     ${sectionParametres('Sauvegarde locale',
       "Où vivent vos données, et comment les emporter d'un appareil à l'autre.",
       corpsSauvegarde())}
+    ${sectionParametres('Synchronisation',
+      "Emporter collection et deck d'un appareil à l'autre, par votre Dropbox.",
+      corpsNuage())}
     ${sectionParametres('Apparence',
       "La teinte de l'atelier.",
       corpsApparence())}

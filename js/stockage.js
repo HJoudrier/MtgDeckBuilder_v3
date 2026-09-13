@@ -135,6 +135,10 @@ function save() {
       : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la fenêtre de sauvegarde pour ne rien perdre.");
   }
   if (saveState === 'ok') dernierEtatSignale = 'ok';
+  /* Les données ont changé et sont écrites : s'il y a un appareil jumeau, il y
+     a lieu de l'en avertir. La poussée est étranglée et différée
+     (`js/nuage.js`) — `save()` se déclenche à chaque geste. */
+  if (typeof nuagePousseeDifferee === 'function') nuagePousseeDifferee();
 }
 
 function scheduleSave() {
