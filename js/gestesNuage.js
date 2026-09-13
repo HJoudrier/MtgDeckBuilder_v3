@@ -32,6 +32,11 @@ function gestesNuage(act, b) {
     return true;
   }
 
+  if (act === 'nuageTester') {
+    nuageDiagnostic();
+    return true;
+  }
+
   if (act === 'nuageDeconnecter') {
     openDialog('Déconnecter la synchronisation',
       `<p class="small">Cet appareil cessera de suivre le dossier Dropbox. <b>Rien n'est effacé</b> :

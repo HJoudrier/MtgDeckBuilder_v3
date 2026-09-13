@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**557 fonctions**, 88 modules, 612 Ko de JavaScript.
+**561 fonctions**, 89 modules, 618 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -38,8 +38,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 68 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 113 |
 | [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 8 | 166 |
-| [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 228 |
-| [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 270 |
+| [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
+| [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 275 |
+| [`nuageDiagnostic.js`](#jsnuagediagnosticjs) | Éprouver la connexion, étape par étape | 3 | 86 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
 | [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
 | [`edhrecThemes.js`](#jsedhrecthemesjs) | L'index des thèmes EDHREC | 10 | 179 |
@@ -83,7 +84,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 213 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 33 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
-| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 7 | 137 |
+| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 8 | 151 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 130 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 5 | 78 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
@@ -96,7 +97,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
-| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 87 |
+| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 301 |
 
@@ -591,7 +592,7 @@ Fusionner deux appareils sans rien perdre. *8 fonctions, 166 lignes, 7.5 Ko.*
 
 ## js/nuageDropbox.js
 
-L'adaptateur Dropbox. *17 fonctions, 228 lignes, 9.5 Ko.*
+L'adaptateur Dropbox. *17 fonctions, 240 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -600,7 +601,7 @@ L'adaptateur Dropbox. *17 fonctions, 228 lignes, 9.5 Ko.*
 | `dbxDefi()` | Le code de preuve : un secret tiré au hasard qu'on garde, et son empreinte qu'on annonce. |
 | `dbxErreurReseau(err)` | Un échec de `fetch` sans réponse est presque toujours la barrière CORS ou l'absence de réseau, jamais un refus de Dropbox : le dire ainsi épargne une heure de recherche du côté du jeton. |
 | `dbxJson(reponse)` | — |
-| `dbxErreur(reponse, corps)` | Le message que Dropbox renvoie est un chemin d'erreur — « path/conflict/file » — plus parlant pour nous que pour le lecteur : on garde les deux. |
+| `dbxErreur(reponse, corps, ou)` | Ce que Dropbox renvoie prend deux formes, et la seconde est la plus utile : un JSON dont `error_summary` est un chemin d'erreur — « path/conflict/file/… » —, ou, sur une requête… |
 | `dbxConnexion(cle)` | Premier temps : on part chez Dropbox. Le vérifieur et l'état attendent dans la clé de configuration — la page va être quittée puis rechargée, rien ne survit en mémoire. |
 | `dbxRetourConnexion()` | Second temps, au rechargement : l'adresse porte le code. |
 | `dbxPoste(url, corps)` | — |
@@ -623,7 +624,7 @@ L'adaptateur Dropbox. *17 fonctions, 228 lignes, 9.5 Ko.*
 
 ## js/nuage.js
 
-La synchronisation : sa configuration, et son calendrier. *12 fonctions, 270 lignes, 9.6 Ko.*
+La synchronisation : sa configuration, et son calendrier. *12 fonctions, 275 lignes, 9.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -649,6 +650,20 @@ La synchronisation : sa configuration, et son calendrier. *12 fonctions, 270 lig
 | `NUAGE_DURABLE` | — |
 | `nuageMinuteur` | La poussée qui suit un geste. Étranglée, et toujours différée : on ne part pas chez Dropbox au milieu d'un ajout de carte. |
 | `nuageDerniereAuto` | — |
+
+## js/nuageDiagnostic.js
+
+Éprouver la connexion, étape par étape. *3 fonctions, 86 lignes, 3.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuageEtape(nom, faire)` | Une étape : son nom, et ce qu'elle a donné. |
+| `nuageEffaceTemoin()` | Supprimer le témoin. C'est une étape à part : elle demande la même permission d'écriture que le dépôt, et son échec isolé dirait que `files.content.write` a été accordée à moitié. |
+| `nuageDiagnostic()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `NUAGE_TEMOIN` | — |
 
 ## js/edhrec.js
 
@@ -1356,13 +1371,14 @@ Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 
 ## js/fenNuage.js
 
-La section « Synchronisation » de la fenêtre des paramètres. *7 fonctions, 137 lignes, 7.7 Ko.*
+La section « Synchronisation » de la fenêtre des paramètres. *8 fonctions, 151 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `nuageQuand(t)` | « il y a trois minutes » se lit mieux qu'un horodatage quand on vient de cliquer, et une date quand cela remonte à hier. |
 | `nuageConflits()` | Les désaccords que la fusion n'a pas pu trancher seule. |
 | `nuageEtatLigne()` | L'état en une ligne, avec sa pastille. |
+| `nuageDetail()` | Ce que Dropbox a répondu mot pour mot, quand il a refusé. |
 | `nuageAvertissementOrigine()` | Sans origine http, la connexion est impossible : Dropbox n'accepte de revenir que sur une adresse qu'il a pu enregistrer, et `file://` n'en est pas une. |
 | `nuageCorpsDeconnecte()` | Non connecté : la clé de l'application, et de quoi la créer. |
 | `nuageCorpsConnecte()` | Connecté : qui, quand, combien, et les gestes. |
@@ -1529,7 +1545,7 @@ Les gestes qui touchent aux données. *1 fonctions, 146 lignes, 4.9 Ko.*
 
 ## js/gestesNuage.js
 
-Les gestes de la synchronisation. *2 fonctions, 87 lignes, 3.1 Ko.*
+Les gestes de la synchronisation. *2 fonctions, 92 lignes, 3.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|

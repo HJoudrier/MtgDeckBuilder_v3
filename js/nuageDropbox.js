@@ -73,13 +73,25 @@ async function dbxJson(reponse) {
   try { return txt ? JSON.parse(txt) : {}; } catch(e) { return {brut: txt}; }
 }
 
-/* Le message que Dropbox renvoie est un chemin d'erreur — « path/conflict/file »
-   — plus parlant pour nous que pour le lecteur : on garde les deux. */
-function dbxErreur(reponse, corps) {
+/* Ce que Dropbox renvoie prend deux formes, et la seconde est la plus utile :
+   un JSON dont `error_summary` est un chemin d'erreur — « path/conflict/file/… » —,
+   ou, sur une requête malformée, un texte brut qui nomme précisément ce qui
+   cloche (« HTTP header "Dropbox-API-Arg" : … »). Ce texte était jeté ; il est
+   désormais gardé et montré, de même que l'appel d'où vient le refus. Un
+   résumé tronqué en « other/… » ne se diagnostique pas, et faire essayer des
+   correctifs au hasard coûte plus cher que de rapporter la phrase entière. */
+function dbxErreur(reponse, corps, ou) {
   const resume = (corps && (corps.error_summary || corps.error_description)) || '';
-  const e = new Error(`Dropbox a refusé (${reponse.status}${resume ? ' : ' + resume : ''})`);
+  const brut = (corps && corps.brut ? String(corps.brut) : '').trim();
+  const dit = resume || brut.slice(0, 400);
+  const e = new Error(`Dropbox a refusé ${ou ? `(${ou}) ` : ''}— ${reponse.status}${dit ? ' : ' + dit : ''}`);
   e.statut = reponse.status;
   e.resume = resume;
+  e.brut = brut;
+  e.ou = ou || '';
+  e.detail = [`appel : ${ou || '?'}`, `statut : ${reponse.status}`,
+    resume ? `résumé : ${resume}` : '', brut ? `réponse : ${brut.slice(0, 800)}` : '']
+    .filter(Boolean).join('\n');
   e.conflit = /conflict/.test(resume);
   e.absent = /not_found/.test(resume);
   e.jetonMort = reponse.status === 401 || /invalid_access_token|expired_access_token/.test(resume);
@@ -136,7 +148,7 @@ async function dbxPoste(url, corps) {
     });
   } catch(err) { throw dbxErreurReseau(err); }
   const j = await dbxJson(r);
-  if (!r.ok) throw dbxErreur(r, j);
+  if (!r.ok) throw dbxErreur(r, j, 'jeton');
   return j;
 }
 
@@ -192,7 +204,7 @@ async function dbxAppel(url, entetes, corps) {
 async function dbxLire(chemin) {
   const r = await dbxAppel(`${DBX_CONTENU}/files/download`, {'Dropbox-API-Arg': dbxArg({path: chemin})});
   if (!r.ok) {
-    const e = dbxErreur(r, await dbxJson(r));
+    const e = dbxErreur(r, await dbxJson(r), 'lecture du fichier');
     if (e.absent) return null;
     throw e;
   }
@@ -213,7 +225,7 @@ async function dbxEcrire(chemin, octets, rev) {
     {'Dropbox-API-Arg': dbxArg({path: chemin, mode, autorename: false, mute: true}),
      'Content-Type': 'application/octet-stream'}, octets);
   const j = await dbxJson(r);
-  if (!r.ok) throw dbxErreur(r, j);
+  if (!r.ok) throw dbxErreur(r, j, rev ? 'écriture (mise à jour)' : 'écriture (création)');
   return {rev: j.rev || '', octets: octets.length};
 }
 
@@ -222,6 +234,6 @@ async function dbxEcrire(chemin, octets, rev) {
 async function dbxCompte() {
   const r = await dbxAppel(`${DBX_API}/users/get_current_account`, {'Content-Type': 'application/json'}, 'null');
   const j = await dbxJson(r);
-  if (!r.ok) throw dbxErreur(r, j);
+  if (!r.ok) throw dbxErreur(r, j, 'compte');
   return (j.name && j.name.display_name) || j.email || '';
 }

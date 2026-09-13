@@ -47,6 +47,7 @@ js/                 modules, chargés dans cet ordre :
   nuageFusion.js    fusionner deux appareils sans rien perdre
   nuageDropbox.js   l'adaptateur Dropbox : PKCE, et le `rev` comme verrou
   nuage.js          la synchronisation : sa configuration, et son calendrier
+  nuageDiagnostic.js  éprouver la connexion, étape par étape
   edhrec.js         les statistiques d'EDHREC pour un commandant
   edhrecForme.js    deviner la forme des pages de thèmes d'EDHREC
   edhrecThemes.js   l'index des thèmes EDHREC

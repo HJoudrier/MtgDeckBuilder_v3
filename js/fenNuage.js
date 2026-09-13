@@ -57,6 +57,14 @@ function nuageEtatLigne() {
     ${esc(mots[NUAGE.etat] || NUAGE.etat)}</span>${NUAGE.msg ? ` — ${esc(NUAGE.msg)}` : ''}</div>`;
 }
 
+/* Ce que Dropbox a répondu mot pour mot, quand il a refusé. Sélectionnable :
+   c'est cette phrase-là qu'on recopie pour comprendre, et un résumé tronqué en
+   « other/… » n'apprend rien à personne. */
+function nuageDetail() {
+  if (!NUAGE.detail) return '';
+  return `<div class="nuage-detail">${esc(NUAGE.detail)}</div>`;
+}
+
 /* Sans origine http, la connexion est impossible : Dropbox n'accepte de
    revenir que sur une adresse qu'il a pu enregistrer, et `file://` n'en est
    pas une. On le dit avant le bouton plutôt que de laisser l'utilisateur
@@ -115,6 +123,7 @@ function nuageCorpsConnecte() {
       NUAGE.dernierPar && NUAGE.dernierPar !== NUAGE.appareil
         ? `, écrit par « ${esc(NUAGE.dernierPar)} »` : ''}${
       NUAGE.octets ? ` · ${esc(nuagePoids(NUAGE.octets))}` : ''}</div>
+    ${nuageDetail()}
     ${nuageConflits()}
     <label class="row small" style="gap:8px;margin-top:6px">
       <input type="checkbox" id="nuageAuto" ${NUAGE.auto ? 'checked' : ''} data-act="nuageAuto">
@@ -125,8 +134,13 @@ function nuageCorpsConnecte() {
     <div class="row" style="gap:6px;margin-top:6px">
       <button type="button" class="btn sm pri" data-act="nuageMaintenant"
         ${NUAGE.enCours ? 'disabled' : ''}>Synchroniser maintenant</button>
+      <button type="button" class="btn sm" data-act="nuageTester"
+        ${NUAGE.enCours ? 'disabled' : ''}>Tester la connexion</button>
       <button type="button" class="btn sm danger" data-act="nuageDeconnecter">Déconnecter</button>
     </div>
+    <div class="small muted">« Tester » éprouve le jeton, le compte, la lecture puis l'écriture, et
+      s'arrête au premier refus en rendant la réponse entière de Dropbox — un échec de synchronisation
+      ne dit pas, à lui seul, laquelle des quatre a cédé.</div>
     <div class="small muted">Déconnecter n'efface rien, ni ici ni chez Dropbox : cet appareil cesse
       simplement de suivre.</div>`;
 }

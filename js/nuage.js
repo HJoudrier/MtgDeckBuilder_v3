@@ -45,6 +45,9 @@ const NUAGE = {
   /* — ce qui ne l'est pas — */
   etat: 'repos',
   msg: '',
+  /* La réponse entière de Dropbox quand il refuse : le résumé seul — parfois
+     « other/… » — ne se diagnostique pas. */
+  detail: '',
   conflits: [],
   octets: 0,
   enCours: false
@@ -186,11 +189,13 @@ async function nuageSynchro(manuel) {
     const r = await nuageTour(false);
     NUAGE.etat = 'ok';
     NUAGE.msg = r.resume;
+    NUAGE.detail = '';
     if (manuel) toast(r.resume);
     else if (r.verse) toast('Synchronisation : ' + r.resume);
   } catch(err) {
     NUAGE.etat = 'erreur';
     NUAGE.msg = err.message || 'échec de la synchronisation';
+    NUAGE.detail = err.detail || (err.reseau ? 'aucune réponse : barrière CORS ou réseau' : '');
     /* Un jeton mort n'est pas une panne : c'est une connexion à refaire, et il
        vaut mieux le dire que réessayer toutes les quinze secondes. */
     if (err.jetonMort) {
