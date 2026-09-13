@@ -97,7 +97,7 @@ function openImport(cible) {
       : 'Les cartes absentes de la base sont créées puis complétées.'}</p>
      <div class="row" style="gap:8px;align-items:center">
        <label class="btn" for="impFile" style="margin:0;cursor:pointer">Choisir un fichier…</label>
-       <input id="impFile" type="file" accept=".txt,.dec,.dek,.mwDeck,.cod,text/plain" multiple style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+       <input id="impFile" type="file" accept=".txt,.dec,.dek,.mwDeck,.cod,text/plain" multiple class="fichier-cache">
        <span class="small muted" id="impInfo">ou déposez-le sur la zone ci-dessous, ou collez la liste</span>
      </div>
      <textarea id="imp" placeholder="1 Sol Ring (LTC) 344&#10;1 Rhystic Study&#10;4 Lightning Bolt (2X2) 117"></textarea>

@@ -599,6 +599,15 @@ dialog::backdrop{background:var(--voile-modal)}
 .dlg-nav[disabled]:hover{border-color:var(--line2);color:inherit}
 .dlg-b{padding:14px;display:flex;flex-direction:column;gap:10px;max-height:min(68vh,620px);overflow:auto}
 dialog.wide{max-width:min(760px,96vw)}
+/* Un champ de fichier qu'on n'affiche pas : c'est son étiquette, dessinée en
+   bouton, qui l'ouvre. Il est hors flux, mais ancré au coin de son bloc
+   conteneur plutôt que laissé à sa position statique : en mode modal le
+   navigateur pose le <dialog> en `position:fixed`, si bien qu'un absolu sans
+   ancêtre positionné s'accroche à la fenêtre entière et non au corps qui
+   défile. Posé au fond des paramètres, il y creusait une hauteur de mille deux
+   cents pixels pour sept cents de contenu — une seconde barre de défilement,
+   et du vide sous les boutons quand on la descendait. */
+.fichier-cache{position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none}
 .fiche{display:flex;gap:14px;flex-wrap:wrap}
 .fiche .visucol{display:flex;flex-direction:column;gap:7px;width:min(300px,50%);flex:0 0 auto}
 .fiche .visucol .visuwrap{width:100%}
@@ -699,4 +708,8 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
    elle occupe sa propre ligne sous les boutons. */
 .dlg-f{flex-wrap:wrap}
 .filtre-progres{flex:1 1 100%;display:flex;flex-direction:column;gap:4px}
+/* Le `display:flex` ci-dessus l'emportait sur le `hidden` du navigateur : la
+   zone se réservait une ligne vide sous les boutons tant qu'aucun filtrage ne
+   tournait. */
+.filtre-progres[hidden]{display:none}
 .dlg-f .btn:disabled{opacity:.45;cursor:default}

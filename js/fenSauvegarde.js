@@ -37,7 +37,7 @@ function corpsSauvegarde() {
       <button type="button" class="btn sm" data-act="saveNow">Enregistrer maintenant</button>
       <button type="button" class="btn sm" data-act="saveExport">Exporter un fichier</button>
       <label class="btn sm" for="saveFile" style="margin:0;cursor:pointer">Restaurer un fichier</label>
-      <input id="saveFile" type="file" accept="application/json,.json" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+      <input id="saveFile" type="file" accept="application/json,.json" class="fichier-cache">
       <button type="button" class="btn sm danger" data-act="saveWipe">Effacer les données locales</button>
     </div>`;
 }
@@ -82,8 +82,7 @@ function blocCatalogue() {
     <div class="small muted" style="margin-top:6px"><b>Mettre à jour</b> compare l'archive de cet appareil à celle que publie Scryfall : elle n'est retéléchargée et réextraite que si elle manque ou si elle a vieilli, sinon seuls les prix sont rafraîchis. <b>Télécharger et extraire</b> force ce téléchargement, sans fichier intermédiaire. Si Scryfall refuse la requête directe, passez par le lien de téléchargement puis par le chargement de l'archive obtenue.</div>
     <div class="row" style="gap:6px;margin-top:6px">
       <label class="btn sm" for="catFile" style="margin:0;cursor:pointer">Charger une archive téléchargée</label>
-      <input id="catFile" type="file" accept=".gz,.json,.jsonl,application/json,application/gzip"
-             style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+      <input id="catFile" type="file" accept=".gz,.json,.jsonl,application/json,application/gzip" class="fichier-cache">
       <button type="button" class="btn sm" data-act="catalogueTelecharger" ${dispo&&S.catalogueActif?'':'disabled'}>Télécharger et extraire</button>
       <button type="button" class="btn sm pri" data-act="catalogueMaj">Mettre à jour</button>
       <button type="button" class="btn sm danger" data-act="catalogueEffacer" ${dispo?'':'disabled'}>Effacer l'archive</button>

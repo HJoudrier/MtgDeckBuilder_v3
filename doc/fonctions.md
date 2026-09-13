@@ -34,7 +34,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 278 |
-| [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 201 |
+| [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 4 | 44 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
 | [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
@@ -518,7 +518,7 @@ La sauvegarde locale. *9 fonctions, 278 lignes, 11 Ko.*
 
 ## js/fenSauvegarde.js
 
-Les sections « Sauvegarde » et « Catalogue » des paramètres. *6 fonctions, 201 lignes, 12 Ko.*
+Les sections « Sauvegarde » et « Catalogue » des paramètres. *6 fonctions, 200 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
