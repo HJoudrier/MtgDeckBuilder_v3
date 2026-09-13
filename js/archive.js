@@ -35,7 +35,11 @@ function compacte(sc) {
     String(sc.set || '').toUpperCase(),
     /* Carte qui n'existe que sous forme numérique : Alchemy, rééquilibrages
        Arena, exclusivités MTGO. On ne peut pas les posséder sur papier. */
-    (sc.digital || (Array.isArray(sc.games) && !sc.games.includes('paper'))) ? 1 : 0
+    (sc.digital || (Array.isArray(sc.games) && !sc.games.includes('paper'))) ? 1 : 0,
+    /* Les couleurs que la carte produit, que seul Scryfall sait vraiment : un
+       terrain-filtre ou un tutorat de terrain échappent à la lecture du texte.
+       Vide quand Scryfall ne dit rien — le texte prend alors le relais. */
+    (sc.produced_mana || []).join('')
   ];
 }
 

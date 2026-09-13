@@ -24,12 +24,42 @@ function statsOf(list) {
   return st;
 }
 
+/* La courbe de mana d'une liste : combien d'exemplaires à chaque coût, la
+   quantité répartie entre les couleurs de l'identité. Les terrains en sont
+   exclus — une courbe parle des sorts qu'on lance.
+
+   Cette fonction était écrite deux fois à l'identique, ici et dans la section
+   Deck, à un détail près : l'arrondi ne figurait que du côté de la collection,
+   si bien qu'une bicolore faisait afficher « 2.3333333333333335 » sous une
+   barre du deck. Une seule copie, et l'arrondi vaut pour les deux. */
+function repartitionCmc(entries) {
+  const out = {};
+  entries.forEach(e => {
+    if (e.card.isLand) return;
+    const k = Math.min(e.card.cmc, 9);
+    out[k] = out[k] || {W:0, U:0, B:0, R:0, G:0, C:0};
+    const ids = e.card.identity.length ? e.card.identity : ['C'];
+    ids.forEach(col => out[k][col] += e.qty / ids.length);
+  });
+  Object.values(out).forEach(o => Object.keys(o).forEach(k => o[k] = Math.round(o[k] * 10) / 10));
+  return out;
+}
+
+/* Le total d'une barre. Arrondir chaque couleur ne suffit pas : `0,3 + 0,3 +
+   0,3` ne fait pas `0,9` en virgule flottante, et la barre annonçait
+   « 0.8999999999999999 ». C'est la somme qu'il faut arrondir, au moment où
+   elle s'écrit. */
+function totalBarre(v) {
+  const t = typeof v === 'number' ? v : Object.values(v).reduce((a, b) => a + b, 0);
+  return Math.round(t * 10) / 10;
+}
+
 function histogram(dataByCmc, colorSplit) {
-  const max = Math.max(1, ...Object.values(dataByCmc).map(v => typeof v === 'number' ? v : Object.values(v).reduce((a, b) => a + b, 0)));
+  const max = Math.max(1, ...Object.values(dataByCmc).map(totalBarre));
   const bars = [];
   for (let i = 0; i <= 9; i++) {
     const v = dataByCmc[i] || 0;
-    const tot = typeof v === 'number' ? v : Object.values(v).reduce((a, b) => a + b, 0);
+    const tot = totalBarre(v);
     const h = Math.round(tot / max * 118);
     let segs = '';
     if (colorSplit && typeof v === 'object') {
@@ -39,7 +69,7 @@ function histogram(dataByCmc, colorSplit) {
     } else {
       segs = `<div class="bseg" style="height:${Math.max(tot ? 2 : 0, h)}px;background:linear-gradient(180deg,var(--brass),var(--brass-d))"></div>`;
     }
-    bars.push(`<div class="bar"><div class="n">${tot || ''}</div>${segs}</div>`);
+    bars.push(`<div class="bar"><div class="n">${tot ? nombreMana(tot) : ''}</div>${segs}</div>`);
   }
   return `<div class="bars">${bars.join('')}</div>
     <div class="blabels">${[0,1,2,3,4,5,6,7,8,'9+'].map(i => `<div>${i}</div>`).join('')}</div>`;
@@ -49,14 +79,7 @@ function renderC() {
   const all = statsOf(collectionCards()), fl = statsOf(filtered());
   const f = fmt();
   const usable = filtered().reduce((n, e) => n + Math.min(e.qty, f.maxCopies), 0);
-  const cmcSplit = {};
-  filtered().forEach(e => {
-    if (e.card.isLand) return;
-    const k = Math.min(e.card.cmc, 9);
-    cmcSplit[k] = cmcSplit[k] || {W:0, U:0, B:0, R:0, G:0, C:0};
-    (e.card.identity.length ? e.card.identity : ['C']).forEach(col => cmcSplit[k][col] += e.qty / (e.card.identity.length || 1));
-  });
-  Object.values(cmcSplit).forEach(o => Object.keys(o).forEach(k => o[k] = Math.round(o[k] * 10) / 10));
+  const cmcSplit = repartitionCmc(filtered());
 
   const bodyEl = document.getElementById('bodyC');
   if (bodyEl) {

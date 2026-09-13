@@ -7,7 +7,11 @@
    garder sur l'enregistrement lui-même.
    ===================================================================== */
 
-const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14, SET:15, NUMERIQUE:16};
+/* `MANA_PROD` est venue en dernier : une archive d'hier n'a que dix-sept
+   colonnes, l'indice y rend `undefined`, et la carte retombe alors sur la
+   lecture de son texte (`manaProduitDe()`, js/mana.js). Aucune migration
+   n'est donc nécessaire — c'est le chemin qu'a déjà suivi `NUMERIQUE`. */
+const CH = {NOM:0, COUT:1, TYPE:2, TEXTE:3, CMC:4, ID_COUL:5, FORCE:6, PRIX:7, ID:8, RANG:9, LEGAL:10, IMG:11, VERSO:12, ENDURANCE:13, ARTISTE:14, SET:15, NUMERIQUE:16, MANA_PROD:17};
 
 const CAT = {
   etat:'', cartes:[], maj:null, source:'', octets:0, date:null, detail:'', partiel:false,
@@ -50,6 +54,7 @@ function getCardOrAnalyzedRec(rec) {
   if (rec[CH.FORCE] != null) card.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) card.endurance = rec[CH.ENDURANCE];
   if (rec[CH.ARTISTE]) card.artist = rec[CH.ARTISTE];
+  if (rec[CH.MANA_PROD]) card.manaProduit = ordonneMana(String(rec[CH.MANA_PROD]).split(''));
   rec._card = card;
   return card;
 }

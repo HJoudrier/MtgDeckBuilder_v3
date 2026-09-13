@@ -8,6 +8,7 @@
   "analyse.js",
   "archetypesLibelles.js",
   "categories.js",
+  "mana.js",
   "impressions.js",
   "cartes.js",
   "liens.js",
@@ -414,6 +415,165 @@
     "completeDepuisRec",
     "majTexteOracle",
     "restore"
+   ]
+  },
+  {
+   "nom": "ordonneMana",
+   "fichier": "mana.js",
+   "ligne": 28,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "applyScryfall",
+    "getCardOrAnalyzedRec",
+    "manaProduitTexte"
+   ]
+  },
+  {
+   "nom": "manaVide",
+   "fichier": "mana.js",
+   "ligne": 33,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bilanMana",
+    "pipsCarte"
+   ]
+  },
+  {
+   "nom": "pipsCarte",
+   "fichier": "mana.js",
+   "ligne": 48,
+   "chargement": false,
+   "appelle": [
+    "manaVide"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bilanMana"
+   ]
+  },
+  {
+   "nom": "manaProduitTexte",
+   "fichier": "mana.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [
+    "ordonneMana"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manaProduitDe"
+   ]
+  },
+  {
+   "nom": "manaProduitDe",
+   "fichier": "mana.js",
+   "ligne": 103,
+   "chargement": false,
+   "appelle": [
+    "manaProduitTexte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bilanMana"
+   ]
+  },
+  {
+   "nom": "bilanMana",
+   "fichier": "mana.js",
+   "ligne": 116,
+   "chargement": false,
+   "appelle": [
+    "deckEntries",
+    "manaProduitDe",
+    "manaVide",
+    "pipsCarte",
+    "verdictMana"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocMana"
+   ]
+  },
+  {
+   "nom": "verdictMana",
+   "fichier": "mana.js",
+   "ligne": 158,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bilanMana"
+   ]
+  },
+  {
+   "nom": "pourcentMana",
+   "fichier": "mana.js",
+   "ligne": 170,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ligneMana"
+   ]
+  },
+  {
+   "nom": "nombreMana",
+   "fichier": "mana.js",
+   "ligne": 176,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocMana",
+    "histogram",
+    "ligneMana"
+   ]
+  },
+  {
+   "nom": "ligneMana",
+   "fichier": "mana.js",
+   "ligne": 180,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "nombreMana",
+    "pourcentMana",
+    "symIcon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocMana"
+   ]
+  },
+  {
+   "nom": "blocMana",
+   "fichier": "mana.js",
+   "ligne": 197,
+   "chargement": false,
+   "appelle": [
+    "bilanMana",
+    "nombreMana"
+   ],
+   "appelleDiffere": [
+    "ligneMana"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderE"
    ]
   },
   {
@@ -2027,7 +2187,7 @@
   {
    "nom": "catalogueAbsent",
    "fichier": "catalogueEtat.js",
-   "ligne": 19,
+   "ligne": 23,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2040,7 +2200,7 @@
   {
    "nom": "noeudsActifs",
    "fichier": "catalogueEtat.js",
-   "ligne": 23,
+   "ligne": 27,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2061,7 +2221,7 @@
   {
    "nom": "carteTouche",
    "fichier": "catalogueEtat.js",
-   "ligne": 27,
+   "ligne": 31,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2077,11 +2237,12 @@
   {
    "nom": "getCardOrAnalyzedRec",
    "fichier": "catalogueEtat.js",
-   "ligne": 39,
+   "ligne": 43,
    "chargement": false,
    "appelle": [
     "buildCard",
-    "find"
+    "find",
+    "ordonneMana"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -2093,7 +2254,7 @@
   {
    "nom": "recToucheNoeuds",
    "fichier": "catalogueEtat.js",
-   "ligne": 57,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
     "carteTouche",
@@ -2635,6 +2796,7 @@
     "manaFb"
    ],
    "appeleePar": [
+    "ligneMana",
     "manaHTML",
     "renderC",
     "zoneCommandant"
@@ -2715,6 +2877,7 @@
     "loose",
     "majTexteOracle",
     "norm",
+    "ordonneMana",
     "reanalyser",
     "registerCard",
     "renameCard"
@@ -3099,7 +3262,7 @@
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 118,
+   "ligne": 119,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -3111,7 +3274,7 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 122,
+   "ligne": 123,
    "chargement": false,
    "appelle": [
     "ecrire",
@@ -3133,7 +3296,7 @@
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 153,
+   "ligne": 154,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -3159,7 +3322,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 159,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -3181,7 +3344,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 259,
+   "ligne": 264,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4702,7 +4865,7 @@
   {
    "nom": "autoCatalogue",
    "fichier": "archive.js",
-   "ligne": 44,
+   "ligne": 48,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4714,7 +4877,7 @@
   {
    "nom": "estGzip",
    "fichier": "archive.js",
-   "ligne": 58,
+   "ligne": 62,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4726,7 +4889,7 @@
   {
    "nom": "compteurOctets",
    "fichier": "archive.js",
-   "ligne": 65,
+   "ligne": 69,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4738,7 +4901,7 @@
   {
    "nom": "nouveauSuivi",
    "fichier": "archive.js",
-   "ligne": 80,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "majBoiteCatalogue"
@@ -4753,7 +4916,7 @@
   {
    "nom": "fluxTexte",
    "fichier": "archive.js",
-   "ligne": 97,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "compteurOctets",
@@ -4768,7 +4931,7 @@
   {
    "nom": "fusionneSets",
    "fichier": "archive.js",
-   "ligne": 120,
+   "ligne": 124,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4780,7 +4943,7 @@
   {
    "nom": "retiens",
    "fichier": "archive.js",
-   "ligne": 133,
+   "ligne": 137,
    "chargement": false,
    "appelle": [
     "fusionneSets",
@@ -4795,7 +4958,7 @@
   {
    "nom": "tailleEstimee",
    "fichier": "archive.js",
-   "ligne": 144,
+   "ligne": 148,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4808,7 +4971,7 @@
   {
    "nom": "ArchiveAbandonnee",
    "fichier": "archive.js",
-   "ligne": 154,
+   "ligne": 158,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4820,7 +4983,7 @@
   {
    "nom": "lireCatalogueFichier",
    "fichier": "archive.js",
-   "ligne": 156,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "ArchiveAbandonnee",
@@ -5346,9 +5509,9 @@
    ]
   },
   {
-   "nom": "histogram",
+   "nom": "repartitionCmc",
    "fichier": "stats.js",
-   "ligne": 27,
+   "ligne": 35,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5359,9 +5522,37 @@
    ]
   },
   {
+   "nom": "totalBarre",
+   "fichier": "stats.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "histogram"
+   ]
+  },
+  {
+   "nom": "histogram",
+   "fichier": "stats.js",
+   "ligne": 57,
+   "chargement": false,
+   "appelle": [
+    "nombreMana",
+    "totalBarre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderC",
+    "renderE"
+   ]
+  },
+  {
    "nom": "renderC",
    "fichier": "stats.js",
-   "ligne": 48,
+   "ligne": 78,
    "chargement": false,
    "appelle": [
     "collectionCards",
@@ -5369,6 +5560,7 @@
     "filtered",
     "fmt",
     "histogram",
+    "repartitionCmc",
     "statsOf",
     "symIcon"
    ],
@@ -7071,6 +7263,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "bilanMana",
     "cartesDuDeck",
     "cartesHorsRestriction",
     "commandantsPossibles",
@@ -7534,6 +7727,7 @@
     "aAcheter",
     "annexeSize",
     "blocAchats",
+    "blocMana",
     "boutonCibles",
     "cardRow",
     "cardTile",
@@ -7558,6 +7752,7 @@
     "partieDeck",
     "queueScryfall",
     "rendGroupes",
+    "repartitionCmc",
     "restaureRecherche",
     "spent",
     "targets",
@@ -7830,6 +8025,7 @@
     "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
+    "ligneMana",
     "ligneProposition",
     "ligneRestriction",
     "ligneWishlist",

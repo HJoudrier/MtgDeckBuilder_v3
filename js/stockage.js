@@ -55,7 +55,7 @@ function snapshot() {
   DB.forEach(c => {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
-      if (c.img || c.cmUrl || c.artist || c.textFull || c.set) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...impressionSnap(c)});
+      if (c.img || c.cmUrl || c.artist || c.textFull || c.set || c.manaProduit) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...(c.manaProduit ? {mp:c.manaProduit} : {}), ...impressionSnap(c)});
     } else if (c.externe && !(S.collection.get(c.name) > 0) && !carteDansUnDeck(c.name)) {
       // vivier d'exploration : non conservé
     } else {
@@ -64,6 +64,7 @@ function snapshot() {
         i:(c.identity||[]).join(''), m:c.cmc, f:c.force, e:c.endurance, a:c.artist||'',
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
         u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0,
+        ...(c.manaProduit ? {mp:c.manaProduit} : {}),
         ...(typeof c.legal === 'string' ? {lg:c.legal} : {}), ...impressionSnap(c)
       });
     }
@@ -174,6 +175,9 @@ function restore(d) {
     if (o.BL) card.imgBL = o.BL;
     card.unknown = !!o.k;
     if (typeof o.lg === 'string') card.legal = o.lg;
+    /* Le mana produit, tel que Scryfall l'a dit une fois. Facultatif : une
+       sauvegarde qui ne le porte pas laisse la carte lire son texte. */
+    if (typeof o.mp === 'string' && o.mp) card.manaProduit = o.mp;
     if (o.X && o.x) card.textFull = true;
     if (card.img) card.imgTried = true;
     impressionRestore(card, o);
@@ -189,6 +193,7 @@ function restore(d) {
     if (o.G) card.imgN = o.G;
     if (o.L) card.imgL = o.L;
     if (o.u) card.cmUrl = o.u;
+    if (typeof o.mp === 'string' && o.mp) card.manaProduit = o.mp;
     if (card.img) card.imgTried = true;
     impressionRestore(card, o);
   });

@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**623 fonctions** dans 97 modules, **1736 appels** relevés.
+**636 fonctions** dans 98 modules, **1758 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -162,6 +162,74 @@ Appelée par : `reanalyser`
 Appelle : `analyze()` *(analyse.js)*, `categories()` *(categories.js)*
 
 Appelée par : `applyScryfall`, `buildCard`, `carteDuCatalogue`, `completeDepuisRec`, `majTexteOracle`, `restore`
+
+## js/mana.js
+
+### `ordonneMana()` — ligne 28
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `applyScryfall`, `getCardOrAnalyzedRec`, `manaProduitTexte`
+
+### `manaVide()` — ligne 33
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `bilanMana`, `pipsCarte`
+
+### `pipsCarte()` — ligne 48
+
+Appelle : `manaVide()` *(mana.js)*
+
+Appelée par : `bilanMana`
+
+### `manaProduitTexte()` — ligne 68
+
+Appelle : `ordonneMana()` *(mana.js)*
+
+Appelée par : `manaProduitDe`
+
+### `manaProduitDe()` — ligne 103
+
+Appelle : `manaProduitTexte()` *(mana.js)*
+
+Appelée par : `bilanMana`
+
+### `bilanMana()` — ligne 116
+
+Appelle : `deckEntries()` *(deck.js)*, `manaProduitDe()` *(mana.js)*, `manaVide()` *(mana.js)*, `pipsCarte()` *(mana.js)*, `verdictMana()` *(mana.js)*
+
+Appelée par : `blocMana`
+
+### `verdictMana()` — ligne 158
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `bilanMana`
+
+### `pourcentMana()` — ligne 170
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `ligneMana`
+
+### `nombreMana()` — ligne 176
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `blocMana`, `histogram`, `ligneMana`
+
+### `ligneMana()` — ligne 180
+
+Appelle : `esc()` *(outils.js)*, `nombreMana()` *(mana.js)*, `pourcentMana()` *(mana.js)*, `symIcon()` *(symboles.js)*
+
+Appelée par : `blocMana`
+
+### `blocMana()` — ligne 197
+
+Appelle : `bilanMana()` *(mana.js)*, `nombreMana()` *(mana.js)*, → `ligneMana()` *(mana.js)*
+
+Appelée par : `renderE`
 
 ## js/impressions.js
 
@@ -747,31 +815,31 @@ Appelée par : `filtreOKRec`, `restrictionOKRec`
 
 ## js/catalogueEtat.js
 
-### `catalogueAbsent()` — ligne 19
+### `catalogueAbsent()` — ligne 23
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `demarrerCatalogue`, `majCatalogue`
 
-### `noeudsActifs()` — ligne 23
+### `noeudsActifs()` — ligne 27
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `blocGraphe`, `chercheCartes`, `ligneCatalogue`, `noteCarte`, `renderD`, `renderG`, `resultatsHTML`, `selectionCandidats`, `signatureCandidats`, `vivierSuggestions`
 
-### `carteTouche()` — ligne 27
+### `carteTouche()` — ligne 31
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `chercheCartes`, `noteCarte`, `recToucheNoeuds`, `renderD`, `vivierSuggestions`
 
-### `getCardOrAnalyzedRec()` — ligne 39
+### `getCardOrAnalyzedRec()` — ligne 43
 
-Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*
+Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*, `ordonneMana()` *(mana.js)*
 
 Appelée par : `chercheCartes`, `recToucheNoeuds`
 
-### `recToucheNoeuds()` — ligne 57
+### `recToucheNoeuds()` — ligne 62
 
 Appelle : `carteTouche()` *(catalogueEtat.js)*, `getCardOrAnalyzedRec()` *(catalogueEtat.js)*
 
@@ -987,7 +1055,7 @@ Appelée par : `corpsDeck`, `corpsFiltres`, `renderTop`
 
 Appelle : `esc()` *(outils.js)*, `pipHTML()` *(symboles.js)*, ⌘ `manaFb()` *(symboles.js)*
 
-Appelée par : `manaHTML`, `renderC`, `zoneCommandant`
+Appelée par : `ligneMana`, `manaHTML`, `renderC`, `zoneCommandant`
 
 ### `manaFb()` — ligne 55
 
@@ -1017,7 +1085,7 @@ Appelée par : `completeUnknown`, `majPrix`, `runScryQueue`
 
 ### `applyScryfall()` — ligne 21
 
-Appelle : `buildCard()` *(cartes.js)*, `cleImpression()` *(impressions.js)*, `codeLegalite()` *(retenue.js)*, `completeImpression()` *(impressions.js)*, `find()` *(cartes.js)*, `loose()` *(cartes.js)*, `majTexteOracle()` *(cartes.js)*, `norm()` *(cartes.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*, `renameCard()` *(cartes.js)*
+Appelle : `buildCard()` *(cartes.js)*, `cleImpression()` *(impressions.js)*, `codeLegalite()` *(retenue.js)*, `completeImpression()` *(impressions.js)*, `find()` *(cartes.js)*, `loose()` *(cartes.js)*, `majTexteOracle()` *(cartes.js)*, `norm()` *(cartes.js)*, `ordonneMana()` *(mana.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*, `renameCard()` *(cartes.js)*
 
 Appelée par : `carteDepuisScryfall`, `chargerCatalogue`, `chercheTexte`, `chercheVerso`, `completeUnknown`, `runScryQueue`
 
@@ -1167,31 +1235,31 @@ Appelle : `carteDansUnDeck()` *(decks.js)*, `clesDecks()` *(decks.js)*, `impress
 
 Appelée par : `gestesDonnees`, `nuagePaquet`, `save`
 
-### `ecrire()` — ligne 118
+### `ecrire()` — ligne 119
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `save`
 
-### `save()` — ligne 122
+### `save()` — ligne 123
 
 Appelle : `ecrire()` *(stockage.js)*, `nuagePousseeDifferee()` *(nuage.js)*, `snapshot()` *(stockage.js)*, `toast()` *(outils.js)*
 
 Appelée par : `brancherRestauration`, `brancherSauvegarde`, `gestesDonnees`, `gestesNuage`, `nuageTour`, `scheduleSave`
 
-### `scheduleSave()` — ligne 153
+### `scheduleSave()` — ligne 154
 
 Appelle : → `save()` *(stockage.js)*
 
 Appelée par : `appliqueCatalogueAuxCartes`, `appliquerAffichage`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `entete.js (chargement)`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `renderAll`, `runScryQueue`
 
-### `restore()` — ligne 159
+### `restore()` — ligne 160
 
 Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*, `impressionRestore()` *(stockage.js)*, `majTexteOracle()` *(cartes.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*, `restaureDecks()` *(decksStockage.js)*
 
 Appelée par : `brancherRestauration`, `demarrer`, `nuageVerse`
 
-### `chargerSauvegarde()` — ligne 259
+### `chargerSauvegarde()` — ligne 264
 
 N'appelle aucune fonction du projet.
 
@@ -1803,61 +1871,61 @@ Appelle : `codeLegalite()` *(retenue.js)*
 
 Appelée par : `lireCatalogueFichier`
 
-### `autoCatalogue()` — ligne 44
+### `autoCatalogue()` — ligne 48
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `demarrerCatalogue`
 
-### `estGzip()` — ligne 58
+### `estGzip()` — ligne 62
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `fluxTexte`
 
-### `compteurOctets()` — ligne 65
+### `compteurOctets()` — ligne 69
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `fluxTexte`
 
-### `nouveauSuivi()` — ligne 80
+### `nouveauSuivi()` — ligne 84
 
 Appelle : `majBoiteCatalogue()` *(boiteCatalogue.js)*
 
 Appelée par : `brancherCatalogue`, `telechargerCatalogue`
 
-### `fluxTexte()` — ligne 97
+### `fluxTexte()` — ligne 101
 
 Appelle : `compteurOctets()` *(archive.js)*, `estGzip()` *(archive.js)*
 
 Appelée par : `lireCatalogueFichier`
 
-### `fusionneSets()` — ligne 120
+### `fusionneSets()` — ligne 124
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `retiens`
 
-### `retiens()` — ligne 133
+### `retiens()` — ligne 137
 
 Appelle : `fusionneSets()` *(archive.js)*, `norm()` *(cartes.js)*
 
 Appelée par : `lireCatalogueFichier`
 
-### `tailleEstimee()` — ligne 144
+### `tailleEstimee()` — ligne 148
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `chargerCatalogueComplet`, `lireCatalogueFichier`
 
-### `ArchiveAbandonnee()` — ligne 154
+### `ArchiveAbandonnee()` — ligne 158
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `lireCatalogueFichier`
 
-### `lireCatalogueFichier()` — ligne 156
+### `lireCatalogueFichier()` — ligne 160
 
 Appelle : `ArchiveAbandonnee()` *(archive.js)*, `appliqueCatalogueAuxCartes()` *(candidats.js)*, `compacte()` *(archive.js)*, `fluxTexte()` *(archive.js)*, `idbEcrire()` *(idb.js)*, `invaliderCandidats()` *(candidats.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `renderSuggestions()` *(suggestions.js)*, `retiens()` *(archive.js)*, `tailleEstimee()` *(archive.js)*, `toast()` *(outils.js)*
 
@@ -2045,15 +2113,27 @@ Appelle : `mainType()` *(cartes.js)*
 
 Appelée par : `renderC`
 
-### `histogram()` — ligne 27
+### `repartitionCmc()` — ligne 35
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `renderC`, `renderE`
 
-### `renderC()` — ligne 48
+### `totalBarre()` — ligne 52
 
-Appelle : `collectionCards()` *(collection.js)*, `eur()` *(outils.js)*, `filtered()` *(collection.js)*, `fmt()` *(outils.js)*, `histogram()` *(stats.js)*, `statsOf()` *(stats.js)*, `symIcon()` *(symboles.js)*
+N'appelle aucune fonction du projet.
+
+Appelée par : `histogram`
+
+### `histogram()` — ligne 57
+
+Appelle : `nombreMana()` *(mana.js)*, `totalBarre()` *(stats.js)*
+
+Appelée par : `renderC`, `renderE`
+
+### `renderC()` — ligne 78
+
+Appelle : `collectionCards()` *(collection.js)*, `eur()` *(outils.js)*, `filtered()` *(collection.js)*, `fmt()` *(outils.js)*, `histogram()` *(stats.js)*, `repartitionCmc()` *(stats.js)*, `statsOf()` *(stats.js)*, `symIcon()` *(symboles.js)*
 
 Appelée par : `renderAll`
 
@@ -2671,7 +2751,7 @@ Appelée par : `cardTile`, `tagsSuggestion`
 
 Appelle : `find()` *(cartes.js)*, `mainType()` *(cartes.js)*
 
-Appelée par : `cartesDuDeck`, `cartesHorsRestriction`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `deckCounts`, `deckSignature`, `exportModal`, `ficheHTML`, `gameChangersDuDeck`, `graphCards`, `legality`, `openImport`, `openWipeModal`, `renderE`, `zoneCommandant`
+Appelée par : `bilanMana`, `cartesDuDeck`, `cartesHorsRestriction`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `deckCounts`, `deckSignature`, `exportModal`, `ficheHTML`, `gameChangersDuDeck`, `graphCards`, `legality`, `openImport`, `openWipeModal`, `renderE`, `zoneCommandant`
 
 ### `deckSignature()` — ligne 21
 
@@ -2835,7 +2915,7 @@ Appelée par : `renderE`
 
 ### `renderE()` — ligne 146
 
-Appelle : `aAcheter()` *(achats.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `boutonCibles()` *(legalite.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(achats.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
+Appelle : `aAcheter()` *(achats.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `blocMana()` *(mana.js)*, `boutonCibles()` *(legalite.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `repartitionCmc()` *(stats.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(achats.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
 
 Appelée par : `app.js (chargement)`, `appliquerAffichage`, `renderAll`, `runScryQueue`
 
@@ -2911,7 +2991,7 @@ Appelée par : `basculerSourceVersions`, `choisirVersion`, `faireDefilerVersion`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `champBudget`, `champDeck`, `champRecherche`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `majBoutonAffichage`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `refCarte`, `renderD`, `renderE`, `renderJ`, `renderTop`, `resultatsHTML`, `resumeDeckConfig`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `vignetteDeck`, `zoneCommandant`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `barreCatalogue`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `champBudget`, `champDeck`, `champRecherche`, `corpsAffichage`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsFormat`, `corpsSauvegarde`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `lienDecksEdhrec`, `ligneAchats`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeSetsHTML`, `majApercu`, `majBoutonAffichage`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `paginationListe`, `panneauEdhrec`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `refCarte`, `renderD`, `renderE`, `renderJ`, `renderTop`, `resultatsHTML`, `resumeDeckConfig`, `resumeFiltres`, `sectionParametres`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `vignetteDeck`, `zoneCommandant`
 
 ### `eur()` — ligne 14
 

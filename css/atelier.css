@@ -772,3 +772,28 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .decks-grille{grid-template-columns:1fr}
   .deck-carte{padding:8px 10px}
 }
+
+/* ---------------------------------------------------------------------
+   Le bloc « Mana coloré » de la section Deck : une ligne par couleur, deux
+   pistes — ce que le deck demande, ce qu'il produit — et le verdict de
+   l'écart. Le liseré de gauche est posé en style en ligne par `ligneMana()`
+   (js/mana.js), avec les mêmes variables que les jauges de rôle.
+   --------------------------------------------------------------------- */
+.mana-lignes{display:flex;flex-direction:column;gap:6px}
+.mana-ligne{
+  display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:10px;
+  border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:8px;
+  background:var(--bg2);padding:7px 10px
+}
+.mana-sym{line-height:0;flex:0 0 auto}
+.mana-pistes{display:flex;flex-direction:column;gap:4px;min-width:0}
+.mana-chiffres{font-size:12px;line-height:1.5;white-space:nowrap;text-align:right}
+.mana-verdict{font-size:11px;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+
+/* Sous le point de rupture, les chiffres et le verdict passent sous les
+   pistes : quatre colonnes dont deux de texte ne tiennent pas en 400 px. */
+@media (max-width:640px){
+  .mana-ligne{grid-template-columns:auto 1fr;gap:6px 10px}
+  .mana-chiffres{grid-column:2;text-align:left}
+  .mana-verdict{grid-column:2}
+}

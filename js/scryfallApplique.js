@@ -53,6 +53,10 @@ function applyScryfall(sc, requested, imagesOnly) {
       }
     }
     if (typeof sc.cmc === 'number' && target.cmc !== sc.cmc) { target.cmc = sc.cmc; fond = true; }
+    /* Le mana produit : Scryfall fait autorité, la lecture du texte n'étant
+       qu'un repli. Ne change rien à la notation, donc ne compte pas comme un
+       changement de fond. */
+    if (Array.isArray(sc.produced_mana)) target.manaProduit = ordonneMana(sc.produced_mana);
     /* Une illustration choisie à la main fait autorité : seule une réponse
        portant sur cette impression-là peut la remplacer. */
     const cleRep = cleImpression(sc.set, sc.collector_number);
@@ -92,6 +96,7 @@ function applyScryfall(sc, requested, imagesOnly) {
   const fresh = buildCard(sc.name, cost, type, price, text);
   fresh.textFull = !!text;
   if (Array.isArray(sc.color_identity)) fresh.identity = sc.color_identity.slice();
+  if (Array.isArray(sc.produced_mana)) fresh.manaProduit = ordonneMana(sc.produced_mana);
   if (typeof sc.cmc === 'number') fresh.cmc = sc.cmc;
   const pw = sc.power || (faces && faces[0] && faces[0].power);
   if (pw != null && /^\d+$/.test(String(pw))) fresh.force = +pw;

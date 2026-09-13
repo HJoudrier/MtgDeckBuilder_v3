@@ -151,13 +151,7 @@ function renderE() {
   // des rôles restent ceux du deck entier.
   const entries = toutes.filter(e => carteFiltree(e.card));
   const masquees = toutes.reduce((a, e) => a + e.qty, 0) - entries.reduce((a, e) => a + e.qty, 0);
-  const cmcSplit = {};
-  entries.forEach(e => {
-    if (e.card.isLand) return;
-    const k = Math.min(e.card.cmc, 9);
-    cmcSplit[k] = cmcSplit[k] || {W:0, U:0, B:0, R:0, G:0, C:0};
-    (e.card.identity.length ? e.card.identity : ['C']).forEach(col => cmcSplit[k][col] += e.qty / (e.card.identity.length || 1));
-  });
+  const cmcSplit = repartitionCmc(entries);
   const nonland = entries.filter(e => !e.card.isLand);
   const avg = nonland.length ? (nonland.reduce((a, e) => a + e.card.cmc * e.qty, 0) / nonland.reduce((a, e) => a + e.qty, 0)) : 0;
   const price = entries.reduce((a, e) => a + e.card.price * e.qty, 0);
@@ -200,6 +194,8 @@ function renderE() {
       ${blocAchats()}
       <h3 style="margin:12px 0 6px;font-size:15px">Courbe de mana</h3>
       ${histogram(cmcSplit, true)}
+      <h3 style="margin:14px 0 6px;font-size:15px">Mana coloré</h3>
+      ${blocMana()}
       <h3 class="titre-cibles" style="margin:14px 0 6px;font-size:15px">Équilibre des rôles ${boutonCibles()}</h3>
       <div class="statgrid">${Object.keys(tgt).map(k => gauge(CATLABEL[k]||k, cnt[k]||0, tgt[k], k)).join('')}</div>
       ${partieDeck('liste', 'Liste',

@@ -23,6 +23,7 @@ js/                 modules, chargés dans cet ordre :
   analyse.js        lire une carte : coût, capacités, déclencheurs, effets
   archetypesLibelles.js  le nom français des thèmes EDHREC
   categories.js     les rôles d'une carte
+  mana.js           ce qu'une carte demande en mana, et ce qu'elle en produit
   impressions.js    les éditions d'une carte, et celle qu'on possède
   cartes.js         la base de cartes et ses index
   liens.js          interaction précise ou déclencheur large
@@ -430,6 +431,37 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   sans style : une carte possédée en quatre exemplaires dont un est monté n'est pas `zero`, et une
   carte possédée à zéro l'est sans être au deck.
 
+- L'onglet Deck porte, sous la courbe de mana, un bloc **« Mana coloré »** : une ligne par couleur,
+  la part des symboles que le deck demande en regard de la part des sources qui les produisent, avec
+  les nombres et un liseré qui juge l'écart. La courbe dit combien de cartes à chaque coût ; elle ne
+  disait rien des couleurs, qui décident pourtant qu'un deck fonctionne. Contrairement à elle, le
+  bloc porte sur le **deck entier** et non sur les cartes affichées — comme les jauges de rôle et le
+  contrôle de conformité : filtrer sur « créatures » ferait disparaître les terrains qui les lancent,
+  et le verdict n'aurait plus de sens. Le bloc le dit en une phrase.
+- **Ce que le deck demande** se lisait déjà : `parseCost()` découpe `{2}{G}{G}` en `card.symbols`,
+  tableau que seul `manaHTML()` consommait. Un hybride se répartit entre ses façons d'être payé — un
+  symbole divisé par le nombre d'options —, si bien que `{W/U}` vaut un demi-blanc et un demi-bleu :
+  le compter pour un plein symbole de chaque couleur ferait passer un deck hybride pour deux fois
+  plus exigeant qu'il n'est.
+- **Ce qu'il produit** n'était connu nulle part. Le nœud `MANA` du graphe le réduit à un booléen —
+  son motif `/add \{/` consomme l'accolade sans capturer la lettre — et `card.identity` ressemble à
+  une production sans en être une : un Sol Ring qui fait `{C}{C}` a une identité vide, un Farseek qui
+  va chercher une Plaine a l'identité verte. `manaProduitDe()` (`js/mana.js`) lit donc `produced_mana`
+  quand Scryfall l'a dit, et retombe sinon sur la ligne de type — les types de terrain règlent d'un
+  coup les duals, les shocks et les triomes — puis sur les clauses « add » du texte oracle. Le champ
+  `card.manaProduit` est **facultatif partout** : un atelier qui n'a jamais vu le réseau lit quand
+  même son mana dans le texte.
+- La colonne `CH.MANA_PROD` est venue en dernier dans l'archive du catalogue, et **n'a demandé aucune
+  migration** : une archive d'hier a dix-sept colonnes, l'indice y rend `undefined`, donc « on ne sait
+  pas », donc le texte prend le relais. C'est le chemin qu'avait déjà suivi `CH.NUMERIQUE`.
+- Une source compte **une fois par couleur qu'elle produit**, rangée selon qu'elle est un terrain ou
+  un accélérateur : un Birds of Paradise est bien une source de vert, sans valoir tout à fait une
+  Forêt, et les deux nombres se lisent séparément.
+- `repartitionCmc()` (`js/stats.js`) est la seule copie du calcul de la courbe : il était écrit deux
+  fois à l'identique, et seule celle de la collection arrondissait. `totalBarre()` arrondit en outre
+  la **somme** d'une barre au moment où elle s'écrit — arrondir chaque couleur ne suffisait pas,
+  `0,3 + 0,3 + 0,3` ne faisant pas `0,9` en virgule flottante, et la barre annonçait
+  « 0.8999999999999999 ».
 - La page **Decks** répond à la question qui précède toutes les autres : sur quoi travaille-t-on.
   « Mes decks » montre une vignette par deck — avancement, taille visée, part possédée, reste à
   acheter, budget, restrictions — et porte les gestes : *Nouveau*, *Travailler dessus*, *Configurer*,

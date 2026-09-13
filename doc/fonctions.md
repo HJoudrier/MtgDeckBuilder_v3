@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**626 fonctions**, 97 modules, 678 Ko de JavaScript.
+**639 fonctions**, 98 modules, 691 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -18,6 +18,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`analyse.js`](#jsanalysejs) | Lire une carte : coût, capacités, déclencheurs, effets | 5 | 148 |
 | [`archetypesLibelles.js`](#jsarchetypeslibellesjs) | Le nom français des thèmes EDHREC | 0 | 83 |
 | [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 126 |
+| [`mana.js`](#jsmanajs) | Ce qu'une carte demande en mana, et ce qu'elle en produit | 11 | 211 |
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
@@ -27,17 +28,17 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
 | [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 11 | 135 |
-| [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 62 |
+| [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 67 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
-| [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 141 |
+| [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 146 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 270 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 275 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 68 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 121 |
@@ -50,11 +51,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`edhrecThemes.js`](#jsedhrecthemesjs) | L'index des thèmes EDHREC | 10 | 179 |
 | [`sets.js`](#jssetsjs) | Les sets publiés par Scryfall | 8 | 156 |
 | [`gameChangers.js`](#jsgamechangersjs) | La liste des « Game Changers » | 4 | 77 |
-| [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 219 |
+| [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 223 |
 | [`catalogue.js`](#jscataloguejs) | Tenir le catalogue à jour | 10 | 232 |
 | [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 258 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 169 |
-| [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 3 | 90 |
+| [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 5 | 113 |
 | [`notation.js`](#jsnotationjs) | La note d'une carte candidate | 5 | 239 |
 | [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 196 |
 | [`sugOrdre.js`](#jssugordrejs) | L'ordre gelé des propositions | 6 | 80 |
@@ -73,7 +74,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 115 |
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 180 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 228 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 224 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -204,6 +205,29 @@ Les rôles d'une carte. *2 fonctions, 126 lignes, 6.8 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `CATLABEL` | — |
+
+## js/mana.js
+
+Ce qu'une carte demande en mana, et ce qu'elle en produit. *11 fonctions, 211 lignes, 10 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ordonneMana(lettres)` | Une chaîne de lettres en ordre WUBRGC, sans doublon : c'est la forme sous laquelle le mana produit se range, se compare et se sauvegarde. |
+| `manaVide()` | — |
+| `pipsCarte(card)` | Ce qu'une carte demande, symbole par symbole. |
+| `manaProduitTexte(card)` | Ce qu'une carte produit, lu dans ce qu'on a sous la main : sa ligne de type d'abord, son texte oracle ensuite. |
+| `manaProduitDe(card)` | Le mana produit d'une carte. `card.manaProduit` vient de `produced_mana`, que Scryfall fait autorité — par une réponse ou par l'archive du catalogue — et l'emporte donc ; le texte prend… |
+| `bilanMana()` | Le bilan du deck **entier**, sans passer par `carteFiltree()` : l'équilibre du mana est une propriété du deck, comme les jauges de rôle et le contrôle de conformité. |
+| `verdictMana(partPips, partSources)` | Ce qu'on peut dire de l'écart entre la part demandée et la part servie, sans en dire plus qu'on ne sait : c'est un rapport de parts, non une promesse de main de départ. |
+| `pourcentMana(x)` | — |
+| `nombreMana(x)` | Un nombre de symboles peut tomber sur un demi — un hybride — : une décimale suffit, et l'entier reste écrit sans virgule. |
+| `ligneMana(l)` | — |
+| `blocMana()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `MANA_LETTRES` | — |
+| `TERRAINS_MANA` | Les types de terrain qui disent à eux seuls ce qu'un terrain produit. |
 
 ## js/impressions.js
 
@@ -409,7 +433,7 @@ Ce qui reste après les filtres. *11 fonctions, 135 lignes, 5.7 Ko.*
 
 ## js/catalogueEtat.js
 
-L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 62 lignes, 2.5 Ko.*
+L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 67 lignes, 2.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -421,7 +445,7 @@ L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 62 lignes, 2.
 
 | Donnée | Rôle |
 |---|---|
-| `CH` | — |
+| `CH` | `MANA_PROD` est venue en dernier : une archive d'hier n'a que dix-sept colonnes, l'indice y rend `undefined`, et la carte retombe alors sur la lecture de son texte (`manaProduitDe()`,… |
 | `CAT` | — |
 
 ## js/groupes.js
@@ -531,7 +555,7 @@ Les symboles de mana. *7 fonctions, 72 lignes, 2.9 Ko.*
 
 ## js/scryfallApplique.js
 
-Verser une réponse de Scryfall dans une carte. *2 fonctions, 141 lignes, 6.4 Ko.*
+Verser une réponse de Scryfall dans une carte. *2 fonctions, 146 lignes, 6.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -590,7 +614,7 @@ Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 270 lignes, 11 Ko.*
+La sauvegarde locale. *9 fonctions, 275 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -862,7 +886,7 @@ La liste des « Game Changers ». *4 fonctions, 77 lignes, 2.9 Ko.*
 
 ## js/archive.js
 
-Lire l'archive Scryfall. *11 fonctions, 219 lignes, 9.9 Ko.*
+Lire l'archive Scryfall. *11 fonctions, 223 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -938,11 +962,13 @@ Visualisation circulaire interactive des capacités. *4 fonctions, 169 lignes, 9
 
 ## js/stats.js
 
-Statistiques, répartitions & courbes de mana. *3 fonctions, 90 lignes, 4.5 Ko.*
+Statistiques, répartitions & courbes de mana. *5 fonctions, 113 lignes, 5.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `statsOf(list)` | — |
+| `repartitionCmc(entries)` | La courbe de mana d'une liste : combien d'exemplaires à chaque coût, la quantité répartie entre les couleurs de l'identité. |
+| `totalBarre(v)` | Le total d'une barre. Arrondir chaque couleur ne suffit pas : `0,3 + 0,3 + 0,3` ne fait pas `0,9` en virgule flottante, et la barre annonçait « 0.8999999999999999 ». C'est la somme qu'il… |
 | `histogram(dataByCmc, colorSplit)` | — |
 | `renderC()` | — |
 
@@ -1228,7 +1254,7 @@ Ce que le format exige, et l'équilibre des rôles. *13 fonctions, 180 lignes, 8
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 228 lignes, 14 Ko.*
+La section Deck. *6 fonctions, 224 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
