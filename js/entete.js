@@ -199,7 +199,9 @@ function renderOnglets() {
     b.setAttribute('aria-selected', String(actif));
     // une seule tabulation entre dans la barre ; les flèches font le reste
     b.tabIndex = actif ? 0 : -1;
-    if (actif) { b.classList.remove('travaille'); b.removeAttribute('title'); }
+    /* La page ouverte n'est plus en retard sur rien : ni le point d'un travail
+       de fond, ni celui d'une liste à reprendre. */
+    if (actif) { b.classList.remove('travaille', 'perime'); b.removeAttribute('title'); }
   });
   document.querySelectorAll('.page[data-page]').forEach(p => {
     p.hidden = p.dataset.page !== S.onglet;
@@ -223,6 +225,10 @@ function activerOnglet(cle, opts) {
       window.scrollTo({top: POS_ONGLETS[cle] || 0, behavior:'auto'});
     scheduleSave();
   }
+  /* La page découverte peut porter une liste de propositions laissée en
+     arrière : c'est ici, et nulle part ailleurs, qu'elle est reprise — toutes
+     les façons de changer d'onglet passent par cette fonction. */
+  if (typeof rattraperSuggestions === 'function') rattraperSuggestions();
 }
 
 /* Aller à une section, d'où qu'on parte : l'onglet qui la porte s'ouvre, et

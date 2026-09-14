@@ -98,6 +98,7 @@ js/                 modules, chargés dans cet ordre :
   versions.js       les éditions d'une même carte
   tuiles.js         vignette et ligne d'une carte, et celles d'une proposition
   ancre.js          garder sa place dans le défilement
+  differe.js        ce qu'on ne calcule que sous les yeux
   recalcul.js       les recalculs annoncés, par tranches
   entete.js         l'en-tête et la barre des onglets
   rendu.js          `renderAll()`, l'unique porte du repeint
@@ -136,9 +137,11 @@ recommandent — groupées et triées à part, avec deux tris qui n'existent que
 d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé. La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
-`ONGLETS_ANCIENS`. Les neuf sections sont rendues à chaque fois, celles qu'on ne
+`ONGLETS_ANCIENS`. Les sections sont rendues à chaque fois, celles qu'on ne
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
-alors aucun rendu. L'en-tête garde quatre pastilles — le deck ouvert, la barre de mana et le nom de la
+alors aucun rendu. **Trois font exception** — les pistes du graphe, EDHREC, le catalogue : elles
+lisent une même notation qui coûte des secondes, et ne se calculent que sous les yeux
+(`js/differe.js`, plus bas). L'en-tête garde quatre pastilles — le deck ouvert, la barre de mana et le nom de la
 combinaison, le format, le budget — et trois commandes au coin haut-droit : le bouton de l'**affichage**, celui
 des **filtres** et l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, l'apparence et le
 catalogue. Les trois voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
@@ -544,6 +547,18 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   perdrait sa frappe et le curseur. Ils sont donc gardés dans `RECHERCHE` et rendus après coup par
   `restaureRecherche()`, qui ne reprend le curseur que si plus rien ne l'a — un rendu déclenché
   ailleurs ne doit pas l'arracher à autre chose.
+- **Les trois listes de propositions ne se notent que sous les yeux.** Elles lisent une même
+  sélection notée — des dizaines de milliers de cartes —, et tout geste qui touche l'état la
+  périme : manipuler un deck coûtait une notation complète par clic, pour des pages qu'on ne
+  regardait pas. `suggestionsVisibles()` (`js/differe.js`) dit si l'onglet ouvert en porte une ;
+  sinon `renderSuggestions()` renonce, `currentSuggestions()` rend la dernière sélection connue
+  sans renoter, et `recalculLong()` retombe sur la voie courte — un simple `renderAll()`, qui
+  refait la courbe de mana, les jauges, la collection et le graphe comme avant. L'onglet laissé
+  en arrière porte un point posé, et `activerOnglet()` reprend sa page à l'ouverture
+  (`rattraperSuggestions()`), annoncée comme n'importe quel recalcul. Les trois sont différées
+  ensemble parce qu'elles partagent cette sélection : n'en différer qu'une ne gagnerait rien. La
+  requête EDHREC, elle, part toujours — c'est du réseau, non du calcul, et la note des cartes du
+  deck en dépend.
 - Les jauges d'équilibre des rôles de la section Deck sont des filtres à part entière : les cocher agit partout, comme
   n'importe quel filtre de l'en-tête, et les mêmes boutons figurent dans la fenêtre des filtres.
 - Leurs objectifs se règlent à la main : le pinceau posé contre le titre ouvre la fenêtre

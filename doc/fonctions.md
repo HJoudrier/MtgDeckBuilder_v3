@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**639 fonctions**, 98 modules, 691 Ko de JavaScript.
+**643 fonctions**, 99 modules, 696 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -57,14 +57,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 169 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 5 | 113 |
 | [`notation.js`](#jsnotationjs) | La note d'une carte candidate | 5 | 239 |
-| [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 196 |
+| [`vivier.js`](#jsvivierjs) | Le vivier des candidates, et son empreinte | 9 | 204 |
 | [`sugOrdre.js`](#jssugordrejs) | L'ordre gelé des propositions | 6 | 80 |
 | [`sugCommandants.js`](#jssugcommandantsjs) | Les commandants du deck, en tête de l'onglet EDHREC | 4 | 139 |
 | [`sugListes.js`](#jssuglistesjs) | Le fond commun des trois listes de propositions | 11 | 142 |
 | [`sugGraphe.js`](#jssuggraphejs) | La section du graphe : ce qui se branche sur les nœuds | 1 | 41 |
 | [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 52 |
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
-| [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 244 |
+| [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 252 |
 | [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
 | [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 3 | 68 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 9 | 156 |
@@ -87,8 +87,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
 | [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 251 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
-| [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 195 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 240 |
+| [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
+| [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 246 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 35 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
@@ -986,7 +987,7 @@ La note d'une carte candidate. *5 fonctions, 239 lignes, 11 Ko.*
 
 ## js/vivier.js
 
-Le vivier des candidates, et son empreinte. *9 fonctions, 196 lignes, 8.3 Ko.*
+Le vivier des candidates, et son empreinte. *9 fonctions, 204 lignes, 8.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1080,7 +1081,7 @@ La section du catalogue : tout le classement. *1 fonctions, 34 lignes, 2.2 Ko.*
 
 ## js/suggestions.js
 
-Les trois sections des propositions. *13 fonctions, 244 lignes, 12 Ko.*
+Les trois sections des propositions. *13 fonctions, 252 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1447,9 +1448,24 @@ L'ancre de défilement. *3 fonctions, 57 lignes, 2.5 Ko.*
 | `releveAncre()` | — |
 | `restaureAncre(a)` | — |
 
+## js/differe.js
+
+Les propositions ne se notent que sous les yeux. *4 fonctions, 74 lignes, 3.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `suggestionsVisibles()` | L'onglet ouvert porte-t-il une des trois listes ? `ONGLETS` et `SECTIONS_SUGGESTIONS` (js/etat.js) en décident seules, comme partout où la répartition des sections est en jeu. |
+| `marqueOngletsPerimes(actif)` | Le point d'un onglet dont la page a vieilli : posé, là où celui d'un travail de fond bat (`signalerTravail()`, js/rendu.js). |
+| `differerSuggestions()` | Remettre la notation à plus tard, et le dire. |
+| `rattraperSuggestions()` | La page qu'on vient d'ouvrir porte une liste périmée : c'est l'instant de la reprendre. |
+
+| Donnée | Rôle |
+|---|---|
+| `SUG_PERIME` | Une page de propositions attend d'être reprise. |
+
 ## js/recalcul.js
 
-Les recalculs annoncés. *8 fonctions, 195 lignes, 8.3 Ko.*
+Les recalculs annoncés. *8 fonctions, 200 lignes, 8.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1473,7 +1489,7 @@ Les recalculs annoncés. *8 fonctions, 195 lignes, 8.3 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *7 fonctions, 240 lignes, 14 Ko.*
+L'en-tête et la barre des onglets. *7 fonctions, 246 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|

@@ -180,12 +180,20 @@ function filetSuggestions() {
    catalogue, de Scryfall — les met toutes les trois à jour. C'est le point
    d'entrée des autres modules. */
 function renderSuggestions() {
+  /* Les statistiques du commandant se demandent quoi qu'il arrive : c'est une
+     requête réseau et non un calcul, et la note des cartes du deck en dépend.
+     Elle passe donc avant le renvoi à plus tard. */
+  lanceEdhrecSiBesoin();
+  /* Hors de vue, rien n'est noté : la page est reprise à son ouverture
+     (`rattraperSuggestions()`, js/differe.js). Le renvoi précède
+     `filetSuggestions()`, qui lancerait sans cela un recalcul de fond pour des
+     listes que personne ne regarde. */
+  if (!suggestionsVisibles()) { differerSuggestions(); return; }
   if (filetSuggestions()) return;
   const sel = selectionSuggestions();
   renderG(sel);
   renderH(sel);
   renderF(sel);
-  lanceEdhrecSiBesoin();
 }
 
 /* La section du graphe (onglet Graphe) : les pistes branchées sur les nœuds

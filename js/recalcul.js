@@ -24,6 +24,11 @@ function pause() {
    rebâtir depuis l'archive, ou le vivier à noter est déjà gros. */
 function recalculLong() {
   if (typeof CAT === 'undefined' || typeof CAND === 'undefined') return false;
+  /* Hors de vue, il n'y a rien de long à faire : les trois listes ne sont pas
+     peintes, donc pas notées (js/differe.js). L'atelier se refait sur-le-champ
+     — la courbe de mana, les jauges, la collection — et la notation attend la
+     page qui en a besoin. */
+  if (typeof suggestionsVisibles === 'function' && !suggestionsVisibles()) return false;
   /* Rien à renoter : la sélection vaut encore pour l'état courant, et le
      rendu la reprendra telle quelle. */
   if (typeof suggestionsAJour === 'function' && suggestionsAJour()) return false;

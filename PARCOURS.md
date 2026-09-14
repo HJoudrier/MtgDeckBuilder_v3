@@ -152,7 +152,10 @@ sequenceDiagram
     UI->>UI: releveAncre()
     UI->>UI: recalculLong() ?
 
-    alt travail court
+    alt hors d'une page de propositions
+        UI->>UI: renderAll()
+        Note over SUG: renderSuggestions() renonce et pose le drapeau :<br/>rien n'est noté, l'onglet porte un point (js/differe.js)
+    else travail court
         UI->>UI: renderAll()
     else travail long
         UI->>EXT: prechauffeCandidats(onProgress)
@@ -177,8 +180,10 @@ Trois précautions que le diagramme rend visibles :
   pas celui qui sortira de la notation.
 - **L'ancre** est relevée avant tout rendu, et restaurée après : sans elle, la vignette qu'on
   regardait descendrait de quelques centaines de pixels.
-- **La notation** ne repart que si l'empreinte a changé (§4). Ajouter une carte la change toujours
-  — le deck fait partie de l'empreinte.
+- **La notation** ne repart que si l'empreinte a changé (§4) *et* qu'une page de propositions est
+  sous les yeux. Ajouter une carte change toujours l'empreinte — le deck en fait partie —, mais le
+  geste part souvent de l'onglet Deck : la notation attend alors la bascule (§3.18). Le diagramme
+  ci-dessus est celui du geste fait depuis l'onglet EDHREC, du Graphe ou du Catalogue.
 
 ### 3.3 Ajouter une carte par le champ de recherche
 
@@ -303,7 +308,9 @@ sequenceDiagram
 Un filtre appliqué hors fenêtre — une couleur cliquée dans l'en-tête, un rôle basculé — passe par
 `apresReglage(raison)` (`js/brouillon.js`), qui dégèle les suggestions, invalide les candidates et
 appelle le même recalcul. C'est le point commun de tous les réglages : **un filtre change le
-vivier, donc tout le classement.**
+vivier, donc tout le classement** — mais le classement n'est repris que sous les yeux. Depuis
+l'onglet Deck ou la Collection, le filtre s'applique sur-le-champ à ce qu'on y voit, et les trois
+pages de propositions sont marquées pour leur prochaine ouverture (§3.18).
 
 ### 3.6 Noter les suggestions
 
@@ -320,6 +327,7 @@ sequenceDiagram
 
     UI->>SUG: prepareSuggestions(onProgress)
     SUG->>SUG: suggestionsAJour() ?
+    Note over UI,SUG: on n'en est là que si une page de propositions est ouverte :<br/>recalculLong() rend false hors de vue (js/differe.js)
     alt l'empreinte n'a pas bougé
         SUG-->>UI: SUG_MEMO.liste, telle quelle
     else il faut renoter
@@ -700,6 +708,43 @@ Dans l'en-tête, la restriction paraît en puce **verrouillée** : `restrictions
 libellé sans clés à effacer, là où `filtresActifs()` en rend — le rendu n'a donc pas de croix à
 dessiner, et le texte mène à cette fenêtre plutôt qu'à celle des filtres.
 
+### 3.18 Basculer d'un onglet à l'autre
+
+Changer d'onglet ne demande aucun rendu — les sections sont déjà peintes, un attribut les
+découvre. Sauf les trois listes de propositions, qu'on n'a pas notées faute de regard : c'est ici
+qu'elles se rattrapent.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant ENT as entete.js
+    participant DIF as differe.js
+    participant UI as interface
+    participant SUG as suggestions.js
+
+    U->>APP: clic sur un onglet (ou flèche du clavier)
+    APP->>ENT: activerOnglet(cle)
+    ENT->>ENT: POS_ONGLETS[ancien] = window.scrollY
+    ENT->>ENT: renderOnglets()
+    Note over ENT: les pages changent d'attribut `hidden` ;<br/>l'onglet ouvert perd ses points « travaille » et « perime »
+    ENT->>ENT: window.scrollTo(POS_ONGLETS[cle])
+    ENT->>DIF: rattraperSuggestions()
+    alt la page ne porte aucune liste de propositions, ou rien n'est périmé
+        DIF-->>ENT: rien
+    else l'empreinte tient encore
+        DIF->>SUG: renderSuggestions()
+        Note over SUG: seul l'affichage avait vieilli — une étiquette<br/>« dans le deck », une ligne de budget : rien n'est noté
+    else la notation est à refaire
+        DIF->>UI: recalculerAvecProgression(raison)
+        Note over UI: la suite du §3.2 : tranches, boîte au-delà de 250 ms,<br/>puis renderAll() et restaureAncre()
+    end
+```
+
+Une seule greffe suffit parce que tout passe par `activerOnglet()` : la barre, les flèches du
+clavier et `allerVersSection()`, qui mène à une section d'où qu'on parte.
+
 ---
 
 ## 4. Ce qui périme quoi
@@ -716,9 +761,11 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 
 Deux conséquences pratiques :
 
-- **Ajouter ou retirer une carte du deck renote tout.** Le deck fait partie de l'empreinte des
-  suggestions ; il n'y a pas de renotation partielle. C'est pourquoi ces gestes passent par le
-  recalcul à tranches plutôt que par un rendu direct.
+- **Ajouter ou retirer une carte du deck renote tout — mais sous les yeux seulement.** Le deck
+  fait partie de l'empreinte des suggestions ; il n'y a pas de renotation partielle, d'où le
+  recalcul à tranches plutôt qu'un rendu direct. Hors d'une page de propositions, cette renotation
+  est remise à l'ouverture de la page qui en a besoin (§3.18) : le geste ne coûte alors que le
+  rendu des sections qu'on regarde.
 - **Changer de deck renote tout aussi.** `S.deckActif` entre dans l'empreinte des candidates, et le
   format, le commandant et la restriction du deck avec lui.
 - **La liste d'achats ne coûte rien à l'en-tête.** `spent()` y est appelé à chaque rendu et fait une

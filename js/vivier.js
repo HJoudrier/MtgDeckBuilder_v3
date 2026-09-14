@@ -160,6 +160,14 @@ function suggestionsAJour() {
 
 function currentSuggestions() {
   if (suggestionsAJour()) return SUG_MEMO.liste;
+  /* Le filet du chemin oblique : `graphCards()` (js/graphe.js) demande la
+     sélection depuis n'importe quel onglet quand le graphe est bâti sur les
+     propositions. Hors de vue, on rend la dernière connue — périmée, mais
+     gratuite — et la page sera reprise à son ouverture. */
+  if (typeof suggestionsVisibles === 'function' && !suggestionsVisibles()) {
+    differerSuggestions();
+    return SUG_MEMO.liste || [];
+  }
   const {pool, X} = vivierSuggestions();
   const res = [];
   noterVivier(pool, X, res, 0, pool.length);

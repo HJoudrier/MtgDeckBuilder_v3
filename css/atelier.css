@@ -258,6 +258,10 @@ header.top{
 .onglet .onglet-pt{width:6px;height:6px;border-radius:99px;background:var(--brass);opacity:0;transition:opacity .2s ease}
 .onglet.travaille .onglet-pt{opacity:1;animation:battement 1.2s ease-in-out infinite}
 @keyframes battement{0%,100%{opacity:1}50%{opacity:.25}}
+/* Le même point, posé : la page a vieilli et sera reprise à son ouverture
+   (js/differe.js). Rien n'y travaille encore, d'où le point fixe et en
+   retrait — un battement annoncerait un calcul en cours. */
+.onglet.perime .onglet-pt{opacity:.5}
 
 /* Une page masquée n'est pas mise en page : rien n'y est mesuré, et son
    contenu reste rendu, prêt à paraître d'un seul attribut. */
