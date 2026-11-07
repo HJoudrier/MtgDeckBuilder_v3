@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**924 fonctions**, 143 modules, 930 Ko de JavaScript.
+**940 fonctions**, 144 modules, 946 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -112,11 +112,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 8 | 116 |
 | [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
+| [`decksLies.js`](#jsdecksliesjs) | Les adversaires liés à Moxfield ou à Archidekt | 11 | 196 |
 | [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 9 | 98 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 7 | 123 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 150 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
@@ -142,7 +143,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 179 |
-| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 5 | 70 |
+| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 8 | 143 |
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
@@ -152,8 +153,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 41 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 295 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 43 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 296 |
 
 ## js/reglesEffets.js
 
@@ -1896,6 +1897,29 @@ La bibliothèque d'adversaires. *8 fonctions, 78 lignes, 3.4 Ko.*
 | `signatureAdversaire(adv)` | L'empreinte d'un adversaire : un résultat calculé contre une liste qui a changé depuis est périmé. |
 | `signatureDeck(cle)` | L'empreinte d'un deck de l'atelier, ouvert ou non. |
 
+## js/decksLies.js
+
+Les adversaires liés à Moxfield ou à Archidekt. *11 fonctions, 196 lignes, 8.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `lisLienDeck(url)` | Reconnaître l'adresse d'un deck publié. |
+| `lisJsonDeck(adresse)` | Lire une adresse, directement ou par le relais. |
+| `recupereDeckLie(lien)` | Récupérer un deck lié : la lecture directe, puis le relais s'il y en a un. |
+| `texteDeListe(liste, commandants)` | La liste en texte MTGO, pour que « Modifier » montre la liste en vigueur et que `parseMtgoList()` la relise telle quelle. |
+| `diffListes(avant, apres)` | Ce qui a changé entre deux listes, commandants compris. |
+| `appliqueDeckLie(cle, d)` | Verser dans un adversaire ce que le site a rendu. |
+| `relisAdversaireLie(cle)` | Relire un adversaire lié. Rend le différentiel, ou `null` en cas d'échec — l'échec est noté sur le lien, pour la pastille et pour ne pas réessayer en boucle. |
+| `annonceChangement(a, diff)` | — |
+| `verifieDecksLies(opts = {})` | Au démarrage : relire, un par un, les adversaires liés qu'on n'a pas vérifiés depuis un jour. |
+| `verifieUnDeckLie(cle)` | « Mettre à jour » sur un adversaire lié : la relecture, et si elle échoue, la fenêtre de l'adversaire en mode collage. |
+| `depuisQuand(t)` | Depuis quand un lien a été vérifié, en mots. |
+
+| Donnée | Rôle |
+|---|---|
+| `DELAI_VERIF_LIEN` | — |
+| `SITES_DECKS` | Les sites qu'on sait lire. Chacun dit où est son API, où est la page du deck, et comment lire sa réponse en `{nom, liste, commandants, maj}`. |
+
 ## js/simPreparation.js
 
 D'un deck ou d'un adversaire à un siège de table. *9 fonctions, 98 lignes, 4.3 Ko.*
@@ -1970,7 +1994,7 @@ Un lot de parties, par tranches. *11 fonctions, 143 lignes, 6.4 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *7 fonctions, 123 lignes, 7.8 Ko.*
+La section « Simulation ». *9 fonctions, 150 lignes, 9.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1978,6 +2002,8 @@ La section « Simulation ». *7 fonctions, 123 lignes, 7.8 Ko.*
 | `optionsHTML(paires, choisi)` | — |
 | `tableHTML(cfg)` | La table : les réglages d'un lot. |
 | `adversairesHTML()` | La bibliothèque d'adversaires. |
+| `pastilleLien(l)` | La pastille d'un adversaire lié : son site, sa dernière vérification, et ce qui a changé la dernière fois. |
+| `relaisHTML()` | Le relais, pour les sites qui refusent d'être lus depuis une autre page. |
 | `badgeCouverture(t)` | Le badge d'un taux de couverture. |
 | `couvertureHTML(cfg)` | Ce que le moteur comprend des decks de la table. |
 | `renderK()` | — |
@@ -2396,15 +2422,22 @@ Fenêtres d'export et d'effacement. *3 fonctions, 179 lignes, 9.8 Ko.*
 
 ## js/fenAdversaire.js
 
-Ajouter ou modifier un adversaire. *5 fonctions, 70 lignes, 3.8 Ko.*
+Ajouter ou modifier un adversaire. *8 fonctions, 143 lignes, 8.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `ouvreAdversaire(cle)` | — |
+| `repliHTML(lien, echec)` | Le bloc du dernier recours : pourquoi la lecture a échoué, où trouver l'export. |
+| `etatLienHTML(l)` | Ce qu'on sait d'un lien : son site, sa dernière vérification, son dernier changement. |
+| `ouvreAdversaire(cle, opts = {})` | — |
 | `majApercuAdversaire()` | Ce que la liste collée donne, à mesure qu'on la colle. |
+| `adversaireDeLaFenetre(cle)` | L'adversaire tel que la fenêtre le décrit : lu sur le site quand on a donné un lien sans coller de liste, sinon tiré de la liste collée. |
 | `enregistreAdversaireFenetre(cle)` | — |
 | `supprimeAdversaire(cle)` | — |
 | `supprimeAdversaireOui(cle)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `FEN_ADV` | Ce que la fenêtre ouverte sait : la liste qu'elle montrait en s'ouvrant (pour savoir si l'on en a collé une autre), et l'échec d'une lecture. |
 
 ## js/fenComportement.js
 
@@ -2497,7 +2530,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 41 lignes, 1.9 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 43 lignes, 2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2506,7 +2539,7 @@ Les gestes de la section « Simulation ». *2 fonctions, 41 lignes, 1.9 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 295 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 296 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

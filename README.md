@@ -123,6 +123,7 @@ js/                 modules, chargés dans cet ordre :
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
   simCartes.js      d'un nom de carte à sa fiche de jeu, adversaires compris
   simAdversaires.js la bibliothèque d'adversaires
+  decksLies.js      les adversaires qui suivent un deck Moxfield ou Archidekt
   simPreparation.js d'un deck ou d'un adversaire à un siège de table
   simStats.js       ce qu'on retient d'une partie, et d'un lot
   simStockage.js    les résultats des lots, gardés et comparés
@@ -324,6 +325,40 @@ format MTGO ou Arena, lues par l'analyseur de l'import (`parseMtgoList()`), qui 
 (`js/simCartes.js`) les cherche dans l'atelier, puis dans l'archive indexée par nom, puis chez
 Scryfall, et les garde dans IndexedDB (`sim-cartes`) — **jamais dans `DB`**, que la sauvegarde
 locale emporterait.
+
+**Les adversaires liés.** Un adversaire peut suivre un deck publié sur Moxfield ou Archidekt
+(`js/decksLies.js`) : le lien se donne dans sa fenêtre, et à l'ouverture de l'atelier, une fois
+par jour au plus, la liste est relue ; un changement met l'adversaire à jour, le dit d'un toast
+(« +3 −2 »), et rend périmés les lots joués contre l'ancienne version — sans code à part, le lien
+n'étant qu'un champ de plus sur l'adversaire (`lien`), sauvegardé et synchronisé avec lui. Chaque
+site est un petit adaptateur (`SITES_DECKS`) : où est son API, comment lire sa réponse ; la réserve
+et les « maybe » ne jouent pas. La lecture suit une **chaîne de repli**, parce que Moxfield n'a pas
+d'API publique et refuse probablement d'être lu depuis une autre page (CORS) : la lecture directe
+d'abord ; puis, s'il est réglé, un **relais** à soi (`S.simulation.relais`, propre à l'appareil) ;
+en dernier recours, la fenêtre de l'adversaire s'ouvre sur un lien vers le deck et l'on colle son
+export — le lien est gardé, la vérification du lendemain réessaiera. Ce dernier chemin marche
+toujours ; rien ne garantit les deux premiers, qu'un site peut fermer du jour au lendemain. La
+pastille de l'adversaire dit où il en est, et son bouton « Mettre à jour » relit à la demande.
+
+Le relais est un Cloudflare Worker gratuit : sur le tableau de bord Cloudflare, *Workers* → *Créer*,
+coller le script ci-dessous, *Déployer*, puis copier son adresse dans le réglage « Relais » de la
+section des adversaires. Il ne lit que les API des deux sites, ne voit que l'identifiant d'un deck
+public, et ajoute l'en-tête qui autorise la page à lire la réponse. Si un site refuse aussi les
+requêtes du relais, il reste le collage.
+
+```js
+export default {
+  async fetch(requete) {
+    const cible = new URL(requete.url).searchParams.get('url') || '';
+    const cors = {'Access-Control-Allow-Origin': '*'};
+    if (!/^https:\/\/(api2\.moxfield\.com|archidekt\.com\/api)\//.test(cible))
+      return new Response('adresse refusée', {status: 400, headers: cors});
+    const r = await fetch(cible, {headers: {'Accept': 'application/json', 'User-Agent': 'atelier-mtg (relais personnel)'}});
+    return new Response(r.body, {status: r.status, headers: {...cors,
+      'Content-Type': r.headers.get('Content-Type') || 'application/json', 'Cache-Control': 'max-age=600'}});
+  }
+};
+```
 
 **Trois couches, dont deux pures.** Le compilateur d'oracle et le moteur n'ont ni DOM, ni `DB`, ni
 `Math.random`, ni `Date` : `index.html` les encadre de `<!-- moteur -->` et `<!-- /moteur -->`, et

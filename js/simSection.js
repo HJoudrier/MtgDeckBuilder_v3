@@ -63,7 +63,8 @@ function adversairesHTML() {
     <h3>Adversaires</h3>
     <div class="row" style="margin-bottom:6px">
       <button type="button" class="btn sm pri" data-act="simAjoutAdv">Ajouter un adversaire</button>
-      <span class="small muted">Une liste collée, au format MTGO ou Arena : ses cartes n'ont pas à être dans votre collection.</span>
+      <span class="small muted">Une liste collée (MTGO, Arena) ou le lien d'un deck Moxfield ou Archidekt, qu'il suivra :
+        ses cartes n'ont pas à être dans votre collection.</span>
     </div>
     ${cles.length ? `<div class="sim-liste">${cles.map(k => {
       const a = S.adversaires[k], r = resolutionAdversaire(a);
@@ -71,13 +72,39 @@ function adversairesHTML() {
         <b>${esc(a.nom)}</b>
         <span class="small muted">${esc((FORMATS[a.format] || {}).label || a.format)} · ${nbCartesAdversaire(a)} cartes${a.commandants.length ? ' · ' + esc(a.commandants.join(', ')) : ''}</span>
         ${r.manquants.length ? `<span class="pill" title="Demandées à Scryfall au prochain lancement : ${esc(r.manquants.slice(0, 8).join(', '))}">${r.manquants.length} inconnue(s)</span>` : ''}
+        ${a.lien ? pastilleLien(a.lien) : ''}
         <span class="sim-gestes">
+          ${a.lien ? `<button type="button" class="btn sm" data-act="simMajLien" data-adv="${esc(k)}" title="Relire le deck sur ${SITES_DECKS[a.lien.site].nom}">Mettre à jour</button>` : ''}
           <button type="button" class="btn sm" data-act="simModifAdv" data-adv="${esc(k)}">Modifier</button>
           <button type="button" class="btn sm" data-act="simSupprAdv" data-adv="${esc(k)}">Supprimer</button>
         </span>
       </div>`;
     }).join('')}</div>` : '<div class="small muted">Aucun adversaire pour l\'instant.</div>'}
+    ${relaisHTML()}
   </div>`;
+}
+
+/* La pastille d'un adversaire lié : son site, sa dernière vérification, et
+   ce qui a changé la dernière fois. */
+function pastilleLien(l) {
+  const ch = l.dernierChangement;
+  const titre = (l.etat && l.etat !== 'ok' ? `Synchronisation impossible : ${l.erreur || l.etat}. ` : '') + depuisQuand(l.verifie) +
+    (ch ? ` — dernier changement le ${new Date(ch.date).toLocaleDateString('fr-FR')} : ${ch.details && ch.details.length ? ch.details.join(', ') : `+${ch.plus} −${ch.moins}`}` : '');
+  return `<span class="pill sim-lien${l.etat && l.etat !== 'ok' ? ' sim-lien-ko' : ''}" title="${esc(titre)}">${esc(SITES_DECKS[l.site].nom)}${l.etat && l.etat !== 'ok' ? ' · synchro impossible' : ''}</span>`;
+}
+
+/* Le relais, pour les sites qui refusent d'être lus depuis une autre page.
+   On ne le montre déplié que si un adversaire lié en aurait besoin. */
+function relaisHTML() {
+  const lies = Object.values(S.adversaires).filter(a => a.lien);
+  if (!lies.length && !S.simulation.relais) return '';
+  const besoin = lies.some(a => a.lien.etat === 'refuse');
+  return `<details class="sim-relais"${besoin && !S.simulation.relais ? ' open' : ''}><summary class="small">Relais pour Moxfield et Archidekt (facultatif)</summary>
+    <div class="small muted">Si un site refuse d'être lu depuis l'atelier, un relais à vous le lit à sa place : un Cloudflare
+      Worker gratuit, dont le script est dans le README. Il ne voit que l'identifiant d'un deck public.</div>
+    <label class="sim-champ sim-champ-large">Adresse du relais
+      <input type="url" data-sim="relais" value="${esc(S.simulation.relais || '')}" placeholder="https://atelier-relais.vous.workers.dev"></label>
+  </details>`;
 }
 
 /* Le badge d'un taux de couverture. */

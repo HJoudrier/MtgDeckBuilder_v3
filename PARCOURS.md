@@ -791,7 +791,46 @@ sequenceDiagram
 
 Rien n'est journalisé pendant un lot : une partie se revoit en la rejouant.
 
-### 3.20 Revoir une partie
+### 3.20 Mettre à jour un adversaire lié
+
+Au démarrage pour les liens vérifiés il y a plus d'un jour (`verifieDecksLies()`), ou au bouton
+« Mettre à jour » (`verifieUnDeckLie()`).
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant APP as app.js
+    participant LIE as decksLies.js
+    participant SITE as Moxfield / Archidekt
+    participant REL as relais (facultatif)
+    participant ADV as simAdversaires.js
+    participant FEN as fenAdversaire.js
+    participant UI as simSection.js
+
+    APP->>LIE: verifieDecksLies()
+    loop chaque adversaire lié vérifié il y a plus d'un jour
+        LIE->>SITE: fetch(api) — lecture directe
+        alt refus (CORS) et relais réglé
+            LIE->>REL: fetch(relais?url=api)
+            REL->>SITE: lecture
+        end
+        alt réponse lue
+            LIE->>LIE: lit(json), diffListes(), appliqueDeckLie()
+            LIE->>ADV: completeAdversaire() — cartes inconnues via Scryfall
+            Note over LIE: toast « +3 −2 » ; les lots d'avant deviennent périmés
+        else échec
+            LIE->>LIE: lien.etat = refuse | introuvable | reseau
+        end
+        LIE->>LIE: scheduleSave()
+    end
+    LIE->>UI: renderK() — la pastille dit où en est chaque lien
+    opt « Mettre à jour » a échoué
+        LIE->>FEN: ouvreAdversaire(cle, {collage: true})
+        Note over FEN: lien vers le deck sur le site ;<br/>l'export collé remplace la liste, le lien est gardé
+    end
+```
+
+### 3.21 Revoir une partie
 
 ```mermaid
 sequenceDiagram

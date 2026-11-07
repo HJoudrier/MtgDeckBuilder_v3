@@ -102,6 +102,7 @@
   "ficheParcours.js",
   "simCartes.js",
   "simAdversaires.js",
+  "decksLies.js",
   "simPreparation.js",
   "simStats.js",
   "simStockage.js",
@@ -6934,7 +6935,9 @@
     "reglageSimulation",
     "renderAll",
     "runScryQueue",
-    "supprimeAdversaireOui"
+    "supprimeAdversaireOui",
+    "verifieDecksLies",
+    "verifieUnDeckLie"
    ]
   },
   {
@@ -11682,7 +11685,8 @@
    "appeleePar": [
     "completeAdversaire",
     "joueLot",
-    "renderK"
+    "renderK",
+    "verifieDecksLies"
    ]
   },
   {
@@ -11739,7 +11743,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "enregistreAdversaireFenetre",
+    "adversaireDeLaFenetre",
     "majApercuAdversaire"
    ]
   },
@@ -11799,7 +11803,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "enregistreAdversaireFenetre"
+    "enregistreAdversaireFenetre",
+    "relisAdversaireLie"
    ]
   },
   {
@@ -11832,6 +11837,168 @@
     "couvertureTable",
     "lotPerime",
     "terminerLot"
+   ]
+  },
+  {
+   "nom": "lisLienDeck",
+   "fichier": "decksLies.js",
+   "ligne": 58,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "adversaireDeLaFenetre"
+   ]
+  },
+  {
+   "nom": "lisJsonDeck",
+   "fichier": "decksLies.js",
+   "ligne": 71,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "recupereDeckLie"
+   ]
+  },
+  {
+   "nom": "recupereDeckLie",
+   "fichier": "decksLies.js",
+   "ligne": 84,
+   "chargement": false,
+   "appelle": [
+    "lisJsonDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "adversaireDeLaFenetre",
+    "relisAdversaireLie"
+   ]
+  },
+  {
+   "nom": "texteDeListe",
+   "fichier": "decksLies.js",
+   "ligne": 100,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "adversaireDeLaFenetre",
+    "appliqueDeckLie"
+   ]
+  },
+  {
+   "nom": "diffListes",
+   "fichier": "decksLies.js",
+   "ligne": 106,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueDeckLie",
+    "enregistreAdversaireFenetre"
+   ]
+  },
+  {
+   "nom": "appliqueDeckLie",
+   "fichier": "decksLies.js",
+   "ligne": 121,
+   "chargement": false,
+   "appelle": [
+    "diffListes",
+    "texteDeListe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "relisAdversaireLie"
+   ]
+  },
+  {
+   "nom": "relisAdversaireLie",
+   "fichier": "decksLies.js",
+   "ligne": 136,
+   "chargement": false,
+   "appelle": [
+    "appliqueDeckLie",
+    "completeAdversaire",
+    "recupereDeckLie"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "verifieDecksLies",
+    "verifieUnDeckLie"
+   ]
+  },
+  {
+   "nom": "annonceChangement",
+   "fichier": "decksLies.js",
+   "ligne": 149,
+   "chargement": false,
+   "appelle": [
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "verifieDecksLies",
+    "verifieUnDeckLie"
+   ]
+  },
+  {
+   "nom": "verifieDecksLies",
+   "fichier": "decksLies.js",
+   "ligne": 155,
+   "chargement": false,
+   "appelle": [
+    "annonceChangement",
+    "chargeSimCartes",
+    "relisAdversaireLie",
+    "renderK",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarrer"
+   ]
+  },
+  {
+   "nom": "verifieUnDeckLie",
+   "fichier": "decksLies.js",
+   "ligne": 177,
+   "chargement": false,
+   "appelle": [
+    "annonceChangement",
+    "ouvreAdversaire",
+    "relisAdversaireLie",
+    "renderK",
+    "scheduleSave",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesSimulation"
+   ]
+  },
+  {
+   "nom": "depuisQuand",
+   "fichier": "decksLies.js",
+   "ligne": 191,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etatLienHTML",
+    "pastilleLien"
    ]
   },
   {
@@ -12368,6 +12535,8 @@
    "appelle": [
     "esc",
     "nbCartesAdversaire",
+    "pastilleLien",
+    "relaisHTML",
     "resolutionAdversaire"
    ],
    "appelleDiffere": [],
@@ -12377,9 +12546,38 @@
    ]
   },
   {
+   "nom": "pastilleLien",
+   "fichier": "simSection.js",
+   "ligne": 89,
+   "chargement": false,
+   "appelle": [
+    "depuisQuand",
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "adversairesHTML"
+   ]
+  },
+  {
+   "nom": "relaisHTML",
+   "fichier": "simSection.js",
+   "ligne": 98,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "adversairesHTML"
+   ]
+  },
+  {
    "nom": "badgeCouverture",
    "fichier": "simSection.js",
-   "ligne": 84,
+   "ligne": 111,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12392,7 +12590,7 @@
   {
    "nom": "couvertureHTML",
    "fichier": "simSection.js",
-   "ligne": 90,
+   "ligne": 117,
    "chargement": false,
    "appelle": [
     "badgeCouverture",
@@ -12408,7 +12606,7 @@
   {
    "nom": "renderK",
    "fichier": "simSection.js",
-   "ligne": 110,
+   "ligne": 137,
    "chargement": false,
    "appelle": [
     "adversairesHTML",
@@ -12433,7 +12631,9 @@
     "reglageSimulation",
     "renderAll",
     "supprimeAdversaireOui",
-    "terminerLot"
+    "terminerLot",
+    "verifieDecksLies",
+    "verifieUnDeckLie"
    ]
   },
   {
@@ -12616,14 +12816,17 @@
     "paginationListe",
     "panneauEdhrec",
     "partiesHTML",
+    "pastilleLien",
     "proposerMajCatalogue",
     "propositionsHTML",
     "puceStatut",
     "refCarte",
+    "relaisHTML",
     "renderD",
     "renderE",
     "renderJ",
     "renderTop",
+    "repliHTML",
     "resumeDeckConfig",
     "resumeFiltres",
     "sectionParametres",
@@ -12747,7 +12950,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "addToDeck",
+    "adversaireDeLaFenetre",
     "ajouterCarte",
+    "annonceChangement",
     "app.js (chargement)",
     "appliqueComportement",
     "brancherCatalogue",
@@ -12785,6 +12990,7 @@
     "save",
     "telechargerCatalogue",
     "terminerLot",
+    "verifieUnDeckLie",
     "versAnnexe",
     "viderAnnexe"
    ]
@@ -15436,26 +15642,58 @@
    ]
   },
   {
-   "nom": "ouvreAdversaire",
+   "nom": "repliHTML",
    "fichier": "fenAdversaire.js",
-   "ligne": 10,
+   "ligne": 20,
    "chargement": false,
    "appelle": [
-    "esc",
-    "majApercuAdversaire",
-    "openDialog",
-    "optionsHTML"
+    "esc"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "gestesSimulation"
+    "adversaireDeLaFenetre",
+    "ouvreAdversaire"
+   ]
+  },
+  {
+   "nom": "etatLienHTML",
+   "fichier": "fenAdversaire.js",
+   "ligne": 33,
+   "chargement": false,
+   "appelle": [
+    "depuisQuand"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ouvreAdversaire"
+   ]
+  },
+  {
+   "nom": "ouvreAdversaire",
+   "fichier": "fenAdversaire.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "etatLienHTML",
+    "majApercuAdversaire",
+    "openDialog",
+    "optionsHTML",
+    "repliHTML"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesSimulation",
+    "verifieUnDeckLie"
    ]
   },
   {
    "nom": "majApercuAdversaire",
    "fichier": "fenAdversaire.js",
-   "ligne": 26,
+   "ligne": 61,
    "chargement": false,
    "appelle": [
     "adversaireDepuisTexte",
@@ -15466,20 +15704,42 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "adversaireDeLaFenetre",
     "app.js (chargement)",
     "ouvreAdversaire"
    ]
   },
   {
-   "nom": "enregistreAdversaireFenetre",
+   "nom": "adversaireDeLaFenetre",
    "fichier": "fenAdversaire.js",
-   "ligne": 36,
+   "ligne": 74,
    "chargement": false,
    "appelle": [
     "adversaireDepuisTexte",
+    "lisLienDeck",
+    "majApercuAdversaire",
+    "recupereDeckLie",
+    "repliHTML",
+    "texteDeListe",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "enregistreAdversaireFenetre"
+   ]
+  },
+  {
+   "nom": "enregistreAdversaireFenetre",
+   "fichier": "fenAdversaire.js",
+   "ligne": 105,
+   "chargement": false,
+   "appelle": [
+    "adversaireDeLaFenetre",
     "closeDialog",
     "completeAdversaire",
     "configSimulation",
+    "diffListes",
     "enregistreAdversaire",
     "renderK",
     "scheduleSave",
@@ -15494,7 +15754,7 @@
   {
    "nom": "supprimeAdversaire",
    "fichier": "fenAdversaire.js",
-   "ligne": 55,
+   "ligne": 128,
    "chargement": false,
    "appelle": [
     "esc",
@@ -15509,7 +15769,7 @@
   {
    "nom": "supprimeAdversaireOui",
    "fichier": "fenAdversaire.js",
-   "ligne": 63,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -15928,7 +16188,7 @@
   {
    "nom": "gestesSimulation",
    "fichier": "gestesSimulation.js",
-   "ligne": 9,
+   "ligne": 10,
    "chargement": false,
    "appelle": [
     "appliqueComportement",
@@ -15942,7 +16202,8 @@
     "renderK",
     "supprimeAdversaire",
     "supprimeAdversaireOui",
-    "supprimeLot"
+    "supprimeLot",
+    "verifieUnDeckLie"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -15953,7 +16214,7 @@
   {
    "nom": "reglageSimulation",
    "fichier": "gestesSimulation.js",
-   "ligne": 30,
+   "ligne": 32,
    "chargement": false,
    "appelle": [
     "renderK",
@@ -16042,7 +16303,8 @@
     "reprendreArchetypesEdhrec",
     "reprendreGameChangers",
     "reprendreSets",
-    "restore"
+    "restore",
+    "verifieDecksLies"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],

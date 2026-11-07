@@ -184,7 +184,7 @@ const S = {
      est de la vue : elle se sauvegarde, mais reste sur l'appareil. */
   adversaires: {},
   comportements: {},
-  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25}
+  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, relais: ''}
 };
 
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});

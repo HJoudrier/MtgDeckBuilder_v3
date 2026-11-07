@@ -851,3 +851,9 @@ tr.sim-maigre td{color:var(--dim2)}
   .sim-champ{display:flex;margin-right:0}
   .sim-barre{grid-template-columns:90px 1fr auto}
 }
+.sim-lien{border-color:var(--brass-d);color:var(--brass)}
+.sim-lien-ko{border-color:var(--bad-line);color:var(--bad-txt)}
+.sim-champ-large{display:flex;margin-right:0}
+.sim-champ-large input{width:100%;min-width:0;box-sizing:border-box}
+.sim-repli{border:1px solid var(--warn);border-radius:6px;padding:8px 10px;margin:4px 0 8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.sim-relais{margin-top:8px}

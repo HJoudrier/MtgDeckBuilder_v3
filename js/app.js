@@ -285,6 +285,7 @@ function demarrer() {
   demarrerCatalogue();
   /* Le retour de connexion que l'adresse peut porter, puis un tirage de fond. */
   nuageDemarrer();
+  verifieDecksLies();
 }
 
 if (document.readyState === 'loading') {
