@@ -7,41 +7,73 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**643 fonctions**, 99 modules, 696 Ko de JavaScript.
+**923 fonctions**, 143 modules, 930 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
 | [`reglesEffets.js`](#jsregleseffetsjs) | Le vocabulaire du graphe : nœuds, effets, déclencheurs | 0 | 273 |
 | [`effets.js`](#jseffetsjs) | Qualifier un déclencheur, un effet, et les accorder | 11 | 258 |
 | [`synergies.js`](#jssynergiesjs) | Ce qu'une carte apporte à une autre | 5 | 61 |
-| [`cartesBrutes.js`](#jscartesbrutesjs) | La base livrée avec l'atelier | 0 | 140 |
+| [`cartesBrutes.js`](#jscartesbrutesjs) | La base livrée avec l'atelier | 0 | 141 |
 | [`analyse.js`](#jsanalysejs) | Lire une carte : coût, capacités, déclencheurs, effets | 5 | 148 |
 | [`archetypesLibelles.js`](#jsarchetypeslibellesjs) | Le nom français des thèmes EDHREC | 0 | 83 |
 | [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 126 |
 | [`mana.js`](#jsmanajs) | Ce qu'une carte demande en mana, et ce qu'elle en produit | 11 | 211 |
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
-| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 18 | 207 |
+| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 213 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 183 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 191 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
 | [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 11 | 135 |
-| [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 67 |
+| [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 71 |
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
+| [`oracleTexte.js`](#jsoracletextejs) | Préparer le texte oracle pour le compilateur | 7 | 122 |
+| [`oracleMotsCles.js`](#jsoraclemotsclesjs) | Les mots-clés que le moteur sait jouer | 3 | 75 |
+| [`oracleCouts.js`](#jsoraclecoutsjs) | Lire un coût : celui d'un sort, celui d'une capacité | 4 | 81 |
+| [`oracleCibles.js`](#jsoracleciblesjs) | Une seule grammaire pour désigner des objets | 6 | 172 |
+| [`oracleEffetsA.js`](#jsoracleeffetsajs) | Les motifs d'effet : dégâts, vie, cartes, retraits | 3 | 140 |
+| [`oracleEffetsB.js`](#jsoracleeffetsbjs) | Les motifs d'effet : jetons, marqueurs, pompes, | 4 | 198 |
+| [`oracleDeclencheurs.js`](#jsoracledeclencheursjs) | Lire ce qui déclenche une capacité | 4 | 88 |
+| [`oracleStatiques.js`](#jsoraclestatiquesjs) | Lire une capacité statique, et la façon d'entrer | 4 | 85 |
+| [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 143 |
+| [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 10 | 159 |
+| [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
+| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 19 | 194 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 8 | 76 |
+| [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 10 | 144 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 8 | 154 |
+| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 9 | 209 |
+| [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 147 |
+| [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 6 | 116 |
+| [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 88 |
+| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 10 | 155 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 156 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 115 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 10 | 147 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 102 |
+| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 58 |
+| [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 5 | 76 |
+| [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 84 |
+| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 120 |
+| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 8 | 168 |
+| [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 82 |
+| [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 1 | 34 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
-| [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 146 |
+| [`champsJeu.js`](#jschampsjeujs) | Ce que le moteur de jeu demande à une carte | 7 | 91 |
+| [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 148 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 275 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 285 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
-| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 68 |
-| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 121 |
+| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 72 |
+| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 123 |
 | [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 234 |
 | [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
 | [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 275 |
@@ -51,9 +83,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`edhrecThemes.js`](#jsedhrecthemesjs) | L'index des thèmes EDHREC | 10 | 179 |
 | [`sets.js`](#jssetsjs) | Les sets publiés par Scryfall | 8 | 156 |
 | [`gameChangers.js`](#jsgamechangersjs) | La liste des « Game Changers » | 4 | 77 |
-| [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 223 |
+| [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 226 |
 | [`catalogue.js`](#jscataloguejs) | Tenir le catalogue à jour | 10 | 232 |
-| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 258 |
+| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 261 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 169 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 5 | 113 |
 | [`notation.js`](#jsnotationjs) | La note d'une carte candidate | 5 | 239 |
@@ -78,6 +110,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
+| [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 8 | 116 |
+| [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
+| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 9 | 98 |
+| [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
+| [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
+| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 10 | 133 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 7 | 123 |
+| [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
 | [`dialogue.js`](#jsdialoguejs) | La fenêtre modale, une à la fois | 2 | 42 |
@@ -89,8 +129,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 246 |
-| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 35 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 249 |
+| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 36 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 130 |
@@ -102,6 +142,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 179 |
+| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 5 | 70 |
+| [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
+| [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
@@ -109,7 +152,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 297 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 41 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 295 |
 
 ## js/reglesEffets.js
 
@@ -167,7 +211,7 @@ Ce qu'une carte apporte à une autre. *5 fonctions, 61 lignes, 2.1 Ko.*
 
 ## js/cartesBrutes.js
 
-La base livrée avec l'atelier. *0 fonctions, 140 lignes, 19 Ko.*
+La base livrée avec l'atelier. *0 fonctions, 141 lignes, 19 Ko.*
 
 | Donnée | Rôle |
 |---|---|
@@ -246,7 +290,7 @@ Les éditions d'une carte, et celle qu'on possède. *7 fonctions, 74 lignes, 2.9
 
 ## js/cartes.js
 
-La base de cartes et ses index. *18 fonctions, 207 lignes, 7.8 Ko.*
+La base de cartes et ses index. *19 fonctions, 213 lignes, 8.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -264,6 +308,7 @@ La base de cartes et ses index. *18 fonctions, 207 lignes, 7.8 Ko.*
 | `commandantsSecondairesPossibles()` | Toutes les cartes du deck qui pourraient commander, les commandants principaux mis à part : la liste que l'onglet EDHREC affiche, cochées ou non. |
 | `commandantsSecondaires()` | Celles qu'on traite effectivement comme commandants secondaires : les autres ont été décochées dans l'onglet EDHREC (`S.secondairesOff`). |
 | `mainType(c)` | — |
+| `carteLivree(line)` | Une ligne de la base livrée devient une carte. |
 | `initBuiltin()` | — |
 | `frontFace(n)` | — |
 | `mergeInto(card, canonical)` | — |
@@ -293,7 +338,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 183 lignes, 10 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 191 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -434,7 +479,7 @@ Ce qui reste après les filtres. *11 fonctions, 135 lignes, 5.7 Ko.*
 
 ## js/catalogueEtat.js
 
-L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 67 lignes, 2.9 Ko.*
+L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 71 lignes, 3.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -535,6 +580,500 @@ Ce qu'il reste à acheter. *9 fonctions, 143 lignes, 5.9 Ko.*
 |---|---|
 | `ACHATS` | — |
 
+## js/oracleTexte.js
+
+Préparer le texte oracle pour le compilateur. *7 fonctions, 122 lignes, 5.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nombreOracle(s)` | Un nombre écrit en chiffres ou en toutes lettres ; « x » reste la variable du coût. |
+| `echappeRegex(s)` | — |
+| `normaliseOracle(texte, nom)` | Réduire le texte d'une face : minuscules, nom → `~`, rappel retiré, tirets et apostrophes unifiés, « enters the battlefield » ramené à « enters » (la formulation de 2024). |
+| `phrasesOracle(ligne)` | Couper une ligne en phrases. Un point dans des guillemets — une capacité accordée — ne coupe pas. |
+| `propositionsOracle(phrase)` | Couper une phrase en propositions qu'un seul motif peut lire. |
+| `faceJouee(fiche)` | La face que le moteur joue. Une carte à faces porte ses faces à part (js/champsJeu.js) ; seule la première se joue au lot 1, le dos est rapporté. Sans faces connues, le texte joint par `… |
+| `lisTypeLigne(type)` | La ligne de type, lue une fois : types, sous-types, supertypes. |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMBRES_MOTS` | — |
+| `SOI_ORACLE` | Les tournures qui désignent la carte elle-même, réduites à `~`. |
+| `VERBES_ORACLE` | Les verbes qui ouvrent une nouvelle proposition après « , and » ou « and » : sans eux, « destroy target creature and its controller gains 2 life » serait un seul bloc, et « create a 1/1… |
+| `COUPE_ORACLE` | — |
+
+## js/oracleMotsCles.js
+
+Les mots-clés que le moteur sait jouer. *3 fonctions, 75 lignes, 3.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `masqueMots(txt)` | Lire une liste de mots-clés simples (« flying and trample », « flying, vigilance »). |
+| `motCleSeul(p)` | Un morceau de ligne de mots-clés, avec son paramètre éventuel. |
+| `ligneMotsCles(ligne)` | Une ligne n'est une ligne de mots-clés que si **tous** ses morceaux en sont : « Flying, haste » oui, « Flying, then draw a card » non. |
+
+| Donnée | Rôle |
+|---|---|
+| `MOT` | — |
+| `MOTS_ANGLAIS` | Le nom anglais de chaque mot-clé simple, tel que l'oracle et Scryfall l'écrivent. |
+| `COULEURS_ANGLAIS` | — |
+
+## js/oracleCouts.js
+
+Lire un coût : celui d'un sort, celui d'une capacité. *4 fonctions, 81 lignes, 3.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `coutMana(str)` | Un coût en mana : symboles, part générique, couleurs exigées, hybrides, nombre de X, et sa valeur de mana. |
+| `coutManaVide()` | Un coût vide, pour les capacités qui ne coûtent qu'un engagement. |
+| `morceauCout(p)` | Un morceau de coût d'activation. Rend la clé et la valeur à poser sur le coût, ou `null`. |
+| `coutActivation(txt)` | Le coût d'une capacité activée, morceau par morceau. |
+
+## js/oracleCibles.js
+
+Une seule grammaire pour désigner des objets. *6 fonctions, 172 lignes, 9.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `singulier(w)` | — |
+| `descVide()` | — |
+| `adjectifDesc(d, w)` | Les adjectifs en tête, relus tant qu'il en reste. |
+| `lisDescripteur(txt, o = {})` | Lire un descripteur. `o.cartes` : on parle de cartes hors du champ par défaut (bibliothèque), `o.objets` : d'objets du champ. Rend `null` dès qu'un mot reste incompris. |
+| `lisReference(txt, c, o = {})` | Lire ce sur quoi porte un effet : une cible (qu'on inscrit dans le contexte), un groupe (« each », « all », un pluriel), un joueur, la carte elle-même, un pronom. |
+| `contexteOracle(evt)` | Le contexte de compilation d'une capacité : les cibles qu'elle déclare, le dernier objet nommé (pour « it »), et ce que l'évènement déclencheur apporte (« that creature », « that player »). |
+
+| Donnée | Rôle |
+|---|---|
+| `TYPES_CARTE` | — |
+| `PLURIELS_ORACLE` | Les pluriels irréguliers des sous-types ; les autres perdent leur « s ». |
+| `PAS_SOUSTYPE` | Des mots qui ne sont jamais un sous-type : sans eux, « target » ou « that » seraient lus comme une race de créature et un motif réussirait à tort. |
+| `QUEUES_DESC` | Les queues de phrase qui précisent un descripteur, relues tant qu'il en reste. |
+
+## js/oracleEffetsA.js
+
+Les motifs d'effet : dégâts, vie, cartes, retraits. *3 fonctions, 140 lignes, 7.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `lisQuantite(txt, c)` | Une quantité : un nombre, X, « that much », « the number of … », « its power ». |
+| `lisSource(txt, c)` | La source qui inflige des dégâts : la carte, ce qu'elle désigne, ou la créature qu'elle équipe. |
+| `motif(id, famille, re, fait, ex)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `EFFETS_ORACLE` | — |
+
+## js/oracleEffetsB.js
+
+Les motifs d'effet : jetons, marqueurs, pompes,. *4 fonctions, 198 lignes, 11 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `lisSigne(s, c)` | Un nombre signé d'une pompe : « +2 », « -1 », « +x ». |
+| `compileProposition(txt, c)` | Lire une proposition : « you may », « if you do », « for each » s'ôtent d'abord, puis chaque motif est essayé dans l'ordre. |
+| `remplaceX(ops, x)` | Remplacer le X d'une capacité par ce que « where X is … » en dit. |
+| `compileEffet(texte, c)` | Lire un effet entier : ses phrases, puis leurs propositions. |
+
+| Donnée | Rôle |
+|---|---|
+| `JETONS_NOMMES` | Les jetons nommés, décrits dans le vocabulaire même du compilateur : ils se compilent comme n'importe quelle carte (js/definitions.js). |
+
+## js/oracleDeclencheurs.js
+
+Lire ce qui déclenche une capacité. *4 fonctions, 88 lignes, 5.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `declencheur(re, fait, ex)` | — |
+| `sujetDecl(txt)` | Le sujet d'un évènement : la carte elle-même, ou un descripteur. |
+| `lisDeclencheur(txt)` | Lire la condition d'un déclencheur, déjà privée de « when / whenever / at ». |
+| `apportDecl(ecoutes)` | Ce que l'évènement apporte au texte de l'effet : un objet (« that creature ») quand le sujet en est un autre que la carte, un joueur (« that player ») quand il s'agit de dégâts infligés. |
+
+| Donnée | Rôle |
+|---|---|
+| `DECLENCHEURS_ORACLE` | — |
+| `EVTS_SOI` | — |
+
+## js/oracleStatiques.js
+
+Lire une capacité statique, et la façon d'entrer. *4 fonctions, 85 lignes, 4.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `statique(re, fait, ex)` | — |
+| `bonusPT(f, e)` | « +1/+1 » en deux nombres. |
+| `lisStatique(txt)` | Lire une statique. |
+| `lisEntree(ligne)` | La façon d'entrer d'un permanent, ou `null` si la ligne n'en parle pas. |
+
+| Donnée | Rôle |
+|---|---|
+| `STATIQUES_ORACLE` | — |
+
+## js/oracleLignes.js
+
+Ranger chaque ligne d'une carte. *7 fonctions, 143 lignes, 6.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `deuxPoints(ligne)` | L'indice du premier deux-points hors guillemets, ou -1. |
+| `compileEffetModal(texte, c, puces)` | Un effet, éventuellement modal : « choose one — » suivi de puces. |
+| `oteRythme(txt)` | Les mentions de rythme qui suivent une capacité activée ou déclenchée. |
+| `compileDeclenchee(ligne, puces)` | Une ligne déclenchée : on essaie chaque virgule comme frontière entre la condition et l'effet, la première qui se lise des deux côtés l'emporte — « Whenever ~ enters or attacks, create… |
+| `compileActivee(ligne, puces)` | Une ligne activée ou de loyauté. |
+| `compileLigne(ligne, estSort, cs, puces)` | Ranger une ligne. `estSort` : la carte est un éphémère ou un rituel, et ce qui n'est ni mot-clé ni activée est son effet ; `cs` est alors le contexte partagé par toutes ses lignes, qui y… |
+| `compileLignes(lignes, estSort)` | Grouper les puces sous la ligne qui les annonce, puis ranger chaque ligne. |
+
+## js/definitions.js
+
+D'une carte à sa définition de jeu. *10 fonctions, 159 lignes, 8.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `empreinte(s)` | Une empreinte courte d'un texte, pour la clé du mémo et les signatures. |
+| `nombreFiche(v)` | — |
+| `couleursDe(cout, fiche)` | Les couleurs d'une carte, lues dans son coût ; un jeton dit les siennes. |
+| `verseLigne(def, res)` | Verser une ligne comprise dans la définition. |
+| `etatLigne(res)` | L'état d'une ligne pour la couverture. |
+| `capacitesImplicites(def, fiche)` | Les capacités qu'une carte a sans les écrire : le mana d'un terrain de base ou d'un dual (le texte n'en est qu'un rappel, effacé), et à défaut le mana que Scryfall dit qu'un terrain produit. |
+| `compileDefinition(fiche, comportement)` | Compiler une fiche. `comportement` remplace le texte oracle quand l'utilisateur a décrit la carte à la main (js/fenComportement.js). |
+| `couverture(compilees, def, fiche, directive, manuel)` | La couverture : l'état de chaque ligne, celui de la carte, et un taux. |
+| `definitionDe(fiche, comportement)` | La définition d'une fiche, gardée sous son nom, l'empreinte de son texte et celle de son comportement manuel. |
+| `definitionJeton(j)` | La définition d'un jeton décrit par un effet (« create a 2/2 black Zombie creature token »). |
+
+| Donnée | Rôle |
+|---|---|
+| `COMPILO_V` | À rehausser dès que le compilateur change ce qu'il comprend : la signature d'un lot de simulations l'inclut, et un rejeu fait avec un autre compilateur ne rejouerait pas la même partie. |
+| `DEFS` | — |
+| `CONTREPARTIE` | Ce qui, ignoré, rendrait la carte **plus forte** qu'elle n'est : une contrepartie, une interdiction, un prix. |
+| `MANA_DES_TYPES` | — |
+
+## js/jeuHasard.js
+
+Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `brasse(a, b)` | Brasser deux entiers en un troisième, pour dériver une graine d'une autre. |
+| `etatHasard(graine)` | L'état d'un générateur, chauffé quinze tirages pour qu'une graine voisine ne donne pas une suite voisine. |
+| `tireHasard(st)` | Un tirage dans [0, 1). |
+| `entierHasard(st, n)` | Un entier dans [0, n). |
+| `melangeHasard(st, t)` | Mélanger un tableau sur place (Fisher-Yates). |
+
+## js/jeuEtat.js
+
+Une partie : ses joueurs, ses objets, ses zones. *19 fonctions, 194 lignes, 8.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nouvellePartie(cfg)` | Créer une partie. `cfg.sieges` : `[{nom, format, vie, cartes:[{def, n}], commandants:[def]}]` ; `cfg.premier` : le siège qui commence. |
+| `nouvelleCarte(P, def, prop, cmd, jeton)` | Inscrire une carte de la partie. Un jeton aussi en reçoit une, pour que ses statistiques et son nom aient un support. |
+| `creeObjet(P, cid, prop, zone, ctrl)` | — |
+| `obj(P, id)` | — |
+| `suit(P, id)` | L'identifiant qu'un objet porte aujourd'hui, en suivant ses changements de zone pendant la résolution en cours (« exile it, then return it »). |
+| `tableauZone(P, o)` | Le tableau d'une zone : le champ de bataille est commun, le reste appartient au propriétaire. |
+| `retireDe(t, id)` | — |
+| `instantane(P, o)` | Ce qu'on savait d'un objet au moment où il est parti : le moteur s'en sert pour « when ~ dies » et « equal to its power » (règle 608.2h). |
+| `deplace(P, id, vers, opts = {})` | Déplacer un objet. Rend l'identifiant du nouvel objet, ou `null` pour un jeton qui quitte le champ (il cesse d'exister). `vers` : une zone, ou `dessus` / `dessous` de la bibliothèque. |
+| `emet(P, e)` | Un évènement, que la collecte des déclencheurs lira (js/jeuDeclencheurs.js). |
+| `jn(P, txt)` | Une ligne de journal — rien du tout quand la partie ne se journalise pas, ce qui est le cas de toutes celles d'un lot. |
+| `nomObj(P, id)` | — |
+| `vivants(P)` | — |
+| `suivantVivant(P, i)` | Le joueur suivant encore en lice, dans l'ordre des sièges. |
+| `ordreApnap(P)` | Les joueurs en lice dans l'ordre APNAP : le joueur actif d'abord. |
+| `adversaires(P, i)` | — |
+| `champDe(P, j)` | Les objets du champ qu'un joueur contrôle. |
+| `piocheN(P, j, n)` | Piocher. Une bibliothèque vide ne fait pas perdre sur-le-champ : elle le note, et l'action d'état tranche (règle 704.5b). |
+| `question(P, j, q, options, x = {})` | Une question posée à un joueur : le moteur la rend par `yield`, le pilote la porte à l'agent du joueur et renvoie sa réponse (js/jeuPilote.js). |
+
+| Donnée | Rôle |
+|---|---|
+| `ZONES_JOUEUR` | — |
+
+## js/jeuCaracteristiques.js
+
+Ce qu'un permanent est en ce moment. *8 fonctions, 76 lignes, 3.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `statiquesEnJeu(P)` | Les statiques en vigueur, relevées une fois par version de l'état. |
+| `statiqueVise(P, src, s, o)` | Une statique s'applique-t-elle à cet objet ? Le sujet se juge sur les caractéristiques **imprimées** de l'objet : les juger sur ses caractéristiques calculées ferait dépendre le calcul… |
+| `car(P, o)` | Les caractéristiques calculées d'un objet du champ (ou d'une carte, pour laquelle seule la définition compte). |
+| `aMot(P, o, m)` | — |
+| `estType(o, t)` | — |
+| `estCreature(o)` | — |
+| `peutEngagerSoi(P, o)` | Une créature peut-elle s'engager pour attaquer ou pour une capacité {T} : elle est là depuis le début du tour de son contrôleur, ou elle a la célérité (règle 302.6). |
+| `mvDe(o)` | La valeur de mana d'un objet ou d'une définition. |
+
+## js/jeuCibles.js
+
+Juger un objet contre un descripteur. *10 fonctions, 144 lignes, 6.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `caracsJugees(P, o, base)` | Les caractéristiques à juger : celles du moment pour un permanent, celles qu'on a retenues pour un objet parti, l'imprimé pour une carte ailleurs. |
+| `etatCombat(P, o, etat)` | — |
+| `correspondObjet(P, o, d, src, ctrl, base)` | Le cœur : un objet (ou un instantané) répond-il au descripteur, vu du joueur `ctrl` qui contrôle la source `src` ? |
+| `correspond(P, o, d, src, ctrl)` | — |
+| `correspondBase(P, o, d, src, ctrl)` | — |
+| `joueurCorrespond(P, j, d, ctrl)` | Un joueur répond-il au descripteur ? |
+| `defCorrespond(def, d)` | Une définition de sort répond-elle (déclencheurs « whenever you cast a noncreature spell ») ? |
+| `ciblable(P, o, ctrl, couleurs)` | Linceul, défense talismanique, protection : un objet peut-il être ciblé par ce joueur, avec une source de ces couleurs ? La garde se paie au lancement (js/jeuLancer.js), elle n'interdit… |
+| `ciblesLegales(P, slot, src, ctrl, couleurs)` | Les candidats légaux d'un emplacement de cible : des identifiants d'objets, ou `{j}` pour un joueur. |
+| `cibleEncoreLegale(P, cand, slot, src, ctrl, couleurs)` | Une cible choisie l'est-elle encore à la résolution (règle 608.2b) ? |
+
+## js/jeuMana.js
+
+La réserve de mana, et le paiement automatique. *8 fonctions, 154 lignes, 6.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `sourcesMana(P, j)` | Les sources de mana qu'un joueur peut activer maintenant, une par objet : un objet à deux capacités {T} n'en active qu'une. |
+| `compteObjets(P, desc, src, j)` | Compter les objets du champ qui répondent à un descripteur, vus d'un joueur — « for each Elf you control ». |
+| `planPaiement(P, j, cout, x)` | Le plan d'un paiement : quelles sources activer, et pour quelle option. |
+| `manaDispo(P, j)` | Ce qu'un joueur peut produire en tout : sa réserve et toutes ses sources. |
+| `ajouteMana(P, j, lettres)` | — |
+| `debite(pool, cout, x)` | Retirer un coût d'une réserve qui suffit : couleurs exigées, hybrides, puis le générique, pris d'abord dans l'incolore puis dans les couleurs les plus abondantes. |
+| `paieMana(P, j, cout, x)` | Payer un coût en mana : activer les sources du plan, verser leur mana dans la réserve, puis en retirer le coût. |
+| `videReserves(P)` | Les réserves se vident à la fin de chaque étape (règle 500.4). |
+
+| Donnée | Rôle |
+|---|---|
+| `LETTRES_MANA` | — |
+
+## js/jeuOpsA.js
+
+Exécuter les opérations : références, dégâts, vie,. *9 fonctions, 209 lignes, 9.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `sourceCtx(P, ctx)` | La source d'une capacité ou d'un sort, telle qu'elle est maintenant, ou telle qu'on l'a connue si elle est partie. |
+| `passeOuPresent(P, id)` | Un objet tel qu'il était, si la résolution en cours l'a fait partir, sinon tel qu'il est. |
+| `resous(P, ref, ctx, passe)` | Résoudre une référence en objets et en joueurs (`{j}`). |
+| `joueursDe(P, ref, ctx)` | Les joueurs d'une référence, objets ramenés à leur contrôleur. |
+| `valeur(P, q, ctx)` | La valeur d'une quantité. |
+| `gagneVie(P, j, n)` | — |
+| `infligeDegats(P, src, cible, n, combat)` | Infliger des dégâts : à un joueur, à une créature, à un planeswalker. |
+| `choisitCartes(P, j, ids, n, texte, q = 'cartes', min)` | Choisir des cartes : une question au joueur, sauf quand le choix est forcé (autant de cartes que d'options, ou aucune). |
+| `sacrifie(P, id)` | Sacrifier, c'est mettre au cimetière en le disant : « whenever you sacrifice » l'écoute. |
+
+| Donnée | Rôle |
+|---|---|
+| `OPS` | — |
+
+## js/jeuOpsB.js
+
+Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 147 lignes, 6.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `metEnJeu(P, id, ctrl, opts = {})` | Un permanent arrive sur le champ, avec sa façon d'entrer : engagé, engagé sauf si, en payant de la vie, avec des marqueurs, et la loyauté d'un planeswalker. |
+| `proposePaiement(P, op, ctx)` | Proposer à un joueur de payer pour empêcher une opération (« unless that player pays {1} »). |
+| `executeOps(P, ops, ctx)` | Dérouler une liste d'opérations. |
+
+| Donnée | Rôle |
+|---|---|
+| `PLAFOND_CHAMP` | Le plafond d'objets sur le champ : une boucle de jetons mal comprise ne doit pas faire tomber la page, elle fait finir la partie au plafond. |
+| `TYPES_PERMANENTS` | — |
+
+## js/jeuDeclencheurs.js
+
+Des évènements aux capacités déclenchées. *6 fonctions, 116 lignes, 5.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ecoute(def)` | Une définition a-t-elle une capacité déclenchée ou la prouesse ? Gardé sur la définition : le test se fait pour chaque permanent à chaque collecte. |
+| `quiConvient(qui, j, ctrl)` | — |
+| `rangDuSort(P, e, desc)` | Le rang d'un sort parmi ceux que son lanceur a lancés ce tour et qui répondent au même descripteur : « their first noncreature spell ». |
+| `ecouteRepond(P, ec, e, s)` | Une écoute répond-elle à un évènement, pour la source `s` ? |
+| `collecteDeclencheurs(P)` | Lire les évènements émis depuis la dernière collecte, et ranger en attente les capacités qu'ils déclenchent. |
+| `declencheursDeLancement(P, item)` | Les déclencheurs de « when you cast ~ », qui écoutent un sort sur la pile et non un permanent : le lancement les range lui-même. |
+
+| Donnée | Rôle |
+|---|---|
+| `CAP_PROUESSE` | La prouesse, écrite une fois comme une capacité déclenchée ordinaire. |
+
+## js/jeuEtatsDeJeu.js
+
+Les actions d'état, et un joueur qui perd. *2 fonctions, 88 lignes, 3.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `elimine(P, j, raison)` | Un joueur perd : il quitte la partie avec tout ce qu'il possède (règle 800.4a). |
+| `appliqueSBA(P)` | Les actions d'état, une passe. Rend vrai si quelque chose a changé. |
+
+## js/jeuLancer.js
+
+Ce qu'un joueur peut faire de sa priorité, et le faire. *10 fonctions, 155 lignes, 7.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `enPhasePrincipale(P, j)` | — |
+| `estEphemere(def)` | — |
+| `coutSort(P, j, o, depuis)` | Le coût total d'un sort : imprimé (ou flashback), plus les taxes de tout le monde (Thalia), moins les réductions de son lanceur, plus la taxe de commandant. |
+| `effetCiblable(P, j, src, effet, couleurs)` | Les emplacements de cible d'un effet ont-ils assez de candidats ? |
+| `coutAutrePossible(P, j, o, c)` | Le coût d'activation, hors mana, peut-il être payé ? |
+| `actionsLegales(P, j)` | Les actions légales d'un joueur qui a la priorité. |
+| `actionsPossibles(P, j)` | La passe rapide : hors de sa phase principale, un joueur qui n'a ni éphémère, ni flash, ni capacité activable n'a rien à décider, et on ne calcule même pas ses actions. |
+| `choisitCibles(P, j, src, slots, couleurs, extra)` | Choisir les cibles d'un effet ; rend `null` si un emplacement obligatoire n'a pas assez de candidats. |
+| `prepareEffets(P, j, src, effet, couleurs, extra)` | Les effets d'un sort ou d'une capacité, modes choisis et cibles prises. |
+| `coutDeGarde(P, j, effets)` | La garde des permanents adverses ciblés s'ajoute au coût. |
+
+| Donnée | Rôle |
+|---|---|
+| `PASSE` | — |
+
+## js/jeuActions.js
+
+Exécuter une action choisie à la priorité. *7 fonctions, 156 lignes, 6.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `paieAutre(P, j, o, c)` | Payer la part d'un coût qui n'est pas du mana : engager, sacrifier, défausser, payer de la vie, retirer des marqueurs. |
+| `maxX(P, j, cout)` | Le plus grand X qu'un joueur peut payer en plus d'un coût. |
+| `lanceSort(P, j, a)` | Lancer un sort. Rend vrai s'il est allé sur la pile. |
+| `activeCapacite(P, j, a)` | Activer une capacité, ou une capacité de loyauté. |
+| `equipe(P, j, a)` | Équiper : une capacité à vitesse de rituel qui attache l'équipement. |
+| `joueTerrain(P, j, a)` | Jouer un terrain : pas de pile, un par tour (règle 305). |
+| `executeAction(P, j, a)` | Exécuter une action choisie. |
+
+## js/jeuPile.js
+
+La priorité, la pile, la résolution. *5 fonctions, 115 lignes, 4.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `retireDeLaPile(P, id)` | — |
+| `prepareDeclencheur(P, t)` | Une capacité déclenchée en attente devient un élément de pile : ses modes, ses cibles. |
+| `stabilise(P)` | Stabiliser avant une priorité (règle 117.5). |
+| `resoudre(P, item)` | Résoudre un élément de pile (règle 608). Les cibles sont revérifiées ; un sort dont toutes les cibles sont devenues illégales est contrecarré par la règle. |
+| `priorite(P)` | Un tour de priorité, jusqu'à ce que tous passent sur une pile vide. |
+
+| Donnée | Rôle |
+|---|---|
+| `PLAFOND_ACTIONS` | Le plafond d'actions par tour : une boucle que l'IA ne saurait pas arrêter fait finir la partie, nulle, plutôt que figer la page. |
+
+## js/jeuCombat.js
+
+Attaquants, bloqueurs, dégâts de combat. *10 fonctions, 147 lignes, 6.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `peutAttaquer(P, o)` | — |
+| `peutBloquer(P, b, a)` | — |
+| `declareAttaquants(P)` | Déclarer les attaquants (règle 508). Rend leur nombre. |
+| `defenseurDe(P, def)` | Le joueur que vise un attaquant, directement ou par son planeswalker. |
+| `declareBloqueurs(P)` | Déclarer les bloqueurs (règle 509), défenseur par défenseur. |
+| `initiativeEnJeu(P)` | Y a-t-il une étape de dégâts d'initiative ? |
+| `frappe(P, o, passe, avecInitiative)` | Une créature frappe-t-elle dans cette passe ? |
+| `repartition(P, a, bs, force)` | Répartir les dégâts d'un attaquant bloqué. |
+| `degatsCombat(P, passe)` | Les dégâts de combat d'une passe (règle 510) : tout est assigné, puis infligé d'un coup. |
+| `finCombat(P)` | — |
+
+## js/jeuTour.js
+
+Les étapes d'un tour. *5 fonctions, 102 lignes, 3.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `degagement(P)` | Le dégagement : les permanents du joueur actif se dégagent, ses créatures cessent d'avoir le mal d'invocation (règle 302.6). |
+| `nettoyage(P)` | Le nettoyage : défausse jusqu'à sept, blessures retirées, fin des effets « jusqu'à la fin du tour » (règle 514). |
+| `etape(P, e)` | Une étape. |
+| `notePrincipale(P)` | Ce que les statistiques relèvent au début de chaque phase principale : le mana que le joueur aurait pu produire, et ses terrains au quatrième tour — de quoi dire un manque ou un… |
+| `tour(P)` | Un tour entier. |
+
+| Donnée | Rôle |
+|---|---|
+| `ETAPES` | — |
+
+## js/jeuPartie.js
+
+Une partie, du mélange à la fin. *2 fonctions, 58 lignes, 2.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `mulligans(P)` | Les mulligans, joueur par joueur dans l'ordre du tour. |
+| `partie(P)` | La partie entière : le générateur que le pilote déroule. |
+
+## js/jeuPilote.js
+
+Dérouler une partie, question après question. *5 fonctions, 76 lignes, 3.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `creePartie(cfg)` | Une partie prête à dérouler. |
+| `valideReponse(q, r)` | Une réponse est-elle recevable ? Sinon on retient le défaut de la question, et on le dit dans le journal. |
+| `avance(h, agents, budgetMs, horloge)` | Dérouler une partie. `agents[j]` répond pour le joueur j : `{humain, repond(P, q)}`. Rend `finie`, `attente` (un humain doit répondre), `pause` (budget épuisé) ou `erreur`. `horloge` est… |
+| `repondre(h, agents, r, budgetMs, horloge)` | Répondre à la question en attente (lot 2), puis reprendre. |
+| `joueJusquauBout(cfg, agents)` | Jouer une partie jusqu'au bout d'une traite (tests, rejeu). |
+
+## js/iaValeur.js
+
+Ce que vaut une carte, un permanent, un adversaire. *8 fonctions, 84 lignes, 3.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `primeMots(m)` | — |
+| `valeurDef(d)` | La valeur d'une définition, hors de toute partie. |
+| `valeurObjet(P, o)` | La valeur d'un permanent tel qu'il est : marqueurs, bonus et blessures compris. |
+| `forceDeFrappe(P, j)` | La force de frappe qu'un joueur a sur le champ. |
+| `menace(P, j)` | La menace qu'un adversaire fait peser : son plateau, sa main, et à quel point il est près de gagner. |
+| `estAMoi(P, c, j)` | Un objet est-il à moi, du point de vue d'un joueur ? |
+| `opHostile(op)` | Une opération nuit-elle à ce qu'elle désigne ? |
+| `opsSurCible(ops, i)` | Les opérations d'une liste qui portent sur l'emplacement de cible `i`. |
+
+| Donnée | Rôle |
+|---|---|
+| `PRIME_MOTS` | — |
+| `OPS_HOSTILES` | Les opérations qui nuisent à ce qu'elles visent. |
+
+## js/iaChoix.js
+
+Les choix du joueur automatique hors de la priorité. *8 fonctions, 120 lignes, 5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `terrainsEnMain(P, j)` | — |
+| `iaMulligan(P, q)` | Garder une main de sept : deux à cinq terrains. |
+| `utiliteEnMain(P, j, id)` | Trier des cartes de la main de la moins utile à la plus utile : les terrains en trop d'abord, puis les sorts qu'on ne pourra pas lancer de sitôt, les injouables en tête. |
+| `iaCibles(P, q)` | Choisir les cibles d'un emplacement : un effet hostile vise ce que l'adversaire a de mieux et qu'il peut atteindre, un effet favorable ce que j'ai de mieux. |
+| `iaCartes(P, q)` | Choisir parmi des cartes ou des permanents selon ce qu'on en fait. |
+| `iaScrute(P, q)` | Scruter : renvoyer dessous ce qui ne servira pas — des terrains quand on en a assez, des sorts trop chers sinon. |
+| `iaOui(P, q)` | « You may » : oui, sauf à payer pour empêcher ce qui ne gêne guère. |
+| `iaModes(P, q)` | Choisir des modes : ceux qui ont le plus d'effet. |
+
+## js/iaPriorite.js
+
+Ce que le joueur automatique fait de sa priorité. *8 fonctions, 168 lignes, 7.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `meilleureCibleHostile(P, j, slot, src, n)` | Le meilleur candidat hostile d'un emplacement, et sa valeur. |
+| `scoreEffet(P, j, effet, src)` | Ce qu'un effet rapporte, à grands traits. |
+| `impactSort(P, j, o)` | L'effet d'un sort qu'on lancerait maintenant. |
+| `impactCapacite(P, j, o, k, ag)` | L'effet d'une capacité qu'on activerait maintenant. |
+| `scoreTerrain(P, j, o)` | Le meilleur terrain à jouer : celui qui ouvre les couleurs que réclame la main, et qui entre dégagé. |
+| `iaReponse(P, j, actions, ag)` | Hors phase principale : faut-il agir maintenant ? |
+| `iaPriorite(P, q, ag)` | La réponse à une question de priorité. |
+| `noteActivation(P, a, ag, i)` | Compter les activations d'une capacité dans le tour, pour qu'une capacité gratuite ne soit pas activée sans fin. |
+
+## js/iaCombat.js
+
+Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 82 lignes, 4.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `tue(P, b, a)` | B tue-t-il A ? |
+| `choisitDefenseur(P, j, defenseurs)` | L'adversaire visé : celui qu'on peut achever, sinon le plus faible en points de vie, sinon le plus menaçant. |
+| `iaAttaquants(P, q)` | Les attaquants. |
+| `iaBloqueurs(P, q)` | Les bloqueurs. |
+
+## js/iaAgent.js
+
+Un joueur automatique. *1 fonctions, 34 lignes, 1.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `agentIA(graine, siege)` | — |
+
 ## js/symboles.js
 
 Les symboles de mana. *7 fonctions, 72 lignes, 2.9 Ko.*
@@ -554,9 +1093,23 @@ Les symboles de mana. *7 fonctions, 72 lignes, 2.9 Ko.*
 | `SYMS` | — |
 | `MAJ_CARTES` | Chaque carte complétée par Scryfall — texte, coût, prix, légalité — peut changer sa note. |
 
+## js/champsJeu.js
+
+Ce que le moteur de jeu demande à une carte. *7 fonctions, 91 lignes, 4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nombreOuRien(v)` | Un nombre ou rien : « X », « * » et « 1+* » ne se jouent pas comme un nombre, et le moteur doit le savoir plutôt que lire zéro. |
+| `champsJeuScryfall(sc)` | Les champs de jeu d'une réponse de Scryfall. |
+| `colonnesJeu(sc)` | Les mêmes champs, dans l'ordre des colonnes que `compacte()` ajoute en fin d'enregistrement (`CH.MOTS_CLES` … `CH.PT_BRUT`). |
+| `champsJeuRec(rec)` | Les champs de jeu d'un enregistrement de l'archive. |
+| `appliqueChampsJeu(card, j)` | Verser des champs de jeu dans une carte, sans effacer ce qu'elle savait déjà par une source plus riche. |
+| `jeuSnap(c)` | Ce qu'une carte sauvegardée emporte de ses champs de jeu — rien quand elle n'en a pas, pour ne pas alourdir la sauvegarde de clés vides. |
+| `jeuRestore(card, o)` | L'inverse de `jeuSnap()`. |
+
 ## js/scryfallApplique.js
 
-Verser une réponse de Scryfall dans une carte. *2 fonctions, 146 lignes, 6.7 Ko.*
+Verser une réponse de Scryfall dans une carte. *2 fonctions, 148 lignes, 6.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -615,7 +1168,7 @@ Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 275 lignes, 11 Ko.*
+La sauvegarde locale. *9 fonctions, 285 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -653,7 +1206,7 @@ Les sections « Sauvegarde » et « Catalogue » des paramètres. *6 fonctions, 
 
 ## js/idb.js
 
-Le magasin IndexedDB. *5 fonctions, 68 lignes, 2.6 Ko.*
+Le magasin IndexedDB. *5 fonctions, 72 lignes, 2.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -667,10 +1220,11 @@ Le magasin IndexedDB. *5 fonctions, 68 lignes, 2.6 Ko.*
 |---|---|
 | `IDB_NOM` | — |
 | `IDB_NUAGE_BASE` | La base de fusion de la synchronisation (js/nuage.js) dort ici, faute de place dans `localStorage`. |
+| `IDB_GARDES` | Ce que `idbVider()` épargne : la base de la synchronisation, les fiches des cartes adverses et les résultats des simulations (js/simCartes.js, js/simStockage.js) — rien de cela n'est le… |
 
 ## js/nuagePaquet.js
 
-Ce qui voyage d'un appareil à l'autre. *7 fonctions, 121 lignes, 5.2 Ko.*
+Ce qui voyage d'un appareil à l'autre. *7 fonctions, 123 lignes, 5.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -887,7 +1441,7 @@ La liste des « Game Changers ». *4 fonctions, 77 lignes, 2.9 Ko.*
 
 ## js/archive.js
 
-Lire l'archive Scryfall. *11 fonctions, 223 lignes, 10 Ko.*
+Lire l'archive Scryfall. *11 fonctions, 226 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -927,7 +1481,7 @@ Tenir le catalogue à jour. *10 fonctions, 232 lignes, 11 Ko.*
 
 ## js/candidats.js
 
-Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 258 lignes, 12 Ko.*
+Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 261 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1305,6 +1859,152 @@ Ouvrir une fiche, et feuilleter la liste d'où elle vient. *4 fonctions, 110 lig
 |---|---|
 | `PARCOURS_FICHE` | — |
 
+## js/simCartes.js
+
+D'un nom de carte à sa fiche de jeu. *8 fonctions, 116 lignes, 5.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ficheDeCarte(c)` | La fiche d'une carte de l'atelier. Le texte d'une carte livrée n'est qu'un résumé : il se joue quand même, et la couverture le dira. |
+| `ficheDeRec(rec)` | La fiche d'un enregistrement de l'archive. |
+| `ficheDeScryfall(sc)` | La fiche d'une réponse de Scryfall, sans rien enregistrer dans l'atelier. |
+| `indexArchive()` | L'index de l'archive par nom et par nom de face avant, rebâti quand l'archive change. |
+| `ficheParNom(nom)` | La fiche d'un nom, ou `null` si personne ne la connaît encore. |
+| `chargeSimCartes()` | Relire les fiches gardées pour les adversaires. |
+| `rangeSimCartes()` | — |
+| `chercheFichesScryfall(noms)` | Demander à Scryfall les fiches qui manquent, par paquets de soixante- quinze. |
+
+| Donnée | Rôle |
+|---|---|
+| `IDB_SIM_CARTES` | — |
+| `SIM_CARTES` | — |
+| `simCartesChargees` | — |
+| `INDEX_ARCHIVE` | — |
+
+## js/simAdversaires.js
+
+La bibliothèque d'adversaires. *8 fonctions, 78 lignes, 3.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `cleAdversaireNeuve()` | — |
+| `adversaireDepuisTexte(nom, texte, format)` | Lire une liste collée en adversaire : les cartes du deck, et son commandant s'il en a un. |
+| `enregistreAdversaire(adv, cle)` | Ranger un adversaire ; rend sa clé. Un nom déjà pris reçoit un numéro, comme un deck : deux adversaires indiscernables dans un menu ne servent à rien. |
+| `nbCartesAdversaire(adv)` | — |
+| `resolutionAdversaire(adv)` | Ce qu'on sait déjà jouer d'un adversaire, et ce qui manque. |
+| `completeAdversaire(cle)` | Compléter un adversaire auprès de Scryfall. |
+| `signatureAdversaire(adv)` | L'empreinte d'un adversaire : un résultat calculé contre une liste qui a changé depuis est périmé. |
+| `signatureDeck(cle)` | L'empreinte d'un deck de l'atelier, ouvert ou non. |
+
+## js/simPreparation.js
+
+D'un deck ou d'un adversaire à un siège de table. *9 fonctions, 98 lignes, 4.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `vieDuFormat(format)` | — |
+| `comportementDe(nom)` | Le comportement écrit à la main pour une carte, s'il y en a un. |
+| `bilanCouverture(entrees, manquantes)` | Résumer la couverture d'un siège. Les terrains ne comptent pas dans le taux : ils sont presque toujours compris, et dilueraient ce qui ne l'est pas. |
+| `siegeDepuisListe(nom, format, liste, commandants)` | Un siège à partir d'une liste `[[nom, quantité]]` et de commandants. |
+| `siegeDeck(cle)` | Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si le format en a un. |
+| `siegeAdversaire(cle)` | — |
+| `nomsManquants(cfg)` | Les noms qu'aucune source ne connaît encore, pour toute une table. |
+| `fiabilite(couvertures)` | La fiabilité d'un résultat, d'après la couverture des decks de la table : le deck testé compte double, puisque c'est lui qu'on juge. |
+| `signatureComportements()` | L'empreinte des comportements manuels qui touchent une table. |
+
+## js/simStats.js
+
+Ce qu'on retient d'une partie, et d'un lot. *5 fonctions, 98 lignes, 5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `wilson(k, n, z = 1.96)` | L'intervalle de Wilson d'une proportion k/n, à 95 %. |
+| `mesuresPartie(P, places, g)` | Les mesures d'une partie. `places[k]` : l'indice dans la table du deck assis au siège k ; le deck testé est l'indice 0. |
+| `moyenne(t)` | — |
+| `agrege(recs, N, terrains)` | Les agrégats d'un lot. `terrains` : les noms des terrains du deck testé, qu'une carte « morte en main » ne doit pas compter. |
+| `statsCartes(jouees, terrains)` | Les mesures de chaque carte du deck testé. |
+
+## js/simStockage.js
+
+Les résultats des lots, gardés et comparés. *8 fonctions, 66 lignes, 2.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `chargeResultats()` | — |
+| `rangeResultats()` | — |
+| `ajouteLot(lot)` | — |
+| `supprimeLot(id)` | — |
+| `lotParId(id)` | — |
+| `lotPerime(lot)` | Un lot est périmé quand le deck, un adversaire, un comportement manuel ou le moteur ont changé depuis : ses chiffres restent lisibles, mais ses parties ne se rejouent plus à l'identique. |
+| `cleTable(lot)` | La table d'un lot, sans le deck testé : deux lots sur la même table se comparent. |
+| `classement(table)` | Le classement des decks sur une table : le dernier lot de chaque deck, du plus fort au plus faible. |
+
+| Donnée | Rôle |
+|---|---|
+| `IDB_SIM_RESULTATS` | — |
+| `LOTS_GARDES` | — |
+| `SIM_RES` | — |
+
+## js/simulation.js
+
+Un lot de parties, par tranches. *10 fonctions, 133 lignes, 6.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `rendMain()` | — |
+| `configSimulation()` | La configuration du lot, bornée et complétée. |
+| `obstacleSimulation(cfg)` | Ce qui empêche de lancer, en une phrase, ou rien. |
+| `placesPartie(N, g)` | La table d'une partie : le deck assis à chaque siège. |
+| `graineDePartie(graine, g)` | — |
+| `majProgressionSim()` | — |
+| `lanceSimulation()` | Lancer un lot. |
+| `terminerLot(cfg, sieges, recs)` | Ranger le lot qui vient de finir, ou d'être arrêté. |
+| `arreteSimulation()` | — |
+| `rejouePartie(lot, k)` | Rejouer une partie d'un lot, journal ouvert. |
+
+| Donnée | Rôle |
+|---|---|
+| `MOTEUR_V` | — |
+| `SIM` | — |
+
+## js/simSection.js
+
+La section « Simulation ». *7 fonctions, 123 lignes, 7.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `couvertureTable(cfg)` | La couverture des decks de la table, recalculée seulement quand un deck, un adversaire, un comportement ou les sources de cartes ont changé. |
+| `optionsHTML(paires, choisi)` | — |
+| `tableHTML(cfg)` | La table : les réglages d'un lot. |
+| `adversairesHTML()` | La bibliothèque d'adversaires. |
+| `badgeCouverture(t)` | Le badge d'un taux de couverture. |
+| `couvertureHTML(cfg)` | Ce que le moteur comprend des decks de la table. |
+| `renderK()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `COUV_TABLE` | — |
+
+## js/simResultats.js
+
+Les résultats d'un lot, l'historique, le classement. *8 fonctions, 111 lignes, 7.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `pct(x)` | — |
+| `un(x)` | — |
+| `barresHTML(lignes)` | Des barres horizontales, une par ligne. |
+| `cartesHTML(r)` | Le tableau des cartes du deck testé. |
+| `partiesHTML(lot)` | Les parties d'un lot, pour en revoir une. |
+| `lotHTML(lot)` | Le résumé d'un lot. |
+| `historiqueHTML(cfg)` | L'historique des lots et le classement des decks sur la table choisie. |
+| `resultatsHTML(cfg)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `CAUSES` | — |
+| `FIABILITE` | — |
+
 ## js/outils.js
 
 Menue monnaie de l'atelier. *5 fonctions, 52 lignes, 1.8 Ko.*
@@ -1489,7 +2189,7 @@ Les recalculs annoncés. *8 fonctions, 200 lignes, 8.7 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *7 fonctions, 246 lignes, 14 Ko.*
+L'en-tête et la barre des onglets. *7 fonctions, 249 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1510,7 +2210,7 @@ L'en-tête et la barre des onglets. *7 fonctions, 246 lignes, 14 Ko.*
 
 ## js/rendu.js
 
-Le rendu d'ensemble. *2 fonctions, 35 lignes, 1.2 Ko.*
+Le rendu d'ensemble. *2 fonctions, 36 lignes, 1.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1693,6 +2393,48 @@ Fenêtres d'export et d'effacement. *3 fonctions, 179 lignes, 9.8 Ko.*
 | `openWantsModal(tout)` | La fenêtre des wants sert deux comptes : celui du deck ouvert, depuis sa section, et celui de tous les decks, depuis la page « Decks ». |
 | `openWipeModal()` | Vider la collection, et elle seule. Ce bouton emportait aussi le deck, la réserve et l'étude : « Vider » d'une section ne doit vider que ce que cette section montre, comme celui du deck… |
 
+## js/fenAdversaire.js
+
+Ajouter ou modifier un adversaire. *5 fonctions, 70 lignes, 3.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ouvreAdversaire(cle)` | — |
+| `majApercuAdversaire()` | Ce que la liste collée donne, à mesure qu'on la colle. |
+| `enregistreAdversaireFenetre(cle)` | — |
+| `supprimeAdversaire(cle)` | — |
+| `supprimeAdversaireOui(cle)` | — |
+
+## js/fenComportement.js
+
+Décrire à la main ce que fait une carte. *6 fonctions, 84 lignes, 4.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `aideFormules()` | Les formules admises, tirées des exemples mêmes des tables de motifs : la liste ne peut pas mentir sur ce que le compilateur sait lire. |
+| `lectureHTML(fiche, texte)` | La lecture d'un texte, ligne par ligne. |
+| `ouvreComportement(nom)` | — |
+| `majApercuComportement()` | — |
+| `appliqueComportement(nom)` | — |
+| `effaceComportement(nom)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `ETATS_LIGNE` | — |
+| `FICHE_COMPORTEMENT` | — |
+
+## js/fenJournal.js
+
+Revoir une partie d'un lot. *1 fonctions, 38 lignes, 2.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ouvreJournal(idLot, k)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMS_ETAPES` | — |
+
 ## js/gestesDecks.js
 
 Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
@@ -1752,9 +2494,18 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 |---|---|
 | `gestesGraphe(act, b)` | — |
 
+## js/gestesSimulation.js
+
+Les gestes de la section « Simulation ». *2 fonctions, 41 lignes, 1.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesSimulation(act, b)` | — |
+| `reglageSimulation(t)` | Un réglage de la table : il agit sur-le-champ — rien n'est calculé avant « Lancer », il n'y a donc rien à différer. |
+
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 297 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 295 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

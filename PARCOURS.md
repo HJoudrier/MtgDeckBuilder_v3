@@ -745,6 +745,77 @@ sequenceDiagram
 Une seule greffe suffit parce que tout passe par `activerOnglet()` : la barre, les flèches du
 clavier et `allerVersSection()`, qui mène à une section d'où qu'on parte.
 
+### 3.19 Lancer un lot de simulations
+
+Le deck testé et les adversaires de la table deviennent des sièges ; le moteur déroule chaque
+partie question après question, les joueurs automatiques répondent, et le pilote rend la main à
+la page toutes les vingt-cinq millisecondes.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant SIM as simulation.js
+    participant PREP as simPreparation.js
+    participant CAR as simCartes.js
+    participant MOT as moteur (jeu*.js)
+    participant IA as ia*.js
+    participant ST as simStats.js
+    participant RES as simStockage.js
+    participant UI as simSection.js
+
+    U->>APP: clic « Lancer N parties »
+    APP->>SIM: lanceSimulation()
+    SIM->>CAR: chargeSimCartes(), nomsManquants()
+    opt des cartes que personne ne connaît
+        CAR->>CAR: chercheFichesScryfall() — par 75, rangées dans IndexedDB
+    end
+    SIM->>PREP: siegeDeck(), siegeAdversaire()
+    Note over PREP: ficheParNom() → definitionDe()<br/>le compilateur d'oracle, gardé sous mémo
+    loop chaque partie g
+        SIM->>MOT: creePartie({graine de g, places tournées})
+        loop par tranches de 25 ms
+            SIM->>MOT: avance(h, agents, 25)
+            MOT->>IA: question (priorité, cibles, attaquants…)
+            IA-->>MOT: réponse
+            MOT-->>SIM: « pause » ou « finie »
+            SIM->>SIM: rendMain() — MessageChannel
+        end
+        SIM->>ST: mesuresPartie(P, places, g)
+    end
+    SIM->>ST: agrege(mesures)
+    SIM->>RES: ajouteLot(lot)
+    SIM->>UI: renderK()
+```
+
+Rien n'est journalisé pendant un lot : une partie se revoit en la rejouant.
+
+### 3.20 Revoir une partie
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant J as fenJournal.js
+    participant SIM as simulation.js
+    participant RES as simStockage.js
+    participant MOT as moteur (jeu*.js)
+
+    U->>APP: clic sur le numéro d'une partie
+    APP->>J: ouvreJournal(lot, k)
+    J->>SIM: rejouePartie(lot, k)
+    SIM->>RES: lotPerime(lot)
+    alt le deck, un adversaire, un comportement ou le moteur ont changé
+        RES-->>J: périmé — « rejeu indisponible »
+    else
+        SIM->>MOT: joueJusquauBout({même graine, mêmes places, journal: true})
+        MOT-->>J: P.journal
+        J->>J: openDialog() — le journal, tour par tour
+    end
+```
+
 ---
 
 ## 4. Ce qui périme quoi
@@ -758,6 +829,8 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | `SUG_MEMO` (`js/vivier.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget du deck, les préférences d'achat, `MAJ_CARTES`, les données EDHREC |
 | `NOTES_COLLECTION` (`js/groupes.js`) | Les notes de la collection, pour le tri par score | `signatureSuggestions()` | Les mêmes |
 | `ACHATS` (`js/achats.js`) | La liste d'achats de tous les decks | `signatureAchats()` | Les listes de chaque deck et leur drapeau « exemplaires propres », la collection, les préférences d'achat |
+| `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, le compilateur |
+| `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un adversaire, un comportement, l'archive, les fiches venues de Scryfall |
 
 Deux conséquences pratiques :
 

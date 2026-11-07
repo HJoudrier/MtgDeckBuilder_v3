@@ -111,6 +111,9 @@ function snapshot() {
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
     majIgnoree: S.majIgnoree,
+    adversaires: S.adversaires,
+    comportements: S.comportements,
+    simulation: S.simulation,
     cartes,
     enrich
   };
@@ -260,6 +263,11 @@ function restore(d) {
      retrouve d'une séance à l'autre, comme l'onglet ouvert. */
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
+  /* Le mode de jeu, venu après tout le reste : une sauvegarde d'hier n'en
+     porte rien, et l'atelier part d'une bibliothèque d'adversaires vide. */
+  if (d.adversaires && typeof d.adversaires === 'object') S.adversaires = d.adversaires;
+  if (d.comportements && typeof d.comportements === 'object') S.comportements = d.comportements;
+  if (d.simulation && typeof d.simulation === 'object') S.simulation = {...S.simulation, ...d.simulation};
   return true;
 }
 

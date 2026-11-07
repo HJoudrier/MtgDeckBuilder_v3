@@ -25,19 +25,6 @@ const MOTS_ANGLAIS = {
   "can't be blocked": MOT.IMBLOCABLE
 };
 
-/* Leur nom français, pour le journal et la fenêtre des comportements. */
-const MOTS_FRANCAIS = {
-  VOL: 'vol', PORTEE: 'portée', PIETINEMENT: 'piétinement', INITIATIVE: 'initiative',
-  DOUBLE: 'double initiative', CONTACT: 'contact mortel', LIEN: 'lien de vie', VIGILANCE: 'vigilance',
-  CELERITE: 'célérité', MENACE: 'menace', DEFENSEUR: 'défenseur', LINCEUL: 'linceul',
-  INDESTRUCTIBLE: 'indestructible', FLASH: 'flash', IMBLOCABLE: 'imblocable', INFECTION: 'infection',
-  PROUESSE: 'prouesse', INTOUCHABLE: 'défense talismanique', GARDE: 'garde', PROTECTION: 'protection'
-};
-
-/* Les mots-clés qui n'ont de sens que sur la pile ou au lancement, et que
-   le compilateur range comme capacités plutôt que comme bits. */
-const MOTS_A_COUT = ['equip', 'kicker', 'flashback', 'cycling', 'ward'];
-
 const COULEURS_ANGLAIS = {white: 'W', blue: 'U', black: 'B', red: 'R', green: 'G'};
 
 /* Lire une liste de mots-clés simples (« flying and trample », « flying,
@@ -85,19 +72,3 @@ function ligneMotsCles(ligne) {
   return r;
 }
 
-/* Les mots-clés que Scryfall a relevés (`card.motsCles`, « Flying|Ward »),
-   traduits en bits. Ils confirment la lecture du texte, et la remplacent
-   quand une archive d'hier n'a pas la colonne. */
-function masqueScryfall(liste) {
-  let m = 0;
-  String(liste || '').split('|').forEach(k => {
-    const b = MOTS_ANGLAIS[k.trim().toLowerCase()];
-    if (b) m |= b;
-  });
-  return m;
-}
-
-/* Les noms français d'un masque, pour qu'un humain le lise. */
-function nomsMots(m) {
-  return Object.keys(MOT).filter(k => m & MOT[k]).map(k => MOTS_FRANCAIS[k]);
-}

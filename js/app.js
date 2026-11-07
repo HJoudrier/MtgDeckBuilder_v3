@@ -2,7 +2,7 @@
    js/app.js — L'aiguillage et le démarrage
 
    Un seul écouteur par geste, posé ici et nulle part ailleurs : le clic passe
-   par les cinq maillons `gestes*`, dans l'ordre, jusqu'à ce que l'un dise
+   par les maillons `gestes*`, dans l'ordre, jusqu'à ce que l'un dise
    l'avoir traité. Le reste — la frappe, les sélecteurs, le clavier, la
    fermeture d'une fenêtre — tient dans les écouteurs qui suivent.
    ===================================================================== */
@@ -12,15 +12,8 @@ document.addEventListener('click', ev => {
   if (!b) return;
 
   const act = b.dataset.act;
-
-  if (gestesDeckConfig(act, b)) return;
-  if (gestesDecks(act, b)) return;
-  if (gestesVue(act, b)) return;
-  if (gestesReglages(act, b)) return;
-  if (gestesDeck(act, b)) return;
-  if (gestesDonnees(act, b)) return;
-  if (gestesNuage(act, b)) return;
-  gestesGraphe(act, b);
+  [gestesDeckConfig, gestesDecks, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
+    gestesSimulation, gestesGraphe].some(g => g(act, b));
 });
 
 /* Aperçu flottant : suit la souris sur les noms de cartes. */
@@ -63,6 +56,9 @@ document.addEventListener('input', ev => {
     glisseColonnes(t);
     return;
   }
+  /* Les fenêtres du mode de jeu lisent la frappe sans rien ranger avant le bouton. */
+  if (t.dataset.advtexte !== undefined) return majApercuAdversaire();
+  if (t.dataset.comportement !== undefined) return majApercuComportement();
   /* Un objectif de rôle, dans sa fenêtre : la frappe va au brouillon, et rien
      n'est appliqué avant le bouton. La fenêtre n'est pas réécrite — elle
      emporterait le champ qu'on est en train de remplir. */
@@ -115,6 +111,8 @@ document.addEventListener('input', ev => {
      vit avec elles, comme celle de la synchronisation. */
   if (saisieBudget(t)) return;
   if (saisieDeck(t)) return;
+  if (t.dataset.sim) return reglageSimulation(t);
+  if (t.dataset.advformat !== undefined) return majApercuAdversaire();
 });
 
 document.addEventListener('change', ev => {

@@ -155,7 +155,7 @@ function definitions(code) {
   const out = [];
   const ligneDe = i => code.slice(0, i).split('\n').length;
 
-  const decl = /^(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/gm;
+  const decl = /^(?:async\s+)?function\s*\*?\s*([A-Za-z_$][\w$]*)\s*\(/gm;
   let m;
   while ((m = decl.exec(code))) {
     /* La liste des paramètres, dont les noms masquent les nôtres. */

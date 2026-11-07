@@ -16,6 +16,10 @@ const IDB_NOM = 'mtg-atelier', IDB_MAG = 'catalogue';
    appareils — après quoi la fusion, privée de base, ne saurait plus distinguer
    une suppression d'un ajout. */
 const IDB_NUAGE_BASE = 'nuage-base';
+/* Ce que `idbVider()` épargne : la base de la synchronisation, les fiches
+   des cartes adverses et les résultats des simulations
+   (js/simCartes.js, js/simStockage.js) — rien de cela n'est le catalogue. */
+const IDB_GARDES = [IDB_NUAGE_BASE, 'sim-cartes', 'sim-resultats'];
 
 function idb() {
   return new Promise((ok, ko) => {
@@ -59,7 +63,7 @@ function idbVider() {
     const mag = db.transaction(IDB_MAG, 'readwrite').objectStore(IDB_MAG);
     const q = mag.getAllKeys();
     q.onsuccess = () => {
-      (q.result || []).forEach(cle => { if (cle !== IDB_NUAGE_BASE) mag.delete(cle); });
+      (q.result || []).forEach(cle => { if (!IDB_GARDES.includes(cle)) mag.delete(cle); });
       ok(true);
     };
     q.onerror = () => ok(false);

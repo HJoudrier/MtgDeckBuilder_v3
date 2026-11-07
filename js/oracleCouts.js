@@ -37,15 +37,6 @@ function coutManaVide() {
   return {sym: [], generique: 0, couleurs: {W: 0, U: 0, B: 0, R: 0, G: 0, C: 0}, hybrides: [], x: 0, total: 0};
 }
 
-/* La somme de deux coûts en mana : la taxe de commandant, le kicker, la
-   taxe de Thalia s'ajoutent au coût imprimé. */
-function ajouteCouts(a, b) {
-  const r = {sym: a.sym.concat(b.sym), generique: a.generique + b.generique, couleurs: {},
-    hybrides: a.hybrides.concat(b.hybrides), x: a.x + b.x, total: a.total + b.total};
-  Object.keys(a.couleurs).forEach(k => { r.couleurs[k] = a.couleurs[k] + (b.couleurs[k] || 0); });
-  return r;
-}
-
 /* Un morceau de coût d'activation. Rend la clé et la valeur à poser sur le
    coût, ou `null`. */
 function morceauCout(p) {

@@ -39,7 +39,41 @@ js/                 modules, chargés dans cet ordre :
   marche.js         Cardmarket
   achats.js         le panier d'un deck, et la liste d'achats de tous
 
+  — le moteur de jeu (purs : ni DOM ni DB, entre <!-- moteur --> et <!-- /moteur -->) —
+  oracleTexte.js    réduire le texte oracle : nom → ~, rappel retiré, lignes, phrases
+  oracleMotsCles.js les mots-clés que le moteur sait jouer, en bits
+  oracleCouts.js    lire un coût de sort ou d'activation
+  oracleCibles.js   une seule grammaire pour désigner des objets
+  oracleEffetsA.js  les motifs d'effet : dégâts, vie, cartes, retraits
+  oracleEffetsB.js  jetons, marqueurs, pompes, mana, recherches ; lire une proposition
+  oracleDeclencheurs.js  lire ce qui déclenche une capacité
+  oracleStatiques.js  les statiques, et la façon d'entrer
+  oracleLignes.js   ranger chaque ligne d'une carte
+  definitions.js    d'une fiche à sa définition de jeu, et sa couverture
+  jeuHasard.js      le hasard semé
+  jeuEtat.js        une partie : joueurs, objets, zones, déplacements, questions
+  jeuCaracteristiques.js  force, endurance, mots-clés du moment
+  jeuCibles.js      juger un objet contre un descripteur
+  jeuMana.js        la réserve, et le paiement automatique
+  jeuOpsA.js        exécuter les opérations : références, dégâts, vie, cartes, retraits
+  jeuOpsB.js        jetons, marqueurs, pompes, recherches ; l'enchaînement
+  jeuDeclencheurs.js  des évènements aux capacités déclenchées
+  jeuEtatsDeJeu.js  les actions d'état, et un joueur qui perd
+  jeuLancer.js      les actions légales, le coût d'un sort, le choix des cibles
+  jeuActions.js     jouer un terrain, lancer, activer, équiper
+  jeuPile.js        la priorité, la pile, la résolution
+  jeuCombat.js      attaquants, bloqueurs, dégâts de combat
+  jeuTour.js        les étapes d'un tour
+  jeuPartie.js      mélange, mulligans, la partie entière
+  jeuPilote.js      dérouler une partie, question après question
+  iaValeur.js       ce que vaut une carte, un permanent, un adversaire
+  iaChoix.js        garder sa main, cibler, chercher, défausser
+  iaPriorite.js     ce que le joueur automatique fait de sa priorité
+  iaCombat.js       attaquer et bloquer
+  iaAgent.js        un joueur automatique
+
   — ce qui vient du dehors —
+  champsJeu.js      ce que le moteur demande à une carte : mots-clés, loyauté, faces
   symboles.js       les symboles de mana
   scryfallApplique.js  verser une réponse de Scryfall dans une carte
   scryfall.js       la file d'attente vers Scryfall
@@ -87,6 +121,14 @@ js/                 modules, chargés dans cet ordre :
   ficheVisuel.js    le visuel de la fiche, et ses éditions
   fiche.js          la fiche détaillée d'une carte
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
+  simCartes.js      d'un nom de carte à sa fiche de jeu, adversaires compris
+  simAdversaires.js la bibliothèque d'adversaires
+  simPreparation.js d'un deck ou d'un adversaire à un siège de table
+  simStats.js       ce qu'on retient d'une partie, et d'un lot
+  simStockage.js    les résultats des lots, gardés et comparés
+  simulation.js     un lot de parties, par tranches
+  simSection.js     la section « Simulation »
+  simResultats.js   les résultats d'un lot, l'historique, le classement
 
   — l'interface commune —
   outils.js         échapper, formater un prix, souffler un mot
@@ -115,6 +157,9 @@ js/                 modules, chargés dans cet ordre :
   fenListes.js      listes déroulantes des archétypes et des éditions
   boiteCatalogue.js progression du chargement de l'archive Scryfall
   fenExport.js      export du deck, liste d'achats, effacement
+  fenAdversaire.js  ajouter ou modifier un adversaire
+  fenComportement.js  décrire à la main ce que fait une carte
+  fenJournal.js     revoir une partie d'un lot
 
   — les gestes —
   gestesDecks.js    créer, ouvrir, configurer, dupliquer, supprimer un deck
@@ -124,17 +169,19 @@ js/                 modules, chargés dans cet ordre :
   gestesDonnees.js  sauvegarde, archive, EDHREC, import
   gestesNuage.js    connecter, synchroniser, déconnecter
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
+  gestesSimulation.js  lancer un lot, gérer les adversaires, revoir une partie
 
   app.js            l'aiguillage et le démarrage
 ```
 
-Les neuf sections de la page se répartissent en six onglets, posés au bas de l'en-tête et
+Les dix sections de la page se répartissent en sept onglets, posés au bas de l'en-tête et
 toujours visibles : **Decks** porte la liste des decks puis la liste d'achats commune,
 **Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
 recommandent — groupées et triées à part, avec deux tris qui n'existent que là : le taux
-d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé. La table
+d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé,
+**Simulation** fait jouer le deck contre des adversaires automatiques (plus bas). La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
 `ONGLETS_ANCIENS`. Les sections sont rendues à chaque fois, celles qu'on ne
@@ -264,6 +311,84 @@ rend la règle lisible sans l'expliquer. `spent()` appelle `aAcheter()`, donc un
 par carte manquante, et l'en-tête le fait à chaque rendu : sur huit decks, la liste referait ce
 travail autant de fois, d'où le mémo `ACHATS` sous `signatureAchats()`. Seule la section `secJ` la
 demande, si bien que l'en-tête ne paie rien de plus qu'avant.
+
+## Le mode de jeu
+
+L'onglet **Simulation** fait jouer le deck ouvert — ou n'importe lequel de « Mes decks » — par un
+joueur automatique, contre un à cinq adversaires automatiques, des centaines de fois, et en tire de
+quoi classer sa force. Chaque siège garde le format de son deck : un deck Commander joue à 40 points
+de vie avec sa zone de commandement, sa taxe et ses dégâts de commandant, un deck de soixante à 20.
+Les adversaires viennent d'une **bibliothèque à part** (`S.adversaires`) : des listes collées, au
+format MTGO ou Arena, lues par l'analyseur de l'import (`parseMtgoList()`), qui n'encombrent ni
+« Mes decks » ni la liste d'achats. Leurs cartes n'ont pas à être possédées : `ficheParNom()`
+(`js/simCartes.js`) les cherche dans l'atelier, puis dans l'archive indexée par nom, puis chez
+Scryfall, et les garde dans IndexedDB (`sim-cartes`) — **jamais dans `DB`**, que la sauvegarde
+locale emporterait.
+
+**Trois couches, dont deux pures.** Le compilateur d'oracle et le moteur n'ont ni DOM, ni `DB`, ni
+`Math.random`, ni `Date` : `index.html` les encadre de `<!-- moteur -->` et `<!-- /moteur -->`, et
+ils se chargent tels quels dans un `vm` de Node pour les tests. Le moteur ne lit jamais une carte de
+l'atelier mais une **fiche** — nom, coût, type, texte, force, loyauté, mots-clés, faces —, que la
+couche de simulation fabrique.
+
+**Le compilateur d'oracle.** `analyze()` dit qu'une carte inflige des dégâts, pas combien ni à
+qui : elle sert le graphe, elle ne se joue pas. Les `oracle*.js` lisent le texte réduit (`~` pour la
+carte, rappel retiré) ligne par ligne, rangent chacune — mots-clés, activée, loyauté, déclenchée,
+statique, façon d'entrer, effet de sort —, et confrontent chaque proposition à des motifs **ancrés
+sur la proposition entière** qui rendent une opération exécutable ou rien : jamais une demi-lecture
+silencieuse. Une seule grammaire désigne les objets (`lisDescripteur()`), un seul prédicat les juge
+(`correspond()`). Chaque motif porte un exemple : il sert de test, et de liste des formules admises.
+
+**La couverture.** Chaque carte est complète, partielle — jouée pour ce qui est compris — ou
+**injouable** : quand une part ignorée ressemble à une contrepartie (« you lose », « sacrifice »,
+« unless », « can't »…), l'IA ne la lance jamais. Ne pas comprendre une carte ne doit **jamais**
+rendre un deck plus fort qu'il n'est. La section affiche le taux de chaque deck de la table, et
+chaque résultat porte un badge de fiabilité. Une carte se décrit à la main dans la fenêtre des
+comportements (`S.comportements`), **avec le même compilateur** : on la réécrit en formules qu'il
+comprend, il dit ligne par ligne ce qu'il en lit, et deux directives s'y ajoutent — `#vanille`,
+`#injouable`. Aucune syntaxe à apprendre, aucun second interprète à tenir.
+
+**Le moteur est écrit en générateurs.** Chaque décision — priorité, mulligan, cibles, modes, X,
+attaquants, bloqueurs, défausse — est une question rendue par `yield` ; le pilote (`avance()`) la
+porte à l'agent du joueur. Un joueur automatique répond sur-le-champ ; un humain, au lot 2,
+laissera la question en attente, et rien dans le moteur ne changera. Le pilote rend aussi la main
+quand son budget de temps est épuisé : un lot se découpe au milieu d'une partie sans rien
+sérialiser. Les règles suivies sont les actuelles : priorité APNAP, pile LIFO, cibles revérifiées à
+la résolution, déclencheurs posés en APNAP, actions d'état en boucle, dégâts de combat sans ordre
+d'assignation (Foundations), mulligan de Londres gratuit le premier à trois joueurs et plus. La
+**carte** (`cid`, stable, pour les statistiques) se distingue de l'**objet** (`id`, neuf à chaque
+changement de zone) : une aura tombe, un sort perd sa cible, sans code à part ; « when ~ dies » et
+« equal to its power » lisent l'instantané pris au départ.
+
+**Le hasard est semé.** Même graine, mêmes decks, même moteur : même partie. Une partie d'un lot
+n'est pas gardée — elle se **revoit en la rejouant**, journal ouvert, tant que rien n'a changé
+(`lotPerime()`). Et la graine de la partie g ne dépend que de celle du lot : deux decks testés sur
+la même table affrontent les mêmes mélanges, ce qui resserre leurs comparaisons.
+
+**Les lots se jouent dans la page.** Un Worker ne se lance pas depuis `file://`. Le lot avance par
+tranches de vingt-cinq millisecondes, et rend la main par un `MessageChannel` plutôt que par
+`setTimeout`, qu'un onglet en arrière-plan ralentit à une fois par seconde. Les places tournent
+d'une partie à l'autre, si bien que chaque deck commence autant de fois. `renderK()` passe à chaque
+`renderAll()` mais ne calcule rien hors de sa page : la couverture se compile sous les yeux, gardée
+sous une signature (`COUV_TABLE`).
+
+**Ce qu'on en tire** (`js/simStats.js`) : le taux de victoire et son intervalle de Wilson à 95 %,
+l'**indice de force** — ce taux rapporté à l'attendu d'une table de N, 1,0 étant le niveau de la
+table —, les victoires par deck et par place, la durée, les causes de défaite, les mulligans, le
+manque de mana, le mana dépensé sur le disponible, le tour du commandant, et par carte les deux
+mesures de 17lands : le taux de victoire quand elle est en main, et ce qu'elle rapporte quand on la
+pioche. Le résumé de chaque lot va dans IndexedDB (`sim-resultats`), qu'`idbVider()` épargne ;
+le classement compare les decks sur une même table.
+
+**Ce que le lot 1 ne fait pas**, et que la couverture ne peut pas toujours dire : pas de système de
+couches complet (les bonus s'additionnent), ni copie, ni changement de contrôle, ni remplacement ou
+prévention généraux ; coûts alternatifs limités au flashback et à la taxe ; faces arrière, aventures
+et cartes partagées ignorées ; ni tours ou combats supplémentaires, ni monarque, ni initiative ;
+capacités de mana qui coûtent du mana absentes du paiement automatique ; pas d'alliance en
+multijoueur. Les joueurs automatiques comparent des valeurs sans chercher dans l'arbre des coups :
+ils avantagent les decks qui jouent leurs menaces et sous-jouent combo, contrôle et politique. Le
+classement dit donc la force d'un deck **joué par cette IA contre cette table**. La table interactive
+— jouer soi-même contre les joueurs automatiques — est le lot 2.
 
 ## La synchronisation entre appareils
 
@@ -397,7 +522,7 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
 
 ## Repères
 
-- L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`).
+- L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`, et pour le mode de jeu `DEFS`, `SIM_CARTES`, `SIM_RES`, `COUV_TABLE`) et `SIM`, l'avancement du lot en cours — qui ne survit pas à la page. L'état d'une partie, lui, vit dans son propre objet `P`, que le moteur ne partage avec personne.
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-onglet`, `data-filtre` et `data-card-name`.
 - La fenêtre des paramètres porte trois sections : la sauvegarde locale, l'apparence, le catalogue.
   Une quatrième tenait le décompte des cartes de la collection, des exemplaires et leur valeur, avec

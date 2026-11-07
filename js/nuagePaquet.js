@@ -36,8 +36,10 @@ const NUAGE_QTES = ['collection'];
 /* Ce qui ne vaut qu'une valeur, et se tranche en bloc. */
 const NUAGE_SCALAIRES = [];
 /* `achats` — comment on achète — voyage ; le plafond, lui, appartient au deck
-   et part avec son dossier. */
-const NUAGE_OBJETS = ['custom', 'achats'];
+   et part avec son dossier. La bibliothèque d'adversaires et les
+   comportements écrits à la main sont du fond, et voyagent aussi ; la
+   configuration d'un lot de simulations, de la vue, reste là. */
+const NUAGE_OBJETS = ['custom', 'achats', 'adversaires', 'comportements'];
 const NUAGE_ENSEMBLES = [];
 /* Le deck ouvert ne voyage pas : c'est de la vue, comme l'onglet. Un
    vingt-sept pouces et un portable peuvent regarder deux decks différents. */

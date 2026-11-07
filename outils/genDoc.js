@@ -74,12 +74,13 @@ function roleAvant(lignes, i) {
 }
 
 /* Les déclarations de premier niveau, celles qui commencent en colonne 1 :
-   ce sont les seules que les autres modules peuvent appeler. */
+   ce sont les seules que les autres modules peuvent appeler. Un générateur
+   (`function*`, le moteur de jeu en est fait) en est une comme une autre. */
 function declarations(src) {
   const lignes = src.split('\n');
   const out = [];
   lignes.forEach((l, i) => {
-    let m = l.match(/^(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)/);
+    let m = l.match(/^(?:async\s+)?function\s*\*?\s*([A-Za-z_$][\w$]*)\s*\(([^)]*)\)/);
     if (m) { out.push({nom: m[1], sig: '(' + m[2].trim() + ')', role: roleAvant(lignes, i)}); return; }
     m = l.match(/^(const|let)\s+([A-Za-z_$][\w$]*)\s*=\s*(.*)$/);
     if (!m) return;

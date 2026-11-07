@@ -80,6 +80,7 @@ digraph appels {
     "commandantsSecondairesPossibles" [label="commandantsSecondairesPossibles", fillcolor="#8a7fa833", color="#8a7fa8"];
     "commandantsSecondaires" [label="commandantsSecondaires", fillcolor="#8a7fa833", color="#8a7fa8"];
     "mainType" [label="mainType", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "carteLivree" [label="carteLivree", fillcolor="#8a7fa833", color="#8a7fa8"];
     "initBuiltin" [label="initBuiltin", fillcolor="#8a7fa833", color="#8a7fa8"];
     "frontFace" [label="frontFace", fillcolor="#8a7fa833", color="#8a7fa8"];
     "mergeInto" [label="mergeInto", fillcolor="#8a7fa833", color="#8a7fa8"];
@@ -96,6 +97,7 @@ digraph appels {
   }
   subgraph "cluster_11" {
     label="js/etat.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "etat.js (chargement)" [label="chargement du module", fillcolor="#6da88c33", color="#6da88c", shape=note];
     "ongletDeSection" [label="ongletDeSection", fillcolor="#6da88c33", color="#6da88c"];
   }
   subgraph "cluster_12" {
@@ -226,21 +228,327 @@ digraph appels {
     "bilanWishlist" [label="bilanWishlist", fillcolor="#96a86d33", color="#96a86d"];
   }
   subgraph "cluster_22" {
-    label="js/symboles.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
-    "loadSymbology" [label="loadSymbology", fillcolor="#6da8a433", color="#6da8a4"];
-    "pipHTML" [label="pipHTML", fillcolor="#6da8a433", color="#6da8a4"];
-    "symBg" [label="symBg", fillcolor="#6da8a433", color="#6da8a4"];
-    "symIcon" [label="symIcon", fillcolor="#6da8a433", color="#6da8a4"];
-    "manaFb" [label="manaFb", fillcolor="#6da8a433", color="#6da8a4"];
-    "manaHTML" [label="manaHTML", fillcolor="#6da8a433", color="#6da8a4"];
-    "stripeColor" [label="stripeColor", fillcolor="#6da8a433", color="#6da8a4"];
+    label="js/oracleTexte.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "nombreOracle" [label="nombreOracle", fillcolor="#6da8a433", color="#6da8a4"];
+    "echappeRegex" [label="echappeRegex", fillcolor="#6da8a433", color="#6da8a4"];
+    "normaliseOracle" [label="normaliseOracle", fillcolor="#6da8a433", color="#6da8a4"];
+    "phrasesOracle" [label="phrasesOracle", fillcolor="#6da8a433", color="#6da8a4"];
+    "propositionsOracle" [label="propositionsOracle", fillcolor="#6da8a433", color="#6da8a4"];
+    "faceJouee" [label="faceJouee", fillcolor="#6da8a433", color="#6da8a4"];
+    "lisTypeLigne" [label="lisTypeLigne", fillcolor="#6da8a433", color="#6da8a4"];
   }
   subgraph "cluster_23" {
+    label="js/oracleMotsCles.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "masqueMots" [label="masqueMots", fillcolor="#a89b6d33", color="#a89b6d"];
+    "motCleSeul" [label="motCleSeul", fillcolor="#a89b6d33", color="#a89b6d"];
+    "ligneMotsCles" [label="ligneMotsCles", fillcolor="#a89b6d33", color="#a89b6d"];
+  }
+  subgraph "cluster_24" {
+    label="js/oracleCouts.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "coutMana" [label="coutMana", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "coutManaVide" [label="coutManaVide", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "morceauCout" [label="morceauCout", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "coutActivation" [label="coutActivation", fillcolor="#6d8ca833", color="#6d8ca8"];
+  }
+  subgraph "cluster_25" {
+    label="js/oracleCibles.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "oracleCibles.js (chargement)" [label="chargement du module", fillcolor="#8a7fa833", color="#8a7fa8", shape=note];
+    "singulier" [label="singulier", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "descVide" [label="descVide", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "adjectifDesc" [label="adjectifDesc", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "lisDescripteur" [label="lisDescripteur", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "lisReference" [label="lisReference", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "contexteOracle" [label="contexteOracle", fillcolor="#8a7fa833", color="#8a7fa8"];
+  }
+  subgraph "cluster_26" {
+    label="js/oracleEffetsA.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "oracleEffetsA.js (chargement)" [label="chargement du module", fillcolor="#a8846d33", color="#a8846d", shape=note];
+    "lisQuantite" [label="lisQuantite", fillcolor="#a8846d33", color="#a8846d"];
+    "lisSource" [label="lisSource", fillcolor="#a8846d33", color="#a8846d"];
+    "motif" [label="motif", fillcolor="#a8846d33", color="#a8846d"];
+  }
+  subgraph "cluster_27" {
+    label="js/oracleEffetsB.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "oracleEffetsB.js (chargement)" [label="chargement du module", fillcolor="#6da88c33", color="#6da88c", shape=note];
+    "lisSigne" [label="lisSigne", fillcolor="#6da88c33", color="#6da88c"];
+    "compileProposition" [label="compileProposition", fillcolor="#6da88c33", color="#6da88c"];
+    "remplaceX" [label="remplaceX", fillcolor="#6da88c33", color="#6da88c"];
+    "compileEffet" [label="compileEffet", fillcolor="#6da88c33", color="#6da88c"];
+  }
+  subgraph "cluster_28" {
+    label="js/oracleDeclencheurs.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "oracleDeclencheurs.js (chargement)" [label="chargement du module", fillcolor="#a86d8a33", color="#a86d8a", shape=note];
+    "declencheur" [label="declencheur", fillcolor="#a86d8a33", color="#a86d8a"];
+    "sujetDecl" [label="sujetDecl", fillcolor="#a86d8a33", color="#a86d8a"];
+    "lisDeclencheur" [label="lisDeclencheur", fillcolor="#a86d8a33", color="#a86d8a"];
+    "apportDecl" [label="apportDecl", fillcolor="#a86d8a33", color="#a86d8a"];
+  }
+  subgraph "cluster_29" {
+    label="js/oracleStatiques.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "oracleStatiques.js (chargement)" [label="chargement du module", fillcolor="#96a86d33", color="#96a86d", shape=note];
+    "statique" [label="statique", fillcolor="#96a86d33", color="#96a86d"];
+    "bonusPT" [label="bonusPT", fillcolor="#96a86d33", color="#96a86d"];
+    "lisStatique" [label="lisStatique", fillcolor="#96a86d33", color="#96a86d"];
+    "lisEntree" [label="lisEntree", fillcolor="#96a86d33", color="#96a86d"];
+  }
+  subgraph "cluster_30" {
+    label="js/oracleLignes.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "deuxPoints" [label="deuxPoints", fillcolor="#6da8a433", color="#6da8a4"];
+    "compileEffetModal" [label="compileEffetModal", fillcolor="#6da8a433", color="#6da8a4"];
+    "oteRythme" [label="oteRythme", fillcolor="#6da8a433", color="#6da8a4"];
+    "compileDeclenchee" [label="compileDeclenchee", fillcolor="#6da8a433", color="#6da8a4"];
+    "compileActivee" [label="compileActivee", fillcolor="#6da8a433", color="#6da8a4"];
+    "compileLigne" [label="compileLigne", fillcolor="#6da8a433", color="#6da8a4"];
+    "compileLignes" [label="compileLignes", fillcolor="#6da8a433", color="#6da8a4"];
+  }
+  subgraph "cluster_31" {
+    label="js/definitions.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "empreinte" [label="empreinte", fillcolor="#a89b6d33", color="#a89b6d"];
+    "nombreFiche" [label="nombreFiche", fillcolor="#a89b6d33", color="#a89b6d"];
+    "couleursDe" [label="couleursDe", fillcolor="#a89b6d33", color="#a89b6d"];
+    "verseLigne" [label="verseLigne", fillcolor="#a89b6d33", color="#a89b6d"];
+    "etatLigne" [label="etatLigne", fillcolor="#a89b6d33", color="#a89b6d"];
+    "capacitesImplicites" [label="capacitesImplicites", fillcolor="#a89b6d33", color="#a89b6d"];
+    "compileDefinition" [label="compileDefinition", fillcolor="#a89b6d33", color="#a89b6d"];
+    "couverture" [label="couverture", fillcolor="#a89b6d33", color="#a89b6d"];
+    "definitionDe" [label="definitionDe", fillcolor="#a89b6d33", color="#a89b6d"];
+    "definitionJeton" [label="definitionJeton", fillcolor="#a89b6d33", color="#a89b6d"];
+  }
+  subgraph "cluster_32" {
+    label="js/jeuHasard.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "brasse" [label="brasse", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "etatHasard" [label="etatHasard", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "tireHasard" [label="tireHasard", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "entierHasard" [label="entierHasard", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "melangeHasard" [label="melangeHasard", fillcolor="#6d8ca833", color="#6d8ca8"];
+  }
+  subgraph "cluster_33" {
+    label="js/jeuEtat.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "nouvellePartie" [label="nouvellePartie", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nouvelleCarte" [label="nouvelleCarte", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "creeObjet" [label="creeObjet", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "obj" [label="obj", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "suit" [label="suit", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "tableauZone" [label="tableauZone", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "retireDe" [label="retireDe", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "instantane" [label="instantane", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "deplace" [label="deplace", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "emet" [label="emet", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "jn" [label="jn", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nomObj" [label="nomObj", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "vivants" [label="vivants", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "suivantVivant" [label="suivantVivant", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "ordreApnap" [label="ordreApnap", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "adversaires" [label="adversaires", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "champDe" [label="champDe", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "piocheN" [label="piocheN", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "question" [label="question", fillcolor="#8a7fa833", color="#8a7fa8"];
+  }
+  subgraph "cluster_34" {
+    label="js/jeuCaracteristiques.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "statiquesEnJeu" [label="statiquesEnJeu", fillcolor="#a8846d33", color="#a8846d"];
+    "statiqueVise" [label="statiqueVise", fillcolor="#a8846d33", color="#a8846d"];
+    "car" [label="car", fillcolor="#a8846d33", color="#a8846d"];
+    "aMot" [label="aMot", fillcolor="#a8846d33", color="#a8846d"];
+    "estType" [label="estType", fillcolor="#a8846d33", color="#a8846d"];
+    "estCreature" [label="estCreature", fillcolor="#a8846d33", color="#a8846d"];
+    "peutEngagerSoi" [label="peutEngagerSoi", fillcolor="#a8846d33", color="#a8846d"];
+    "mvDe" [label="mvDe", fillcolor="#a8846d33", color="#a8846d"];
+  }
+  subgraph "cluster_35" {
+    label="js/jeuCibles.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "caracsJugees" [label="caracsJugees", fillcolor="#6da88c33", color="#6da88c"];
+    "etatCombat" [label="etatCombat", fillcolor="#6da88c33", color="#6da88c"];
+    "correspondObjet" [label="correspondObjet", fillcolor="#6da88c33", color="#6da88c"];
+    "correspond" [label="correspond", fillcolor="#6da88c33", color="#6da88c"];
+    "correspondBase" [label="correspondBase", fillcolor="#6da88c33", color="#6da88c"];
+    "joueurCorrespond" [label="joueurCorrespond", fillcolor="#6da88c33", color="#6da88c"];
+    "defCorrespond" [label="defCorrespond", fillcolor="#6da88c33", color="#6da88c"];
+    "ciblable" [label="ciblable", fillcolor="#6da88c33", color="#6da88c"];
+    "ciblesLegales" [label="ciblesLegales", fillcolor="#6da88c33", color="#6da88c"];
+    "cibleEncoreLegale" [label="cibleEncoreLegale", fillcolor="#6da88c33", color="#6da88c"];
+  }
+  subgraph "cluster_36" {
+    label="js/jeuMana.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "sourcesMana" [label="sourcesMana", fillcolor="#a86d8a33", color="#a86d8a"];
+    "compteObjets" [label="compteObjets", fillcolor="#a86d8a33", color="#a86d8a"];
+    "planPaiement" [label="planPaiement", fillcolor="#a86d8a33", color="#a86d8a"];
+    "manaDispo" [label="manaDispo", fillcolor="#a86d8a33", color="#a86d8a"];
+    "ajouteMana" [label="ajouteMana", fillcolor="#a86d8a33", color="#a86d8a"];
+    "debite" [label="debite", fillcolor="#a86d8a33", color="#a86d8a"];
+    "paieMana" [label="paieMana", fillcolor="#a86d8a33", color="#a86d8a"];
+    "videReserves" [label="videReserves", fillcolor="#a86d8a33", color="#a86d8a"];
+  }
+  subgraph "cluster_37" {
+    label="js/jeuOpsA.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "jeuOpsA.js (chargement)" [label="chargement du module", fillcolor="#96a86d33", color="#96a86d", shape=note];
+    "sourceCtx" [label="sourceCtx", fillcolor="#96a86d33", color="#96a86d"];
+    "passeOuPresent" [label="passeOuPresent", fillcolor="#96a86d33", color="#96a86d"];
+    "resous" [label="resous", fillcolor="#96a86d33", color="#96a86d"];
+    "joueursDe" [label="joueursDe", fillcolor="#96a86d33", color="#96a86d"];
+    "valeur" [label="valeur", fillcolor="#96a86d33", color="#96a86d"];
+    "gagneVie" [label="gagneVie", fillcolor="#96a86d33", color="#96a86d"];
+    "infligeDegats" [label="infligeDegats", fillcolor="#96a86d33", color="#96a86d"];
+    "choisitCartes" [label="choisitCartes", fillcolor="#96a86d33", color="#96a86d"];
+    "sacrifie" [label="sacrifie", fillcolor="#96a86d33", color="#96a86d"];
+  }
+  subgraph "cluster_38" {
+    label="js/jeuOpsB.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "jeuOpsB.js (chargement)" [label="chargement du module", fillcolor="#6da8a433", color="#6da8a4", shape=note];
+    "metEnJeu" [label="metEnJeu", fillcolor="#6da8a433", color="#6da8a4"];
+    "proposePaiement" [label="proposePaiement", fillcolor="#6da8a433", color="#6da8a4"];
+    "executeOps" [label="executeOps", fillcolor="#6da8a433", color="#6da8a4"];
+  }
+  subgraph "cluster_39" {
+    label="js/jeuDeclencheurs.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "ecoute" [label="ecoute", fillcolor="#a89b6d33", color="#a89b6d"];
+    "quiConvient" [label="quiConvient", fillcolor="#a89b6d33", color="#a89b6d"];
+    "rangDuSort" [label="rangDuSort", fillcolor="#a89b6d33", color="#a89b6d"];
+    "ecouteRepond" [label="ecouteRepond", fillcolor="#a89b6d33", color="#a89b6d"];
+    "collecteDeclencheurs" [label="collecteDeclencheurs", fillcolor="#a89b6d33", color="#a89b6d"];
+    "declencheursDeLancement" [label="declencheursDeLancement", fillcolor="#a89b6d33", color="#a89b6d"];
+  }
+  subgraph "cluster_40" {
+    label="js/jeuEtatsDeJeu.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "elimine" [label="elimine", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "appliqueSBA" [label="appliqueSBA", fillcolor="#6d8ca833", color="#6d8ca8"];
+  }
+  subgraph "cluster_41" {
+    label="js/jeuLancer.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "enPhasePrincipale" [label="enPhasePrincipale", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "estEphemere" [label="estEphemere", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "coutSort" [label="coutSort", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "effetCiblable" [label="effetCiblable", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "coutAutrePossible" [label="coutAutrePossible", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "actionsLegales" [label="actionsLegales", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "actionsPossibles" [label="actionsPossibles", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "choisitCibles" [label="choisitCibles", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "prepareEffets" [label="prepareEffets", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "coutDeGarde" [label="coutDeGarde", fillcolor="#8a7fa833", color="#8a7fa8"];
+  }
+  subgraph "cluster_42" {
+    label="js/jeuActions.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "jeuActions.js (chargement)" [label="chargement du module", fillcolor="#a8846d33", color="#a8846d", shape=note];
+    "paieAutre" [label="paieAutre", fillcolor="#a8846d33", color="#a8846d"];
+    "maxX" [label="maxX", fillcolor="#a8846d33", color="#a8846d"];
+    "lanceSort" [label="lanceSort", fillcolor="#a8846d33", color="#a8846d"];
+    "activeCapacite" [label="activeCapacite", fillcolor="#a8846d33", color="#a8846d"];
+    "equipe" [label="equipe", fillcolor="#a8846d33", color="#a8846d"];
+    "joueTerrain" [label="joueTerrain", fillcolor="#a8846d33", color="#a8846d"];
+    "executeAction" [label="executeAction", fillcolor="#a8846d33", color="#a8846d"];
+  }
+  subgraph "cluster_43" {
+    label="js/jeuPile.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "retireDeLaPile" [label="retireDeLaPile", fillcolor="#6da88c33", color="#6da88c"];
+    "prepareDeclencheur" [label="prepareDeclencheur", fillcolor="#6da88c33", color="#6da88c"];
+    "stabilise" [label="stabilise", fillcolor="#6da88c33", color="#6da88c"];
+    "resoudre" [label="resoudre", fillcolor="#6da88c33", color="#6da88c"];
+    "priorite" [label="priorite", fillcolor="#6da88c33", color="#6da88c"];
+  }
+  subgraph "cluster_44" {
+    label="js/jeuCombat.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "peutAttaquer" [label="peutAttaquer", fillcolor="#a86d8a33", color="#a86d8a"];
+    "peutBloquer" [label="peutBloquer", fillcolor="#a86d8a33", color="#a86d8a"];
+    "declareAttaquants" [label="declareAttaquants", fillcolor="#a86d8a33", color="#a86d8a"];
+    "defenseurDe" [label="defenseurDe", fillcolor="#a86d8a33", color="#a86d8a"];
+    "declareBloqueurs" [label="declareBloqueurs", fillcolor="#a86d8a33", color="#a86d8a"];
+    "initiativeEnJeu" [label="initiativeEnJeu", fillcolor="#a86d8a33", color="#a86d8a"];
+    "frappe" [label="frappe", fillcolor="#a86d8a33", color="#a86d8a"];
+    "repartition" [label="repartition", fillcolor="#a86d8a33", color="#a86d8a"];
+    "degatsCombat" [label="degatsCombat", fillcolor="#a86d8a33", color="#a86d8a"];
+    "finCombat" [label="finCombat", fillcolor="#a86d8a33", color="#a86d8a"];
+  }
+  subgraph "cluster_45" {
+    label="js/jeuTour.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "degagement" [label="degagement", fillcolor="#96a86d33", color="#96a86d"];
+    "nettoyage" [label="nettoyage", fillcolor="#96a86d33", color="#96a86d"];
+    "etape" [label="etape", fillcolor="#96a86d33", color="#96a86d"];
+    "notePrincipale" [label="notePrincipale", fillcolor="#96a86d33", color="#96a86d"];
+    "tour" [label="tour", fillcolor="#96a86d33", color="#96a86d"];
+  }
+  subgraph "cluster_46" {
+    label="js/jeuPartie.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "mulligans" [label="mulligans", fillcolor="#6da8a433", color="#6da8a4"];
+    "partie" [label="partie", fillcolor="#6da8a433", color="#6da8a4"];
+  }
+  subgraph "cluster_47" {
+    label="js/jeuPilote.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "creePartie" [label="creePartie", fillcolor="#a89b6d33", color="#a89b6d"];
+    "valideReponse" [label="valideReponse", fillcolor="#a89b6d33", color="#a89b6d"];
+    "avance" [label="avance", fillcolor="#a89b6d33", color="#a89b6d"];
+    "repondre" [label="repondre", fillcolor="#a89b6d33", color="#a89b6d"];
+    "joueJusquauBout" [label="joueJusquauBout", fillcolor="#a89b6d33", color="#a89b6d"];
+  }
+  subgraph "cluster_48" {
+    label="js/iaValeur.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "primeMots" [label="primeMots", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "valeurDef" [label="valeurDef", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "valeurObjet" [label="valeurObjet", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "forceDeFrappe" [label="forceDeFrappe", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "menace" [label="menace", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "estAMoi" [label="estAMoi", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "opHostile" [label="opHostile", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "opsSurCible" [label="opsSurCible", fillcolor="#6d8ca833", color="#6d8ca8"];
+  }
+  subgraph "cluster_49" {
+    label="js/iaChoix.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "terrainsEnMain" [label="terrainsEnMain", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "iaMulligan" [label="iaMulligan", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "utiliteEnMain" [label="utiliteEnMain", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "iaCibles" [label="iaCibles", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "iaCartes" [label="iaCartes", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "iaScrute" [label="iaScrute", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "iaOui" [label="iaOui", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "iaModes" [label="iaModes", fillcolor="#8a7fa833", color="#8a7fa8"];
+  }
+  subgraph "cluster_50" {
+    label="js/iaPriorite.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "meilleureCibleHostile" [label="meilleureCibleHostile", fillcolor="#a8846d33", color="#a8846d"];
+    "scoreEffet" [label="scoreEffet", fillcolor="#a8846d33", color="#a8846d"];
+    "impactSort" [label="impactSort", fillcolor="#a8846d33", color="#a8846d"];
+    "impactCapacite" [label="impactCapacite", fillcolor="#a8846d33", color="#a8846d"];
+    "scoreTerrain" [label="scoreTerrain", fillcolor="#a8846d33", color="#a8846d"];
+    "iaReponse" [label="iaReponse", fillcolor="#a8846d33", color="#a8846d"];
+    "iaPriorite" [label="iaPriorite", fillcolor="#a8846d33", color="#a8846d"];
+    "noteActivation" [label="noteActivation", fillcolor="#a8846d33", color="#a8846d"];
+  }
+  subgraph "cluster_51" {
+    label="js/iaCombat.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "tue" [label="tue", fillcolor="#6da88c33", color="#6da88c"];
+    "choisitDefenseur" [label="choisitDefenseur", fillcolor="#6da88c33", color="#6da88c"];
+    "iaAttaquants" [label="iaAttaquants", fillcolor="#6da88c33", color="#6da88c"];
+    "iaBloqueurs" [label="iaBloqueurs", fillcolor="#6da88c33", color="#6da88c"];
+  }
+  subgraph "cluster_52" {
+    label="js/iaAgent.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "agentIA" [label="agentIA", fillcolor="#a86d8a33", color="#a86d8a"];
+  }
+  subgraph "cluster_53" {
+    label="js/symboles.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "loadSymbology" [label="loadSymbology", fillcolor="#96a86d33", color="#96a86d"];
+    "pipHTML" [label="pipHTML", fillcolor="#96a86d33", color="#96a86d"];
+    "symBg" [label="symBg", fillcolor="#96a86d33", color="#96a86d"];
+    "symIcon" [label="symIcon", fillcolor="#96a86d33", color="#96a86d"];
+    "manaFb" [label="manaFb", fillcolor="#96a86d33", color="#96a86d"];
+    "manaHTML" [label="manaHTML", fillcolor="#96a86d33", color="#96a86d"];
+    "stripeColor" [label="stripeColor", fillcolor="#96a86d33", color="#96a86d"];
+  }
+  subgraph "cluster_54" {
+    label="js/champsJeu.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "nombreOuRien" [label="nombreOuRien", fillcolor="#6da8a433", color="#6da8a4"];
+    "champsJeuScryfall" [label="champsJeuScryfall", fillcolor="#6da8a433", color="#6da8a4"];
+    "colonnesJeu" [label="colonnesJeu", fillcolor="#6da8a433", color="#6da8a4"];
+    "champsJeuRec" [label="champsJeuRec", fillcolor="#6da8a433", color="#6da8a4"];
+    "appliqueChampsJeu" [label="appliqueChampsJeu", fillcolor="#6da8a433", color="#6da8a4"];
+    "jeuSnap" [label="jeuSnap", fillcolor="#6da8a433", color="#6da8a4"];
+    "jeuRestore" [label="jeuRestore", fillcolor="#6da8a433", color="#6da8a4"];
+  }
+  subgraph "cluster_55" {
     label="js/scryfallApplique.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "scryTarget" [label="scryTarget", fillcolor="#a89b6d33", color="#a89b6d"];
     "applyScryfall" [label="applyScryfall", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_24" {
+  subgraph "cluster_56" {
     label="js/scryfall.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "identScryfall" [label="identScryfall", fillcolor="#6d8ca833", color="#6d8ca8"];
     "cibleImpression" [label="cibleImpression", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -250,7 +558,7 @@ digraph appels {
     "runScryQueue" [label="runScryQueue", fillcolor="#6d8ca833", color="#6d8ca8"];
     "completeUnknown" [label="completeUnknown", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_25" {
+  subgraph "cluster_57" {
     label="js/recherches.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "majRecherches" [label="majRecherches", fillcolor="#8a7fa833", color="#8a7fa8"];
     "chercheScryfall" [label="chercheScryfall", fillcolor="#8a7fa833", color="#8a7fa8"];
@@ -263,13 +571,13 @@ digraph appels {
     "carteDepuisScryfall" [label="carteDepuisScryfall", fillcolor="#8a7fa833", color="#8a7fa8"];
     "enrichAllUnknown" [label="enrichAllUnknown", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_26" {
+  subgraph "cluster_58" {
     label="js/decksStockage.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "deckSnap" [label="deckSnap", fillcolor="#a8846d33", color="#a8846d"];
     "ciblesPropres" [label="ciblesPropres", fillcolor="#a8846d33", color="#a8846d"];
     "restaureDecks" [label="restaureDecks", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_27" {
+  subgraph "cluster_59" {
     label="js/stockage.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "impressionSnap" [label="impressionSnap", fillcolor="#6da88c33", color="#6da88c"];
     "impressionRestore" [label="impressionRestore", fillcolor="#6da88c33", color="#6da88c"];
@@ -280,7 +588,7 @@ digraph appels {
     "restore" [label="restore", fillcolor="#6da88c33", color="#6da88c"];
     "chargerSauvegarde" [label="chargerSauvegarde", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_28" {
+  subgraph "cluster_60" {
     label="js/fenSauvegarde.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "corpsSauvegarde" [label="corpsSauvegarde", fillcolor="#a86d8a33", color="#a86d8a"];
     "blocCatalogue" [label="blocCatalogue", fillcolor="#a86d8a33", color="#a86d8a"];
@@ -289,7 +597,7 @@ digraph appels {
     "brancherCatalogue" [label="brancherCatalogue", fillcolor="#a86d8a33", color="#a86d8a"];
     "brancherRestauration" [label="brancherRestauration", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_29" {
+  subgraph "cluster_61" {
     label="js/idb.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
     "idb" [label="idb", fillcolor="#96a86d33", color="#96a86d"];
     "idbLire" [label="idbLire", fillcolor="#96a86d33", color="#96a86d"];
@@ -297,7 +605,7 @@ digraph appels {
     "idbOublier" [label="idbOublier", fillcolor="#96a86d33", color="#96a86d"];
     "idbVider" [label="idbVider", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_30" {
+  subgraph "cluster_62" {
     label="js/nuagePaquet.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "nuagePaquet" [label="nuagePaquet", fillcolor="#6da8a433", color="#6da8a4"];
     "nuageFond" [label="nuageFond", fillcolor="#6da8a433", color="#6da8a4"];
@@ -307,7 +615,7 @@ digraph appels {
     "nuageEmballe" [label="nuageEmballe", fillcolor="#6da8a433", color="#6da8a4"];
     "nuageDeballe" [label="nuageDeballe", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_31" {
+  subgraph "cluster_63" {
     label="js/nuageFusion.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "nuageStable" [label="nuageStable", fillcolor="#a89b6d33", color="#a89b6d"];
     "fusionneQuantites" [label="fusionneQuantites", fillcolor="#a89b6d33", color="#a89b6d"];
@@ -321,7 +629,7 @@ digraph appels {
     "empreinteFond" [label="empreinteFond", fillcolor="#a89b6d33", color="#a89b6d"];
     "fusionnePaquets" [label="fusionnePaquets", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_32" {
+  subgraph "cluster_64" {
     label="js/nuageDropbox.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "dbxRetour" [label="dbxRetour", fillcolor="#6d8ca833", color="#6d8ca8"];
     "dbxBase64Url" [label="dbxBase64Url", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -341,7 +649,7 @@ digraph appels {
     "dbxEcrire" [label="dbxEcrire", fillcolor="#6d8ca833", color="#6d8ca8"];
     "dbxCompte" [label="dbxCompte", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_33" {
+  subgraph "cluster_65" {
     label="js/nuage.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "nuageLire" [label="nuageLire", fillcolor="#8a7fa833", color="#8a7fa8"];
     "nuageEcrire" [label="nuageEcrire", fillcolor="#8a7fa833", color="#8a7fa8"];
@@ -356,13 +664,13 @@ digraph appels {
     "nuageDemarrer" [label="nuageDemarrer", fillcolor="#8a7fa833", color="#8a7fa8"];
     "nuageDeconnecte" [label="nuageDeconnecte", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_34" {
+  subgraph "cluster_66" {
     label="js/nuageDiagnostic.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "nuageEtape" [label="nuageEtape", fillcolor="#a8846d33", color="#a8846d"];
     "nuageEffaceTemoin" [label="nuageEffaceTemoin", fillcolor="#a8846d33", color="#a8846d"];
     "nuageDiagnostic" [label="nuageDiagnostic", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_35" {
+  subgraph "cluster_67" {
     label="js/edhrec.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "edhrecSlug" [label="edhrecSlug", fillcolor="#6da88c33", color="#6da88c"];
     "fetchEdhrecCommander" [label="fetchEdhrecCommander", fillcolor="#6da88c33", color="#6da88c"];
@@ -371,7 +679,7 @@ digraph appels {
     "signatureCommandants" [label="signatureCommandants", fillcolor="#6da88c33", color="#6da88c"];
     "loadEdhrec" [label="loadEdhrec", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_36" {
+  subgraph "cluster_68" {
     label="js/edhrecForme.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "pauseEdhrec" [label="pauseEdhrec", fillcolor="#a86d8a33", color="#a86d8a"];
     "formesDeduites" [label="formesDeduites", fillcolor="#a86d8a33", color="#a86d8a"];
@@ -381,7 +689,7 @@ digraph appels {
     "indexDepuisCartes" [label="indexDepuisCartes", fillcolor="#a86d8a33", color="#a86d8a"];
     "cartesDepuisIndex" [label="cartesDepuisIndex", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_37" {
+  subgraph "cluster_69" {
     label="js/edhrecThemes.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
     "reprendreArchetypesEdhrec" [label="reprendreArchetypesEdhrec", fillcolor="#96a86d33", color="#96a86d"];
     "urlIndexEdhrec" [label="urlIndexEdhrec", fillcolor="#96a86d33", color="#96a86d"];
@@ -394,7 +702,7 @@ digraph appels {
     "archetypesARevoir" [label="archetypesARevoir", fillcolor="#96a86d33", color="#96a86d"];
     "chargerArchetypesEdhrec" [label="chargerArchetypesEdhrec", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_38" {
+  subgraph "cluster_70" {
     label="js/sets.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "setRetenu" [label="setRetenu", fillcolor="#6da8a433", color="#6da8a4"];
     "reprendreSets" [label="reprendreSets", fillcolor="#6da8a433", color="#6da8a4"];
@@ -405,14 +713,14 @@ digraph appels {
     "noteSetIndex" [label="noteSetIndex", fillcolor="#6da8a433", color="#6da8a4"];
     "chargerSetScryfall" [label="chargerSetScryfall", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_39" {
+  subgraph "cluster_71" {
     label="js/gameChangers.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "reprendreGameChangers" [label="reprendreGameChangers", fillcolor="#a89b6d33", color="#a89b6d"];
     "sauverGameChangers" [label="sauverGameChangers", fillcolor="#a89b6d33", color="#a89b6d"];
     "gameChangersARevoir" [label="gameChangersARevoir", fillcolor="#a89b6d33", color="#a89b6d"];
     "chargerGameChangers" [label="chargerGameChangers", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_40" {
+  subgraph "cluster_72" {
     label="js/archive.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "compacte" [label="compacte", fillcolor="#6d8ca833", color="#6d8ca8"];
     "autoCatalogue" [label="autoCatalogue", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -426,7 +734,7 @@ digraph appels {
     "ArchiveAbandonnee" [label="ArchiveAbandonnee", fillcolor="#6d8ca833", color="#6d8ca8"];
     "lireCatalogueFichier" [label="lireCatalogueFichier", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_41" {
+  subgraph "cluster_73" {
     label="js/catalogue.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "chargerCatalogueLocal" [label="chargerCatalogueLocal", fillcolor="#8a7fa833", color="#8a7fa8"];
     "verifierMajCatalogue" [label="verifierMajCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
@@ -439,7 +747,7 @@ digraph appels {
     "proposerMajCatalogue" [label="proposerMajCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
     "majCatalogue" [label="majCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_42" {
+  subgraph "cluster_74" {
     label="js/candidats.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "completeDepuisRec" [label="completeDepuisRec", fillcolor="#a8846d33", color="#a8846d"];
     "noterLegalArchive" [label="noterLegalArchive", fillcolor="#a8846d33", color="#a8846d"];
@@ -456,14 +764,14 @@ digraph appels {
     "signatureCatalogue" [label="signatureCatalogue", fillcolor="#a8846d33", color="#a8846d"];
     "chargerCatalogue" [label="chargerCatalogue", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_43" {
+  subgraph "cluster_75" {
     label="js/graphe.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "graphCards" [label="graphCards", fillcolor="#6da88c33", color="#6da88c"];
     "buildGraph" [label="buildGraph", fillcolor="#6da88c33", color="#6da88c"];
     "svgGraph" [label="svgGraph", fillcolor="#6da88c33", color="#6da88c"];
     "renderD" [label="renderD", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_44" {
+  subgraph "cluster_76" {
     label="js/stats.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "statsOf" [label="statsOf", fillcolor="#a86d8a33", color="#a86d8a"];
     "repartitionCmc" [label="repartitionCmc", fillcolor="#a86d8a33", color="#a86d8a"];
@@ -471,7 +779,7 @@ digraph appels {
     "histogram" [label="histogram", fillcolor="#a86d8a33", color="#a86d8a"];
     "renderC" [label="renderC", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_45" {
+  subgraph "cluster_77" {
     label="js/notation.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
     "contexteEvaluation" [label="contexteEvaluation", fillcolor="#96a86d33", color="#96a86d"];
     "noteCarte" [label="noteCarte", fillcolor="#96a86d33", color="#96a86d"];
@@ -479,7 +787,7 @@ digraph appels {
     "nbCartesLarges" [label="nbCartesLarges", fillcolor="#96a86d33", color="#96a86d"];
     "nbLiens" [label="nbLiens", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_46" {
+  subgraph "cluster_78" {
     label="js/vivier.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "vivierSuggestions" [label="vivierSuggestions", fillcolor="#6da8a433", color="#6da8a4"];
     "noterVivier" [label="noterVivier", fillcolor="#6da8a433", color="#6da8a4"];
@@ -491,7 +799,7 @@ digraph appels {
     "currentSuggestions" [label="currentSuggestions", fillcolor="#6da8a433", color="#6da8a4"];
     "prepareSuggestions" [label="prepareSuggestions", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_47" {
+  subgraph "cluster_79" {
     label="js/sugOrdre.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "geleSuggestions" [label="geleSuggestions", fillcolor="#a89b6d33", color="#a89b6d"];
     "ordreGele" [label="ordreGele", fillcolor="#a89b6d33", color="#a89b6d"];
@@ -500,14 +808,14 @@ digraph appels {
     "classementDecale" [label="classementDecale", fillcolor="#a89b6d33", color="#a89b6d"];
     "bandeauReclassement" [label="bandeauReclassement", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_48" {
+  subgraph "cluster_80" {
     label="js/sugCommandants.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "lienDecksEdhrec" [label="lienDecksEdhrec", fillcolor="#6d8ca833", color="#6d8ca8"];
     "ligneCommandant" [label="ligneCommandant", fillcolor="#6d8ca833", color="#6d8ca8"];
     "blocCommandants" [label="blocCommandants", fillcolor="#6d8ca833", color="#6d8ca8"];
     "panneauEdhrec" [label="panneauEdhrec", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_49" {
+  subgraph "cluster_81" {
     label="js/sugListes.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "selectionSuggestions" [label="selectionSuggestions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "listeSug" [label="listeSug", fillcolor="#8a7fa833", color="#8a7fa8"];
@@ -521,19 +829,19 @@ digraph appels {
     "visuelsSuggestions" [label="visuelsSuggestions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "visuelsGroupes" [label="visuelsGroupes", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_50" {
+  subgraph "cluster_82" {
     label="js/sugGraphe.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "blocGraphe" [label="blocGraphe", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_51" {
+  subgraph "cluster_83" {
     label="js/sugEdhrec.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "blocEdhrec" [label="blocEdhrec", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_52" {
+  subgraph "cluster_84" {
     label="js/sugCatalogue.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "listeSuggestions" [label="listeSuggestions", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_53" {
+  subgraph "cluster_85" {
     label="js/suggestions.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
     "ligneCatalogue" [label="ligneCatalogue", fillcolor="#96a86d33", color="#96a86d"];
     "ligneBudget" [label="ligneBudget", fillcolor="#96a86d33", color="#96a86d"];
@@ -549,20 +857,20 @@ digraph appels {
     "refreshSuggestions" [label="refreshSuggestions", fillcolor="#96a86d33", color="#96a86d"];
     "lanceEdhrecSiBesoin" [label="lanceEdhrecSiBesoin", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_54" {
+  subgraph "cluster_86" {
     label="js/decksSection.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "coutDeck" [label="coutDeck", fillcolor="#6da8a433", color="#6da8a4"];
     "puceStatut" [label="puceStatut", fillcolor="#6da8a433", color="#6da8a4"];
     "vignetteDeck" [label="vignetteDeck", fillcolor="#6da8a433", color="#6da8a4"];
     "renderI" [label="renderI", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_55" {
+  subgraph "cluster_87" {
     label="js/wishlistSection.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "decksDemandeurs" [label="decksDemandeurs", fillcolor="#a89b6d33", color="#a89b6d"];
     "ligneWishlist" [label="ligneWishlist", fillcolor="#a89b6d33", color="#a89b6d"];
     "renderJ" [label="renderJ", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_56" {
+  subgraph "cluster_88" {
     label="js/collection.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "couleursOK" [label="couleursOK", fillcolor="#6d8ca833", color="#6d8ca8"];
     "colorOK" [label="colorOK", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -574,22 +882,21 @@ digraph appels {
     "ligneCausesCollection" [label="ligneCausesCollection", fillcolor="#6d8ca833", color="#6d8ca8"];
     "renderB" [label="renderB", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_57" {
+  subgraph "cluster_89" {
     label="js/fenImport.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "retireExtrait" [label="retireExtrait", fillcolor="#8a7fa833", color="#8a7fa8"];
     "extraitEdition" [label="extraitEdition", fillcolor="#8a7fa833", color="#8a7fa8"];
     "parseMtgoList" [label="parseMtgoList", fillcolor="#8a7fa833", color="#8a7fa8"];
     "openImport" [label="openImport", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_58" {
+  subgraph "cluster_90" {
     label="js/fenAjout.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "ajouterCarte" [label="ajouterCarte", fillcolor="#a8846d33", color="#a8846d"];
     "chercheCartes" [label="chercheCartes", fillcolor="#a8846d33", color="#a8846d"];
-    "resultatsHTML" [label="resultatsHTML", fillcolor="#a8846d33", color="#a8846d"];
     "majResultats" [label="majResultats", fillcolor="#a8846d33", color="#a8846d"];
     "openAdd" [label="openAdd", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_59" {
+  subgraph "cluster_91" {
     label="js/rechercheSection.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "etatRecherche" [label="etatRecherche", fillcolor="#6da88c33", color="#6da88c"];
     "compteListe" [label="compteListe", fillcolor="#6da88c33", color="#6da88c"];
@@ -603,7 +910,7 @@ digraph appels {
     "molletteRecherche" [label="molletteRecherche", fillcolor="#6da88c33", color="#6da88c"];
     "restaureRecherche" [label="restaureRecherche", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_60" {
+  subgraph "cluster_92" {
     label="js/annexes.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "annexeListe" [label="annexeListe", fillcolor="#a86d8a33", color="#a86d8a"];
     "annexeEntries" [label="annexeEntries", fillcolor="#a86d8a33", color="#a86d8a"];
@@ -615,7 +922,7 @@ digraph appels {
     "viderAnnexe" [label="viderAnnexe", fillcolor="#a86d8a33", color="#a86d8a"];
     "tagAnnexe" [label="tagAnnexe", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_61" {
+  subgraph "cluster_93" {
     label="js/deck.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
     "deckEntries" [label="deckEntries", fillcolor="#96a86d33", color="#96a86d"];
     "deckSignature" [label="deckSignature", fillcolor="#96a86d33", color="#96a86d"];
@@ -627,7 +934,7 @@ digraph appels {
     "removeFromDeck" [label="removeFromDeck", fillcolor="#96a86d33", color="#96a86d"];
     "buyCard" [label="buyCard", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_62" {
+  subgraph "cluster_94" {
     label="js/legalite.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "gameChangersDuDeck" [label="gameChangersDuDeck", fillcolor="#6da8a433", color="#6da8a4"];
     "ligneGameChangers" [label="ligneGameChangers", fillcolor="#6da8a433", color="#6da8a4"];
@@ -643,7 +950,7 @@ digraph appels {
     "gauge" [label="gauge", fillcolor="#6da8a433", color="#6da8a4"];
     "legality" [label="legality", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_63" {
+  subgraph "cluster_95" {
     label="js/deckSection.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "blocAchats" [label="blocAchats", fillcolor="#a89b6d33", color="#a89b6d"];
     "zoneCommandant" [label="zoneCommandant", fillcolor="#a89b6d33", color="#a89b6d"];
@@ -652,7 +959,7 @@ digraph appels {
     "blocAnnexe" [label="blocAnnexe", fillcolor="#a89b6d33", color="#a89b6d"];
     "renderE" [label="renderE", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_64" {
+  subgraph "cluster_96" {
     label="js/ficheVisuel.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "ficheTexteHTML" [label="ficheTexteHTML", fillcolor="#6d8ca833", color="#6d8ca8"];
     "rafraichirFiche" [label="rafraichirFiche", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -660,18 +967,102 @@ digraph appels {
     "ficheImageKO" [label="ficheImageKO", fillcolor="#6d8ca833", color="#6d8ca8"];
     "blocVersions" [label="blocVersions", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_65" {
+  subgraph "cluster_97" {
     label="js/fiche.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "ficheHTML" [label="ficheHTML", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_66" {
+  subgraph "cluster_98" {
     label="js/ficheParcours.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "poseParcoursFiche" [label="poseParcoursFiche", fillcolor="#a8846d33", color="#a8846d"];
     "ficheVoisine" [label="ficheVoisine", fillcolor="#a8846d33", color="#a8846d"];
     "enteteFiche" [label="enteteFiche", fillcolor="#a8846d33", color="#a8846d"];
     "openCardModal" [label="openCardModal", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_67" {
+  subgraph "cluster_99" {
+    label="js/simCartes.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "ficheDeCarte" [label="ficheDeCarte", fillcolor="#6da88c33", color="#6da88c"];
+    "ficheDeRec" [label="ficheDeRec", fillcolor="#6da88c33", color="#6da88c"];
+    "ficheDeScryfall" [label="ficheDeScryfall", fillcolor="#6da88c33", color="#6da88c"];
+    "indexArchive" [label="indexArchive", fillcolor="#6da88c33", color="#6da88c"];
+    "ficheParNom" [label="ficheParNom", fillcolor="#6da88c33", color="#6da88c"];
+    "chargeSimCartes" [label="chargeSimCartes", fillcolor="#6da88c33", color="#6da88c"];
+    "rangeSimCartes" [label="rangeSimCartes", fillcolor="#6da88c33", color="#6da88c"];
+    "chercheFichesScryfall" [label="chercheFichesScryfall", fillcolor="#6da88c33", color="#6da88c"];
+  }
+  subgraph "cluster_100" {
+    label="js/simAdversaires.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "cleAdversaireNeuve" [label="cleAdversaireNeuve", fillcolor="#a86d8a33", color="#a86d8a"];
+    "adversaireDepuisTexte" [label="adversaireDepuisTexte", fillcolor="#a86d8a33", color="#a86d8a"];
+    "enregistreAdversaire" [label="enregistreAdversaire", fillcolor="#a86d8a33", color="#a86d8a"];
+    "nbCartesAdversaire" [label="nbCartesAdversaire", fillcolor="#a86d8a33", color="#a86d8a"];
+    "resolutionAdversaire" [label="resolutionAdversaire", fillcolor="#a86d8a33", color="#a86d8a"];
+    "completeAdversaire" [label="completeAdversaire", fillcolor="#a86d8a33", color="#a86d8a"];
+    "signatureAdversaire" [label="signatureAdversaire", fillcolor="#a86d8a33", color="#a86d8a"];
+    "signatureDeck" [label="signatureDeck", fillcolor="#a86d8a33", color="#a86d8a"];
+  }
+  subgraph "cluster_101" {
+    label="js/simPreparation.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "vieDuFormat" [label="vieDuFormat", fillcolor="#96a86d33", color="#96a86d"];
+    "comportementDe" [label="comportementDe", fillcolor="#96a86d33", color="#96a86d"];
+    "bilanCouverture" [label="bilanCouverture", fillcolor="#96a86d33", color="#96a86d"];
+    "siegeDepuisListe" [label="siegeDepuisListe", fillcolor="#96a86d33", color="#96a86d"];
+    "siegeDeck" [label="siegeDeck", fillcolor="#96a86d33", color="#96a86d"];
+    "siegeAdversaire" [label="siegeAdversaire", fillcolor="#96a86d33", color="#96a86d"];
+    "nomsManquants" [label="nomsManquants", fillcolor="#96a86d33", color="#96a86d"];
+    "fiabilite" [label="fiabilite", fillcolor="#96a86d33", color="#96a86d"];
+    "signatureComportements" [label="signatureComportements", fillcolor="#96a86d33", color="#96a86d"];
+  }
+  subgraph "cluster_102" {
+    label="js/simStats.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "wilson" [label="wilson", fillcolor="#6da8a433", color="#6da8a4"];
+    "mesuresPartie" [label="mesuresPartie", fillcolor="#6da8a433", color="#6da8a4"];
+    "agrege" [label="agrege", fillcolor="#6da8a433", color="#6da8a4"];
+    "statsCartes" [label="statsCartes", fillcolor="#6da8a433", color="#6da8a4"];
+  }
+  subgraph "cluster_103" {
+    label="js/simStockage.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "chargeResultats" [label="chargeResultats", fillcolor="#a89b6d33", color="#a89b6d"];
+    "rangeResultats" [label="rangeResultats", fillcolor="#a89b6d33", color="#a89b6d"];
+    "ajouteLot" [label="ajouteLot", fillcolor="#a89b6d33", color="#a89b6d"];
+    "supprimeLot" [label="supprimeLot", fillcolor="#a89b6d33", color="#a89b6d"];
+    "lotParId" [label="lotParId", fillcolor="#a89b6d33", color="#a89b6d"];
+    "lotPerime" [label="lotPerime", fillcolor="#a89b6d33", color="#a89b6d"];
+    "cleTable" [label="cleTable", fillcolor="#a89b6d33", color="#a89b6d"];
+    "classement" [label="classement", fillcolor="#a89b6d33", color="#a89b6d"];
+  }
+  subgraph "cluster_104" {
+    label="js/simulation.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "rendMain" [label="rendMain", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "configSimulation" [label="configSimulation", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "obstacleSimulation" [label="obstacleSimulation", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "placesPartie" [label="placesPartie", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "graineDePartie" [label="graineDePartie", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "majProgressionSim" [label="majProgressionSim", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "lanceSimulation" [label="lanceSimulation", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "terminerLot" [label="terminerLot", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "arreteSimulation" [label="arreteSimulation", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "rejouePartie" [label="rejouePartie", fillcolor="#6d8ca833", color="#6d8ca8"];
+  }
+  subgraph "cluster_105" {
+    label="js/simSection.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "couvertureTable" [label="couvertureTable", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "optionsHTML" [label="optionsHTML", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "tableHTML" [label="tableHTML", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "adversairesHTML" [label="adversairesHTML", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "badgeCouverture" [label="badgeCouverture", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "couvertureHTML" [label="couvertureHTML", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "renderK" [label="renderK", fillcolor="#8a7fa833", color="#8a7fa8"];
+  }
+  subgraph "cluster_106" {
+    label="js/simResultats.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "barresHTML" [label="barresHTML", fillcolor="#a8846d33", color="#a8846d"];
+    "cartesHTML" [label="cartesHTML", fillcolor="#a8846d33", color="#a8846d"];
+    "partiesHTML" [label="partiesHTML", fillcolor="#a8846d33", color="#a8846d"];
+    "lotHTML" [label="lotHTML", fillcolor="#a8846d33", color="#a8846d"];
+    "historiqueHTML" [label="historiqueHTML", fillcolor="#a8846d33", color="#a8846d"];
+    "resultatsHTML" [label="resultatsHTML", fillcolor="#a8846d33", color="#a8846d"];
+  }
+  subgraph "cluster_107" {
     label="js/outils.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "esc" [label="esc", fillcolor="#6da88c33", color="#6da88c"];
     "eur" [label="eur", fillcolor="#6da88c33", color="#6da88c"];
@@ -679,19 +1070,19 @@ digraph appels {
     "fmt" [label="fmt", fillcolor="#6da88c33", color="#6da88c"];
     "toast" [label="toast", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_68" {
+  subgraph "cluster_108" {
     label="js/theme.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "themeDuSysteme" [label="themeDuSysteme", fillcolor="#a86d8a33", color="#a86d8a"];
     "appliqueTheme" [label="appliqueTheme", fillcolor="#a86d8a33", color="#a86d8a"];
     "reprendTheme" [label="reprendTheme", fillcolor="#a86d8a33", color="#a86d8a"];
     "basculeTheme" [label="basculeTheme", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_69" {
+  subgraph "cluster_109" {
     label="js/dialogue.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
     "openDialog" [label="openDialog", fillcolor="#96a86d33", color="#96a86d"];
     "closeDialog" [label="closeDialog", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_70" {
+  subgraph "cluster_110" {
     label="js/brouillon.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "ouvreBrouillon" [label="ouvreBrouillon", fillcolor="#6da8a433", color="#6da8a4"];
     "copieEtat" [label="copieEtat", fillcolor="#6da8a433", color="#6da8a4"];
@@ -707,11 +1098,11 @@ digraph appels {
     "verseBrouillon" [label="verseBrouillon", fillcolor="#6da8a433", color="#6da8a4"];
     "fermetureBrouillon" [label="fermetureBrouillon", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_71" {
+  subgraph "cluster_111" {
     label="js/couleurs.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
     "nomCombinaisonCouleurs" [label="nomCombinaisonCouleurs", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_72" {
+  subgraph "cluster_112" {
     label="js/apercu.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
     "initApercu" [label="initApercu", fillcolor="#6d8ca833", color="#6d8ca8"];
     "apercuTexte" [label="apercuTexte", fillcolor="#6d8ca833", color="#6d8ca8"];
@@ -721,7 +1112,7 @@ digraph appels {
     "cacherApercu" [label="cacherApercu", fillcolor="#6d8ca833", color="#6d8ca8"];
     "majApercu" [label="majApercu", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_73" {
+  subgraph "cluster_113" {
     label="js/versions.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
     "aDeuxFaces" [label="aDeuxFaces", fillcolor="#8a7fa833", color="#8a7fa8"];
     "autreFace" [label="autreFace", fillcolor="#8a7fa833", color="#8a7fa8"];
@@ -738,7 +1129,7 @@ digraph appels {
     "visuelEnRecherche" [label="visuelEnRecherche", fillcolor="#8a7fa833", color="#8a7fa8"];
     "choisirVersion" [label="choisirVersion", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_74" {
+  subgraph "cluster_114" {
     label="js/tuiles.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
     "tagIllegal" [label="tagIllegal", fillcolor="#a8846d33", color="#a8846d"];
     "tagGameChanger" [label="tagGameChanger", fillcolor="#a8846d33", color="#a8846d"];
@@ -753,182 +1144,215 @@ digraph appels {
     "sugRow" [label="sugRow", fillcolor="#a8846d33", color="#a8846d"];
     "sugLigne" [label="sugLigne", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_75" {
+  subgraph "cluster_115" {
     label="js/ancre.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
     "candidatsAncre" [label="candidatsAncre", fillcolor="#6da88c33", color="#6da88c"];
     "releveAncre" [label="releveAncre", fillcolor="#6da88c33", color="#6da88c"];
     "restaureAncre" [label="restaureAncre", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_76" {
-    label="js/recalcul.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
-    "pause" [label="pause", fillcolor="#a86d8a33", color="#a86d8a"];
-    "recalculLong" [label="recalculLong", fillcolor="#a86d8a33", color="#a86d8a"];
-    "corpsBoiteRecalcul" [label="corpsBoiteRecalcul", fillcolor="#a86d8a33", color="#a86d8a"];
-    "annonceRecalcul" [label="annonceRecalcul", fillcolor="#a86d8a33", color="#a86d8a"];
-    "finRecalcul" [label="finRecalcul", fillcolor="#a86d8a33", color="#a86d8a"];
-    "progresSection" [label="progresSection", fillcolor="#a86d8a33", color="#a86d8a"];
-    "finProgresSection" [label="finProgresSection", fillcolor="#a86d8a33", color="#a86d8a"];
-    "recalculerAvecProgression" [label="recalculerAvecProgression", fillcolor="#a86d8a33", color="#a86d8a"];
+  subgraph "cluster_116" {
+    label="js/differe.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "suggestionsVisibles" [label="suggestionsVisibles", fillcolor="#a86d8a33", color="#a86d8a"];
+    "marqueOngletsPerimes" [label="marqueOngletsPerimes", fillcolor="#a86d8a33", color="#a86d8a"];
+    "differerSuggestions" [label="differerSuggestions", fillcolor="#a86d8a33", color="#a86d8a"];
+    "rattraperSuggestions" [label="rattraperSuggestions", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_77" {
-    label="js/entete.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
-    "entete.js (chargement)" [label="chargement du module", fillcolor="#96a86d33", color="#96a86d", shape=note];
-    "listeDeLOngletCourant" [label="listeDeLOngletCourant", fillcolor="#96a86d33", color="#96a86d"];
-    "majBoutonAffichage" [label="majBoutonAffichage", fillcolor="#96a86d33", color="#96a86d"];
-    "majHauteurEntete" [label="majHauteurEntete", fillcolor="#96a86d33", color="#96a86d"];
-    "renderTop" [label="renderTop", fillcolor="#96a86d33", color="#96a86d"];
-    "renderOnglets" [label="renderOnglets", fillcolor="#96a86d33", color="#96a86d"];
+  subgraph "cluster_117" {
+    label="js/recalcul.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "pause" [label="pause", fillcolor="#96a86d33", color="#96a86d"];
+    "recalculLong" [label="recalculLong", fillcolor="#96a86d33", color="#96a86d"];
+    "corpsBoiteRecalcul" [label="corpsBoiteRecalcul", fillcolor="#96a86d33", color="#96a86d"];
+    "annonceRecalcul" [label="annonceRecalcul", fillcolor="#96a86d33", color="#96a86d"];
+    "finRecalcul" [label="finRecalcul", fillcolor="#96a86d33", color="#96a86d"];
+    "progresSection" [label="progresSection", fillcolor="#96a86d33", color="#96a86d"];
+    "finProgresSection" [label="finProgresSection", fillcolor="#96a86d33", color="#96a86d"];
+    "recalculerAvecProgression" [label="recalculerAvecProgression", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_78" {
-    label="js/rendu.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
-    "signalerTravail" [label="signalerTravail", fillcolor="#6da8a433", color="#6da8a4"];
-    "renderAll" [label="renderAll", fillcolor="#6da8a433", color="#6da8a4"];
+  subgraph "cluster_118" {
+    label="js/entete.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "entete.js (chargement)" [label="chargement du module", fillcolor="#6da8a433", color="#6da8a4", shape=note];
+    "listeDeLOngletCourant" [label="listeDeLOngletCourant", fillcolor="#6da8a433", color="#6da8a4"];
+    "majBoutonAffichage" [label="majBoutonAffichage", fillcolor="#6da8a433", color="#6da8a4"];
+    "majHauteurEntete" [label="majHauteurEntete", fillcolor="#6da8a433", color="#6da8a4"];
+    "renderTop" [label="renderTop", fillcolor="#6da8a433", color="#6da8a4"];
+    "renderOnglets" [label="renderOnglets", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_79" {
-    label="js/fenFormat.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
-    "resumeFormat" [label="resumeFormat", fillcolor="#a89b6d33", color="#a89b6d"];
-    "majResumeFormat" [label="majResumeFormat", fillcolor="#a89b6d33", color="#a89b6d"];
-    "corpsFormat" [label="corpsFormat", fillcolor="#a89b6d33", color="#a89b6d"];
-    "majFenetreFormat" [label="majFenetreFormat", fillcolor="#a89b6d33", color="#a89b6d"];
-    "openFormatModal" [label="openFormatModal", fillcolor="#a89b6d33", color="#a89b6d"];
+  subgraph "cluster_119" {
+    label="js/rendu.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "signalerTravail" [label="signalerTravail", fillcolor="#a89b6d33", color="#a89b6d"];
+    "renderAll" [label="renderAll", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_80" {
-    label="js/fenNuage.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
-    "nuageQuand" [label="nuageQuand", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageOu" [label="nuageOu", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageConflits" [label="nuageConflits", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageEtatLigne" [label="nuageEtatLigne", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageDetail" [label="nuageDetail", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageAvertissementOrigine" [label="nuageAvertissementOrigine", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageCorpsDeconnecte" [label="nuageCorpsDeconnecte", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "nuageCorpsConnecte" [label="nuageCorpsConnecte", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "corpsNuage" [label="corpsNuage", fillcolor="#6d8ca833", color="#6d8ca8"];
+  subgraph "cluster_120" {
+    label="js/fenFormat.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "resumeFormat" [label="resumeFormat", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "majResumeFormat" [label="majResumeFormat", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "corpsFormat" [label="corpsFormat", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "majFenetreFormat" [label="majFenetreFormat", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "openFormatModal" [label="openFormatModal", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_81" {
-    label="js/fenParametres.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
-    "sectionParametres" [label="sectionParametres", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "corpsApparence" [label="corpsApparence", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "corpsCatalogue" [label="corpsCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "corpsParametres" [label="corpsParametres", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "majFenetreParametres" [label="majFenetreParametres", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "brancherParametres" [label="brancherParametres", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "appliquerParametres" [label="appliquerParametres", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "openParametresModal" [label="openParametresModal", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "appliquerFormat" [label="appliquerFormat", fillcolor="#8a7fa833", color="#8a7fa8"];
+  subgraph "cluster_121" {
+    label="js/fenNuage.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "nuageQuand" [label="nuageQuand", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageOu" [label="nuageOu", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageConflits" [label="nuageConflits", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageEtatLigne" [label="nuageEtatLigne", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageDetail" [label="nuageDetail", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageAvertissementOrigine" [label="nuageAvertissementOrigine", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageCorpsDeconnecte" [label="nuageCorpsDeconnecte", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "nuageCorpsConnecte" [label="nuageCorpsConnecte", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "corpsNuage" [label="corpsNuage", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_82" {
-    label="js/fenBudget.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
-    "champBudget" [label="champBudget", fillcolor="#a8846d33", color="#a8846d"];
-    "corpsBudget" [label="corpsBudget", fillcolor="#a8846d33", color="#a8846d"];
-    "saisieBudget" [label="saisieBudget", fillcolor="#a8846d33", color="#a8846d"];
-    "majResumeBudget" [label="majResumeBudget", fillcolor="#a8846d33", color="#a8846d"];
-    "appliquerBudget" [label="appliquerBudget", fillcolor="#a8846d33", color="#a8846d"];
-    "openBudgetModal" [label="openBudgetModal", fillcolor="#a8846d33", color="#a8846d"];
+  subgraph "cluster_122" {
+    label="js/fenParametres.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "sectionParametres" [label="sectionParametres", fillcolor="#a8846d33", color="#a8846d"];
+    "corpsApparence" [label="corpsApparence", fillcolor="#a8846d33", color="#a8846d"];
+    "corpsCatalogue" [label="corpsCatalogue", fillcolor="#a8846d33", color="#a8846d"];
+    "corpsParametres" [label="corpsParametres", fillcolor="#a8846d33", color="#a8846d"];
+    "majFenetreParametres" [label="majFenetreParametres", fillcolor="#a8846d33", color="#a8846d"];
+    "brancherParametres" [label="brancherParametres", fillcolor="#a8846d33", color="#a8846d"];
+    "appliquerParametres" [label="appliquerParametres", fillcolor="#a8846d33", color="#a8846d"];
+    "openParametresModal" [label="openParametresModal", fillcolor="#a8846d33", color="#a8846d"];
+    "appliquerFormat" [label="appliquerFormat", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_83" {
-    label="js/fenDeck.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
-    "dossierEnConfig" [label="dossierEnConfig", fillcolor="#6da88c33", color="#6da88c"];
-    "champDeck" [label="champDeck", fillcolor="#6da88c33", color="#6da88c"];
-    "ligneRestriction" [label="ligneRestriction", fillcolor="#6da88c33", color="#6da88c"];
-    "corpsDeck" [label="corpsDeck", fillcolor="#6da88c33", color="#6da88c"];
-    "resumeDeckConfig" [label="resumeDeckConfig", fillcolor="#6da88c33", color="#6da88c"];
-    "majResumeDeck" [label="majResumeDeck", fillcolor="#6da88c33", color="#6da88c"];
-    "majFenetreDeck" [label="majFenetreDeck", fillcolor="#6da88c33", color="#6da88c"];
-    "appliquerDeck" [label="appliquerDeck", fillcolor="#6da88c33", color="#6da88c"];
-    "openDeckModal" [label="openDeckModal", fillcolor="#6da88c33", color="#6da88c"];
+  subgraph "cluster_123" {
+    label="js/fenBudget.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "champBudget" [label="champBudget", fillcolor="#6da88c33", color="#6da88c"];
+    "corpsBudget" [label="corpsBudget", fillcolor="#6da88c33", color="#6da88c"];
+    "saisieBudget" [label="saisieBudget", fillcolor="#6da88c33", color="#6da88c"];
+    "majResumeBudget" [label="majResumeBudget", fillcolor="#6da88c33", color="#6da88c"];
+    "appliquerBudget" [label="appliquerBudget", fillcolor="#6da88c33", color="#6da88c"];
+    "openBudgetModal" [label="openBudgetModal", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_84" {
-    label="js/fenFiltres.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
-    "ligneFiltre" [label="ligneFiltre", fillcolor="#a86d8a33", color="#a86d8a"];
-    "corpsFiltres" [label="corpsFiltres", fillcolor="#a86d8a33", color="#a86d8a"];
-    "resumeFiltres" [label="resumeFiltres", fillcolor="#a86d8a33", color="#a86d8a"];
-    "majResumeFiltres" [label="majResumeFiltres", fillcolor="#a86d8a33", color="#a86d8a"];
-    "zoneProgression" [label="zoneProgression", fillcolor="#a86d8a33", color="#a86d8a"];
-    "majProgression" [label="majProgression", fillcolor="#a86d8a33", color="#a86d8a"];
-    "filtrerAvecProgression" [label="filtrerAvecProgression", fillcolor="#a86d8a33", color="#a86d8a"];
-    "majFenetreFiltres" [label="majFenetreFiltres", fillcolor="#a86d8a33", color="#a86d8a"];
-    "appliquerFiltres" [label="appliquerFiltres", fillcolor="#a86d8a33", color="#a86d8a"];
-    "openFiltresModal" [label="openFiltresModal", fillcolor="#a86d8a33", color="#a86d8a"];
+  subgraph "cluster_124" {
+    label="js/fenDeck.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "dossierEnConfig" [label="dossierEnConfig", fillcolor="#a86d8a33", color="#a86d8a"];
+    "champDeck" [label="champDeck", fillcolor="#a86d8a33", color="#a86d8a"];
+    "ligneRestriction" [label="ligneRestriction", fillcolor="#a86d8a33", color="#a86d8a"];
+    "corpsDeck" [label="corpsDeck", fillcolor="#a86d8a33", color="#a86d8a"];
+    "resumeDeckConfig" [label="resumeDeckConfig", fillcolor="#a86d8a33", color="#a86d8a"];
+    "majResumeDeck" [label="majResumeDeck", fillcolor="#a86d8a33", color="#a86d8a"];
+    "majFenetreDeck" [label="majFenetreDeck", fillcolor="#a86d8a33", color="#a86d8a"];
+    "appliquerDeck" [label="appliquerDeck", fillcolor="#a86d8a33", color="#a86d8a"];
+    "openDeckModal" [label="openDeckModal", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_85" {
-    label="js/fenAffichage.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
-    "indexColonnes" [label="indexColonnes", fillcolor="#96a86d33", color="#96a86d"];
-    "resumeAffichage" [label="resumeAffichage", fillcolor="#96a86d33", color="#96a86d"];
-    "corpsAffichage" [label="corpsAffichage", fillcolor="#96a86d33", color="#96a86d"];
-    "majFenetreAffichage" [label="majFenetreAffichage", fillcolor="#96a86d33", color="#96a86d"];
-    "reglageAffichage" [label="reglageAffichage", fillcolor="#96a86d33", color="#96a86d"];
-    "glisseColonnes" [label="glisseColonnes", fillcolor="#96a86d33", color="#96a86d"];
-    "verseAffichagePartout" [label="verseAffichagePartout", fillcolor="#96a86d33", color="#96a86d"];
-    "appliquerAffichage" [label="appliquerAffichage", fillcolor="#96a86d33", color="#96a86d"];
-    "openAffichageModal" [label="openAffichageModal", fillcolor="#96a86d33", color="#96a86d"];
+  subgraph "cluster_125" {
+    label="js/fenFiltres.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "ligneFiltre" [label="ligneFiltre", fillcolor="#96a86d33", color="#96a86d"];
+    "corpsFiltres" [label="corpsFiltres", fillcolor="#96a86d33", color="#96a86d"];
+    "resumeFiltres" [label="resumeFiltres", fillcolor="#96a86d33", color="#96a86d"];
+    "majResumeFiltres" [label="majResumeFiltres", fillcolor="#96a86d33", color="#96a86d"];
+    "zoneProgression" [label="zoneProgression", fillcolor="#96a86d33", color="#96a86d"];
+    "majProgression" [label="majProgression", fillcolor="#96a86d33", color="#96a86d"];
+    "filtrerAvecProgression" [label="filtrerAvecProgression", fillcolor="#96a86d33", color="#96a86d"];
+    "majFenetreFiltres" [label="majFenetreFiltres", fillcolor="#96a86d33", color="#96a86d"];
+    "appliquerFiltres" [label="appliquerFiltres", fillcolor="#96a86d33", color="#96a86d"];
+    "openFiltresModal" [label="openFiltresModal", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_86" {
-    label="js/fenCibles.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
-    "ligneCible" [label="ligneCible", fillcolor="#6da8a433", color="#6da8a4"];
-    "corpsCibles" [label="corpsCibles", fillcolor="#6da8a433", color="#6da8a4"];
-    "majFenetreCibles" [label="majFenetreCibles", fillcolor="#6da8a433", color="#6da8a4"];
-    "appliquerCibles" [label="appliquerCibles", fillcolor="#6da8a433", color="#6da8a4"];
-    "openCiblesModal" [label="openCiblesModal", fillcolor="#6da8a433", color="#6da8a4"];
+  subgraph "cluster_126" {
+    label="js/fenAffichage.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "indexColonnes" [label="indexColonnes", fillcolor="#6da8a433", color="#6da8a4"];
+    "resumeAffichage" [label="resumeAffichage", fillcolor="#6da8a433", color="#6da8a4"];
+    "corpsAffichage" [label="corpsAffichage", fillcolor="#6da8a433", color="#6da8a4"];
+    "majFenetreAffichage" [label="majFenetreAffichage", fillcolor="#6da8a433", color="#6da8a4"];
+    "reglageAffichage" [label="reglageAffichage", fillcolor="#6da8a433", color="#6da8a4"];
+    "glisseColonnes" [label="glisseColonnes", fillcolor="#6da8a433", color="#6da8a4"];
+    "verseAffichagePartout" [label="verseAffichagePartout", fillcolor="#6da8a433", color="#6da8a4"];
+    "appliquerAffichage" [label="appliquerAffichage", fillcolor="#6da8a433", color="#6da8a4"];
+    "openAffichageModal" [label="openAffichageModal", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_87" {
-    label="js/fenListes.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
-    "listeArchetypesHTML" [label="listeArchetypesHTML", fillcolor="#a89b6d33", color="#a89b6d"];
-    "majListeArchetypes" [label="majListeArchetypes", fillcolor="#a89b6d33", color="#a89b6d"];
-    "etatArchetypes" [label="etatArchetypes", fillcolor="#a89b6d33", color="#a89b6d"];
-    "listeSetsHTML" [label="listeSetsHTML", fillcolor="#a89b6d33", color="#a89b6d"];
-    "majListeSets" [label="majListeSets", fillcolor="#a89b6d33", color="#a89b6d"];
-    "etatSets" [label="etatSets", fillcolor="#a89b6d33", color="#a89b6d"];
+  subgraph "cluster_127" {
+    label="js/fenCibles.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "ligneCible" [label="ligneCible", fillcolor="#a89b6d33", color="#a89b6d"];
+    "corpsCibles" [label="corpsCibles", fillcolor="#a89b6d33", color="#a89b6d"];
+    "majFenetreCibles" [label="majFenetreCibles", fillcolor="#a89b6d33", color="#a89b6d"];
+    "appliquerCibles" [label="appliquerCibles", fillcolor="#a89b6d33", color="#a89b6d"];
+    "openCiblesModal" [label="openCiblesModal", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_88" {
-    label="js/boiteCatalogue.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
-    "octets" [label="octets", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "barreCatalogue" [label="barreCatalogue", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "corpsBoiteCatalogue" [label="corpsBoiteCatalogue", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "ouvrirBoiteCatalogue" [label="ouvrirBoiteCatalogue", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "majBoiteCatalogue" [label="majBoiteCatalogue", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "fermerBoiteCatalogue" [label="fermerBoiteCatalogue", fillcolor="#6d8ca833", color="#6d8ca8"];
+  subgraph "cluster_128" {
+    label="js/fenListes.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "listeArchetypesHTML" [label="listeArchetypesHTML", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "majListeArchetypes" [label="majListeArchetypes", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "etatArchetypes" [label="etatArchetypes", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "listeSetsHTML" [label="listeSetsHTML", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "majListeSets" [label="majListeSets", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "etatSets" [label="etatSets", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_89" {
-    label="js/fenExport.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
-    "exportModal" [label="exportModal", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "openWantsModal" [label="openWantsModal", fillcolor="#8a7fa833", color="#8a7fa8"];
-    "openWipeModal" [label="openWipeModal", fillcolor="#8a7fa833", color="#8a7fa8"];
+  subgraph "cluster_129" {
+    label="js/boiteCatalogue.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "octets" [label="octets", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "barreCatalogue" [label="barreCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "corpsBoiteCatalogue" [label="corpsBoiteCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "ouvrirBoiteCatalogue" [label="ouvrirBoiteCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "majBoiteCatalogue" [label="majBoiteCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
+    "fermerBoiteCatalogue" [label="fermerBoiteCatalogue", fillcolor="#8a7fa833", color="#8a7fa8"];
   }
-  subgraph "cluster_90" {
-    label="js/gestesDecks.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
-    "gestesDecks" [label="gestesDecks", fillcolor="#a8846d33", color="#a8846d"];
-    "saisieDeck" [label="saisieDeck", fillcolor="#a8846d33", color="#a8846d"];
-    "gestesDeckConfig" [label="gestesDeckConfig", fillcolor="#a8846d33", color="#a8846d"];
+  subgraph "cluster_130" {
+    label="js/fenExport.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "exportModal" [label="exportModal", fillcolor="#a8846d33", color="#a8846d"];
+    "openWantsModal" [label="openWantsModal", fillcolor="#a8846d33", color="#a8846d"];
+    "openWipeModal" [label="openWipeModal", fillcolor="#a8846d33", color="#a8846d"];
   }
-  subgraph "cluster_91" {
-    label="js/gestesVue.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
-    "gestesVue" [label="gestesVue", fillcolor="#6da88c33", color="#6da88c"];
+  subgraph "cluster_131" {
+    label="js/fenAdversaire.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "ouvreAdversaire" [label="ouvreAdversaire", fillcolor="#6da88c33", color="#6da88c"];
+    "majApercuAdversaire" [label="majApercuAdversaire", fillcolor="#6da88c33", color="#6da88c"];
+    "enregistreAdversaireFenetre" [label="enregistreAdversaireFenetre", fillcolor="#6da88c33", color="#6da88c"];
+    "supprimeAdversaire" [label="supprimeAdversaire", fillcolor="#6da88c33", color="#6da88c"];
+    "supprimeAdversaireOui" [label="supprimeAdversaireOui", fillcolor="#6da88c33", color="#6da88c"];
   }
-  subgraph "cluster_92" {
-    label="js/gestesReglages.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
-    "gestesReglages" [label="gestesReglages", fillcolor="#a86d8a33", color="#a86d8a"];
+  subgraph "cluster_132" {
+    label="js/fenComportement.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "aideFormules" [label="aideFormules", fillcolor="#a86d8a33", color="#a86d8a"];
+    "lectureHTML" [label="lectureHTML", fillcolor="#a86d8a33", color="#a86d8a"];
+    "ouvreComportement" [label="ouvreComportement", fillcolor="#a86d8a33", color="#a86d8a"];
+    "majApercuComportement" [label="majApercuComportement", fillcolor="#a86d8a33", color="#a86d8a"];
+    "appliqueComportement" [label="appliqueComportement", fillcolor="#a86d8a33", color="#a86d8a"];
+    "effaceComportement" [label="effaceComportement", fillcolor="#a86d8a33", color="#a86d8a"];
   }
-  subgraph "cluster_93" {
-    label="js/gestesDeck.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
-    "gestesDeck" [label="gestesDeck", fillcolor="#96a86d33", color="#96a86d"];
+  subgraph "cluster_133" {
+    label="js/fenJournal.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "ouvreJournal" [label="ouvreJournal", fillcolor="#96a86d33", color="#96a86d"];
   }
-  subgraph "cluster_94" {
-    label="js/gestesDonnees.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
-    "gestesDonnees" [label="gestesDonnees", fillcolor="#6da8a433", color="#6da8a4"];
+  subgraph "cluster_134" {
+    label="js/gestesDecks.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "gestesDecks" [label="gestesDecks", fillcolor="#6da8a433", color="#6da8a4"];
+    "saisieDeck" [label="saisieDeck", fillcolor="#6da8a433", color="#6da8a4"];
+    "gestesDeckConfig" [label="gestesDeckConfig", fillcolor="#6da8a433", color="#6da8a4"];
   }
-  subgraph "cluster_95" {
-    label="js/gestesNuage.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
-    "gestesNuage" [label="gestesNuage", fillcolor="#a89b6d33", color="#a89b6d"];
-    "gestesNuageChange" [label="gestesNuageChange", fillcolor="#a89b6d33", color="#a89b6d"];
+  subgraph "cluster_135" {
+    label="js/gestesVue.js"; fontsize=13; style="rounded,filled"; color="#a89b6d"; fillcolor="#a89b6d1a"; penwidth=1.4;
+    "gestesVue" [label="gestesVue", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_96" {
-    label="js/gestesGraphe.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
-    "gestesGraphe" [label="gestesGraphe", fillcolor="#6d8ca833", color="#6d8ca8"];
+  subgraph "cluster_136" {
+    label="js/gestesReglages.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
+    "gestesReglages" [label="gestesReglages", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-  subgraph "cluster_97" {
-    label="js/app.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
-    "app.js (chargement)" [label="chargement du module", fillcolor="#8a7fa833", color="#8a7fa8", shape=note];
-    "demarrer" [label="demarrer", fillcolor="#8a7fa833", color="#8a7fa8"];
+  subgraph "cluster_137" {
+    label="js/gestesDeck.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
+    "gestesDeck" [label="gestesDeck", fillcolor="#8a7fa833", color="#8a7fa8"];
+  }
+  subgraph "cluster_138" {
+    label="js/gestesDonnees.js"; fontsize=13; style="rounded,filled"; color="#a8846d"; fillcolor="#a8846d1a"; penwidth=1.4;
+    "gestesDonnees" [label="gestesDonnees", fillcolor="#a8846d33", color="#a8846d"];
+  }
+  subgraph "cluster_139" {
+    label="js/gestesNuage.js"; fontsize=13; style="rounded,filled"; color="#6da88c"; fillcolor="#6da88c1a"; penwidth=1.4;
+    "gestesNuage" [label="gestesNuage", fillcolor="#6da88c33", color="#6da88c"];
+    "gestesNuageChange" [label="gestesNuageChange", fillcolor="#6da88c33", color="#6da88c"];
+  }
+  subgraph "cluster_140" {
+    label="js/gestesGraphe.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
+    "gestesGraphe" [label="gestesGraphe", fillcolor="#a86d8a33", color="#a86d8a"];
+  }
+  subgraph "cluster_141" {
+    label="js/gestesSimulation.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
+    "gestesSimulation" [label="gestesSimulation", fillcolor="#96a86d33", color="#96a86d"];
+    "reglageSimulation" [label="reglageSimulation", fillcolor="#96a86d33", color="#96a86d"];
+  }
+  subgraph "cluster_142" {
+    label="js/app.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
+    "app.js (chargement)" [label="chargement du module", fillcolor="#6da8a433", color="#6da8a4", shape=note];
+    "demarrer" [label="demarrer", fillcolor="#6da8a433", color="#6da8a4"];
   }
 
   "qualifieDeclencheur" -> "sousTypesDeSort" [color="#8a7fa899"];
@@ -987,8 +1411,10 @@ digraph appels {
   "commandantsSecondairesPossibles" -> "deckEntries" [color="#8a7fa899"];
   "commandantsSecondairesPossibles" -> "peutCommander" [color="#8a7fa899"];
   "commandantsSecondaires" -> "commandantsSecondairesPossibles" [color="#8a7fa899"];
-  "initBuiltin" -> "registerCard" [color="#8a7fa899"];
-  "initBuiltin" -> "buildCard" [color="#8a7fa899"];
+  "carteLivree" -> "buildCard" [color="#8a7fa899"];
+  "carteLivree" -> "reanalyser" [color="#8a7fa899"];
+  "carteLivree" -> "registerCard" [color="#8a7fa899"];
+  "initBuiltin" -> "carteLivree" [style=dashed, color="#8a7fa866"];
   "mergeInto" -> "annexeListe" [color="#8a7fa899"];
   "mergeInto" -> "unindexCard" [color="#8a7fa899"];
   "renameCard" -> "norm" [color="#8a7fa899"];
@@ -996,12 +1422,12 @@ digraph appels {
   "renameCard" -> "unindexCard" [color="#8a7fa899"];
   "renameCard" -> "indexCard" [color="#8a7fa899"];
   "renameCard" -> "annexeListe" [style=dashed, color="#8a7fa866"];
-  "cartes.js (chargement)" -> "registerCard" [color="#8a7fa899"];
-  "cartes.js (chargement)" -> "buildCard" [color="#8a7fa899"];
   "cartes.js (chargement)" -> "norm" [color="#8a7fa899"];
+  "cartes.js (chargement)" -> "carteLivree" [style=dashed, color="#8a7fa866"];
   "classeLiens" -> "seuilLiensLarges" [color="#a8846d99"];
   "classeLiens" -> "cleLien" [color="#a8846d99"];
   "libelleFamillesLarges" -> "libelleFamilleLarge" [style=dashed, color="#a8846d66"];
+  "etat.js (chargement)" -> "adversaires" [style=dashed, color="#6da88c66"];
   "deckCourant" -> "clesDecks" [color="#a86d8a99"];
   "deckCourant" -> "cleDeckNeuve" [color="#a86d8a99"];
   "deckCourant" -> "deckNeuf" [color="#a86d8a99"];
@@ -1107,6 +1533,8 @@ digraph appels {
   "getCardOrAnalyzedRec" -> "find" [color="#8a7fa899"];
   "getCardOrAnalyzedRec" -> "buildCard" [color="#8a7fa899"];
   "getCardOrAnalyzedRec" -> "ordonneMana" [color="#8a7fa899"];
+  "getCardOrAnalyzedRec" -> "appliqueChampsJeu" [color="#8a7fa899"];
+  "getCardOrAnalyzedRec" -> "champsJeuRec" [color="#8a7fa899"];
   "recToucheNoeuds" -> "getCardOrAnalyzedRec" [color="#8a7fa899"];
   "recToucheNoeuds" -> "carteTouche" [color="#8a7fa899"];
   "notesCollectionAJour" -> "signatureSuggestions" [color="#a8846d99"];
@@ -1145,13 +1573,541 @@ digraph appels {
   "wishlist" -> "multiplicateurAchat" [color="#96a86d99"];
   "bilanWishlist" -> "wishlist" [color="#96a86d99"];
   "bilanWishlist" -> "clesDecks" [color="#96a86d99"];
-  "loadSymbology" -> "renderAll" [color="#6da8a499"];
-  "symBg" -> "pipHTML" [color="#6da8a499"];
-  "symBg" -> "esc" [color="#6da8a499"];
-  "symIcon" -> "pipHTML" [color="#6da8a499"];
-  "symIcon" -> "esc" [color="#6da8a499"];
-  "symIcon" -> "manaFb" [style=dotted, color="#6da8a466"];
-  "manaHTML" -> "symIcon" [color="#6da8a499"];
+  "normaliseOracle" -> "echappeRegex" [color="#6da8a499"];
+  "motCleSeul" -> "coutMana" [color="#a89b6d99"];
+  "ligneMotsCles" -> "motCleSeul" [color="#a89b6d99"];
+  "morceauCout" -> "coutMana" [color="#6d8ca899"];
+  "morceauCout" -> "lisDescripteur" [color="#6d8ca899"];
+  "morceauCout" -> "nombreOracle" [color="#6d8ca899"];
+  "coutActivation" -> "morceauCout" [color="#6d8ca899"];
+  "coutActivation" -> "coutManaVide" [color="#6d8ca899"];
+  "lisDescripteur" -> "descVide" [color="#8a7fa899"];
+  "lisDescripteur" -> "adjectifDesc" [color="#8a7fa899"];
+  "lisDescripteur" -> "singulier" [color="#8a7fa899"];
+  "lisReference" -> "nombreOracle" [color="#8a7fa899"];
+  "lisReference" -> "lisDescripteur" [color="#8a7fa899"];
+  "oracleCibles.js (chargement)" -> "nombreOracle" [color="#8a7fa899"];
+  "lisQuantite" -> "nombreOracle" [color="#a8846d99"];
+  "lisQuantite" -> "lisDescripteur" [color="#a8846d99"];
+  "oracleEffetsA.js (chargement)" -> "motif" [color="#a8846d99"];
+  "oracleEffetsA.js (chargement)" -> "lisSource" [color="#a8846d99"];
+  "oracleEffetsA.js (chargement)" -> "lisQuantite" [color="#a8846d99"];
+  "oracleEffetsA.js (chargement)" -> "lisReference" [color="#a8846d99"];
+  "oracleEffetsA.js (chargement)" -> "lisDescripteur" [color="#a8846d99"];
+  "oracleEffetsA.js (chargement)" -> "nombreOracle" [color="#a8846d99"];
+  "lisSigne" -> "lisQuantite" [color="#6da88c99"];
+  "compileProposition" -> "lisReference" [color="#6da88c99"];
+  "compileProposition" -> "coutMana" [color="#6da88c99"];
+  "compileProposition" -> "compileEffet" [color="#6da88c99"];
+  "compileProposition" -> "lisDescripteur" [color="#6da88c99"];
+  "compileEffet" -> "phrasesOracle" [color="#6da88c99"];
+  "compileEffet" -> "lisQuantite" [color="#6da88c99"];
+  "compileEffet" -> "propositionsOracle" [color="#6da88c99"];
+  "compileEffet" -> "compileProposition" [color="#6da88c99"];
+  "compileEffet" -> "remplaceX" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "motif" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "lisReference" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "lisQuantite" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "masqueMots" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "compileProposition" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "lisSigne" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "nombreOracle" [color="#6da88c99"];
+  "oracleEffetsB.js (chargement)" -> "lisDescripteur" [color="#6da88c99"];
+  "sujetDecl" -> "lisDescripteur" [color="#a86d8a99"];
+  "oracleDeclencheurs.js (chargement)" -> "declencheur" [color="#a86d8a99"];
+  "oracleDeclencheurs.js (chargement)" -> "sujetDecl" [color="#a86d8a99"];
+  "oracleDeclencheurs.js (chargement)" -> "lisDescripteur" [color="#a86d8a99"];
+  "lisEntree" -> "nombreOracle" [color="#96a86d99"];
+  "lisEntree" -> "lisDescripteur" [color="#96a86d99"];
+  "oracleStatiques.js (chargement)" -> "statique" [color="#96a86d99"];
+  "oracleStatiques.js (chargement)" -> "lisDescripteur" [color="#96a86d99"];
+  "oracleStatiques.js (chargement)" -> "bonusPT" [color="#96a86d99"];
+  "oracleStatiques.js (chargement)" -> "masqueMots" [color="#96a86d99"];
+  "compileEffetModal" -> "compileEffet" [color="#6da8a499"];
+  "compileEffetModal" -> "contexteOracle" [color="#6da8a499"];
+  "compileDeclenchee" -> "lisDeclencheur" [color="#6da8a499"];
+  "compileDeclenchee" -> "oteRythme" [color="#6da8a499"];
+  "compileDeclenchee" -> "contexteOracle" [color="#6da8a499"];
+  "compileDeclenchee" -> "apportDecl" [color="#6da8a499"];
+  "compileDeclenchee" -> "compileEffetModal" [color="#6da8a499"];
+  "compileActivee" -> "deuxPoints" [color="#6da8a499"];
+  "compileActivee" -> "oteRythme" [color="#6da8a499"];
+  "compileActivee" -> "contexteOracle" [color="#6da8a499"];
+  "compileActivee" -> "compileEffetModal" [color="#6da8a499"];
+  "compileActivee" -> "coutActivation" [color="#6da8a499"];
+  "compileLigne" -> "ligneMotsCles" [color="#6da8a499"];
+  "compileLigne" -> "coutActivation" [color="#6da8a499"];
+  "compileLigne" -> "lisDescripteur" [color="#6da8a499"];
+  "compileLigne" -> "compileDeclenchee" [color="#6da8a499"];
+  "compileLigne" -> "compileActivee" [color="#6da8a499"];
+  "compileLigne" -> "lisEntree" [color="#6da8a499"];
+  "compileLigne" -> "compileEffetModal" [color="#6da8a499"];
+  "compileLigne" -> "lisStatique" [color="#6da8a499"];
+  "compileLignes" -> "contexteOracle" [color="#6da8a499"];
+  "compileLignes" -> "compileLigne" [color="#6da8a499"];
+  "capacitesImplicites" -> "coutManaVide" [color="#a89b6d99"];
+  "compileDefinition" -> "faceJouee" [color="#a89b6d99"];
+  "compileDefinition" -> "lisTypeLigne" [color="#a89b6d99"];
+  "compileDefinition" -> "coutMana" [color="#a89b6d99"];
+  "compileDefinition" -> "coutManaVide" [color="#a89b6d99"];
+  "compileDefinition" -> "couleursDe" [color="#a89b6d99"];
+  "compileDefinition" -> "nombreFiche" [color="#a89b6d99"];
+  "compileDefinition" -> "normaliseOracle" [color="#a89b6d99"];
+  "compileDefinition" -> "compileLignes" [color="#a89b6d99"];
+  "compileDefinition" -> "verseLigne" [color="#a89b6d99"];
+  "compileDefinition" -> "capacitesImplicites" [color="#a89b6d99"];
+  "compileDefinition" -> "couverture" [color="#a89b6d99"];
+  "couverture" -> "etatLigne" [color="#a89b6d99"];
+  "couverture" -> "faceJouee" [color="#a89b6d99"];
+  "definitionDe" -> "empreinte" [color="#a89b6d99"];
+  "definitionDe" -> "compileDefinition" [color="#a89b6d99"];
+  "definitionJeton" -> "definitionDe" [color="#a89b6d99"];
+  "etatHasard" -> "tireHasard" [color="#6d8ca899"];
+  "entierHasard" -> "tireHasard" [color="#6d8ca899"];
+  "melangeHasard" -> "entierHasard" [color="#6d8ca899"];
+  "nouvellePartie" -> "etatHasard" [color="#8a7fa899"];
+  "nouvellePartie" -> "creeObjet" [color="#8a7fa899"];
+  "nouvellePartie" -> "nouvelleCarte" [color="#8a7fa899"];
+  "instantane" -> "car" [color="#8a7fa899"];
+  "deplace" -> "obj" [color="#8a7fa899"];
+  "deplace" -> "instantane" [color="#8a7fa899"];
+  "deplace" -> "retireDe" [color="#8a7fa899"];
+  "deplace" -> "tableauZone" [color="#8a7fa899"];
+  "deplace" -> "emet" [color="#8a7fa899"];
+  "deplace" -> "creeObjet" [color="#8a7fa899"];
+  "nomObj" -> "obj" [color="#8a7fa899"];
+  "adversaires" -> "vivants" [color="#8a7fa899"];
+  "champDe" -> "obj" [color="#8a7fa899"];
+  "piocheN" -> "obj" [color="#8a7fa899"];
+  "piocheN" -> "emet" [color="#8a7fa899"];
+  "statiquesEnJeu" -> "obj" [color="#a8846d99"];
+  "statiqueVise" -> "correspondBase" [color="#a8846d99"];
+  "car" -> "statiquesEnJeu" [color="#a8846d99"];
+  "car" -> "statiqueVise" [color="#a8846d99"];
+  "aMot" -> "car" [color="#a8846d99"];
+  "peutEngagerSoi" -> "estCreature" [color="#a8846d99"];
+  "peutEngagerSoi" -> "aMot" [color="#a8846d99"];
+  "caracsJugees" -> "car" [color="#6da88c99"];
+  "correspondObjet" -> "caracsJugees" [color="#6da88c99"];
+  "correspondObjet" -> "mvDe" [color="#6da88c99"];
+  "correspondObjet" -> "etatCombat" [color="#6da88c99"];
+  "correspond" -> "correspondObjet" [color="#6da88c99"];
+  "correspondBase" -> "correspondObjet" [color="#6da88c99"];
+  "ciblable" -> "car" [color="#6da88c99"];
+  "ciblesLegales" -> "joueurCorrespond" [color="#6da88c99"];
+  "ciblesLegales" -> "obj" [color="#6da88c99"];
+  "ciblesLegales" -> "correspond" [color="#6da88c99"];
+  "ciblesLegales" -> "ciblable" [color="#6da88c99"];
+  "cibleEncoreLegale" -> "joueurCorrespond" [color="#6da88c99"];
+  "cibleEncoreLegale" -> "obj" [color="#6da88c99"];
+  "cibleEncoreLegale" -> "correspond" [color="#6da88c99"];
+  "cibleEncoreLegale" -> "ciblable" [color="#6da88c99"];
+  "sourcesMana" -> "obj" [color="#a86d8a99"];
+  "sourcesMana" -> "peutEngagerSoi" [color="#a86d8a99"];
+  "sourcesMana" -> "compteObjets" [color="#a86d8a99"];
+  "sourcesMana" -> "estType" [color="#a86d8a99"];
+  "sourcesMana" -> "estCreature" [color="#a86d8a99"];
+  "compteObjets" -> "correspond" [color="#a86d8a99"];
+  "compteObjets" -> "obj" [color="#a86d8a99"];
+  "planPaiement" -> "sourcesMana" [color="#a86d8a99"];
+  "manaDispo" -> "sourcesMana" [color="#a86d8a99"];
+  "paieMana" -> "planPaiement" [color="#a86d8a99"];
+  "paieMana" -> "obj" [color="#a86d8a99"];
+  "paieMana" -> "deplace" [color="#a86d8a99"];
+  "paieMana" -> "ajouteMana" [color="#a86d8a99"];
+  "paieMana" -> "debite" [color="#a86d8a99"];
+  "sourceCtx" -> "obj" [color="#96a86d99"];
+  "sourceCtx" -> "suit" [color="#96a86d99"];
+  "passeOuPresent" -> "obj" [color="#96a86d99"];
+  "passeOuPresent" -> "suit" [color="#96a86d99"];
+  "resous" -> "sourceCtx" [color="#96a86d99"];
+  "resous" -> "passeOuPresent" [color="#96a86d99"];
+  "resous" -> "obj" [color="#96a86d99"];
+  "resous" -> "suit" [color="#96a86d99"];
+  "resous" -> "joueurCorrespond" [color="#96a86d99"];
+  "resous" -> "correspond" [color="#96a86d99"];
+  "joueursDe" -> "resous" [color="#96a86d99"];
+  "valeur" -> "resous" [color="#96a86d99"];
+  "valeur" -> "mvDe" [color="#96a86d99"];
+  "valeur" -> "car" [color="#96a86d99"];
+  "valeur" -> "compteObjets" [color="#96a86d99"];
+  "valeur" -> "sourceCtx" [color="#96a86d99"];
+  "gagneVie" -> "emet" [color="#96a86d99"];
+  "infligeDegats" -> "caracsJugees" [color="#96a86d99"];
+  "infligeDegats" -> "emet" [color="#96a86d99"];
+  "infligeDegats" -> "car" [color="#96a86d99"];
+  "infligeDegats" -> "estType" [color="#96a86d99"];
+  "infligeDegats" -> "estCreature" [color="#96a86d99"];
+  "infligeDegats" -> "gagneVie" [color="#96a86d99"];
+  "infligeDegats" -> "jn" [color="#96a86d99"];
+  "choisitCartes" -> "question" [color="#96a86d99"];
+  "sacrifie" -> "obj" [color="#96a86d99"];
+  "sacrifie" -> "instantane" [color="#96a86d99"];
+  "sacrifie" -> "deplace" [color="#96a86d99"];
+  "sacrifie" -> "emet" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "valeur" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "resous" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "sourceCtx" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "infligeDegats" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "car" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "joueursDe" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "gagneVie" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "piocheN" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "deplace" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "choisitCartes" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "emet" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "aMot" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "jn" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "retireDeLaPile" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "champDe" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "correspond" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "sacrifie" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "executeOps" [color="#96a86d99"];
+  "jeuOpsA.js (chargement)" -> "question" [color="#96a86d99"];
+  "metEnJeu" -> "obj" [color="#6da8a499"];
+  "metEnJeu" -> "champDe" [color="#6da8a499"];
+  "metEnJeu" -> "correspondBase" [color="#6da8a499"];
+  "metEnJeu" -> "question" [color="#6da8a499"];
+  "metEnJeu" -> "deplace" [color="#6da8a499"];
+  "proposePaiement" -> "joueursDe" [color="#6da8a499"];
+  "proposePaiement" -> "planPaiement" [color="#6da8a499"];
+  "proposePaiement" -> "question" [color="#6da8a499"];
+  "proposePaiement" -> "paieMana" [color="#6da8a499"];
+  "executeOps" -> "proposePaiement" [color="#6da8a499"];
+  "executeOps" -> "compteObjets" [color="#6da8a499"];
+  "executeOps" -> "sourceCtx" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "valeur" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "definitionJeton" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "joueursDe" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "nouvelleCarte" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "creeObjet" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "emet" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "jn" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "resous" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "obj" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "ajouteMana" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "sourceCtx" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "correspond" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "choisitCartes" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "melangeHasard" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "champDe" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "retireDeLaPile" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "metEnJeu" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "deplace" [color="#6da8a499"];
+  "jeuOpsB.js (chargement)" -> "retireDe" [color="#6da8a499"];
+  "rangDuSort" -> "defCorrespond" [color="#a89b6d99"];
+  "ecouteRepond" -> "obj" [color="#a89b6d99"];
+  "ecouteRepond" -> "correspond" [color="#a89b6d99"];
+  "ecouteRepond" -> "quiConvient" [color="#a89b6d99"];
+  "ecouteRepond" -> "defCorrespond" [color="#a89b6d99"];
+  "ecouteRepond" -> "rangDuSort" [color="#a89b6d99"];
+  "collecteDeclencheurs" -> "obj" [color="#a89b6d99"];
+  "collecteDeclencheurs" -> "ecoute" [color="#a89b6d99"];
+  "collecteDeclencheurs" -> "ecouteRepond" [color="#a89b6d99"];
+  "elimine" -> "jn" [color="#6d8ca899"];
+  "elimine" -> "obj" [color="#6d8ca899"];
+  "elimine" -> "retireDe" [color="#6d8ca899"];
+  "elimine" -> "deplace" [color="#6d8ca899"];
+  "elimine" -> "vivants" [color="#6d8ca899"];
+  "appliqueSBA" -> "elimine" [color="#6d8ca899"];
+  "appliqueSBA" -> "obj" [color="#6d8ca899"];
+  "appliqueSBA" -> "car" [color="#6d8ca899"];
+  "appliqueSBA" -> "estCreature" [color="#6d8ca899"];
+  "appliqueSBA" -> "estType" [color="#6d8ca899"];
+  "appliqueSBA" -> "correspondBase" [color="#6d8ca899"];
+  "appliqueSBA" -> "deplace" [color="#6d8ca899"];
+  "coutSort" -> "statiquesEnJeu" [color="#8a7fa899"];
+  "coutSort" -> "defCorrespond" [color="#8a7fa899"];
+  "effetCiblable" -> "ciblesLegales" [color="#8a7fa899"];
+  "coutAutrePossible" -> "peutEngagerSoi" [color="#8a7fa899"];
+  "coutAutrePossible" -> "champDe" [color="#8a7fa899"];
+  "coutAutrePossible" -> "correspond" [color="#8a7fa899"];
+  "actionsLegales" -> "enPhasePrincipale" [color="#8a7fa899"];
+  "actionsLegales" -> "estType" [color="#8a7fa899"];
+  "actionsLegales" -> "obj" [color="#8a7fa899"];
+  "actionsLegales" -> "estEphemere" [color="#8a7fa899"];
+  "actionsLegales" -> "planPaiement" [color="#8a7fa899"];
+  "actionsLegales" -> "coutSort" [color="#8a7fa899"];
+  "actionsLegales" -> "coutAutrePossible" [color="#8a7fa899"];
+  "actionsLegales" -> "effetCiblable" [color="#8a7fa899"];
+  "actionsLegales" -> "ciblesLegales" [color="#8a7fa899"];
+  "actionsLegales" -> "champDe" [color="#8a7fa899"];
+  "actionsLegales" -> "estCreature" [color="#8a7fa899"];
+  "actionsPossibles" -> "enPhasePrincipale" [color="#8a7fa899"];
+  "actionsPossibles" -> "actionsLegales" [color="#8a7fa899"];
+  "actionsPossibles" -> "estEphemere" [color="#8a7fa899"];
+  "actionsPossibles" -> "obj" [color="#8a7fa899"];
+  "choisitCibles" -> "ciblesLegales" [color="#8a7fa899"];
+  "choisitCibles" -> "question" [color="#8a7fa899"];
+  "prepareEffets" -> "ciblesLegales" [color="#8a7fa899"];
+  "prepareEffets" -> "question" [color="#8a7fa899"];
+  "prepareEffets" -> "choisitCibles" [color="#8a7fa899"];
+  "coutDeGarde" -> "obj" [color="#8a7fa899"];
+  "coutDeGarde" -> "car" [color="#8a7fa899"];
+  "paieAutre" -> "champDe" [color="#a8846d99"];
+  "paieAutre" -> "correspond" [color="#a8846d99"];
+  "paieAutre" -> "choisitCartes" [color="#a8846d99"];
+  "paieAutre" -> "obj" [color="#a8846d99"];
+  "paieAutre" -> "sacrifie" [color="#a8846d99"];
+  "paieAutre" -> "deplace" [color="#a8846d99"];
+  "paieAutre" -> "instantane" [color="#a8846d99"];
+  "maxX" -> "planPaiement" [color="#a8846d99"];
+  "lanceSort" -> "obj" [color="#a8846d99"];
+  "lanceSort" -> "coutSort" [color="#a8846d99"];
+  "lanceSort" -> "deplace" [color="#a8846d99"];
+  "lanceSort" -> "prepareEffets" [color="#a8846d99"];
+  "lanceSort" -> "choisitCibles" [color="#a8846d99"];
+  "lanceSort" -> "maxX" [color="#a8846d99"];
+  "lanceSort" -> "question" [color="#a8846d99"];
+  "lanceSort" -> "coutDeGarde" [color="#a8846d99"];
+  "lanceSort" -> "planPaiement" [color="#a8846d99"];
+  "lanceSort" -> "coutAutrePossible" [color="#a8846d99"];
+  "lanceSort" -> "paieAutre" [color="#a8846d99"];
+  "lanceSort" -> "paieMana" [color="#a8846d99"];
+  "lanceSort" -> "jn" [color="#a8846d99"];
+  "lanceSort" -> "emet" [color="#a8846d99"];
+  "lanceSort" -> "declencheursDeLancement" [color="#a8846d99"];
+  "activeCapacite" -> "obj" [color="#a8846d99"];
+  "activeCapacite" -> "prepareEffets" [color="#a8846d99"];
+  "activeCapacite" -> "question" [color="#a8846d99"];
+  "activeCapacite" -> "maxX" [color="#a8846d99"];
+  "activeCapacite" -> "coutAutrePossible" [color="#a8846d99"];
+  "activeCapacite" -> "planPaiement" [color="#a8846d99"];
+  "activeCapacite" -> "paieAutre" [color="#a8846d99"];
+  "activeCapacite" -> "paieMana" [color="#a8846d99"];
+  "activeCapacite" -> "jn" [color="#a8846d99"];
+  "equipe" -> "obj" [color="#a8846d99"];
+  "equipe" -> "choisitCibles" [color="#a8846d99"];
+  "equipe" -> "paieMana" [color="#a8846d99"];
+  "joueTerrain" -> "jn" [color="#a8846d99"];
+  "joueTerrain" -> "nomObj" [color="#a8846d99"];
+  "joueTerrain" -> "metEnJeu" [color="#a8846d99"];
+  "executeAction" -> "joueTerrain" [color="#a8846d99"];
+  "executeAction" -> "lanceSort" [color="#a8846d99"];
+  "executeAction" -> "activeCapacite" [color="#a8846d99"];
+  "executeAction" -> "equipe" [color="#a8846d99"];
+  "jeuActions.js (chargement)" -> "sourceCtx" [color="#a8846d99"];
+  "jeuActions.js (chargement)" -> "resous" [color="#a8846d99"];
+  "prepareDeclencheur" -> "obj" [color="#6da88c99"];
+  "prepareDeclencheur" -> "prepareEffets" [color="#6da88c99"];
+  "stabilise" -> "collecteDeclencheurs" [color="#6da88c99"];
+  "stabilise" -> "appliqueSBA" [color="#6da88c99"];
+  "stabilise" -> "ordreApnap" [color="#6da88c99"];
+  "stabilise" -> "prepareDeclencheur" [color="#6da88c99"];
+  "resoudre" -> "obj" [color="#6da88c99"];
+  "resoudre" -> "cibleEncoreLegale" [color="#6da88c99"];
+  "resoudre" -> "jn" [color="#6da88c99"];
+  "resoudre" -> "deplace" [color="#6da88c99"];
+  "resoudre" -> "metEnJeu" [color="#6da88c99"];
+  "resoudre" -> "executeOps" [color="#6da88c99"];
+  "priorite" -> "stabilise" [color="#6da88c99"];
+  "priorite" -> "suivantVivant" [color="#6da88c99"];
+  "priorite" -> "actionsPossibles" [color="#6da88c99"];
+  "priorite" -> "question" [color="#6da88c99"];
+  "priorite" -> "executeAction" [color="#6da88c99"];
+  "priorite" -> "vivants" [color="#6da88c99"];
+  "priorite" -> "resoudre" [color="#6da88c99"];
+  "peutAttaquer" -> "estCreature" [color="#a86d8a99"];
+  "peutAttaquer" -> "aMot" [color="#a86d8a99"];
+  "peutAttaquer" -> "car" [color="#a86d8a99"];
+  "peutBloquer" -> "car" [color="#a86d8a99"];
+  "peutBloquer" -> "estCreature" [color="#a86d8a99"];
+  "declareAttaquants" -> "champDe" [color="#a86d8a99"];
+  "declareAttaquants" -> "peutAttaquer" [color="#a86d8a99"];
+  "declareAttaquants" -> "adversaires" [color="#a86d8a99"];
+  "declareAttaquants" -> "obj" [color="#a86d8a99"];
+  "declareAttaquants" -> "estType" [color="#a86d8a99"];
+  "declareAttaquants" -> "question" [color="#a86d8a99"];
+  "declareAttaquants" -> "aMot" [color="#a86d8a99"];
+  "declareAttaquants" -> "emet" [color="#a86d8a99"];
+  "declareAttaquants" -> "jn" [color="#a86d8a99"];
+  "declareAttaquants" -> "nomObj" [color="#a86d8a99"];
+  "defenseurDe" -> "obj" [color="#a86d8a99"];
+  "declareBloqueurs" -> "ordreApnap" [color="#a86d8a99"];
+  "declareBloqueurs" -> "obj" [color="#a86d8a99"];
+  "declareBloqueurs" -> "defenseurDe" [color="#a86d8a99"];
+  "declareBloqueurs" -> "champDe" [color="#a86d8a99"];
+  "declareBloqueurs" -> "estCreature" [color="#a86d8a99"];
+  "declareBloqueurs" -> "car" [color="#a86d8a99"];
+  "declareBloqueurs" -> "question" [color="#a86d8a99"];
+  "declareBloqueurs" -> "peutBloquer" [color="#a86d8a99"];
+  "declareBloqueurs" -> "aMot" [color="#a86d8a99"];
+  "declareBloqueurs" -> "emet" [color="#a86d8a99"];
+  "initiativeEnJeu" -> "obj" [color="#a86d8a99"];
+  "initiativeEnJeu" -> "aMot" [color="#a86d8a99"];
+  "frappe" -> "car" [color="#a86d8a99"];
+  "repartition" -> "aMot" [color="#a86d8a99"];
+  "repartition" -> "car" [color="#a86d8a99"];
+  "degatsCombat" -> "obj" [color="#a86d8a99"];
+  "degatsCombat" -> "frappe" [color="#a86d8a99"];
+  "degatsCombat" -> "car" [color="#a86d8a99"];
+  "degatsCombat" -> "aMot" [color="#a86d8a99"];
+  "degatsCombat" -> "repartition" [color="#a86d8a99"];
+  "degatsCombat" -> "infligeDegats" [color="#a86d8a99"];
+  "degatsCombat" -> "priorite" [color="#a86d8a99"];
+  "degagement" -> "obj" [color="#96a86d99"];
+  "nettoyage" -> "choisitCartes" [color="#96a86d99"];
+  "nettoyage" -> "deplace" [color="#96a86d99"];
+  "nettoyage" -> "obj" [color="#96a86d99"];
+  "nettoyage" -> "collecteDeclencheurs" [color="#96a86d99"];
+  "nettoyage" -> "priorite" [color="#96a86d99"];
+  "etape" -> "degagement" [color="#96a86d99"];
+  "etape" -> "emet" [color="#96a86d99"];
+  "etape" -> "piocheN" [color="#96a86d99"];
+  "etape" -> "notePrincipale" [color="#96a86d99"];
+  "etape" -> "declareAttaquants" [color="#96a86d99"];
+  "etape" -> "declareBloqueurs" [color="#96a86d99"];
+  "etape" -> "initiativeEnJeu" [color="#96a86d99"];
+  "etape" -> "degatsCombat" [color="#96a86d99"];
+  "etape" -> "priorite" [color="#96a86d99"];
+  "etape" -> "finCombat" [color="#96a86d99"];
+  "etape" -> "nettoyage" [color="#96a86d99"];
+  "notePrincipale" -> "manaDispo" [color="#96a86d99"];
+  "notePrincipale" -> "champDe" [color="#96a86d99"];
+  "notePrincipale" -> "estType" [color="#96a86d99"];
+  "tour" -> "jn" [color="#96a86d99"];
+  "tour" -> "etape" [color="#96a86d99"];
+  "tour" -> "videReserves" [color="#96a86d99"];
+  "mulligans" -> "ordreApnap" [color="#6da8a499"];
+  "mulligans" -> "piocheN" [color="#6da8a499"];
+  "mulligans" -> "question" [color="#6da8a499"];
+  "mulligans" -> "obj" [color="#6da8a499"];
+  "mulligans" -> "melangeHasard" [color="#6da8a499"];
+  "mulligans" -> "choisitCartes" [color="#6da8a499"];
+  "mulligans" -> "retireDe" [color="#6da8a499"];
+  "mulligans" -> "jn" [color="#6da8a499"];
+  "partie" -> "melangeHasard" [color="#6da8a499"];
+  "partie" -> "mulligans" [color="#6da8a499"];
+  "partie" -> "tour" [color="#6da8a499"];
+  "partie" -> "suivantVivant" [color="#6da8a499"];
+  "partie" -> "jn" [color="#6da8a499"];
+  "creePartie" -> "nouvellePartie" [color="#a89b6d99"];
+  "creePartie" -> "partie" [color="#a89b6d99"];
+  "avance" -> "valideReponse" [color="#a89b6d99"];
+  "repondre" -> "avance" [color="#a89b6d99"];
+  "repondre" -> "valideReponse" [color="#a89b6d99"];
+  "joueJusquauBout" -> "creePartie" [color="#a89b6d99"];
+  "joueJusquauBout" -> "avance" [color="#a89b6d99"];
+  "valeurDef" -> "primeMots" [color="#6d8ca899"];
+  "valeurObjet" -> "estCreature" [color="#6d8ca899"];
+  "valeurObjet" -> "valeurDef" [color="#6d8ca899"];
+  "valeurObjet" -> "car" [color="#6d8ca899"];
+  "valeurObjet" -> "primeMots" [color="#6d8ca899"];
+  "forceDeFrappe" -> "champDe" [color="#6d8ca899"];
+  "forceDeFrappe" -> "car" [color="#6d8ca899"];
+  "forceDeFrappe" -> "estCreature" [style=dashed, color="#6d8ca866"];
+  "menace" -> "champDe" [color="#6d8ca899"];
+  "menace" -> "valeurObjet" [color="#6d8ca899"];
+  "estAMoi" -> "obj" [color="#6d8ca899"];
+  "terrainsEnMain" -> "estType" [color="#8a7fa899"];
+  "terrainsEnMain" -> "obj" [color="#8a7fa899"];
+  "iaMulligan" -> "terrainsEnMain" [color="#8a7fa899"];
+  "utiliteEnMain" -> "obj" [color="#8a7fa899"];
+  "utiliteEnMain" -> "champDe" [color="#8a7fa899"];
+  "utiliteEnMain" -> "estType" [color="#8a7fa899"];
+  "utiliteEnMain" -> "terrainsEnMain" [color="#8a7fa899"];
+  "utiliteEnMain" -> "manaDispo" [color="#8a7fa899"];
+  "utiliteEnMain" -> "valeurDef" [color="#8a7fa899"];
+  "iaCibles" -> "opsSurCible" [color="#8a7fa899"];
+  "iaCibles" -> "obj" [color="#8a7fa899"];
+  "iaCibles" -> "estAMoi" [color="#8a7fa899"];
+  "iaCibles" -> "valeurDef" [color="#8a7fa899"];
+  "iaCibles" -> "valeurObjet" [color="#8a7fa899"];
+  "iaCibles" -> "estCreature" [color="#8a7fa899"];
+  "iaCibles" -> "car" [color="#8a7fa899"];
+  "iaCibles" -> "opHostile" [style=dashed, color="#8a7fa866"];
+  "iaCartes" -> "obj" [color="#8a7fa899"];
+  "iaCartes" -> "utiliteEnMain" [color="#8a7fa899"];
+  "iaCartes" -> "valeurObjet" [color="#8a7fa899"];
+  "iaCartes" -> "estType" [color="#8a7fa899"];
+  "iaCartes" -> "champDe" [color="#8a7fa899"];
+  "iaCartes" -> "valeurDef" [color="#8a7fa899"];
+  "iaScrute" -> "champDe" [color="#8a7fa899"];
+  "iaScrute" -> "estType" [color="#8a7fa899"];
+  "iaScrute" -> "terrainsEnMain" [color="#8a7fa899"];
+  "iaScrute" -> "obj" [color="#8a7fa899"];
+  "iaOui" -> "manaDispo" [color="#8a7fa899"];
+  "iaModes" -> "opHostile" [color="#8a7fa899"];
+  "meilleureCibleHostile" -> "ciblesLegales" [color="#a8846d99"];
+  "meilleureCibleHostile" -> "estAMoi" [color="#a8846d99"];
+  "meilleureCibleHostile" -> "obj" [color="#a8846d99"];
+  "meilleureCibleHostile" -> "estCreature" [color="#a8846d99"];
+  "meilleureCibleHostile" -> "car" [color="#a8846d99"];
+  "meilleureCibleHostile" -> "valeurDef" [color="#a8846d99"];
+  "meilleureCibleHostile" -> "valeurObjet" [color="#a8846d99"];
+  "scoreEffet" -> "manaDispo" [color="#a8846d99"];
+  "scoreEffet" -> "opHostile" [color="#a8846d99"];
+  "scoreEffet" -> "meilleureCibleHostile" [color="#a8846d99"];
+  "scoreEffet" -> "obj" [color="#a8846d99"];
+  "scoreEffet" -> "correspond" [color="#a8846d99"];
+  "scoreEffet" -> "valeurObjet" [color="#a8846d99"];
+  "scoreEffet" -> "valeurDef" [color="#a8846d99"];
+  "scoreEffet" -> "definitionJeton" [color="#a8846d99"];
+  "impactSort" -> "scoreEffet" [color="#a8846d99"];
+  "impactSort" -> "valeurDef" [color="#a8846d99"];
+  "impactSort" -> "meilleureCibleHostile" [color="#a8846d99"];
+  "impactSort" -> "champDe" [color="#a8846d99"];
+  "impactSort" -> "estCreature" [style=dashed, color="#a8846d66"];
+  "impactCapacite" -> "scoreEffet" [color="#a8846d99"];
+  "impactCapacite" -> "valeurObjet" [color="#a8846d99"];
+  "impactCapacite" -> "estCreature" [color="#a8846d99"];
+  "scoreTerrain" -> "obj" [color="#a8846d99"];
+  "scoreTerrain" -> "sourcesMana" [color="#a8846d99"];
+  "iaReponse" -> "suivantVivant" [color="#a8846d99"];
+  "iaReponse" -> "obj" [color="#a8846d99"];
+  "iaReponse" -> "valeurDef" [color="#a8846d99"];
+  "iaReponse" -> "champDe" [color="#a8846d99"];
+  "iaReponse" -> "scoreEffet" [color="#a8846d99"];
+  "iaReponse" -> "impactSort" [color="#a8846d99"];
+  "iaReponse" -> "impactCapacite" [color="#a8846d99"];
+  "iaReponse" -> "opHostile" [style=dashed, color="#a8846d66"];
+  "iaPriorite" -> "enPhasePrincipale" [color="#a8846d99"];
+  "iaPriorite" -> "iaReponse" [color="#a8846d99"];
+  "iaPriorite" -> "noteActivation" [color="#a8846d99"];
+  "iaPriorite" -> "scoreTerrain" [color="#a8846d99"];
+  "iaPriorite" -> "obj" [color="#a8846d99"];
+  "iaPriorite" -> "impactSort" [color="#a8846d99"];
+  "iaPriorite" -> "impactCapacite" [color="#a8846d99"];
+  "tue" -> "car" [color="#6da88c99"];
+  "choisitDefenseur" -> "menace" [color="#6da88c99"];
+  "choisitDefenseur" -> "forceDeFrappe" [color="#6da88c99"];
+  "iaAttaquants" -> "choisitDefenseur" [color="#6da88c99"];
+  "iaAttaquants" -> "champDe" [color="#6da88c99"];
+  "iaAttaquants" -> "estCreature" [color="#6da88c99"];
+  "iaAttaquants" -> "obj" [color="#6da88c99"];
+  "iaAttaquants" -> "car" [color="#6da88c99"];
+  "iaAttaquants" -> "adversaires" [color="#6da88c99"];
+  "iaAttaquants" -> "forceDeFrappe" [color="#6da88c99"];
+  "iaAttaquants" -> "peutBloquer" [color="#6da88c99"];
+  "iaAttaquants" -> "tue" [color="#6da88c99"];
+  "iaAttaquants" -> "valeurObjet" [color="#6da88c99"];
+  "iaBloqueurs" -> "obj" [color="#6da88c99"];
+  "iaBloqueurs" -> "valeurObjet" [color="#6da88c99"];
+  "iaBloqueurs" -> "aMot" [color="#6da88c99"];
+  "iaBloqueurs" -> "peutBloquer" [color="#6da88c99"];
+  "iaBloqueurs" -> "tue" [color="#6da88c99"];
+  "iaBloqueurs" -> "car" [color="#6da88c99"];
+  "agentIA" -> "etatHasard" [color="#a86d8a99"];
+  "agentIA" -> "brasse" [color="#a86d8a99"];
+  "agentIA" -> "iaPriorite" [color="#a86d8a99"];
+  "agentIA" -> "iaMulligan" [color="#a86d8a99"];
+  "agentIA" -> "iaCartes" [color="#a86d8a99"];
+  "agentIA" -> "iaScrute" [color="#a86d8a99"];
+  "agentIA" -> "iaCibles" [color="#a86d8a99"];
+  "agentIA" -> "iaOui" [color="#a86d8a99"];
+  "agentIA" -> "iaModes" [color="#a86d8a99"];
+  "agentIA" -> "iaAttaquants" [color="#a86d8a99"];
+  "agentIA" -> "iaBloqueurs" [color="#a86d8a99"];
+  "loadSymbology" -> "renderAll" [color="#96a86d99"];
+  "symBg" -> "pipHTML" [color="#96a86d99"];
+  "symBg" -> "esc" [color="#96a86d99"];
+  "symIcon" -> "pipHTML" [color="#96a86d99"];
+  "symIcon" -> "esc" [color="#96a86d99"];
+  "symIcon" -> "manaFb" [style=dotted, color="#96a86d66"];
+  "manaHTML" -> "symIcon" [color="#96a86d99"];
+  "champsJeuScryfall" -> "nombreOuRien" [color="#6da8a499"];
+  "colonnesJeu" -> "champsJeuScryfall" [color="#6da8a499"];
+  "jeuRestore" -> "appliqueChampsJeu" [color="#6da8a499"];
   "scryTarget" -> "frontFace" [color="#a89b6d99"];
   "scryTarget" -> "norm" [color="#a89b6d99"];
   "scryTarget" -> "loose" [color="#a89b6d99"];
@@ -1164,6 +2120,8 @@ digraph appels {
   "applyScryfall" -> "ordonneMana" [color="#a89b6d99"];
   "applyScryfall" -> "cleImpression" [color="#a89b6d99"];
   "applyScryfall" -> "reanalyser" [color="#a89b6d99"];
+  "applyScryfall" -> "appliqueChampsJeu" [color="#a89b6d99"];
+  "applyScryfall" -> "champsJeuScryfall" [color="#a89b6d99"];
   "applyScryfall" -> "buildCard" [color="#a89b6d99"];
   "applyScryfall" -> "registerCard" [color="#a89b6d99"];
   "applyScryfall" -> "renameCard" [color="#a89b6d99"];
@@ -1224,6 +2182,7 @@ digraph appels {
   "restaureDecks" -> "find" [color="#a8846d99"];
   "snapshot" -> "norm" [color="#6da88c99"];
   "snapshot" -> "impressionSnap" [color="#6da88c99"];
+  "snapshot" -> "jeuSnap" [color="#6da88c99"];
   "snapshot" -> "carteDansUnDeck" [color="#6da88c99"];
   "snapshot" -> "clesDecks" [color="#6da88c99"];
   "snapshot" -> "deckSnap" [style=dashed, color="#6da88c66"];
@@ -1237,6 +2196,7 @@ digraph appels {
   "restore" -> "buildCard" [color="#6da88c99"];
   "restore" -> "reanalyser" [color="#6da88c99"];
   "restore" -> "impressionRestore" [color="#6da88c99"];
+  "restore" -> "jeuRestore" [color="#6da88c99"];
   "restore" -> "majTexteOracle" [color="#6da88c99"];
   "restore" -> "restaureDecks" [color="#6da88c99"];
   "corpsSauvegarde" -> "esc" [color="#a86d8a99"];
@@ -1440,6 +2400,8 @@ digraph appels {
   "chargerGameChangers" -> "sauverGameChangers" [color="#a89b6d99"];
   "chargerGameChangers" -> "renderAll" [color="#a89b6d99"];
   "compacte" -> "codeLegalite" [color="#6d8ca899"];
+  "compacte" -> "colonnesJeu" [color="#6d8ca899"];
+  "nouveauSuivi" -> "avance" [color="#6d8ca899"];
   "nouveauSuivi" -> "majBoiteCatalogue" [color="#6d8ca899"];
   "fluxTexte" -> "estGzip" [color="#6d8ca899"];
   "fluxTexte" -> "compteurOctets" [color="#6d8ca899"];
@@ -1497,12 +2459,17 @@ digraph appels {
   "majCatalogue" -> "renderAll" [color="#8a7fa899"];
   "completeDepuisRec" -> "majTexteOracle" [color="#a8846d99"];
   "completeDepuisRec" -> "reanalyser" [color="#a8846d99"];
+  "completeDepuisRec" -> "appliqueChampsJeu" [color="#a8846d99"];
+  "completeDepuisRec" -> "champsJeuRec" [color="#a8846d99"];
   "completeDepuisRec" -> "noterSetsArchive" [color="#a8846d99"];
   "completeDepuisRec" -> "noterLegalArchive" [color="#a8846d99"];
   "carteDuCatalogue" -> "find" [color="#a8846d99"];
   "carteDuCatalogue" -> "completeDepuisRec" [color="#a8846d99"];
   "carteDuCatalogue" -> "registerCard" [color="#a8846d99"];
   "carteDuCatalogue" -> "buildCard" [color="#a8846d99"];
+  "carteDuCatalogue" -> "ordonneMana" [color="#a8846d99"];
+  "carteDuCatalogue" -> "appliqueChampsJeu" [color="#a8846d99"];
+  "carteDuCatalogue" -> "champsJeuRec" [color="#a8846d99"];
   "carteDuCatalogue" -> "noterLegalArchive" [color="#a8846d99"];
   "carteDuCatalogue" -> "reanalyser" [color="#a8846d99"];
   "signatureCandidats" -> "noeudsActifs" [color="#a8846d99"];
@@ -1599,6 +2566,8 @@ digraph appels {
   "signatureSuggestions" -> "tailleDe" [color="#6da8a499"];
   "suggestionsAJour" -> "signatureSuggestions" [color="#6da8a499"];
   "currentSuggestions" -> "suggestionsAJour" [color="#6da8a499"];
+  "currentSuggestions" -> "suggestionsVisibles" [color="#6da8a499"];
+  "currentSuggestions" -> "differerSuggestions" [color="#6da8a499"];
   "currentSuggestions" -> "vivierSuggestions" [color="#6da8a499"];
   "currentSuggestions" -> "noterVivier" [color="#6da8a499"];
   "currentSuggestions" -> "signatureSuggestions" [color="#6da8a499"];
@@ -1687,12 +2656,14 @@ digraph appels {
   "filetSuggestions" -> "suggestionsAJour" [color="#96a86d99"];
   "filetSuggestions" -> "recalculLong" [color="#96a86d99"];
   "filetSuggestions" -> "recalculerAvecProgression" [color="#96a86d99"];
+  "renderSuggestions" -> "lanceEdhrecSiBesoin" [color="#96a86d99"];
+  "renderSuggestions" -> "suggestionsVisibles" [color="#96a86d99"];
+  "renderSuggestions" -> "differerSuggestions" [color="#96a86d99"];
   "renderSuggestions" -> "filetSuggestions" [color="#96a86d99"];
   "renderSuggestions" -> "selectionSuggestions" [color="#96a86d99"];
   "renderSuggestions" -> "renderG" [color="#96a86d99"];
   "renderSuggestions" -> "renderH" [color="#96a86d99"];
   "renderSuggestions" -> "renderF" [color="#96a86d99"];
-  "renderSuggestions" -> "lanceEdhrecSiBesoin" [color="#96a86d99"];
   "renderG" -> "filetSuggestions" [color="#96a86d99"];
   "renderG" -> "selectionSuggestions" [color="#96a86d99"];
   "renderG" -> "poseCorps" [color="#96a86d99"];
@@ -1815,11 +2786,9 @@ digraph appels {
   "chercheCartes" -> "recToucheNoeuds" [color="#a8846d99"];
   "chercheCartes" -> "getCardOrAnalyzedRec" [color="#a8846d99"];
   "chercheCartes" -> "carteTouche" [color="#a8846d99"];
-  "resultatsHTML" -> "chercheCartes" [color="#a8846d99"];
-  "resultatsHTML" -> "noeudsActifs" [color="#a8846d99"];
-  "resultatsHTML" -> "norm" [color="#a8846d99"];
-  "resultatsHTML" -> "esc" [color="#a8846d99"];
-  "resultatsHTML" -> "find" [color="#a8846d99"];
+  "resultatsHTML" -> "lotParId" [color="#a8846d99"];
+  "resultatsHTML" -> "lotHTML" [color="#a8846d99"];
+  "resultatsHTML" -> "historiqueHTML" [color="#a8846d99"];
   "majResultats" -> "resultatsHTML" [color="#a8846d99"];
   "majResultats" -> "norm" [color="#a8846d99"];
   "majResultats" -> "chercheScryfall" [color="#a8846d99"];
@@ -2053,6 +3022,118 @@ digraph appels {
   "openCardModal" -> "openDialog" [color="#a8846d99"];
   "openCardModal" -> "ficheHTML" [color="#a8846d99"];
   "openCardModal" -> "enteteFiche" [color="#a8846d99"];
+  "ficheDeRec" -> "champsJeuRec" [color="#6da88c99"];
+  "ficheDeScryfall" -> "champsJeuScryfall" [color="#6da88c99"];
+  "ficheDeScryfall" -> "nombreOuRien" [color="#6da88c99"];
+  "indexArchive" -> "catalogueAbsent" [color="#6da88c99"];
+  "indexArchive" -> "norm" [color="#6da88c99"];
+  "ficheParNom" -> "norm" [color="#6da88c99"];
+  "ficheParNom" -> "find" [color="#6da88c99"];
+  "ficheParNom" -> "indexArchive" [color="#6da88c99"];
+  "ficheParNom" -> "ficheDeRec" [color="#6da88c99"];
+  "ficheParNom" -> "ficheDeCarte" [color="#6da88c99"];
+  "chargeSimCartes" -> "idbLire" [color="#6da88c99"];
+  "chargeSimCartes" -> "norm" [color="#6da88c99"];
+  "rangeSimCartes" -> "idbEcrire" [color="#6da88c99"];
+  "chercheFichesScryfall" -> "ficheDeScryfall" [color="#6da88c99"];
+  "chercheFichesScryfall" -> "norm" [color="#6da88c99"];
+  "chercheFichesScryfall" -> "rangeSimCartes" [color="#6da88c99"];
+  "adversaireDepuisTexte" -> "parseMtgoList" [color="#a86d8a99"];
+  "enregistreAdversaire" -> "cleAdversaireNeuve" [color="#a86d8a99"];
+  "resolutionAdversaire" -> "ficheParNom" [color="#a86d8a99"];
+  "completeAdversaire" -> "chargeSimCartes" [color="#a86d8a99"];
+  "completeAdversaire" -> "resolutionAdversaire" [color="#a86d8a99"];
+  "completeAdversaire" -> "chercheFichesScryfall" [color="#a86d8a99"];
+  "signatureAdversaire" -> "empreinte" [color="#a86d8a99"];
+  "signatureDeck" -> "empreinte" [color="#a86d8a99"];
+  "siegeDepuisListe" -> "ficheParNom" [color="#96a86d99"];
+  "siegeDepuisListe" -> "definitionDe" [color="#96a86d99"];
+  "siegeDepuisListe" -> "comportementDe" [color="#96a86d99"];
+  "siegeDepuisListe" -> "vieDuFormat" [color="#96a86d99"];
+  "siegeDepuisListe" -> "bilanCouverture" [color="#96a86d99"];
+  "siegeDeck" -> "siegeDepuisListe" [color="#96a86d99"];
+  "siegeAdversaire" -> "siegeDepuisListe" [color="#96a86d99"];
+  "nomsManquants" -> "ficheParNom" [color="#96a86d99"];
+  "signatureComportements" -> "empreinte" [color="#96a86d99"];
+  "agrege" -> "wilson" [color="#6da8a499"];
+  "agrege" -> "statsCartes" [color="#6da8a499"];
+  "chargeResultats" -> "idbLire" [color="#a89b6d99"];
+  "rangeResultats" -> "idbEcrire" [color="#a89b6d99"];
+  "ajouteLot" -> "rangeResultats" [color="#a89b6d99"];
+  "supprimeLot" -> "rangeResultats" [color="#a89b6d99"];
+  "lotPerime" -> "signatureDeck" [color="#a89b6d99"];
+  "lotPerime" -> "signatureAdversaire" [color="#a89b6d99"];
+  "lotPerime" -> "signatureComportements" [color="#a89b6d99"];
+  "classement" -> "cleTable" [color="#a89b6d99"];
+  "graineDePartie" -> "brasse" [color="#6d8ca899"];
+  "lanceSimulation" -> "configSimulation" [color="#6d8ca899"];
+  "lanceSimulation" -> "obstacleSimulation" [color="#6d8ca899"];
+  "lanceSimulation" -> "toast" [color="#6d8ca899"];
+  "lanceSimulation" -> "renderK" [color="#6d8ca899"];
+  "lanceSimulation" -> "chargeSimCartes" [color="#6d8ca899"];
+  "lanceSimulation" -> "nomsManquants" [color="#6d8ca899"];
+  "lanceSimulation" -> "majProgressionSim" [color="#6d8ca899"];
+  "lanceSimulation" -> "chercheFichesScryfall" [color="#6d8ca899"];
+  "lanceSimulation" -> "siegeDeck" [color="#6d8ca899"];
+  "lanceSimulation" -> "signalerTravail" [color="#6d8ca899"];
+  "lanceSimulation" -> "placesPartie" [color="#6d8ca899"];
+  "lanceSimulation" -> "graineDePartie" [color="#6d8ca899"];
+  "lanceSimulation" -> "creePartie" [color="#6d8ca899"];
+  "lanceSimulation" -> "agentIA" [color="#6d8ca899"];
+  "lanceSimulation" -> "avance" [color="#6d8ca899"];
+  "lanceSimulation" -> "mesuresPartie" [color="#6d8ca899"];
+  "lanceSimulation" -> "rendMain" [color="#6d8ca899"];
+  "lanceSimulation" -> "terminerLot" [color="#6d8ca899"];
+  "lanceSimulation" -> "siegeAdversaire" [style=dashed, color="#6d8ca866"];
+  "terminerLot" -> "signalerTravail" [color="#6d8ca899"];
+  "terminerLot" -> "signatureDeck" [color="#6d8ca899"];
+  "terminerLot" -> "signatureAdversaire" [color="#6d8ca899"];
+  "terminerLot" -> "signatureComportements" [color="#6d8ca899"];
+  "terminerLot" -> "fiabilite" [color="#6d8ca899"];
+  "terminerLot" -> "agrege" [color="#6d8ca899"];
+  "terminerLot" -> "ajouteLot" [color="#6d8ca899"];
+  "terminerLot" -> "toast" [color="#6d8ca899"];
+  "terminerLot" -> "renderK" [color="#6d8ca899"];
+  "rejouePartie" -> "lotPerime" [color="#6d8ca899"];
+  "rejouePartie" -> "siegeDeck" [color="#6d8ca899"];
+  "rejouePartie" -> "placesPartie" [color="#6d8ca899"];
+  "rejouePartie" -> "graineDePartie" [color="#6d8ca899"];
+  "rejouePartie" -> "joueJusquauBout" [color="#6d8ca899"];
+  "rejouePartie" -> "agentIA" [color="#6d8ca899"];
+  "rejouePartie" -> "siegeAdversaire" [style=dashed, color="#6d8ca866"];
+  "couvertureTable" -> "signatureDeck" [color="#8a7fa899"];
+  "couvertureTable" -> "signatureAdversaire" [color="#8a7fa899"];
+  "couvertureTable" -> "signatureComportements" [color="#8a7fa899"];
+  "couvertureTable" -> "siegeDeck" [color="#8a7fa899"];
+  "couvertureTable" -> "siegeAdversaire" [color="#8a7fa899"];
+  "optionsHTML" -> "esc" [color="#8a7fa899"];
+  "tableHTML" -> "clesDecks" [color="#8a7fa899"];
+  "tableHTML" -> "optionsHTML" [color="#8a7fa899"];
+  "adversairesHTML" -> "resolutionAdversaire" [color="#8a7fa899"];
+  "adversairesHTML" -> "esc" [color="#8a7fa899"];
+  "adversairesHTML" -> "nbCartesAdversaire" [color="#8a7fa899"];
+  "couvertureHTML" -> "couvertureTable" [color="#8a7fa899"];
+  "couvertureHTML" -> "esc" [color="#8a7fa899"];
+  "couvertureHTML" -> "badgeCouverture" [color="#8a7fa899"];
+  "renderK" -> "configSimulation" [color="#8a7fa899"];
+  "renderK" -> "chargeResultats" [color="#8a7fa899"];
+  "renderK" -> "chargeSimCartes" [color="#8a7fa899"];
+  "renderK" -> "tableHTML" [color="#8a7fa899"];
+  "renderK" -> "adversairesHTML" [color="#8a7fa899"];
+  "renderK" -> "couvertureHTML" [color="#8a7fa899"];
+  "renderK" -> "resultatsHTML" [color="#8a7fa899"];
+  "renderK" -> "majProgressionSim" [color="#8a7fa899"];
+  "barresHTML" -> "esc" [color="#a8846d99"];
+  "cartesHTML" -> "esc" [color="#a8846d99"];
+  "partiesHTML" -> "esc" [color="#a8846d99"];
+  "lotHTML" -> "lotPerime" [color="#a8846d99"];
+  "lotHTML" -> "esc" [color="#a8846d99"];
+  "lotHTML" -> "barresHTML" [color="#a8846d99"];
+  "lotHTML" -> "cartesHTML" [color="#a8846d99"];
+  "lotHTML" -> "partiesHTML" [color="#a8846d99"];
+  "historiqueHTML" -> "classement" [color="#a8846d99"];
+  "historiqueHTML" -> "esc" [color="#a8846d99"];
+  "historiqueHTML" -> "lotPerime" [color="#a8846d99"];
   "refCarte" -> "esc" [color="#6da88c99"];
   "reprendTheme" -> "themeDuSysteme" [color="#a86d8a99"];
   "reprendTheme" -> "appliqueTheme" [color="#a86d8a99"];
@@ -2177,516 +3258,591 @@ digraph appels {
   "sugLigne" -> "eur" [color="#a8846d99"];
   "sugLigne" -> "acteSuggestion" [color="#a8846d99"];
   "releveAncre" -> "candidatsAncre" [color="#6da88c99"];
-  "recalculLong" -> "suggestionsAJour" [color="#a86d8a99"];
-  "recalculLong" -> "signatureCandidats" [color="#a86d8a99"];
-  "corpsBoiteRecalcul" -> "esc" [color="#a86d8a99"];
-  "corpsBoiteRecalcul" -> "zoneProgression" [color="#a86d8a99"];
-  "annonceRecalcul" -> "zoneProgression" [color="#a86d8a99"];
-  "annonceRecalcul" -> "openDialog" [color="#a86d8a99"];
-  "annonceRecalcul" -> "corpsBoiteRecalcul" [color="#a86d8a99"];
-  "finRecalcul" -> "closeDialog" [color="#a86d8a99"];
-  "progresSection" -> "signalerTravail" [color="#a86d8a99"];
-  "finProgresSection" -> "signalerTravail" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "releveAncre" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "geleSuggestions" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "recalculLong" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "renderAll" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "restaureAncre" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "progresSection" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "majProgression" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "annonceRecalcul" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "pause" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "prechauffeCandidats" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "prepareSuggestions" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "finProgresSection" [color="#a86d8a99"];
-  "recalculerAvecProgression" -> "finRecalcul" [color="#a86d8a99"];
-  "majBoutonAffichage" -> "listeDeLOngletCourant" [color="#96a86d99"];
-  "majBoutonAffichage" -> "esc" [color="#96a86d99"];
-  "majBoutonAffichage" -> "resumeAffichage" [color="#96a86d99"];
-  "renderTop" -> "majHauteurEntete" [color="#96a86d99"];
-  "renderTop" -> "fmt" [color="#96a86d99"];
-  "renderTop" -> "spent" [color="#96a86d99"];
-  "renderTop" -> "nomCombinaisonCouleurs" [color="#96a86d99"];
-  "renderTop" -> "symBg" [color="#96a86d99"];
-  "renderTop" -> "esc" [color="#96a86d99"];
-  "renderTop" -> "clesDecks" [color="#96a86d99"];
-  "renderTop" -> "deckCourant" [color="#96a86d99"];
-  "renderTop" -> "filtresActifs" [color="#96a86d99"];
-  "renderTop" -> "texteFiltresActifs" [color="#96a86d99"];
-  "renderTop" -> "restrictionsActives" [color="#96a86d99"];
-  "renderOnglets" -> "majBoutonAffichage" [color="#96a86d99"];
-  "entete.js (chargement)" -> "deckCourant" [color="#96a86d99"];
-  "entete.js (chargement)" -> "eur" [color="#96a86d99"];
-  "entete.js (chargement)" -> "majBoutonAffichage" [color="#96a86d99"];
-  "entete.js (chargement)" -> "majHauteurEntete" [color="#96a86d99"];
-  "entete.js (chargement)" -> "renderOnglets" [color="#96a86d99"];
-  "entete.js (chargement)" -> "scheduleSave" [color="#96a86d99"];
-  "entete.js (chargement)" -> "ongletDeSection" [color="#96a86d99"];
-  "signalerTravail" -> "ongletDeSection" [color="#6da8a499"];
-  "renderAll" -> "renderOnglets" [color="#6da8a499"];
-  "renderAll" -> "renderTop" [color="#6da8a499"];
-  "renderAll" -> "renderI" [color="#6da8a499"];
-  "renderAll" -> "renderJ" [color="#6da8a499"];
-  "renderAll" -> "renderB" [color="#6da8a499"];
-  "renderAll" -> "renderC" [color="#6da8a499"];
-  "renderAll" -> "renderD" [color="#6da8a499"];
-  "renderAll" -> "renderE" [color="#6da8a499"];
-  "renderAll" -> "renderSuggestions" [color="#6da8a499"];
-  "renderAll" -> "scheduleSave" [color="#6da8a499"];
-  "resumeFormat" -> "fmt" [color="#a89b6d99"];
-  "majResumeFormat" -> "avecBrouillon" [color="#a89b6d99"];
-  "majResumeFormat" -> "resumeFormat" [style=dashed, color="#a89b6d66"];
-  "corpsFormat" -> "avecBrouillon" [color="#a89b6d99"];
-  "corpsFormat" -> "esc" [color="#a89b6d99"];
-  "corpsFormat" -> "resumeFormat" [color="#a89b6d99"];
-  "corpsFormat" -> "fmt" [color="#a89b6d99"];
-  "corpsFormat" -> "customPanel" [color="#a89b6d99"];
-  "majFenetreFormat" -> "corpsFormat" [color="#a89b6d99"];
-  "openFormatModal" -> "openDialog" [color="#a89b6d99"];
-  "openFormatModal" -> "corpsFormat" [color="#a89b6d99"];
-  "openFormatModal" -> "zoneProgression" [color="#a89b6d99"];
-  "openFormatModal" -> "ouvreBrouillon" [color="#a89b6d99"];
-  "openFormatModal" -> "majFenetreFormat" [style=dashed, color="#a89b6d66"];
-  "nuageOu" -> "esc" [color="#6d8ca899"];
-  "nuageConflits" -> "esc" [color="#6d8ca899"];
-  "nuageConflits" -> "nuageOu" [color="#6d8ca899"];
-  "nuageEtatLigne" -> "esc" [color="#6d8ca899"];
-  "nuageDetail" -> "esc" [color="#6d8ca899"];
-  "nuageCorpsDeconnecte" -> "nuageAvertissementOrigine" [color="#6d8ca899"];
-  "nuageCorpsDeconnecte" -> "esc" [color="#6d8ca899"];
-  "nuageCorpsConnecte" -> "esc" [color="#6d8ca899"];
-  "nuageCorpsConnecte" -> "nuageEtatLigne" [color="#6d8ca899"];
-  "nuageCorpsConnecte" -> "nuageQuand" [color="#6d8ca899"];
-  "nuageCorpsConnecte" -> "nuagePoids" [color="#6d8ca899"];
-  "nuageCorpsConnecte" -> "nuageDetail" [color="#6d8ca899"];
-  "nuageCorpsConnecte" -> "nuageConflits" [color="#6d8ca899"];
-  "corpsNuage" -> "nuageConnecte" [color="#6d8ca899"];
-  "corpsNuage" -> "nuageCorpsConnecte" [color="#6d8ca899"];
-  "corpsNuage" -> "nuageCorpsDeconnecte" [color="#6d8ca899"];
-  "sectionParametres" -> "esc" [color="#8a7fa899"];
-  "corpsCatalogue" -> "avecBrouillon" [color="#8a7fa899"];
-  "corpsCatalogue" -> "blocCatalogue" [color="#8a7fa899"];
-  "corpsParametres" -> "sectionParametres" [color="#8a7fa899"];
-  "corpsParametres" -> "corpsSauvegarde" [color="#8a7fa899"];
-  "corpsParametres" -> "corpsNuage" [color="#8a7fa899"];
-  "corpsParametres" -> "corpsApparence" [color="#8a7fa899"];
-  "corpsParametres" -> "corpsCatalogue" [color="#8a7fa899"];
-  "majFenetreParametres" -> "corpsParametres" [color="#8a7fa899"];
-  "majFenetreParametres" -> "brancherParametres" [color="#8a7fa899"];
-  "brancherParametres" -> "brancherSauvegarde" [color="#8a7fa899"];
-  "brancherParametres" -> "brancherRestauration" [color="#8a7fa899"];
-  "brancherParametres" -> "brancherCatalogue" [color="#8a7fa899"];
-  "appliquerParametres" -> "verseBrouillon" [color="#8a7fa899"];
-  "appliquerParametres" -> "filtrerAvecProgression" [color="#8a7fa899"];
-  "appliquerParametres" -> "closeDialog" [color="#8a7fa899"];
-  "openParametresModal" -> "openDialog" [color="#8a7fa899"];
-  "openParametresModal" -> "corpsParametres" [color="#8a7fa899"];
-  "openParametresModal" -> "zoneProgression" [color="#8a7fa899"];
-  "openParametresModal" -> "ouvreBrouillon" [color="#8a7fa899"];
-  "openParametresModal" -> "brancherParametres" [color="#8a7fa899"];
-  "openParametresModal" -> "majFenetreParametres" [style=dashed, color="#8a7fa866"];
-  "appliquerFormat" -> "verseBrouillon" [color="#8a7fa899"];
-  "appliquerFormat" -> "filtrerAvecProgression" [color="#8a7fa899"];
-  "appliquerFormat" -> "closeDialog" [color="#8a7fa899"];
-  "champBudget" -> "esc" [color="#a8846d99"];
-  "corpsBudget" -> "avecBrouillon" [color="#a8846d99"];
-  "corpsBudget" -> "ligneAchats" [color="#a8846d99"];
-  "corpsBudget" -> "esc" [color="#a8846d99"];
-  "corpsBudget" -> "deckCourant" [color="#a8846d99"];
-  "corpsBudget" -> "champBudget" [color="#a8846d99"];
-  "corpsBudget" -> "ligneBudget" [color="#a8846d99"];
-  "saisieBudget" -> "modifieBrouillon" [color="#a8846d99"];
-  "saisieBudget" -> "majResumeBudget" [color="#a8846d99"];
-  "saisieBudget" -> "invaliderCandidats" [color="#a8846d99"];
-  "saisieBudget" -> "invaliderAchats" [color="#a8846d99"];
-  "saisieBudget" -> "refreshSuggestions" [color="#a8846d99"];
-  "majResumeBudget" -> "avecBrouillon" [color="#a8846d99"];
-  "majResumeBudget" -> "ligneBudget" [color="#a8846d99"];
-  "majResumeBudget" -> "ligneAchats" [color="#a8846d99"];
-  "appliquerBudget" -> "verseBrouillon" [color="#a8846d99"];
-  "appliquerBudget" -> "filtrerAvecProgression" [color="#a8846d99"];
-  "appliquerBudget" -> "closeDialog" [color="#a8846d99"];
-  "openBudgetModal" -> "openDialog" [color="#a8846d99"];
-  "openBudgetModal" -> "corpsBudget" [color="#a8846d99"];
-  "openBudgetModal" -> "zoneProgression" [color="#a8846d99"];
-  "openBudgetModal" -> "ouvreBrouillon" [color="#a8846d99"];
-  "openBudgetModal" -> "majResumeBudget" [style=dashed, color="#a8846d66"];
-  "dossierEnConfig" -> "deckCourant" [color="#6da88c99"];
-  "champDeck" -> "esc" [color="#6da88c99"];
-  "ligneRestriction" -> "dossierEnConfig" [color="#6da88c99"];
-  "ligneRestriction" -> "esc" [color="#6da88c99"];
-  "corpsDeck" -> "avecBrouillon" [color="#6da88c99"];
-  "corpsDeck" -> "dossierEnConfig" [color="#6da88c99"];
-  "corpsDeck" -> "couleursRestriction" [color="#6da88c99"];
-  "corpsDeck" -> "coutDeck" [color="#6da88c99"];
-  "corpsDeck" -> "esc" [color="#6da88c99"];
-  "corpsDeck" -> "champDeck" [color="#6da88c99"];
-  "corpsDeck" -> "eur" [color="#6da88c99"];
-  "corpsDeck" -> "symBg" [color="#6da88c99"];
-  "corpsDeck" -> "nomCombinaisonCouleurs" [color="#6da88c99"];
-  "corpsDeck" -> "targets" [color="#6da88c99"];
-  "corpsDeck" -> "rolesFiltre" [color="#6da88c99"];
-  "corpsDeck" -> "ligneRestriction" [color="#6da88c99"];
-  "corpsDeck" -> "resumeDeckConfig" [color="#6da88c99"];
-  "resumeDeckConfig" -> "avecBrouillon" [color="#6da88c99"];
-  "resumeDeckConfig" -> "dossierEnConfig" [color="#6da88c99"];
-  "resumeDeckConfig" -> "filtresActifs" [color="#6da88c99"];
-  "resumeDeckConfig" -> "couleursRestriction" [color="#6da88c99"];
-  "resumeDeckConfig" -> "esc" [color="#6da88c99"];
-  "resumeDeckConfig" -> "eur" [color="#6da88c99"];
-  "majResumeDeck" -> "resumeDeckConfig" [color="#6da88c99"];
-  "majFenetreDeck" -> "corpsDeck" [color="#6da88c99"];
-  "appliquerDeck" -> "verseBrouillon" [color="#6da88c99"];
-  "appliquerDeck" -> "renommerDeck" [color="#6da88c99"];
-  "appliquerDeck" -> "invaliderAchats" [color="#6da88c99"];
-  "appliquerDeck" -> "filtrerAvecProgression" [color="#6da88c99"];
-  "appliquerDeck" -> "closeDialog" [color="#6da88c99"];
-  "openDeckModal" -> "openDialog" [color="#6da88c99"];
-  "openDeckModal" -> "corpsDeck" [color="#6da88c99"];
-  "openDeckModal" -> "zoneProgression" [color="#6da88c99"];
-  "openDeckModal" -> "ouvreBrouillon" [color="#6da88c99"];
-  "openDeckModal" -> "majFenetreDeck" [style=dashed, color="#6da88c66"];
-  "ligneFiltre" -> "esc" [color="#a86d8a99"];
-  "corpsFiltres" -> "avecBrouillon" [color="#a86d8a99"];
-  "corpsFiltres" -> "symBg" [color="#a86d8a99"];
-  "corpsFiltres" -> "esc" [color="#a86d8a99"];
-  "corpsFiltres" -> "nomCombinaisonCouleurs" [color="#a86d8a99"];
-  "corpsFiltres" -> "setsFiltre" [color="#a86d8a99"];
-  "corpsFiltres" -> "libelleSet" [color="#a86d8a99"];
-  "corpsFiltres" -> "listeSetsHTML" [color="#a86d8a99"];
-  "corpsFiltres" -> "etatSets" [color="#a86d8a99"];
-  "corpsFiltres" -> "archetypesFiltre" [color="#a86d8a99"];
-  "corpsFiltres" -> "resumeArchetype" [color="#a86d8a99"];
-  "corpsFiltres" -> "libelleArchetype" [color="#a86d8a99"];
-  "corpsFiltres" -> "listeArchetypesHTML" [color="#a86d8a99"];
-  "corpsFiltres" -> "etatArchetypes" [color="#a86d8a99"];
-  "corpsFiltres" -> "targets" [color="#a86d8a99"];
-  "corpsFiltres" -> "rolesFiltre" [color="#a86d8a99"];
-  "corpsFiltres" -> "ligneFiltre" [color="#a86d8a99"];
-  "corpsFiltres" -> "resumeFiltres" [color="#a86d8a99"];
-  "resumeFiltres" -> "avecBrouillon" [color="#a86d8a99"];
-  "resumeFiltres" -> "filtered" [color="#a86d8a99"];
-  "resumeFiltres" -> "collectionCards" [color="#a86d8a99"];
-  "resumeFiltres" -> "filtresActifs" [color="#a86d8a99"];
-  "resumeFiltres" -> "esc" [color="#a86d8a99"];
-  "resumeFiltres" -> "texteFiltresActifs" [color="#a86d8a99"];
-  "resumeFiltres" -> "brouillonModifie" [color="#a86d8a99"];
-  "majResumeFiltres" -> "resumeFiltres" [color="#a86d8a99"];
-  "filtrerAvecProgression" -> "majProgression" [color="#a86d8a99"];
-  "filtrerAvecProgression" -> "pause" [color="#a86d8a99"];
-  "filtrerAvecProgression" -> "prechauffeCandidats" [color="#a86d8a99"];
-  "filtrerAvecProgression" -> "prepareSuggestions" [color="#a86d8a99"];
-  "filtrerAvecProgression" -> "renderAll" [color="#a86d8a99"];
-  "majFenetreFiltres" -> "corpsFiltres" [color="#a86d8a99"];
-  "appliquerFiltres" -> "verseBrouillon" [color="#a86d8a99"];
-  "appliquerFiltres" -> "filtrerAvecProgression" [color="#a86d8a99"];
-  "appliquerFiltres" -> "closeDialog" [color="#a86d8a99"];
-  "openFiltresModal" -> "chargerListeSets" [color="#a86d8a99"];
-  "openFiltresModal" -> "openDialog" [color="#a86d8a99"];
-  "openFiltresModal" -> "corpsFiltres" [color="#a86d8a99"];
-  "openFiltresModal" -> "zoneProgression" [color="#a86d8a99"];
-  "openFiltresModal" -> "ouvreBrouillon" [color="#a86d8a99"];
-  "openFiltresModal" -> "majFenetreFiltres" [color="#a86d8a99"];
-  "openFiltresModal" -> "majResumeFiltres" [color="#a86d8a99"];
-  "resumeAffichage" -> "colonnesDe" [color="#96a86d99"];
-  "resumeAffichage" -> "vueDe" [color="#96a86d99"];
-  "corpsAffichage" -> "avecBrouillon" [color="#96a86d99"];
-  "corpsAffichage" -> "colonnesDe" [color="#96a86d99"];
-  "corpsAffichage" -> "indexColonnes" [color="#96a86d99"];
-  "corpsAffichage" -> "vueDe" [color="#96a86d99"];
-  "corpsAffichage" -> "esc" [color="#96a86d99"];
-  "corpsAffichage" -> "resumeAffichage" [color="#96a86d99"];
-  "majFenetreAffichage" -> "corpsAffichage" [color="#96a86d99"];
-  "reglageAffichage" -> "modifieBrouillon" [color="#96a86d99"];
-  "reglageAffichage" -> "majFenetreAffichage" [color="#96a86d99"];
-  "glisseColonnes" -> "modifieBrouillon" [color="#96a86d99"];
-  "appliquerAffichage" -> "avecBrouillon" [color="#96a86d99"];
-  "appliquerAffichage" -> "vueDe" [color="#96a86d99"];
-  "appliquerAffichage" -> "colonnesDe" [color="#96a86d99"];
-  "appliquerAffichage" -> "modifieBrouillon" [color="#96a86d99"];
-  "appliquerAffichage" -> "verseAffichagePartout" [color="#96a86d99"];
-  "appliquerAffichage" -> "verseBrouillon" [color="#96a86d99"];
-  "appliquerAffichage" -> "closeDialog" [color="#96a86d99"];
-  "appliquerAffichage" -> "renderAll" [color="#96a86d99"];
-  "appliquerAffichage" -> "renderB" [color="#96a86d99"];
-  "appliquerAffichage" -> "renderE" [color="#96a86d99"];
-  "appliquerAffichage" -> "refreshSuggestions" [color="#96a86d99"];
-  "appliquerAffichage" -> "scheduleSave" [color="#96a86d99"];
-  "openAffichageModal" -> "indexColonnes" [color="#96a86d99"];
-  "openAffichageModal" -> "colonnesDe" [color="#96a86d99"];
-  "openAffichageModal" -> "openDialog" [color="#96a86d99"];
-  "openAffichageModal" -> "corpsAffichage" [color="#96a86d99"];
-  "openAffichageModal" -> "ouvreBrouillon" [color="#96a86d99"];
-  "openAffichageModal" -> "majFenetreAffichage" [style=dashed, color="#96a86d66"];
-  "ligneCible" -> "esc" [color="#6da8a499"];
-  "ligneCible" -> "fmt" [color="#6da8a499"];
-  "corpsCibles" -> "avecBrouillon" [color="#6da8a499"];
-  "corpsCibles" -> "ciblesParDefaut" [color="#6da8a499"];
-  "corpsCibles" -> "targets" [color="#6da8a499"];
-  "corpsCibles" -> "deckCounts" [color="#6da8a499"];
-  "corpsCibles" -> "ciblesReglees" [color="#6da8a499"];
-  "corpsCibles" -> "ligneCible" [color="#6da8a499"];
-  "corpsCibles" -> "esc" [color="#6da8a499"];
-  "corpsCibles" -> "fmt" [color="#6da8a499"];
-  "majFenetreCibles" -> "corpsCibles" [color="#6da8a499"];
-  "appliquerCibles" -> "verseBrouillon" [color="#6da8a499"];
-  "appliquerCibles" -> "filtrerAvecProgression" [color="#6da8a499"];
-  "appliquerCibles" -> "closeDialog" [color="#6da8a499"];
-  "openCiblesModal" -> "openDialog" [color="#6da8a499"];
-  "openCiblesModal" -> "corpsCibles" [color="#6da8a499"];
-  "openCiblesModal" -> "zoneProgression" [color="#6da8a499"];
-  "openCiblesModal" -> "ouvreBrouillon" [color="#6da8a499"];
-  "openCiblesModal" -> "majFenetreCibles" [style=dashed, color="#6da8a466"];
-  "listeArchetypesHTML" -> "archetypesFiltre" [color="#a89b6d99"];
-  "listeArchetypesHTML" -> "loose" [color="#a89b6d99"];
-  "listeArchetypesHTML" -> "archetypesDisponibles" [color="#a89b6d99"];
-  "listeArchetypesHTML" -> "esc" [color="#a89b6d99"];
-  "majListeArchetypes" -> "avecBrouillon" [color="#a89b6d99"];
-  "majListeArchetypes" -> "listeArchetypesHTML" [style=dashed, color="#a89b6d66"];
-  "etatArchetypes" -> "esc" [color="#a89b6d99"];
-  "listeSetsHTML" -> "setsFiltre" [color="#a89b6d99"];
-  "listeSetsHTML" -> "loose" [color="#a89b6d99"];
-  "listeSetsHTML" -> "esc" [color="#a89b6d99"];
-  "majListeSets" -> "avecBrouillon" [color="#a89b6d99"];
-  "majListeSets" -> "listeSetsHTML" [style=dashed, color="#a89b6d66"];
-  "etatSets" -> "esc" [color="#a89b6d99"];
-  "barreCatalogue" -> "esc" [color="#6d8ca899"];
-  "barreCatalogue" -> "octets" [color="#6d8ca899"];
-  "corpsBoiteCatalogue" -> "barreCatalogue" [color="#6d8ca899"];
-  "ouvrirBoiteCatalogue" -> "openDialog" [color="#6d8ca899"];
-  "ouvrirBoiteCatalogue" -> "corpsBoiteCatalogue" [color="#6d8ca899"];
-  "majBoiteCatalogue" -> "octets" [color="#6d8ca899"];
-  "fermerBoiteCatalogue" -> "closeDialog" [color="#6d8ca899"];
-  "exportModal" -> "deckEntries" [color="#8a7fa899"];
-  "exportModal" -> "collectionCards" [color="#8a7fa899"];
-  "exportModal" -> "fmt" [color="#8a7fa899"];
-  "exportModal" -> "annexeEntries" [color="#8a7fa899"];
-  "exportModal" -> "deckSize" [color="#8a7fa899"];
-  "exportModal" -> "openDialog" [color="#8a7fa899"];
-  "exportModal" -> "esc" [color="#8a7fa899"];
-  "exportModal" -> "eur" [color="#8a7fa899"];
-  "exportModal" -> "toast" [color="#8a7fa899"];
-  "openWantsModal" -> "wishlist" [color="#8a7fa899"];
-  "openWantsModal" -> "aAcheter" [color="#8a7fa899"];
-  "openWantsModal" -> "toast" [color="#8a7fa899"];
-  "openWantsModal" -> "openDialog" [color="#8a7fa899"];
-  "openWantsModal" -> "deckCourant" [color="#8a7fa899"];
-  "openWantsModal" -> "eur" [color="#8a7fa899"];
-  "openWantsModal" -> "esc" [color="#8a7fa899"];
-  "openWipeModal" -> "collectionCards" [color="#8a7fa899"];
-  "openWipeModal" -> "deckEntries" [color="#8a7fa899"];
-  "openWipeModal" -> "openDialog" [color="#8a7fa899"];
-  "openWipeModal" -> "closeDialog" [color="#8a7fa899"];
-  "openWipeModal" -> "recalculerAvecProgression" [color="#8a7fa899"];
-  "openWipeModal" -> "toast" [color="#8a7fa899"];
-  "gestesDecks" -> "creerDeck" [color="#a8846d99"];
-  "gestesDecks" -> "activerDeck" [color="#a8846d99"];
-  "gestesDecks" -> "openDeckModal" [color="#a8846d99"];
-  "gestesDecks" -> "toast" [color="#a8846d99"];
-  "gestesDecks" -> "appliquerDeck" [color="#a8846d99"];
-  "gestesDecks" -> "modifieBrouillon" [color="#a8846d99"];
-  "gestesDecks" -> "reinitRestrictions" [color="#a8846d99"];
-  "gestesDecks" -> "apresReglage" [color="#a8846d99"];
-  "gestesDecks" -> "majResumeDeck" [color="#a8846d99"];
-  "gestesDecks" -> "dupliquerDeck" [color="#a8846d99"];
-  "gestesDecks" -> "renderI" [color="#a8846d99"];
-  "gestesDecks" -> "scheduleSave" [color="#a8846d99"];
-  "gestesDecks" -> "bilanDeck" [color="#a8846d99"];
-  "gestesDecks" -> "openDialog" [color="#a8846d99"];
-  "gestesDecks" -> "esc" [color="#a8846d99"];
-  "gestesDecks" -> "supprimerDeck" [color="#a8846d99"];
-  "gestesDecks" -> "closeDialog" [color="#a8846d99"];
-  "gestesDecks" -> "recalculerAvecProgression" [color="#a8846d99"];
-  "gestesDecks" -> "deckCourant" [color="#a8846d99"];
-  "gestesDecks" -> "renderAll" [color="#a8846d99"];
-  "gestesDecks" -> "openWantsModal" [color="#a8846d99"];
-  "saisieDeck" -> "modifieBrouillon" [color="#a8846d99"];
-  "saisieDeck" -> "dossierEnConfig" [color="#a8846d99"];
-  "saisieDeck" -> "majFenetreDeck" [color="#a8846d99"];
-  "saisieDeck" -> "majResumeDeck" [color="#a8846d99"];
-  "saisieDeck" -> "majRestriction" [color="#a8846d99"];
-  "gestesDeckConfig" -> "modifieBrouillon" [color="#a8846d99"];
-  "gestesDeckConfig" -> "restrictionsDuDeck" [color="#a8846d99"];
-  "gestesDeckConfig" -> "majFenetreDeck" [color="#a8846d99"];
-  "gestesDeckConfig" -> "rolesFiltre" [color="#a8846d99"];
-  "gestesVue" -> "closeDialog" [color="#6da88c99"];
-  "gestesVue" -> "modifieBrouillon" [color="#6da88c99"];
-  "gestesVue" -> "apresReglage" [color="#6da88c99"];
-  "gestesVue" -> "renderD" [color="#6da88c99"];
-  "gestesVue" -> "invaliderCandidats" [color="#6da88c99"];
-  "gestesVue" -> "recalculerAvecProgression" [color="#6da88c99"];
-  "gestesVue" -> "openFiltresModal" [color="#6da88c99"];
-  "gestesVue" -> "majFenetreFiltres" [color="#6da88c99"];
-  "gestesVue" -> "basculerArchetype" [color="#6da88c99"];
-  "gestesVue" -> "avecBrouillon" [color="#6da88c99"];
-  "gestesVue" -> "archetypesAChargerEdhrec" [color="#6da88c99"];
-  "gestesVue" -> "chargerThemeEdhrec" [color="#6da88c99"];
-  "gestesVue" -> "basculerSet" [color="#6da88c99"];
-  "gestesVue" -> "setsACharger" [color="#6da88c99"];
-  "gestesVue" -> "chargerSetScryfall" [color="#6da88c99"];
-  "gestesVue" -> "effacerFiltre" [color="#6da88c99"];
-  "gestesVue" -> "faireDefilerVersion" [color="#6da88c99"];
-  "gestesVue" -> "basculerSourceVersions" [color="#6da88c99"];
-  "gestesVue" -> "choisirVersion" [color="#6da88c99"];
-  "gestesReglages" -> "appliquerFiltres" [color="#a86d8a99"];
-  "gestesReglages" -> "interrompreCatalogue" [color="#a86d8a99"];
-  "gestesReglages" -> "openAffichageModal" [color="#a86d8a99"];
-  "gestesReglages" -> "appliquerAffichage" [color="#a86d8a99"];
-  "gestesReglages" -> "appliquerFormat" [color="#a86d8a99"];
-  "gestesReglages" -> "openParametresModal" [color="#a86d8a99"];
-  "gestesReglages" -> "appliquerParametres" [color="#a86d8a99"];
-  "gestesReglages" -> "openBudgetModal" [color="#a86d8a99"];
-  "gestesReglages" -> "appliquerBudget" [color="#a86d8a99"];
-  "gestesReglages" -> "modifieBrouillon" [color="#a86d8a99"];
-  "gestesReglages" -> "reinitFiltres" [color="#a86d8a99"];
-  "gestesReglages" -> "apresReglage" [color="#a86d8a99"];
-  "gestesReglages" -> "toast" [color="#a86d8a99"];
-  "gestesReglages" -> "openFormatModal" [color="#a86d8a99"];
-  "gestesReglages" -> "openCiblesModal" [color="#a86d8a99"];
-  "gestesReglages" -> "appliquerCibles" [color="#a86d8a99"];
-  "gestesReglages" -> "reinitCibles" [color="#a86d8a99"];
-  "gestesReglages" -> "majFenetreCibles" [color="#a86d8a99"];
-  "gestesReglages" -> "fmt" [color="#a86d8a99"];
-  "gestesReglages" -> "basculerRole" [color="#a86d8a99"];
-  "gestesReglages" -> "listeSug" [color="#a86d8a99"];
-  "gestesReglages" -> "selectionSuggestions" [color="#a86d8a99"];
-  "gestesReglages" -> "defautSug" [color="#a86d8a99"];
-  "gestesReglages" -> "groupeCartes" [color="#a86d8a99"];
-  "gestesReglages" -> "cleLimiteSug" [color="#a86d8a99"];
-  "gestesReglages" -> "refreshSuggestions" [color="#a86d8a99"];
-  "gestesDeck" -> "geleSuggestions" [color="#96a86d99"];
-  "gestesDeck" -> "addToDeck" [color="#96a86d99"];
-  "gestesDeck" -> "openCardModal" [color="#96a86d99"];
-  "gestesDeck" -> "removeFromDeck" [color="#96a86d99"];
-  "gestesDeck" -> "scheduleSave" [color="#96a86d99"];
-  "gestesDeck" -> "renderB" [color="#96a86d99"];
-  "gestesDeck" -> "versAnnexe" [color="#96a86d99"];
-  "gestesDeck" -> "retirerAnnexe" [color="#96a86d99"];
-  "gestesDeck" -> "openDialog" [color="#96a86d99"];
-  "gestesDeck" -> "annexeSize" [color="#96a86d99"];
-  "gestesDeck" -> "esc" [color="#96a86d99"];
-  "gestesDeck" -> "closeDialog" [color="#96a86d99"];
-  "gestesDeck" -> "viderAnnexe" [color="#96a86d99"];
-  "gestesDeck" -> "recalculerAvecProgression" [color="#96a86d99"];
-  "gestesDeck" -> "buyCard" [color="#96a86d99"];
-  "gestesDeck" -> "signatureCommandants" [color="#96a86d99"];
-  "gestesDeck" -> "apresReglage" [color="#96a86d99"];
-  "gestesDeck" -> "degeleSuggestions" [color="#96a86d99"];
-  "gestesDeck" -> "renderSuggestions" [color="#96a86d99"];
-  "gestesDeck" -> "openWantsModal" [color="#96a86d99"];
-  "gestesDeck" -> "toast" [color="#96a86d99"];
-  "gestesDeck" -> "find" [color="#96a86d99"];
-  "gestesDeck" -> "invaliderCandidats" [color="#96a86d99"];
-  "gestesDeck" -> "poseParcoursFiche" [color="#96a86d99"];
-  "gestesDeck" -> "ficheVoisine" [color="#96a86d99"];
-  "gestesDeck" -> "majApercu" [color="#96a86d99"];
-  "gestesDonnees" -> "save" [color="#6da8a499"];
-  "gestesDonnees" -> "toast" [color="#6da8a499"];
-  "gestesDonnees" -> "snapshot" [color="#6da8a499"];
-  "gestesDonnees" -> "openDialog" [color="#6da8a499"];
-  "gestesDonnees" -> "nuageConnecte" [color="#6da8a499"];
-  "gestesDonnees" -> "nuageDeconnecte" [color="#6da8a499"];
-  "gestesDonnees" -> "idbVider" [color="#6da8a499"];
-  "gestesDonnees" -> "idbOublier" [color="#6da8a499"];
-  "gestesDonnees" -> "annexeListe" [color="#6da8a499"];
-  "gestesDonnees" -> "closeDialog" [color="#6da8a499"];
-  "gestesDonnees" -> "renderAll" [color="#6da8a499"];
-  "gestesDonnees" -> "telechargerCatalogue" [color="#6da8a499"];
-  "gestesDonnees" -> "majCatalogue" [color="#6da8a499"];
-  "gestesDonnees" -> "scheduleSave" [color="#6da8a499"];
-  "gestesDonnees" -> "invaliderCandidats" [color="#6da8a499"];
-  "gestesDonnees" -> "recalculerAvecProgression" [color="#6da8a499"];
-  "gestesDonnees" -> "rafraichirFenetreSauvegarde" [color="#6da8a499"];
-  "gestesDonnees" -> "loadEdhrec" [color="#6da8a499"];
-  "gestesDonnees" -> "chargerCatalogue" [color="#6da8a499"];
-  "gestesDonnees" -> "openAdd" [color="#6da8a499"];
-  "gestesDonnees" -> "openImport" [color="#6da8a499"];
-  "gestesDonnees" -> "enrichAllUnknown" [color="#6da8a499"];
-  "gestesDonnees" -> "openWipeModal" [color="#6da8a499"];
-  "gestesDonnees" -> "exportModal" [color="#6da8a499"];
-  "gestesNuage" -> "save" [color="#a89b6d99"];
-  "gestesNuage" -> "toast" [color="#a89b6d99"];
-  "gestesNuage" -> "dbxConnexion" [color="#a89b6d99"];
-  "gestesNuage" -> "nuageSynchro" [color="#a89b6d99"];
-  "gestesNuage" -> "nuageDiagnostic" [color="#a89b6d99"];
-  "gestesNuage" -> "openDialog" [color="#a89b6d99"];
-  "gestesNuage" -> "nuageDeconnecte" [color="#a89b6d99"];
-  "gestesNuage" -> "closeDialog" [color="#a89b6d99"];
-  "gestesNuage" -> "openParametresModal" [color="#a89b6d99"];
-  "gestesNuageChange" -> "nuageEcrire" [color="#a89b6d99"];
-  "gestesNuageChange" -> "nuageNomParDefaut" [color="#a89b6d99"];
-  "gestesNuageChange" -> "nuageSynchro" [color="#a89b6d99"];
-  "gestesNuageChange" -> "majFenetreParametres" [style=dashed, color="#a89b6d66"];
-  "gestesGraphe" -> "renderD" [color="#6d8ca899"];
-  "gestesGraphe" -> "invaliderCandidats" [color="#6d8ca899"];
-  "gestesGraphe" -> "renderSuggestions" [color="#6d8ca899"];
-  "gestesGraphe" -> "renderTop" [color="#6d8ca899"];
-  "gestesGraphe" -> "closeDialog" [color="#6d8ca899"];
-  "gestesGraphe" -> "find" [color="#6d8ca899"];
-  "gestesGraphe" -> "ajouterCarte" [color="#6d8ca899"];
-  "gestesGraphe" -> "majResultats" [color="#6d8ca899"];
-  "gestesGraphe" -> "pasRecherche" [color="#6d8ca899"];
-  "gestesGraphe" -> "norm" [color="#6d8ca899"];
-  "gestesGraphe" -> "registerCard" [color="#6d8ca899"];
-  "gestesGraphe" -> "carteDepuisScryfall" [color="#6d8ca899"];
-  "gestesGraphe" -> "buildCard" [color="#6d8ca899"];
-  "gestesGraphe" -> "renderB" [color="#6d8ca899"];
-  "gestesGraphe" -> "poseParcoursFiche" [color="#6d8ca899"];
-  "gestesGraphe" -> "openCardModal" [color="#6d8ca899"];
-  "demarrer" -> "initBuiltin" [color="#8a7fa899"];
-  "demarrer" -> "chargerSauvegarde" [color="#8a7fa899"];
-  "demarrer" -> "restore" [color="#8a7fa899"];
-  "demarrer" -> "reprendTheme" [color="#8a7fa899"];
-  "demarrer" -> "renderAll" [color="#8a7fa899"];
-  "demarrer" -> "loadSymbology" [color="#8a7fa899"];
-  "demarrer" -> "reprendreArchetypesEdhrec" [color="#8a7fa899"];
-  "demarrer" -> "archetypesARevoir" [color="#8a7fa899"];
-  "demarrer" -> "chargerArchetypesEdhrec" [color="#8a7fa899"];
-  "demarrer" -> "reprendreSets" [color="#8a7fa899"];
-  "demarrer" -> "reprendreGameChangers" [color="#8a7fa899"];
-  "demarrer" -> "gameChangersARevoir" [color="#8a7fa899"];
-  "demarrer" -> "chargerGameChangers" [color="#8a7fa899"];
-  "demarrer" -> "demarrerCatalogue" [color="#8a7fa899"];
-  "demarrer" -> "nuageDemarrer" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesDeckConfig" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesDecks" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesVue" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesReglages" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesDeck" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesDonnees" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesNuage" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesGraphe" [color="#8a7fa899"];
-  "app.js (chargement)" -> "montrerApercu" [color="#8a7fa899"];
-  "app.js (chargement)" -> "placerApercu" [color="#8a7fa899"];
-  "app.js (chargement)" -> "cacherApercu" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majListeArchetypes" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majListeSets" [color="#8a7fa899"];
-  "app.js (chargement)" -> "modifieBrouillon" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majFiltre" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majResumeFiltres" [color="#8a7fa899"];
-  "app.js (chargement)" -> "glisseColonnes" [color="#8a7fa899"];
-  "app.js (chargement)" -> "reglerCible" [color="#8a7fa899"];
-  "app.js (chargement)" -> "saisieRecherche" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majResultats" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majResumeFormat" [color="#8a7fa899"];
-  "app.js (chargement)" -> "renderAll" [color="#8a7fa899"];
-  "app.js (chargement)" -> "renderE" [color="#8a7fa899"];
-  "app.js (chargement)" -> "invaliderCandidats" [color="#8a7fa899"];
-  "app.js (chargement)" -> "refreshSuggestions" [color="#8a7fa899"];
-  "app.js (chargement)" -> "saisieBudget" [color="#8a7fa899"];
-  "app.js (chargement)" -> "saisieDeck" [color="#8a7fa899"];
-  "app.js (chargement)" -> "gestesNuageChange" [color="#8a7fa899"];
-  "app.js (chargement)" -> "apresReglage" [color="#8a7fa899"];
-  "app.js (chargement)" -> "basculeTheme" [color="#8a7fa899"];
-  "app.js (chargement)" -> "reglageAffichage" [color="#8a7fa899"];
-  "app.js (chargement)" -> "fmt" [color="#8a7fa899"];
-  "app.js (chargement)" -> "toast" [color="#8a7fa899"];
-  "app.js (chargement)" -> "fermetureBrouillon" [color="#8a7fa899"];
-  "app.js (chargement)" -> "closeDialog" [color="#8a7fa899"];
-  "app.js (chargement)" -> "molletteRecherche" [color="#8a7fa899"];
-  "app.js (chargement)" -> "appliquerFiltres" [color="#8a7fa899"];
-  "app.js (chargement)" -> "appliquerBudget" [color="#8a7fa899"];
-  "app.js (chargement)" -> "ficheVoisine" [color="#8a7fa899"];
-  "app.js (chargement)" -> "demarrer" [color="#8a7fa899"];
-  "app.js (chargement)" -> "majHauteurEntete" [style=dashed, color="#8a7fa866"];
+  "marqueOngletsPerimes" -> "ongletDeSection" [color="#a86d8a99"];
+  "differerSuggestions" -> "marqueOngletsPerimes" [color="#a86d8a99"];
+  "rattraperSuggestions" -> "suggestionsVisibles" [color="#a86d8a99"];
+  "rattraperSuggestions" -> "marqueOngletsPerimes" [color="#a86d8a99"];
+  "rattraperSuggestions" -> "suggestionsAJour" [color="#a86d8a99"];
+  "rattraperSuggestions" -> "renderSuggestions" [color="#a86d8a99"];
+  "rattraperSuggestions" -> "recalculerAvecProgression" [color="#a86d8a99"];
+  "recalculLong" -> "suggestionsVisibles" [color="#96a86d99"];
+  "recalculLong" -> "suggestionsAJour" [color="#96a86d99"];
+  "recalculLong" -> "signatureCandidats" [color="#96a86d99"];
+  "corpsBoiteRecalcul" -> "esc" [color="#96a86d99"];
+  "corpsBoiteRecalcul" -> "zoneProgression" [color="#96a86d99"];
+  "annonceRecalcul" -> "zoneProgression" [color="#96a86d99"];
+  "annonceRecalcul" -> "openDialog" [color="#96a86d99"];
+  "annonceRecalcul" -> "corpsBoiteRecalcul" [color="#96a86d99"];
+  "finRecalcul" -> "closeDialog" [color="#96a86d99"];
+  "progresSection" -> "signalerTravail" [color="#96a86d99"];
+  "finProgresSection" -> "signalerTravail" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "releveAncre" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "geleSuggestions" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "recalculLong" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "renderAll" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "restaureAncre" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "progresSection" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "majProgression" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "annonceRecalcul" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "pause" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "prechauffeCandidats" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "prepareSuggestions" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "finProgresSection" [color="#96a86d99"];
+  "recalculerAvecProgression" -> "finRecalcul" [color="#96a86d99"];
+  "majBoutonAffichage" -> "listeDeLOngletCourant" [color="#6da8a499"];
+  "majBoutonAffichage" -> "esc" [color="#6da8a499"];
+  "majBoutonAffichage" -> "resumeAffichage" [color="#6da8a499"];
+  "renderTop" -> "majHauteurEntete" [color="#6da8a499"];
+  "renderTop" -> "fmt" [color="#6da8a499"];
+  "renderTop" -> "spent" [color="#6da8a499"];
+  "renderTop" -> "nomCombinaisonCouleurs" [color="#6da8a499"];
+  "renderTop" -> "symBg" [color="#6da8a499"];
+  "renderTop" -> "esc" [color="#6da8a499"];
+  "renderTop" -> "clesDecks" [color="#6da8a499"];
+  "renderTop" -> "deckCourant" [color="#6da8a499"];
+  "renderTop" -> "filtresActifs" [color="#6da8a499"];
+  "renderTop" -> "texteFiltresActifs" [color="#6da8a499"];
+  "renderTop" -> "restrictionsActives" [color="#6da8a499"];
+  "renderOnglets" -> "majBoutonAffichage" [color="#6da8a499"];
+  "entete.js (chargement)" -> "deckCourant" [color="#6da8a499"];
+  "entete.js (chargement)" -> "eur" [color="#6da8a499"];
+  "entete.js (chargement)" -> "majBoutonAffichage" [color="#6da8a499"];
+  "entete.js (chargement)" -> "majHauteurEntete" [color="#6da8a499"];
+  "entete.js (chargement)" -> "renderOnglets" [color="#6da8a499"];
+  "entete.js (chargement)" -> "scheduleSave" [color="#6da8a499"];
+  "entete.js (chargement)" -> "rattraperSuggestions" [color="#6da8a499"];
+  "entete.js (chargement)" -> "renderK" [color="#6da8a499"];
+  "entete.js (chargement)" -> "ongletDeSection" [color="#6da8a499"];
+  "signalerTravail" -> "ongletDeSection" [color="#a89b6d99"];
+  "renderAll" -> "renderOnglets" [color="#a89b6d99"];
+  "renderAll" -> "renderTop" [color="#a89b6d99"];
+  "renderAll" -> "renderI" [color="#a89b6d99"];
+  "renderAll" -> "renderJ" [color="#a89b6d99"];
+  "renderAll" -> "renderB" [color="#a89b6d99"];
+  "renderAll" -> "renderC" [color="#a89b6d99"];
+  "renderAll" -> "renderD" [color="#a89b6d99"];
+  "renderAll" -> "renderE" [color="#a89b6d99"];
+  "renderAll" -> "renderSuggestions" [color="#a89b6d99"];
+  "renderAll" -> "renderK" [color="#a89b6d99"];
+  "renderAll" -> "scheduleSave" [color="#a89b6d99"];
+  "resumeFormat" -> "fmt" [color="#6d8ca899"];
+  "majResumeFormat" -> "avecBrouillon" [color="#6d8ca899"];
+  "majResumeFormat" -> "resumeFormat" [style=dashed, color="#6d8ca866"];
+  "corpsFormat" -> "avecBrouillon" [color="#6d8ca899"];
+  "corpsFormat" -> "esc" [color="#6d8ca899"];
+  "corpsFormat" -> "resumeFormat" [color="#6d8ca899"];
+  "corpsFormat" -> "fmt" [color="#6d8ca899"];
+  "corpsFormat" -> "customPanel" [color="#6d8ca899"];
+  "majFenetreFormat" -> "corpsFormat" [color="#6d8ca899"];
+  "openFormatModal" -> "openDialog" [color="#6d8ca899"];
+  "openFormatModal" -> "corpsFormat" [color="#6d8ca899"];
+  "openFormatModal" -> "zoneProgression" [color="#6d8ca899"];
+  "openFormatModal" -> "ouvreBrouillon" [color="#6d8ca899"];
+  "openFormatModal" -> "majFenetreFormat" [style=dashed, color="#6d8ca866"];
+  "nuageOu" -> "esc" [color="#8a7fa899"];
+  "nuageConflits" -> "esc" [color="#8a7fa899"];
+  "nuageConflits" -> "nuageOu" [color="#8a7fa899"];
+  "nuageEtatLigne" -> "esc" [color="#8a7fa899"];
+  "nuageDetail" -> "esc" [color="#8a7fa899"];
+  "nuageCorpsDeconnecte" -> "nuageAvertissementOrigine" [color="#8a7fa899"];
+  "nuageCorpsDeconnecte" -> "esc" [color="#8a7fa899"];
+  "nuageCorpsConnecte" -> "esc" [color="#8a7fa899"];
+  "nuageCorpsConnecte" -> "nuageEtatLigne" [color="#8a7fa899"];
+  "nuageCorpsConnecte" -> "nuageQuand" [color="#8a7fa899"];
+  "nuageCorpsConnecte" -> "nuagePoids" [color="#8a7fa899"];
+  "nuageCorpsConnecte" -> "nuageDetail" [color="#8a7fa899"];
+  "nuageCorpsConnecte" -> "nuageConflits" [color="#8a7fa899"];
+  "corpsNuage" -> "nuageConnecte" [color="#8a7fa899"];
+  "corpsNuage" -> "nuageCorpsConnecte" [color="#8a7fa899"];
+  "corpsNuage" -> "nuageCorpsDeconnecte" [color="#8a7fa899"];
+  "sectionParametres" -> "esc" [color="#a8846d99"];
+  "corpsCatalogue" -> "avecBrouillon" [color="#a8846d99"];
+  "corpsCatalogue" -> "blocCatalogue" [color="#a8846d99"];
+  "corpsParametres" -> "sectionParametres" [color="#a8846d99"];
+  "corpsParametres" -> "corpsSauvegarde" [color="#a8846d99"];
+  "corpsParametres" -> "corpsNuage" [color="#a8846d99"];
+  "corpsParametres" -> "corpsApparence" [color="#a8846d99"];
+  "corpsParametres" -> "corpsCatalogue" [color="#a8846d99"];
+  "majFenetreParametres" -> "corpsParametres" [color="#a8846d99"];
+  "majFenetreParametres" -> "brancherParametres" [color="#a8846d99"];
+  "brancherParametres" -> "brancherSauvegarde" [color="#a8846d99"];
+  "brancherParametres" -> "brancherRestauration" [color="#a8846d99"];
+  "brancherParametres" -> "brancherCatalogue" [color="#a8846d99"];
+  "appliquerParametres" -> "verseBrouillon" [color="#a8846d99"];
+  "appliquerParametres" -> "filtrerAvecProgression" [color="#a8846d99"];
+  "appliquerParametres" -> "closeDialog" [color="#a8846d99"];
+  "openParametresModal" -> "openDialog" [color="#a8846d99"];
+  "openParametresModal" -> "corpsParametres" [color="#a8846d99"];
+  "openParametresModal" -> "zoneProgression" [color="#a8846d99"];
+  "openParametresModal" -> "ouvreBrouillon" [color="#a8846d99"];
+  "openParametresModal" -> "brancherParametres" [color="#a8846d99"];
+  "openParametresModal" -> "majFenetreParametres" [style=dashed, color="#a8846d66"];
+  "appliquerFormat" -> "verseBrouillon" [color="#a8846d99"];
+  "appliquerFormat" -> "filtrerAvecProgression" [color="#a8846d99"];
+  "appliquerFormat" -> "closeDialog" [color="#a8846d99"];
+  "champBudget" -> "esc" [color="#6da88c99"];
+  "corpsBudget" -> "avecBrouillon" [color="#6da88c99"];
+  "corpsBudget" -> "ligneAchats" [color="#6da88c99"];
+  "corpsBudget" -> "esc" [color="#6da88c99"];
+  "corpsBudget" -> "deckCourant" [color="#6da88c99"];
+  "corpsBudget" -> "champBudget" [color="#6da88c99"];
+  "corpsBudget" -> "ligneBudget" [color="#6da88c99"];
+  "saisieBudget" -> "modifieBrouillon" [color="#6da88c99"];
+  "saisieBudget" -> "majResumeBudget" [color="#6da88c99"];
+  "saisieBudget" -> "invaliderCandidats" [color="#6da88c99"];
+  "saisieBudget" -> "invaliderAchats" [color="#6da88c99"];
+  "saisieBudget" -> "refreshSuggestions" [color="#6da88c99"];
+  "majResumeBudget" -> "avecBrouillon" [color="#6da88c99"];
+  "majResumeBudget" -> "ligneBudget" [color="#6da88c99"];
+  "majResumeBudget" -> "ligneAchats" [color="#6da88c99"];
+  "appliquerBudget" -> "verseBrouillon" [color="#6da88c99"];
+  "appliquerBudget" -> "filtrerAvecProgression" [color="#6da88c99"];
+  "appliquerBudget" -> "closeDialog" [color="#6da88c99"];
+  "openBudgetModal" -> "openDialog" [color="#6da88c99"];
+  "openBudgetModal" -> "corpsBudget" [color="#6da88c99"];
+  "openBudgetModal" -> "zoneProgression" [color="#6da88c99"];
+  "openBudgetModal" -> "ouvreBrouillon" [color="#6da88c99"];
+  "openBudgetModal" -> "majResumeBudget" [style=dashed, color="#6da88c66"];
+  "dossierEnConfig" -> "deckCourant" [color="#a86d8a99"];
+  "champDeck" -> "esc" [color="#a86d8a99"];
+  "ligneRestriction" -> "dossierEnConfig" [color="#a86d8a99"];
+  "ligneRestriction" -> "esc" [color="#a86d8a99"];
+  "corpsDeck" -> "avecBrouillon" [color="#a86d8a99"];
+  "corpsDeck" -> "dossierEnConfig" [color="#a86d8a99"];
+  "corpsDeck" -> "couleursRestriction" [color="#a86d8a99"];
+  "corpsDeck" -> "coutDeck" [color="#a86d8a99"];
+  "corpsDeck" -> "esc" [color="#a86d8a99"];
+  "corpsDeck" -> "champDeck" [color="#a86d8a99"];
+  "corpsDeck" -> "eur" [color="#a86d8a99"];
+  "corpsDeck" -> "symBg" [color="#a86d8a99"];
+  "corpsDeck" -> "nomCombinaisonCouleurs" [color="#a86d8a99"];
+  "corpsDeck" -> "targets" [color="#a86d8a99"];
+  "corpsDeck" -> "rolesFiltre" [color="#a86d8a99"];
+  "corpsDeck" -> "ligneRestriction" [color="#a86d8a99"];
+  "corpsDeck" -> "resumeDeckConfig" [color="#a86d8a99"];
+  "resumeDeckConfig" -> "avecBrouillon" [color="#a86d8a99"];
+  "resumeDeckConfig" -> "dossierEnConfig" [color="#a86d8a99"];
+  "resumeDeckConfig" -> "filtresActifs" [color="#a86d8a99"];
+  "resumeDeckConfig" -> "couleursRestriction" [color="#a86d8a99"];
+  "resumeDeckConfig" -> "esc" [color="#a86d8a99"];
+  "resumeDeckConfig" -> "eur" [color="#a86d8a99"];
+  "majResumeDeck" -> "resumeDeckConfig" [color="#a86d8a99"];
+  "majFenetreDeck" -> "corpsDeck" [color="#a86d8a99"];
+  "appliquerDeck" -> "verseBrouillon" [color="#a86d8a99"];
+  "appliquerDeck" -> "renommerDeck" [color="#a86d8a99"];
+  "appliquerDeck" -> "invaliderAchats" [color="#a86d8a99"];
+  "appliquerDeck" -> "filtrerAvecProgression" [color="#a86d8a99"];
+  "appliquerDeck" -> "closeDialog" [color="#a86d8a99"];
+  "openDeckModal" -> "openDialog" [color="#a86d8a99"];
+  "openDeckModal" -> "corpsDeck" [color="#a86d8a99"];
+  "openDeckModal" -> "zoneProgression" [color="#a86d8a99"];
+  "openDeckModal" -> "ouvreBrouillon" [color="#a86d8a99"];
+  "openDeckModal" -> "majFenetreDeck" [style=dashed, color="#a86d8a66"];
+  "ligneFiltre" -> "esc" [color="#96a86d99"];
+  "corpsFiltres" -> "avecBrouillon" [color="#96a86d99"];
+  "corpsFiltres" -> "symBg" [color="#96a86d99"];
+  "corpsFiltres" -> "esc" [color="#96a86d99"];
+  "corpsFiltres" -> "nomCombinaisonCouleurs" [color="#96a86d99"];
+  "corpsFiltres" -> "setsFiltre" [color="#96a86d99"];
+  "corpsFiltres" -> "libelleSet" [color="#96a86d99"];
+  "corpsFiltres" -> "listeSetsHTML" [color="#96a86d99"];
+  "corpsFiltres" -> "etatSets" [color="#96a86d99"];
+  "corpsFiltres" -> "archetypesFiltre" [color="#96a86d99"];
+  "corpsFiltres" -> "resumeArchetype" [color="#96a86d99"];
+  "corpsFiltres" -> "libelleArchetype" [color="#96a86d99"];
+  "corpsFiltres" -> "listeArchetypesHTML" [color="#96a86d99"];
+  "corpsFiltres" -> "etatArchetypes" [color="#96a86d99"];
+  "corpsFiltres" -> "targets" [color="#96a86d99"];
+  "corpsFiltres" -> "rolesFiltre" [color="#96a86d99"];
+  "corpsFiltres" -> "ligneFiltre" [color="#96a86d99"];
+  "corpsFiltres" -> "resumeFiltres" [color="#96a86d99"];
+  "resumeFiltres" -> "avecBrouillon" [color="#96a86d99"];
+  "resumeFiltres" -> "filtered" [color="#96a86d99"];
+  "resumeFiltres" -> "collectionCards" [color="#96a86d99"];
+  "resumeFiltres" -> "filtresActifs" [color="#96a86d99"];
+  "resumeFiltres" -> "esc" [color="#96a86d99"];
+  "resumeFiltres" -> "texteFiltresActifs" [color="#96a86d99"];
+  "resumeFiltres" -> "brouillonModifie" [color="#96a86d99"];
+  "majResumeFiltres" -> "resumeFiltres" [color="#96a86d99"];
+  "filtrerAvecProgression" -> "majProgression" [color="#96a86d99"];
+  "filtrerAvecProgression" -> "pause" [color="#96a86d99"];
+  "filtrerAvecProgression" -> "prechauffeCandidats" [color="#96a86d99"];
+  "filtrerAvecProgression" -> "prepareSuggestions" [color="#96a86d99"];
+  "filtrerAvecProgression" -> "renderAll" [color="#96a86d99"];
+  "majFenetreFiltres" -> "corpsFiltres" [color="#96a86d99"];
+  "appliquerFiltres" -> "verseBrouillon" [color="#96a86d99"];
+  "appliquerFiltres" -> "filtrerAvecProgression" [color="#96a86d99"];
+  "appliquerFiltres" -> "closeDialog" [color="#96a86d99"];
+  "openFiltresModal" -> "chargerListeSets" [color="#96a86d99"];
+  "openFiltresModal" -> "openDialog" [color="#96a86d99"];
+  "openFiltresModal" -> "corpsFiltres" [color="#96a86d99"];
+  "openFiltresModal" -> "zoneProgression" [color="#96a86d99"];
+  "openFiltresModal" -> "ouvreBrouillon" [color="#96a86d99"];
+  "openFiltresModal" -> "majFenetreFiltres" [color="#96a86d99"];
+  "openFiltresModal" -> "majResumeFiltres" [color="#96a86d99"];
+  "resumeAffichage" -> "colonnesDe" [color="#6da8a499"];
+  "resumeAffichage" -> "vueDe" [color="#6da8a499"];
+  "corpsAffichage" -> "avecBrouillon" [color="#6da8a499"];
+  "corpsAffichage" -> "colonnesDe" [color="#6da8a499"];
+  "corpsAffichage" -> "indexColonnes" [color="#6da8a499"];
+  "corpsAffichage" -> "vueDe" [color="#6da8a499"];
+  "corpsAffichage" -> "esc" [color="#6da8a499"];
+  "corpsAffichage" -> "resumeAffichage" [color="#6da8a499"];
+  "majFenetreAffichage" -> "corpsAffichage" [color="#6da8a499"];
+  "reglageAffichage" -> "modifieBrouillon" [color="#6da8a499"];
+  "reglageAffichage" -> "majFenetreAffichage" [color="#6da8a499"];
+  "glisseColonnes" -> "modifieBrouillon" [color="#6da8a499"];
+  "appliquerAffichage" -> "avecBrouillon" [color="#6da8a499"];
+  "appliquerAffichage" -> "vueDe" [color="#6da8a499"];
+  "appliquerAffichage" -> "colonnesDe" [color="#6da8a499"];
+  "appliquerAffichage" -> "modifieBrouillon" [color="#6da8a499"];
+  "appliquerAffichage" -> "verseAffichagePartout" [color="#6da8a499"];
+  "appliquerAffichage" -> "verseBrouillon" [color="#6da8a499"];
+  "appliquerAffichage" -> "closeDialog" [color="#6da8a499"];
+  "appliquerAffichage" -> "renderAll" [color="#6da8a499"];
+  "appliquerAffichage" -> "renderB" [color="#6da8a499"];
+  "appliquerAffichage" -> "renderE" [color="#6da8a499"];
+  "appliquerAffichage" -> "refreshSuggestions" [color="#6da8a499"];
+  "appliquerAffichage" -> "scheduleSave" [color="#6da8a499"];
+  "openAffichageModal" -> "indexColonnes" [color="#6da8a499"];
+  "openAffichageModal" -> "colonnesDe" [color="#6da8a499"];
+  "openAffichageModal" -> "openDialog" [color="#6da8a499"];
+  "openAffichageModal" -> "corpsAffichage" [color="#6da8a499"];
+  "openAffichageModal" -> "ouvreBrouillon" [color="#6da8a499"];
+  "openAffichageModal" -> "majFenetreAffichage" [style=dashed, color="#6da8a466"];
+  "ligneCible" -> "esc" [color="#a89b6d99"];
+  "ligneCible" -> "fmt" [color="#a89b6d99"];
+  "corpsCibles" -> "avecBrouillon" [color="#a89b6d99"];
+  "corpsCibles" -> "ciblesParDefaut" [color="#a89b6d99"];
+  "corpsCibles" -> "targets" [color="#a89b6d99"];
+  "corpsCibles" -> "deckCounts" [color="#a89b6d99"];
+  "corpsCibles" -> "ciblesReglees" [color="#a89b6d99"];
+  "corpsCibles" -> "ligneCible" [color="#a89b6d99"];
+  "corpsCibles" -> "esc" [color="#a89b6d99"];
+  "corpsCibles" -> "fmt" [color="#a89b6d99"];
+  "majFenetreCibles" -> "corpsCibles" [color="#a89b6d99"];
+  "appliquerCibles" -> "verseBrouillon" [color="#a89b6d99"];
+  "appliquerCibles" -> "filtrerAvecProgression" [color="#a89b6d99"];
+  "appliquerCibles" -> "closeDialog" [color="#a89b6d99"];
+  "openCiblesModal" -> "openDialog" [color="#a89b6d99"];
+  "openCiblesModal" -> "corpsCibles" [color="#a89b6d99"];
+  "openCiblesModal" -> "zoneProgression" [color="#a89b6d99"];
+  "openCiblesModal" -> "ouvreBrouillon" [color="#a89b6d99"];
+  "openCiblesModal" -> "majFenetreCibles" [style=dashed, color="#a89b6d66"];
+  "listeArchetypesHTML" -> "archetypesFiltre" [color="#6d8ca899"];
+  "listeArchetypesHTML" -> "loose" [color="#6d8ca899"];
+  "listeArchetypesHTML" -> "archetypesDisponibles" [color="#6d8ca899"];
+  "listeArchetypesHTML" -> "esc" [color="#6d8ca899"];
+  "majListeArchetypes" -> "avecBrouillon" [color="#6d8ca899"];
+  "majListeArchetypes" -> "listeArchetypesHTML" [style=dashed, color="#6d8ca866"];
+  "etatArchetypes" -> "esc" [color="#6d8ca899"];
+  "listeSetsHTML" -> "setsFiltre" [color="#6d8ca899"];
+  "listeSetsHTML" -> "loose" [color="#6d8ca899"];
+  "listeSetsHTML" -> "esc" [color="#6d8ca899"];
+  "majListeSets" -> "avecBrouillon" [color="#6d8ca899"];
+  "majListeSets" -> "listeSetsHTML" [style=dashed, color="#6d8ca866"];
+  "etatSets" -> "esc" [color="#6d8ca899"];
+  "barreCatalogue" -> "esc" [color="#8a7fa899"];
+  "barreCatalogue" -> "octets" [color="#8a7fa899"];
+  "corpsBoiteCatalogue" -> "barreCatalogue" [color="#8a7fa899"];
+  "ouvrirBoiteCatalogue" -> "openDialog" [color="#8a7fa899"];
+  "ouvrirBoiteCatalogue" -> "corpsBoiteCatalogue" [color="#8a7fa899"];
+  "majBoiteCatalogue" -> "octets" [color="#8a7fa899"];
+  "fermerBoiteCatalogue" -> "closeDialog" [color="#8a7fa899"];
+  "exportModal" -> "deckEntries" [color="#a8846d99"];
+  "exportModal" -> "collectionCards" [color="#a8846d99"];
+  "exportModal" -> "fmt" [color="#a8846d99"];
+  "exportModal" -> "annexeEntries" [color="#a8846d99"];
+  "exportModal" -> "deckSize" [color="#a8846d99"];
+  "exportModal" -> "openDialog" [color="#a8846d99"];
+  "exportModal" -> "esc" [color="#a8846d99"];
+  "exportModal" -> "eur" [color="#a8846d99"];
+  "exportModal" -> "toast" [color="#a8846d99"];
+  "openWantsModal" -> "wishlist" [color="#a8846d99"];
+  "openWantsModal" -> "aAcheter" [color="#a8846d99"];
+  "openWantsModal" -> "toast" [color="#a8846d99"];
+  "openWantsModal" -> "openDialog" [color="#a8846d99"];
+  "openWantsModal" -> "deckCourant" [color="#a8846d99"];
+  "openWantsModal" -> "eur" [color="#a8846d99"];
+  "openWantsModal" -> "esc" [color="#a8846d99"];
+  "openWipeModal" -> "collectionCards" [color="#a8846d99"];
+  "openWipeModal" -> "deckEntries" [color="#a8846d99"];
+  "openWipeModal" -> "openDialog" [color="#a8846d99"];
+  "openWipeModal" -> "closeDialog" [color="#a8846d99"];
+  "openWipeModal" -> "recalculerAvecProgression" [color="#a8846d99"];
+  "openWipeModal" -> "toast" [color="#a8846d99"];
+  "ouvreAdversaire" -> "openDialog" [color="#6da88c99"];
+  "ouvreAdversaire" -> "esc" [color="#6da88c99"];
+  "ouvreAdversaire" -> "optionsHTML" [color="#6da88c99"];
+  "ouvreAdversaire" -> "majApercuAdversaire" [color="#6da88c99"];
+  "majApercuAdversaire" -> "adversaireDepuisTexte" [color="#6da88c99"];
+  "majApercuAdversaire" -> "resolutionAdversaire" [color="#6da88c99"];
+  "majApercuAdversaire" -> "nbCartesAdversaire" [color="#6da88c99"];
+  "majApercuAdversaire" -> "esc" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "adversaireDepuisTexte" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "toast" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "enregistreAdversaire" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "configSimulation" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "closeDialog" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "scheduleSave" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "renderK" [color="#6da88c99"];
+  "enregistreAdversaireFenetre" -> "completeAdversaire" [color="#6da88c99"];
+  "supprimeAdversaire" -> "openDialog" [color="#6da88c99"];
+  "supprimeAdversaire" -> "esc" [color="#6da88c99"];
+  "supprimeAdversaireOui" -> "closeDialog" [color="#6da88c99"];
+  "supprimeAdversaireOui" -> "scheduleSave" [color="#6da88c99"];
+  "supprimeAdversaireOui" -> "renderK" [color="#6da88c99"];
+  "aideFormules" -> "esc" [color="#a86d8a99"];
+  "lectureHTML" -> "compileDefinition" [color="#a86d8a99"];
+  "lectureHTML" -> "badgeCouverture" [color="#a86d8a99"];
+  "lectureHTML" -> "esc" [color="#a86d8a99"];
+  "ouvreComportement" -> "ficheParNom" [color="#a86d8a99"];
+  "ouvreComportement" -> "toast" [color="#a86d8a99"];
+  "ouvreComportement" -> "openDialog" [color="#a86d8a99"];
+  "ouvreComportement" -> "esc" [color="#a86d8a99"];
+  "ouvreComportement" -> "lectureHTML" [color="#a86d8a99"];
+  "ouvreComportement" -> "aideFormules" [color="#a86d8a99"];
+  "ouvreComportement" -> "majApercuComportement" [color="#a86d8a99"];
+  "majApercuComportement" -> "lectureHTML" [color="#a86d8a99"];
+  "appliqueComportement" -> "closeDialog" [color="#a86d8a99"];
+  "appliqueComportement" -> "scheduleSave" [color="#a86d8a99"];
+  "appliqueComportement" -> "renderK" [color="#a86d8a99"];
+  "appliqueComportement" -> "toast" [color="#a86d8a99"];
+  "effaceComportement" -> "closeDialog" [color="#a86d8a99"];
+  "effaceComportement" -> "scheduleSave" [color="#a86d8a99"];
+  "effaceComportement" -> "renderK" [color="#a86d8a99"];
+  "effaceComportement" -> "toast" [color="#a86d8a99"];
+  "ouvreJournal" -> "lotParId" [color="#96a86d99"];
+  "ouvreJournal" -> "rejouePartie" [color="#96a86d99"];
+  "ouvreJournal" -> "toast" [color="#96a86d99"];
+  "ouvreJournal" -> "openDialog" [color="#96a86d99"];
+  "ouvreJournal" -> "esc" [color="#96a86d99"];
+  "gestesDecks" -> "creerDeck" [color="#6da8a499"];
+  "gestesDecks" -> "activerDeck" [color="#6da8a499"];
+  "gestesDecks" -> "openDeckModal" [color="#6da8a499"];
+  "gestesDecks" -> "toast" [color="#6da8a499"];
+  "gestesDecks" -> "appliquerDeck" [color="#6da8a499"];
+  "gestesDecks" -> "modifieBrouillon" [color="#6da8a499"];
+  "gestesDecks" -> "reinitRestrictions" [color="#6da8a499"];
+  "gestesDecks" -> "apresReglage" [color="#6da8a499"];
+  "gestesDecks" -> "majResumeDeck" [color="#6da8a499"];
+  "gestesDecks" -> "dupliquerDeck" [color="#6da8a499"];
+  "gestesDecks" -> "renderI" [color="#6da8a499"];
+  "gestesDecks" -> "scheduleSave" [color="#6da8a499"];
+  "gestesDecks" -> "bilanDeck" [color="#6da8a499"];
+  "gestesDecks" -> "openDialog" [color="#6da8a499"];
+  "gestesDecks" -> "esc" [color="#6da8a499"];
+  "gestesDecks" -> "supprimerDeck" [color="#6da8a499"];
+  "gestesDecks" -> "closeDialog" [color="#6da8a499"];
+  "gestesDecks" -> "recalculerAvecProgression" [color="#6da8a499"];
+  "gestesDecks" -> "deckCourant" [color="#6da8a499"];
+  "gestesDecks" -> "renderAll" [color="#6da8a499"];
+  "gestesDecks" -> "openWantsModal" [color="#6da8a499"];
+  "saisieDeck" -> "modifieBrouillon" [color="#6da8a499"];
+  "saisieDeck" -> "dossierEnConfig" [color="#6da8a499"];
+  "saisieDeck" -> "majFenetreDeck" [color="#6da8a499"];
+  "saisieDeck" -> "majResumeDeck" [color="#6da8a499"];
+  "saisieDeck" -> "majRestriction" [color="#6da8a499"];
+  "gestesDeckConfig" -> "modifieBrouillon" [color="#6da8a499"];
+  "gestesDeckConfig" -> "restrictionsDuDeck" [color="#6da8a499"];
+  "gestesDeckConfig" -> "majFenetreDeck" [color="#6da8a499"];
+  "gestesDeckConfig" -> "rolesFiltre" [color="#6da8a499"];
+  "gestesVue" -> "closeDialog" [color="#a89b6d99"];
+  "gestesVue" -> "modifieBrouillon" [color="#a89b6d99"];
+  "gestesVue" -> "apresReglage" [color="#a89b6d99"];
+  "gestesVue" -> "renderD" [color="#a89b6d99"];
+  "gestesVue" -> "invaliderCandidats" [color="#a89b6d99"];
+  "gestesVue" -> "recalculerAvecProgression" [color="#a89b6d99"];
+  "gestesVue" -> "openFiltresModal" [color="#a89b6d99"];
+  "gestesVue" -> "majFenetreFiltres" [color="#a89b6d99"];
+  "gestesVue" -> "basculerArchetype" [color="#a89b6d99"];
+  "gestesVue" -> "avecBrouillon" [color="#a89b6d99"];
+  "gestesVue" -> "archetypesAChargerEdhrec" [color="#a89b6d99"];
+  "gestesVue" -> "chargerThemeEdhrec" [color="#a89b6d99"];
+  "gestesVue" -> "basculerSet" [color="#a89b6d99"];
+  "gestesVue" -> "setsACharger" [color="#a89b6d99"];
+  "gestesVue" -> "chargerSetScryfall" [color="#a89b6d99"];
+  "gestesVue" -> "effacerFiltre" [color="#a89b6d99"];
+  "gestesVue" -> "faireDefilerVersion" [color="#a89b6d99"];
+  "gestesVue" -> "basculerSourceVersions" [color="#a89b6d99"];
+  "gestesVue" -> "choisirVersion" [color="#a89b6d99"];
+  "gestesReglages" -> "appliquerFiltres" [color="#6d8ca899"];
+  "gestesReglages" -> "interrompreCatalogue" [color="#6d8ca899"];
+  "gestesReglages" -> "openAffichageModal" [color="#6d8ca899"];
+  "gestesReglages" -> "appliquerAffichage" [color="#6d8ca899"];
+  "gestesReglages" -> "appliquerFormat" [color="#6d8ca899"];
+  "gestesReglages" -> "openParametresModal" [color="#6d8ca899"];
+  "gestesReglages" -> "appliquerParametres" [color="#6d8ca899"];
+  "gestesReglages" -> "openBudgetModal" [color="#6d8ca899"];
+  "gestesReglages" -> "appliquerBudget" [color="#6d8ca899"];
+  "gestesReglages" -> "modifieBrouillon" [color="#6d8ca899"];
+  "gestesReglages" -> "reinitFiltres" [color="#6d8ca899"];
+  "gestesReglages" -> "apresReglage" [color="#6d8ca899"];
+  "gestesReglages" -> "toast" [color="#6d8ca899"];
+  "gestesReglages" -> "openFormatModal" [color="#6d8ca899"];
+  "gestesReglages" -> "openCiblesModal" [color="#6d8ca899"];
+  "gestesReglages" -> "appliquerCibles" [color="#6d8ca899"];
+  "gestesReglages" -> "reinitCibles" [color="#6d8ca899"];
+  "gestesReglages" -> "majFenetreCibles" [color="#6d8ca899"];
+  "gestesReglages" -> "fmt" [color="#6d8ca899"];
+  "gestesReglages" -> "basculerRole" [color="#6d8ca899"];
+  "gestesReglages" -> "listeSug" [color="#6d8ca899"];
+  "gestesReglages" -> "selectionSuggestions" [color="#6d8ca899"];
+  "gestesReglages" -> "defautSug" [color="#6d8ca899"];
+  "gestesReglages" -> "groupeCartes" [color="#6d8ca899"];
+  "gestesReglages" -> "cleLimiteSug" [color="#6d8ca899"];
+  "gestesReglages" -> "refreshSuggestions" [color="#6d8ca899"];
+  "gestesDeck" -> "geleSuggestions" [color="#8a7fa899"];
+  "gestesDeck" -> "addToDeck" [color="#8a7fa899"];
+  "gestesDeck" -> "openCardModal" [color="#8a7fa899"];
+  "gestesDeck" -> "removeFromDeck" [color="#8a7fa899"];
+  "gestesDeck" -> "scheduleSave" [color="#8a7fa899"];
+  "gestesDeck" -> "renderB" [color="#8a7fa899"];
+  "gestesDeck" -> "versAnnexe" [color="#8a7fa899"];
+  "gestesDeck" -> "retirerAnnexe" [color="#8a7fa899"];
+  "gestesDeck" -> "openDialog" [color="#8a7fa899"];
+  "gestesDeck" -> "annexeSize" [color="#8a7fa899"];
+  "gestesDeck" -> "esc" [color="#8a7fa899"];
+  "gestesDeck" -> "closeDialog" [color="#8a7fa899"];
+  "gestesDeck" -> "viderAnnexe" [color="#8a7fa899"];
+  "gestesDeck" -> "recalculerAvecProgression" [color="#8a7fa899"];
+  "gestesDeck" -> "buyCard" [color="#8a7fa899"];
+  "gestesDeck" -> "signatureCommandants" [color="#8a7fa899"];
+  "gestesDeck" -> "apresReglage" [color="#8a7fa899"];
+  "gestesDeck" -> "degeleSuggestions" [color="#8a7fa899"];
+  "gestesDeck" -> "renderSuggestions" [color="#8a7fa899"];
+  "gestesDeck" -> "openWantsModal" [color="#8a7fa899"];
+  "gestesDeck" -> "toast" [color="#8a7fa899"];
+  "gestesDeck" -> "find" [color="#8a7fa899"];
+  "gestesDeck" -> "invaliderCandidats" [color="#8a7fa899"];
+  "gestesDeck" -> "poseParcoursFiche" [color="#8a7fa899"];
+  "gestesDeck" -> "ficheVoisine" [color="#8a7fa899"];
+  "gestesDeck" -> "majApercu" [color="#8a7fa899"];
+  "gestesDonnees" -> "save" [color="#a8846d99"];
+  "gestesDonnees" -> "toast" [color="#a8846d99"];
+  "gestesDonnees" -> "snapshot" [color="#a8846d99"];
+  "gestesDonnees" -> "openDialog" [color="#a8846d99"];
+  "gestesDonnees" -> "nuageConnecte" [color="#a8846d99"];
+  "gestesDonnees" -> "nuageDeconnecte" [color="#a8846d99"];
+  "gestesDonnees" -> "idbVider" [color="#a8846d99"];
+  "gestesDonnees" -> "idbOublier" [color="#a8846d99"];
+  "gestesDonnees" -> "annexeListe" [color="#a8846d99"];
+  "gestesDonnees" -> "closeDialog" [color="#a8846d99"];
+  "gestesDonnees" -> "renderAll" [color="#a8846d99"];
+  "gestesDonnees" -> "telechargerCatalogue" [color="#a8846d99"];
+  "gestesDonnees" -> "majCatalogue" [color="#a8846d99"];
+  "gestesDonnees" -> "scheduleSave" [color="#a8846d99"];
+  "gestesDonnees" -> "invaliderCandidats" [color="#a8846d99"];
+  "gestesDonnees" -> "recalculerAvecProgression" [color="#a8846d99"];
+  "gestesDonnees" -> "rafraichirFenetreSauvegarde" [color="#a8846d99"];
+  "gestesDonnees" -> "loadEdhrec" [color="#a8846d99"];
+  "gestesDonnees" -> "chargerCatalogue" [color="#a8846d99"];
+  "gestesDonnees" -> "openAdd" [color="#a8846d99"];
+  "gestesDonnees" -> "openImport" [color="#a8846d99"];
+  "gestesDonnees" -> "enrichAllUnknown" [color="#a8846d99"];
+  "gestesDonnees" -> "openWipeModal" [color="#a8846d99"];
+  "gestesDonnees" -> "exportModal" [color="#a8846d99"];
+  "gestesNuage" -> "save" [color="#6da88c99"];
+  "gestesNuage" -> "toast" [color="#6da88c99"];
+  "gestesNuage" -> "dbxConnexion" [color="#6da88c99"];
+  "gestesNuage" -> "nuageSynchro" [color="#6da88c99"];
+  "gestesNuage" -> "nuageDiagnostic" [color="#6da88c99"];
+  "gestesNuage" -> "openDialog" [color="#6da88c99"];
+  "gestesNuage" -> "nuageDeconnecte" [color="#6da88c99"];
+  "gestesNuage" -> "closeDialog" [color="#6da88c99"];
+  "gestesNuage" -> "openParametresModal" [color="#6da88c99"];
+  "gestesNuageChange" -> "nuageEcrire" [color="#6da88c99"];
+  "gestesNuageChange" -> "nuageNomParDefaut" [color="#6da88c99"];
+  "gestesNuageChange" -> "nuageSynchro" [color="#6da88c99"];
+  "gestesNuageChange" -> "majFenetreParametres" [style=dashed, color="#6da88c66"];
+  "gestesGraphe" -> "renderD" [color="#a86d8a99"];
+  "gestesGraphe" -> "invaliderCandidats" [color="#a86d8a99"];
+  "gestesGraphe" -> "renderSuggestions" [color="#a86d8a99"];
+  "gestesGraphe" -> "renderTop" [color="#a86d8a99"];
+  "gestesGraphe" -> "closeDialog" [color="#a86d8a99"];
+  "gestesGraphe" -> "find" [color="#a86d8a99"];
+  "gestesGraphe" -> "ajouterCarte" [color="#a86d8a99"];
+  "gestesGraphe" -> "majResultats" [color="#a86d8a99"];
+  "gestesGraphe" -> "pasRecherche" [color="#a86d8a99"];
+  "gestesGraphe" -> "norm" [color="#a86d8a99"];
+  "gestesGraphe" -> "registerCard" [color="#a86d8a99"];
+  "gestesGraphe" -> "carteDepuisScryfall" [color="#a86d8a99"];
+  "gestesGraphe" -> "buildCard" [color="#a86d8a99"];
+  "gestesGraphe" -> "renderB" [color="#a86d8a99"];
+  "gestesGraphe" -> "poseParcoursFiche" [color="#a86d8a99"];
+  "gestesGraphe" -> "openCardModal" [color="#a86d8a99"];
+  "gestesSimulation" -> "lanceSimulation" [color="#96a86d99"];
+  "gestesSimulation" -> "arreteSimulation" [color="#96a86d99"];
+  "gestesSimulation" -> "ouvreAdversaire" [color="#96a86d99"];
+  "gestesSimulation" -> "enregistreAdversaireFenetre" [color="#96a86d99"];
+  "gestesSimulation" -> "supprimeAdversaire" [color="#96a86d99"];
+  "gestesSimulation" -> "supprimeAdversaireOui" [color="#96a86d99"];
+  "gestesSimulation" -> "ouvreComportement" [color="#96a86d99"];
+  "gestesSimulation" -> "appliqueComportement" [color="#96a86d99"];
+  "gestesSimulation" -> "effaceComportement" [color="#96a86d99"];
+  "gestesSimulation" -> "renderK" [color="#96a86d99"];
+  "gestesSimulation" -> "supprimeLot" [color="#96a86d99"];
+  "gestesSimulation" -> "ouvreJournal" [color="#96a86d99"];
+  "reglageSimulation" -> "renderK" [color="#96a86d99"];
+  "reglageSimulation" -> "scheduleSave" [color="#96a86d99"];
+  "demarrer" -> "initBuiltin" [color="#6da8a499"];
+  "demarrer" -> "chargerSauvegarde" [color="#6da8a499"];
+  "demarrer" -> "restore" [color="#6da8a499"];
+  "demarrer" -> "reprendTheme" [color="#6da8a499"];
+  "demarrer" -> "renderAll" [color="#6da8a499"];
+  "demarrer" -> "loadSymbology" [color="#6da8a499"];
+  "demarrer" -> "reprendreArchetypesEdhrec" [color="#6da8a499"];
+  "demarrer" -> "archetypesARevoir" [color="#6da8a499"];
+  "demarrer" -> "chargerArchetypesEdhrec" [color="#6da8a499"];
+  "demarrer" -> "reprendreSets" [color="#6da8a499"];
+  "demarrer" -> "reprendreGameChangers" [color="#6da8a499"];
+  "demarrer" -> "gameChangersARevoir" [color="#6da8a499"];
+  "demarrer" -> "chargerGameChangers" [color="#6da8a499"];
+  "demarrer" -> "demarrerCatalogue" [color="#6da8a499"];
+  "demarrer" -> "nuageDemarrer" [color="#6da8a499"];
+  "app.js (chargement)" -> "montrerApercu" [color="#6da8a499"];
+  "app.js (chargement)" -> "placerApercu" [color="#6da8a499"];
+  "app.js (chargement)" -> "cacherApercu" [color="#6da8a499"];
+  "app.js (chargement)" -> "majListeArchetypes" [color="#6da8a499"];
+  "app.js (chargement)" -> "majListeSets" [color="#6da8a499"];
+  "app.js (chargement)" -> "modifieBrouillon" [color="#6da8a499"];
+  "app.js (chargement)" -> "majFiltre" [color="#6da8a499"];
+  "app.js (chargement)" -> "majResumeFiltres" [color="#6da8a499"];
+  "app.js (chargement)" -> "glisseColonnes" [color="#6da8a499"];
+  "app.js (chargement)" -> "majApercuAdversaire" [color="#6da8a499"];
+  "app.js (chargement)" -> "majApercuComportement" [color="#6da8a499"];
+  "app.js (chargement)" -> "reglerCible" [color="#6da8a499"];
+  "app.js (chargement)" -> "saisieRecherche" [color="#6da8a499"];
+  "app.js (chargement)" -> "majResultats" [color="#6da8a499"];
+  "app.js (chargement)" -> "majResumeFormat" [color="#6da8a499"];
+  "app.js (chargement)" -> "renderAll" [color="#6da8a499"];
+  "app.js (chargement)" -> "renderE" [color="#6da8a499"];
+  "app.js (chargement)" -> "invaliderCandidats" [color="#6da8a499"];
+  "app.js (chargement)" -> "refreshSuggestions" [color="#6da8a499"];
+  "app.js (chargement)" -> "saisieBudget" [color="#6da8a499"];
+  "app.js (chargement)" -> "saisieDeck" [color="#6da8a499"];
+  "app.js (chargement)" -> "reglageSimulation" [color="#6da8a499"];
+  "app.js (chargement)" -> "gestesNuageChange" [color="#6da8a499"];
+  "app.js (chargement)" -> "apresReglage" [color="#6da8a499"];
+  "app.js (chargement)" -> "basculeTheme" [color="#6da8a499"];
+  "app.js (chargement)" -> "reglageAffichage" [color="#6da8a499"];
+  "app.js (chargement)" -> "fmt" [color="#6da8a499"];
+  "app.js (chargement)" -> "toast" [color="#6da8a499"];
+  "app.js (chargement)" -> "fermetureBrouillon" [color="#6da8a499"];
+  "app.js (chargement)" -> "closeDialog" [color="#6da8a499"];
+  "app.js (chargement)" -> "molletteRecherche" [color="#6da8a499"];
+  "app.js (chargement)" -> "appliquerFiltres" [color="#6da8a499"];
+  "app.js (chargement)" -> "appliquerBudget" [color="#6da8a499"];
+  "app.js (chargement)" -> "ficheVoisine" [color="#6da8a499"];
+  "app.js (chargement)" -> "demarrer" [color="#6da8a499"];
+  "app.js (chargement)" -> "gestesDeckConfig" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesDecks" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesVue" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesReglages" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesDeck" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesDonnees" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesNuage" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesSimulation" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "gestesGraphe" [style=dashed, color="#6da8a466"];
+  "app.js (chargement)" -> "majHauteurEntete" [style=dashed, color="#6da8a466"];
 }

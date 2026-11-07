@@ -29,6 +29,7 @@ function renderAll() {
   renderD();
   renderE();
   renderSuggestions();
+  renderK();
   scheduleSave();
 }
 

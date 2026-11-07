@@ -60,7 +60,8 @@ const ONGLETS = {
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
   edhrec:     {label:'EDHREC',     sections:['secH'],        liste:'edhrec'},
-  catalogue:  {label:'Catalogue',  sections:['secF'],        liste:'suggestions'}
+  catalogue:  {label:'Catalogue',  sections:['secF'],        liste:'suggestions'},
+  simulation: {label:'Simulation', sections:['secK'],        liste:null}
 };
 const CLES_ONGLETS = Object.keys(ONGLETS);
 
@@ -176,7 +177,14 @@ const S = {
   majIgnoree: null,
   enriching: false,
   scryHS: false,
-  edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null}
+  edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
+  /* Le mode de jeu. La bibliothèque d'adversaires et les comportements écrits
+     à la main sont l'intention du joueur : ils se sauvegardent et voyagent.
+     La configuration d'un lot — quel deck, contre qui, combien de parties —
+     est de la vue : elle se sauvegarde, mais reste sur l'appareil. */
+  adversaires: {},
+  comportements: {},
+  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25}
 };
 
 'WUBRG'.split('').forEach(c => S.custom.colorLimits[c] = {min:0, max:99});

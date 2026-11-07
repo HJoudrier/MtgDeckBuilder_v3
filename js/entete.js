@@ -229,6 +229,9 @@ function activerOnglet(cle, opts) {
      arrière : c'est ici, et nulle part ailleurs, qu'elle est reprise — toutes
      les façons de changer d'onglet passent par cette fonction. */
   if (typeof rattraperSuggestions === 'function') rattraperSuggestions();
+  /* La page des simulations ne calcule sa couverture que sous les yeux : on
+     la peint en y arrivant. */
+  if (cle === 'simulation' && typeof renderK === 'function') renderK();
 }
 
 /* Aller à une section, d'où qu'on parte : l'onglet qui la porte s'ouvre, et
