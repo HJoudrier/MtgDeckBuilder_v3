@@ -55,9 +55,19 @@ function majProgressionSim() {
     : `${SIM.fait} / ${SIM.total} parties (${pct} %) — ${Math.round((Date.now() - SIM.debut) / 1000)} s`;
 }
 
-/* Lancer un lot. */
+/* Lancer un lot. Une erreur de préparation ne doit pas laisser la section
+   figée sur « préparation » : elle est dite, et la table rendue. */
 async function lanceSimulation() {
   if (SIM.etat === 'encours' || SIM.etat === 'prepare') return;
+  try { await joueLot(); } catch (e) {
+    SIM.etat = 'erreur';
+    signalerTravail('secK', false);
+    toast('La simulation a échoué : ' + (e && e.message ? e.message : e));
+    renderK();
+  }
+}
+
+async function joueLot() {
   const cfg = configSimulation();
   const obstacle = obstacleSimulation(cfg);
   if (obstacle) { toast(obstacle); return; }

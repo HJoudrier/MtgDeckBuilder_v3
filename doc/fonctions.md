@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**923 fonctions**, 143 modules, 930 Ko de JavaScript.
+**924 fonctions**, 143 modules, 930 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -115,7 +115,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 9 | 98 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
-| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 10 | 133 |
+| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
 | [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 7 | 123 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
@@ -1947,7 +1947,7 @@ Les résultats des lots, gardés et comparés. *8 fonctions, 66 lignes, 2.6 Ko.*
 
 ## js/simulation.js
 
-Un lot de parties, par tranches. *10 fonctions, 133 lignes, 6.1 Ko.*
+Un lot de parties, par tranches. *11 fonctions, 143 lignes, 6.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1957,7 +1957,8 @@ Un lot de parties, par tranches. *10 fonctions, 133 lignes, 6.1 Ko.*
 | `placesPartie(N, g)` | La table d'une partie : le deck assis à chaque siège. |
 | `graineDePartie(graine, g)` | — |
 | `majProgressionSim()` | — |
-| `lanceSimulation()` | Lancer un lot. |
+| `lanceSimulation()` | Lancer un lot. Une erreur de préparation ne doit pas laisser la section figée sur « préparation » : elle est dite, et la table rendue. |
+| `joueLot()` | — |
 | `terminerLot(cfg, sieges, recs)` | Ranger le lot qui vient de finir, ou d'être arrêté. |
 | `arreteSimulation()` | — |
 | `rejouePartie(lot, k)` | Rejouer une partie d'un lot, journal ouvert. |

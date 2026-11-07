@@ -5671,7 +5671,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "joueJusquauBout",
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
@@ -5699,7 +5699,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "joueJusquauBout",
-    "lanceSimulation",
+    "joueLot",
     "nouveauSuivi",
     "repondre"
    ]
@@ -6244,7 +6244,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation",
+    "joueLot",
     "rejouePartie"
    ]
   },
@@ -11681,7 +11681,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "completeAdversaire",
-    "lanceSimulation",
+    "joueLot",
     "renderK"
    ]
   },
@@ -11713,7 +11713,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "completeAdversaire",
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
@@ -11901,7 +11901,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "couvertureTable",
-    "lanceSimulation",
+    "joueLot",
     "rejouePartie"
    ]
   },
@@ -11917,7 +11917,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "couvertureTable",
-    "lanceSimulation",
+    "joueLot",
     "rejouePartie"
    ]
   },
@@ -11932,7 +11932,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
@@ -11984,7 +11984,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
@@ -12137,7 +12137,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
@@ -12150,7 +12150,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "enregistreAdversaireFenetre",
-    "lanceSimulation",
+    "joueLot",
     "renderK"
    ]
   },
@@ -12163,7 +12163,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
@@ -12175,7 +12175,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation",
+    "joueLot",
     "rejouePartie"
    ]
   },
@@ -12190,7 +12190,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation",
+    "joueLot",
     "rejouePartie"
    ]
   },
@@ -12203,14 +12203,31 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation",
+    "joueLot",
     "renderK"
    ]
   },
   {
    "nom": "lanceSimulation",
    "fichier": "simulation.js",
-   "ligne": 59,
+   "ligne": 60,
+   "chargement": false,
+   "appelle": [
+    "joueLot",
+    "renderK",
+    "signalerTravail",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesSimulation"
+   ]
+  },
+  {
+   "nom": "joueLot",
+   "fichier": "simulation.js",
+   "ligne": 70,
    "chargement": false,
    "appelle": [
     "agentIA",
@@ -12237,13 +12254,13 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
-    "gestesSimulation"
+    "lanceSimulation"
    ]
   },
   {
    "nom": "terminerLot",
    "fichier": "simulation.js",
-   "ligne": 99,
+   "ligne": 109,
    "chargement": false,
    "appelle": [
     "agrege",
@@ -12259,13 +12276,13 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "lanceSimulation"
+    "joueLot"
    ]
   },
   {
    "nom": "arreteSimulation",
    "fichier": "simulation.js",
-   "ligne": 120,
+   "ligne": 130,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12277,7 +12294,7 @@
   {
    "nom": "rejouePartie",
    "fichier": "simulation.js",
-   "ligne": 124,
+   "ligne": 134,
    "chargement": false,
    "appelle": [
     "agentIA",
@@ -12411,6 +12428,7 @@
     "enregistreAdversaireFenetre",
     "entete.js (chargement)",
     "gestesSimulation",
+    "joueLot",
     "lanceSimulation",
     "reglageSimulation",
     "renderAll",
@@ -12749,6 +12767,7 @@
     "gestesDonnees",
     "gestesNuage",
     "gestesReglages",
+    "joueLot",
     "lanceSimulation",
     "lireCatalogueFichier",
     "loadEdhrec",
@@ -14063,6 +14082,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "finProgresSection",
+    "joueLot",
     "lanceSimulation",
     "progresSection",
     "terminerLot"

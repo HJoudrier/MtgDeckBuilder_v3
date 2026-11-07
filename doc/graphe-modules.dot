@@ -118,7 +118,7 @@ digraph modules {
     "simPreparation.js" [label="js/simPreparation.js\n9 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "simStats.js" [label="js/simStats.js\n4 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
     "simStockage.js" [label="js/simStockage.js\n8 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
-    "simulation.js" [label="js/simulation.js\n10 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "simulation.js" [label="js/simulation.js\n11 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "simSection.js" [label="js/simSection.js\n7 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "simResultats.js" [label="js/simResultats.js\n6 fonctions", fillcolor="#a8846d33", color="#a8846d"];
   }
@@ -338,6 +338,9 @@ digraph modules {
   "ficheParcours.js" -> "recherches.js" [penwidth=2.08, color="#a8846daa", tooltip="3 appel(s)"];
   "simCartes.js" -> "champsJeu.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
   "simAdversaires.js" -> "simCartes.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
+  "simulation.js" -> "rendu.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
+  "simulation.js" -> "outils.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
+  "simulation.js" -> "simSection.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
   "simulation.js" -> "jeuPilote.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
   "simSection.js" -> "simPreparation.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
   "simSection.js" -> "outils.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];

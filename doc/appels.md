@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**916 fonctions** dans 143 modules, **2490 appels** relevés.
+**917 fonctions** dans 143 modules, **2494 appels** relevés.
 
 ## Noms définis deux fois
 
@@ -2102,7 +2102,7 @@ Appelée par : `creePartie`
 
 Appelle : `nouvellePartie()` *(jeuEtat.js)*, `partie()` *(jeuPartie.js)*
 
-Appelée par : `joueJusquauBout`, `lanceSimulation`
+Appelée par : `joueJusquauBout`, `joueLot`
 
 ### `valideReponse()` — ligne 21
 
@@ -2114,7 +2114,7 @@ Appelée par : `avance`, `repondre`
 
 Appelle : `valideReponse()` *(jeuPilote.js)*
 
-Appelée par : `joueJusquauBout`, `lanceSimulation`, `nouveauSuivi`, `repondre`
+Appelée par : `joueJusquauBout`, `joueLot`, `nouveauSuivi`, `repondre`
 
 ### `repondre()` — ligne 62
 
@@ -2308,7 +2308,7 @@ Appelée par : `agentIA`
 
 Appelle : `brasse()` *(jeuHasard.js)*, `etatHasard()` *(jeuHasard.js)*, `iaAttaquants()` *(iaCombat.js)*, `iaBloqueurs()` *(iaCombat.js)*, `iaCartes()` *(iaChoix.js)*, `iaCibles()` *(iaChoix.js)*, `iaModes()` *(iaChoix.js)*, `iaMulligan()` *(iaChoix.js)*, `iaOui()` *(iaChoix.js)*, `iaPriorite()` *(iaPriorite.js)*, `iaScrute()` *(iaChoix.js)*
 
-Appelée par : `lanceSimulation`, `rejouePartie`
+Appelée par : `joueLot`, `rejouePartie`
 
 ## js/symboles.js
 
@@ -4338,7 +4338,7 @@ Appelée par : `nomsManquants`, `ouvreComportement`, `resolutionAdversaire`, `si
 
 Appelle : `idbLire()` *(idb.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `completeAdversaire`, `lanceSimulation`, `renderK`
+Appelée par : `completeAdversaire`, `joueLot`, `renderK`
 
 ### `rangeSimCartes()` — ligne 89
 
@@ -4350,7 +4350,7 @@ Appelée par : `chercheFichesScryfall`
 
 Appelle : `ficheDeScryfall()` *(simCartes.js)*, `norm()` *(cartes.js)*, `rangeSimCartes()` *(simCartes.js)*
 
-Appelée par : `completeAdversaire`, `lanceSimulation`
+Appelée par : `completeAdversaire`, `joueLot`
 
 ## js/simAdversaires.js
 
@@ -4432,19 +4432,19 @@ Appelée par : `siegeAdversaire`, `siegeDeck`
 
 Appelle : `siegeDepuisListe()` *(simPreparation.js)*
 
-Appelée par : `couvertureTable`, `lanceSimulation`, `rejouePartie`
+Appelée par : `couvertureTable`, `joueLot`, `rejouePartie`
 
 ### `siegeAdversaire()` — ligne 69
 
 Appelle : `siegeDepuisListe()` *(simPreparation.js)*
 
-Appelée par : `couvertureTable`, `lanceSimulation`, `rejouePartie`
+Appelée par : `couvertureTable`, `joueLot`, `rejouePartie`
 
 ### `nomsManquants()` — ligne 75
 
 Appelle : `ficheParNom()` *(simCartes.js)*
 
-Appelée par : `lanceSimulation`
+Appelée par : `joueLot`
 
 ### `fiabilite()` — ligne 88
 
@@ -4470,7 +4470,7 @@ Appelée par : `agrege`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `lanceSimulation`
+Appelée par : `joueLot`
 
 ### `agrege()` — ligne 44
 
@@ -4540,57 +4540,63 @@ Appelée par : `historiqueHTML`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `lanceSimulation`
+Appelée par : `joueLot`
 
 ### `configSimulation()` — ligne 26
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `enregistreAdversaireFenetre`, `lanceSimulation`, `renderK`
+Appelée par : `enregistreAdversaireFenetre`, `joueLot`, `renderK`
 
 ### `obstacleSimulation()` — ligne 36
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `lanceSimulation`
+Appelée par : `joueLot`
 
 ### `placesPartie()` — ligne 43
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `lanceSimulation`, `rejouePartie`
+Appelée par : `joueLot`, `rejouePartie`
 
 ### `graineDePartie()` — ligne 48
 
 Appelle : `brasse()` *(jeuHasard.js)*
 
-Appelée par : `lanceSimulation`, `rejouePartie`
+Appelée par : `joueLot`, `rejouePartie`
 
 ### `majProgressionSim()` — ligne 50
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `lanceSimulation`, `renderK`
+Appelée par : `joueLot`, `renderK`
 
-### `lanceSimulation()` — ligne 59
+### `lanceSimulation()` — ligne 60
 
-Appelle : `agentIA()` *(iaAgent.js)*, `avance()` *(jeuPilote.js)*, `chargeSimCartes()` *(simCartes.js)*, `chercheFichesScryfall()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `creePartie()` *(jeuPilote.js)*, `graineDePartie()` *(simulation.js)*, `majProgressionSim()` *(simulation.js)*, `mesuresPartie()` *(simStats.js)*, `nomsManquants()` *(simPreparation.js)*, `obstacleSimulation()` *(simulation.js)*, `placesPartie()` *(simulation.js)*, `rendMain()` *(simulation.js)*, `renderK()` *(simSection.js)*, `siegeDeck()` *(simPreparation.js)*, `signalerTravail()` *(rendu.js)*, `terminerLot()` *(simulation.js)*, `toast()` *(outils.js)*, → `siegeAdversaire()` *(simPreparation.js)*
+Appelle : `joueLot()` *(simulation.js)*, `renderK()` *(simSection.js)*, `signalerTravail()` *(rendu.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesSimulation`
 
-### `terminerLot()` — ligne 99
+### `joueLot()` — ligne 70
 
-Appelle : `agrege()` *(simStats.js)*, `ajouteLot()` *(simStockage.js)*, `fiabilite()` *(simPreparation.js)*, `renderK()` *(simSection.js)*, `signalerTravail()` *(rendu.js)*, `signatureAdversaire()` *(simAdversaires.js)*, `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simAdversaires.js)*, `toast()` *(outils.js)*
+Appelle : `agentIA()` *(iaAgent.js)*, `avance()` *(jeuPilote.js)*, `chargeSimCartes()` *(simCartes.js)*, `chercheFichesScryfall()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `creePartie()` *(jeuPilote.js)*, `graineDePartie()` *(simulation.js)*, `majProgressionSim()` *(simulation.js)*, `mesuresPartie()` *(simStats.js)*, `nomsManquants()` *(simPreparation.js)*, `obstacleSimulation()` *(simulation.js)*, `placesPartie()` *(simulation.js)*, `rendMain()` *(simulation.js)*, `renderK()` *(simSection.js)*, `siegeDeck()` *(simPreparation.js)*, `signalerTravail()` *(rendu.js)*, `terminerLot()` *(simulation.js)*, `toast()` *(outils.js)*, → `siegeAdversaire()` *(simPreparation.js)*
 
 Appelée par : `lanceSimulation`
 
-### `arreteSimulation()` — ligne 120
+### `terminerLot()` — ligne 109
+
+Appelle : `agrege()` *(simStats.js)*, `ajouteLot()` *(simStockage.js)*, `fiabilite()` *(simPreparation.js)*, `renderK()` *(simSection.js)*, `signalerTravail()` *(rendu.js)*, `signatureAdversaire()` *(simAdversaires.js)*, `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simAdversaires.js)*, `toast()` *(outils.js)*
+
+Appelée par : `joueLot`
+
+### `arreteSimulation()` — ligne 130
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `gestesSimulation`
 
-### `rejouePartie()` — ligne 124
+### `rejouePartie()` — ligne 134
 
 Appelle : `agentIA()` *(iaAgent.js)*, `graineDePartie()` *(simulation.js)*, `joueJusquauBout()` *(jeuPilote.js)*, `lotPerime()` *(simStockage.js)*, `placesPartie()` *(simulation.js)*, `siegeDeck()` *(simPreparation.js)*, → `siegeAdversaire()` *(simPreparation.js)*
 
@@ -4638,7 +4644,7 @@ Appelée par : `renderK`
 
 Appelle : `adversairesHTML()` *(simSection.js)*, `chargeResultats()` *(simStockage.js)*, `chargeSimCartes()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `couvertureHTML()` *(simSection.js)*, `majProgressionSim()` *(simulation.js)*, `resultatsHTML()` *(simResultats.js)*, `tableHTML()` *(simSection.js)*
 
-Appelée par : `appliqueComportement`, `effaceComportement`, `enregistreAdversaireFenetre`, `entete.js (chargement)`, `gestesSimulation`, `lanceSimulation`, `reglageSimulation`, `renderAll`, `supprimeAdversaireOui`, `terminerLot`
+Appelée par : `appliqueComportement`, `effaceComportement`, `enregistreAdversaireFenetre`, `entete.js (chargement)`, `gestesSimulation`, `joueLot`, `lanceSimulation`, `reglageSimulation`, `renderAll`, `supprimeAdversaireOui`, `terminerLot`
 
 ## js/simResultats.js
 
@@ -4708,7 +4714,7 @@ Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `blocEdhrec`,
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `appliqueComportement`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `completeUnknown`, `deplacerCarte`, `effaceComportement`, `enregistreAdversaireFenetre`, `enrichAllUnknown`, `exportModal`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesNuage`, `gestesReglages`, `lanceSimulation`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `nuageDemarrer`, `nuageDiagnostic`, `nuageSynchro`, `openImport`, `openWantsModal`, `openWipeModal`, `ouvreComportement`, `ouvreJournal`, `runScryQueue`, `save`, `telechargerCatalogue`, `terminerLot`, `versAnnexe`, `viderAnnexe`
+Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `appliqueComportement`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `completeUnknown`, `deplacerCarte`, `effaceComportement`, `enregistreAdversaireFenetre`, `enrichAllUnknown`, `exportModal`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesNuage`, `gestesReglages`, `joueLot`, `lanceSimulation`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `nuageDemarrer`, `nuageDiagnostic`, `nuageSynchro`, `openImport`, `openWantsModal`, `openWipeModal`, `ouvreComportement`, `ouvreJournal`, `runScryQueue`, `save`, `telechargerCatalogue`, `terminerLot`, `versAnnexe`, `viderAnnexe`
 
 ## js/theme.js
 
@@ -5180,7 +5186,7 @@ Appelée par : `entete.js (chargement)`, `renderAll`
 
 Appelle : `ongletDeSection()` *(etat.js)*
 
-Appelée par : `finProgresSection`, `lanceSimulation`, `progresSection`, `terminerLot`
+Appelée par : `finProgresSection`, `joueLot`, `lanceSimulation`, `progresSection`, `terminerLot`
 
 ### `renderAll()` — ligne 20
 
