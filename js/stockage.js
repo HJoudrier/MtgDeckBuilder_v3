@@ -55,7 +55,7 @@ function snapshot() {
   DB.forEach(c => {
     const base = BUILTIN.has(norm(c.name));
     if (base) {
-      if (c.img || c.cmUrl || c.artist || c.textFull || c.set || c.manaProduit) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...(c.manaProduit ? {mp:c.manaProduit} : {}), ...impressionSnap(c)});
+      if (c.img || c.cmUrl || c.artist || c.textFull || c.set || c.manaProduit || c.motsCles) enrich.push({n:c.name, p:c.price, g:c.img||'', G:c.imgN||'', L:c.imgL||'', u:c.cmUrl||'', a:c.artist||'', x:c.textFull ? c.text : '', ...(c.manaProduit ? {mp:c.manaProduit} : {}), ...impressionSnap(c), ...jeuSnap(c)});
     } else if (c.externe && !(S.collection.get(c.name) > 0) && !carteDansUnDeck(c.name)) {
       // vivier d'exploration : non conservé
     } else {
@@ -65,7 +65,7 @@ function snapshot() {
         g:c.img||'', G:c.imgN||'', L:c.imgL||'', B:c.imgB||'', BL:c.imgBL||'',
         u:c.cmUrl||'', k:c.unknown?1:0, X:c.textFull?1:0,
         ...(c.manaProduit ? {mp:c.manaProduit} : {}),
-        ...(typeof c.legal === 'string' ? {lg:c.legal} : {}), ...impressionSnap(c)
+        ...(typeof c.legal === 'string' ? {lg:c.legal} : {}), ...impressionSnap(c), ...jeuSnap(c)
       });
     }
   });
@@ -181,6 +181,7 @@ function restore(d) {
     if (o.X && o.x) card.textFull = true;
     if (card.img) card.imgTried = true;
     impressionRestore(card, o);
+    jeuRestore(card, o);
   });
 
   (d.enrich || []).forEach(o => {
@@ -196,6 +197,7 @@ function restore(d) {
     if (typeof o.mp === 'string' && o.mp) card.manaProduit = o.mp;
     if (card.img) card.imgTried = true;
     impressionRestore(card, o);
+    jeuRestore(card, o);
   });
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));

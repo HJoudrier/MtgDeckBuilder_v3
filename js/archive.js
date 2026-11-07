@@ -39,7 +39,10 @@ function compacte(sc) {
     /* Les couleurs que la carte produit, que seul Scryfall sait vraiment : un
        terrain-filtre ou un tutorat de terrain échappent à la lecture du texte.
        Vide quand Scryfall ne dit rien — le texte prend alors le relais. */
-    (sc.produced_mana || []).join('')
+    (sc.produced_mana || []).join(''),
+    /* Ce que le moteur de jeu lit en plus : mots-clés, loyauté, layout,
+       faces, force non numérique (js/champsJeu.js). */
+    ...colonnesJeu(sc)
   ];
 }
 

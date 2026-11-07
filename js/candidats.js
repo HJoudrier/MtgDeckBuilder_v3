@@ -32,6 +32,7 @@ function completeDepuisRec(c, rec) {
   if (rec[CH.ENDURANCE] != null && c.endurance == null) c.endurance = rec[CH.ENDURANCE];
   if (rec[CH.ARTISTE] && !c.artist) c.artist = rec[CH.ARTISTE];
   if (!c.price && rec[CH.PRIX] > 0) c.price = rec[CH.PRIX];
+  if (!c.motsCles && !c.faces) appliqueChampsJeu(c, champsJeuRec(rec));
   noterSetsArchive(c, rec);
   noterLegalArchive(c, rec);
   return c;
@@ -62,6 +63,8 @@ function carteDuCatalogue(rec) {
   if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
   if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
   if (rec[CH.ARTISTE]) c.artist = rec[CH.ARTISTE];
+  if (rec[CH.MANA_PROD]) c.manaProduit = ordonneMana(String(rec[CH.MANA_PROD]).split(''));
+  appliqueChampsJeu(c, champsJeuRec(rec));
   noterLegalArchive(c, rec);
   reanalyser(c);
   if (rec[CH.IMG]) {

@@ -88,6 +88,7 @@ function applyScryfall(sc, requested, imagesOnly) {
     }
     const art = sc.artist || (faces && faces[0] && faces[0].artist);
     if (art) target.artist = art;
+    appliqueChampsJeu(target, champsJeuScryfall(sc));
     if (legal !== undefined && target.legal !== legal) { target.legal = legal; fond = true; }
     if (fond) MAJ_CARTES++;
     return true;
@@ -105,6 +106,7 @@ function applyScryfall(sc, requested, imagesOnly) {
   const art = sc.artist || (faces && faces[0] && faces[0].artist);
   if (art) fresh.artist = art;
   if (legal !== undefined) fresh.legal = legal;
+  appliqueChampsJeu(fresh, champsJeuScryfall(sc));
   reanalyser(fresh);
 
   if (!target) {

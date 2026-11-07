@@ -143,22 +143,28 @@ function mainType(c) {
 
 const TYPE_ORDER = ['Créature','Éphémère','Rituel','Artefact','Enchantement','Planeswalker','Terrain','Jeton','Autre'];
 
+/* Une ligne de la base livrée devient une carte. Le sixième champ, facultatif,
+   porte la force et l'endurance : le texte n'est qu'un résumé, et ce que
+   `buildCard()` y devine se trompe dès qu'un jeton est décrit (Wurmcoil y
+   lisait 3/3) ou manque tout court (Llanowar Elves) — or le moteur de jeu
+   fait combattre ces nombres-là. */
+function carteLivree(line) {
+  const [name, cost, type, price, text, pt] = line.split('|');
+  if (!name) return null;
+  const card = buildCard(name, cost, type, price, text);
+  const m = /^(\d+)\/(\d+)$/.exec(pt || '');
+  if (m) { card.force = +m[1]; card.endurance = +m[2]; reanalyser(card); }
+  return registerCard(card);
+}
+
 /* Peuplement initial */
-RAW.split('\n').forEach(line => {
-  const [name, cost, type, price, text] = line.split('|');
-  if (!name) return;
-  registerCard(buildCard(name, cost, type, price, text));
-});
+RAW.split('\n').forEach(carteLivree);
 
 const BUILTIN = new Set(DB.map(c => norm(c.name)));
 
 function initBuiltin() {
   if (DB.length === 0) {
-    RAW.split('\n').forEach(line => {
-      const [name, cost, type, price, text] = line.split('|');
-      if (!name) return;
-      registerCard(buildCard(name, cost, type, price, text));
-    });
+    RAW.split('\n').forEach(carteLivree);
   }
 }
 
