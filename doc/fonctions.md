@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**940 fonctions**, 144 modules, 946 Ko de JavaScript.
+**952 fonctions**, 146 modules, 956 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -42,7 +42,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`oracleDeclencheurs.js`](#jsoracledeclencheursjs) | Lire ce qui déclenche une capacité | 4 | 88 |
 | [`oracleStatiques.js`](#jsoraclestatiquesjs) | Lire une capacité statique, et la façon d'entrer | 4 | 85 |
 | [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 143 |
-| [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 10 | 159 |
+| [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 10 | 164 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 19 | 194 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 8 | 76 |
@@ -58,7 +58,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 10 | 147 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 102 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 58 |
-| [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 5 | 76 |
+| [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
+| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 102 |
+| [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 84 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 120 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 8 | 168 |
@@ -113,7 +115,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 8 | 116 |
 | [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
 | [`decksLies.js`](#jsdecksliesjs) | Les adversaires liés à Moxfield ou à Archidekt | 11 | 196 |
-| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 9 | 98 |
+| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 11 | 124 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
@@ -725,14 +727,14 @@ Ranger chaque ligne d'une carte. *7 fonctions, 143 lignes, 6.5 Ko.*
 
 ## js/definitions.js
 
-D'une carte à sa définition de jeu. *10 fonctions, 159 lignes, 8.5 Ko.*
+D'une carte à sa définition de jeu. *10 fonctions, 164 lignes, 8.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `empreinte(s)` | Une empreinte courte d'un texte, pour la clé du mémo et les signatures. |
 | `nombreFiche(v)` | — |
 | `couleursDe(cout, fiche)` | Les couleurs d'une carte, lues dans son coût ; un jeton dit les siennes. |
-| `verseLigne(def, res)` | Verser une ligne comprise dans la définition. |
+| `verseLigne(def, res, texte)` | Verser une ligne comprise dans la définition. |
 | `etatLigne(res)` | L'état d'une ligne pour la couverture. |
 | `capacitesImplicites(def, fiche)` | Les capacités qu'une carte a sans les écrire : le mana d'un terrain de base ou d'un dual (le texte n'en est qu'un rappel, effacé), et à défaut le mana que Scryfall dit qu'un terrain produit. |
 | `compileDefinition(fiche, comportement)` | Compiler une fiche. `comportement` remplace le texte oracle quand l'utilisateur a décrit la carte à la main (js/fenComportement.js). |
@@ -996,15 +998,39 @@ Une partie, du mélange à la fin. *2 fonctions, 58 lignes, 2.1 Ko.*
 
 ## js/jeuPilote.js
 
-Dérouler une partie, question après question. *5 fonctions, 76 lignes, 3.1 Ko.*
+Dérouler une partie, question après question. *6 fonctions, 99 lignes, 4.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `creePartie(cfg)` | Une partie prête à dérouler. |
 | `valideReponse(q, r)` | Une réponse est-elle recevable ? Sinon on retient le défaut de la question, et on le dit dans le journal. |
+| `reponseRecevable(q, r)` | Ce qui ne va pas dans la réponse d'un humain, en une phrase, ou rien. |
 | `avance(h, agents, budgetMs, horloge)` | Dérouler une partie. `agents[j]` répond pour le joueur j : `{humain, repond(P, q)}`. Rend `finie`, `attente` (un humain doit répondre), `pause` (budget épuisé) ou `erreur`. `horloge` est… |
 | `repondre(h, agents, r, budgetMs, horloge)` | Répondre à la question en attente (lot 2), puis reprendre. |
 | `joueJusquauBout(cfg, agents)` | Jouer une partie jusqu'au bout d'une traite (tests, rejeu). |
+
+## js/jeuVue.js
+
+Ce qu'un joueur voit de la partie. *7 fonctions, 102 lignes, 5.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ficheVue(def)` | La fiche d'affichage d'une carte : ce qu'un humain lit sur elle. |
+| `objetVue(P, o, cartes)` | Un permanent tel qu'on le voit : ses caractéristiques du moment, son état, sa place dans le combat. |
+| `carteVue(P, id, cartes)` | Une carte d'une zone publique, ou de sa propre main. |
+| `libelleRef(P, c)` | Le libellé d'une cible ou d'un joueur. |
+| `vue(P, j)` | La vue du joueur `j`. |
+| `libelleAction(P, a)` | Le libellé d'une action de priorité. |
+| `questionPourUI(P, q)` | Une question telle qu'un humain la reçoit : des libellés, des références, des bornes — et rien de ce que le moteur garde pour lui (définitions, opérations, descripteurs). |
+
+## js/jeuArrets.js
+
+Quand demander à un joueur humain. *2 fonctions, 33 lignes, 1.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `arretsParDefaut()` | Les arrêts de départ : mes deux phases principales et le moment où les bloqueurs sont posés ; chez les autres, leurs attaquants déclarés, leurs bloqueurs, leur fin de tour. |
+| `doitDemander(P, j, q, A)` | Faut-il poser cette question de priorité au joueur ? `A.passeJusqua` : le numéro du tour où il a demandé « passer jusqu'à mon tour » ; il tombe de lui-même au début de son tour suivant. |
 
 ## js/iaValeur.js
 
@@ -1922,14 +1948,16 @@ Les adversaires liés à Moxfield ou à Archidekt. *11 fonctions, 196 lignes, 8.
 
 ## js/simPreparation.js
 
-D'un deck ou d'un adversaire à un siège de table. *9 fonctions, 98 lignes, 4.3 Ko.*
+D'un deck ou d'un adversaire à un siège de table. *11 fonctions, 124 lignes, 6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `vieDuFormat(format)` | — |
 | `comportementDe(nom)` | Le comportement écrit à la main pour une carte, s'il y en a un. |
 | `bilanCouverture(entrees, manquantes)` | Résumer la couverture d'un siège. Les terrains ne comptent pas dans le taux : ils sont presque toujours compris, et dilueraient ce qui ne l'est pas. |
-| `siegeDepuisListe(nom, format, liste, commandants)` | Un siège à partir d'une liste `[[nom, quantité]]` et de commandants. |
+| `siegeDepuisListe(nom, format, liste, commandants, resout = ficheParNom, comportement = comportementDe)` | Un siège à partir d'une liste `[[nom, quantité]]` et de commandants. |
+| `siegeDepuisFiches(nom, format, cartes, commandants, comportements)` | Un siège bâti sur les fiches qu'un invité a envoyées : l'hôte ne lit ni son `S` ni son archive, il joue les cartes telles que l'invité les connaît, avec les comportements que l'invité a… |
+| `fichesDeDeck(cle)` | Les fiches d'un deck de l'atelier, telles qu'un invité les envoie à l'hôte : la liste, le commandant, et les comportements écrits à la main pour ces cartes-là seulement. |
 | `siegeDeck(cle)` | Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si le format en a un. |
 | `siegeAdversaire(cle)` | — |
 | `nomsManquants(cfg)` | Les noms qu'aucune source ne connaît encore, pour toute une table. |

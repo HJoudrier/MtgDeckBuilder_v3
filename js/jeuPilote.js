@@ -32,6 +32,29 @@ function valideReponse(q, r) {
   return Number.isInteger(r) && r >= 0 && r < n ? r : q.defaut;
 }
 
+/* Ce qui ne va pas dans la réponse d'un humain, en une phrase, ou rien.
+   `valideReponse()` remplace en silence une réponse invalide par le défaut
+   — juste pour un joueur automatique, qui ne se trompe pas ; un humain doit
+   plutôt être réinterrogé, la raison sous les yeux. */
+function reponseRecevable(q, r) {
+  const n = q.options.length;
+  if (q.q === 'attaquants' || q.q === 'bloqueurs') {
+    if (!Array.isArray(r)) return 'Réponse illisible.';
+    if (r.some(p => !Array.isArray(p) || p.length !== 2 || !Number.isInteger(p[0]) || p[0] < 0 || p[0] >= n || !Number.isInteger(p[1]))) return 'Une paire est invalide.';
+    const vus = new Set(r.map(p => p[0]));
+    return vus.size === r.length ? '' : 'Une créature figure deux fois.';
+  }
+  if (q.multi) {
+    if (!Array.isArray(r) || r.some(i => !Number.isInteger(i) || i < 0 || i >= n)) return 'Réponse illisible.';
+    const u = new Set(r).size;
+    if (u !== r.length) return 'Un choix figure deux fois.';
+    if (u < q.min) return q.min === q.max ? `Choisissez-en ${q.min}.` : `Choisissez-en au moins ${q.min}.`;
+    if (u > q.max) return `Choisissez-en au plus ${q.max}.`;
+    return '';
+  }
+  return Number.isInteger(r) && r >= 0 && r < n ? '' : 'Réponse illisible.';
+}
+
 /* Dérouler une partie. `agents[j]` répond pour le joueur j :
    `{humain, repond(P, q)}`. Rend `finie`, `attente` (un humain doit
    répondre), `pause` (budget épuisé) ou `erreur`. `horloge` est passée par

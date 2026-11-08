@@ -35,24 +35,50 @@ function bilanCouverture(entrees, manquantes) {
 }
 
 /* Un siège à partir d'une liste `[[nom, quantité]]` et de commandants. */
-function siegeDepuisListe(nom, format, liste, commandants) {
+function siegeDepuisListe(nom, format, liste, commandants, resout = ficheParNom, comportement = comportementDe) {
   const cartes = [], manquantes = [], entrees = [], cmds = [];
   for (const [n, q] of liste) {
-    const f = ficheParNom(n);
+    const f = resout(n);
     if (!f) { manquantes.push(n); continue; }
-    const def = definitionDe(f, comportementDe(f.nom));
+    const def = definitionDe(f, comportement(f.nom));
     cartes.push({def, n: q});
     entrees.push({nom: f.nom, n: q, def, fiche: f});
   }
   for (const n of commandants) {
-    const f = ficheParNom(n);
+    const f = resout(n);
     if (!f) { manquantes.push(n); continue; }
-    const def = definitionDe(f, comportementDe(f.nom));
+    const def = definitionDe(f, comportement(f.nom));
     cmds.push(def);
     entrees.push({nom: f.nom, n: 1, def, fiche: f, cmd: true});
   }
   return {nom, format, vie: vieDuFormat(format), cartes, commandants: cmds, manquantes,
     couverture: bilanCouverture(entrees, manquantes)};
+}
+
+/* Un siège bâti sur les fiches qu'un invité a envoyées : l'hôte ne lit ni
+   son `S` ni son archive, il joue les cartes telles que l'invité les connaît,
+   avec les comportements que l'invité a écrits pour elles. */
+function siegeDepuisFiches(nom, format, cartes, commandants, comportements) {
+  const parNom = new Map();
+  cartes.forEach(([f]) => parNom.set(f.nom, f));
+  commandants.forEach(f => parNom.set(f.nom, f));
+  const comp = n => { const c = (comportements || {})[n]; return typeof c === 'string' && c.trim() ? c : undefined; };
+  return siegeDepuisListe(nom, format, cartes.map(([f, n]) => [f.nom, n]), commandants.map(f => f.nom), n => parNom.get(n) || null, comp);
+}
+
+/* Les fiches d'un deck de l'atelier, telles qu'un invité les envoie à
+   l'hôte : la liste, le commandant, et les comportements écrits à la main
+   pour ces cartes-là seulement. `manquantes` : ce que l'appareil ne connaît
+   pas, à demander à Scryfall avant l'envoi. */
+function fichesDeDeck(cle) {
+  const d = S.decks[cle];
+  if (!d) return null;
+  const cmd = (FORMATS[d.format] || {}).commander && d.commander ? [d.commander] : [];
+  const cartes = [], commandants = [], manquantes = [], comportements = {};
+  const prends = n => { const f = ficheParNom(n); if (!f) manquantes.push(n); else if (comportementDe(f.nom)) comportements[f.nom] = comportementDe(f.nom); return f; };
+  [...d.deck].filter(([n]) => !cmd.includes(n)).forEach(([n, q]) => { const f = prends(n); if (f) cartes.push([f, q]); });
+  cmd.forEach(n => { const f = prends(n); if (f) commandants.push(f); });
+  return {nom: d.nom, format: d.format, cartes, commandants, comportements, manquantes};
 }
 
 /* Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si

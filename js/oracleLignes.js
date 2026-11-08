@@ -136,7 +136,7 @@ function compileLignes(lignes, estSort) {
     const puces = [];
     for (let j = i + 1; j < lignes.length && /^•/.test(lignes[j]); j++) puces.push(lignes[j]);
     const texte = [lignes[i], ...puces].join(' ');
-    out.push({texte, res: compileLigne(lignes[i], estSort, cs, puces)});
+    out.push({texte, i, res: compileLigne(lignes[i], estSort, cs, puces)});
   }
   return {lignes: out, contexteSort: cs};
 }

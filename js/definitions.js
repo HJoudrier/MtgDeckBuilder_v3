@@ -16,7 +16,7 @@
 /* À rehausser dès que le compilateur change ce qu'il comprend : la
    signature d'un lot de simulations l'inclut, et un rejeu fait avec un
    autre compilateur ne rejouerait pas la même partie. */
-const COMPILO_V = 1;
+const COMPILO_V = 2;
 
 const DEFS = new Map();
 
@@ -45,7 +45,7 @@ function couleursDe(cout, fiche) {
 }
 
 /* Verser une ligne comprise dans la définition. */
-function verseLigne(def, res) {
+function verseLigne(def, res, texte) {
   if (!res) return;
   switch (res.genre) {
     case 'mots':
@@ -57,13 +57,13 @@ function verseLigne(def, res) {
     case 'coutSup': def.coutSup = res.cout; break;
     case 'entree': def.entree = Object.assign(def.entree || {}, res.entree); break;
     case 'statique': def.statiques.push(res.s); break;
-    case 'mana': def.capacites.push({genre: 'mana', cout: res.cout, options: res.options, parChaque: res.parChaque}); break;
+    case 'mana': def.capacites.push({genre: 'mana', cout: res.cout, options: res.options, parChaque: res.parChaque, texte}); break;
     case 'activee':
-      if (res.cout && res.effet) def.capacites.push({genre: 'activee', cout: res.cout, effet: res.effet, vitesse: res.vitesse, unefois: res.unefois});
+      if (res.cout && res.effet) def.capacites.push({genre: 'activee', cout: res.cout, effet: res.effet, vitesse: res.vitesse, unefois: res.unefois, texte});
       break;
-    case 'loyaute': if (res.effet) def.capacites.push({genre: 'loyaute', delta: res.delta, effet: res.effet}); break;
+    case 'loyaute': if (res.effet) def.capacites.push({genre: 'loyaute', delta: res.delta, effet: res.effet, texte}); break;
     case 'declenchee':
-      if (res.ecoutes && res.effet) def.capacites.push({genre: 'declenchee', ecoutes: res.ecoutes, effet: res.effet, unefois: res.unefois});
+      if (res.ecoutes && res.effet) def.capacites.push({genre: 'declenchee', ecoutes: res.ecoutes, effet: res.effet, unefois: res.unefois, texte});
       break;
   }
 }
@@ -98,7 +98,8 @@ function compileDefinition(fiche, comportement) {
     couleurs: couleursDe(cout, fiche), force: nombreFiche(face.force), endurance: nombreFiche(face.endurance),
     loyaute: nombreFiche(face.loyaute), mots: 0, params: {}, sort: null, capacites: [], statiques: [],
     entree: null, aura: null, equipe: null, kicker: null, flashback: null, cycling: null,
-    jeton: /\btoken\b/i.test(face.type || ''), couverture: null
+    jeton: /\btoken\b/i.test(face.type || ''), couverture: null,
+    coutTexte: face.cout || '', typeLigne: face.type || '', texteOracle: String(face.texte || '').replace(/\n/g, ' // ')
   };
   if (def.types.includes('creature') && (def.force == null || def.endurance == null)) {
     def.forceVariable = true;
@@ -109,9 +110,13 @@ function compileDefinition(fiche, comportement) {
   const brut = manuel ? String(comportement) : face.texte;
   const directive = manuel ? (/^\s*#(vanille|injouable)\b/i.exec(brut) || [])[1] : null;
   const estSort = def.types.includes('instant') || def.types.includes('sorcery');
-  const lignes = directive ? [] : normaliseOracle(brut.replace(/\n/g, ' // '), face.nom);
+  /* Chaque ligne est réduite à part, pour garder en regard son texte
+     d'origine : c'est lui qui sert de libellé à une capacité à la table. */
+  const paires = directive ? [] : brut.replace(/\n/g, ' // ').split(/\s*\/\/\s*/)
+    .map(o => [normaliseOracle(o, face.nom)[0], o.trim()]).filter(p => p[0]);
+  const lignes = paires.map(p => p[0]);
   const {lignes: compilees, contexteSort} = compileLignes(lignes, estSort);
-  compilees.forEach(l => verseLigne(def, l.res));
+  compilees.forEach(l => verseLigne(def, l.res, paires[l.i][1]));
   if (estSort) {
     const effs = compilees.filter(l => l.res && l.res.genre === 'sort').map(l => l.res.effet);
     const modal = effs.find(e => e.modes);
