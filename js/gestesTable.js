@@ -30,6 +30,14 @@ function gestesTable(act, b) {
     case 'tArrets': ouvreArrets(); return true;
     case 'tArretsDefaut': arretsDefaut(); return true;
     case 'tAppliquerArrets': appliqueArrets(); return true;
+    case 'tAjoutInvite': ajouteInvite(); return true;
+    case 'tRelier': relieCode(b.dataset.cle); return true;
+    case 'tReprise': repriseInvite(b.dataset.cle); return true;
+    case 'tConfier': confieInvite(b.dataset.cle); return true;
+    case 'tRejoindre': ouvreRejoindre(null); return true;
+    case 'tPret': pret(); return true;
+    case 'tLienOffre': lienOffreColle(); return true;
+    case 'tReprendre': reprendTable(); return true;
   }
   return false;
 }

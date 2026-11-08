@@ -93,6 +93,7 @@ function partieHTML() {
         <button type="button" class="btn sm" data-act="tJournal">Journal</button>
         <button type="button" class="btn sm" data-act="tQuitter">Quitter</button></span>
     </div>
+    ${typeof alertesInvitesHTML === 'function' ? alertesInvitesHTML() : ''}${TABLE.liaisonPerdue ? perteHoteHTML() : ''}
     <div class="tb-adversaires">${autres.map(J => bandeauJoueur(J, v, false)).join('')}</div>
     ${pileHTML(v)}
     <div class="tb-journal small muted">${journal.map(l => esc(l.txt)).join(' · ')}</div>

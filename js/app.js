@@ -288,6 +288,7 @@ function demarrer() {
   /* Le retour de connexion que l'adresse peut porter, puis un tirage de fond. */
   nuageDemarrer();
   verifieDecksLies();
+  if (!rejoindreDepuisAdresse()) chercheTableSauvee();
 }
 
 if (document.readyState === 'loading') {

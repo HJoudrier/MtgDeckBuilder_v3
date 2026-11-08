@@ -43,9 +43,11 @@ async function commenceTable() {
   await chargeSimCartes();
   const manquent = sources.filter(s => !s.fiches).map(siegeDeSource).filter(Boolean).flatMap(x => x.manquantes);
   if (manquent.length) { toast(`${manquent.length} carte(s) demandée(s) à Scryfall…`); await chercheFichesScryfall([...new Set(manquent)]); }
+  sources.forEach(s => { s.fiches = fichesDeSource(s); });
   const sieges = sources.map(siegeDeSource);
   if (sieges.some(x => !x || !x.cartes.length)) { toast('Un siège n\'a pas de deck jouable.'); return; }
   const graine = (Date.now() ^ (Math.random() * 4294967296)) >>> 0;
+  TABLE.config = {graine, premier: graine % sieges.length};
   TABLE.h = creePartie({graine, premier: graine % sieges.length, plafondTours: 60, journal: true, consigne: true,
     sieges: sieges.map((x, i) => ({...x, nom: sources[i].nom}))});
   TABLE.agents = sieges.map(() => ({humain: true}));
@@ -81,8 +83,8 @@ async function boucleTable() {
         await (s.mode !== 'moi' && !passe ? attendre(TABLE.pauseIA) : rendMain());
       }
     }
-    if (TABLE.h && TABLE.h.fini) { TABLE.question = null; diffuseVues(true); }
-  } finally { TABLE.boucle = false; }
+    if (TABLE.h && TABLE.h.fini) { TABLE.question = null; diffuseVues(true); oublieTableSauvee(); }
+  } finally { TABLE.boucle = false; if (TABLE.h && !TABLE.h.fini) sauveTable(); }
 }
 
 /* Porter une question à son siège : l'interface de cet appareil, ou
@@ -154,6 +156,7 @@ function passeJusquaMonTour(j) {
 }
 
 function quitteTable() {
+  if (TABLE.role === 'hote' && TABLE.h) oublieTableSauvee();
   if (typeof fermeLiaisons === 'function') fermeLiaisons();
   Object.assign(TABLE, {ouverte: false, phase: '', h: null, question: null, vue: null, role: ''});
   renduTable();

@@ -19,7 +19,7 @@ const IDB_NUAGE_BASE = 'nuage-base';
 /* Ce que `idbVider()` épargne : la base de la synchronisation, les fiches
    des cartes adverses et les résultats des simulations
    (js/simCartes.js, js/simStockage.js) — rien de cela n'est le catalogue. */
-const IDB_GARDES = [IDB_NUAGE_BASE, 'sim-cartes', 'sim-resultats'];
+const IDB_GARDES = [IDB_NUAGE_BASE, 'sim-cartes', 'sim-resultats', 'table-partie'];
 
 function idb() {
   return new Promise((ok, ko) => {

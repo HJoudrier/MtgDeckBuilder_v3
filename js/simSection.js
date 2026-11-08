@@ -48,7 +48,10 @@ function tableHTML(cfg) {
       ${enCours ? `<button type="button" class="btn danger" data-act="simArreter">Arrêter</button>`
         : `<button type="button" class="btn pri" data-act="simLancer">Lancer ${cfg.parties} parties</button>`}
       <span class="small muted">Chaque deck est joué par un joueur automatique ; les places tournent d'une partie à l'autre.</span>
-      <button type="button" class="btn" data-act="tOuvrirSalon" style="margin-left:auto" title="Jouer vous-même, contre des joueurs automatiques ou des invités">Jouer une partie</button>
+      <span class="row" style="margin-left:auto"><button type="button" class="btn" data-act="tOuvrirSalon" title="Jouer vous-même, contre des joueurs automatiques ou des invités">Jouer une partie</button>
+        <button type="button" class="btn" data-act="tRejoindre" title="Rejoindre la table qu'un autre héberge, en lisant son QR code">Rejoindre une table</button>
+        ${typeof TABLE_SAUVEE !== 'undefined' && TABLE_SAUVEE ? `<button type="button" class="btn pri" data-act="tReprendre"
+          title="La partie hébergée ici a été interrompue le ${new Date(TABLE_SAUVEE.date).toLocaleString('fr-FR')}">Reprendre la partie interrompue</button>` : ''}</span>
     </div>
     <div class="sim-progres" ${enCours ? '' : 'hidden'}>
       <div class="small muted" id="simTexte"></div>

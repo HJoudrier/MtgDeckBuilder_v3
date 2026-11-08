@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1076 fonctions**, 163 modules, 1039 Ko de JavaScript.
+**1121 fonctions**, 166 modules, 1060 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -115,11 +115,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 8 | 116 |
 | [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
 | [`decksLies.js`](#jsdecksliesjs) | Les adversaires liés à Moxfield ou à Archidekt | 11 | 196 |
-| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 11 | 124 |
+| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 13 | 139 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 151 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 154 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
@@ -166,14 +166,17 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 161 |
-| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 9 | 123 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 164 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 9 | 124 |
 | [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 13 | 148 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
-| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 9 | 92 |
+| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 11 | 130 |
+| [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
+| [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
+| [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 66 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 3 | 52 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 298 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 3 | 60 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 299 |
 
 ## js/reglesEffets.js
 
@@ -1965,7 +1968,7 @@ Les adversaires liés à Moxfield ou à Archidekt. *11 fonctions, 196 lignes, 8.
 
 ## js/simPreparation.js
 
-D'un deck ou d'un adversaire à un siège de table. *11 fonctions, 124 lignes, 6 Ko.*
+D'un deck ou d'un adversaire à un siège de table. *13 fonctions, 139 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1975,6 +1978,8 @@ D'un deck ou d'un adversaire à un siège de table. *11 fonctions, 124 lignes, 6
 | `siegeDepuisListe(nom, format, liste, commandants, resout = ficheParNom, comportement = comportementDe)` | Un siège à partir d'une liste `[[nom, quantité]]` et de commandants. |
 | `siegeDepuisFiches(nom, format, cartes, commandants, comportements)` | Un siège bâti sur les fiches qu'un invité a envoyées : l'hôte ne lit ni son `S` ni son archive, il joue les cartes telles que l'invité les connaît, avec les comportements que l'invité a… |
 | `fichesDeDeck(cle)` | Les fiches d'un deck de l'atelier, telles qu'un invité les envoie à l'hôte : la liste, le commandant, et les comportements écrits à la main pour ces cartes-là seulement. |
+| `fichesDeListe(nom, format, liste, commandants)` | Les fiches d'une liste `[[nom, quantité]]` et de ses commandants. |
+| `fichesDeSource(s)` | Les fiches d'une source du salon : un deck, un adversaire, ou ce qu'un invité a envoyé. |
 | `siegeDeck(cle)` | Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si le format en a un. |
 | `siegeAdversaire(cle)` | — |
 | `nomsManquants(cfg)` | Les noms qu'aucune source ne connaît encore, pour toute une table. |
@@ -2039,7 +2044,7 @@ Un lot de parties, par tranches. *11 fonctions, 143 lignes, 6.4 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *9 fonctions, 151 lignes, 9.9 Ko.*
+La section « Simulation ». *9 fonctions, 154 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2755,7 +2760,7 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *12 fonctions, 161 lignes, 7 Ko.*
+La partie que ce navigateur héberge. *12 fonctions, 164 lignes, 7.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2778,7 +2783,7 @@ La partie que ce navigateur héberge. *12 fonctions, 161 lignes, 7 Ko.*
 
 ## js/tableRendu.js
 
-La table, peinte depuis une vue. *9 fonctions, 123 lignes, 7.2 Ko.*
+La table, peinte depuis une vue. *9 fonctions, 124 lignes, 7.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2829,7 +2834,7 @@ Attaquer et bloquer, au doigt. *4 fonctions, 73 lignes, 3.8 Ko.*
 
 ## js/tableSalon.js
 
-Le salon : qui s'assoit à la table, avec quel deck. *9 fonctions, 92 lignes, 4.4 Ko.*
+Le salon : qui s'assoit à la table, avec quel deck. *11 fonctions, 130 lignes, 7.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2837,11 +2842,85 @@ Le salon : qui s'assoit à la table, avec quel deck. *9 fonctions, 92 lignes, 4.
 | `nomDeSource(src)` | — |
 | `siegesDuSalon()` | Les sièges du salon, tels que `commenceTable()` les attend. |
 | `salonHTML()` | — |
+| `siegeDistantHTML(e, i)` | Le siège d'un invité au salon : son QR tant qu'il n'a pas répondu, puis son nom et son deck. |
+| `alertesInvitesHTML()` | Pendant la partie, chez l'hôte : les invités qui ne répondent plus. |
 | `ouvreSalon()` | — |
 | `reglageSalon(t)` | — |
 | `ajouteSiegeIA()` | — |
 | `retireSiege(i)` | — |
 | `commenceDepuisSalon()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `ETATS_INVITE` | — |
+
+## js/tableLiaison.js
+
+Les invités de l'hôte. *23 fonctions, 188 lignes, 6.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `adressePublique()` | L'adresse où les téléphones trouvent l'atelier : celle qu'on a réglée, ou celle de cette page si elle est servie en http(s). |
+| `texteOffre(s)` | — |
+| `videoTable()` | La vidéo de la caméra : un seul élément, posé une fois hors de la table, pour que les repeints de la table ne coupent pas son flux. |
+| `montreVideo(oui)` | — |
+| `ajouteInvite()` | Ajouter un siège d'invité : la caméra, puis l'offre et son QR. |
+| `prepareOffre(s)` | — |
+| `scanneReponses()` | Lire à la caméra les réponses des invités qui en attendent une. |
+| `sautReponse(t, tape)` | Une réponse lue (base45) ou tapée (base32), si elle va avec un siège qui l'attend. |
+| `relie(r)` | — |
+| `relieCode(cle)` | « Relier » avec le code tapé. |
+| `etatDistant(s, e)` | — |
+| `recoitDistant(s, m)` | — |
+| `envoieDebut()` | Ce que l'hôte envoie à un invité pendant la partie. |
+| `nouvellesLignes(s)` | — |
+| `envoieVue(s, i)` | — |
+| `envoieQuestion(s, q)` | — |
+| `envoieErreur(s, n, err)` | — |
+| `renvoieTout(s)` | Un invité revenu : sa place, sa vue, et la question qui l'attendait. |
+| `repriseInvite(cle)` | Un nouveau QR pour un invité perdu : même jeton, même siège. |
+| `confieInvite(cle)` | — |
+| `oublieDistant(cle)` | — |
+| `fermeLiaisons()` | — |
+| `gardeEveil()` | Garder l'écran allumé pendant la partie : un téléphone en veille perd la liaison au bout d'une trentaine de secondes. |
+
+## js/tableInvite.js
+
+Rejoindre la table d'un autre. *14 fonctions, 135 lignes, 6.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `lisOffreTexte(t)` | L'offre d'un hôte, lue dans une adresse ou un texte de QR. |
+| `rejoindreDepuisAdresse()` | Au démarrage : l'adresse porte-t-elle une offre ? On l'efface aussitôt, pour qu'un rechargement ne rejoigne pas une seconde fois. |
+| `ouvreRejoindre(offre)` | — |
+| `scanneOffre()` | — |
+| `lienOffreColle()` | Le lien de l'hôte, collé à la main. |
+| `reglageInvite(c, t)` | — |
+| `pret()` | « Prêt » : les fiches du deck choisi, la réponse et son QR. |
+| `etatHote(e)` | — |
+| `recoitHote(m)` | — |
+| `envoieReponse(n, r)` | — |
+| `envoieArrets()` | — |
+| `envoiePasseTour()` | — |
+| `perteHoteHTML()` | Chez l'invité, la liaison perdue : il faut le QR de reprise de l'hôte. |
+| `rejoindreHTML()` | — |
+
+## js/tableReprise.js
+
+Reprendre une partie après un rechargement. *4 fonctions, 66 lignes, 2.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `sauveTable()` | Ranger la partie, au plus une fois par seconde. |
+| `oublieTableSauvee()` | — |
+| `chercheTableSauvee()` | Y a-t-il une partie interrompue ? Lu une fois au démarrage, pour que la section Simulation propose de la reprendre. |
+| `reprendTable()` | Rejouer la partie rangée jusqu'au coup en attente, puis rendre la main. |
+
+| Donnée | Rôle |
+|---|---|
+| `IDB_TABLE` | — |
+| `SAUVE_TABLE` | — |
+| `TABLE_SAUVEE` | — |
 
 ## js/fenArrets.js
 
@@ -2861,7 +2940,7 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *3 fonctions, 52 lignes, 2.6 Ko.*
+Les gestes de la table interactive. *3 fonctions, 60 lignes, 3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2871,7 +2950,7 @@ Les gestes de la table interactive. *3 fonctions, 52 lignes, 2.6 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 298 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 299 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

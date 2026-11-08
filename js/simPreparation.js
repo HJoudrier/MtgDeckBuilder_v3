@@ -74,11 +74,26 @@ function fichesDeDeck(cle) {
   const d = S.decks[cle];
   if (!d) return null;
   const cmd = (FORMATS[d.format] || {}).commander && d.commander ? [d.commander] : [];
-  const cartes = [], commandants = [], manquantes = [], comportements = {};
+  return fichesDeListe(d.nom, d.format, [...d.deck].filter(([n]) => !cmd.includes(n)), cmd);
+}
+
+/* Les fiches d'une liste `[[nom, quantité]]` et de ses commandants. */
+function fichesDeListe(nom, format, liste, commandants) {
+  const cartes = [], cmds = [], manquantes = [], comportements = {};
   const prends = n => { const f = ficheParNom(n); if (!f) manquantes.push(n); else if (comportementDe(f.nom)) comportements[f.nom] = comportementDe(f.nom); return f; };
-  [...d.deck].filter(([n]) => !cmd.includes(n)).forEach(([n, q]) => { const f = prends(n); if (f) cartes.push([f, q]); });
-  cmd.forEach(n => { const f = prends(n); if (f) commandants.push(f); });
-  return {nom: d.nom, format: d.format, cartes, commandants, comportements, manquantes};
+  liste.forEach(([n, q]) => { const f = prends(n); if (f) cartes.push([f, q]); });
+  commandants.forEach(n => { const f = prends(n); if (f) cmds.push(f); });
+  return {nom, format, cartes, commandants: cmds, comportements, manquantes};
+}
+
+/* Les fiches d'une source du salon : un deck, un adversaire, ou ce qu'un
+   invité a envoyé. */
+function fichesDeSource(s) {
+  if (s.fiches) return s.fiches;
+  const [g, k] = String(s.deck || '').split(':');
+  if (g === 'd') return fichesDeDeck(k);
+  const a = S.adversaires[k];
+  return a ? fichesDeListe(a.nom, a.format, a.liste, a.commandants) : null;
 }
 
 /* Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si
