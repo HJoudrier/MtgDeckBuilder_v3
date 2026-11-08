@@ -49,6 +49,8 @@
   "jeuTour.js",
   "jeuPartie.js",
   "jeuPilote.js",
+  "jeuVue.js",
+  "jeuArrets.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -144,6 +146,26 @@
   "gestesNuage.js",
   "gestesGraphe.js",
   "gestesSimulation.js",
+  "qrCorps.js",
+  "qrMatrice.js",
+  "qrEcrit.js",
+  "qrBinarise.js",
+  "qrReperes.js",
+  "qrLit.js",
+  "camera.js",
+  "liaisonCode.js",
+  "liaisonSdp.js",
+  "liaison.js",
+  "tableHote.js",
+  "tableRendu.js",
+  "tableQuestions.js",
+  "tableCombat.js",
+  "tableSalon.js",
+  "tableLiaison.js",
+  "tableInvite.js",
+  "tableReprise.js",
+  "fenArrets.js",
+  "gestesTable.js",
   "app.js"
  ],
  "fonctions": [
@@ -955,6 +977,7 @@
     "gestesDeck",
     "gestesGraphe",
     "getCardOrAnalyzedRec",
+    "imageCarte",
     "legality",
     "loadEdhrec",
     "majApercu",
@@ -1323,12 +1346,15 @@
     "bilanWishlist",
     "deckCourant",
     "demandesTousDecks",
+    "rejoindreHTML",
     "renderI",
     "renderJ",
     "renderTop",
     "restaureDecks",
+    "salonHTML",
     "signatureAchats",
     "snapshot",
+    "sourcesDeDecks",
     "supprimerDeck",
     "tableHTML",
     "vignetteDeck"
@@ -3611,7 +3637,7 @@
   {
    "nom": "couverture",
    "fichier": "definitions.js",
-   "ligne": 126,
+   "ligne": 131,
    "chargement": false,
    "appelle": [
     "etatLigne",
@@ -3626,7 +3652,7 @@
   {
    "nom": "definitionDe",
    "fichier": "definitions.js",
-   "ligne": 145,
+   "ligne": 150,
    "chargement": false,
    "appelle": [
     "compileDefinition",
@@ -3642,7 +3668,7 @@
   {
    "nom": "definitionJeton",
    "fichier": "definitions.js",
-   "ligne": 155,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "definitionDe"
@@ -3781,6 +3807,7 @@
     "actionsPossibles",
     "activeCapacite",
     "appliqueSBA",
+    "carteVue",
     "champDe",
     "cibleEncoreLegale",
     "ciblesLegales",
@@ -3807,6 +3834,8 @@
     "initiativeEnJeu",
     "jeuOpsB.js (chargement)",
     "lanceSort",
+    "libelleAction",
+    "libelleRef",
     "meilleureCibleHostile",
     "metEnJeu",
     "mulligans",
@@ -3817,6 +3846,7 @@
     "passeOuPresent",
     "piocheN",
     "prepareDeclencheur",
+    "questionPourUI",
     "resoudre",
     "resous",
     "sacrifie",
@@ -3826,7 +3856,8 @@
     "sourcesMana",
     "statiquesEnJeu",
     "terrainsEnMain",
-    "utiliteEnMain"
+    "utiliteEnMain",
+    "vue"
    ]
   },
   {
@@ -4160,6 +4191,7 @@
     "instantane",
     "jeuOpsA.js (chargement)",
     "meilleureCibleHostile",
+    "objetVue",
     "peutAttaquer",
     "peutBloquer",
     "repartition",
@@ -4187,6 +4219,7 @@
     "jeuOpsA.js (chargement)",
     "peutAttaquer",
     "peutEngagerSoi",
+    "questionPourUI",
     "repartition"
    ]
   },
@@ -4230,6 +4263,7 @@
     "impactSort",
     "infligeDegats",
     "meilleureCibleHostile",
+    "objetVue",
     "peutAttaquer",
     "peutBloquer",
     "peutEngagerSoi",
@@ -4279,18 +4313,6 @@
    "appeleePar": [
     "correspondObjet",
     "infligeDegats"
-   ]
-  },
-  {
-   "nom": "etatCombat",
-   "fichier": "jeuCibles.js",
-   "ligne": 23,
-   "chargement": false,
-   "appelle": [],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "correspondObjet"
    ]
   },
   {
@@ -5393,7 +5415,8 @@
    "appeleePar": [
     "declareBloqueurs",
     "iaAttaquants",
-    "iaBloqueurs"
+    "iaBloqueurs",
+    "questionPourUI"
    ]
   },
   {
@@ -5671,8 +5694,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "commenceTable",
     "joueJusquauBout",
-    "joueLot"
+    "joueLot",
+    "reprendTable"
    ]
   },
   {
@@ -5685,13 +5710,26 @@
    "appelleParHtml": [],
    "appeleePar": [
     "avance",
+    "boucleTable",
     "repondre"
+   ]
+  },
+  {
+   "nom": "reponseRecevable",
+   "fichier": "jeuPilote.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "recoitReponse"
    ]
   },
   {
    "nom": "avance",
    "fichier": "jeuPilote.js",
-   "ligne": 39,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
     "valideReponse"
@@ -5699,16 +5737,18 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "boucleTable",
     "joueJusquauBout",
     "joueLot",
     "nouveauSuivi",
-    "repondre"
+    "repondre",
+    "reprendTable"
    ]
   },
   {
    "nom": "repondre",
    "fichier": "jeuPilote.js",
-   "ligne": 62,
+   "ligne": 85,
    "chargement": false,
    "appelle": [
     "avance",
@@ -5716,12 +5756,16 @@
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
-   "appeleePar": []
+   "appeleePar": [
+    "boucleTable",
+    "recoitReponse",
+    "reprendTable"
+   ]
   },
   {
    "nom": "joueJusquauBout",
    "fichier": "jeuPilote.js",
-   "ligne": 71,
+   "ligne": 94,
    "chargement": false,
    "appelle": [
     "avance",
@@ -5731,6 +5775,151 @@
    "appelleParHtml": [],
    "appeleePar": [
     "rejouePartie"
+   ]
+  },
+  {
+   "nom": "ficheVue",
+   "fichier": "jeuVue.js",
+   "ligne": 17,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "carteVue",
+    "objetVue",
+    "questionPourUI",
+    "vue"
+   ]
+  },
+  {
+   "nom": "objetVue",
+   "fichier": "jeuVue.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [
+    "car",
+    "estCreature",
+    "ficheVue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "vue"
+   ]
+  },
+  {
+   "nom": "carteVue",
+   "fichier": "jeuVue.js",
+   "ligne": 36,
+   "chargement": false,
+   "appelle": [
+    "ficheVue",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "vue"
+   ]
+  },
+  {
+   "nom": "libelleRef",
+   "fichier": "jeuVue.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "questionPourUI",
+    "vue"
+   ]
+  },
+  {
+   "nom": "vue",
+   "fichier": "jeuVue.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "carteVue",
+    "ficheVue",
+    "libelleRef",
+    "obj",
+    "objetVue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "diffuseVues",
+    "envoieQuestion",
+    "envoieVue",
+    "poseQuestion"
+   ]
+  },
+  {
+   "nom": "libelleAction",
+   "fichier": "jeuVue.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "questionPourUI"
+   ]
+  },
+  {
+   "nom": "questionPourUI",
+   "fichier": "jeuVue.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [
+    "aMot",
+    "ficheVue",
+    "libelleAction",
+    "libelleRef",
+    "obj",
+    "peutBloquer"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "envoieQuestion",
+    "poseQuestion"
+   ]
+  },
+  {
+   "nom": "arretsParDefaut",
+   "fichier": "jeuArrets.js",
+   "ligne": 15,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "arretsDefaut",
+    "caseArret",
+    "commenceTable",
+    "corpsArrets",
+    "recoitDistant"
+   ]
+  },
+  {
+   "nom": "doitDemander",
+   "fichier": "jeuArrets.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable"
    ]
   },
   {
@@ -6245,8 +6434,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "commenceTable",
     "joueLot",
-    "rejouePartie"
+    "rejouePartie",
+    "reprendTable"
    ]
   },
   {
@@ -6340,7 +6531,8 @@
     "ficheTexteHTML",
     "ligneProposition",
     "montrerApercu",
-    "sugLigne"
+    "sugLigne",
+    "tableRendu.js (chargement)"
    ]
   },
   {
@@ -6876,7 +7068,7 @@
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 122,
+   "ligne": 124,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6888,7 +7080,7 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 126,
+   "ligne": 128,
    "chargement": false,
    "appelle": [
     "ecrire",
@@ -6910,7 +7102,7 @@
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 157,
+   "ligne": 159,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -6918,6 +7110,8 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
+    "ajouteSiegeIA",
+    "appliqueArrets",
     "appliqueCatalogueAuxCartes",
     "appliqueComportement",
     "appliquerAffichage",
@@ -6932,8 +7126,11 @@
     "gestesDeck",
     "gestesDecks",
     "gestesDonnees",
+    "reglageInvite",
+    "reglageSalon",
     "reglageSimulation",
     "renderAll",
+    "retireSiege",
     "runScryQueue",
     "supprimeAdversaireOui",
     "verifieDecksLies",
@@ -6943,7 +7140,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 163,
+   "ligne": 165,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -6966,7 +7163,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 274,
+   "ligne": 278,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7112,6 +7309,7 @@
     "chargeResultats",
     "chargeSimCartes",
     "chargerCatalogueComplet",
+    "chercheTableSauvee",
     "nuageBaseLire",
     "reprendreArchetypesEdhrec",
     "reprendreGameChangers",
@@ -7133,6 +7331,7 @@
     "nuageBaseEcrire",
     "rangeResultats",
     "rangeSimCartes",
+    "sauveTable",
     "sauverArchetypesEdhrec",
     "sauverGameChangers",
     "sauverSets"
@@ -7150,7 +7349,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "gestesDonnees",
-    "nuageDeconnecte"
+    "nuageDeconnecte",
+    "oublieTableSauvee"
    ]
   },
   {
@@ -11665,10 +11865,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "fichesDeListe",
     "nomsManquants",
     "ouvreComportement",
-    "resolutionAdversaire",
-    "siegeDepuisListe"
+    "resolutionAdversaire"
    ]
   },
   {
@@ -11683,8 +11883,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "commenceTable",
     "completeAdversaire",
     "joueLot",
+    "pret",
     "renderK",
     "verifieDecksLies"
    ]
@@ -11716,8 +11918,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "commenceTable",
     "completeAdversaire",
-    "joueLot"
+    "joueLot",
+    "pret"
    ]
   },
   {
@@ -12022,7 +12226,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "siegeDepuisListe"
+    "fichesDeListe"
    ]
   },
   {
@@ -12044,22 +12248,82 @@
    "chargement": false,
    "appelle": [
     "bilanCouverture",
-    "comportementDe",
     "definitionDe",
-    "ficheParNom",
     "vieDuFormat"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "siegeAdversaire",
-    "siegeDeck"
+    "siegeDeck",
+    "siegeDepuisFiches"
+   ]
+  },
+  {
+   "nom": "siegeDepuisFiches",
+   "fichier": "simPreparation.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "siegeDepuisListe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reprendTable",
+    "siegeDeSource"
+   ]
+  },
+  {
+   "nom": "fichesDeDeck",
+   "fichier": "simPreparation.js",
+   "ligne": 73,
+   "chargement": false,
+   "appelle": [
+    "fichesDeListe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fichesDeSource",
+    "pret"
+   ]
+  },
+  {
+   "nom": "fichesDeListe",
+   "fichier": "simPreparation.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [
+    "comportementDe",
+    "ficheParNom"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fichesDeDeck",
+    "fichesDeSource"
+   ]
+  },
+  {
+   "nom": "fichesDeSource",
+   "fichier": "simPreparation.js",
+   "ligne": 91,
+   "chargement": false,
+   "appelle": [
+    "fichesDeDeck",
+    "fichesDeListe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "commenceTable"
    ]
   },
   {
    "nom": "siegeDeck",
    "fichier": "simPreparation.js",
-   "ligne": 60,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "siegeDepuisListe"
@@ -12069,13 +12333,14 @@
    "appeleePar": [
     "couvertureTable",
     "joueLot",
-    "rejouePartie"
+    "rejouePartie",
+    "siegeDeSource"
    ]
   },
   {
    "nom": "siegeAdversaire",
    "fichier": "simPreparation.js",
-   "ligne": 69,
+   "ligne": 110,
    "chargement": false,
    "appelle": [
     "siegeDepuisListe"
@@ -12085,13 +12350,14 @@
    "appeleePar": [
     "couvertureTable",
     "joueLot",
-    "rejouePartie"
+    "rejouePartie",
+    "siegeDeSource"
    ]
   },
   {
    "nom": "nomsManquants",
    "fichier": "simPreparation.js",
-   "ligne": 75,
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "ficheParNom"
@@ -12105,7 +12371,7 @@
   {
    "nom": "fiabilite",
    "fichier": "simPreparation.js",
-   "ligne": 88,
+   "ligne": 129,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12117,7 +12383,7 @@
   {
    "nom": "signatureComportements",
    "fichier": "simPreparation.js",
-   "ligne": 95,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
     "empreinte"
@@ -12304,6 +12570,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "boucleTable",
     "joueLot"
    ]
   },
@@ -12509,6 +12776,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "ouvreAdversaire",
+    "rejoindreHTML",
+    "salonHTML",
     "tableHTML"
    ]
   },
@@ -12530,7 +12799,7 @@
   {
    "nom": "adversairesHTML",
    "fichier": "simSection.js",
-   "ligne": 60,
+   "ligne": 64,
    "chargement": false,
    "appelle": [
     "esc",
@@ -12548,7 +12817,7 @@
   {
    "nom": "pastilleLien",
    "fichier": "simSection.js",
-   "ligne": 89,
+   "ligne": 93,
    "chargement": false,
    "appelle": [
     "depuisQuand",
@@ -12563,7 +12832,7 @@
   {
    "nom": "relaisHTML",
    "fichier": "simSection.js",
-   "ligne": 98,
+   "ligne": 102,
    "chargement": false,
    "appelle": [
     "esc"
@@ -12577,7 +12846,7 @@
   {
    "nom": "badgeCouverture",
    "fichier": "simSection.js",
-   "ligne": 111,
+   "ligne": 115,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12590,7 +12859,7 @@
   {
    "nom": "couvertureHTML",
    "fichier": "simSection.js",
-   "ligne": 117,
+   "ligne": 121,
    "chargement": false,
    "appelle": [
     "badgeCouverture",
@@ -12606,7 +12875,7 @@
   {
    "nom": "renderK",
    "fichier": "simSection.js",
-   "ligne": 137,
+   "ligne": 141,
    "chargement": false,
    "appelle": [
     "adversairesHTML",
@@ -12622,6 +12891,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliqueComportement",
+    "chercheTableSauvee",
     "effaceComportement",
     "enregistreAdversaireFenetre",
     "entete.js (chargement)",
@@ -12743,6 +13013,7 @@
     "actesAnnexe",
     "adversairesHTML",
     "aideFormules",
+    "alertesInvitesHTML",
     "barreCatalogue",
     "barresHTML",
     "blocAchats",
@@ -12757,7 +13028,10 @@
     "champBudget",
     "champDeck",
     "champRecherche",
+    "chipsChoix",
+    "combatHTML",
     "corpsAffichage",
+    "corpsArrets",
     "corpsBoiteRecalcul",
     "corpsBudget",
     "corpsCibles",
@@ -12813,6 +13087,7 @@
     "ouvreAdversaire",
     "ouvreComportement",
     "ouvreJournal",
+    "ouvreJournalTable",
     "paginationListe",
     "panneauEdhrec",
     "partiesHTML",
@@ -12820,7 +13095,9 @@
     "proposerMajCatalogue",
     "propositionsHTML",
     "puceStatut",
+    "questionHTML",
     "refCarte",
+    "rejoindreHTML",
     "relaisHTML",
     "renderD",
     "renderE",
@@ -12829,13 +13106,16 @@
     "repliHTML",
     "resumeDeckConfig",
     "resumeFiltres",
+    "salonHTML",
     "sectionParametres",
+    "siegeDistantHTML",
     "sugLigne",
     "sugRow",
     "supprimeAdversaire",
     "svgGraph",
     "symBg",
     "symIcon",
+    "tableRendu.js (chargement)",
     "tagAnnexe",
     "tagDeck",
     "tagEdhrec",
@@ -12961,6 +13241,7 @@
     "buyCard",
     "chargerArchetypesEdhrec",
     "choisirVersion",
+    "commenceTable",
     "completeUnknown",
     "deplacerCarte",
     "effaceComportement",
@@ -12974,6 +13255,7 @@
     "gestesReglages",
     "joueLot",
     "lanceSimulation",
+    "lienOffreColle",
     "lireCatalogueFichier",
     "loadEdhrec",
     "majCatalogue",
@@ -12986,6 +13268,8 @@
     "openWipeModal",
     "ouvreComportement",
     "ouvreJournal",
+    "relie",
+    "relieCode",
     "runScryQueue",
     "save",
     "telechargerCatalogue",
@@ -13080,8 +13364,10 @@
     "openWantsModal",
     "openWipeModal",
     "ouvreAdversaire",
+    "ouvreArrets",
     "ouvreComportement",
     "ouvreJournal",
+    "ouvreJournalTable",
     "ouvrirBoiteCatalogue",
     "proposerMajCatalogue",
     "supprimeAdversaire"
@@ -13097,6 +13383,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)",
+    "appliqueArrets",
     "appliqueComportement",
     "appliquerAffichage",
     "appliquerBudget",
@@ -13137,7 +13424,8 @@
     "openDeckModal",
     "openFiltresModal",
     "openFormatModal",
-    "openParametresModal"
+    "openParametresModal",
+    "ouvreArrets"
    ]
   },
   {
@@ -13192,6 +13480,7 @@
    "appeleePar": [
     "appliquerAffichage",
     "corpsAffichage",
+    "corpsArrets",
     "corpsBudget",
     "corpsCatalogue",
     "corpsCibles",
@@ -13221,6 +13510,8 @@
    "appeleePar": [
     "app.js (chargement)",
     "appliquerAffichage",
+    "arretsDefaut",
+    "caseArret",
     "gestesDeckConfig",
     "gestesDecks",
     "gestesReglages",
@@ -13320,6 +13611,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "appliqueArrets",
     "appliquerAffichage",
     "appliquerBudget",
     "appliquerCibles",
@@ -14310,6 +14602,7 @@
     "renderOnglets",
     "renderSuggestions",
     "renderTop",
+    "renduTable",
     "scheduleSave"
    ],
    "appelleDiffere": [],
@@ -15502,6 +15795,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "barreCatalogue",
+    "lecteur",
     "majBoiteCatalogue"
    ]
   },
@@ -16227,6 +16521,2557 @@
    ]
   },
   {
+   "nom": "gfMul",
+   "fichier": "qrCorps.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "polyVal",
+    "rsCorrection",
+    "rsDecode",
+    "rsGenerateur"
+   ]
+  },
+  {
+   "nom": "gfDiv",
+   "fichier": "qrCorps.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "rsDecode"
+   ]
+  },
+  {
+   "nom": "gfPow",
+   "fichier": "qrCorps.js",
+   "ligne": 27,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "rsDecode",
+    "rsGenerateur"
+   ]
+  },
+  {
+   "nom": "rsGenerateur",
+   "fichier": "qrCorps.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [
+    "gfMul",
+    "gfPow"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "rsCorrection"
+   ]
+  },
+  {
+   "nom": "rsCorrection",
+   "fichier": "qrCorps.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "gfMul",
+    "rsGenerateur"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrMots"
+   ]
+  },
+  {
+   "nom": "polyVal",
+   "fichier": "qrCorps.js",
+   "ligne": 53,
+   "chargement": false,
+   "appelle": [
+    "gfMul"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "rsDecode"
+   ]
+  },
+  {
+   "nom": "rsDecode",
+   "fichier": "qrCorps.js",
+   "ligne": 58,
+   "chargement": false,
+   "appelle": [
+    "gfDiv",
+    "gfMul",
+    "gfPow",
+    "polyVal"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrCapacite",
+   "fichier": "qrCorps.js",
+   "ligne": 114,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit",
+    "qrMots"
+   ]
+  },
+  {
+   "nom": "qrTaille",
+   "fichier": "qrMatrice.js",
+   "ligne": 16,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrGrille",
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrBitsFormat",
+   "fichier": "qrMatrice.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitFormat",
+    "qrPoseFormat"
+   ]
+  },
+  {
+   "nom": "qrBitsVersion",
+   "fichier": "qrMatrice.js",
+   "ligne": 27,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrGrille"
+   ]
+  },
+  {
+   "nom": "qrGrille",
+   "fichier": "qrMatrice.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "qrBitsVersion",
+    "qrTaille"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit",
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrPositionsFormat",
+   "fichier": "qrMatrice.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitFormat",
+    "qrPoseFormat"
+   ]
+  },
+  {
+   "nom": "qrPoseFormat",
+   "fichier": "qrMatrice.js",
+   "ligne": 78,
+   "chargement": false,
+   "appelle": [
+    "qrBitsFormat",
+    "qrPositionsFormat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit"
+   ]
+  },
+  {
+   "nom": "qrOrdre",
+   "fichier": "qrMatrice.js",
+   "ligne": 87,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit",
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrMasque",
+   "fichier": "qrMatrice.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit",
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrEstAlnum",
+   "fichier": "qrEcrit.js",
+   "ligne": 18,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrBitsDonnees"
+   ]
+  },
+  {
+   "nom": "qrBitsDonnees",
+   "fichier": "qrEcrit.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [
+    "qrEstAlnum"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit"
+   ]
+  },
+  {
+   "nom": "qrMots",
+   "fichier": "qrEcrit.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [
+    "qrCapacite",
+    "rsCorrection"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit"
+   ]
+  },
+  {
+   "nom": "qrPenalite",
+   "fichier": "qrEcrit.js",
+   "ligne": 58,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEcrit"
+   ]
+  },
+  {
+   "nom": "qrEcrit",
+   "fichier": "qrEcrit.js",
+   "ligne": 84,
+   "chargement": false,
+   "appelle": [
+    "qrBitsDonnees",
+    "qrCapacite",
+    "qrGrille",
+    "qrMasque",
+    "qrMots",
+    "qrOrdre",
+    "qrPenalite",
+    "qrPoseFormat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "alertesInvitesHTML",
+    "rejoindreHTML",
+    "siegeDistantHTML"
+   ]
+  },
+  {
+   "nom": "qrSVG",
+   "fichier": "qrEcrit.js",
+   "ligne": 103,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "alertesInvitesHTML",
+    "rejoindreHTML",
+    "siegeDistantHTML"
+   ]
+  },
+  {
+   "nom": "qrGris",
+   "fichier": "qrBinarise.js",
+   "ligne": 13,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisQR"
+   ]
+  },
+  {
+   "nom": "qrBinarise",
+   "fichier": "qrBinarise.js",
+   "ligne": 20,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisQR"
+   ]
+  },
+  {
+   "nom": "qrNoir",
+   "fichier": "qrBinarise.js",
+   "ligne": 53,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrChercheAlignement",
+    "qrEchantillonne",
+    "qrTraverse",
+    "qrTroisSuites"
+   ]
+  },
+  {
+   "nom": "qrProportions",
+   "fichier": "qrReperes.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrChercheReperes",
+    "qrTraverse"
+   ]
+  },
+  {
+   "nom": "qrTroisSuites",
+   "fichier": "qrReperes.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [
+    "qrNoir"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrTraverse"
+   ]
+  },
+  {
+   "nom": "qrTraverse",
+   "fichier": "qrReperes.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "qrNoir",
+    "qrProportions",
+    "qrTroisSuites"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrChercheAlignement",
+    "qrChercheReperes"
+   ]
+  },
+  {
+   "nom": "qrChercheReperes",
+   "fichier": "qrReperes.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "qrProportions",
+    "qrTraverse"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisQR"
+   ]
+  },
+  {
+   "nom": "qrTriplets",
+   "fichier": "qrReperes.js",
+   "ligne": 85,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisQR"
+   ]
+  },
+  {
+   "nom": "qrChercheAlignement",
+   "fichier": "qrReperes.js",
+   "ligne": 105,
+   "chargement": false,
+   "appelle": [
+    "qrNoir",
+    "qrTraverse"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitTriplet"
+   ]
+  },
+  {
+   "nom": "qrCarreVersQuad",
+   "fichier": "qrLit.js",
+   "ligne": 15,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitTriplet"
+   ]
+  },
+  {
+   "nom": "qrAdjointe",
+   "fichier": "qrLit.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitTriplet"
+   ]
+  },
+  {
+   "nom": "qrCompose",
+   "fichier": "qrLit.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitTriplet"
+   ]
+  },
+  {
+   "nom": "qrApplique",
+   "fichier": "qrLit.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrEchantillonne"
+   ]
+  },
+  {
+   "nom": "qrEchantillonne",
+   "fichier": "qrLit.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [
+    "qrApplique",
+    "qrNoir"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitTriplet"
+   ]
+  },
+  {
+   "nom": "qrLitFormat",
+   "fichier": "qrLit.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "qrBitsFormat",
+    "qrPositionsFormat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrSegments",
+   "fichier": "qrLit.js",
+   "ligne": 75,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitGrille"
+   ]
+  },
+  {
+   "nom": "qrLitGrille",
+   "fichier": "qrLit.js",
+   "ligne": 101,
+   "chargement": false,
+   "appelle": [
+    "qrGrille",
+    "qrLitFormat",
+    "qrMasque",
+    "qrOrdre",
+    "qrSegments",
+    "qrTaille",
+    "rsDecode"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qrLitTriplet"
+   ]
+  },
+  {
+   "nom": "lisQR",
+   "fichier": "qrLit.js",
+   "ligne": 126,
+   "chargement": false,
+   "appelle": [
+    "qrBinarise",
+    "qrChercheReperes",
+    "qrGris",
+    "qrLitTriplet",
+    "qrTriplets"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisImage"
+   ]
+  },
+  {
+   "nom": "qrLitTriplet",
+   "fichier": "qrLit.js",
+   "ligne": 139,
+   "chargement": false,
+   "appelle": [
+    "qrAdjointe",
+    "qrCarreVersQuad",
+    "qrChercheAlignement",
+    "qrCompose",
+    "qrEchantillonne",
+    "qrLitGrille"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisQR"
+   ]
+  },
+  {
+   "nom": "ouvreCamera",
+   "fichier": "camera.js",
+   "ligne": 21,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "repriseInvite",
+    "scanneOffre"
+   ]
+  },
+  {
+   "nom": "fermeCamera",
+   "fichier": "camera.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etatDistant",
+    "fermeLiaisons",
+    "lienOffreColle",
+    "scanneOffre"
+   ]
+  },
+  {
+   "nom": "detecteurNatif",
+   "fichier": "camera.js",
+   "ligne": 45,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisImage"
+   ]
+  },
+  {
+   "nom": "lisImage",
+   "fichier": "camera.js",
+   "ligne": 56,
+   "chargement": false,
+   "appelle": [
+    "detecteurNatif",
+    "lisQR"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "scanne"
+   ]
+  },
+  {
+   "nom": "scanne",
+   "fichier": "camera.js",
+   "ligne": 73,
+   "chargement": false,
+   "appelle": [
+    "lisImage"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "scanneOffre",
+    "scanneReponses"
+   ]
+  },
+  {
+   "nom": "ecrivain",
+   "fichier": "liaisonCode.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "empaquette"
+   ]
+  },
+  {
+   "nom": "lecteur",
+   "fichier": "liaisonCode.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [
+    "octets"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "depaquette"
+   ]
+  },
+  {
+   "nom": "empaquette",
+   "fichier": "liaisonCode.js",
+   "ligne": 49,
+   "chargement": false,
+   "appelle": [
+    "ecrivain"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creeOffre",
+    "repondOffre"
+   ]
+  },
+  {
+   "nom": "depaquette",
+   "fichier": "liaisonCode.js",
+   "ligne": 65,
+   "chargement": false,
+   "appelle": [
+    "lecteur"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisOffreTexte",
+    "sautReponse"
+   ]
+  },
+  {
+   "nom": "base64url",
+   "fichier": "liaisonCode.js",
+   "ligne": 80,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "texteOffre"
+   ]
+  },
+  {
+   "nom": "deBase64url",
+   "fichier": "liaisonCode.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisOffreTexte"
+   ]
+  },
+  {
+   "nom": "base45",
+   "fichier": "liaisonCode.js",
+   "ligne": 84,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "rejoindreHTML"
+   ]
+  },
+  {
+   "nom": "deBase45",
+   "fichier": "liaisonCode.js",
+   "ligne": 93,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "sautReponse"
+   ]
+  },
+  {
+   "nom": "codeATaper",
+   "fichier": "liaisonCode.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "rejoindreHTML"
+   ]
+  },
+  {
+   "nom": "deCodeATaper",
+   "fichier": "liaisonCode.js",
+   "ligne": 114,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "sautReponse"
+   ]
+  },
+  {
+   "nom": "lisSdpLocal",
+   "fichier": "liaisonSdp.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "choisitCandidats"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creeOffre",
+    "repondOffre"
+   ]
+  },
+  {
+   "nom": "choisitCandidats",
+   "fichier": "liaisonSdp.js",
+   "ligne": 28,
+   "chargement": false,
+   "appelle": [
+    "ipv6Octets"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisSdpLocal"
+   ]
+  },
+  {
+   "nom": "ipv6Octets",
+   "fichier": "liaisonSdp.js",
+   "ligne": 48,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "choisitCandidats"
+   ]
+  },
+  {
+   "nom": "adresseCandidat",
+   "fichier": "liaisonSdp.js",
+   "ligne": 57,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "sdpDistant"
+   ]
+  },
+  {
+   "nom": "sdpDistant",
+   "fichier": "liaisonSdp.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [
+    "adresseCandidat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueReponse",
+    "repondOffre"
+   ]
+  },
+  {
+   "nom": "nouvelleConnexion",
+   "fichier": "liaison.js",
+   "ligne": 21,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creeOffre",
+    "repondOffre"
+   ]
+  },
+  {
+   "nom": "collecteFinie",
+   "fichier": "liaison.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creeOffre",
+    "repondOffre"
+   ]
+  },
+  {
+   "nom": "creeOffre",
+   "fichier": "liaison.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [
+    "collecteFinie",
+    "empaquette",
+    "lisSdpLocal",
+    "nouvelleConnexion"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "prepareOffre"
+   ]
+  },
+  {
+   "nom": "repondOffre",
+   "fichier": "liaison.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "collecteFinie",
+    "empaquette",
+    "lisSdpLocal",
+    "nouvelleConnexion",
+    "sdpDistant"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pret"
+   ]
+  },
+  {
+   "nom": "appliqueReponse",
+   "fichier": "liaison.js",
+   "ligne": 60,
+   "chargement": false,
+   "appelle": [
+    "sdpDistant"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "relie"
+   ]
+  },
+  {
+   "nom": "canal",
+   "fichier": "liaison.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "prepareOffre",
+    "pret"
+   ]
+  },
+  {
+   "nom": "jetonNeuf",
+   "fichier": "liaison.js",
+   "ligne": 109,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite"
+   ]
+  },
+  {
+   "nom": "attendre",
+   "fichier": "tableHote.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable"
+   ]
+  },
+  {
+   "nom": "signePublic",
+   "fichier": "tableHote.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable"
+   ]
+  },
+  {
+   "nom": "siegeDeSource",
+   "fichier": "tableHote.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [
+    "siegeAdversaire",
+    "siegeDeck",
+    "siegeDepuisFiches"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "commenceTable"
+   ]
+  },
+  {
+   "nom": "commenceTable",
+   "fichier": "tableHote.js",
+   "ligne": 41,
+   "chargement": false,
+   "appelle": [
+    "agentIA",
+    "arretsParDefaut",
+    "boucleTable",
+    "chargeSimCartes",
+    "chercheFichesScryfall",
+    "creePartie",
+    "envoieDebut",
+    "fichesDeSource",
+    "toast"
+   ],
+   "appelleDiffere": [
+    "siegeDeSource"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "commenceDepuisSalon"
+   ]
+  },
+  {
+   "nom": "boucleTable",
+   "fichier": "tableHote.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [
+    "attendre",
+    "avance",
+    "diffuseVues",
+    "doitDemander",
+    "oublieTableSauvee",
+    "poseQuestion",
+    "rendMain",
+    "repondre",
+    "sauveTable",
+    "signePublic",
+    "valideReponse"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "commenceTable",
+    "confieInvite",
+    "recoitReponse",
+    "reprendTable"
+   ]
+  },
+  {
+   "nom": "poseQuestion",
+   "fichier": "tableHote.js",
+   "ligne": 92,
+   "chargement": false,
+   "appelle": [
+    "diffuseVues",
+    "envoieQuestion",
+    "questionPourUI",
+    "renduTable",
+    "vue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable"
+   ]
+  },
+  {
+   "nom": "recoitReponse",
+   "fichier": "tableHote.js",
+   "ligne": 108,
+   "chargement": false,
+   "appelle": [
+    "boucleTable",
+    "diffuseVues",
+    "envoieErreur",
+    "renduTable",
+    "repondre",
+    "reponseRecevable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "passeJusquaMonTour",
+    "recoitDistant",
+    "repondsTable"
+   ]
+  },
+  {
+   "nom": "diffuseVues",
+   "fichier": "tableHote.js",
+   "ligne": 125,
+   "chargement": false,
+   "appelle": [
+    "envoieVue",
+    "renduTable",
+    "vue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable",
+    "poseQuestion",
+    "recoitReponse",
+    "reprendTable"
+   ]
+  },
+  {
+   "nom": "journalTable",
+   "fichier": "tableHote.js",
+   "ligne": 140,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "journalTableLignes",
+    "nouvellesLignes"
+   ]
+  },
+  {
+   "nom": "majArretsTable",
+   "fichier": "tableHote.js",
+   "ligne": 143,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueArrets"
+   ]
+  },
+  {
+   "nom": "passeJusquaMonTour",
+   "fichier": "tableHote.js",
+   "ligne": 150,
+   "chargement": false,
+   "appelle": [
+    "recoitReponse"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "passeTour",
+    "recoitDistant"
+   ]
+  },
+  {
+   "nom": "quitteTable",
+   "fichier": "tableHote.js",
+   "ligne": 158,
+   "chargement": false,
+   "appelle": [
+    "fermeLiaisons",
+    "oublieTableSauvee",
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "tableRendu.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "alertesInvitesHTML",
+    "bandeauJoueur",
+    "chipCarte",
+    "esc",
+    "etatChoix",
+    "imageCarte",
+    "manaHTML",
+    "perteHoteHTML"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "imageCarte",
+   "fichier": "tableRendu.js",
+   "ligne": 17,
+   "chargement": false,
+   "appelle": [
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tableRendu.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chipCarte",
+   "fichier": "tableRendu.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [
+    "etatChoix"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tableRendu.js (chargement)"
+   ]
+  },
+  {
+   "nom": "bandeauJoueur",
+   "fichier": "tableRendu.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [
+    "etatJoueur"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tableRendu.js (chargement)"
+   ]
+  },
+  {
+   "nom": "pileHTML",
+   "fichier": "tableRendu.js",
+   "ligne": 58,
+   "chargement": false,
+   "appelle": [
+    "etatChoix"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "journalTableLignes",
+   "fichier": "tableRendu.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [
+    "journalTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ouvreJournalTable",
+    "partieHTML"
+   ]
+  },
+  {
+   "nom": "detailHTML",
+   "fichier": "tableRendu.js",
+   "ligne": 70,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "partieHTML",
+   "fichier": "tableRendu.js",
+   "ligne": 83,
+   "chargement": false,
+   "appelle": [
+    "journalTableLignes"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renduTable"
+   ]
+  },
+  {
+   "nom": "finHTML",
+   "fichier": "tableRendu.js",
+   "ligne": 106,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renduTable"
+   ]
+  },
+  {
+   "nom": "renduTable",
+   "fichier": "tableRendu.js",
+   "ligne": 114,
+   "chargement": false,
+   "appelle": [
+    "finHTML",
+    "partieHTML",
+    "rejoindreHTML",
+    "salonHTML"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "ajouteSiegeIA",
+    "attaqueTous",
+    "basculeChoix",
+    "clicCarte",
+    "confieInvite",
+    "diffuseVues",
+    "etatDistant",
+    "etatHote",
+    "gestesTable",
+    "montreDetail",
+    "ouvreRejoindre",
+    "ouvreSalon",
+    "poseQuestion",
+    "prepareOffre",
+    "pret",
+    "quitteTable",
+    "recoitDistant",
+    "recoitHote",
+    "recoitReponse",
+    "reglageSalon",
+    "relie",
+    "renderAll",
+    "repondsTable",
+    "retireSiege",
+    "scanneOffre"
+   ]
+  },
+  {
+   "nom": "selDe",
+   "fichier": "tableQuestions.js",
+   "ligne": 13,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "attaqueTous",
+    "clicCarte",
+    "clicJoueur",
+    "etatChoix",
+    "etatJoueur",
+    "gestesTable",
+    "questionHTML",
+    "valideTable"
+   ]
+  },
+  {
+   "nom": "etatChoix",
+   "fichier": "tableQuestions.js",
+   "ligne": 20,
+   "chargement": false,
+   "appelle": [
+    "etatCombat",
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chipCarte",
+    "pileHTML",
+    "tableRendu.js (chargement)"
+   ]
+  },
+  {
+   "nom": "etatJoueur",
+   "fichier": "tableQuestions.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "bandeauJoueur"
+   ]
+  },
+  {
+   "nom": "repondsTable",
+   "fichier": "tableQuestions.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [
+    "envoieReponse",
+    "recoitReponse",
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "basculeChoix",
+    "clicCarte",
+    "gestesTable",
+    "valideTable"
+   ]
+  },
+  {
+   "nom": "nomVisible",
+   "fichier": "tableQuestions.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "montreDetail"
+   ]
+  },
+  {
+   "nom": "montreDetail",
+   "fichier": "tableQuestions.js",
+   "ligne": 57,
+   "chargement": false,
+   "appelle": [
+    "nomVisible",
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "clicCarte"
+   ]
+  },
+  {
+   "nom": "basculeChoix",
+   "fichier": "tableQuestions.js",
+   "ligne": 64,
+   "chargement": false,
+   "appelle": [
+    "renduTable",
+    "repondsTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "clicCarte",
+    "clicJoueur",
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "clicCarte",
+   "fichier": "tableQuestions.js",
+   "ligne": 76,
+   "chargement": false,
+   "appelle": [
+    "basculeChoix",
+    "clicCombat",
+    "montreDetail",
+    "renduTable",
+    "repondsTable",
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "clicJoueur",
+   "fichier": "tableQuestions.js",
+   "ligne": 93,
+   "chargement": false,
+   "appelle": [
+    "basculeChoix",
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "valideTable",
+   "fichier": "tableQuestions.js",
+   "ligne": 101,
+   "chargement": false,
+   "appelle": [
+    "repondsTable",
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "chipsChoix",
+   "fichier": "tableQuestions.js",
+   "ligne": 112,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "questionHTML"
+   ]
+  },
+  {
+   "nom": "questionHTML",
+   "fichier": "tableQuestions.js",
+   "ligne": 121,
+   "chargement": false,
+   "appelle": [
+    "chipsChoix",
+    "combatHTML",
+    "esc",
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "etatCombat",
+   "fichier": "tableCombat.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "correspondObjet",
+    "etatChoix"
+   ]
+  },
+  {
+   "nom": "clicCombat",
+   "fichier": "tableCombat.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "clicCarte"
+   ]
+  },
+  {
+   "nom": "combatHTML",
+   "fichier": "tableCombat.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "questionHTML"
+   ]
+  },
+  {
+   "nom": "attaqueTous",
+   "fichier": "tableCombat.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [
+    "renduTable",
+    "selDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "sourcesDeDecks",
+   "fichier": "tableSalon.js",
+   "ligne": 11,
+   "chargement": false,
+   "appelle": [
+    "clesDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteSiegeIA",
+    "ouvreSalon",
+    "salonHTML"
+   ]
+  },
+  {
+   "nom": "nomDeSource",
+   "fichier": "tableSalon.js",
+   "ligne": 16,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "siegesDuSalon"
+   ]
+  },
+  {
+   "nom": "siegesDuSalon",
+   "fichier": "tableSalon.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [
+    "nomDeSource"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "commenceDepuisSalon"
+   ]
+  },
+  {
+   "nom": "salonHTML",
+   "fichier": "tableSalon.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "adressePublique",
+    "clesDecks",
+    "esc",
+    "optionsHTML",
+    "siegeDistantHTML",
+    "sourcesDeDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renduTable"
+   ]
+  },
+  {
+   "nom": "siegeDistantHTML",
+   "fichier": "tableSalon.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "qrEcrit",
+    "qrSVG",
+    "texteOffre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "salonHTML"
+   ]
+  },
+  {
+   "nom": "alertesInvitesHTML",
+   "fichier": "tableSalon.js",
+   "ligne": 84,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "qrEcrit",
+    "qrSVG",
+    "texteOffre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tableRendu.js (chargement)"
+   ]
+  },
+  {
+   "nom": "ouvreSalon",
+   "fichier": "tableSalon.js",
+   "ligne": 93,
+   "chargement": false,
+   "appelle": [
+    "renduTable",
+    "sourcesDeDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "reglageSalon",
+   "fichier": "tableSalon.js",
+   "ligne": 99,
+   "chargement": false,
+   "appelle": [
+    "reglageInvite",
+    "renduTable",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "ajouteSiegeIA",
+   "fichier": "tableSalon.js",
+   "ligne": 111,
+   "chargement": false,
+   "appelle": [
+    "renduTable",
+    "scheduleSave",
+    "sourcesDeDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "retireSiege",
+   "fichier": "tableSalon.js",
+   "ligne": 118,
+   "chargement": false,
+   "appelle": [
+    "oublieDistant",
+    "renduTable",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "commenceDepuisSalon",
+   "fichier": "tableSalon.js",
+   "ligne": 126,
+   "chargement": false,
+   "appelle": [
+    "commenceTable",
+    "siegesDuSalon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "adressePublique",
+   "fichier": "tableLiaison.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "salonHTML",
+    "texteOffre"
+   ]
+  },
+  {
+   "nom": "texteOffre",
+   "fichier": "tableLiaison.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [
+    "adressePublique",
+    "base64url"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "alertesInvitesHTML",
+    "siegeDistantHTML"
+   ]
+  },
+  {
+   "nom": "videoTable",
+   "fichier": "tableLiaison.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "montreVideo",
+    "repriseInvite",
+    "scanneOffre",
+    "scanneReponses"
+   ]
+  },
+  {
+   "nom": "montreVideo",
+   "fichier": "tableLiaison.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "videoTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "etatDistant",
+    "fermeLiaisons",
+    "lienOffreColle",
+    "repriseInvite",
+    "scanneOffre"
+   ]
+  },
+  {
+   "nom": "ajouteInvite",
+   "fichier": "tableLiaison.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [
+    "arretsParDefaut",
+    "jetonNeuf",
+    "montreVideo",
+    "ouvreCamera",
+    "prepareOffre",
+    "renduTable",
+    "scanneReponses",
+    "videoTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "prepareOffre",
+   "fichier": "tableLiaison.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [
+    "canal",
+    "creeOffre",
+    "etatDistant",
+    "recoitDistant",
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "repriseInvite"
+   ]
+  },
+  {
+   "nom": "scanneReponses",
+   "fichier": "tableLiaison.js",
+   "ligne": 60,
+   "chargement": false,
+   "appelle": [
+    "relie",
+    "sautReponse",
+    "scanne",
+    "videoTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajouteInvite",
+    "repriseInvite"
+   ]
+  },
+  {
+   "nom": "sautReponse",
+   "fichier": "tableLiaison.js",
+   "ligne": 72,
+   "chargement": false,
+   "appelle": [
+    "deBase45",
+    "deCodeATaper",
+    "depaquette"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "relieCode",
+    "scanneReponses"
+   ]
+  },
+  {
+   "nom": "relie",
+   "fichier": "tableLiaison.js",
+   "ligne": 80,
+   "chargement": false,
+   "appelle": [
+    "appliqueReponse",
+    "renduTable",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "relieCode",
+    "scanneReponses"
+   ]
+  },
+  {
+   "nom": "relieCode",
+   "fichier": "tableLiaison.js",
+   "ligne": 88,
+   "chargement": false,
+   "appelle": [
+    "relie",
+    "sautReponse",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "etatDistant",
+   "fichier": "tableLiaison.js",
+   "ligne": 95,
+   "chargement": false,
+   "appelle": [
+    "fermeCamera",
+    "montreVideo",
+    "renduTable",
+    "renvoieTout"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "prepareOffre"
+   ]
+  },
+  {
+   "nom": "recoitDistant",
+   "fichier": "tableLiaison.js",
+   "ligne": 104,
+   "chargement": false,
+   "appelle": [
+    "arretsParDefaut",
+    "passeJusquaMonTour",
+    "recoitReponse",
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "prepareOffre"
+   ]
+  },
+  {
+   "nom": "envoieDebut",
+   "fichier": "tableLiaison.js",
+   "ligne": 120,
+   "chargement": false,
+   "appelle": [
+    "envoieVue",
+    "gardeEveil"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "commenceTable"
+   ]
+  },
+  {
+   "nom": "nouvellesLignes",
+   "fichier": "tableLiaison.js",
+   "ligne": 125,
+   "chargement": false,
+   "appelle": [
+    "journalTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "envoieQuestion",
+    "envoieVue"
+   ]
+  },
+  {
+   "nom": "envoieVue",
+   "fichier": "tableLiaison.js",
+   "ligne": 131,
+   "chargement": false,
+   "appelle": [
+    "nouvellesLignes",
+    "vue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "diffuseVues",
+    "envoieDebut",
+    "renvoieTout"
+   ]
+  },
+  {
+   "nom": "envoieQuestion",
+   "fichier": "tableLiaison.js",
+   "ligne": 135,
+   "chargement": false,
+   "appelle": [
+    "nouvellesLignes",
+    "questionPourUI",
+    "vue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "poseQuestion",
+    "renvoieTout"
+   ]
+  },
+  {
+   "nom": "envoieErreur",
+   "fichier": "tableLiaison.js",
+   "ligne": 139,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "recoitReponse"
+   ]
+  },
+  {
+   "nom": "renvoieTout",
+   "fichier": "tableLiaison.js",
+   "ligne": 142,
+   "chargement": false,
+   "appelle": [
+    "envoieQuestion",
+    "envoieVue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etatDistant"
+   ]
+  },
+  {
+   "nom": "repriseInvite",
+   "fichier": "tableLiaison.js",
+   "ligne": 152,
+   "chargement": false,
+   "appelle": [
+    "montreVideo",
+    "ouvreCamera",
+    "prepareOffre",
+    "scanneReponses",
+    "videoTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "confieInvite",
+   "fichier": "tableLiaison.js",
+   "ligne": 162,
+   "chargement": false,
+   "appelle": [
+    "boucleTable",
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "oublieDistant",
+   "fichier": "tableLiaison.js",
+   "ligne": 170,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fermeLiaisons",
+    "retireSiege"
+   ]
+  },
+  {
+   "nom": "fermeLiaisons",
+   "fichier": "tableLiaison.js",
+   "ligne": 176,
+   "chargement": false,
+   "appelle": [
+    "fermeCamera",
+    "montreVideo"
+   ],
+   "appelleDiffere": [
+    "oublieDistant"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "quitteTable"
+   ]
+  },
+  {
+   "nom": "gardeEveil",
+   "fichier": "tableLiaison.js",
+   "ligne": 185,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "envoieDebut",
+    "pret"
+   ]
+  },
+  {
+   "nom": "lisOffreTexte",
+   "fichier": "tableInvite.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [
+    "deBase64url",
+    "depaquette"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lienOffreColle",
+    "rejoindreDepuisAdresse",
+    "scanneOffre"
+   ]
+  },
+  {
+   "nom": "rejoindreDepuisAdresse",
+   "fichier": "tableInvite.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [
+    "lisOffreTexte",
+    "ouvreRejoindre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarrer"
+   ]
+  },
+  {
+   "nom": "ouvreRejoindre",
+   "fichier": "tableInvite.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "pret",
+    "renduTable",
+    "scanneOffre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable",
+    "lienOffreColle",
+    "rejoindreDepuisAdresse",
+    "scanneOffre"
+   ]
+  },
+  {
+   "nom": "scanneOffre",
+   "fichier": "tableInvite.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [
+    "fermeCamera",
+    "lisOffreTexte",
+    "montreVideo",
+    "ouvreCamera",
+    "ouvreRejoindre",
+    "renduTable",
+    "scanne",
+    "videoTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ouvreRejoindre"
+   ]
+  },
+  {
+   "nom": "lienOffreColle",
+   "fichier": "tableInvite.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "fermeCamera",
+    "lisOffreTexte",
+    "montreVideo",
+    "ouvreRejoindre",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "reglageInvite",
+   "fichier": "tableInvite.js",
+   "ligne": 58,
+   "chargement": false,
+   "appelle": [
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reglageSalon"
+   ]
+  },
+  {
+   "nom": "pret",
+   "fichier": "tableInvite.js",
+   "ligne": 65,
+   "chargement": false,
+   "appelle": [
+    "canal",
+    "chargeSimCartes",
+    "chercheFichesScryfall",
+    "fichesDeDeck",
+    "gardeEveil",
+    "renduTable",
+    "repondOffre"
+   ],
+   "appelleDiffere": [
+    "etatHote",
+    "recoitHote"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable",
+    "ouvreRejoindre"
+   ]
+  },
+  {
+   "nom": "etatHote",
+   "fichier": "tableInvite.js",
+   "ligne": 82,
+   "chargement": false,
+   "appelle": [
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pret"
+   ]
+  },
+  {
+   "nom": "recoitHote",
+   "fichier": "tableInvite.js",
+   "ligne": 91,
+   "chargement": false,
+   "appelle": [
+    "renduTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pret"
+   ]
+  },
+  {
+   "nom": "envoieReponse",
+   "fichier": "tableInvite.js",
+   "ligne": 102,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "repondsTable"
+   ]
+  },
+  {
+   "nom": "envoieArrets",
+   "fichier": "tableInvite.js",
+   "ligne": 103,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueArrets"
+   ]
+  },
+  {
+   "nom": "envoiePasseTour",
+   "fichier": "tableInvite.js",
+   "ligne": 104,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "passeTour"
+   ]
+  },
+  {
+   "nom": "perteHoteHTML",
+   "fichier": "tableInvite.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tableRendu.js (chargement)"
+   ]
+  },
+  {
+   "nom": "rejoindreHTML",
+   "fichier": "tableInvite.js",
+   "ligne": 113,
+   "chargement": false,
+   "appelle": [
+    "base45",
+    "clesDecks",
+    "codeATaper",
+    "esc",
+    "optionsHTML",
+    "qrEcrit",
+    "qrSVG"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renduTable"
+   ]
+  },
+  {
+   "nom": "sauveTable",
+   "fichier": "tableReprise.js",
+   "ligne": 18,
+   "chargement": false,
+   "appelle": [
+    "idbEcrire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable"
+   ]
+  },
+  {
+   "nom": "oublieTableSauvee",
+   "fichier": "tableReprise.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [
+    "idbOublier"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "boucleTable",
+    "quitteTable"
+   ]
+  },
+  {
+   "nom": "chercheTableSauvee",
+   "fichier": "tableReprise.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "idbLire",
+    "renderK"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarrer"
+   ]
+  },
+  {
+   "nom": "reprendTable",
+   "fichier": "tableReprise.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "agentIA",
+    "avance",
+    "boucleTable",
+    "creePartie",
+    "diffuseVues",
+    "repondre",
+    "siegeDepuisFiches"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "corpsArrets",
+   "fichier": "fenArrets.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "arretsParDefaut",
+    "avecBrouillon",
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ouvreArrets"
+   ]
+  },
+  {
+   "nom": "ouvreArrets",
+   "fichier": "fenArrets.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [
+    "corpsArrets",
+    "openDialog",
+    "ouvreBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "caseArret",
+   "fichier": "fenArrets.js",
+   "ligne": 34,
+   "chargement": false,
+   "appelle": [
+    "arretsParDefaut",
+    "modifieBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "arretsDefaut",
+   "fichier": "fenArrets.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "arretsParDefaut",
+    "modifieBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "appliqueArrets",
+   "fichier": "fenArrets.js",
+   "ligne": 48,
+   "chargement": false,
+   "appelle": [
+    "closeDialog",
+    "envoieArrets",
+    "majArretsTable",
+    "scheduleSave",
+    "verseBrouillon"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "gestesTable",
+   "fichier": "gestesTable.js",
+   "ligne": 8,
+   "chargement": false,
+   "appelle": [
+    "ajouteInvite",
+    "ajouteSiegeIA",
+    "appliqueArrets",
+    "arretsDefaut",
+    "attaqueTous",
+    "basculeChoix",
+    "clicCarte",
+    "clicJoueur",
+    "commenceDepuisSalon",
+    "confieInvite",
+    "lienOffreColle",
+    "ouvreArrets",
+    "ouvreJournalTable",
+    "ouvreRejoindre",
+    "ouvreSalon",
+    "passeTour",
+    "pret",
+    "quitteTable",
+    "relieCode",
+    "renduTable",
+    "repondsTable",
+    "reprendTable",
+    "repriseInvite",
+    "retireSiege",
+    "selDe",
+    "valideTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "passeTour",
+   "fichier": "gestesTable.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [
+    "envoiePasseTour",
+    "passeJusquaMonTour"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
+   "nom": "ouvreJournalTable",
+   "fichier": "gestesTable.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "journalTableLignes",
+    "openDialog"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesTable"
+   ]
+  },
+  {
    "nom": "chargement du module",
    "fichier": "app.js",
    "ligne": null,
@@ -16237,6 +19082,7 @@
     "apresReglage",
     "basculeTheme",
     "cacherApercu",
+    "caseArret",
     "closeDialog",
     "demarrer",
     "fermetureBrouillon",
@@ -16259,6 +19105,7 @@
     "placerApercu",
     "refreshSuggestions",
     "reglageAffichage",
+    "reglageSalon",
     "reglageSimulation",
     "reglerCible",
     "renderAll",
@@ -16277,6 +19124,7 @@
     "gestesNuage",
     "gestesReglages",
     "gestesSimulation",
+    "gestesTable",
     "gestesVue",
     "majHauteurEntete"
    ],
@@ -16286,18 +19134,20 @@
   {
    "nom": "demarrer",
    "fichier": "app.js",
-   "ligne": 259,
+   "ligne": 261,
    "chargement": false,
    "appelle": [
     "archetypesARevoir",
     "chargerArchetypesEdhrec",
     "chargerGameChangers",
     "chargerSauvegarde",
+    "chercheTableSauvee",
     "demarrerCatalogue",
     "gameChangersARevoir",
     "initBuiltin",
     "loadSymbology",
     "nuageDemarrer",
+    "rejoindreDepuisAdresse",
     "renderAll",
     "reprendTheme",
     "reprendreArchetypesEdhrec",

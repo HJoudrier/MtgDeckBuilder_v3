@@ -66,6 +66,8 @@ js/                 modules, chargés dans cet ordre :
   jeuTour.js        les étapes d'un tour
   jeuPartie.js      mélange, mulligans, la partie entière
   jeuPilote.js      dérouler une partie, question après question
+  jeuVue.js         ce qu'un joueur voit de la partie, et une question lisible par un humain
+  jeuArrets.js      quand demander à un joueur humain
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
   iaChoix.js        garder sa main, cibler, chercher, défausser
   iaPriorite.js     ce que le joueur automatique fait de sa priorité
@@ -171,6 +173,28 @@ js/                 modules, chargés dans cet ordre :
   gestesNuage.js    connecter, synchroniser, déconnecter
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
   gestesSimulation.js  lancer un lot, gérer les adversaires, revoir une partie
+
+  — la table interactive et sa liaison —
+  qrCorps.js        le corps fini du QR code, et Reed–Solomon
+  qrMatrice.js      la grille d'un QR : motifs fixes, format, ordre, masques
+  qrEcrit.js        écrire un QR code, et son SVG
+  qrBinarise.js     d'une image de caméra à du noir et du blanc
+  qrReperes.js      trouver un QR dans une image
+  qrLit.js          lire un QR repéré : perspective, format, correction
+  camera.js         lire un QR avec la caméra
+  liaisonCode.js    ce que les deux QR transportent, au plus court
+  liaisonSdp.js     lire une description WebRTC, en rebâtir une
+  liaison.js        deux navigateurs reliés sans serveur
+  tableHote.js      la partie que ce navigateur héberge
+  tableRendu.js     la table, peinte depuis une vue
+  tableQuestions.js répondre à une question du moteur, à la main
+  tableCombat.js    attaquer et bloquer, au doigt
+  tableSalon.js     le salon : qui s'assoit, avec quel deck
+  tableLiaison.js   les invités de l'hôte
+  tableInvite.js    rejoindre la table d'un autre
+  tableReprise.js   reprendre une partie après un rechargement
+  fenArrets.js      les arrêts de la table
+  gestesTable.js    les gestes de la table interactive
 
   app.js            l'aiguillage et le démarrage
 ```
@@ -359,6 +383,45 @@ export default {
   }
 };
 ```
+
+**La table interactive.** « Jouer une partie » ouvre un salon en plein écran : son deck, puis
+des sièges automatiques ou des **invités**, qui jouent chacun sur leur appareil — téléphone ou
+ordinateur — avec un deck de **leur** atelier. Le navigateur de l'hôte fait tourner le moteur ;
+pour le pilote, tous les sièges sont humains, et `boucleTable()` (`js/tableHote.js`) aiguille
+chaque question : l'automate répond, une priorité qu'aucun arrêt n'appelle est passée
+(`doitDemander()`, `js/jeuArrets.js`, à la façon d'Arena), le reste va à l'interface du siège, ici
+ou chez l'invité. Une réponse humaine est jugée avant d'aller au moteur (`reponseRecevable()`) et
+reposée avec sa raison ; une courte pause suit chaque geste visible d'un automate, sans quoi la
+partie se jouerait sans qu'on la voie. Un joueur ne reçoit qu'une **vue** (`vue()`,
+`js/jeuVue.js`) : rien d'un objet caché d'autrui, pas même son identifiant — ceux d'une
+bibliothèque suivent l'ordre de la liste. La table se peint depuis cette vue (`renduTable()`) :
+exception assumée à « `renderAll()` unique porte », puisqu'elle se repeint à chaque message de la
+partie. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
+étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
+après un rechargement.
+
+**Sans aucun serveur.** L'utilisateur a voulu une liaison WebRTC sans tiers : ni signalisation, ni
+STUN, ni TURN (`js/liaison.js`). Les deux descriptions passent donc **par la lumière** : l'hôte
+montre un QR — une adresse `#rejoindre=…` que l'appareil photo ouvre, ou que l'invité lit dans son
+atelier par « Rejoindre une table », seul chemin quand son atelier n'est pas à la même adresse que
+celui de l'hôte —, l'invité montre le QR de sa réponse, et **la caméra de l'hôte le lit** ; sans
+caméra, l'hôte tape un code contrôlé groupe par groupe. Chaque description est réduite à ses
+champs utiles (`js/liaisonCode.js`, 68 octets : ufrag et mot de passe ICE à six bits par
+caractère, empreinte du certificat, un candidat), et la description distante est rebâtie d'un
+gabarit (`js/liaisonSdp.js`) ; on ne retouche jamais une description locale, ce que Chrome
+abandonne et que Firefox refuse. La caméra de l'hôte est ouverte avant de créer les offres : tant
+qu'elle tourne, le navigateur dévoile les vraies adresses locales au lieu de noms mDNS. Le
+QR code est écrit et lu à la main (`js/qr*.js`) : le détecteur du navigateur n'existe ni sous
+Windows ni sous Linux, ni dans Firefox ni dans Safari. Il est peint noir sur blanc **forcé** —
+seule exception à la règle des couleurs : un QR clair sur sombre ne se lit pas. Les écouteurs posés
+sur la connexion et le canal sont l'autre exception, à la règle de l'aiguillage unique : ce ne sont
+pas des éléments de la page.
+
+Ce que cela impose, et que la page dit : **même réseau local** (un Wi-Fi « invités » qui isole ses
+clients, Brave ou une extension anti-fuite WebRTC empêchent la liaison) ; **une caméra chez
+l'hôte**, ou le code à taper ; un téléphone qui se met en veille perd la liaison — l'écran est tenu
+allumé, et un « QR de reprise » rend sa place à l'invité, sinon son siège est confié à l'automate ;
+l'hôte voit tout s'il ouvre ses outils de développement. Le paiement du mana reste automatique.
 
 **Trois couches, dont deux pures.** Le compilateur d'oracle et le moteur n'ont ni DOM, ni `DB`, ni
 `Math.random`, ni `Date` : `index.html` les encadre de `<!-- moteur -->` et `<!-- /moteur -->`, et
@@ -557,7 +620,7 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
 
 ## Repères
 
-- L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`, et pour le mode de jeu `DEFS`, `SIM_CARTES`, `SIM_RES`, `COUV_TABLE`) et `SIM`, l'avancement du lot en cours — qui ne survit pas à la page. L'état d'une partie, lui, vit dans son propre objet `P`, que le moteur ne partage avec personne.
+- L'état applicatif tient dans l'objet `S` de `etat.js` ; aucune autre variable globale mutable n'est partagée entre modules, hormis les caches explicites (`CAT`, `NOTES_DECK`, `VISUELS_CHARGES`, et pour le mode de jeu `DEFS`, `SIM_CARTES`, `SIM_RES`, `COUV_TABLE`), `SIM`, l'avancement du lot en cours, et `TABLE`, la table interactive ouverte — deux états qui ne survivent pas à la page (la partie hébergée, elle, se rejoue depuis IndexedDB). L'état d'une partie, lui, vit dans son propre objet `P`, que le moteur ne partage avec personne.
 - Les évènements de l'interface passent tous par la délégation en place dans `app.js`, sur les attributs `data-act`, `data-card`, `data-node`, `data-onglet`, `data-filtre` et `data-card-name`.
 - La fenêtre des paramètres porte trois sections : la sauvegarde locale, l'apparence, le catalogue.
   Une quatrième tenait le décompte des cartes de la collection, des exemplaires et leur valeur, avec

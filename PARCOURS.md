@@ -830,7 +830,60 @@ sequenceDiagram
     end
 ```
 
-### 3.21 Revoir une partie
+### 3.21 Rejoindre une table
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor H as Hôte
+    actor I as Invité
+    participant HS as tableSalon / tableLiaison (hôte)
+    participant L as liaison.js
+    participant IN as tableInvite.js (invité)
+
+    H->>HS: « + Invité (QR code) » — ajouteInvite()
+    HS->>HS: ouvreCamera() — les vraies adresses locales se dévoilent
+    HS->>L: creeOffre(jeton) — collecte des candidats
+    L-->>HS: 68 octets → base64url
+    HS-->>H: QR « …/#rejoindre=… »
+    I->>IN: appareil photo, ou « Rejoindre une table » (lecteur intégré)
+    IN->>IN: lisOffreTexte(), choix du nom et d'un deck de SON atelier
+    IN->>L: repondOffre(offre) — description distante rebâtie (liaisonSdp)
+    L-->>IN: 68 octets → base45
+    IN-->>I: QR de réponse plein écran, code à taper en dessous
+    HS->>HS: scanne() — qrLit ou BarcodeDetector — ou relieCode()
+    HS->>L: appliqueReponse() — le canal de données s'ouvre
+    IN->>HS: bonjour {nom, fiches du deck, arrêts}
+    H->>HS: « Commencer » — commenceTable()
+```
+
+### 3.22 Une question à un joueur distant
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant B as boucleTable (hôte)
+    participant M as moteur (avance / repondre)
+    participant A as jeuArrets.js
+    participant C as canal
+    participant IN as table de l'invité
+
+    B->>M: avance() — s'arrête à chaque question (tous les sièges « humains »)
+    alt siège automatique ou confié
+        B->>M: repondre(réponse de l'IA), pause si un geste se voit
+    else priorité qu'aucun arrêt n'appelle
+        B->>A: doitDemander() → non
+        B->>M: repondre(passer)
+    else question pour l'invité
+        B->>C: question (questionPourUI) + vue (vue(P, j)) + journal
+        C->>IN: renduTable() — boutons, cartes surlignées
+        IN->>C: reponse {n, r}
+        C->>B: recoitReponse(j, n, r) — reponseRecevable() ou erreur renvoyée
+        B->>M: repondre(r), diffuseVues(), sauveTable()
+    end
+```
+
+### 3.23 Revoir une partie
 
 ```mermaid
 sequenceDiagram
