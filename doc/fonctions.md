@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1007 fonctions**, 153 modules, 992 Ko de JavaScript.
+**1076 fonctions**, 163 modules, 1039 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -156,6 +156,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 43 |
+| [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
+| [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
+| [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
+| [`qrBinarise.js`](#jsqrbinarisejs) | D'une image de caméra à du noir et du blanc | 3 | 57 |
+| [`qrReperes.js`](#jsqrreperesjs) | Trouver un QR code dans une image | 7 | 119 |
+| [`qrLit.js`](#jsqrlitjs) | Lire un QR code repéré | 10 | 168 |
+| [`camera.js`](#jscamerajs) | Lire un QR code avec la caméra | 5 | 82 |
+| [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
+| [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
+| [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
 | [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 161 |
 | [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 9 | 123 |
 | [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 13 | 148 |
@@ -2571,6 +2581,177 @@ Les gestes de la section « Simulation ». *2 fonctions, 43 lignes, 2 Ko.*
 |---|---|
 | `gestesSimulation(act, b)` | — |
 | `reglageSimulation(t)` | Un réglage de la table : il agit sur-le-champ — rien n'est calculé avant « Lancer », il n'y a donc rien à différer. |
+
+## js/qrCorps.js
+
+Le corps fini du QR code, et Reed–Solomon. *8 fonctions, 118 lignes, 5.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gfMul(a, b)` | — |
+| `gfDiv(a, b)` | — |
+| `gfPow(e)` | — |
+| `rsGenerateur(n)` | Le polynôme générateur de n mots de correction : ∏ (x − αⁱ), i < n, coefficients du plus haut degré au plus bas. |
+| `rsCorrection(donnees, n)` | Les n mots de correction d'un bloc de données. |
+| `polyVal(p, x)` | Évaluer un polynôme (degré haut d'abord) en x. |
+| `rsDecode(recu, n)` | Corriger un bloc reçu (données puis correction) qui porte n mots de correction : syndromes, Berlekamp–Massey, Chien, Forney. |
+| `qrCapacite(v, niveau)` | Le nombre de mots de données d'une version à un niveau. |
+
+| Donnée | Rôle |
+|---|---|
+| `GF_EXP` | — |
+| `QR_BLOCS` | Les blocs de chaque version et niveau de correction : [mots de correction par bloc, blocs du groupe 1, données par bloc du groupe 1, blocs du groupe 2, données par bloc du groupe 2]. |
+
+## js/qrMatrice.js
+
+La grille d'un QR code. *8 fonctions, 111 lignes, 4.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `qrTaille(v)` | — |
+| `qrBitsFormat(niveau, masque)` | Les 15 bits de format d'un niveau et d'un masque (BCH 15,5, masqué). |
+| `qrBitsVersion(v)` | Les 18 bits de version (BCH 18,6), à partir de la version 7. |
+| `qrGrille(v)` | Une grille vide et le relevé de ses modules fixes : `fixe[y][x]` est vrai là où ni donnée ni correction n'ira. |
+| `qrPositionsFormat(n)` | Les positions des 15 bits de format, en deux copies, bit i d'abord. |
+| `qrPoseFormat(g, niveau, masque)` | — |
+| `qrOrdre(g)` | L'ordre des modules de données : des colonnes de deux, de droite à gauche, en serpentant de bas en haut puis de haut en bas, la colonne de synchronisation sautée. |
+| `qrMasque(g, k)` | Appliquer (ou retirer : c'est la même opération) un masque aux modules de données. |
+
+| Donnée | Rôle |
+|---|---|
+| `QR_ALIGNEMENTS` | — |
+| `QR_NIVEAUX` | — |
+| `QR_MASQUES` | — |
+
+## js/qrEcrit.js
+
+Écrire un QR code. *6 fonctions, 110 lignes, 4.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `qrEstAlnum(t)` | — |
+| `qrBitsDonnees(texte, v)` | Les bits d'un texte dans une version donnée (la largeur du compte de caractères change à la version 10). |
+| `qrMots(bits, v, niveau)` | Les mots de données, complétés, découpés en blocs, suivis de leur correction, entrelacés. |
+| `qrPenalite(m)` | La pénalité d'une grille (norme, §7.8.3) : les longues suites, les carrés de quatre, ce qui imite un motif de repérage, le déséquilibre. |
+| `qrEcrit(texte, niveau = 'M')` | Écrire un texte en QR. Rend `{n, m, v}` ; lève une erreur au-delà de la version 10. |
+| `qrSVG(qr, titre)` | Le SVG d'un QR, avec sa marge de quatre modules. |
+
+| Donnée | Rôle |
+|---|---|
+| `QR_ALNUM` | — |
+
+## js/qrBinarise.js
+
+D'une image de caméra à du noir et du blanc. *3 fonctions, 57 lignes, 2.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `qrGris(img)` | La luminance d'une image RGBA (ImageData ou équivalent). |
+| `qrBinarise(g, w, h)` | Une image binaire `{w, h, d}`, `d[i]` à 1 pour un pixel sombre. |
+| `qrNoir(b, x, y)` | — |
+
+## js/qrReperes.js
+
+Trouver un QR code dans une image. *7 fonctions, 119 lignes, 5.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `qrProportions(l, rapports)` | Des longueurs sont-elles dans les proportions voulues ? |
+| `qrTroisSuites(b, x, y, dx, dy, max)` | Compter, depuis un pixel sombre, la suite sombre, puis claire, puis sombre dans une direction. |
+| `qrTraverse(b, x, y, dx, dy, rapports, max)` | Traverser un candidat dans une direction : rend le centre affiné et la taille de module, ou `null`. |
+| `qrChercheReperes(b)` | Les centres des carrés de repérage `{x, y, m, n}` (n : détections). |
+| `dist(a, b)` | — |
+| `qrTriplets(cands)` | Les triplets qui peuvent former le QR, du plus vraisemblable au moins, chacun ordonné haut-gauche, haut-droite, bas-gauche. |
+| `qrChercheAlignement(b, px, py, m)` | Chercher le motif d'alignement autour de l'endroit prévu. |
+
+| Donnée | Rôle |
+|---|---|
+| `QR_REPERE` | — |
+
+## js/qrLit.js
+
+Lire un QR code repéré. *10 fonctions, 168 lignes, 7.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `qrCarreVersQuad(q)` | L'homographie du carré unité vers un quadrilatère (coins dans l'ordre (0,0), (1,0), (1,1), (0,1)). |
+| `qrAdjointe([a11, a21, a31, a12, a22, a32, a13, a23, a33])` | — |
+| `qrCompose(a, o)` | — |
+| `qrApplique(t, x, y)` | — |
+| `qrEchantillonne(b, t, n, m)` | Échantillonner une grille de n modules : chaque module au vote de neuf points autour de son centre. |
+| `qrLitFormat(m, n)` | Le format lu sur la grille : le niveau et le masque dont les 15 bits sont les plus proches de l'une des deux copies (trois erreurs au plus). |
+| `qrSegments(mots, v)` | Les segments d'un flux de données : numérique, alphanumérique, octets. |
+| `qrLitGrille(m, v)` | Lire une grille échantillonnée de version v. |
+| `lisQR(img)` | Lire le premier QR d'une image RGBA. Rend le texte, ou `null`. |
+| `qrLitTriplet(b, t)` | Lire le QR que désigne un triplet. La taille d'un module, mesurée sur les carrés de repérage, sort trop grande d'une image floue ou tournée — d'une bonne dizaine de pour cent : on essaie… |
+
+## js/camera.js
+
+Lire un QR code avec la caméra. *5 fonctions, 82 lignes, 3.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ouvreCamera(video)` | Ouvrir la caméra dans un élément vidéo de la page. |
+| `fermeCamera()` | — |
+| `detecteurNatif()` | Le détecteur du navigateur, s'il sait lire les QR. |
+| `lisImage(video)` | Lire une image de la vidéo : le texte du QR, ou `null`. |
+| `scanne(video, accepte)` | Lire en boucle jusqu'à un QR qu'accepte `accepte(texte)`, ou l'arrêt. |
+
+| Donnée | Rôle |
+|---|---|
+| `CAMERA` | — |
+
+## js/liaisonCode.js
+
+Ce que les deux QR codes transportent, au plus court. *10 fonctions, 127 lignes, 5.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ecrivain()` | — |
+| `lecteur(o)` | — |
+| `empaquette(d)` | Empaqueter les champs d'une description : drapeaux, jeton du siège, ufrag, pwd, empreinte, candidats (4 : IPv4, 6 : IPv6, 1 : nom mDNS). |
+| `depaquette(o)` | — |
+| `base64url(o)` | — |
+| `deBase64url(s)` | — |
+| `base45(o)` | Base45 (RFC 9285) : deux octets en trois signes alphanumériques. |
+| `deBase45(s)` | — |
+| `codeATaper(o)` | — |
+| `deCodeATaper(txt, longueur)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `B64` | — |
+| `B32` | Le code à taper : base32 sans voyelles ambiguës, par groupes de quatre, chaque groupe suivi d'un signe de contrôle pour dire où l'on s'est trompé plutôt que « code faux ». |
+
+## js/liaisonSdp.js
+
+Lire une description WebRTC, en rebâtir une. *5 fonctions, 75 lignes, 3.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `lisSdpLocal(sdp)` | Les champs d'une description locale : ufrag, pwd, empreinte, rôle DTLS, et les candidats utilisables sur un réseau local. |
+| `choisitCandidats(tous)` | Les candidats qu'on garde : IPv4 de réseau local d'abord, puis noms mDNS, puis IPv6 globale ; jamais 169.254 ni fe80. |
+| `ipv6Octets(a)` | — |
+| `adresseCandidat(c)` | — |
+| `sdpDistant(d)` | Rebâtir une description distante. `d.setup` : actpass pour une offre, le rôle que l'autre a vraiment pris pour une réponse. |
+
+## js/liaison.js
+
+Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nouvelleConnexion()` | — |
+| `collecteFinie(pc, ms = 2000)` | Attendre la fin de la collecte des candidats, deux secondes au plus : sans serveur il n'y a que des candidats locaux, qui viennent en un instant. |
+| `creeOffre(jeton)` | L'hôte : une offre, et ce qu'il faut en mettre dans le QR. |
+| `repondOffre(offre)` | L'invité : répondre à une offre lue dans un QR. |
+| `appliqueReponse(pc, rep)` | L'hôte : appliquer la réponse d'un invité. |
+| `canal(c, surMessage, surEtat)` | Un canal de messages au-dessus du canal de données : envoyer, recevoir, savoir si l'autre est encore là. |
+| `jetonNeuf()` | Un jeton de siège, tiré au sort : il dit à l'hôte quelle réponse va avec quel siège, et permet à un invité de reprendre sa place. |
+
+| Donnée | Rôle |
+|---|---|
+| `MORCEAU` | — |
 
 ## js/tableHote.js
 
