@@ -30,6 +30,7 @@ function renderAll() {
   renderE();
   renderSuggestions();
   renderK();
+  renduTable();
   scheduleSave();
 }
 

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**952 fonctions**, 146 modules, 956 Ko de JavaScript.
+**1007 fonctions**, 153 modules, 992 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -22,7 +22,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 213 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 191 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 196 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
@@ -72,7 +72,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 285 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 289 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 72 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 123 |
@@ -119,7 +119,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 150 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 151 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
@@ -133,7 +133,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 249 |
-| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 36 |
+| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 37 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 130 |
@@ -156,7 +156,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 43 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 296 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 161 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 9 | 123 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 13 | 148 |
+| [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
+| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 9 | 92 |
+| [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 3 | 52 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 298 |
 
 ## js/reglesEffets.js
 
@@ -341,7 +348,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 191 lignes, 11 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 196 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1195,7 +1202,7 @@ Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 285 lignes, 12 Ko.*
+La sauvegarde locale. *9 fonctions, 289 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2022,7 +2029,7 @@ Un lot de parties, par tranches. *11 fonctions, 143 lignes, 6.4 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *9 fonctions, 150 lignes, 9.7 Ko.*
+La section « Simulation ». *9 fonctions, 151 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2265,7 +2272,7 @@ L'en-tête et la barre des onglets. *7 fonctions, 249 lignes, 14 Ko.*
 
 ## js/rendu.js
 
-Le rendu d'ensemble. *2 fonctions, 36 lignes, 1.2 Ko.*
+Le rendu d'ensemble. *2 fonctions, 37 lignes, 1.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2565,9 +2572,125 @@ Les gestes de la section « Simulation ». *2 fonctions, 43 lignes, 2 Ko.*
 | `gestesSimulation(act, b)` | — |
 | `reglageSimulation(t)` | Un réglage de la table : il agit sur-le-champ — rien n'est calculé avant « Lancer », il n'y a donc rien à différer. |
 
+## js/tableHote.js
+
+La partie que ce navigateur héberge. *12 fonctions, 161 lignes, 7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `attendre(ms)` | — |
+| `signePublic(P)` | Ce qu'un humain verrait changer : la pile, le champ, les points de vie. |
+| `siegeDeSource(s)` | Le siège moteur d'une source choisie au salon : un deck de l'atelier, un adversaire de la bibliothèque, ou les fiches reçues d'un invité. |
+| `commenceTable()` | Commencer la partie que le salon décrit. Les cartes que personne ne connaît encore sont demandées à Scryfall avant. |
+| `boucleTable()` | La boucle d'aiguillage. Elle s'arrête quand un humain doit répondre, et reprend à sa réponse (`recoitReponse()`). |
+| `poseQuestion(q)` | Porter une question à son siège : l'interface de cet appareil, ou l'appareil de l'invité. |
+| `recoitReponse(j, n, r)` | Une réponse arrive, de cet appareil ou d'un invité. |
+| `diffuseVues(tout)` | Repeindre la table de cet appareil et envoyer leur vue aux invités, au plus une fois tous les cent millisecondes. |
+| `journalTable()` | Le journal de la partie hébergée, ligne par ligne. |
+| `majArretsTable()` | Les arrêts du siège local ont changé : la partie en cours les suit. |
+| `passeJusquaMonTour(j)` | « Passer jusqu'à mon tour » : retenu sur le siège, il tombe au début de son prochain tour. |
+| `quitteTable()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `TABLE` | — |
+
+## js/tableRendu.js
+
+La table, peinte depuis une vue. *9 fonctions, 123 lignes, 7.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `imageCarte(nom)` | Le visuel d'une carte : celui que l'atelier connaît, sinon celui que Scryfall sert par son nom. |
+| `chipCarte(o, v)` | Une carte du champ, de la main ou d'une zone, en vignette de texte : lisible sans réseau, et dix fois plus dense qu'une image sur un téléphone. |
+| `bandeauJoueur(J, v, estMoi)` | Le bandeau d'un joueur : son nom, ses points de vie, ses zones, son champ. |
+| `pileHTML(v)` | — |
+| `journalTableLignes()` | Les dernières lignes du journal, qui disent ce que les autres ont fait. |
+| `detailHTML(v)` | — |
+| `partieHTML()` | — |
+| `finHTML(v)` | — |
+| `renduTable()` | Peindre la table, si elle est ouverte. |
+
+## js/tableQuestions.js
+
+Répondre à une question du moteur, à la main. *13 fonctions, 148 lignes, 7.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `selDe(q)` | La sélection en cours, propre à la question affichée. |
+| `etatChoix(id)` | L'état d'une carte vis-à-vis de la question : choisissable, choisie, ou rien. |
+| `etatJoueur(j)` | — |
+| `repondsTable(r)` | Envoyer une réponse : au moteur sur l'hôte, à l'hôte depuis un invité. |
+| `nomVisible(id)` | Le nom d'une carte visible, pour la montrer en grand. |
+| `montreDetail(id)` | — |
+| `basculeChoix(q, s, i)` | — |
+| `clicCarte(id)` | Un toucher sur une carte de la table. |
+| `clicJoueur(j)` | — |
+| `valideTable()` | « Valider » : la sélection en cours, sous la forme que le moteur attend. |
+| `bornes(q)` | — |
+| `chipsChoix(q, s)` | Les choix d'une question à cases. |
+| `questionHTML(q, v)` | Le bandeau de la question. |
+
+| Donnée | Rôle |
+|---|---|
+| `TITRES_Q` | — |
+
+## js/tableCombat.js
+
+Attaquer et bloquer, au doigt. *4 fonctions, 73 lignes, 3.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `etatCombat(q, s, id)` | — |
+| `clicCombat(q, s, id)` | Un toucher pendant un combat. Rend vrai s'il a servi. |
+| `combatHTML(q, s, v)` | — |
+| `attaqueTous()` | — |
+
+## js/tableSalon.js
+
+Le salon : qui s'assoit à la table, avec quel deck. *9 fonctions, 92 lignes, 4.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `sourcesDeDecks()` | — |
+| `nomDeSource(src)` | — |
+| `siegesDuSalon()` | Les sièges du salon, tels que `commenceTable()` les attend. |
+| `salonHTML()` | — |
+| `ouvreSalon()` | — |
+| `reglageSalon(t)` | — |
+| `ajouteSiegeIA()` | — |
+| `retireSiege(i)` | — |
+| `commenceDepuisSalon()` | — |
+
+## js/fenArrets.js
+
+Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `corpsArrets()` | — |
+| `ouvreArrets()` | — |
+| `caseArret(t)` | Une case cochée : au brouillon. |
+| `arretsDefaut()` | — |
+| `appliqueArrets()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `ETAPES_ARRET` | — |
+
+## js/gestesTable.js
+
+Les gestes de la table interactive. *3 fonctions, 52 lignes, 2.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesTable(act, b)` | — |
+| `passeTour()` | « Passer jusqu'à mon tour », sur l'hôte comme depuis un invité. |
+| `ouvreJournalTable()` | Le journal de la partie en cours, en grand. |
+
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 296 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 298 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

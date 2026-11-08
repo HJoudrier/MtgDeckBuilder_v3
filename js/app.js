@@ -13,7 +13,7 @@ document.addEventListener('click', ev => {
 
   const act = b.dataset.act;
   [gestesDeckConfig, gestesDecks, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
-    gestesSimulation, gestesGraphe].some(g => g(act, b));
+    gestesSimulation, gestesTable, gestesGraphe].some(g => g(act, b));
 });
 
 /* Aperçu flottant : suit la souris sur les noms de cartes. */
@@ -112,6 +112,8 @@ document.addEventListener('input', ev => {
   if (saisieBudget(t)) return;
   if (saisieDeck(t)) return;
   if (t.dataset.sim) return reglageSimulation(t);
+  if (t.dataset.tsalon) return reglageSalon(t);
+  if (t.dataset.arret) return caseArret(t);
   if (t.dataset.advformat !== undefined) return majApercuAdversaire();
 });
 

@@ -857,3 +857,50 @@ tr.sim-maigre td{color:var(--dim2)}
 .sim-champ-large input{width:100%;min-width:0;box-sizing:border-box}
 .sim-repli{border:1px solid var(--warn);border-radius:6px;padding:8px 10px;margin:4px 0 8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .sim-relais{margin-top:8px}
+
+/* ---------- La table interactive (js/table*.js) ---------- */
+.table{position:fixed;inset:0;z-index:900;background:var(--bg);color:var(--txt);overflow:auto;display:flex;flex-direction:column;gap:6px;padding:8px 10px 0}
+.table[hidden]{display:none}
+body.table-ouverte{overflow:hidden}
+.tb-salon{max-width:760px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:10px;padding-bottom:16px}
+.tb-tete{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tb-gestes{margin-left:auto;display:inline-flex;gap:6px}
+.tb-adversaires{display:flex;flex-direction:column;gap:6px}
+.tb-joueur{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:6px 8px}
+.tb-joueur.actif{border-color:var(--brass)}
+.tb-joueur.elimine{opacity:.5}
+.tb-joueur.moi{background:var(--panel2)}
+.tb-entete{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;width:100%;background:none;border:1px solid transparent;border-radius:6px;color:var(--txt);text-align:left;padding:2px 4px;cursor:pointer;font:inherit}
+.tb-entete.choix{border-color:var(--brass);box-shadow:0 0 0 2px var(--brass-a2)}
+.tb-entete.choisi{border-color:var(--ok-d);background:var(--ok-bg)}
+.tb-vie{font-family:var(--mono);font-weight:600;color:var(--txt-vif)}
+.tb-poison{color:var(--bad-txt);font-family:var(--mono)}
+.tb-champ,.tb-zone,.tb-main,.tb-choix,.tb-pile{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:4px}
+.tb-terrains .tb-carte{opacity:.92}
+.tb-main{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+.tb-carte{display:inline-flex;align-items:center;gap:5px;max-width:190px;min-height:30px;padding:3px 7px;border:1px solid var(--line2);border-radius:6px;background:var(--panel);color:var(--txt);font:inherit;font-size:12px;cursor:pointer;flex:0 0 auto}
+.tb-carte .tb-nom{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-carte.engage{transform:rotate(-4deg);opacity:.65}
+.tb-carte.malade .tb-nom{font-style:italic}
+.tb-carte.jeton{border-style:dashed}
+.tb-carte.choix{border-color:var(--brass);box-shadow:0 0 0 2px var(--brass-a2)}
+.tb-carte.choisi{border-color:var(--ok-d);background:var(--ok-bg);color:var(--ok-txt)}
+.tb-carte.vise{border-color:var(--bad-line)}
+.tb-carte.pile{max-width:none}
+.tb-pt{font-family:var(--mono);font-weight:600}
+.tb-marq{font-family:var(--mono);font-size:11px;color:var(--ok-txt)}
+.tb-tag{font-size:12px}
+.tb-journal{min-height:16px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-question{position:sticky;bottom:0;margin-top:auto;background:var(--panel2);border-top:1px solid var(--brass-d);padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px;margin-left:-10px;margin-right:-10px}
+.tb-actions{display:flex;flex-wrap:wrap;gap:5px;max-height:32vh;overflow:auto}
+.tb-erreur{color:var(--bad-txt)}
+.tb-attente{padding:30px;text-align:center;color:var(--dim)}
+.tb-fin{position:sticky;bottom:0;background:var(--panel);border-top:1px solid var(--brass);padding:10px;display:flex;gap:10px;align-items:center;margin:0 -10px}
+.tb-detail{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,92vw);max-height:86vh;overflow:auto;background:var(--panel);border:1px solid var(--brass);border-radius:var(--r);padding:10px;z-index:950;box-shadow:0 8px 30px var(--ombre)}
+.tb-detail-corps{display:flex;gap:10px;margin-top:6px}
+.tb-detail-corps img{width:140px;border-radius:8px;background:var(--vide-img);flex:0 0 auto}
+@media (max-width:640px){
+  .tb-carte{max-width:150px}
+  .tb-detail-corps{flex-direction:column}
+  .tb-detail-corps img{width:100%;max-width:260px}
+}

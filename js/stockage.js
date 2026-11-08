@@ -114,6 +114,8 @@ function snapshot() {
     adversaires: S.adversaires,
     comportements: S.comportements,
     simulation: S.simulation,
+    table: S.table,
+    arrets: S.arrets,
     cartes,
     enrich
   };
@@ -268,6 +270,8 @@ function restore(d) {
   if (d.adversaires && typeof d.adversaires === 'object') S.adversaires = d.adversaires;
   if (d.comportements && typeof d.comportements === 'object') S.comportements = d.comportements;
   if (d.simulation && typeof d.simulation === 'object') S.simulation = {...S.simulation, ...d.simulation};
+  if (d.table && typeof d.table === 'object') S.table = {...S.table, ...d.table, sieges: (d.table.sieges || []).filter(s => s.mode === 'ia')};
+  if (d.arrets && typeof d.arrets === 'object') S.arrets = d.arrets;
   return true;
 }
 
