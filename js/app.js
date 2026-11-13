@@ -13,7 +13,7 @@ document.addEventListener('click', ev => {
 
   const act = b.dataset.act;
   [gestesDeckConfig, gestesDecks, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
-    gestesSimulation, gestesTable, gestesGraphe].some(g => g(act, b));
+    gestesSimulation, gestesTable, gestesForge, gestesGraphe].some(g => g(act, b));
 });
 
 /* Aperçu flottant : suit la souris sur les noms de cartes. */
@@ -287,7 +287,7 @@ function demarrer() {
   demarrerCatalogue();
   /* Le retour de connexion que l'adresse peut porter, puis un tirage de fond. */
   nuageDemarrer();
-  verifieDecksLies();
+  verifieDecksLies(); demarreForge();
   if (!rejoindreDepuisAdresse()) chercheTableSauvee();
 }
 

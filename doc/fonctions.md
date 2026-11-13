@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1121 fonctions**, 166 modules, 1060 Ko de JavaScript.
+**1164 fonctions**, 170 modules, 1092 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -43,6 +43,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`oracleStatiques.js`](#jsoraclestatiquesjs) | Lire une capacité statique, et la façon d'entrer | 4 | 85 |
 | [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 143 |
 | [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 10 | 164 |
+| [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 124 |
+| [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 135 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 19 | 194 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 8 | 76 |
@@ -74,7 +76,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
 | [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 289 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
-| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 5 | 72 |
+| [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 123 |
 | [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 234 |
 | [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
@@ -119,7 +121,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 154 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 155 |
+| [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 216 |
+| [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 174 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
@@ -136,7 +140,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 37 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
-| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 130 |
+| [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 133 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 6 | 107 |
 | [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 207 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
@@ -155,7 +159,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 43 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 44 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -769,6 +773,47 @@ D'une carte à sa définition de jeu. *10 fonctions, 164 lignes, 8.9 Ko.*
 | `CONTREPARTIE` | Ce qui, ignoré, rendrait la carte **plus forte** qu'elle n'est : une contrepartie, une interdiction, un prix. |
 | `MANA_DES_TYPES` | — |
 
+## js/forgeScript.js
+
+Lire un script de carte de Forge. *8 fonctions, 124 lignes, 5.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `forgeTable(txt)` | Une capacité `Clé$ Valeur \| Clé$ Valeur` en table. |
+| `forgeApi(t)` | L'effet d'une capacité : la valeur de sa première clé SP, AB ou DB. |
+| `forgeLigneType(types)` | `Legendary Creature Human Soldier` → la ligne de type de l'atelier, `Legendary Creature — Human Soldier`. |
+| `forgeCoutMana(c)` | `4 B B`, `X R`, `W/U W/U`, `2/G`, `W/P` → `{4}{B}{B}`… ; `no cost` → ''. |
+| `faceVide()` | — |
+| `lisScriptForge(texte)` | Lire un script. Rend `{faces: [face, …], mode}` ; `mode` dit comment les faces se rapportent (`DoubleFaced`, `Split`, `Adventure`, `Modal`, `Flip`…). |
+| `forgeSousCapacite(face, nom)` | La sous-capacité nommée par une SVar, lue en table — ou `null` si la SVar n'est pas une capacité (`X:Count$…`, un indice pour l'IA). |
+| `ficheDeScriptForge(s)` | La fiche de l'atelier qu'un script décrit : nom, coût, type, texte, force et endurance — de quoi afficher la carte et nourrir les statistiques, même sans la jouer. |
+
+| Donnée | Rôle |
+|---|---|
+| `FORGE_SUPERTYPES` | — |
+| `FORGE_TYPES` | — |
+
+## js/forgeCouverture.js
+
+Ce qu'une carte de Forge demande au moteur. *8 fonctions, 135 lignes, 6.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `forgeSait(genre, ...noms)` | Inscrire ce qu'un module du moteur sait faire. |
+| `forgeConnu(el)` | — |
+| `morceauxCout(cout)` | Les morceaux d'un coût Forge (`2 T Sac<1/CARDNAME> PayLife<2>`) autres que le mana. |
+| `expressionsDe(v)` | Les expressions d'une valeur de SVar : `Count$Valid Creature.YouCtrl` → `expr:Count$Valid`. |
+| `elementsTable(face, t, genre, out, vus)` | Les éléments d'une table, en suivant ses renvois dans les SVars. |
+| `unitesForge(face)` | Les unités d'une face, chacune avec ses éléments et son texte. |
+| `couvertureForge(script)` | La couverture d'un script : l'état de chaque unité, celui de la carte, et les éléments qui manquent. |
+| `manquesForge(scripts)` | Les éléments qui manquent, classés par nombre de cartes qu'ils rendraient complètes ou meilleures. |
+
+| Donnée | Rôle |
+|---|---|
+| `FORGE_SAIT` | — |
+| `FORGE_DESCRIPTIFS` | Les paramètres qui ne font que décrire — pour l'humain, pour l'IA de Forge — et ne changent rien au jeu. |
+| `FORGE_RENVOIS` | Les paramètres dont la valeur nomme une autre SVar à suivre. |
+
 ## js/jeuHasard.js
 
 Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
@@ -1253,10 +1298,11 @@ Les sections « Sauvegarde » et « Catalogue » des paramètres. *6 fonctions, 
 
 ## js/idb.js
 
-Le magasin IndexedDB. *5 fonctions, 72 lignes, 2.9 Ko.*
+Le magasin IndexedDB. *6 fonctions, 75 lignes, 3.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `idbGardee(cle)` | — |
 | `idb()` | — |
 | `idbLire(cle)` | — |
 | `idbEcrire(cle, val)` | — |
@@ -1267,7 +1313,7 @@ Le magasin IndexedDB. *5 fonctions, 72 lignes, 2.9 Ko.*
 |---|---|
 | `IDB_NOM` | — |
 | `IDB_NUAGE_BASE` | La base de fusion de la synchronisation (js/nuage.js) dort ici, faute de place dans `localStorage`. |
-| `IDB_GARDES` | Ce que `idbVider()` épargne : la base de la synchronisation, les fiches des cartes adverses et les résultats des simulations (js/simCartes.js, js/simStockage.js) — rien de cela n'est le… |
+| `IDB_GARDES` | Ce que `idbVider()` épargne : la base de la synchronisation, les fiches des cartes adverses et les résultats des simulations (js/simCartes.js, js/simStockage.js), et les scripts de Forge… |
 
 ## js/nuagePaquet.js
 
@@ -2044,7 +2090,7 @@ Un lot de parties, par tranches. *11 fonctions, 143 lignes, 6.4 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *9 fonctions, 154 lignes, 10 Ko.*
+La section « Simulation ». *9 fonctions, 155 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2061,6 +2107,58 @@ La section « Simulation ». *9 fonctions, 154 lignes, 10 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `COUV_TABLE` | — |
+
+## js/forgeDepot.js
+
+Les scripts de cartes de Forge, téléchargés et gardés. *15 fonctions, 216 lignes, 9.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `paquetForge(chemin)` | Le paquet IndexedDB d'un chemin : un par dossier de premier niveau, pour ne réécrire que ce qui a changé. |
+| `baseForge(nom)` | Le nom de base qu'un fichier de Forge tire du nom de sa carte. |
+| `indexeForge(chemin, texte)` | Ranger un texte en mémoire et l'indexer par le nom de chacune de ses faces. |
+| `chargeForge()` | Relire ce que l'appareil garde, une seule fois : deux appels pressés attendent la même lecture. |
+| `forgeIncomplet()` | Reste-t-il des fichiers à télécharger ? |
+| `jsonGH(url)` | — |
+| `listeForge()` | La liste des fichiers, empreintes comprises, au dernier commit. |
+| `nomsPrioritaires()` | Les noms des cartes de vos decks et de vos adversaires. |
+| `cheminsDeNoms(noms, liste)` | Les chemins de la liste qui portent ces noms : le nom de base exact, ou le début du nom d'un fichier à deux faces. |
+| `rangeForge()` | Ranger les paquets modifiés et l'index. |
+| `telechargeUn(ch, sha, chemin, essai = 0)` | — |
+| `telechargeForge(force)` | Télécharger ce qui manque ou a changé : vos cartes d'abord. |
+| `demarreForge()` | Au démarrage, en tâche de fond : reprendre un téléchargement inachevé, ou vérifier une fois par semaine qu'il n'y a rien de neuf. |
+| `oublieForge()` | Effacer les scripts de l'appareil. Le bouton n'est offert qu'à l'arrêt. |
+| `scriptForgeDe(nom)` | Le script Forge d'une carte, s'il est là. |
+
+| Donnée | Rôle |
+|---|---|
+| `FORGE_GH` | — |
+| `IDB_FORGE` | — |
+| `FORGE_DELAI` | — |
+| `FORGE` | — |
+
+## js/forgeVue.js
+
+Les cartes Forge sous les yeux. *11 fonctions, 174 lignes, 8.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `forgeChange()` | Les scripts ont changé : ce qu'on en avait tiré est périmé. |
+| `etatForgeTexte()` | — |
+| `corpsForge()` | La section de la fenêtre des paramètres. |
+| `majForgeUI(change)` | Repeindre sur place ce qui montre Forge. `change` : les scripts ont changé, le tableau des manques aussi. |
+| `poidsPrioritaires()` | Les noms de vos decks et adversaires, chacun avec le nombre de listes où il figure : un élément qui manque à trois decks pèse trois fois. |
+| `manquesDecks()` | Ce qui manque pour vos cartes, recalculé quand un deck, un adversaire, les scripts ou le savoir du moteur ont changé. |
+| `mesureBaseForge()` | Toute la base, par tranches : trente-quatre mille scripts prennent deux ou trois secondes, qu'on rend au navigateur toutes les mille cartes. |
+| `libelleElement(e)` | — |
+| `listeManques(manques, unite)` | — |
+| `manquesHTML()` | Le bloc « Ce qu'il manque au moteur » de l'onglet Simulation. |
+| `gestesForge(act)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `MANQUES` | — |
+| `GENRES_FORGE` | — |
 
 ## js/simResultats.js
 
@@ -2329,7 +2427,7 @@ La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 1
 
 ## js/fenParametres.js
 
-Fenêtre « Paramètres ». *9 fonctions, 130 lignes, 5.9 Ko.*
+Fenêtre « Paramètres ». *9 fonctions, 133 lignes, 6.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2580,7 +2678,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 43 lignes, 2 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 44 lignes, 2.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|

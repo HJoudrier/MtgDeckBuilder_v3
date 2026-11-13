@@ -35,7 +35,8 @@ function reglageSimulation(t) {
     const i = +t.dataset.i;
     while (c.sieges.length <= i) c.sieges.push('');
     c.sieges[i] = t.value;
-  } else if (cle === 'deck' || cle === 'relais') c[cle] = t.value.trim();
+  } else if (t.type === 'checkbox') c[cle] = t.checked;
+  else if (cle === 'deck' || cle === 'relais') c[cle] = t.value.trim();
   else c[cle] = +t.value;
   renderK();
   scheduleSave();

@@ -148,6 +148,7 @@ function renderK() {
   if (!simCartesChargees) { chargeSimCartes().then(() => { if (S.onglet === 'simulation') renderK(); }); }
   corps.innerHTML = `<div class="sim-grille">${tableHTML(cfg)}${adversairesHTML()}</div>
     ${couvertureHTML(cfg)}
+    <div id="simManques">${manquesHTML()}</div>
     <div id="simResultats">${resultatsHTML(cfg)}</div>`;
   if (SIM.etat === 'encours' || SIM.etat === 'prepare') majProgressionSim();
 }

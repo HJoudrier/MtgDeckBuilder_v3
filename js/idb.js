@@ -18,8 +18,11 @@ const IDB_NOM = 'mtg-atelier', IDB_MAG = 'catalogue';
 const IDB_NUAGE_BASE = 'nuage-base';
 /* Ce que `idbVider()` épargne : la base de la synchronisation, les fiches
    des cartes adverses et les résultats des simulations
-   (js/simCartes.js, js/simStockage.js) — rien de cela n'est le catalogue. */
+   (js/simCartes.js, js/simStockage.js), et les scripts de Forge — toutes
+   les clés en `forge-` (js/forgeDepot.js) : rien de cela n'est le
+   catalogue. */
 const IDB_GARDES = [IDB_NUAGE_BASE, 'sim-cartes', 'sim-resultats', 'table-partie'];
+function idbGardee(cle) { return IDB_GARDES.includes(cle) || String(cle).startsWith('forge-'); }
 
 function idb() {
   return new Promise((ok, ko) => {
@@ -63,7 +66,7 @@ function idbVider() {
     const mag = db.transaction(IDB_MAG, 'readwrite').objectStore(IDB_MAG);
     const q = mag.getAllKeys();
     q.onsuccess = () => {
-      (q.result || []).forEach(cle => { if (!IDB_GARDES.includes(cle)) mag.delete(cle); });
+      (q.result || []).forEach(cle => { if (!idbGardee(cle)) mag.delete(cle); });
       ok(true);
     };
     q.onerror = () => ok(false);

@@ -184,7 +184,7 @@ const S = {
      est de la vue : elle se sauvegarde, mais reste sur l'appareil. */
   adversaires: {},
   comportements: {},
-  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, relais: ''},
+  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, relais: '', forgeAuto: true},
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
      De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent. */

@@ -50,6 +50,8 @@ js/                 modules, chargés dans cet ordre :
   oracleStatiques.js  les statiques, et la façon d'entrer
   oracleLignes.js   ranger chaque ligne d'une carte
   definitions.js    d'une fiche à sa définition de jeu, et sa couverture
+  forgeScript.js    lire un script de carte de Forge, sans l'interpréter
+  forgeCouverture.js  ce qu'un script demande au moteur, ce que le moteur sait
   jeuHasard.js      le hasard semé
   jeuEtat.js        une partie : joueurs, objets, zones, déplacements, questions
   jeuCaracteristiques.js  force, endurance, mots-clés du moment
@@ -132,6 +134,8 @@ js/                 modules, chargés dans cet ordre :
   simulation.js     un lot de parties, par tranches
   simSection.js     la section « Simulation »
   simResultats.js   les résultats d'un lot, l'historique, le classement
+  forgeDepot.js     les scripts de Forge, téléchargés de GitHub et gardés
+  forgeVue.js       la section « Cartes Forge » et « Ce qu'il manque au moteur »
 
   — l'interface commune —
   outils.js         échapper, formater un prix, souffler un mot

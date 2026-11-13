@@ -33,6 +33,8 @@
   "oracleStatiques.js",
   "oracleLignes.js",
   "definitions.js",
+  "forgeScript.js",
+  "forgeCouverture.js",
   "jeuHasard.js",
   "jeuEtat.js",
   "jeuCaracteristiques.js",
@@ -110,6 +112,8 @@
   "simStockage.js",
   "simulation.js",
   "simSection.js",
+  "forgeDepot.js",
+  "forgeVue.js",
   "simResultats.js",
   "outils.js",
   "theme.js",
@@ -804,6 +808,7 @@
     "gestesGraphe",
     "indexArchive",
     "indexCard",
+    "indexeForge",
     "loose",
     "majResultats",
     "nbInteractions",
@@ -816,6 +821,7 @@
     "renameCard",
     "retiens",
     "saisieRecherche",
+    "scriptForgeDe",
     "scryTarget",
     "setsCarte",
     "setsRec",
@@ -3678,6 +3684,217 @@
    "appeleePar": [
     "jeuOpsB.js (chargement)",
     "scoreEffet"
+   ]
+  },
+  {
+   "nom": "forgeTable",
+   "fichier": "forgeScript.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "elementsTable",
+    "forgeSousCapacite",
+    "lisScriptForge",
+    "unitesForge"
+   ]
+  },
+  {
+   "nom": "forgeApi",
+   "fichier": "forgeScript.js",
+   "ligne": 33,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "forgeLigneType",
+   "fichier": "forgeScript.js",
+   "ligne": 41,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ficheDeScriptForge"
+   ]
+  },
+  {
+   "nom": "forgeCoutMana",
+   "fichier": "forgeScript.js",
+   "ligne": 49,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisScriptForge"
+   ]
+  },
+  {
+   "nom": "faceVide",
+   "fichier": "forgeScript.js",
+   "ligne": 55,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lisScriptForge"
+   ]
+  },
+  {
+   "nom": "lisScriptForge",
+   "fichier": "forgeScript.js",
+   "ligne": 62,
+   "chargement": false,
+   "appelle": [
+    "faceVide",
+    "forgeCoutMana",
+    "forgeTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesDecks",
+    "mesureBaseForge"
+   ]
+  },
+  {
+   "nom": "forgeSousCapacite",
+   "fichier": "forgeScript.js",
+   "ligne": 104,
+   "chargement": false,
+   "appelle": [
+    "forgeTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "ficheDeScriptForge",
+   "fichier": "forgeScript.js",
+   "ligne": 113,
+   "chargement": false,
+   "appelle": [
+    "forgeLigneType"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "forgeSait",
+   "fichier": "forgeCouverture.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "forgeConnu",
+   "fichier": "forgeCouverture.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureForge"
+   ]
+  },
+  {
+   "nom": "morceauxCout",
+   "fichier": "forgeCouverture.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "elementsTable"
+   ]
+  },
+  {
+   "nom": "expressionsDe",
+   "fichier": "forgeCouverture.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "elementsTable"
+   ]
+  },
+  {
+   "nom": "elementsTable",
+   "fichier": "forgeCouverture.js",
+   "ligne": 56,
+   "chargement": false,
+   "appelle": [
+    "expressionsDe",
+    "forgeTable",
+    "morceauxCout"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "unitesForge"
+   ]
+  },
+  {
+   "nom": "unitesForge",
+   "fichier": "forgeCouverture.js",
+   "ligne": 83,
+   "chargement": false,
+   "appelle": [
+    "elementsTable",
+    "forgeTable"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureForge"
+   ]
+  },
+  {
+   "nom": "couvertureForge",
+   "fichier": "forgeCouverture.js",
+   "ligne": 104,
+   "chargement": false,
+   "appelle": [
+    "forgeConnu",
+    "unitesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesDecks",
+    "manquesForge",
+    "mesureBaseForge"
+   ]
+  },
+  {
+   "nom": "manquesForge",
+   "fichier": "forgeCouverture.js",
+   "ligne": 123,
+   "chargement": false,
+   "appelle": [
+    "couvertureForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesDecks",
+    "mesureBaseForge"
    ]
   },
   {
@@ -7281,9 +7498,21 @@
    ]
   },
   {
+   "nom": "idbGardee",
+   "fichier": "idb.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "idbVider"
+   ]
+  },
+  {
    "nom": "idb",
    "fichier": "idb.js",
-   "ligne": 24,
+   "ligne": 27,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7298,7 +7527,7 @@
   {
    "nom": "idbLire",
    "fichier": "idb.js",
-   "ligne": 34,
+   "ligne": 37,
    "chargement": false,
    "appelle": [
     "idb"
@@ -7306,6 +7535,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "chargeForge",
     "chargeResultats",
     "chargeSimCartes",
     "chargerCatalogueComplet",
@@ -7319,7 +7549,7 @@
   {
    "nom": "idbEcrire",
    "fichier": "idb.js",
-   "ligne": 42,
+   "ligne": 45,
    "chargement": false,
    "appelle": [
     "idb"
@@ -7329,6 +7559,7 @@
    "appeleePar": [
     "lireCatalogueFichier",
     "nuageBaseEcrire",
+    "rangeForge",
     "rangeResultats",
     "rangeSimCartes",
     "sauveTable",
@@ -7340,7 +7571,7 @@
   {
    "nom": "idbOublier",
    "fichier": "idb.js",
-   "ligne": 51,
+   "ligne": 54,
    "chargement": false,
    "appelle": [
     "idb"
@@ -7350,16 +7581,18 @@
    "appeleePar": [
     "gestesDonnees",
     "nuageDeconnecte",
+    "oublieForge",
     "oublieTableSauvee"
    ]
   },
   {
    "nom": "idbVider",
    "fichier": "idb.js",
-   "ligne": 61,
+   "ligne": 64,
    "chargement": false,
    "appelle": [
-    "idb"
+    "idb",
+    "idbGardee"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -12024,6 +12257,7 @@
    "appeleePar": [
     "couvertureTable",
     "lotPerime",
+    "manquesDecks",
     "terminerLot"
    ]
   },
@@ -12040,6 +12274,7 @@
    "appeleePar": [
     "couvertureTable",
     "lotPerime",
+    "manquesDecks",
     "terminerLot"
    ]
   },
@@ -12884,6 +13119,7 @@
     "configSimulation",
     "couvertureHTML",
     "majProgressionSim",
+    "manquesHTML",
     "resultatsHTML",
     "tableHTML"
    ],
@@ -12904,6 +13140,409 @@
     "terminerLot",
     "verifieDecksLies",
     "verifieUnDeckLie"
+   ]
+  },
+  {
+   "nom": "paquetForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "oublieForge",
+    "rangeForge",
+    "telechargeForge",
+    "telechargeUn"
+   ]
+  },
+  {
+   "nom": "baseForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cheminsDeNoms"
+   ]
+  },
+  {
+   "nom": "indexeForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "norm"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chargeForge",
+    "telechargeUn"
+   ]
+  },
+  {
+   "nom": "chargeForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 45,
+   "chargement": false,
+   "appelle": [
+    "forgeIncomplet",
+    "idbLire",
+    "indexeForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarreForge",
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "forgeIncomplet",
+   "fichier": "forgeDepot.js",
+   "ligne": 62,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chargeForge",
+    "demarreForge"
+   ]
+  },
+  {
+   "nom": "jsonGH",
+   "fichier": "forgeDepot.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "listeForge"
+   ]
+  },
+  {
+   "nom": "listeForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 73,
+   "chargement": false,
+   "appelle": [
+    "jsonGH"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "nomsPrioritaires",
+   "fichier": "forgeDepot.js",
+   "ligne": 98,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "cheminsDeNoms",
+   "fichier": "forgeDepot.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [
+    "baseForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "rangeForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 120,
+   "chargement": false,
+   "appelle": [
+    "idbEcrire",
+    "paquetForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "telechargeUn",
+   "fichier": "forgeDepot.js",
+   "ligne": 132,
+   "chargement": false,
+   "appelle": [
+    "indexeForge",
+    "paquetForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "telechargeForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 148,
+   "chargement": false,
+   "appelle": [
+    "chargeForge",
+    "cheminsDeNoms",
+    "forgeChange",
+    "listeForge",
+    "majForgeUI",
+    "nomsPrioritaires",
+    "paquetForge",
+    "rangeForge",
+    "telechargeUn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarreForge",
+    "gestesForge"
+   ]
+  },
+  {
+   "nom": "demarreForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 192,
+   "chargement": false,
+   "appelle": [
+    "chargeForge",
+    "forgeChange",
+    "forgeIncomplet",
+    "telechargeForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarrer"
+   ]
+  },
+  {
+   "nom": "oublieForge",
+   "fichier": "forgeDepot.js",
+   "ligne": 202,
+   "chargement": false,
+   "appelle": [
+    "forgeChange",
+    "idbOublier"
+   ],
+   "appelleDiffere": [
+    "paquetForge"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesForge"
+   ]
+  },
+  {
+   "nom": "scriptForgeDe",
+   "fichier": "forgeDepot.js",
+   "ligne": 212,
+   "chargement": false,
+   "appelle": [
+    "norm"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesDecks"
+   ]
+  },
+  {
+   "nom": "forgeChange",
+   "fichier": "forgeVue.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [
+    "majForgeUI"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "demarreForge",
+    "oublieForge",
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "etatForgeTexte",
+   "fichier": "forgeVue.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsForge",
+    "manquesHTML"
+   ]
+  },
+  {
+   "nom": "corpsForge",
+   "fichier": "forgeVue.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "etatForgeTexte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsParametres",
+    "majForgeUI"
+   ]
+  },
+  {
+   "nom": "majForgeUI",
+   "fichier": "forgeVue.js",
+   "ligne": 64,
+   "chargement": false,
+   "appelle": [
+    "corpsForge",
+    "manquesHTML",
+    "releveAncre",
+    "restaureAncre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeChange",
+    "mesureBaseForge",
+    "telechargeForge"
+   ]
+  },
+  {
+   "nom": "poidsPrioritaires",
+   "fichier": "forgeVue.js",
+   "ligne": 77,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesDecks"
+   ]
+  },
+  {
+   "nom": "manquesDecks",
+   "fichier": "forgeVue.js",
+   "ligne": 87,
+   "chargement": false,
+   "appelle": [
+    "couvertureForge",
+    "lisScriptForge",
+    "manquesForge",
+    "poidsPrioritaires",
+    "scriptForgeDe"
+   ],
+   "appelleDiffere": [
+    "signatureAdversaire",
+    "signatureDeck"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesHTML"
+   ]
+  },
+  {
+   "nom": "mesureBaseForge",
+   "fichier": "forgeVue.js",
+   "ligne": 109,
+   "chargement": false,
+   "appelle": [
+    "attendre",
+    "couvertureForge",
+    "lisScriptForge",
+    "majForgeUI",
+    "manquesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesForge"
+   ]
+  },
+  {
+   "nom": "libelleElement",
+   "fichier": "forgeVue.js",
+   "ligne": 128,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "listeManques"
+   ]
+  },
+  {
+   "nom": "listeManques",
+   "fichier": "forgeVue.js",
+   "ligne": 133,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "libelleElement"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "manquesHTML"
+   ]
+  },
+  {
+   "nom": "manquesHTML",
+   "fichier": "forgeVue.js",
+   "ligne": 141,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "etatForgeTexte",
+    "listeManques",
+    "manquesDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "majForgeUI",
+    "renderK"
+   ]
+  },
+  {
+   "nom": "gestesForge",
+   "fichier": "forgeVue.js",
+   "ligne": 165,
+   "chargement": false,
+   "appelle": [
+    "mesureBaseForge",
+    "oublieForge",
+    "telechargeForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
    ]
   },
   {
@@ -13037,6 +13676,7 @@
     "corpsCibles",
     "corpsDeck",
     "corpsFiltres",
+    "corpsForge",
     "corpsFormat",
     "corpsSauvegarde",
     "couvertureHTML",
@@ -13053,6 +13693,7 @@
     "gestesDecks",
     "historiqueHTML",
     "lectureHTML",
+    "libelleElement",
     "lienDecksEdhrec",
     "ligneAchats",
     "ligneCatalogue",
@@ -13067,11 +13708,13 @@
     "ligneRestriction",
     "ligneWishlist",
     "listeArchetypesHTML",
+    "listeManques",
     "listeSetsHTML",
     "lotHTML",
     "majApercu",
     "majApercuAdversaire",
     "majBoutonAffichage",
+    "manquesHTML",
     "montrerApercu",
     "nuageConflits",
     "nuageCorpsConnecte",
@@ -14233,6 +14876,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "majForgeUI",
     "nuageTour",
     "recalculerAvecProgression"
    ]
@@ -14246,6 +14890,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "majForgeUI",
     "nuageTour",
     "recalculerAvecProgression"
    ]
@@ -14892,6 +15537,7 @@
    "appelle": [
     "corpsApparence",
     "corpsCatalogue",
+    "corpsForge",
     "corpsNuage",
     "corpsSauvegarde",
     "sectionParametres"
@@ -14906,7 +15552,7 @@
   {
    "nom": "majFenetreParametres",
    "fichier": "fenParametres.js",
-   "ligne": 90,
+   "ligne": 93,
    "chargement": false,
    "appelle": [
     "brancherParametres",
@@ -14926,7 +15572,7 @@
   {
    "nom": "brancherParametres",
    "fichier": "fenParametres.js",
-   "ligne": 101,
+   "ligne": 104,
    "chargement": false,
    "appelle": [
     "brancherCatalogue",
@@ -14943,7 +15589,7 @@
   {
    "nom": "appliquerParametres",
    "fichier": "fenParametres.js",
-   "ligne": 107,
+   "ligne": 110,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -14959,7 +15605,7 @@
   {
    "nom": "openParametresModal",
    "fichier": "fenParametres.js",
-   "ligne": 113,
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "brancherParametres",
@@ -14980,7 +15626,7 @@
   {
    "nom": "appliquerFormat",
    "fichier": "fenParametres.js",
-   "ligne": 124,
+   "ligne": 127,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -17480,7 +18126,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "boucleTable"
+    "boucleTable",
+    "mesureBaseForge"
    ]
   },
   {
@@ -19120,6 +19767,7 @@
     "gestesDeckConfig",
     "gestesDecks",
     "gestesDonnees",
+    "gestesForge",
     "gestesGraphe",
     "gestesNuage",
     "gestesReglages",
@@ -19142,6 +19790,7 @@
     "chargerGameChangers",
     "chargerSauvegarde",
     "chercheTableSauvee",
+    "demarreForge",
     "demarrerCatalogue",
     "gameChangersARevoir",
     "initBuiltin",
