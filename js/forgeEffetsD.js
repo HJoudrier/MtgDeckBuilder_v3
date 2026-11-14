@@ -55,7 +55,10 @@ forgeEffet('RegenerateAll', ['ValidCards'], function* (P, t, env) {
 
 /* Les durées qu'un effet de Forge sait tenir, dans le vocabulaire du
    moteur ; une autre rend la table injouable. */
-const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainTour', UntilHostLeavesPlay: 'hote'};
+const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainTour', UntilHostLeavesPlay: 'hote', EndOfTurn: 'tour',
+  /* Jusqu'à la fin de votre prochain tour (la pioche d'impulsion récente) ;
+     jusqu'à la fin du combat, lu comme la fin du tour. */
+  UntilTheEndOfYourNextTurn: 'finProchainTour', UntilEndOfCombat: 'tour', UntilEndOfCombatYourNextTurn: 'finProchainTour'};
 
 forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stackable', 'ForgetOnMoved', 'ExileOnMoved', 'ReplacementEffects'], function* (P, t, env) {
   const prep = env.op.effet, src = env.src;

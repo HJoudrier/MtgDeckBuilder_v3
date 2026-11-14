@@ -88,6 +88,7 @@ forgeEffet('RollDice', ['Sides', 'Amount', 'Modifier', 'ResultSVar', 'ResultSubA
   for (let k = 0; k < n; k++) total += 1 + entierHasard(P.rng, faces);
   jn(P, `${P.joueurs[env.ctrl].nom} lance un dé : ${total}`);
   if (t.ResultSVar) varsDe(env.ctx)[t.ResultSVar] = total;
+  emet(P, {t: 'de', joueur: env.ctrl, n: total});
   const tr = tranchesDe(t.ResultSubAbilities).find(x => total >= x.a && total <= x.b);
   if (tr) yield* joueSous(P, env, tr.nom);
 }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: (t, op) => sousEffets(op, tranchesDe(t.ResultSubAbilities).map(x => x.nom))});

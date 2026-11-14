@@ -22,7 +22,7 @@ forgeEffet('Dig', ['DigNum', 'ChangeNum', 'ChangeValid', 'DestinationZone', 'Des
   const d1 = zoneForge(t.DestinationZone) || 'main', d2 = zoneForge(t.DestinationZone2) || 'bibliotheque';
   for (const id of pris) {
     const nid = yield* deplaceForge(P, obj(P, id), d1, env, {dessous: t.LibraryPosition === '-1'});
-    if (nid != null && t.RememberChanged === 'True') retiensForge(env.ctx, nid);
+    if (nid != null && (t.RememberChanged === 'True' || t.Imprint === 'True')) retiensForge(env.ctx, nid);
   }
   for (const id of dessus.filter(x => !pris.includes(x))) {
     if (d2 === 'bibliotheque') { if (t.LibraryPosition2 !== '0') { retireDe(B, id); B.unshift(id); } }
@@ -41,11 +41,11 @@ function* regardeForge(P, j, n, cimetiere) {
 }
 
 forgeEffet('Scry', ['ScryNum'], function* (P, t, env) {
-  for (const j of joueursForge(P, t, env)) yield* regardeForge(P, j, forgeNombre(P, t.ScryNum || 1, env), false);
+  for (const j of joueursForge(P, t, env)) { const n = forgeNombre(P, t.ScryNum || 1, env); yield* regardeForge(P, j, n, false); emet(P, {t: 'scry', joueur: j, n}); }
 }, (t, op) => { op.op = 'scrute'; op.n = nombreIA(t.ScryNum || 1); op.hostile = false; });
 
 forgeEffet('Surveil', ['Amount'], function* (P, t, env) {
-  for (const j of joueursForge(P, t, env)) yield* regardeForge(P, j, forgeNombre(P, t.Amount || 1, env), true);
+  for (const j of joueursForge(P, t, env)) { const n = forgeNombre(P, t.Amount || 1, env); yield* regardeForge(P, j, n, true); emet(P, {t: 'surveil', joueur: j, n}); }
 }, (t, op) => { op.op = 'scrute'; op.cimetiere = true; op.n = nombreIA(t.Amount || 1); op.hostile = false; });
 
 /* La source des dégâts : `DamageSource$`, sinon la source de la capacité. */

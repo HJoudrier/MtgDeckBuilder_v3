@@ -19,6 +19,8 @@
 function formeRemplacement(face, r) {
   const actif = !r.ActiveZones || r.ActiveZones === 'Battlefield';
   if (!actif) return null;
+  const b = formeRemplacementB(r);
+  if (b) return b;
   if (r.Event === 'Untap' && r.Layer === 'CantHappen' && r.ValidCard && (!r.ValidStepTurnToController || r.ValidStepTurnToController === 'You')) return 'untap';
   if (r.Event === 'Counter' && r.Layer === 'CantHappen' && (r.ValidCard || /^Spell(\.|$)/.test(r.ValidSA || ''))) return 'contre';
   if (r.Event === 'DamageDone' && r.Prevent === 'True' && !r.ReplaceWith) return 'prevention';

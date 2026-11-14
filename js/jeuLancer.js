@@ -93,7 +93,7 @@ function actionsLegales(P, j) {
   };
   J.main.forEach(id => essaie(id, 'main'));
   J.commandement.forEach(id => essaie(id, 'commandement'));
-  J.cimetiere.forEach(id => { if (lancableDuCimetiere(obj(P, id).def)) essaie(id, 'cimetiere'); });
+  J.cimetiere.forEach(id => { if (lancableDuCimetiere(obj(P, id).def, obj(P, id), P)) essaie(id, 'cimetiere'); });
   /* Ce qu'une permission laisse jouer d'ailleurs (js/jeuPermis.js). */
   cartesPermises(P, j).forEach(({o, depuis}) => {
     if (estType(o, 'land')) { if (terrains) r.push({k: 'terrain', id: o.id, depuis}); }
@@ -148,7 +148,7 @@ function actionsPossibles(P, j) {
   const horsChamp = (ids, zone) => ids.some(id => obj(P, id).def.capacites.some(k => k.zone === zone && k.vitesse !== 'rituel'));
   const peut = J.main.some(id => estEphemere(obj(P, id).def)) ||
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
-    J.cimetiere.some(id => { const d = obj(P, id).def; return lancableDuCimetiere(d) && estEphemere(d); }) ||
+    J.cimetiere.some(id => { const d = obj(P, id).def; return lancableDuCimetiere(d, obj(P, id), P) && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) && estEphemere(o.def); }) ||
     cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) ||
     champDe(P, j).some(o => retournable(P, j, o)) ||

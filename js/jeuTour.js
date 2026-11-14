@@ -54,6 +54,7 @@ function* nettoyage(P) {
 
 /* Une étape. */
 function* etape(P, e) {
+  if (etapeSautee(P, e)) return;
   switch (e) {
     case 'degagement': degagement(P); return;
     case 'entretien': suspensionsEntretien(P); yield* rebondsEntretien(P); emet(P, {t: 'etape', etape: 'entretien', actif: P.actif}); break;

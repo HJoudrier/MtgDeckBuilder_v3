@@ -113,10 +113,13 @@ function* executeForge(P, op, ctx) {
      là, sous-capacités comprises. */
   if (op.coutInterne) {
     const c = coutForge(op.coutInterne), autre = autresCout(c.cout), porteur = src && !src.lki ? src : {id: -1, zone: '', marq: {}};
-    const ok = planPaiement(P, ctx.ctrl, c.cout.mana, 0) && (!autre || coutAutrePossible(P, ctx.ctrl, porteur, autre));
+    const decl = c.cout.exileDeclencheur ? objetEvt(P, ctx) : null;
+    const ok = planPaiement(P, ctx.ctrl, c.cout.mana, 0) && (!autre || coutAutrePossible(P, ctx.ctrl, porteur, autre)) &&
+      (!c.cout.exileDeclencheur || (!!decl && decl.zone === 'cimetiere'));
     const r = ok ? yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${op.coutInterne} ?`, source: ctx.source, extra: {ops: [op]}}) : 0;
     if (r !== 1 || !paieMana(P, ctx.ctrl, c.cout.mana, 0)) { ctx.coupe = op.chaine; return; }
     if (autre) yield* paieAutre(P, ctx.ctrl, porteur, autre);
+    if (decl) deplace(P, decl.id, 'exil');
   }
   if ((t.Optional === 'True' || t.OptionalDecider) && !api.optionnel) {
     /* Celui qui décide est nommé, jamais déduit des cibles. */

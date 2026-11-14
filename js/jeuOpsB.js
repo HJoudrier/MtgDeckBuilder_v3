@@ -113,6 +113,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   }
   /* « Creatures your opponents control enter tapped » (js/forgeRemplacements.js). */
   if (!engage && entreeEngageeParAutre(P, d0, ctrl, o)) engage = true;
+  /* « Unless you reveal a Giant card from your hand ». */
+  if (ent.engagee && ent.saufRevele && !opts.engage && P.joueurs[ctrl].main.some(x => x !== id && correspond(P, obj(P, x), ent.saufRevele, o, ctrl))) engage = false;
   if (ent.engagee && ent.payeVie && !opts.engage) {
     const r = yield question(P, ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${ent.payeVie} PV pour qu'il entre dégagé ?`, source: id});
     if (r === 1) { P.joueurs[ctrl].vie -= ent.payeVie; engage = false; }

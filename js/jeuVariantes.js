@@ -118,7 +118,7 @@ function variantesSort(P, j, o, depuis) {
   const base = coutSort(P, j, o, depuis);
   /* Deux coûts additionnels au choix : l'un des deux est dû, jamais aucun. */
   if (d.coutsAuChoix) d.coutsAuChoix.forEach((c, i) => essaie(i ? 'choixB' : 'choixA', sommeMana(base, c.cout.mana), fusionAutres(d.coutSup, autresCout(c.cout))));
-  else if (depuis !== 'cimetiere' || d.flashback) essaie(null, base, d.coutSup || null);
+  else if (depuis !== 'cimetiere' || d.flashback || flashbackAccorde(P, o)) essaie(null, base, d.coutSup || null);
   const k = coutComplet(d.kicker);
   if (k) essaie('kicker', sommeMana(base, k.mana), fusionAutres(d.coutSup, autresCout(k)));
   const b = coutComplet(d.rachat);

@@ -23,11 +23,15 @@ function pompeForge(P, objets, t, env) {
   objets.filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f, e, mots, fin}); P.ver++; });
 }
 
-forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) { pompeForge(P, objetsForge(P, t, env), t, env); },
+forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) {
+  /* Le flashback accordé à une carte du cimetière (js/forgeRemplacementsB.js). */
+  if (t.PumpZone === 'Graveyard') { objetsForge(P, t, env).filter(o => o.zone === 'cimetiere').forEach(o => { o.flashbackTemp = P.tour; }); return; }
+  pompeForge(P, objetsForge(P, t, env), t, env);
+},
   (t, op) => {
     op.op = 'pompe'; op.f = bonusIA(t.NumAtt); op.e = bonusIA(t.NumDef); op.mots = motsForge(t.KW);
     op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.f < 0 || op.e < 0;
-  }, {prepare: t => !t.PumpZone || t.PumpZone === 'Battlefield'});
+  }, {prepare: t => !t.PumpZone || t.PumpZone === 'Battlefield' || (t.PumpZone === 'Graveyard' && t.KW === 'Flashback' && !t.NumAtt && !t.NumDef)});
 
 forgeEffet('PumpAll', ['ValidCards', 'NumAtt', 'NumDef', 'KW', 'Duration'], function* (P, t, env) {
   pompeForge(P, objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Creature', env.src, env.ctrl, env)), t, env);

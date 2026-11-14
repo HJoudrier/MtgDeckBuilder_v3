@@ -34,7 +34,7 @@ function variantesEtendues(P, j, o, depuis, essaie) {
 }
 
 /* Une carte qui se lance du cimetière autrement que par flashback. */
-function lancableDuCimetiere(d) { return !!(d.flashback || d.escape || d.retrace || d.jumpstart || d.disturb || (d.dos && d.dos.params.aftermath)); }
+function lancableDuCimetiere(d, o, P) { return !!((o && P && flashbackAccorde(P, o)) || d.flashback || d.escape || d.retrace || d.jumpstart || d.disturb || (d.dos && d.dos.params.aftermath)); }
 
 /* Split second : tant qu'il est sur la pile, personne ne lance ni
    n'active. */

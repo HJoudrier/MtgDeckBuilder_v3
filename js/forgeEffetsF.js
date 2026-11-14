@@ -97,6 +97,14 @@ etendEffet('GainControl', ['AllValid'], (P, t, env) => {
    parmi `Choices`. */
 FORGE_API.PutCounter.gen = (g => function* (P, t, env) {
   const g2 = genreMarqueur(t.CounterType || 'P1P1'), n = () => forgeNombre(P, t.CounterNum || (/^\d+$/.test(t.Bolster || t.Adapt || '') ? t.Bolster || t.Adapt : 1), env);
+  /* Monstruosité : une fois seulement, et l'évènement que BecomeMonstrous
+     écoute (js/forgeRemplacementsB.js). */
+  if (t.Monstrosity === 'True') {
+    const o = forgeDefinis(P, t.Defined || 'Self', env)[0];
+    if (!o || o.zone !== 'champ' || o.monstrueux) return;
+    poseMarqueurs(P, o, g2, n(), env.src); o.monstrueux = true; emet(P, {t: 'monstrueux', id: o.id});
+    return;
+  }
   if (t.Bolster) {
     const l = champDe(P, env.ctrl).filter(estCreature);
     if (!l.length) return;
@@ -124,7 +132,7 @@ FORGE_API.PutCounter.gen = (g => function* (P, t, env) {
   }
   yield* g(P, t, env);
 })(FORGE_API.PutCounter.gen);
-forgeSait('param', 'PutCounter.Bolster', 'PutCounter.Adapt', 'PutCounter.Choices', 'PutCounter.DividedAsYouChoose', 'PutCounter.Support');
+forgeSait('param', 'PutCounter.Monstrosity', 'PutCounter.Bolster', 'PutCounter.Adapt', 'PutCounter.Choices', 'PutCounter.DividedAsYouChoose', 'PutCounter.Support');
 
 /* Retirer du combat ; échanger le contrôle de deux permanents. */
 forgeEffet('RemoveFromCombat', [], function* (P, t, env) {

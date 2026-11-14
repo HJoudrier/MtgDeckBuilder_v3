@@ -96,7 +96,9 @@ const COUTS_B = {
   DamageYou: (c, n) => { c.vie = (c.vie || 0) + n; return true; },
   Mill: (c, n) => { c.meule = n; return true; },
   ExileFromTop: (c, n) => { c.exileDessus = n; return true; },
-  ExileAnyGrave: (c, n, p) => !/Triggered/.test(p[1] || '') && (c.exileTousCim = {n, desc: descForge(p[1] || 'Card')}),
+  /* « You may exile it » : la carte déclenchante, dans son cimetière
+     (js/forgeEffetsA.js `executeForge()` la juge et l'exile). */
+  ExileAnyGrave: (c, n, p) => /^Card\.Triggered(New)?Card$/.test(p[1] || '') ? (c.exileDeclencheur = true) : !/Triggered/.test(p[1] || '') && (c.exileTousCim = {n, desc: descForge(p[1] || 'Card')}),
   RemoveAnyCounter: (c, n, p) => (c.retireAny = {n, genre: p[1] && p[1] !== 'Any' ? genreMarqueur(p[1]) : null,
     soi: /^(CARDNAME|NICKNAME|Self)$/.test(p[2] || ''), desc: /^(CARDNAME|NICKNAME|Self)$/.test(p[2] || '') ? null : descForge(p[2] || 'Permanent')}),
   Exert: c => { c.exerce = true; return true; },

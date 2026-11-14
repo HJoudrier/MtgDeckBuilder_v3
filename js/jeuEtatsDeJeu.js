@@ -43,6 +43,7 @@ function appliqueSBA(P) {
     else if (J.poison >= 10) raison = 'poison';
     else if (J.piocheVide) raison = 'bibliotheque';
     else if (Object.keys(J.degatsCmd).some(k => J.degatsCmd[k] >= 21)) raison = 'commandant';
+    if (raison && nePeutPerdre(P, J.i, raison)) raison = null;
     if (raison) { elimine(P, J.i, raison); change = true; }
   }
   if (P.fin) return change;

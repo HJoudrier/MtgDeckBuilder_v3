@@ -180,7 +180,10 @@ function entreeForge(def, face, r) {
   const ent = def.entree = def.entree || {};
   if (w.DB === 'Tap' && !v[2]) {
     ent.engagee = true;
-    if (w.UnlessCost) { const m = /^PayLife<(\d+)>$/.exec(w.UnlessCost); if (!m) return false; ent.payeVie = +m[1]; }
+    if (w.UnlessCost) {
+      const m = /^PayLife<(\d+)>$/.exec(w.UnlessCost), r = /^Reveal<1\/([^>]+)>$/.exec(w.UnlessCost);
+      if (m) ent.payeVie = +m[1]; else if (r) ent.saufRevele = descForge(r[1].replace(/\.Other$|\+Other$/, '')); else return false;
+    }
     if (r.CheckSVar || w.ConditionCheckSVar) {
       const sv = face.svars[r.CheckSVar || w.ConditionCheckSVar] || '', cmp = r.SVarCompare || w.ConditionSVarCompare;
       const m = /^Count\$Valid (.+)$/.exec(sv.trim());

@@ -100,6 +100,7 @@ js/                 modules, chargés dans cet ordre :
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
+  forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
   forgeDefinition.js  d'un script de Forge à une définition de jeu
@@ -748,6 +749,13 @@ du tour précédent (`P.sortsDernierTour`, noté avant que `tour()` ne les effac
 jugent la même chose. Disturb et aftermath se lancent du cimetière, prototype et fuse sont des
 variantes ; fuse décale les emplacements de cible de la seconde moitié. Un omen se lance comme une
 aventure et se mélange ensuite dans la bibliothèque ; une carte flip se retourne comme une transformable.
+
+**Les déclencheurs et remplacements, suite** (`js/forgeRemplacementsB.js`, lot F23). « You can't lose the
+game » se juge dans les actions d'état, avant d'éliminer ; « skip your draw step » au seuil de l'étape.
+Un effet qui dure « jusqu'à la fin de votre prochain tour » (la pioche d'impulsion récente) garde le tour
+où il est posé (`e.pose`) et part au nettoyage du tour suivant de son contrôleur. Le flashback accordé
+(Snapcaster Mage) est une marque de tour sur la carte du cimetière. Le coût « you may exile it » d'une
+carte qui vient de mourir se juge et se paie à la résolution, sur la carte de l'évènement.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

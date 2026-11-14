@@ -28,7 +28,7 @@ function durees(P) {
 /* Poser un effet. `fin` : 'tour', 'prochainTour', 'hote' ou null. */
 function poseEffet(P, e) {
   durees(P);
-  const ef = {id: P.prochainId++, zone: 'effet', att: null, marq: {}, mods: [], memo: [], memoJ: [], ...e};
+  const ef = {id: P.prochainId++, zone: 'effet', att: null, marq: {}, mods: [], memo: [], memoJ: [], pose: P.tour, ...e};
   ef.def = {nom: e.nom || 'Effet', capacites: e.capacites || [], statiques: e.statiques || [], couleurs: [], types: [],
     sousTypes: [], supers: [], mots: 0, params: {}};
   P.effets.push(ef);
@@ -41,7 +41,7 @@ function finDuTour(P) {
   P.champ.forEach(id => { const o = obj(P, id); if (o.ctrlRendu != null) { o.ctrl = o.ctrlRendu; o.ctrlRendu = null; P.ver++; } });
   if (!P.effets) return;
   const n = P.effets.length;
-  P.effets = P.effets.filter(e => e.fin !== 'tour');
+  P.effets = P.effets.filter(e => e.fin !== 'tour' && !(e.fin === 'finProchainTour' && e.ctrl === P.actif && e.pose < P.tour));
   P.retardes = P.retardes.filter(r => !r.ceTour);
   if (P.effets.length !== n) P.ver++;
 }
