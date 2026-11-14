@@ -47,7 +47,7 @@ function effetForge(face, t0, jetons, racine) {
     const max = /^\d+$/.test(t0.CharmNum || '1') ? +(t0.CharmNum || 1) : null;
     const min = t0.MinCharmNum != null ? (/^\d+$/.test(t0.MinCharmNum) ? +t0.MinCharmNum : null) : max;
     if (max == null || min == null) return null;
-    return {ops: [], cibles: [], modes: {min, max, options: opts}};
+    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null}};
   }
   const ops = [], cibles = [], chaine = ++CHAINES_FORGE;
   let t = t0, parent = null, garde = 0;

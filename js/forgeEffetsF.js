@@ -170,3 +170,35 @@ FORGE_API.ChangeZone.prepare = (p0 => (t, op) => (!p0 || p0(t, op)) &&
   (!t.StaticEffect || !!(op.face.svars[t.StaticEffect] && statiqueForge(op.face, forgeTable(op.face.svars[t.StaticEffect]), op.jetons))))(FORGE_API.ChangeZone.prepare);
 etendEffet('Dig', ['WithMayLook', 'ExileFaceDown'], null, null);
 etendEffet('ChangeZoneAll', ['UseAllOriginZones'], null, null);
+
+/* —— Les formes des effets (lot F26) —————————————————————————————— */
+
+/* La force et l'endurance d'un jeton fixées par l'effet (« X/X »). */
+etendEffet('Token', ['TokenPower', 'TokenToughness'], null, function* (P, t, env, touches, nouveaux) {
+  if (!t.TokenPower && !t.TokenToughness) return;
+  const f = t.TokenPower != null ? forgeNombre(P, t.TokenPower, env) : null, e = t.TokenToughness != null ? forgeNombre(P, t.TokenToughness, env) : null;
+  nouveaux.filter(o => o.def.jeton).forEach(o => { o.def = {...o.def, force: f != null ? f : o.def.force, endurance: e != null ? e : o.def.endurance}; P.ver++; });
+});
+
+/* Copier un sort plusieurs fois. */
+FORGE_API.CopySpellAbility.gen = (g => function* (P, t, env) {
+  const n = t.Amount ? forgeNombre(P, t.Amount, env) : 1;
+  for (let k = 0; k < Math.min(n, 20); k++) yield* g(P, t, env);
+})(FORGE_API.CopySpellAbility.gen);
+forgeSait('param', 'CopySpellAbility.Amount');
+
+/* Ce qui devient la copie (`CloneTarget$`), au lieu de la source. */
+etendEffet('Clone', ['CloneTarget'], (P, t) => t.CloneTarget && !/^Valid /.test(t.CloneTarget) ? {...t, Defined: t.CloneTarget} : t, null);
+
+/* « Remove all counters; remember how many » : le nombre retiré, que la
+   suite lit (`Remembered$Amount`, `Count$RememberedSize`). */
+etendEffet('RemoveCounter', ['RememberRemoved'], (P, t, env) => {
+  if (t.RememberRemoved === 'True') { const o = forgeDefinis(P, t.Defined || 'Self', env)[0]; env.ctx._avantRetrait = o && o.marq ? {...o.marq} : null; env.ctx._objRetrait = o; }
+  return t;
+}, function* (P, t, env) {
+  if (t.RememberRemoved !== 'True' || !env.ctx._objRetrait || !env.ctx._avantRetrait) return;
+  const o = env.ctx._objRetrait, g = genreMarqueur(t.CounterType || 'P1P1');
+  const n = Math.max(0, (env.ctx._avantRetrait[g] || 0) - ((o.marq || {})[g] || 0));
+  (env.ctx.vars = env.ctx.vars || {}).X = n;
+  for (let k = 0; k < n; k++) env.ctx.memo.push(-1 - k);
+});

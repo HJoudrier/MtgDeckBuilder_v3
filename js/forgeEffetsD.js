@@ -69,7 +69,10 @@ forgeEffet('RegenerateAll', ['ValidCards'], function* (P, t, env) {
 const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainTour', UntilHostLeavesPlay: 'hote', EndOfTurn: 'tour',
   /* Jusqu'à la fin de votre prochain tour (la pioche d'impulsion récente) ;
      jusqu'à la fin du combat, lu comme la fin du tour. */
-  UntilTheEndOfYourNextTurn: 'finProchainTour', UntilEndOfCombat: 'tour', UntilEndOfCombatYourNextTurn: 'finProchainTour'};
+  UntilTheEndOfYourNextTurn: 'finProchainTour', UntilEndOfCombat: 'tour', UntilEndOfCombatYourNextTurn: 'finProchainTour',
+  /* Jusqu'à la fin du tour, ou plus tôt si l'hôte part : lu comme la fin du
+     tour ; jusqu'à votre prochaine étape de fin : comme votre prochain tour. */
+  UntilHostLeavesPlayOrEOT: 'tour', UntilYourNextEndStep: 'prochainTour', AsLongAsControl: 'hote', UntilLoseControlOfHost: 'hote'};
 
 forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stackable', 'ForgetOnMoved', 'ExileOnMoved', 'ReplacementEffects'], function* (P, t, env) {
   const prep = env.op.effet, src = env.src;

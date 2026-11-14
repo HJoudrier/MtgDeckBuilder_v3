@@ -6165,7 +6165,7 @@
   {
    "nom": "coutDeGarde",
    "fichier": "jeuLancer.js",
-   "ligne": 195,
+   "ligne": 200,
    "chargement": false,
    "appelle": [
     "car",
@@ -6180,7 +6180,7 @@
   {
    "nom": "restreintCibles",
    "fichier": "jeuLancer.js",
-   "ligne": 207,
+   "ligne": 212,
    "chargement": false,
    "appelle": [
     "obj"
@@ -9594,7 +9594,7 @@
   {
    "nom": "animeForge",
    "fichier": "forgeEffetsD.js",
-   "ligne": 125,
+   "ligne": 128,
    "chargement": false,
    "appelle": [
     "couleursMots",
@@ -9611,7 +9611,7 @@
   {
    "nom": "accordeAnimation",
    "fichier": "forgeEffetsD.js",
-   "ligne": 144,
+   "ligne": 147,
    "chargement": false,
    "appelle": [
     "capaciteForge",
@@ -9629,7 +9629,7 @@
   {
    "nom": "animationTenable",
    "fichier": "forgeEffetsD.js",
-   "ligne": 154,
+   "ligne": 157,
    "chargement": false,
    "appelle": [
     "accordeAnimation",

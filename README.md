@@ -769,6 +769,11 @@ cibles — même contrôleur, noms différents, une par joueur — écartent apr
 enfreignent (`restreintCibles()`). Une carte lancée par un effet « exile it instead » porte la marque
 jusque sur la pile.
 
+**Les formes des effets, suite** (lot F26). Un charme qui interdit de reprendre un mode (« this game »,
+« this turn ») garde les modes pris dans `P.cartes[cid].modesPris`. Les jetons X/X, les copies multiples,
+la cible d'un clone, les durées « until end of turn or until the host leaves » et « as long as you
+control » s'ajoutent par `etendEffet()`.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

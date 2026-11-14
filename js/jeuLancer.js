@@ -177,10 +177,15 @@ function* prepareEffets(P, j, src, effet, couleurs, extra) {
   if (!effet) return [];
   let options = [{ops: effet.ops, cibles: effet.cibles}];
   if (effet.modes) {
-    const m = effet.modes, ok = m.options.filter(op => op.cibles.every(sl => ciblesLegales(P, sl, src, j, couleurs).length >= sl.min));
+    /* « Choose one that hasn't been chosen this game / this turn » : les
+       modes déjà pris par cette carte (`P.cartes[cid].modesPris`). */
+    const k = m0 => src && P.cartes[src.cid] && (P.cartes[src.cid].modesPris || {})[m0.texte];
+    const pris = op => effet.modes.restr && k(op) != null && (effet.modes.restr === 'ThisGame' || k(op) === P.tour);
+    const m = effet.modes, ok = m.options.filter(op => !pris(op) && op.cibles.every(sl => ciblesLegales(P, sl, src, j, couleurs).length >= sl.min));
     if (ok.length < m.min) return null;
     const r = yield question(P, j, 'modes', ok.map(o => o.texte), {min: m.min, max: Math.min(m.max, ok.length), multi: true, source: src && src.id, extra: {options: ok}});
     options = (Array.isArray(r) ? r : [r]).map(i => ok[i]).filter(Boolean);
+    if (m.restr && src && P.cartes[src.cid]) { const k2 = P.cartes[src.cid]; k2.modesPris = k2.modesPris || {}; options.forEach(o => { k2.modesPris[o.texte] = P.tour; }); }
   }
   const effets = [];
   for (const op of options) {
