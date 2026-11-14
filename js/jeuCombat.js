@@ -20,6 +20,9 @@ function peutBloquer(P, b, a) {
   const cb = car(P, b), ca = car(P, a);
   if (b.engage || cb.nePeutBloquer || !estCreature(b)) return false;
   if (ca.mots & MOT.IMBLOCABLE) return false;
+  const passe = a.def.params.passage;
+  if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
+  if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
   if ((ca.mots & MOT.VOL) && !(cb.mots & (MOT.VOL | MOT.PORTEE))) return false;
   if ((ca.mots & MOT.PROTECTION) && (a.def.params.protection || []).some(k => cb.couleurs.includes(k))) return false;
   return true;

@@ -40,8 +40,17 @@ function car(P, o) {
   if (o._v === P.ver && o._c) return o._c;
   const d = o.def;
   let force = d.force || 0, endurance = d.endurance || 0, mots = d.mots;
-  let nePeutAttaquer = false, nePeutBloquer = false;
+  let nePeutAttaquer = false, nePeutBloquer = false, pasPar = null;
   if (o.zone === 'champ') {
+    /* Les statiques de Forge d'abord : une force fixée (« base power and
+       toughness ») remplace l'imprimée avant marqueurs et bonus. */
+    const fg = typeof statiquesForgeSur === 'function' && P.forgeStat !== false ? statiquesForgeSur(P, o) : null;
+    if (fg) {
+      if (fg.setF != null) force = fg.setF;
+      if (fg.setE != null) endurance = fg.setE;
+      force += fg.f; endurance += fg.e; mots |= fg.mots;
+      nePeutAttaquer = fg.attaque; nePeutBloquer = fg.blocage; pasPar = fg.pasPar;
+    }
     const p = (o.marq['+1/+1'] || 0) - (o.marq['-1/-1'] || 0);
     force += p; endurance += p;
     for (const {src, s} of statiquesEnJeu(P)) {
@@ -53,7 +62,7 @@ function car(P, o) {
     for (const m of o.mods) { force += m.f || 0; endurance += m.e || 0; mots |= m.mots || 0; }
   }
   o._c = {force, endurance, mots, types: d.types, sousTypes: d.sousTypes, couleurs: d.couleurs,
-    supers: d.supers, nePeutAttaquer, nePeutBloquer, loyaute: o.marq.loyaute || 0};
+    supers: d.supers, nePeutAttaquer, nePeutBloquer, pasPar, loyaute: o.marq.loyaute || 0};
   o._v = P.ver;
   return o._c;
 }

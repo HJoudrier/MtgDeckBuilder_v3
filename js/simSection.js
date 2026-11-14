@@ -15,7 +15,7 @@ let COUV_TABLE = {cle: null, val: null};
    un adversaire, un comportement ou les sources de cartes ont changé. */
 function couvertureTable(cfg) {
   const cle = [cfg.deck, signatureDeck(cfg.deck), ...cfg.sieges.map(k => k + (S.adversaires[k] ? signatureAdversaire(S.adversaires[k]) : '')),
-    signatureComportements(), CAT.date, CAT.cartes.length, SIM_CARTES.size].join('|');
+    signatureComportements(), CAT.date, CAT.cartes.length, SIM_CARTES.size, typeof FORGE !== 'undefined' ? FORGE.textes.size : 0].join('|');
   if (COUV_TABLE.cle === cle) return COUV_TABLE.val;
   const val = [];
   if (S.decks[cfg.deck]) val.push({nom: S.decks[cfg.deck].nom, teste: true, c: siegeDeck(cfg.deck).couverture});
@@ -128,10 +128,11 @@ function couvertureHTML(cfg) {
       n'avantage pas son deck. « Décrire » permet d'écrire son comportement à la main.</div>
     ${t.map(x => `<details class="sim-couv"${x.teste ? ' open' : ''}>
       <summary><b>${esc(x.nom)}</b> ${badgeCouverture(x.c.taux)}
-        <span class="small muted">${x.c.complete} complète(s) · ${x.c.partielle} partielle(s) · ${x.c.injouable} injouable(s)${x.c.manquantes.length ? ` · ${x.c.manquantes.length} inconnue(s)` : ''}</span></summary>
+        <span class="small muted">${x.c.complete} complète(s) · ${x.c.partielle} partielle(s) · ${x.c.injouable} injouable(s)${x.c.manquantes.length ? ` · ${x.c.manquantes.length} inconnue(s)` : ''}${x.c.forge ? ` · ${x.c.forge} lue(s) dans Forge` : ''}</span></summary>
       ${x.c.archiveSansJeu ? '<div class="small">L\'archive du catalogue date d\'avant le mode de jeu : la recharger donnerait au moteur les mots-clés et la loyauté.</div>' : ''}
       ${x.c.cartes.length ? `<div class="sim-liste">${x.c.cartes.slice(0, 60).map(c => `<div class="sim-ligne">
         <span class="sim-etat ${c.etat}">${c.etat}</span> ${esc(c.nom)}${c.n > 1 ? ` ×${c.n}` : ''}${c.manuel ? ' <span class="small muted">(décrite à la main)</span>' : ''}
+        ${c.source === 'forge' ? `<span class="small muted" title="${esc((c.manque || []).join(', '))}">Forge${c.manque && c.manque.length ? ' — manque ' + esc(c.manque.slice(0, 2).map(e => e.split(':')[1]).join(', ')) : ''}</span>` : ''}
         <span class="sim-gestes"><button type="button" class="btn sm" data-act="simComportement" data-carte="${esc(c.nom)}">Décrire</button></span>
       </div>`).join('')}</div>` : '<div class="small muted">Tout est compris.</div>'}
     </details>`).join('')}

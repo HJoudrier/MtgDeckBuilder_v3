@@ -70,6 +70,17 @@ js/                 modules, chargés dans cet ordre :
   jeuPilote.js      dérouler une partie, question après question
   jeuVue.js         ce qu'un joueur voit de la partie, et une question lisible par un humain
   jeuArrets.js      quand demander à un joueur humain
+  forgeValide.js    le langage de filtres de Forge (`Creature.OppCtrl+powerLE2`)
+  forgeExpr.js      les quantités de Forge (`Count$Valid …`, `Count$xPaid`, `/Twice`)
+  forgeDefini.js    ce que `Defined$` désigne (`Targeted`, `Remembered`, `TriggeredCard`…)
+  forgeCout.js      lire un coût de Forge (`2 R T Sac<1/CARDNAME>`)
+  forgeEffetsA.js   le registre des effets, la porte `executeForge()`, zones et cartes
+  forgeEffetsB.js   bibliothèque, dégâts et vie, retraits, jetons et marqueurs
+  forgeEffetsC.js   pompes, engagements, mana, combats, contrôle, mémoire, réflexes
+  forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
+  forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
+  forgeMotsCles.js  les mots-clés de Forge (`K:`)
+  forgeDefinition.js  d'un script de Forge à une définition de jeu
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
   iaChoix.js        garder sa main, cibler, chercher, défausser
   iaPriorite.js     ce que le joueur automatique fait de sa priorité
@@ -491,6 +502,55 @@ multijoueur. Les joueurs automatiques comparent des valeurs sans chercher dans l
 ils avantagent les decks qui jouent leurs menaces et sous-jouent combo, contrôle et politique. Le
 classement dit donc la force d'un deck **joué par cette IA contre cette table**. La table interactive
 — jouer soi-même contre les joueurs automatiques — est le lot 2.
+
+## Le modèle Forge
+
+Le compilateur d'oracle devine les effets dans l'anglais, et plafonne vite. **Forge** — un moteur
+Java libre, sous GPL-3.0 — a écrit chacune de ses trente-quatre mille cartes dans un langage
+structuré : un fichier par carte, une ligne par capacité, `A:SP$ DealDamage | ValidTgts$ Any |
+NumDmg$ 3`. L'atelier s'en sert, sans rien en embarquer.
+
+**La source** (`js/forgeDepot.js`). Les scripts sont téléchargés depuis le dépôt public de Forge sur
+GitHub, sur l'appareil seulement, et gardés par paquets dans IndexedDB (clés `forge-*`, qu'`idbVider()`
+épargne). La liste vient de l'API (quatre requêtes, avec l'empreinte `sha` de chaque fichier), les
+fichiers de `raw.githubusercontent.com` épinglé au commit, dix à la fois. Vos cartes et celles de
+vos adversaires passent d'abord ; un téléchargement interrompu reprend ; une fois par semaine, seuls
+les fichiers dont l'empreinte a changé sont relus. Le premier téléchargement attend qu'on le demande
+(paramètres, « Cartes Forge »).
+
+**Une opération par table.** Une capacité de Forge est une chaîne de tables (`SubAbility$`). Chacune
+entre dans le moteur comme une opération `{op, forge: true, api, t, face, slot}` : `op` dit sa nature
+à l'IA (`degats`, `exile`, `pioche`…), `t` la table elle-même, que `executeForge()` résout à la pile.
+Les `ValidTgts$` deviennent des emplacements de cible ordinaires dont le descripteur porte le filtre
+Forge (`desc.forge`), jugé par `forgeValideObjet()` depuis `correspondObjet()`. Le lancement, les
+cibles, la pile, les déclencheurs, l'IA restent ceux du moteur : rien n'a été écrit deux fois. Les
+déclencheurs deviennent des écoutes `{evt: 'forge'}`, les statiques des `{s: 'forge'}` lues par
+`car()`, `coutSort()` et `peutBloquer()`. Les objets retenus (`Remembered`) et les cartes exilées
+(`ExiledWith`) appartiennent à la carte, comme dans Forge.
+
+**La meilleure des deux lectures.** `definitionDe()` lit une carte qui porte son script des deux
+façons, et joue celle qui comprend le plus — complète avant partielle avant injouable, puis le
+meilleur taux. Tant que le moteur ne connaît pas tout le vocabulaire de Forge, une carte que l'oracle
+comprenait ne joue jamais moins bien qu'avant. Un comportement écrit à la main l'emporte toujours.
+
+**Une couverture exacte** (`js/forgeCouverture.js`). Chaque module inscrit ce qu'il sait faire au
+registre `FORGE_SAIT` (`forgeSait()`) : effets, déclencheurs, statiques, remplacements, mots-clés,
+morceaux de coût, expressions, propriétés de filtre, désignations — et les paramètres **par effet**
+(`param:ChangeZone.Origin`), parce qu'un même nom ne veut pas dire la même chose d'un effet à l'autre.
+Une unité — une capacité et sa chaîne, un déclencheur, une statique, un remplacement, un mot-clé — qui
+emploie un élément inconnu, ou qu'on ne sait pas construire (`construction:…`), est écartée entière.
+La carte est injouable si l'unité écartée est son sort, un remplacement, ou ressemble à une
+contrepartie. Le bloc « Ce qu'il manque au moteur » classe les éléments manquants par cartes touchées,
+vos decks d'abord : c'est la feuille de route.
+
+**Étendre le moteur**, un élément à la fois : `forgeEffet(api, params, gen, ia)` pour un effet,
+`forgeMode()` pour un déclencheur, `forgeStatique()` pour une statique, une branche de
+`motCleForge()` pour un mot-clé. Un paramètre qu'un effet ne déclare pas rend sa table injouable : on
+n'inscrit que ce qu'on lit vraiment.
+
+**Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
+morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
+jamais plus forte.
 
 ## La synchronisation entre appareils
 

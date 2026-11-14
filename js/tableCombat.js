@@ -9,7 +9,7 @@
    le moteur effacerait ce blocage en silence.
    ===================================================================== */
 
-function etatCombat(q, s, id) {
+function etatCombatTable(q, s, id) {
   if (q.q === 'attaquants') {
     const i = q.options.findIndex(o => o.id === id);
     return i < 0 ? '' : s.paires.has(i) ? 'choisi' : 'choix';

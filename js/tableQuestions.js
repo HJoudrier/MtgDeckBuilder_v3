@@ -22,7 +22,7 @@ function etatChoix(id) {
   if (!q) return '';
   const s = selDe(q);
   if (q.q === 'priorite') return q.options.some(a => a.id === id && a.k !== 'passer') ? 'choix' : '';
-  if (q.q === 'attaquants' || q.q === 'bloqueurs') return etatCombat(q, s, id);
+  if (q.q === 'attaquants' || q.q === 'bloqueurs') return etatCombatTable(q, s, id);
   const i = q.options.findIndex(o => o && o.id === id);
   return i < 0 ? '' : s.choix.has(i) ? 'choisi' : 'choix';
 }

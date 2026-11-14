@@ -772,7 +772,7 @@ sequenceDiagram
         CAR->>CAR: chercheFichesScryfall() — par 75, rangées dans IndexedDB
     end
     SIM->>PREP: siegeDeck(), siegeAdversaire()
-    Note over PREP: ficheParNom() → definitionDe()<br/>le compilateur d'oracle, gardé sous mémo
+    Note over PREP: ficheParNom() joint le script Forge s'il est là<br/>definitionDe() : Forge ou oracle, la mieux comprise, gardée sous mémo
     loop chaque partie g
         SIM->>MOT: creePartie({graine de g, places tournées})
         loop par tranches de 25 ms
@@ -908,6 +908,70 @@ sequenceDiagram
     end
 ```
 
+### 3.24 Télécharger les cartes Forge
+
+Le premier téléchargement se demande dans les paramètres ; ensuite, le démarrage reprend un
+téléchargement inachevé et vérifie les mises à jour une fois par semaine.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Utilisateur
+    participant APP as app.js
+    participant DEP as forgeDepot.js
+    participant GH as GitHub
+    participant IDB as IndexedDB
+    participant VUE as forgeVue.js
+
+    U->>APP: clic « Télécharger les scripts »
+    APP->>DEP: telechargeForge(true)
+    DEP->>IDB: chargeForge() — l'index et les paquets déjà là
+    DEP->>GH: listeForge() — commit, contenu de forge-gui/res, deux arbres
+    DEP->>DEP: les chemins dont le sha a changé ; vos cartes d'abord (cheminsDeNoms)
+    loop dix ouvriers
+        DEP->>GH: raw.githubusercontent.com/…/commit/chemin
+        DEP->>DEP: indexeForge() — par nom de face
+        opt toutes les quatre secondes
+            DEP->>IDB: rangeForge() — les paquets modifiés, l'index
+            DEP->>VUE: majForgeUI(true)
+        end
+    end
+    DEP->>VUE: forgeChange() — couverture et manques périmés
+```
+
+### 3.25 Résoudre une capacité Forge
+
+Une capacité lue dans Forge est une liste d'opérations `forge`, une par table de sa chaîne ;
+la pile la résout comme une autre.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant PILE as jeuPile.js
+    participant OPS as jeuOpsB.js
+    participant FA as forgeEffetsA.js
+    participant DEF as forgeDefini.js
+    participant EX as forgeExpr.js
+    participant API as FORGE_API[api]
+
+    PILE->>OPS: executeOps(ef.ops, ctx)
+    loop chaque opération de la chaîne
+        OPS->>FA: executeForge(P, op, ctx)
+        FA->>FA: memoireForge() — la mémoire de la carte source
+        FA->>FA: conditionForge() — Condition*, CheckSVar, IsPresent
+        opt Optional$ ou OptionalDecider$
+            FA-->>PILE: question « oui » au joueur
+        end
+        opt UnlessCost$
+            FA-->>PILE: question au payeur
+        end
+        FA->>API: gen(P, t, env)
+        API->>DEF: objetsForge() / joueursForge() — cibles, sinon Defined$
+        API->>EX: forgeNombre() — NumDmg$, Count$…, X
+        API-->>FA: zones, dégâts, jetons, marqueurs, évènements émis
+    end
+```
+
 ---
 
 ## 4. Ce qui périme quoi
@@ -921,8 +985,9 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | `SUG_MEMO` (`js/vivier.js`) | La sélection notée et ordonnée | `signatureSuggestions()` | L'empreinte des candidates, **le deck et son commandant**, la collection, le budget du deck, les préférences d'achat, `MAJ_CARTES`, les données EDHREC |
 | `NOTES_COLLECTION` (`js/groupes.js`) | Les notes de la collection, pour le tri par score | `signatureSuggestions()` | Les mêmes |
 | `ACHATS` (`js/achats.js`) | La liste d'achats de tous les decks | `signatureAchats()` | Les listes de chaque deck et leur drapeau « exemplaires propres », la collection, les préférences d'achat |
-| `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, le compilateur |
-| `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un adversaire, un comportement, l'archive, les fiches venues de Scryfall |
+| `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, script Forge et jetons, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, un script Forge téléchargé ou mis à jour, le compilateur |
+| `MANQUES` (`js/forgeVue.js`) | Ce qu'il manque au moteur pour vos cartes, et pour toute la base | les scripts, le commit, la taille de `FORGE_SAIT`, les decks et les adversaires | Un téléchargement, un deck ou un adversaire modifié, un élément ajouté au moteur |
+| `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un adversaire, un comportement, l'archive, les fiches venues de Scryfall, les scripts Forge |
 
 Deux conséquences pratiques :
 

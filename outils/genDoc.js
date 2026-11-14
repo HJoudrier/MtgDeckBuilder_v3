@@ -15,7 +15,8 @@
 
    Usage : node outils/genDoc.js [--verifie]
    `--verifie` ne réécrit rien et sort en erreur si le fichier est périmé —
-   de quoi le contrôler sans risquer de l'oublier.
+   de quoi le contrôler sans risquer de l'oublier — ou si deux modules
+   déclarent le même nom global.
    ===================================================================== */
 
 import fs from 'node:fs';
@@ -147,6 +148,28 @@ modules.forEach(m => {
     md += '\n';
   }
 });
+
+/* Deux modules qui déclarent le même nom global : le dernier chargé
+   écrase le premier sans bruit, et un geste se met à appeler la fonction
+   d'un autre. Ni le navigateur ni les tests d'un module isolé ne le
+   voient ; on le refuse ici. */
+function doublons() {
+  const vus = new Map(), r = [];
+  ordreModules().forEach(f => {
+    const src = fs.readFileSync(path.join(RACINE, 'js', f), 'utf8');
+    for (const m of src.matchAll(/^(?:async\s+)?(?:function\*?\s+|const\s+|let\s+|var\s+)([A-Za-z_$][\w$]*)/gm)) {
+      if (vus.has(m[1]) && vus.get(m[1]) !== f) r.push(`${m[1]} : ${vus.get(m[1])} et ${f}`);
+      else vus.set(m[1], f);
+    }
+  });
+  return r;
+}
+
+const dbl = doublons();
+if (dbl.length) {
+  console.error('Noms globaux déclarés deux fois :\n  ' + dbl.join('\n  '));
+  if (process.argv.includes('--verifie')) process.exit(1);
+}
 
 if (process.argv.includes('--verifie')) {
   const actuel = fs.existsSync(SORTIE) ? fs.readFileSync(SORTIE, 'utf8') : '';

@@ -67,7 +67,7 @@ function impactSort(P, j, o) {
   if (d.sort) return scoreEffet(P, j, d.sort, o) + d.mv * 0.2;
   let v = valeurDef(d);
   if (d.aura) {
-    const hostile = d.statiques.some(s => s.s === 'interdit');
+    const hostile = !!d.auraHostile || d.statiques.some(s => s.s === 'interdit');
     v = hostile ? meilleureCibleHostile(P, j, {desc: d.aura, min: 1, max: 1}, o, null)
       : champDe(P, j).some(estCreature) ? 2.5 : -1;
   }

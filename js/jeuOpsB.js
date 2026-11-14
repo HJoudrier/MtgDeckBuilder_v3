@@ -23,7 +23,7 @@ OPS.jetons = function* (P, op, ctx) {
       o.engage = !!op.engage;
       P.champ.push(o.id);
       P.ver++;
-      emet(P, {t: 'entre', id: o.id, ctrl: j});
+      emet(P, {t: 'entre', id: o.id, ctrl: j, jeton: true});
     }
   }
   jn(P, `${n} jeton(s) ${op._def.nom}`);
@@ -139,7 +139,7 @@ function* executeOps(P, ops, ctx) {
     if (P.fin) return;
     if (op.sauf && (yield* proposePaiement(P, op, ctx))) continue;
     const fois = op.parChaque ? compteObjets(P, op.parChaque, sourceCtx(P, ctx), ctx.ctrl) : 1;
-    const f = OPS[op.op];
+    const f = op.forge ? executeForge : OPS[op.op];
     if (!f) continue;
     for (let k = 0; k < fois && !P.fin; k++) yield* f(P, op, ctx);
   }

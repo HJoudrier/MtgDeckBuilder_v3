@@ -58,7 +58,7 @@ function chercheCartes(q) {
   return [...debut.sort(tri), ...dedans.sort(tri)].slice(0, 14);
 }
 
-function resultatsHTML(q, cible) {
+function resultatsAjoutHTML(q, cible) {
   const res = chercheCartes(q);
   const cols = [...S.colors].join('') || 'aucune';
   const noeuds = noeudsActifs();
@@ -96,7 +96,7 @@ function resultatsHTML(q, cible) {
 function majResultats(cible, sansRelancer) {
   const champ = document.getElementById('addN');
   const z = document.getElementById('addRes');
-  if (z && champ) z.innerHTML = resultatsHTML(champ.value, cible);
+  if (z && champ) z.innerHTML = resultatsAjoutHTML(champ.value, cible);
   if (sansRelancer || !champ) return;
   clearTimeout(scryTimer);
   const q = champ.value;
@@ -120,6 +120,6 @@ function openAdd(cible) {
      </div>
      ${versDeck ? `<label class="row small" style="gap:6px"><input type="checkbox" id="addStock"> Ajouter aussi à la collection (sinon la carte est comptée à l'achat)</label>` : ''}
      ${annexe ? `<div class="small muted">${esc(annexe.aide)} Une carte posée ici quitte le deck s'il la portait : les trois listes s'excluent.</div>` : ''}
-     <div id="addRes">${resultatsHTML('', cible)}</div>`,
+     <div id="addRes">${resultatsAjoutHTML('', cible)}</div>`,
     '<button class="btn" value="cancel">Fermer</button>', true);
 }

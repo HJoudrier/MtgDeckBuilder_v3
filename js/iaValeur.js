@@ -64,6 +64,7 @@ const OPS_HOSTILES = new Set(['degats', 'detruit', 'exile', 'contre', 'engage', 
 
 /* Une opération nuit-elle à ce qu'elle désigne ? */
 function opHostile(op) {
+  if (op.hostile != null) return op.hostile;
   if (OPS_HOSTILES.has(op.op)) return true;
   if (op.op === 'place') return op.vers === 'main' || op.vers === 'dessus' || op.vers === 'dessous';
   if (op.op === 'marqueurs') return op.genre === '-1/-1';

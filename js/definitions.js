@@ -16,7 +16,7 @@
 /* À rehausser dès que le compilateur change ce qu'il comprend : la
    signature d'un lot de simulations l'inclut, et un rejeu fait avec un
    autre compilateur ne rejouerait pas la même partie. */
-const COMPILO_V = 2;
+const COMPILO_V = 3;
 
 const DEFS = new Map();
 
@@ -145,13 +145,31 @@ function couverture(compilees, def, fiche, directive, manuel) {
   return {lignes, etat, taux, manuel: !!manuel, directive: directive || null};
 }
 
+/* Le rang d'une couverture : complète, puis partielle, puis injouable, et
+   à état égal le meilleur taux. */
+function rangCouverture(c) { return (c.etat === 'complete' ? 2 : c.etat === 'partielle' ? 1 : 0) + c.taux * 0.5; }
+
 /* La définition d'une fiche, gardée sous son nom, l'empreinte de son texte
-   et celle de son comportement manuel. */
+   et celle de son comportement manuel. Un comportement écrit à la main
+   l'emporte ; sinon, une carte qui porte son script Forge (`fiche.forge`)
+   est lue des deux façons, et la mieux comprise est jouée — tant que le
+   moteur ne connaît pas tout le vocabulaire de Forge, une carte que
+   l'oracle comprend mieux ne doit pas jouer moins bien. */
 function definitionDe(fiche, comportement) {
+  const forge = !comportement && fiche.forge && typeof definitionForge === 'function';
   const cle = fiche.nom + '|' + empreinte(fiche.texte + '|' + fiche.type + '|' + fiche.force + '/' + fiche.endurance) +
-    '|' + empreinte(comportement || '') + '|' + COMPILO_V;
+    '|' + empreinte(comportement || '') + (forge ? '|F' + empreinte(fiche.forge + JSON.stringify(fiche.forgeJetons || {})) : '') + '|' + COMPILO_V;
   let d = DEFS.get(cle);
-  if (!d) { d = compileDefinition(fiche, comportement); DEFS.set(cle, d); }
+  if (!d) {
+    d = compileDefinition(fiche, comportement);
+    d.source = comportement ? 'manuel' : 'oracle';
+    if (forge) {
+      let f = null;
+      try { f = definitionForge(fiche); } catch (e) { f = null; }
+      if (f && rangCouverture(f.couverture) >= rangCouverture(d.couverture)) d = f;
+    }
+    DEFS.set(cle, d);
+  }
   return d;
 }
 

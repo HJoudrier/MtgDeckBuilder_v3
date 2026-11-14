@@ -17,7 +17,7 @@
 let MANQUES = {cle: null, val: null, base: null, mesure: false};
 
 const GENRES_FORGE = {api: 'effet', trig: 'déclencheur', stat: 'statique', repl: 'remplacement', kw: 'mot-clé',
-  param: 'paramètre', cout: 'coût', expr: 'expression'};
+  param: 'paramètre', cout: 'coût', expr: 'expression', filtre: 'filtre', defini: 'désignation', construction: 'forme non jouée'};
 
 /* Les scripts ont changé : ce qu'on en avait tiré est périmé. */
 function forgeChange() {

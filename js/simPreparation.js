@@ -27,10 +27,12 @@ function bilanCouverture(entrees, manquantes) {
   const somme = etat => nl.filter(c => c.def.couverture.etat === etat).reduce((s, c) => s + c.n, 0);
   const complete = somme('complete'), partielle = somme('partielle'), injouable = somme('injouable');
   const cartes = nl.filter(c => c.def.couverture.etat !== 'complete')
-    .map(c => ({nom: c.nom, n: c.n, etat: c.def.couverture.etat, taux: c.def.couverture.taux, manuel: c.def.couverture.manuel}))
+    .map(c => ({nom: c.nom, n: c.n, etat: c.def.couverture.etat, taux: c.def.couverture.taux, manuel: c.def.couverture.manuel,
+      source: c.def.source, manque: c.def.couverture.manque || null}))
     .sort((a, b) => (a.etat === 'injouable' ? 0 : 1) - (b.etat === 'injouable' ? 0 : 1) || a.taux - b.taux);
   const archiveSansJeu = entrees.some(c => c.fiche.archiveSansJeu);
-  return {n, complete, partielle, injouable, manquantes, cartes, archiveSansJeu,
+  const forge = nl.filter(c => c.def.source === 'forge').reduce((s, c) => s + c.n, 0);
+  return {n, complete, partielle, injouable, manquantes, cartes, archiveSansJeu, forge,
     taux: n ? (complete + partielle * 0.5) / n : 1};
 }
 

@@ -14,6 +14,14 @@
 
 const LETTRES_MANA = ['W', 'U', 'B', 'R', 'G', 'C'];
 
+/* Les couleurs de l'identité d'un joueur : celles de ses commandants. Sans
+   commandant, un « mana de l'identité » n'en produit aucun (règle 903.4f). */
+function identiteJoueur(P, j) {
+  const k = new Set();
+  P.cartes.forEach(c => { if (c.cmd && c.prop === j) c.def.couleurs.forEach(x => k.add(x)); });
+  return [...k];
+}
+
 /* Les sources de mana qu'un joueur peut activer maintenant, une par objet :
    un objet à deux capacités {T} n'en active qu'une. */
 function sourcesMana(P, j) {
@@ -29,7 +37,8 @@ function sourcesMana(P, j) {
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
-      let opts = k.options;
+      let opts = k.identite ? identiteJoueur(P, j) : k.options;
+      if (!opts.length) continue;
       if (k.parChaque) {
         const n = compteObjets(P, k.parChaque, o, j);
         if (!n) continue;

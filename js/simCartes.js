@@ -65,6 +65,22 @@ function indexArchive() {
    de l'atelier sans texte (importée, jamais complétée) ne compte pas : le
    moteur la jouerait comme une carte vide. */
 function ficheParNom(nom) {
+  const f = ficheSansForge(nom);
+  return f ? avecForge(f) : null;
+}
+
+/* La fiche, avec son script Forge et ceux des jetons qu'il crée, si
+   l'appareil les a (js/forgeDepot.js). Une copie : les fiches gardées pour
+   les adversaires ne s'alourdissent pas de scripts. */
+function avecForge(f) {
+  const s = typeof scriptForgeDe === 'function' ? scriptForgeDe(f.nom) : null;
+  if (!s) return f;
+  const jetons = {};
+  nomsJetonsForge(s).forEach(n => { const t = FORGE.jetons.get(n); if (t) jetons[n] = t; });
+  return {...f, forge: s, forgeJetons: jetons};
+}
+
+function ficheSansForge(nom) {
   const k = norm(nom);
   const c = find(nom);
   const livree = c && BUILTIN.has(norm(c.name));

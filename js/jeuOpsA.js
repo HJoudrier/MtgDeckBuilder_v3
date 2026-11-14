@@ -105,6 +105,7 @@ function infligeDegats(P, src, cible, n, combat) {
     if (estType(o, 'planeswalker') && !estCreature(o)) { o.marq.loyaute = (o.marq.loyaute || 0) - n; P.ver++; }
     else if (mots & MOT.INFECTION) { o.marq['-1/-1'] = (o.marq['-1/-1'] || 0) + n; P.ver++; }
     else { o.bless += n; if (mots & MOT.CONTACT) o.toucheMortel = true; }
+    emet(P, {t: 'degatsObjet', source: src.id, id: o.id, n, combat, ctrl});
   }
   if (P.cartes[src.cid]) P.cartes[src.cid].st.degats += n;
   if (mots & MOT.LIEN) gagneVie(P, ctrl, n);

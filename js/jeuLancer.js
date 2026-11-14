@@ -29,6 +29,7 @@ function coutSort(P, j, o, depuis) {
     if (s.s === 'taxe' && defCorrespond(o.def, s.desc)) plus += s.n;
     if (s.s === 'reduction' && src.ctrl === j && defCorrespond(o.def, s.desc)) moins += s.n;
   }
+  if (typeof coutsForge === 'function') { const [p, m] = coutsForge(P, j, o); plus += p; moins += m; }
   if (depuis === 'commandement') plus += 2 * (P.joueurs[j].taxe[o.cid] || 0);
   if (!plus && !moins) return cout;
   const generique = Math.max(0, cout.generique + plus - moins);

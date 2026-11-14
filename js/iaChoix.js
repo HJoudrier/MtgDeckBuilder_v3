@@ -39,7 +39,7 @@ function iaCibles(P, q) {
   const slot = ex.slot || {};
   const ops = ex.equipe || ex.aura ? [] : opsSurCible(ex.ops, ex.indice);
   let hostile = ops.some(opHostile);
-  if (ex.aura) hostile = q.source && obj(P, q.source) && obj(P, q.source).def.statiques.some(s => s.s === 'interdit');
+  if (ex.aura) hostile = q.source && obj(P, q.source) && (!!obj(P, q.source).def.auraHostile || obj(P, q.source).def.statiques.some(s => s.s === 'interdit'));
   if (slot.desc && slot.desc.ctrl === 'vous') hostile = false;
   const opDeg = ops.find(o => o.op === 'degats');
   const n = opDeg && typeof opDeg.n === 'number' ? opDeg.n : null;
@@ -102,6 +102,7 @@ function iaScrute(P, q) {
 /* « You may » : oui, sauf à payer pour empêcher ce qui ne gêne guère. */
 function iaOui(P, q) {
   const ex = q.extra || {};
+  if (ex.saufForge) return 1;
   if (ex.sauf) {
     const op = ex.sauf;
     const dispo = manaDispo(P, q.joueur);

@@ -31,6 +31,7 @@ function etatCombat(P, o, etat) {
 /* Le cœur : un objet (ou un instantané) répond-il au descripteur, vu du
    joueur `ctrl` qui contrôle la source `src` ? */
 function correspondObjet(P, o, d, src, ctrl, base) {
+  if (d.forge) return forgeValideObjet(P, o, d.forge, src, ctrl, null, base);
   const zone = o.lki ? 'champ' : o.zone;
   const c = caracsJugees(P, o, base);
   if (d.genre === 'nimporte') {
@@ -77,6 +78,7 @@ function correspondBase(P, o, d, src, ctrl) { return correspondObjet(P, o, d, sr
 /* Un joueur répond-il au descripteur ? */
 function joueurCorrespond(P, j, d, ctrl) {
   if (P.joueurs[j].elimine) return false;
+  if (d.forge) return forgeValideJoueur(P, j, d.forge, ctrl, null);
   if (d.genre === 'nimporte') return true;
   if (d.genre !== 'joueur') return false;
   return d.joueur === 'adv' ? j !== ctrl : true;
@@ -86,6 +88,7 @@ function joueurCorrespond(P, j, d, ctrl) {
    noncreature spell ») ? */
 function defCorrespond(def, d) {
   if (!d) return true;
+  if (d.forge) return forgeValideDef(def, d.forge, null, null);
   if (d.types.length && !d.types.some(t => def.types.includes(t))) return false;
   if (d.non.length && d.non.some(t => def.types.includes(t))) return false;
   if (d.sousTypes.length && !d.sousTypes.some(s => def.sousTypes.includes(s))) return false;

@@ -68,6 +68,7 @@ function ecouteRepond(P, ec, e, s) {
     case 'pioche': return e.t === 'pioche' && quiConvient(ec.qui, e.joueur, s.ctrl);
     case 'sacrifie': return e.t === 'sacrifie' && e.joueur === s.ctrl && (!sujet || correspond(P, e.lki, sujet, s, s.ctrl));
     case 'quitte': return e.t === 'zone' && e.de === 'champ' && e.ancien === s.id;
+    case 'forge': return forgeDeclenche(P, ec, e, s);
   }
   return false;
 }
