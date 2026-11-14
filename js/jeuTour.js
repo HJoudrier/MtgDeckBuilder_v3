@@ -31,8 +31,9 @@ function degagement(P) {
    « jusqu'à la fin du tour » (règle 514). */
 function* nettoyage(P) {
   const J = P.joueurs[P.actif];
-  if (J.main.length > 7) {
-    const choix = yield* choisitCartes(P, P.actif, J.main.slice(), J.main.length - 7, 'Défausser', 'defausse');
+  const max = tailleMainMax(P, P.actif);
+  if (J.main.length > max) {
+    const choix = yield* choisitCartes(P, P.actif, J.main.slice(), J.main.length - max, 'Défausser', 'defausse');
     choix.forEach(id => defausseCarte(P, id, P.actif));
   }
   finDuTour(P);

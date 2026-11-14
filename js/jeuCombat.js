@@ -13,7 +13,7 @@
 function peutAttaquer(P, o) {
   if (!estCreature(o) || o.engage || !(o.pret || aMot(P, o, MOT.CELERITE))) return false;
   const c = car(P, o);
-  return !(c.mots & MOT.DEFENSEUR) && !c.nePeutAttaquer;
+  return !((c.mots & MOT.DEFENSEUR) && !defenseurAttaque(P, o)) && !c.nePeutAttaquer;
 }
 
 function peutBloquer(P, b, a) {
@@ -42,9 +42,20 @@ function* declareAttaquants(P) {
   const defenseurs = adversaires(P, j).map(i => ({j: i}));
   P.champ.forEach(id => { const o = obj(P, id); if (o.ctrl !== j && estType(o, 'planeswalker')) defenseurs.push({pw: id}); });
   const r = yield question(P, j, 'attaquants', cands, {min: 0, max: cands.length, multi: true, defaut: [], extra: {defenseurs}});
+  const choisis = new Map();
   for (const paire of Array.isArray(r) ? r : []) {
     const id = cands[paire[0]], def = defenseurs[paire[1]];
-    if (id == null || !def || P.combat.attaquants.has(id)) continue;
+    if (id != null && def && !choisis.has(id) && attaquePermise(P, obj(P, id), def)) choisis.set(id, def);
+  }
+  /* « Attacks each combat if able » : la créature qui le doit et le peut
+     attaque le premier défenseur permis, si son contrôleur l'a oubliée. */
+  cands.forEach(id => {
+    if (choisis.has(id) || !doitAttaquer(P, obj(P, id))) return;
+    const def = defenseurs.find(d => attaquePermise(P, obj(P, id), d) && !taxeAttaque(P, obj(P, id), d));
+    if (def) choisis.set(id, def);
+  });
+  yield* paieTaxesAttaque(P, j, choisis);
+  for (const [id, def] of choisis) {
     const o = obj(P, id);
     P.combat.attaquants.set(id, def);
     P.attaquantsTour = (P.attaquantsTour || 0) + 1;
@@ -54,6 +65,21 @@ function* declareAttaquants(P) {
   const n = P.combat.attaquants.size;
   if (n) jn(P, `${P.joueurs[j].nom} attaque avec ${[...P.combat.attaquants.keys()].map(id => nomObj(P, id)).join(', ')}`);
   return n;
+}
+
+/* La taxe d'attaque (Ghostly Prison) : l'attaquant la paie en une fois,
+   ou les attaquants taxés restent chez eux — les plus chers d'abord, tant
+   que le total dépasse ce qu'il peut payer. */
+function* paieTaxesAttaque(P, j, choisis) {
+  const taxes = [...choisis].map(([id, def]) => [id, taxeAttaque(P, obj(P, id), def)]).filter(x => x[1] > 0).sort((a, b) => a[1] - b[1]);
+  if (!taxes.length) return;
+  const cout = n => ({...coutManaVide(), generique: n, total: n});
+  let total = taxes.reduce((s, x) => s + x[1], 0);
+  while (taxes.length && !planPaiement(P, j, cout(total), 0)) { const [id, n] = taxes.pop(); choisis.delete(id); total -= n; }
+  if (!taxes.length) return;
+  const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: `Payer {${total}} pour attaquer ?`, extra: {taxeAttaque: total}});
+  if (r === 1 && paieMana(P, j, cout(total), 0)) return;
+  taxes.forEach(([id]) => choisis.delete(id));
 }
 
 /* Le joueur que vise un attaquant, directement ou par son planeswalker. */
@@ -73,17 +99,22 @@ function* declareBloqueurs(P) {
     const blqs = champDe(P, d).filter(o => estCreature(o) && !o.engage && !car(P, o).nePeutBloquer).map(o => o.id);
     if (!blqs.length) continue;
     const r = yield question(P, d, 'bloqueurs', blqs, {min: 0, max: blqs.length, multi: true, defaut: [], extra: {attaquants: atts}});
-    for (const paire of Array.isArray(r) ? r : []) {
-      const b = blqs[paire[0]], a = atts[paire[1]];
-      if (b == null || a == null || cb.bloqueurs.has(b) || !peutBloquer(P, obj(P, b), obj(P, a))) continue;
+    const pose = (b, a) => {
+      if (b == null || a == null || cb.bloqueurs.has(b) || !peutBloquer(P, obj(P, b), obj(P, a))) return;
+      if ((cb.bloquesPar.get(a) || []).length >= bornesBlocage(P, obj(P, a)).max) return;
       cb.bloqueurs.set(b, a);
       if (!cb.bloquesPar.has(a)) cb.bloquesPar.set(a, []);
       cb.bloquesPar.get(a).push(b);
-    }
+    };
+    for (const paire of Array.isArray(r) ? r : []) pose(blqs[paire[0]], atts[paire[1]]);
+    /* « Blocks each combat if able ». */
+    blqs.forEach(b => { if (!cb.bloqueurs.has(b) && doitBloquer(P, obj(P, b))) pose(b, atts.find(a => peutBloquer(P, obj(P, b), obj(P, a)))); });
   }
-  /* La menace : un attaquant bloqué par une seule créature ne l'est pas. */
+  /* La menace, et « can't be blocked except by three or more » : un
+     attaquant bloqué par trop peu de créatures ne l'est pas. */
   for (const [a, bs] of cb.bloquesPar) {
-    if (bs.length === 1 && aMot(P, obj(P, a), MOT.MENACE)) { cb.bloqueurs.delete(bs[0]); cb.bloquesPar.delete(a); }
+    const min = Math.max(aMot(P, obj(P, a), MOT.MENACE) ? 2 : 1, bornesBlocage(P, obj(P, a)).min);
+    if (bs.length < min) { bs.forEach(b => cb.bloqueurs.delete(b)); cb.bloquesPar.delete(a); }
   }
   for (const [a, bs] of cb.bloquesPar) {
     cb.bloque.add(a);
@@ -123,6 +154,10 @@ function repartition(P, a, bs, force) {
   return r;
 }
 
+/* Doran : une créature peut infliger ses dégâts de combat selon son
+   endurance. */
+function forceDeCombat(P, o) { const c = car(P, o); return degatsParEndurance(P, o) ? c.endurance : c.force; }
+
 /* Les dégâts de combat d'une passe (règle 510) : tout est assigné, puis
    infligé d'un coup. */
 function* degatsCombat(P, passe) {
@@ -133,7 +168,7 @@ function* degatsCombat(P, passe) {
     const a = obj(P, aid);
     if (!a || a.zone !== 'champ' || !frappe(P, a, passe, avecInit)) continue;
     cb.frappe.add(aid);
-    const force = car(P, a).force;
+    const force = forceDeCombat(P, a);
     if (force <= 0) continue;
     const cible = def.j != null ? (P.joueurs[def.j].elimine ? null : {j: def.j}) : obj(P, def.pw);
     if (!cb.bloque.has(aid)) { if (cible) coups.push([a, cible, force]); continue; }
@@ -145,7 +180,7 @@ function* degatsCombat(P, passe) {
     const b = obj(P, bid), a = obj(P, aid);
     if (!b || !a || !frappe(P, b, passe, avecInit)) continue;
     cb.frappe.add(bid);
-    const f = car(P, b).force;
+    const f = forceDeCombat(P, b);
     if (f > 0) coups.push([b, a, f]);
   }
   coups.forEach(([src, cible, n]) => infligeDegats(P, src, cible, n, true));

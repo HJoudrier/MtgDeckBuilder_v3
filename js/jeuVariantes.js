@@ -84,6 +84,10 @@ function reduit(o, c, creatures, m) {
 /* Un coût en mana est-il payable, réductions comprises ? */
 function payableAvec(P, j, o, mana, x) {
   if (planPaiement(P, j, mana, x, {sort: o})) return true;
+  /* Une réduction selon la cible : proposée si une cible la donne, jugée
+     au lancement (js/jeuActions.js `lanceSort()`). */
+  const rc = reductionPossible(P, j, o);
+  if (rc && planPaiement(P, j, {...mana, generique: Math.max(0, mana.generique - rc), total: mana.total - Math.min(rc, mana.generique)}, x, {sort: o})) return true;
   const d = o.def;
   if (!d.params.convocation && !d.params.delve) return false;
   const cim = d.params.delve ? P.joueurs[j].cimetiere.filter(id => id !== o.id).length : 0;

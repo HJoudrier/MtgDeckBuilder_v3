@@ -107,8 +107,13 @@ function collecteRetardes(P, e) {
 function capacitesDe(P, o) {
   if (!o || o.zone !== 'champ' || typeof capacitesAccordees !== 'function') return o ? o.def.capacites : [];
   if (o._capV === P.ver) return o._cap;
+  /* Un terrain dont une statique change les types tient ses capacités de
+     mana de ses types ; un permanent qui perd ses capacités n'a plus que
+     celles qu'on lui accorde. */
+  const terrain = o.anime ? capacitesTerrain(o) : null;
+  const base = terrain || (o.anime && sansCapacites(o) ? [] : o.def.capacites);
   const plus = capacitesAccordees(P, o);
-  o._cap = plus.length ? o.def.capacites.concat(plus) : o.def.capacites;
+  o._cap = plus.length ? base.concat(plus) : base;
   o._capV = P.ver;
   return o._cap;
 }

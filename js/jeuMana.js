@@ -46,6 +46,7 @@ function sourcesMana(P, j, pour) {
     for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
+      if (activationInterdite(P, j, o, k)) continue;
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||

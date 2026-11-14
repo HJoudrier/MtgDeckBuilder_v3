@@ -46,6 +46,9 @@ function appliqueSBA(P) {
     if (raison) { elimine(P, J.i, raison); change = true; }
   }
   if (P.fin) return change;
+  /* Les statiques qui changent un contrôleur ou un type d'abord : ce qui
+     suit juge les permanents tels qu'elles les font. */
+  if (couchesStatiques(P)) change = true;
   const auCimetiere = new Set(), detruits = new Set(), legendes = new Map();
   for (const id of P.champ) {
     const o = obj(P, id), c = car(P, o);

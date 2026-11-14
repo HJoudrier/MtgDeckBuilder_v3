@@ -18,7 +18,7 @@ function statiquesEnJeu(P) {
   const r = [];
   for (const id of P.champ) {
     const o = obj(P, id);
-    if (o.def.statiques.length) o.def.statiques.forEach(s => r.push({src: o, s}));
+    if (o.def.statiques.length && !(o.anime && sansCapacites(o))) o.def.statiques.forEach(s => r.push({src: o, s}));
   }
   if (P.effets) P.effets.forEach(e => e.def.statiques.forEach(s => r.push({src: e, s})));
   P._statV = P.ver; P._stat = r;
@@ -85,9 +85,13 @@ function animation(o) {
   const r = {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types.slice(), sousTypes: d.sousTypes.slice(), couleurs: d.couleurs,
     changelin: !!(d.params && d.params.changelin)};
   for (const a of o.anime) {
+    if (a.retireTypes) r.types = [];
+    if (a.changelin) r.changelin = true;
+    if (a.perdTout) r.mots = 0;
     if (a.force != null) r.force = a.force;
     if (a.endurance != null) r.endurance = a.endurance;
     if (a.retireSousTypes) r.sousTypes = [];
+    if (a.retireTerrains) r.sousTypes = r.sousTypes.filter(s => !TYPES_TERRAIN.has(s));
     (a.types || []).forEach(t => { if (!r.types.includes(t)) r.types.push(t); });
     (a.sousTypes || []).forEach(t => { if (!r.sousTypes.includes(t)) r.sousTypes.push(t); });
     if (a.couleurs) r.couleurs = a.ecrase ? a.couleurs : [...new Set([...r.couleurs, ...a.couleurs])];
@@ -97,7 +101,10 @@ function animation(o) {
 }
 
 function aMot(P, o, m) { return (car(P, o).mots & m) !== 0; }
-function estType(o, t) { return o.def.types.includes(t) || (!!o.anime && o.anime.some(a => (a.types || []).includes(t))); }
+function estType(o, t) {
+  if (o.anime && o.anime.some(a => a.retireTypes)) return animation(o).types.includes(t);
+  return o.def.types.includes(t) || (!!o.anime && o.anime.some(a => (a.types || []).includes(t)));
+}
 function estCreature(o) { return estType(o, 'creature'); }
 
 /* Une créature peut-elle s'engager pour attaquer ou pour une capacité {T} :

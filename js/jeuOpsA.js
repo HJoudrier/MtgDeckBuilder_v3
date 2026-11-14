@@ -79,7 +79,7 @@ function valeur(P, q, ctx) {
 }
 
 function gagneVie(P, j, n) {
-  if (n <= 0 || P.joueurs[j].elimine) return;
+  if (n <= 0 || P.joueurs[j].elimine || vieBloquee(P, j)) return;
   P.joueurs[j].vie += n;
   P.joueurs[j].vieTour = (P.joueurs[j].vieTour || 0) + n;
   emet(P, {t: 'vie', joueur: j, n});

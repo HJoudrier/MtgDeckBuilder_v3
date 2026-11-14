@@ -44,7 +44,7 @@ function iaAttaquants(P, q) {
   const aLaMaison = new Set(parEndurance.slice(0, garde).map(x => x[0]));
   const r = [];
   for (const [i, a] of atts) {
-    if (aLaMaison.has(i) || car(P, a).force <= 0) continue;
+    if (aLaMaison.has(i) || car(P, a).force <= 0 || !attaquePermise(P, a, cible) || taxeAttaque(P, a, cible) > manaDispo(P, j)) continue;
     const capables = bloqueurs.filter(b => peutBloquer(P, b, a));
     const puni = capables.some(b => tue(P, b, a) && !tue(P, a, b));
     const echange = capables.some(b => tue(P, b, a) && tue(P, a, b) && valeurObjet(P, b) < valeurObjet(P, a));

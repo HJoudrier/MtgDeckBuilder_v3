@@ -69,7 +69,8 @@ function coutAutrePossible(P, j, o, c) {
 function actionsLegales(P, j) {
   const J = P.joueurs[j], r = [];
   const rituel = enPhasePrincipale(P, j);
-  if (rituel && J.terrainsJoues < 1) J.main.forEach(id => {
+  const terrains = rituel && J.terrainsJoues < terrainsParTour(P, j);
+  if (terrains) J.main.forEach(id => {
     const d = obj(P, id).def;
     if (estType(obj(P, id), 'land')) r.push({k: 'terrain', id});
     if (d.dos && d.modeFaces === 'Modal' && d.dos.types.includes('land')) r.push({k: 'terrain', id, variante: 'dos'});
@@ -82,7 +83,8 @@ function actionsLegales(P, j) {
     variantesSort(P, j, o, depuis).forEach(v => {
       if (seulement && v.variante !== seulement) return;
       const d = v.def || o.def;
-      if (d.types.includes('land') || (!rituel && !estEphemere(d))) return;
+      if (d.types.includes('land') || (!rituel && !estEphemere(d) && !flashAccorde(P, j, o, d))) return;
+      if (sortInterdit(P, j, o, depuis, d)) return;
       if (d.sort && !effetCiblable(P, j, o, d.sort, d.couleurs)) return;
       if (d.aura && !ciblesLegales(P, {desc: d.aura, min: 1, max: 1}, o, j, d.couleurs).length) return;
       r.push(v.variante ? {k: 'lancer', id, depuis, variante: v.variante} : {k: 'lancer', id, depuis});
@@ -93,7 +95,7 @@ function actionsLegales(P, j) {
   J.cimetiere.forEach(id => { if (obj(P, id).def.flashback) essaie(id, 'cimetiere'); });
   /* Ce qu'une permission laisse jouer d'ailleurs (js/jeuPermis.js). */
   cartesPermises(P, j).forEach(({o, depuis}) => {
-    if (estType(o, 'land')) { if (rituel && J.terrainsJoues < 1) r.push({k: 'terrain', id: o.id, depuis}); }
+    if (estType(o, 'land')) { if (terrains) r.push({k: 'terrain', id: o.id, depuis}); }
     else essaie(o.id, depuis, 'permis');
   });
   J.exil.forEach(id => { const o = obj(P, id); if ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) essaie(id, 'exil'); });
@@ -106,6 +108,7 @@ function actionsLegales(P, j) {
       if (k.zone !== zone || k.genre !== 'activee') return;
       if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
       if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o}) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
+      if (activationInterdite(P, j, o, k)) return;
       r.push({k: 'activer', id, i});
     });
   }));
@@ -113,7 +116,7 @@ function actionsLegales(P, j) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
     capacitesDe(P, o).forEach((k, i) => {
-      if (k.zone) return;
+      if (k.zone || ((k.genre === 'activee' || k.genre === 'loyaute') && activationInterdite(P, j, o, k))) return;
       if (k.genre === 'activee') {
         if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
         if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o})) return;
@@ -145,7 +148,7 @@ function actionsPossibles(P, j) {
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return d.flashback && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) && estEphemere(o.def); }) ||
-    cartesPermises(P, j).some(x => estEphemere(x.o.def)) ||
+    cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) ||
     champDe(P, j).some(o => retournable(P, j, o)) ||
     P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && capacitesDe(P, o).some(k => k.genre === 'activee' && !k.zone && k.vitesse !== 'rituel'); });
   return peut ? actionsLegales(P, j) : [PASSE];

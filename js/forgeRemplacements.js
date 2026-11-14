@@ -40,7 +40,7 @@ forgeSait('param', 'Untap.ValidCard', 'Untap.ValidStepTurnToController', 'Untap.
 function remplacementsEnJeu(P) {
   if (P._remV === P.ver) return P._rem;
   const r = [];
-  for (const id of P.champ) { const o = obj(P, id); (o.def.remplacements || []).forEach(x => r.push({src: o, r: x})); }
+  for (const id of P.champ) { const o = obj(P, id); if (!sansCapacites(o)) (o.def.remplacements || []).forEach(x => r.push({src: o, r: x})); }
   (P.effets || []).forEach(e => (e.remplacements || []).forEach(x => r.push({src: e, r: x})));
   P._remV = P.ver; P._rem = r;
   return r;
@@ -86,6 +86,7 @@ function incontrecarrable(P, o) {
    « prevent the next N damage » posés sur un objet ou un joueur. Rend ce
    qui reste à infliger. */
 function degatsApresPrevention(P, src, cible, n, combat) {
+  if (preventionInterdite(P, src, combat)) return n;
   if (combat && P.brouillard === P.tour) return 0;
   for (const {src: h, r} of remplacementsEnJeu(P)) {
     if (r.forme !== 'prevention') continue;

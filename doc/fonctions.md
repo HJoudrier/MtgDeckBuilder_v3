@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1333 fonctions**, 190 modules, 1282 Ko de JavaScript.
+**1369 fonctions**, 192 modules, 1309 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -47,22 +47,22 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 168 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 214 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 114 |
-| [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 11 | 155 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 10 | 183 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 121 |
+| [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 11 | 156 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 10 | 184 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 9 | 214 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 162 |
-| [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 6 | 122 |
-| [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 93 |
-| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 10 | 198 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 189 |
-| [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 287 |
-| [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 146 |
+| [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 6 | 125 |
+| [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 96 |
+| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 10 | 201 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 190 |
+| [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 291 |
+| [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 151 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 136 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 6 | 75 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 122 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 10 | 156 |
-| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 111 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 128 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 191 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 112 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 58 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 108 |
@@ -79,8 +79,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 99 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 8 | 111 |
-| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 8 | 150 |
-| [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 7 | 103 |
+| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 202 |
+| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 27 | 254 |
+| [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 111 |
+| [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 7 | 104 |
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 186 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 272 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
@@ -884,7 +886,7 @@ Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 214 lignes, 9.4 
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 114 lignes, 5.4 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 121 lignes, 5.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -900,7 +902,7 @@ Ce qu'un permanent est en ce moment. *9 fonctions, 114 lignes, 5.4 Ko.*
 
 ## js/jeuCibles.js
 
-Juger un objet contre un descripteur. *11 fonctions, 155 lignes, 7.4 Ko.*
+Juger un objet contre un descripteur. *11 fonctions, 156 lignes, 7.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -918,7 +920,7 @@ Juger un objet contre un descripteur. *11 fonctions, 155 lignes, 7.4 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *10 fonctions, 183 lignes, 7.7 Ko.*
+La réserve de mana, et le paiement automatique. *10 fonctions, 184 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -974,7 +976,7 @@ Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 162 lignes
 
 ## js/jeuDeclencheurs.js
 
-Des évènements aux capacités déclenchées. *6 fonctions, 122 lignes, 6.1 Ko.*
+Des évènements aux capacités déclenchées. *6 fonctions, 125 lignes, 6.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -991,7 +993,7 @@ Des évènements aux capacités déclenchées. *6 fonctions, 122 lignes, 6.1 Ko.
 
 ## js/jeuEtatsDeJeu.js
 
-Les actions d'état, et un joueur qui perd. *2 fonctions, 93 lignes, 4 Ko.*
+Les actions d'état, et un joueur qui perd. *2 fonctions, 96 lignes, 4.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1000,7 +1002,7 @@ Les actions d'état, et un joueur qui perd. *2 fonctions, 93 lignes, 4 Ko.*
 
 ## js/jeuLancer.js
 
-Ce qu'un joueur peut faire de sa priorité, et le faire. *10 fonctions, 198 lignes, 11 Ko.*
+Ce qu'un joueur peut faire de sa priorité, et le faire. *10 fonctions, 201 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1021,7 +1023,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *10 fonctions, 198 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 189 lignes, 8.4 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 190 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1035,7 +1037,7 @@ Exécuter une action choisie à la priorité. *7 fonctions, 189 lignes, 8.4 Ko.*
 
 ## js/jeuVariantes.js
 
-Les autres façons de lancer et de payer. *18 fonctions, 287 lignes, 13 Ko.*
+Les autres façons de lancer et de payer. *18 fonctions, 291 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1069,7 +1071,7 @@ Les autres façons de lancer et de payer. *18 fonctions, 287 lignes, 13 Ko.*
 
 ## js/jeuDurees.js
 
-Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 146 lignes, 6 Ko.*
+Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 151 lignes, 6.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1128,7 +1130,7 @@ Jouer une carte depuis une autre zone. *6 fonctions, 75 lignes, 3.3 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 122 lignes, 5.4 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 128 lignes, 5.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1144,24 +1146,26 @@ La priorité, la pile, la résolution. *5 fonctions, 122 lignes, 5.4 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *10 fonctions, 156 lignes, 7.2 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 191 lignes, 9.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `peutAttaquer(P, o)` | — |
 | `peutBloquer(P, b, a)` | — |
 | `declareAttaquants(P)` | Déclarer les attaquants (règle 508). Rend leur nombre. |
+| `paieTaxesAttaque(P, j, choisis)` | La taxe d'attaque (Ghostly Prison) : l'attaquant la paie en une fois, ou les attaquants taxés restent chez eux — les plus chers d'abord, tant que le total dépasse ce qu'il peut payer. |
 | `defenseurDe(P, def)` | Le joueur que vise un attaquant, directement ou par son planeswalker. |
 | `declareBloqueurs(P)` | Déclarer les bloqueurs (règle 509), défenseur par défenseur. |
 | `initiativeEnJeu(P)` | Y a-t-il une étape de dégâts d'initiative ? |
 | `frappe(P, o, passe, avecInitiative)` | Une créature frappe-t-elle dans cette passe ? |
 | `repartition(P, a, bs, force)` | Répartir les dégâts d'un attaquant bloqué. |
+| `forceDeCombat(P, o)` | Doran : une créature peut infliger ses dégâts de combat selon son endurance. |
 | `degatsCombat(P, passe)` | Les dégâts de combat d'une passe (règle 510) : tout est assigné, puis infligé d'un coup. |
 | `finCombat(P)` | — |
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *5 fonctions, 111 lignes, 4.5 Ko.*
+Les étapes d'un tour. *5 fonctions, 112 lignes, 4.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1423,26 +1427,84 @@ Quand une capacité déclenchée de Forge se. *8 fonctions, 111 lignes, 6.8 Ko.*
 
 ## js/forgeStatiques.js
 
-Les capacités statiques de Forge. *8 fonctions, 150 lignes, 7.9 Ko.*
+Les capacités statiques de Forge. *10 fonctions, 202 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `typesForge(txt)` | `Creature,Elemental` ou `Swamp & Forest` → types et sous-types du moteur. |
 | `couleursMots(txt)` | `Red`, `Black & Green`, `Colorless` → des couleurs du moteur. |
-| `statiqueTenable(t)` | Les valeurs qu'on sait tenir dans une statique : on n'ajoute pas le type créature par une statique (le combat et les actions d'état ne le verraient pas), ni un type qui n'en est pas un. |
+| `statiqueTenable(t)` | Les valeurs qu'on sait tenir dans une statique. |
 | `forgeStatique(mode, params, f)` | — |
 | `envStatique(src, s)` | Le contexte d'une statique : sa source en est le seul repère. |
 | `viseForge(P, src, s, o, cle)` | La statique vise-t-elle cet objet, et ses conditions tiennent-elles ? |
 | `statiquesForgeSur(P, o)` | Ce que les statiques de Forge font à un objet : bonus, mots-clés, force fixée, interdictions. |
 | `coutsForge(P, j, o)` | Les réductions et les hausses de coût de Forge pour un sort que `j` lance : `[plus, moins]`. |
+| `reductionParCibles(P, j, o, effets)` | « This spell costs {2} less to cast if it targets a creature you control » : la réduction se juge une fois les cibles prises (js/jeuActions.js `lanceSort()`). |
+| `reductionPossible(P, j, o)` | La plus grande réduction selon la cible qu'un sort peut espérer : une cible qui la donne est en jeu. |
 
 | Donnée | Rôle |
 |---|---|
 | `FORGE_STATIQUES` | — |
+| `CACHES_TENUS` | Les mots-clés cachés que le moteur tient : des interdictions. |
+
+## js/forgeInterdits.js
+
+Ce que les statiques de Forge interdisent,. *27 fonctions, 254 lignes, 13 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `statiquesMode(P, mode)` | Les statiques de Forge en jeu d'un mode, relevées une fois par version. |
+| `statiqueQui(P, mode, f, o)` | Parcourir les statiques d'un mode dont la condition tient : rend la première pour laquelle `f` est vraie. |
+| `joueurStatique(P, j, v, src, env)` | — |
+| `objetOuRien(P, o, v, src, env)` | — |
+| `zoneOuRien(v, zone)` | — |
+| `sortInterdit(P, j, o, depuis, d)` | Un sort que `j` ne peut pas lancer depuis `depuis` (Rule of Law, « your opponents can't cast spells during your turn »). |
+| `flashAccorde(P, j, o, d)` | « You may cast creature spells as though they had flash ». |
+| `flashPossible(P, j)` | Quelqu'un peut-il recevoir le flash d'une statique, d'un permanent ou d'une carte de sa main ? Le raccourci de la passe rapide (js/jeuLancer.js `actionsPossibles()`) le demande. |
+| `capaciteVisee(v, k)` | La capacité `k` de `o` répond-elle au filtre `ValidSA` d'une statique ? `Activated`, `Activated.!ManaAbility`, `Activated.!Loyalty`. |
+| `activationInterdite(P, j, o, k)` | Null Rod, Pithing Needle, Arrest : la capacité ne s'active pas. |
+| `doitAttaquer(P, o)` | —— Le combat ————————————————————————————————————————————————— |
+| `doitBloquer(P, o)` | — |
+| `defenseurAttaque(P, o)` | — |
+| `degatsParEndurance(P, o)` | — |
+| `bornesBlocage(P, a)` | Le nombre de bloqueurs permis contre un attaquant : `{min, max}`. |
+| `defenseurVise(P, def, v, src, env)` | Le défenseur visé par une attaque répond-il à `Target$` (« can't attack you or planeswalkers you control ») ? |
+| `proprieteDefenseur(P, d, prop, o)` | — |
+| `attaquePermise(P, o, def)` | `o` peut-il attaquer ce défenseur (`{j}` ou `{pw}`) ? |
+| `taxeAttaque(P, o, def)` | La taxe d'attaque (Ghostly Prison, Propaganda) : le mana générique que coûte `o` attaquant ce défenseur. |
+| `vieBloquee(P, j)` | —— Vie, dégâts, cibles ————————————————————————————————————————— |
+| `preventionInterdite(P, s, combat)` | — |
+| `cibleInterdite(P, o, s, ctrl)` | « ~ can't be the target of spells your opponents control » : une statique qui interdit à cette source de cibler cet objet. |
+| `mouvementEvt(P, e)` | Le mouvement que décrit un évènement, pour `Origin$`, `Destination$` et `ValidCause$`. |
+| `declenchementsEnPlus(P, s, cap, e)` | Panharmonicon : combien de fois de plus la capacité `cap` de `s` se déclenche pour l'évènement `e`. |
+| `statiquesJoueur(P, j, cle)` | Les statiques `Continuous` qui visent ce joueur (`Affected$ You`). |
+| `tailleMainMax(P, j)` | La taille maximale de la main au nettoyage (Reliquary Tower). |
+| `terrainsParTour(P, j)` | Le nombre de terrains que `j` peut jouer ce tour (Exploration, Azusa). |
+
+| Donnée | Rôle |
+|---|---|
+| `DEFENSEUR_PROPRIETE` | « … unless defending player controls an Island » : une propriété du joueur qui défend, jugée pour l'attaquant. |
+| `MODES_ECOUTE` | Le mode de Forge d'une écoute, pour `ValidMode$`. |
+
+## js/jeuCouches.js
+
+Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 111 lignes, 5.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `statiquesCouches(P)` | Les statiques qui font une couche, relevées une fois par version. |
+| `typesCouche(P, src, v)` | Les types qu'ajoute une statique : `Creature & Artifact`, `ChosenType`, `AllCreatureTypes` (tous les types de créature, comme le changelin). |
+| `couchesStatiques(P)` | Une passe : ce que chaque permanent doit être selon les statiques, posé s'il diffère de ce qu'il est. |
+| `sansCapacites(o)` | Un permanent qui a perdu toutes ses capacités (« loses all abilities »), ou un terrain dont les types de terrain sont remplacés (Blood Moon) : il perd celles de son texte (règle 305.7). |
+| `capacitesTerrain(o)` | Un terrain dont une statique change les types de terrain (Urborg, Blood Moon, Spreading Seas) : ses capacités de mana suivent ses types, les intrinsèques des types de base (règle 305.6). |
+
+| Donnée | Rôle |
+|---|---|
+| `TYPES_TERRAIN` | Les types de terrain que les statiques retirent avec `RemoveLandTypes`. |
 
 ## js/forgeRemplacements.js
 
-Les remplacements de Forge (`R:`). *7 fonctions, 103 lignes, 5.4 Ko.*
+Les remplacements de Forge (`R:`). *7 fonctions, 104 lignes, 5.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1549,7 +1611,7 @@ Ce que le joueur automatique fait de sa priorité. *10 fonctions, 199 lignes, 9.
 
 ## js/iaCombat.js
 
-Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 82 lignes, 4.1 Ko.*
+Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 82 lignes, 4.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|

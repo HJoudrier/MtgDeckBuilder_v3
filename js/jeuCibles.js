@@ -106,6 +106,7 @@ function ciblable(P, o, ctrl, couleurs, src) {
   if ((m & MOT.LINCEUL) && o.ctrl !== ctrl) return false;
   if ((m & MOT.PROTECTION) && couleurs && (o.def.params.protection || []).some(k => couleurs.includes(k))) return false;
   if (src && protegeFiltre(P, o, src)) return false;
+  if (src && cibleInterdite(P, o, src, ctrl)) return false;
   return true;
 }
 

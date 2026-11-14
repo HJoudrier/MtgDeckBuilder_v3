@@ -67,6 +67,7 @@ js/                 modules, chargés dans cet ordre :
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
   jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
+  jeuCouches.js     ce qu'une statique fait devenir un permanent : contrôleur, types, capacités
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
   jeuTour.js        les étapes d'un tour
@@ -87,6 +88,7 @@ js/                 modules, chargés dans cet ordre :
   forgeTraine.js    la traîne : exaltation, terreur, bushido, tempête, cascade, brouillard, comploter, explorer
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
+  forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
   forgeDefinition.js  d'un script de Forge à une définition de jeu
@@ -637,6 +639,19 @@ moment, et un sort permis depuis le cimetière y retourne, au contraire du flash
 « une fois par tour » se note dans `P.unefois`. **La protection** accepte aussi un filtre de Forge
 (« from artifacts », `K:Protection:Creature.Black`) : `protegeFiltre()` le juge contre la source, au
 ciblage, au blocage et aux dégâts.
+
+**Les statiques qui règlent les joueurs** (`js/forgeInterdits.js`, lot F11). Rule of Law, le flash
+accordé, Null Rod, « attacks each combat if able », Ghostly Prison, Panharmonicon, Doran, « players
+can't gain life »… ne changent pas ce qu'est un objet : elles changent ce qu'un joueur a le droit de
+faire. Chaque règle du moteur qu'elles touchent — `actionsLegales()`, `sourcesMana()`,
+`declareAttaquants()`, `ciblable()`, `gagneVie()`, la collecte des déclencheurs — interroge la sienne
+(`sortInterdit()`, `activationInterdite()`, `attaquePermise()`…), relevée une fois par version de
+l'état. La taxe d'attaque se paie en une fois ; faute de mana, les attaquants les plus chers restent
+chez eux. **Les statiques qui font devenir** (`js/jeuCouches.js`) — Control Magic, March of the
+Machines, Humility, Blood Moon, Urborg — changent `o.ctrl` et la couche `o.anime`, que `car()` ne
+gouverne pas : elles s'appliquent à chaque passe des actions d'état, comme Forge le fait à chaque
+vérification de l'état. Un terrain dont les types changent tient ses capacités de mana de ses types
+(règle 305.6) ; « RemoveLandTypes » lui ôte celles de son texte (305.7).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

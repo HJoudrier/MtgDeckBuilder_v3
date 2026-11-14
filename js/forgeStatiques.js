@@ -19,6 +19,7 @@ const FORGE_STATIQUES = {};
 function typesForge(txt) {
   const r = {types: [], sousTypes: []};
   String(txt || '').split(/\s*[,&]\s*/).filter(Boolean).forEach(m => {
+    if (m === 'AllCreatureTypes') return;
     if (FORGE_TYPES_CARTE[m]) r.types.push(FORGE_TYPES_CARTE[m]); else r.sousTypes.push(m.toLowerCase());
   });
   return r;
@@ -29,9 +30,9 @@ function couleursMots(txt) {
   return String(txt || '').split(/\s*[,&]\s*|\s+/).map(m => FORGE_COULEURS[m]).filter(Boolean);
 }
 
-/* Les valeurs qu'on sait tenir dans une statique : on n'ajoute pas le type
-   créature par une statique (le combat et les actions d'état ne le
-   verraient pas), ni un type qui n'en est pas un. */
+/* Les valeurs qu'on sait tenir dans une statique. Le type ajouté, le
+   contrôle et la perte des capacités passent par la couche des actions
+   d'état (js/jeuCouches.js), que le combat et `estType()` voient. */
 function statiqueTenable(t) {
   /* Jouer depuis une autre zone : la pioche d'impulsion, le cimetière, le
      dessus de la bibliothèque (js/jeuPermis.js). */
@@ -45,12 +46,22 @@ function statiqueTenable(t) {
      le jeu du moteur. */
   if (t.MayLookAt && !t.AddKeyword && !t.AddPower && !t.AddAbility) return true;
   if (t.AffectedZone && t.AffectedZone !== 'Battlefield') return false;
-  if (t.AddType && (/\bCreature\b|AllCreatureTypes/.test(t.AddType) || (/ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType'))) return false;
+  if (t.AddType && /ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType') return false;
+  if (t.AddHiddenKeyword && !t.AddHiddenKeyword.split('&').every(k => CACHES_TENUS[k.trim()])) return false;
+  if (t.GainControl && t.GainControl !== 'You') return false;
+  if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl)$/.test(x.trim()))) return false;
+  if (t.UnlessDefender && !DEFENSEUR_PROPRIETE.test(t.UnlessDefender)) return false;
+  if (t.Mode === 'CantAttackUnless' && !/^\d+$/.test(t.Cost || '')) return false;
+  if (t.Mode === 'CastWithFlash' && t.ValidSA && t.ValidSA !== 'Spell') return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
-  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(t.Mode === 'ReduceCost' && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
+  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
   if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/Colorless/.test(t.SetColor || '')) return false;
   return true;
 }
+
+/* Les mots-clés cachés que le moteur tient : des interdictions. */
+const CACHES_TENUS = {"CARDNAME can't block.": {blocage: true}, "CARDNAME can't attack.": {attaque: true},
+  "CARDNAME can't attack or block.": {attaque: true, blocage: true}};
 
 function forgeStatique(mode, params, f) {
   FORGE_STATIQUES[mode] = f;
@@ -86,18 +97,24 @@ forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'Aff
   const env = cda ? (src.id === o.id ? envStatique(src, s) : null) : viseForge(P, src, s, o);
   if (cda && env && !conditionForge(P, t, env)) return;
   if (!env) return;
-  if (t.AddPower) r.f += forgeNombre(P, t.AddPower, env);
-  if (t.AddToughness) r.e += forgeNombre(P, t.AddToughness, env);
+  /* `AffectedX` se compte sur l'objet visé (« P/T equal to its mana
+     value »), le reste sur la source. */
+  const n = v => forgeNombre(P, v, /^Affected/.test(v) ? {...env, src: o} : env);
+  if (t.AddPower) r.f += n(t.AddPower);
+  if (t.AddToughness) r.e += n(t.AddToughness);
   if (t.AddKeyword) r.mots |= motsForge(t.AddKeyword);
-  if (t.SetPower) r.setF = forgeNombre(P, t.SetPower, env);
-  if (t.SetToughness) r.setE = forgeNombre(P, t.SetToughness, env);
+  if (t.SetPower) r.setF = n(t.SetPower);
+  if (t.SetToughness) r.setE = n(t.SetToughness);
+  if (t.AddHiddenKeyword) t.AddHiddenKeyword.split('&').forEach(k => { const c = CACHES_TENUS[k.trim()] || {}; if (c.attaque) r.attaque = true; if (c.blocage) r.blocage = true; });
   if (t.AddType === 'ChosenType') { const k = choixDe(P, src).type; if (k) r.sousTypes.push(k); }
   else if (t.AddType) { const ty = typesForge(t.AddType); r.types.push(...ty.types); r.sousTypes.push(...ty.sousTypes); }
   if (t.SetColor) r.couleurs = couleursMots(t.SetColor);
   if (t.AddColor) r.couleurs = [...new Set([...(r.couleurs || o.def.couleurs), ...couleursMots(t.AddColor)])];
 });
 
-forgeStatique('CantAttack', ['ValidCard'], (P, src, s, o, r) => { if (viseForge(P, src, s, o, 'ValidCard')) r.attaque = true; });
+/* Une interdiction qui dépend du défenseur se juge à la déclaration
+   (js/forgeInterdits.js `attaquePermise()`). */
+forgeStatique('CantAttack', ['ValidCard'], (P, src, s, o, r) => { if (!s.t.Target && !s.t.UnlessDefender && viseForge(P, src, s, o, 'ValidCard')) r.attaque = true; });
 forgeStatique('CantBlock', ['ValidCard'], (P, src, s, o, r) => { if (viseForge(P, src, s, o, 'ValidCard')) r.blocage = true; });
 /* « Can't attack or block », écrit en un seul mode. */
 forgeSait('stat', 'CantAttack,CantBlock');
@@ -136,7 +153,7 @@ function coutsForge(P, j, o) {
   for (const {src, s} of [...statiquesEnJeu(P).filter(x => x.src.id !== o.id || !x.s.t || !x.s.t.EffectZone), ...siennes]) {
     if (s.s !== 'forge' || (s.t.Mode !== 'ReduceCost' && s.t.Mode !== 'RaiseCost')) continue;
     const t = s.t;
-    if (t.Type && t.Type !== 'Spell') continue;
+    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget) continue;
     if (t.Activator === 'You' && j !== src.ctrl) continue;
     if (t.Activator === 'Opponent' && j === src.ctrl) continue;
     if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id)) continue;
@@ -146,4 +163,39 @@ function coutsForge(P, j, o) {
     if (t.Mode === 'ReduceCost') moins += n; else plus += n;
   }
   return [plus, moins];
+}
+
+/* « This spell costs {2} less to cast if it targets a creature you
+   control » : la réduction se juge une fois les cibles prises
+   (js/jeuActions.js `lanceSort()`). */
+function reductionParCibles(P, j, o, effets) {
+  const cibles = [].concat(...effets.map(ef => [].concat(...ef.cibles))).map(c => typeof c === 'number' ? obj(P, c) : c).filter(Boolean);
+  if (!cibles.length) return 0;
+  const siennes = o.def.statiques.filter(s => s.s === 'forge').map(s => ({src: o, s}));
+  let n = 0;
+  for (const {src, s} of [...statiquesEnJeu(P).filter(x => x.src.id !== o.id), ...siennes]) {
+    const t = s.t;
+    if (s.s !== 'forge' || (t.Mode !== 'ReduceCost' && t.Mode !== 'RaiseCost') || !t.ValidTarget || t.Cost || (t.Type && t.Type !== 'Spell')) continue;
+    if ((t.Activator === 'You' && j !== src.ctrl) || (t.Activator === 'Opponent' && j === src.ctrl)) continue;
+    if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id)) continue;
+    const env = envStatique(src, s);
+    if (!cibles.some(c => c.j != null ? forgeValideJoueur(P, c.j, t.ValidTarget, src.ctrl, env) : forgeValideObjet(P, c, t.ValidTarget, src, src.ctrl, env, true))) continue;
+    if (conditionForge(P, t, env)) n += (t.Mode === 'ReduceCost' ? 1 : -1) * forgeNombre(P, t.Amount || 1, env);
+  }
+  return n;
+}
+
+/* La plus grande réduction selon la cible qu'un sort peut espérer : une
+   cible qui la donne est en jeu. */
+function reductionPossible(P, j, o) {
+  let n = 0;
+  for (const s of o.def.statiques) {
+    const t = s.t;
+    if (s.s !== 'forge' || !t || t.Mode !== 'ReduceCost' || !t.ValidTarget || (t.Type && t.Type !== 'Spell')) continue;
+    const env = envStatique(o, s);
+    const existe = P.champ.some(id => forgeValideObjet(P, obj(P, id), t.ValidTarget, o, j, env, true)) ||
+      P.joueurs.some(J => !J.elimine && forgeValideJoueur(P, J.i, t.ValidTarget, j, env));
+    if (existe) n += forgeNombre(P, t.Amount || 1, env);
+  }
+  return n;
 }

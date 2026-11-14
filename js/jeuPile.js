@@ -32,7 +32,13 @@ function* prepareDeclencheur(P, t) {
 function* stabilise(P) {
   for (let garde = 0; garde < 60; garde++) {
     collecteDeclencheurs(P);
-    while (!P.fin && appliqueSBA(P)) collecteDeclencheurs(P);
+    /* Des actions d'état qui ne se stabilisent pas (deux statiques qui se
+       défont l'une l'autre) font une partie nulle, pas un onglet figé. */
+    let passes = 0;
+    while (!P.fin && appliqueSBA(P)) {
+      collecteDeclencheurs(P);
+      if (++passes > 200) P.fin = {nulle: true, raison: 'boucle', tour: P.tour};
+    }
     if (P.fin || !P.enAttente.length) return;
     const attente = P.enAttente;
     P.enAttente = [];

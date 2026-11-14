@@ -87,8 +87,9 @@ function* lanceSort(P, j, a) {
     const opts = Array.from({length: max + 1}, (_, i) => i);
     x = opts[(yield question(P, j, 'x', opts, {defaut: max, source: nid}))] || 0;
   }
-  const garde = coutDeGarde(P, j, effets);
-  let cout = garde ? {...cout0, generique: cout0.generique + garde, total: cout0.total + garde} : cout0;
+  const garde = coutDeGarde(P, j, effets) - reductionParCibles(P, j, s, effets);
+  const gen = Math.max(0, cout0.generique + garde);
+  let cout = garde ? {...cout0, generique: gen, total: cout0.total + gen - cout0.generique} : cout0;
   if (!payableAvec(P, j, s, cout, x)) return annule();
   if (v.autre && !coutAutrePossible(P, j, s, v.autre)) return annule();
   cout = yield* paieReductions(P, j, s, cout, x);
