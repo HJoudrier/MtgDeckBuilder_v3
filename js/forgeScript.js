@@ -49,7 +49,9 @@ function forgeLigneType(types) {
 function forgeCoutMana(c) {
   const s = String(c || '').trim();
   if (!s || /^no cost$/i.test(s)) return '';
-  return s.split(/\s+/).map(x => '{' + x.toUpperCase() + '}').join('');
+  /* `GW`, `2W`, `WP` : l'hybride et le phyrexian s'écrivent sans barre ; sans
+     elle, le coût se lisait vide — une carte hybride ne coûtait rien. */
+  return s.split(/\s+/).map(x => '{' + (/^[WUBRG2][WUBRGP]$/i.test(x) ? x[0] + '/' + x[1] : x).toUpperCase() + '}').join('');
 }
 
 function faceVide() {

@@ -88,7 +88,7 @@ function actionsLegales(P, j) {
     variantesSort(P, j, o, depuis).forEach(v => {
       if (seulement && v.variante !== seulement) return;
       const d = v.def || o.def;
-      if (d.types.includes('land') || (!rituel && !estEphemere(d) && !flashAccorde(P, j, o, d))) return;
+      if (d.types.includes('land') || (!rituel && !estEphemere(d) && v.variante !== 'sneak' && !flashAccorde(P, j, o, d))) return;
       if (sortInterdit(P, j, o, depuis, d)) return;
       if (d.sort && !effetCiblable(P, j, o, d.sort, d.couleurs)) return;
       if (d.aura && !ciblesLegales(P, {desc: d.aura, min: 1, max: 1}, o, j, d.couleurs).length) return;
@@ -155,7 +155,7 @@ function actionsPossibles(P, j) {
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return lancableDuCimetiere(d, obj(P, id), P) && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure || exilLancable(P, o, false)) && estEphemere(o.def); }) ||
-    cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) || actionsPrepare(P, j, false).length ||
+    cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) || actionsPrepare(P, j, false).length || sneakPossible(P, j) ||
     champDe(P, j).some(o => retournable(P, j, o)) ||
     P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && capacitesDe(P, o).some(k => k.genre === 'activee' && !k.zone && k.vitesse !== 'rituel'); });
   return peut ? actionsLegales(P, j) : [PASSE];

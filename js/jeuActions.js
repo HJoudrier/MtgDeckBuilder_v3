@@ -69,7 +69,8 @@ function* lanceSort(P, j, a) {
   /* La face jouée : l'arrière d'une carte modale, l'aventure, la face
      cachée — l'objet sur la pile la porte (js/jeuFaces.js). */
   const d = v.def || o0.def;
-  const cout0 = v.mana, presageTour = o0.presageTour;
+  let cout0 = v.mana;
+  const presageTour = o0.presageTour;
   if (a.variante === 'permis') permisUtilise(P, j, o0);
   const nid = deplace(P, a.id, 'pile');
   const s = obj(P, nid);
@@ -77,6 +78,8 @@ function* lanceSort(P, j, a) {
   if (o0.exilApres) s.exilApres = true;
   s.ctrl = j;
   if (d !== s.def) s.def = d;
+  /* La variante se lit dès le choix des cibles (« if this spell was bargained »). */
+  s.varianteLance = a.variante || null;
   const annule = () => {
     const r = deplace(P, nid, a.depuis === 'commandement' ? 'commandement' : a.depuis);
     if (r != null && presageTour != null) obj(P, r).presageTour = presageTour;
@@ -84,6 +87,8 @@ function* lanceSort(P, j, a) {
   };
   let effets = [];
   if (d.sort) effets = yield* prepareEffets(P, j, s, d.sort, d.couleurs);
+  /* Splice : des cartes de la main greffent leurs effets (js/forgeMotsClesE.js). */
+  if (d.sort && effets) cout0 = yield* epissures(P, j, s, d, cout0, effets);
   else if (d.aura) {
     const c = yield* choisitCibles(P, j, s, [{desc: d.aura, min: 1, max: 1}], d.couleurs, {aura: true});
     effets = c ? [{ops: [], slots: [{desc: d.aura, min: 1, max: 1}], cibles: c, aura: true}] : null;

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1556 fonctions**, 217 modules, 1564 Ko de JavaScript.
+**1566 fonctions**, 218 modules, 1581 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -43,7 +43,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`oracleStatiques.js`](#jsoraclestatiquesjs) | Lire une capacité statique, et la façon d'entrer | 4 | 85 |
 | [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 143 |
 | [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 12 | 191 |
-| [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 124 |
+| [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 172 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 220 |
@@ -51,15 +51,15 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 68 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 146 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 224 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 225 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 222 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 176 |
-| [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 140 |
+| [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 98 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 11 | 233 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 232 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 237 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 299 |
-| [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 71 |
+| [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 72 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
 | [`jeuCoutsX.js`](#jsjeucoutsxjs) | Les coûts dont la quantité est X, et ceux qui | 10 | 127 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 158 |
@@ -67,7 +67,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 137 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 141 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 123 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 61 |
@@ -79,7 +79,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 149 |
-| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 108 |
+| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 114 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 291 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 208 |
@@ -105,10 +105,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 157 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
 | [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 147 |
-| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 204 |
+| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 206 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 171 |
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 216 |
 | [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 236 |
+| [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 276 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 126 |
@@ -824,7 +825,7 @@ D'une carte à sa définition de jeu. *12 fonctions, 191 lignes, 10 Ko.*
 
 ## js/forgeScript.js
 
-Lire un script de carte de Forge. *8 fonctions, 124 lignes, 5.8 Ko.*
+Lire un script de carte de Forge. *8 fonctions, 126 lignes, 6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -969,7 +970,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.8 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *12 fonctions, 224 lignes, 10 Ko.*
+La réserve de mana, et le paiement automatique. *12 fonctions, 225 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1028,7 +1029,7 @@ Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 176 lignes
 
 ## js/jeuDeclencheurs.js
 
-Des évènements aux capacités déclenchées. *7 fonctions, 140 lignes, 6.9 Ko.*
+Des évènements aux capacités déclenchées. *7 fonctions, 144 lignes, 7.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1077,7 +1078,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *11 fonctions, 233 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 232 lignes, 11 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 237 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1125,7 +1126,7 @@ Les autres façons de lancer et de payer. *18 fonctions, 299 lignes, 14 Ko.*
 
 ## js/jeuVariantesB.js
 
-Les façons de lancer, suite. *6 fonctions, 71 lignes, 3.9 Ko.*
+Les façons de lancer, suite. *6 fonctions, 72 lignes, 4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1257,7 +1258,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 137 lignes, 6.7 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 141 lignes, 7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1452,7 +1453,7 @@ Ce que `Defined$` désigne. *6 fonctions, 149 lignes, 9.6 Ko.*
 
 ## js/forgeDesignations.js
 
-Ce que Forge désigne encore : des joueurs. *5 fonctions, 108 lignes, 6.5 Ko.*
+Ce que Forge désigne encore : des joueurs. *5 fonctions, 114 lignes, 7.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1915,7 +1916,7 @@ Les paliers : Station, classes, Rooms, vitesse. *6 fonctions, 147 lignes, 8.1 Ko
 
 ## js/forgeMotsCles.js
 
-Les mots-clés de Forge (`K:`). *4 fonctions, 204 lignes, 11 Ko.*
+Les mots-clés de Forge (`K:`). *4 fonctions, 206 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1990,6 +1991,29 @@ Les mots-clés des permanents, troisième partie. *7 fonctions, 236 lignes, 14 K
 | Donnée | Rôle |
 |---|---|
 | `ATTAQUE_SOI` | — |
+
+## js/forgeMotsClesE.js
+
+Les mots-clés de lancement, II. *10 fonctions, 276 lignes, 15 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `texteTable(t)` | Un tableau de Forge réécrit en texte, pour une face recompilée. |
+| `motCleLancementB(def, face, jetons, tete, reste)` | Les mots-clés de ce fichier, lus par js/forgeMotsCles.js `motCleForge()`. |
+| `surchargeForge(def, face, jetons, cout)` | Le sort surchargé : chaque cible devient « chacun de ceux-là ». |
+| `eveilForge(def, face, jetons, n, c)` | Awaken N : au bout de la chaîne du sort, N marqueurs +1/+1 sur un terrain qu'on contrôle, qui devient une créature Élémental 0/0 avec la célérité. |
+| `variantesMotsClesE(P, j, o, depuis, essaie)` | Les façons de lancer de ce fichier, ajoutées par js/jeuVariantesB.js `variantesEtendues()`. |
+| `sneakPossible(P, j)` | Sneak se lance à l'étape des bloqueurs, quelle que soit la vitesse du sort (js/jeuLancer.js). |
+| `conspirateurs(P, j, o)` | Ce que payent Conspire et Emerge en plus : deux créatures qui partagent une couleur avec le sort, engagées ; la créature choisie, sacrifiée. |
+| `epissures(P, j, s, d, cout, effets)` | Au lancement d'un sort Arcane (ou d'un type que dit le mot-clé), les cartes de la main qui s'y greffent : on les révèle, on paie leur coût en plus, et leurs effets s'ajoutent au sort,… |
+| `donneCadeau(P, d, id, ctx)` | Donner le cadeau : l'adversaire choisi (`Promised`) le reçoit. |
+| `encodeChiffre(P, item)` | Après la résolution, exiler la carte encodée sur une créature qu'on contrôle (js/jeuPile.js). |
+
+| Donnée | Rôle |
+|---|---|
+| `CAP_CONSPIRE` | Conspire : « when you do, copy it » — un déclencheur au lancement. |
+| `CAP_CADEAU` | À l'arrivée : la créature de Sneak attaque ; le cadeau d'un permanent se donne en entrant ; le marchandage se retient. |
+| `CAP_CHIFFRE` | — |
 
 ## js/forgeDefinition.js
 

@@ -33,10 +33,11 @@ function variantesEtendues(P, j, o, depuis, essaie) {
     if (d.disturb && d.dos) essaie('disturb', coutSort(P, j, o, depuis, d.disturb.mana), autresCout(d.disturb), d.dos);
     if (d.dos && d.dos.params.aftermath) essaie('aftermath', coutSort(P, j, o, depuis, d.dos.cout), d.dos.coutSup || null, d.dos);
   }
+  variantesMotsClesE(P, j, o, depuis, essaie);
 }
 
 /* Une carte qui se lance du cimetière autrement que par flashback. */
-function lancableDuCimetiere(d, o, P) { return !!((o && P && flashbackAccorde(P, o)) || d.flashback || d.escape || d.retrace || d.jumpstart || d.disturb || (d.dos && d.dos.params.aftermath)); }
+function lancableDuCimetiere(d, o, P) { return !!((o && P && flashbackAccorde(P, o)) || d.flashback || d.escape || d.retrace || d.jumpstart || d.disturb || (d.dos && d.dos.params.aftermath) || (d.mayhem && o && P && o.defausseTour === P.tour)); }
 
 /* Split second : tant qu'il est sur la pile, personne ne lance ni
    n'active. */
@@ -45,7 +46,7 @@ function secondeFendue(P) { return P.pile.some(it => it.sort && it.def && it.def
 /* Où va un sort résolu : l'exil pour le flashback et le jump-start, et
    pour le rebound s'il vient de la main. */
 function exileApresResolution(item) {
-  if (item.depuis === 'cimetiere') return !['permis', 'escape', 'retrace'].includes(item.variante);
+  if (item.depuis === 'cimetiere') return !['permis', 'escape', 'retrace', 'mayhem'].includes(item.variante);
   return item.depuis === 'main' && !!item.def.rebond;
 }
 

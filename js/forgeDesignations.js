@@ -19,6 +19,7 @@ function definisEtendus(P, v, env) {
     case 'ReplacedTarget': { const c = evt.remCible; return !c ? [] : c.j != null ? [{j: c.j}] : [obj(P, c.id) || c]; }
     case 'ReplacedSource': { const s = evt.remSource; return s ? [obj(P, s.id) || s] : []; }
     case 'ReplacedSourceController': { const s = evt.remSource; return s ? [{j: (obj(P, s.id) || s).ctrl}] : []; }
+    case 'Promised': return ctx.promis != null ? [{j: ctx.promis}] : [];
     case 'ReplacedPlayer': return evt.remJoueur != null ? [{j: evt.remJoueur}] : [];
     case 'ChosenCardController': return cartesChoisies(P, env).map(id => obj(P, id)).filter(Boolean).map(o => ({j: o.ctrl}));
     /* Le joueur ciblé, ou le contrôleur du planeswalker ciblé (Bonfire of the Damned). */
@@ -73,6 +74,8 @@ function exprDesignations(P, tete, q, env) {
     /* Les sorts de commandant lancés depuis la zone de commandement : la
        taxe en compte un par lancer. */
     if (q === 'YourSpeed') return P.joueurs[j].vitesse || 0;
+    if ((k = /^Bargained\./.exec(q))) return siAlors(P, q, (env.ctx || {}).variante === 'bargain' || !!(src && (src.marchande || src.varianteLance === 'bargain')), env);
+    if ((k = /^PromisedGift\./.exec(q))) return siAlors(P, q, (env.ctx || {}).promis != null || !!(src && src.cadeauPromis), env);
     if (q === 'TotalCommanderCastFromCommandZone') return Object.values(P.joueurs[j].taxe || {}).reduce((s, n) => s + n, 0);
   }
   if (tete === 'PlayerCountPropertyYou') {
@@ -95,6 +98,9 @@ forgeSait('expr', 'SVar$CostCountersRemoved', 'Count$Presence', 'Count$Blessing'
 function proprieteDesignee(P, o, p) {
   /* Le niveau d'une classe, gardé par js/forgePaliers.js. */
   if (p.startsWith('ClassLevelGE')) return (o.niveau || 1) >= +p.slice(12);
+  /* Le cadeau promis, le marchandage (js/forgeMotsClesE.js). */
+  if (p === 'PromisedGift') return !!o.cadeauPromis;
+  if (p === 'Bargain') return !!o.marchande || o.varianteLance === 'bargain';
   switch (p) {
     case 'IsMonstrous': return !!o.monstrueux;
     case 'IsGoaded': return !!P && typeof goadActif === 'function' && goadActif(P, o);

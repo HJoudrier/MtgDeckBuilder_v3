@@ -207,7 +207,8 @@ function paieMana(P, j, cout, x, pour) {
 
 /* Les réserves se vident à la fin de chaque étape (règle 500.4). */
 function videReserves(P) {
-  P.joueurs.forEach(J => { LETTRES_MANA.forEach(k => { J.pool[k] = 0; }); });
+  /* Le mana de Firebending dure jusqu'à la fin du combat (js/forgeMotsClesE.js). */
+  P.joueurs.forEach(J => { const f = P.combat && J.feu ? Math.min(J.feu, J.pool.R) : 0; LETTRES_MANA.forEach(k => { J.pool[k] = 0; }); J.pool.R = f; J.feu = f; });
 }
 
 /* Le mana « reflété » : ce que les permanents désignés pourraient

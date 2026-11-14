@@ -132,8 +132,12 @@ function sourcesHorsChamp(P) {
 /* Les déclencheurs de « when you cast ~ », qui écoutent un sort sur la pile
    et non un permanent : le lancement les range lui-même. */
 function declencheursDeLancement(P, item) {
+  const evt = {t: 'lance', joueur: item.ctrl, def: item.def, id: item.id}, s = obj(P, item.id);
   item.def.capacites.forEach(cap => {
-    if (cap.genre === 'declenchee' && cap.ecoutes.some(ec => ec.evt === 'lanceSoi'))
-      P.enAttente.push({src: item.id, ctrl: item.ctrl, cap, evt: {t: 'lance', joueur: item.ctrl, def: item.def}});
+    if (cap.genre !== 'declenchee') return;
+    /* Celui de Forge (`SpellCast`, `Card.Self`, sans zone) écoute depuis la pile. */
+    if (cap.ecoutes.some(ec => ec.evt === 'lanceSoi' || (s && ec.evt === 'forge' && ec.t.Mode === 'SpellCast' && !ec.t.TriggerZones &&
+      /^(Card|Spell)\.Self\b/.test(ec.t.ValidCard || '') && forgeDeclenche(P, ec, evt, s))))
+      P.enAttente.push({src: item.id, ctrl: item.ctrl, cap, evt});
   });
 }

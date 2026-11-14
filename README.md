@@ -115,6 +115,7 @@ js/                 modules, chargés dans cet ordre :
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
   forgeMotsClesD.js les mots-clés des permanents, troisième partie : annihilator, renown, rampage, mobilize, mentor, graft, backup, sunburst, devour, ascend, strive, Leylines
+  forgeMotsClesE.js les mots-clés de lancement, II : overload, awaken, sneak, mayhem, gift, bargain, conspire, emerge, splice ; firebending, cipher
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
   forgeDefinition.js  d'un script de Forge à une définition de jeu
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
@@ -953,6 +954,29 @@ générateur : combien et à qui se décident sur-le-champ, et la chaîne qui su
 - *La vitesse.* « Start your engines! » donne la vitesse 1. Elle monte d'un cran par tour, jusqu'à 4,
   quand un adversaire perd des points de vie pendant ton tour (`noteHistorique()`) : sur-le-champ, là
   où Forge passe par un déclencheur.
+
+**Les mots-clés de lancement, II** (lot F39, `js/forgeMotsClesE.js`). Chacun est une variante de
+lancement, ou un ajout au lancement :
+
+| Mot-clé | Ce que le moteur en fait |
+|---|---|
+| Overload | Le sort est recompilé, ses cibles changées en désignations (`Defined$ Valid …`) : « target » devient « each ». |
+| Awaken | La chaîne du sort finit par des marqueurs sur un terrain qu'on contrôle, qui s'anime. |
+| Sneak | Lancé à l'étape des bloqueurs, quelle que soit sa vitesse, en renvoyant un attaquant non bloqué ; une créature entre engagée et attaquante. |
+| Mayhem | Lancé depuis le cimetière le tour où la carte a été défaussée (`o.defausseTour`). |
+| Gift | L'adversaire choisi (`Promised`) reçoit le cadeau : avant le reste d'un sort, en entrant pour un permanent. |
+| Bargain | Un sacrifice en plus. La variante se lit dès le choix des cibles (`s.varianteLance`). |
+| Conspire | Deux créatures qui partagent une couleur avec le sort, engagées, puis une copie. |
+| Emerge | Une variante par créature à sacrifier, le coût réduit de sa valeur de mana. |
+| Splice | Au lancement d'un sort Arcane, les cartes de la main y greffent leurs effets et leur coût. |
+| Firebending | Du mana rouge que la réserve garde jusqu'à la fin du combat. |
+| Cipher | La carte s'encode sur une créature ; ses blessures à un joueur relancent une copie. |
+
+*Deux défauts trouvés en chemin* :
+- les coûts hybrides de Forge (`GW`, `2W`) se lisaient vides : ces cartes ne coûtaient rien et
+  n'avaient pas de couleur (`forgeCoutMana()`) ;
+- « When you cast this spell » (`SpellCast` sur `Card.Self`) ne se déclenchait pas, la carte étant sur
+  la pile et non sur le champ (`declencheursDeLancement()`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

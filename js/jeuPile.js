@@ -88,13 +88,17 @@ function* resoudre(P, item) {
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
     evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ,
-    optionnel: item.variante === 'optionnel', retires: item.retires || 0, engages: item.engages || null};
+    optionnel: item.variante === 'optionnel', retires: item.retires || 0, engages: item.engages || null, variante: item.variante || null};
+  /* Le cadeau promis se donne avant le reste du sort (js/forgeMotsClesE.js). */
+  if (item.sort && item.variante === 'gift') yield* donneCadeau(P, item.def, item.id, ctx);
   for (const ef of item.effets) {
     ctx.cibles = ef.cibles;
     yield* executeOps(P, ef.ops, ctx);
     if (P.fin) return;
   }
   if (item.sort && obj(P, item.id)) {
+    /* Cipher : encodée sur une créature plutôt qu'au cimetière. */
+    if (item.def.chiffre && (yield* encodeChiffre(P, item))) return;
     /* Une aventure part en exil, d'où la créature se lancera. */
     const flashback = exileApresResolution(item) || !!(obj(P, item.id) && obj(P, item.id).exilApres);
     /* Omen : la carte se mélange dans la bibliothèque de son propriétaire. */
