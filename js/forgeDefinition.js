@@ -137,16 +137,21 @@ function capaciteForge(def, face, t, jetons) {
 /* Un déclencheur `T:`. */
 function declencheurForge(def, face, t, jetons) {
   if (!FORGE_MODES[t.Mode] || !phaseConnue(t)) return false;
-  /* Hors du champ, seul « when you cycle ~ » s'entend : la carte cyclée
-     écoute à travers son instantané (js/jeuActions.js). */
-  if (t.TriggerZones && t.TriggerZones !== 'Battlefield' && !(t.Mode === 'Cycled' && /^(Hand|Graveyard)$/.test(t.TriggerZones))) return false;
+  /* Hors du champ, la carte écoute depuis son cimetière, la zone de
+     commandement (« eminence ») ou l'exil ; « when you cycle ~ » écoute à
+     travers l'instantané de la carte cyclée (js/jeuActions.js). */
+  const cycle = t.Mode === 'Cycled' && /^(Hand|Graveyard)$/.test(t.TriggerZones || '');
+  const zones = !t.TriggerZones || cycle ? null : t.TriggerZones.split(',').map(z => ZONES_FORGE[z.trim()]);
+  if (zones && zones.some(z => !['champ', 'cimetiere', 'commandement', 'exil'].includes(z))) return false;
   const exe = forgeSousCapacite(face, t.Execute);
   const effet = effetForge(face, exe, jetons);
   if (!effet) return false;
   if (t.OptionalDecider && effet.ops[0]) effet.ops[0] = {...effet.ops[0], t: {...effet.ops[0].t, OptionalDecider: t.OptionalDecider}};
-  def.capacites.push({genre: 'declenchee', ecoutes: [{evt: 'forge', t, face}], effet, texte: texteForge(face, t)});
+  def.capacites.push({genre: 'declenchee', ecoutes: [{evt: 'forge', t, face, uid: ++FORGE_UID}], effet, texte: texteForge(face, t),
+    zones: zones && !(zones.length === 1 && zones[0] === 'champ') ? zones : null});
   return true;
 }
+let FORGE_UID = 0;
 
 /* Un remplacement `R:`. Deux formes seulement, les plus courantes : la
    carte entre engagée (sauf si l'on contrôle tel terrain, ou en payant de

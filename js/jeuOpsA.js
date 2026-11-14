@@ -107,7 +107,7 @@ function infligeDegats(P, src, cible, n, combat) {
     if ((car(P, o).mots & MOT.PROTECTION) && (o.def.params.protection || []).some(k => cs.couleurs.includes(k))) return 0;
     if (protegeFiltre(P, o, src)) return 0;
     if (estType(o, 'planeswalker') && !estCreature(o)) { o.marq.loyaute = (o.marq.loyaute || 0) - n; P.ver++; }
-    else if (mots & MOT.INFECTION) { o.marq['-1/-1'] = (o.marq['-1/-1'] || 0) + n; P.ver++; }
+    else if (mots & MOT.INFECTION) poseMarqueurs(P, o, '-1/-1', n, src);
     else { o.bless += n; if (mots & MOT.CONTACT) o.toucheMortel = true; }
     emet(P, {t: 'degatsObjet', source: src.id, id: o.id, n, combat, ctrl});
   }

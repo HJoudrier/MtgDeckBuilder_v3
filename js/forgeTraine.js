@@ -83,7 +83,7 @@ forgeEffet('Connive', ['Num'], function* (P, t, env) {
     const pris = yield* choisitCartes(P, j, P.joueurs[j].main.slice(), n, 'Défausser', 'defausse');
     const nonTerrains = pris.filter(id => !estType(obj(P, id), 'land')).length;
     pris.forEach(id => defausseCarte(P, id, j));
-    if (nonTerrains && obj(P, o.id)) { o.marq['+1/+1'] = (o.marq['+1/+1'] || 0) + nonTerrains; P.ver++; }
+    if (nonTerrains && obj(P, o.id)) poseMarqueurs(P, o, '+1/+1', nonTerrains, o);
   }
 }, (t, op) => { op.op = 'pioche'; op.n = 1; op.qui = {vous: 1}; op.hostile = false; });
 
@@ -95,7 +95,7 @@ forgeEffet('Explore', [], function* (P, t, env) {
     if (!B.length) continue;
     const c = obj(P, B[B.length - 1]);
     if (estType(c, 'land')) { deplace(P, c.id, 'main'); continue; }
-    o.marq['+1/+1'] = (o.marq['+1/+1'] || 0) + 1; P.ver++;
+    poseMarqueurs(P, o, '+1/+1', 1, o);
     const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: `Mettre ${c.def.nom} au cimetière ?`, source: o.id});
     if (r === 1) deplace(P, c.id, 'cimetiere');
   }

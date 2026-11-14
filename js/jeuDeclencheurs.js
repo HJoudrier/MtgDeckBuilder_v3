@@ -81,13 +81,15 @@ const CAP_PROUESSE = {genre: 'declenchee', effet: {ops: [{op: 'pompe', a: {soi: 
 /* Lire les évènements émis depuis la dernière collecte, et ranger en
    attente les capacités qu'ils déclenchent. */
 function collecteDeclencheurs(P) {
+  declencheursEtat(P);
   if (!P.evts.length) { P.partis.length = 0; return; }
   const evts = P.evts, partis = P.partis;
   P.evts = []; P.partis = [];
+  P._lot = new Set();
   const sources = [];
   for (const id of P.champ) { const o = obj(P, id); if (ecoute(o.def) || capacitesDe(P, o) !== o.def.capacites) sources.push(o); }
   for (const l of partis) if (ecoute(l.def) || l.caps) sources.push(l);
-  sources.push(...sourcesEffets(P));
+  sources.push(...sourcesEffets(P), ...sourcesHorsChamp(P));
   for (const e of evts) {
     collecteRetardes(P, e);
     for (const s of sources) {
@@ -97,7 +99,7 @@ function collecteDeclencheurs(P) {
         P.enAttente.push({src: s.id, ctrl: s.ctrl, cap: CAP_PROUESSE, evt: e});
       const caps = s.lki ? (s.caps || s.def.capacites) : s.zone === 'effet' ? s.def.capacites : capacitesDe(P, s);
       caps.forEach((cap, i) => {
-        if (cap.genre !== 'declenchee') return;
+        if (cap.genre !== 'declenchee' || (!s.lki && s.zone !== 'effet' && !(cap.zones || ['champ']).includes(s.zone))) return;
         if (!cap.ecoutes.some(ec => ecouteRepond(P, ec, e, s))) return;
         if (cap.unefois) {
           const cle = s.id + '|' + i;
@@ -112,6 +114,19 @@ function collecteDeclencheurs(P) {
       });
     }
   }
+}
+
+/* Les cartes qui écoutent hors du champ : depuis un cimetière, la zone de
+   commandement (« eminence ») ou l'exil. */
+function sourcesHorsChamp(P) {
+  const r = [];
+  for (const J of P.joueurs) for (const z of ['cimetiere', 'commandement', 'exil']) for (const id of J[z]) {
+    const o = obj(P, id), d = o && o.def;
+    if (!d) continue;
+    if (d._hors === undefined) d._hors = d.capacites.some(k => k.zones && k.zones.some(x => x !== 'champ'));
+    if (d._hors) r.push(o);
+  }
+  return r;
 }
 
 /* Les déclencheurs de « when you cast ~ », qui écoutent un sort sur la pile

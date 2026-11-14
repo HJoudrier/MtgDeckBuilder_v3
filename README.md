@@ -54,6 +54,7 @@ js/                 modules, chargés dans cet ordre :
   forgeCouverture.js  ce qu'un script demande au moteur, ce que le moteur sait
   jeuHasard.js      le hasard semé
   jeuEtat.js        une partie : joueurs, objets, zones, déplacements, questions
+  jeuGestes.js      les gestes qui font un évènement : engager, dégager, poser des marqueurs, cibler
   jeuCaracteristiques.js  force, endurance, mots-clés du moment
   jeuCibles.js      juger un objet contre un descripteur
   jeuMana.js        la réserve, et le paiement automatique
@@ -87,6 +88,7 @@ js/                 modules, chargés dans cet ordre :
   forgeCopies.js    jetons copies, entrer comme copie, copier un sort
   forgeTraine.js    la traîne : exaltation, terreur, bushido, tempête, cascade, brouillard, comploter, explorer
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
+  forgeDeclencheursB.js  la suite : engager, cibler, marqueurs, attaque déclarée, crime, déclencheurs d'état
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -652,6 +654,15 @@ Machines, Humility, Blood Moon, Urborg — changent `o.ctrl` et la couche `o.ani
 gouverne pas : elles s'appliquent à chaque passe des actions d'état, comme Forge le fait à chaque
 vérification de l'état. Un terrain dont les types changent tient ses capacités de mana de ses types
 (règle 305.6) ; « RemoveLandTypes » lui ôte celles de son texte (305.7).
+
+**Les déclencheurs, suite** (`js/forgeDeclencheursB.js`, `js/jeuGestes.js`, lot F12). Un déclencheur
+ne voit que les évènements émis : engager, dégager, poser des marqueurs et cibler passent donc par
+une porte qui émet (`engageObjet()`, `poseMarqueurs()`, `emetCibles()`), au lieu d'écrire le champ de
+l'objet là où ils se font. Les modes « one or more » (`ChangesZoneAll`, `DamageDealtOnce`…) ne
+partent qu'une fois par collecte ; « only once each turn » se compte par source et par déclencheur
+(`P.declTour`). Une carte écoute aussi depuis son cimetière, la zone de commandement ou l'exil
+(`TriggerZones$`, `cap.zones`). Un déclencheur d'état (`Always`) part dès que sa condition tient, et
+pas de nouveau tant qu'il attend ou qu'il est sur la pile.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

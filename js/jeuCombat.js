@@ -59,10 +59,11 @@ function* declareAttaquants(P) {
     const o = obj(P, id);
     P.combat.attaquants.set(id, def);
     P.attaquantsTour = (P.attaquantsTour || 0) + 1;
-    if (!aMot(P, o, MOT.VIGILANCE)) o.engage = true;
+    if (!aMot(P, o, MOT.VIGILANCE)) engageObjet(P, o, false, true);
     emet(P, {t: 'attaque', id, defenseur: def});
   }
   const n = P.combat.attaquants.size;
+  if (n) emet(P, {t: 'attaquants', joueur: j, ids: [...P.combat.attaquants.keys()], defs: [...P.combat.attaquants.values()]});
   if (n) jn(P, `${P.joueurs[j].nom} attaque avec ${[...P.combat.attaquants.keys()].map(id => nomObj(P, id)).join(', ')}`);
   return n;
 }
@@ -119,8 +120,9 @@ function* declareBloqueurs(P) {
   for (const [a, bs] of cb.bloquesPar) {
     cb.bloque.add(a);
     emet(P, {t: 'estBloque', id: a});
-    bs.forEach(b => emet(P, {t: 'bloque', id: b}));
+    bs.forEach(b => { emet(P, {t: 'bloque', id: b}); emet(P, {t: 'bloquePar', id: a, bloqueur: b}); });
   }
+  for (const a of cb.attaquants.keys()) if (!cb.bloque.has(a)) emet(P, {t: 'nonBloque', id: a});
 }
 
 /* Y a-t-il une étape de dégâts d'initiative ? */

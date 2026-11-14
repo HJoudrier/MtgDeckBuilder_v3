@@ -61,7 +61,7 @@ function* retourne(P, j, a) {
 function retourneFace(P, o) {
   if (!o.faceCachee) return;
   o.def = o.vraieDef; o.faceCachee = false;
-  if (o.def.morph && o.def.morph.mega) o.marq['+1/+1'] = (o.marq['+1/+1'] || 0) + 1;
+  if (o.def.morph && o.def.morph.mega) poseMarqueurs(P, o, '+1/+1', 1, o);
   P.ver++;
   jn(P, `${o.def.nom} est retourné`);
   emet(P, {t: 'retourne', id: o.id, ctrl: o.ctrl});
@@ -123,7 +123,7 @@ function* paieEquipage(P, j, o, n) {
   cands.filter(x => !pris.includes(x)).sort((a, b) => car(P, a).force - car(P, b).force).forEach(x => {
     if (total < n) { pris.push(x); total += Math.max(0, car(P, x).force); }
   });
-  pris.forEach(x => { x.engage = true; });
+  pris.forEach(x => engageObjet(P, x));
   P.ver++;
 }
 

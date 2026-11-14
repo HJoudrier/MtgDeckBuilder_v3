@@ -166,7 +166,7 @@ function paieMana(P, j, cout, x, pour) {
   for (const {s, option} of plan) {
     const o = obj(P, s.id);
     if (!o) continue;
-    o.engage = true;
+    engageObjet(P, o, true);
     if (s.vie) J.vie -= s.vie;
     if (s.sac) deplace(P, s.id, 'cimetiere');
     ajouteMana(P, j, option);

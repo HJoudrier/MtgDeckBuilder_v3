@@ -174,13 +174,13 @@ forgeEffet('PutCounter', ['CounterType', 'CounterNum', 'ETB'], function* (P, t, 
   const l = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Self', env);
   l.forEach(x => {
     if (x.j != null) { const J = P.joueurs[x.j]; if (g === 'energy') J.energie = (J.energie || 0) + n; else if (g === 'poison') J.poison += n; return; }
-    if (x.zone === 'champ' && !x.lki) { x.marq[g] = (x.marq[g] || 0) + n; P.ver++; }
+    if (x.zone === 'champ' && !x.lki) poseMarqueurs(P, x, g, n, env.src);
   });
 }, (t, op) => { op.op = 'marqueurs'; op.genre = genreMarqueur(t.CounterType); op.n = nombreIA(t.CounterNum || 1); op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.genre === '-1/-1'; });
 
 forgeEffet('PutCounterAll', ['CounterType', 'CounterNum', 'ValidCards'], function* (P, t, env) {
   const g = genreMarqueur(t.CounterType), n = forgeNombre(P, t.CounterNum || 1, env);
-  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env)).forEach(o => { o.marq[g] = (o.marq[g] || 0) + n; P.ver++; });
+  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env)).forEach(o => poseMarqueurs(P, o, g, n, env.src));
 }, (t, op) => { op.op = 'marqueurs'; op.genre = genreMarqueur(t.CounterType); op.n = nombreIA(t.CounterNum || 1); op.hostile = false; });
 
 forgeEffet('RemoveCounter', ['CounterType', 'CounterNum'], function* (P, t, env) {

@@ -160,7 +160,7 @@ function* paieReductions(P, j, o, mana, x) {
   }
   const final = moinsGenerique(reste, exiles.length);
   if (!planPaiement(P, j, final, x, pour)) return null;
-  pris.forEach(c => { c.engage = true; });
+  pris.forEach(c => engageObjet(P, c));
   exiles.forEach(id => deplace(P, id, 'exil'));
   P.ver++;
   return final;

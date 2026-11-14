@@ -33,23 +33,23 @@ forgeEffet('PumpAll', ['ValidCards', 'NumAtt', 'NumDef', 'KW', 'Duration'], func
   pompeForge(P, objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Creature', env.src, env.ctrl, env)), t, env);
 }, (t, op) => { op.op = 'pompe'; op.f = bonusIA(t.NumAtt); op.e = bonusIA(t.NumDef); op.hostile = false; });
 
-forgeEffet('Tap', [], function* (P, t, env) { objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.engage = true; P.ver++; }); },
+forgeEffet('Tap', [], function* (P, t, env) { objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => engageObjet(P, o)); },
   (t, op) => { op.op = 'engage'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.slot != null; });
-forgeEffet('Untap', [], function* (P, t, env) { objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.engage = false; P.ver++; }); },
+forgeEffet('Untap', [], function* (P, t, env) { objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => degageObjet(P, o)); },
   (t, op) => { op.op = 'degage'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = false; });
 /* Engager ou dégager : l'IA engage ce qui est à l'adversaire et dégage ce
    qui est à elle. */
 forgeEffet('TapOrUntap', [], function* (P, t, env) {
   for (const o of objetsForge(P, t, env).filter(x => x.zone === 'champ' && !x.lki)) {
     const i = yield* choisitUn(P, env.ctrl, ['Engager', 'Dégager'], `${o.def.nom} : engager ou dégager ?`, o.ctrl === env.ctrl ? 1 : 0, env.ctx.source);
-    o.engage = i === 0; P.ver++;
+    if (i === 0) engageObjet(P, o); else degageObjet(P, o);
   }
 }, (t, op) => { op.op = 'engage'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.slot != null; });
 forgeEffet('TapAll', ['ValidCards'], function* (P, t, env) {
-  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Creature', env.src, env.ctrl, env)).forEach(o => { o.engage = true; P.ver++; });
+  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Creature', env.src, env.ctrl, env)).forEach(o => engageObjet(P, o));
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 forgeEffet('UntapAll', ['ValidCards'], function* (P, t, env) {
-  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent.YouCtrl', env.src, env.ctrl, env)).forEach(o => { o.engage = false; P.ver++; });
+  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent.YouCtrl', env.src, env.ctrl, env)).forEach(o => degageObjet(P, o));
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* Les options d'un `Produced$` : `G`, `C`, `Combo W U`, `Any`, `W W`. */
@@ -99,7 +99,7 @@ forgeEffet('GainControl', ['NewController', 'LoseControl', 'Untap', 'AddKWs'], f
   objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
     if (t.LoseControl === 'EOT' && o.ctrlRendu == null) o.ctrlRendu = o.ctrl;
     o.ctrl = j; o.pret = false;
-    if (t.Untap === 'True') o.engage = false;
+    if (t.Untap === 'True') degageObjet(P, o);
     if (t.AddKWs) o.mods.push({f: 0, e: 0, mots: motsForge(t.AddKWs), fin: 'tour'});
     P.ver++;
   });

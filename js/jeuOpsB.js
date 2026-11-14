@@ -31,10 +31,7 @@ OPS.jetons = function* (P, op, ctx) {
 };
 OPS.marqueurs = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
-  resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ').forEach(o => {
-    o.marq[op.genre] = (o.marq[op.genre] || 0) + n;
-    P.ver++;
-  });
+  resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ').forEach(o => poseMarqueurs(P, o, op.genre, n, sourceCtx(P, ctx)));
 };
 OPS.prolifere = function* (P, op, ctx) {
   P.champ.forEach(id => {
@@ -62,7 +59,7 @@ OPS.cherche = function* (P, op, ctx) {
   melangeHasard(P.rng, P.joueurs[j].bibliotheque);
 };
 OPS.engage = function* (P, op, ctx) {
-  resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ').forEach(o => { o.engage = true; });
+  resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ').forEach(o => engageObjet(P, o));
 };
 OPS.degage = function* (P, op, ctx) {
   let cibles;
@@ -70,7 +67,7 @@ OPS.degage = function* (P, op, ctx) {
     const ids = champDe(P, ctx.ctrl).filter(o => o.engage && correspond(P, o, op.a.choix, sourceCtx(P, ctx), ctx.ctrl)).map(o => o.id);
     cibles = (yield* choisitCartes(P, ctx.ctrl, ids, op.a.n, 'Dégager', 'cartes', 0)).map(id => obj(P, id));
   } else cibles = resous(P, op.a, ctx);
-  cibles.filter(o => o && o.j == null && o.zone === 'champ').forEach(o => { o.engage = false; });
+  cibles.filter(o => o && o.j == null && o.zone === 'champ').forEach(o => degageObjet(P, o));
 };
 OPS.place = function* (P, op, ctx) {
   let cibles;
@@ -133,9 +130,9 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (no.def.entree && no.def.entree.forge) yield* effetsEntree(P, no);
   if (ent.marqueursForge && obj(P, n)) {
     const m = ent.marqueursForge, env = {face: m.face, ctx: {x, kicked: !!opts.kicked, cibles: [], memo: [], memoJ: []}, src: no, ctrl, op: {}};
-    if (!m.cond || conditionForge(P, m.cond, env)) { const k = forgeNombre(P, m.n, env); if (k > 0) { no.marq[m.genre] = (no.marq[m.genre] || 0) + k; P.ver++; } }
+    if (!m.cond || conditionForge(P, m.cond, env)) { const k = forgeNombre(P, m.n, env); if (k > 0) poseMarqueurs(P, no, m.genre, k, no); }
   }
-  if (opts.marqueurs) Object.entries(opts.marqueurs).forEach(([g, k]) => { const y = obj(P, n); if (y) { y.marq[g] = (y.marq[g] || 0) + k; P.ver++; } });
+  if (opts.marqueurs) Object.entries(opts.marqueurs).forEach(([g, k]) => { const y = obj(P, n); if (y) poseMarqueurs(P, y, g, k, y); });
   return n;
 }
 

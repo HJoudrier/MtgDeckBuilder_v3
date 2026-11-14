@@ -25,7 +25,7 @@ function* prepareDeclencheur(P, t) {
   const effets = yield* prepareEffets(P, t.ctrl, src, t.cap.effet, src ? src.def.couleurs : [], {declencheur: true});
   if (!effets) return null;
   return {id: P.prochainId++, capacite: true, source: t.src, lki: t.lki, ctrl: t.ctrl, effets, x: 0, evt: t.evt,
-    nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ};
+    nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ, declencheur: t.cap};
 }
 
 /* Stabiliser avant une priorité (règle 117.5). */
@@ -46,7 +46,7 @@ function* stabilise(P) {
       for (const t of attente) {
         if (t.ctrl !== j) continue;
         const item = yield* prepareDeclencheur(P, t);
-        if (item) P.pile.push(item);
+        if (item) { P.pile.push(item); emetCibles(P, item.ctrl, obj(P, item.source) || item.lki, item.effets); }
       }
     }
   }

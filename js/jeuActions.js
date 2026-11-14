@@ -12,13 +12,13 @@
    d'où elle vient. */
 function* paieAutre(P, j, o, c) {
   let lki = null;
-  if (c.engage) o.engage = true;
-  if (c.degage) o.engage = false;
+  if (c.engage) engageObjet(P, o);
+  if (c.degage) degageObjet(P, o);
   if (c.vie) P.joueurs[j].vie -= c.vie;
   if (c.retire) { o.marq[c.retire.genre] -= c.retire.n; P.ver++; }
   if (c.engageAutres) {
     const ids = champDe(P, j).filter(x => !x.engage && x.id !== o.id && correspond(P, x, c.engageAutres.desc, o, j)).map(x => x.id);
-    (yield* choisitCartes(P, j, ids, c.engageAutres.n, 'Engager')).forEach(id => { obj(P, id).engage = true; });
+    (yield* choisitCartes(P, j, ids, c.engageAutres.n, 'Engager')).forEach(id => engageObjet(P, obj(P, id)));
   }
   if (c.sac) {
     const ids = champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j)).map(x => x.id);
@@ -111,7 +111,8 @@ function* lanceSort(P, j, a) {
   J.stats.sorts++;
   J.sortsTour.push(d);
   jn(P, `${J.nom} lance ${d.nom}`);
-  emet(P, {t: 'lance', joueur: j, def: d, id: nid});
+  emet(P, {t: 'lance', joueur: j, def: d, id: nid, depuis: a.depuis});
+  emetCibles(P, j, s, effets);
   declencheursDeLancement(P, item);
   return true;
 }
@@ -146,6 +147,8 @@ function* activeCapacite(P, j, a) {
   }
   P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
+  emet(P, {t: 'active', id: o.id, joueur: j, loyaute: k.genre === 'loyaute', lki});
+  emetCibles(P, j, o, effets);
   return true;
 }
 
@@ -172,7 +175,8 @@ function* joueTerrain(P, j, a) {
   P.joueurs[j].terrainsJoues++;
   if (a.depuis) permisUtilise(P, j, obj(P, a.id));
   jn(P, `${P.joueurs[j].nom} joue ${nomObj(P, a.id)}`);
-  yield* metEnJeu(P, a.id, j, a.variante === 'dos' ? {face: obj(P, a.id).def.dos} : {});
+  const n = yield* metEnJeu(P, a.id, j, a.variante === 'dos' ? {face: obj(P, a.id).def.dos} : {});
+  emet(P, {t: 'terrainJoue', id: n, joueur: j, depuis: a.depuis || 'main'});
   return true;
 }
 

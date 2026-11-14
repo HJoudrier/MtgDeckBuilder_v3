@@ -17,7 +17,8 @@ const FORGE_DEFINIS = ['Self', 'You', 'Targeted', 'TargetedPlayer', 'TargetedCon
   'ActivePlayer', 'Valid', 'ValidGraveyard', 'ValidHand', 'TriggeredActivator', 'OppNonTargeted', 'ExiledWith',
   'DelayTriggerRemembered', 'DelayTriggerRememberedLKI', 'TriggeredAttackerLKICopy', 'TriggeredBlocker',
   /* L'objet qu'un remplacement détourne : lu par js/forgeRemplacements.js. */
-  'ReplacedCard', 'TriggeredTargetLKICopy', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
+  'ReplacedCard', 'TriggeredTargetLKICopy', 'TriggeredBlockerLKICopy', 'TriggeredAttackers', 'TriggeredAttackerController',
+  'TriggeredBlockerController', 'TriggeredTargetController', 'TriggeredDefender', 'TriggeredSourceLKICopy', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
   'RememberedCard'];
 
 /* Les cibles prises par l'emplacement de la capacité en cours, ou de celle
@@ -64,8 +65,24 @@ function forgeDefinis(P, val, env) {
       ...(ctx.memoJ || []).map(j => ({j}))];
     case 'RememberedController': return uniquesJ((ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean).map(o => o.ctrl));
     case 'RememberedOwner': return uniquesJ((ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean).map(o => o.prop));
+    /* Le combat : l'attaquant et le bloqueur d'un blocage, les attaquants
+       d'une déclaration, le défenseur d'une attaque. */
+    case 'TriggeredBlocker': case 'TriggeredBlockerLKICopy': case 'TriggeredBlockerController': {
+      const l = evt.t === 'bloquePar' ? [obj(P, evt.bloqueur)] : evt.t === 'estBloque' && P.combat ? (P.combat.bloquesPar.get(evt.id) || []).map(id => obj(P, id))
+        : [objetEvt(P, ctx)];
+      return v === 'TriggeredBlockerController' ? uniquesJ(l.filter(Boolean).map(o => o.ctrl)) : l.filter(Boolean);
+    }
+    case 'TriggeredAttackers': return evt.t === 'attaquants' ? evt.ids.map(id => obj(P, id)).filter(Boolean) : [objetEvt(P, ctx)].filter(Boolean);
+    case 'TriggeredAttackerController': { const o = objetEvt(P, ctx); return o ? [{j: o.ctrl}] : evt.joueur != null ? [{j: evt.joueur}] : []; }
+    case 'TriggeredTargetController': { const o = evt.t === 'cible' && evt.id != null ? obj(P, evt.id) : null; return o ? [{j: o.ctrl}] : evt.joueur != null ? [{j: evt.joueur}] : []; }
+    case 'TriggeredDefender': {
+      const d = evt.defenseur;
+      if (d == null) return [];
+      return typeof d === 'object' ? (d.j != null ? [{j: d.j}] : [obj(P, d.pw)].filter(Boolean)) : [{j: d}];
+    }
+    case 'TriggeredSourceLKICopy': { const o = evt.source != null ? passeOuPresent(P, evt.source) : null; return o ? [o] : []; }
     case 'TriggeredCard': case 'TriggeredCardLKICopy': case 'TriggeredNewCardLKICopy': case 'TriggeredAttacker':
-    case 'TriggeredAttackerLKICopy': case 'TriggeredBlocker':
+    case 'TriggeredAttackerLKICopy':
     case 'TriggeredSource': {
       const o = v === 'TriggeredSource' ? (evt.source != null ? obj(P, suit(P, evt.source)) : null) : objetEvt(P, ctx);
       return o ? [o] : [];
@@ -75,8 +92,15 @@ function forgeDefinis(P, val, env) {
       return o ? [{j: o.ctrl}] : evt.ctrl != null ? [{j: evt.ctrl}] : [];
     }
     case 'TriggeredCardOwner': { const o = objetEvt(P, ctx); return o ? [{j: o.prop}] : []; }
-    case 'TriggeredPlayer': case 'TriggeredTarget': case 'TriggeredActivator': case 'TriggeredTargetLKICopy': return evt.joueur != null ? [{j: evt.joueur}] : [];
-    case 'TriggeredDefendingPlayer': return evt.defenseur != null ? [{j: evt.defenseur}] : [];
+    case 'TriggeredTarget': case 'TriggeredTargetLKICopy': if (evt.t === 'cible' && evt.id != null) return [obj(P, evt.id)].filter(Boolean);
+      return evt.joueur != null ? [{j: evt.joueur}] : [];
+    case 'TriggeredPlayer': case 'TriggeredActivator': return evt.joueur != null ? [{j: evt.joueur}] : [];
+    case 'TriggeredDefendingPlayer': {
+      const d = evt.defenseur;
+      if (d == null) return [];
+      const j = typeof d === 'object' ? defenseurDe(P, d) : d;
+      return j != null ? [{j}] : [];
+    }
     case 'Enchanted': case 'Equipped': { const a = src && src.att != null ? obj(P, src.att) : null; return a ? [a] : []; }
     case 'EnchantedController': case 'EquippedController': { const a = src && src.att != null ? obj(P, src.att) : null; return a ? [{j: a.ctrl}] : []; }
     case 'Player': return vivants(P).map(J => ({j: J.i}));
