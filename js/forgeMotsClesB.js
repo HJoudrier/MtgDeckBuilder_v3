@@ -104,6 +104,7 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
       return true;
     }
     case 'Retrace': def.retrace = true; return !reste.length;
+    case 'Improvise': def.params.convocation = true; def.params.improvise = true; return !reste.length;
     case 'Jump-start': def.jumpstart = true; return !reste.length;
     case 'Rebound': def.rebond = true; return !reste.length;
     case 'Split second': def.params.splitSecond = true; return !reste.length;
@@ -118,7 +119,7 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
 forgeSait('kw', 'Soulshift', 'Undying', 'Persist', 'Modular', 'Bloodthirst', 'Fabricate', 'Riot', 'Evolve', 'Extort', 'Wither', 'Toxic', 'Shadow',
   'Horsemanship', 'Skulk', 'Flanking', 'Level up', 'Outlast', 'Vanishing', 'Fading', 'Living Weapon', 'Umbra armor', 'Totem armor', 'Unleash',
   'Partner with', 'Choose a Background', "Doctor's companion", 'Friends forever', 'Afterlife', 'Melee', 'Battle cry', 'Escape', 'Dash', 'Spectacle',
-  'Surge', 'Retrace', 'Jump-start', 'Rebound', 'Split second');
+  'Surge', 'Retrace', 'Jump-start', 'Rebound', 'Split second', 'Improvise');
 
 /* Un jeton de Forge écrit à la main : une créature d'un type, d'une force,
    de couleurs et de mots-clés donnés. */

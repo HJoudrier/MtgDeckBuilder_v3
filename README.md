@@ -67,6 +67,7 @@ js/                 modules, chargés dans cet ordre :
   jeuActions.js     jouer un terrain, lancer, activer, équiper
   jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho, folie, suspension
   jeuVariantesB.js  coût alternatif, escape, retrace, jump-start, dash, spectacle, surge, split second, rebound
+  jeuCoutsB.js      les morceaux de coût de plus : meuler, exert, blight, collecter des indices…
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
   jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
@@ -730,6 +731,14 @@ par l'entrée de `o.anime`, que `capacitesDe()` et `statiquesEnJeu()` lisent —
 mots-clés ou toutes les capacités. **La version de l'état ne bouge qu'à un vrai changement** : la passe des
 couches (js/jeuCouches.js) lève puis repose les couches à l'identique sans toucher à `P.ver`, sans quoi
 chaque passe des actions d'état viderait tous les caches de `car()`.
+
+**Le mana et les coûts, suite** (`js/jeuCoutsB.js`, lot F21). L'hybride et le phyrexian s'écrivent sans
+barre dans les coûts d'activation de Forge (`WB`, `WP`). Les morceaux de coût de plus (`COUTS_B`, dans
+js/forgeCout.js) se lisent en champs du coût, que `coutAutrePossibleB()` juge et `paieAutreB()` paie à
+la suite des autres ; une capacité de mana qui en porte n'est pas une source gratuite. Improvise passe
+par la convocation, avec les artefacts pour candidats. Le mana reflété (Reflecting Pool) se calcule au
+moment de payer. Simplifications annoncées : le déclencheur de mana monte sur la pile au lieu de se
+résoudre tout de suite, et fourrager exile toujours trois cartes du cimetière.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

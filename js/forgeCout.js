@@ -12,10 +12,12 @@
 /* Le mana d'un coût de Forge : `2 W W`, `X R`, `W/U`, `2/W`, `W/P`, `C`. */
 function manaForge(morceaux) {
   if (!morceaux.length) return coutManaVide();
-  return coutMana(morceaux.map(m => '{' + m.toUpperCase() + '}').join(''));
+  /* `WB`, `WP` : l'hybride et le phyrexian s'écrivent sans barre dans les
+     coûts d'activation. */
+  return coutMana(morceaux.map(m => '{' + (/^[WUBRG2][WUBRGP]$/i.test(m) ? m[0] + '/' + m[1] : m).toUpperCase() + '}').join(''));
 }
 
-function estManaForge(m) { return /^(\d+|X|[WUBRGCS]|[WUBRG2]\/[WUBRGP])$/i.test(m); }
+function estManaForge(m) { return /^(\d+|X|[WUBRGCS]|[WUBRG2]\/?[WUBRGP])$/.test(m); }
 
 /* Lire un coût. Rend `{cout, loyaute}` — `loyaute` : le changement de
    loyauté d'une capacité de planeswalker, un nombre ou `'X'`. */
@@ -30,6 +32,13 @@ function coutForge(txt) {
     if (estManaForge(m)) { mana.push(m); continue; }
     if (m === 'T') { cout.engage = true; continue; }
     if (m === 'Q') { cout.degage = true; continue; }
+    if (m === 'Mandatory' || m === 'XMin1') continue;
+    /* Fourrager : exiler trois cartes de son cimetière (ou sacrifier un
+       Food — simplification : toujours le cimetière). */
+    if (m === 'Forage') { cout.exileCimetiere = {n: 3, desc: descForge('Card')}; continue; }
+    const tout = /^(\w+)<([^>]*)>$/.exec(m), parts = tout ? tout[2].split('/') : [];
+    const nb = /^\d+$/.test(parts[0] || '') ? +parts[0] : null;
+    if (tout && COUTS_B[tout[1]]) { if (nb == null && tout[1] !== 'Exert') return null; if (!COUTS_B[tout[1]](cout, nb, parts, mana)) return null; continue; }
     const k = /^(\w+)<([^/>]+)(?:\/([^/>]+))?(?:\/[^>]*)?>$/.exec(m);
     if (!k) return null;
     const n = /^\d+$/.test(k[2]) ? +k[2] : k[2];
@@ -81,5 +90,29 @@ function coutForge(txt) {
   return {cout, loyaute};
 }
 
-forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'ExileFromHand', 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
+/* Les morceaux de coût de plus (js/jeuCoutsB.js les paie). Rendent faux
+   pour une forme qu'on ne sait pas payer. */
+const COUTS_B = {
+  DamageYou: (c, n) => { c.vie = (c.vie || 0) + n; return true; },
+  Mill: (c, n) => { c.meule = n; return true; },
+  ExileFromTop: (c, n) => { c.exileDessus = n; return true; },
+  ExileAnyGrave: (c, n, p) => !/Triggered/.test(p[1] || '') && (c.exileTousCim = {n, desc: descForge(p[1] || 'Card')}),
+  RemoveAnyCounter: (c, n, p) => (c.retireAny = {n, genre: p[1] && p[1] !== 'Any' ? genreMarqueur(p[1]) : null,
+    soi: /^(CARDNAME|NICKNAME|Self)$/.test(p[2] || ''), desc: /^(CARDNAME|NICKNAME|Self)$/.test(p[2] || '') ? null : descForge(p[2] || 'Permanent')}),
+  Exert: c => { c.exerce = true; return true; },
+  Blight: (c, n) => { c.fletrit = n; return true; },
+  CollectEvidence: (c, n) => { c.indices = n; return true; },
+  Waterbend: (c, n, p, mana) => { mana.push(String(n)); return true; },
+  ExiledMoveToGrave: (c, n, p) => !/ExiledWithSource|Triggered/.test(p[1] || '') && (c.exilVersCim = {n, desc: descForge(p[1] || 'Card')}),
+  Behold: (c, n, p) => !/Chosen/.test(p[1] || '') && (c.contemple = {n, desc: descForge(p[1] || 'Card')}),
+  PutCardToLibFromGrave: (c, n, p) => (c.versBib = {n, desc: descForge(String(p[2] || 'Card').split(';')[0])}),
+};
+
+forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'ExileFromHand', 'Mandatory', 'XMin1', 'Forage', ...Object.keys(COUTS_B), 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
   'Return', 'Reveal', 'PayEnergy', 'Draw');
+
+/* Le mana reflété (js/jeuMana.js `manaReflete()`), et le déclencheur de
+   mana qui monte sur la pile au lieu de se résoudre tout de suite :
+   simplification annoncée. */
+forgeSait('api', 'ManaReflected');
+forgeSait('param', 'ManaReflected.ColorOrType', 'ManaReflected.Valid', 'ManaReflected.ReflectProperty', 'TapsForMana.Static');

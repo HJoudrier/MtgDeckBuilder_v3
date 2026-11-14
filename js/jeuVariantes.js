@@ -46,8 +46,10 @@ function fusionAutres(a, b) {
 
 /* Les créatures qu'on peut engager pour convoquer : pas celles qui
    produisent du mana, que le paiement compte déjà. */
-function convocables(P, j) {
-  return champDe(P, j).filter(x => estCreature(x) && !x.engage && !x.def.capacites.some(k => k.genre === 'mana'));
+function convocables(P, j, o) {
+  /* Improvise : les artefacts paient le générique comme la convocation. */
+  const imp = o && o.def.params.improvise;
+  return champDe(P, j).filter(x => (imp ? estType(x, 'artifact') : estCreature(x)) && !x.engage && !x.def.capacites.some(k => k.genre === 'mana'));
 }
 
 function moinsGenerique(c, n) {
@@ -69,9 +71,9 @@ function convoque(c, creatures) {
 
 /* Les créatures à convoquer, les plus utiles d'abord : celles dont une
    couleur est due. */
-function ordreConvocation(P, j, c) {
+function ordreConvocation(P, j, c, o) {
   const utile = o => o.def.couleurs.some(k => c.couleurs[k] > 0) ? 1 : 0;
-  return convocables(P, j).sort((a, b) => utile(b) - utile(a));
+  return convocables(P, j, o).sort((a, b) => utile(b) - utile(a));
 }
 
 /* Le coût après convocation des `n` premières créatures et exploration de
@@ -91,7 +93,7 @@ function payableAvec(P, j, o, mana, x) {
   const d = o.def;
   if (!d.params.convocation && !d.params.delve) return false;
   const cim = d.params.delve ? P.joueurs[j].cimetiere.filter(id => id !== o.id).length : 0;
-  return !!planPaiement(P, j, reduit(o, mana, d.params.convocation ? convocables(P, j) : [], cim), x, {sort: o});
+  return !!planPaiement(P, j, reduit(o, mana, d.params.convocation ? convocables(P, j, o) : [], cim), x, {sort: o});
 }
 
 /* Les façons légales de lancer une carte d'où elle est : `[{variante,
@@ -142,7 +144,7 @@ function* paieReductions(P, j, o, mana, x) {
   const d = o.def, pour = {sort: o};
   if (!d.params.convocation && !d.params.delve) return mana;
   if (planPaiement(P, j, mana, x, pour)) return mana;
-  const cands = d.params.convocation ? ordreConvocation(P, j, mana) : [];
+  const cands = d.params.convocation ? ordreConvocation(P, j, mana, o) : [];
   const cim = d.params.delve ? P.joueurs[j].cimetiere.filter(id => id !== o.id) : [];
   let n = 0;
   while (n < cands.length && !planPaiement(P, j, reduit(o, mana, cands.slice(0, n), cim.length), x, pour)) n++;

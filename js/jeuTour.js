@@ -24,6 +24,7 @@ function degagement(P) {
     if (o.ctrl !== P.actif) continue;
     o.pret = true;
     if (o.engage && typeof degagementEmpeche === 'function' && degagementEmpeche(P, o)) continue;
+    if (o.exerce) { o.exerce = false; continue; }
     degageObjet(P, o);
   }
 }

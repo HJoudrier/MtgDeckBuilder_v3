@@ -107,6 +107,13 @@ function capaciteForge(def, face, t, jetons) {
   const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
   if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
   if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage || c.cout.sac)) return false;
+  /* « Add one mana of any color a land you control could produce »
+     (Reflecting Pool, Exotic Orchard) : les couleurs se lisent au moment
+     de payer (js/jeuMana.js `manaReflete()`). */
+  if (api === 'ManaReflected' && !t.SubAbility && t.Valid && !/^Defined/.test(t.Valid)) {
+    def.capacites.push({genre: 'mana', cout: c.cout, options: [], reflete: {valid: t.Valid, type: t.ColorOrType === 'Type'}, texte: texteForge(face, t)});
+    return true;
+  }
   if (api === 'Mana' && !t.SubAbility) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */

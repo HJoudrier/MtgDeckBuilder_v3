@@ -59,7 +59,7 @@ const FORGE_RENVOIS = ['SubAbility', 'Execute', 'ReplaceWith', 'RepeatSubAbility
    que le mana. */
 function morceauxCout(cout) {
   return String(cout || '').split(/\s+(?![^<]*>)/).filter(Boolean)
-    .filter(m => !/^([0-9]+|X|[WUBRGCS]|[WUBRG2]\/[WUBRGP])$/i.test(m))
+    .filter(m => !/^([0-9]+|X|[WUBRGCS]|[WUBRG2]\/?[WUBRGP])$/.test(m))
     .map(m => 'cout:' + (m === 'T' || m === 'Q' ? m : m.split('<')[0]));
 }
 

@@ -61,7 +61,7 @@ function coutAutrePossible(P, j, o, c) {
   if (c.revele && compte(J.main, c.revele.desc) < c.revele.n) return false;
   if (c.energie && (J.energie || 0) < c.energie) return false;
   if (c.equipage && !equipagePossible(P, j, o, c.equipage)) return false;
-  return true;
+  return !coutSpecial(c) || coutAutrePossibleB(P, j, o, c);
 }
 
 /* Les actions légales d'un joueur qui a la priorité. `PASSE` est toujours la

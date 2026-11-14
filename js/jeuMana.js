@@ -50,10 +50,10 @@ function sourcesMana(P, j, pour) {
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
-        c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage) continue;
+        c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || coutSpecial(c)) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
-      let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.options;
+      let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.reflete ? manaReflete(P, j, o, k) : k.options;
       if (!opts.length) continue;
       if (k.montant) {
         const n = forgeNombre(P, k.montant, {face: k.face, ctx: {cibles: [], memo: [], memoJ: [], x: 0}, src: o, ctrl: j, op: {}, base: true});
@@ -182,4 +182,16 @@ function paieMana(P, j, cout, x, pour) {
 /* Les réserves se vident à la fin de chaque étape (règle 500.4). */
 function videReserves(P) {
   P.joueurs.forEach(J => { LETTRES_MANA.forEach(k => { J.pool[k] = 0; }); });
+}
+
+/* Le mana « reflété » : ce que les permanents désignés pourraient
+   produire, une couleur par option ; l'incolore seulement pour un type. */
+function manaReflete(P, j, o, k) {
+  const r = new Set();
+  for (const id of P.champ) {
+    const x = obj(P, id);
+    if (x.id === o.id || !forgeValideObjet(P, x, k.reflete.valid, o, j, null, true)) continue;
+    capacitesDe(P, x).forEach(m => { if (m.genre === 'mana' && !m.reflete) (m.options || []).forEach(s => String(s).split('').forEach(l => r.add(l))); });
+  }
+  return [...r].filter(l => k.reflete.type || l !== 'C');
 }
