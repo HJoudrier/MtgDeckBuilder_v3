@@ -93,6 +93,10 @@ function* copieSort(P, j, o, it, nouvelles) {
 function copiesFin(P) {
   P.champ.filter(id => obj(P, id).finEtape).forEach(id => {
     const o = obj(P, id);
-    if (o.finEtape === 'exil' || o.finEtape === 'main') deplace(P, id, o.finEtape); else sacrifie(P, id);
+    if (o.finEtape === 'exil' || o.finEtape === 'main') {
+      const n = deplace(P, id, o.finEtape);
+      /* Warp : relançable de l'exil à partir du tour suivant. */
+      if (o.warp && n != null && obj(P, n)) obj(P, n).warpTour = P.tour;
+    } else sacrifie(P, id);
   });
 }

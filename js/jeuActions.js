@@ -119,6 +119,7 @@ function* lanceSort(P, j, a) {
   emet(P, {t: 'lance', joueur: j, def: d, id: nid, depuis: a.depuis});
   emetCibles(P, j, s, effets);
   declencheursDeLancement(P, item);
+  declencheursDeVariante(P, item);
   return true;
 }
 
@@ -192,6 +193,7 @@ function* executeAction(P, j, a) {
   if (a.k === 'activer') return yield* activeCapacite(P, j, a);
   if (a.k === 'equiper') return yield* equipe(P, j, a);
   if (a.k === 'presager') return yield* presage(P, j, a);
+  if (a.k === 'comploter') return yield* complote(P, j, a);
   if (a.k === 'suspendre') return yield* suspend(P, j, a);
   if (a.k === 'retourner') return yield* retourne(P, j, a);
   return false;

@@ -104,6 +104,7 @@ js/                 modules, chargés dans cet ordre :
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
+  forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
   forgeDefinition.js  d'un script de Forge à une définition de jeu
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
@@ -784,6 +785,14 @@ réserve de leçons, « défausser pour piocher » —, détourner un sort à ci
 file d'étapes (`P.fileEtapes`) où `AddPhase` insère un combat ou une phase principale de plus. Un
 effet de Forge qui cible dit désormais à l'IA ce qu'il vise (`op.a`), ce qui lui fait choisir la
 bonne cible pour une détention ou un goad.
+
+**Les mots-clés de lancement, suite** (lot F28). `js/forgeMotsClesC.js` ajoute des façons de lancer à
+`variantesSort()` : entwine (tous les modes), replicate et squad (payés une à trois fois), casualty,
+offspring, blitz, warp. Les copies de replicate et casualty naissent d'une capacité déclenchée au
+lancement ; ce que blitz, squad et offspring donnent au permanent passe par une entrée `o.anime` qui
+porte des capacités, ce qui suit l'objet jusqu'à sa mort. Embalm, eternalize, encore, transmute et
+ninjutsu sont des capacités activées depuis le cimetière ou la main ; plot est une action spéciale,
+comme le présage. Simplification annoncée : le ninja attaque le premier adversaire.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

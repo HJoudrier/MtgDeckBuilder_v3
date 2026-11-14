@@ -158,6 +158,7 @@ function iaPriorite(P, q, ag) {
     let s = -1;
     if (a.k === 'lancer') s = scoreLancer(P, j, a);
     else if (a.k === 'presager') s = 1.1;
+    else if (a.k === 'comploter') s = 1.05;
     else if (a.k === 'retourner') s = valeurDef(obj(P, a.id).vraieDef) - 1;
     else if (a.k === 'suspendre') s = impactSort(P, j, obj(P, a.id)) * 0.5;
     else if (a.k === 'activer') s = impactCapacite(P, j, obj(P, a.id), capacitesDe(P, obj(P, a.id))[a.i], ag);
@@ -184,6 +185,13 @@ function scoreLancer(P, j, a) {
   if (a.variante === 'kicker') s += o.def.kickerUtile ? 1.5 : -5;
   else if (a.variante === 'rachat') s += 2;
   else if (a.variante === 'evocation') s *= 0.6;
+  /* Les copies valent presque l'original ; un jeton de plus, un peu moins. */
+  else if (/^replicate\d$/.test(a.variante || '')) s *= 1 + 0.8 * +a.variante.slice(-1);
+  else if (/^squad\d$/.test(a.variante || '')) s += 1.5 * +a.variante.slice(-1);
+  else if (a.variante === 'casualty') s = s * 1.6 - 1;
+  else if (a.variante === 'entwine') s += 1.5;
+  else if (a.variante === 'offspring') s += 1;
+  else if (a.variante === 'blitz' || a.variante === 'warp') s *= 0.7;
   return s;
 }
 

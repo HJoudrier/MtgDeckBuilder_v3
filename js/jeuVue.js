@@ -71,13 +71,15 @@ function libelleAction(P, a) {
   if (a.k === 'retourner') return 'Retourner ' + (o && o.vraieDef ? o.vraieDef.nom : nom);
   if (a.k === 'equiper') return 'Équiper : ' + nom;
   if (a.k === 'presager') return 'Présager ' + nom;
+  if (a.k === 'comploter') return 'Comploter ' + nom;
   if (a.k === 'suspendre') return 'Suspendre ' + nom;
   if (a.k === 'lancer') return 'Lancer ' + nom + (a.depuis === 'commandement' ? ' (commandant)' : a.depuis === 'cimetiere' && !a.variante ? ' (flashback)' :
-    a.variante === 'permis' ? ` (depuis ${ZONES_DEPUIS[a.depuis]})` : a.depuis === 'exil' ? ' (présage)' : '') + (({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)', folie: ' (folie)', suspension: ' (suspension)',
+    a.variante === 'permis' ? ` (depuis ${ZONES_DEPUIS[a.depuis]})` : a.depuis === 'exil' ? (a.variante === 'complot' ? ' (complot)' : o && o.warpTour != null ? ' (warp)' : ' (présage)') : '') + (({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)', folie: ' (folie)', suspension: ' (suspension)',
       choixA: o && o.def.coutsAuChoix ? ` (${o.def.coutsAuChoix[0].texte})` : '', choixB: o && o.def.coutsAuChoix ? ` (${o.def.coutsAuChoix[1].texte})` : '',
       morph: ' (face cachée)', dash: ' (dash)', spectacle: ' (spectacle)', surge: ' (surge)', escape: ' (escape)', retrace: ' (retrace)',
       jumpstart: ' (jump-start)', disturb: ' (disturb)', aftermath: ' (aftermath)', prototype: ' (prototype)', fuse: ' (fuse)',
-      omen: o && o.def.dos ? ` (${o.def.dos.nom})` : ''}[a.variante] || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
+      omen: o && o.def.dos ? ` (${o.def.dos.nom})` : '', entwine: ' (entwine)', casualty: ' (casualty)', offspring: ' (offspring)',
+      blitz: ' (blitz)', warp: ' (warp)'}[a.variante] || (/^(replicate|squad)\d$/.test(a.variante || '') ? ` (${a.variante.slice(0, -1)} ×${a.variante.slice(-1)})` : '') || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
   const k = o && capacitesDe(P, o)[a.i];
   return nom + ' — ' + ((k && k.texte) || 'capacité');
 }

@@ -180,6 +180,8 @@ function motCleForge(def, k, face, jetons) {
   if (t != null) return t;
   const t2 = motCleTraineB(def, k, face, jetons, tete, reste);
   if (t2 != null) return t2;
+  const t3 = motCleLancement(def, k, face, jetons, tete, reste);
+  if (t3 != null) return t3;
   return false;
 }
 

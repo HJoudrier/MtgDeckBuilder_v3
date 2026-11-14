@@ -99,7 +99,8 @@ function actionsLegales(P, j) {
     if (estType(o, 'land')) { if (terrains) r.push({k: 'terrain', id: o.id, depuis}); }
     else essaie(o.id, depuis, 'permis');
   });
-  J.exil.forEach(id => { const o = obj(P, id); if ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) essaie(id, 'exil'); });
+  J.exil.forEach(id => { const o = obj(P, id); if ((o.presageTour != null && o.presageTour < P.tour) || o.aventure || exilLancable(P, o, rituel)) essaie(id, 'exil'); });
+  r.push(...actionsComplot(P, j, rituel));
   if (P.actif === j) J.main.forEach(id => { if (obj(P, id).def.presage && planPaiement(P, j, MANA_DEUX, 0)) r.push({k: 'presager', id}); });
   J.main.forEach(id => { if (suspendable(P, j, obj(P, id), rituel)) r.push({k: 'suspendre', id}); });
   /* Les capacités qui s'activent depuis la main (cycle) ou le cimetière. */
@@ -107,7 +108,7 @@ function actionsLegales(P, j) {
     const o = obj(P, id);
     o.def.capacites.forEach((k, i) => {
       if (k.zone !== zone || k.genre !== 'activee') return;
-      if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
+      if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i)) || (k.phases && !dansPhases(P, k.phases))) return;
       if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o}) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
       if (activationInterdite(P, j, o, k)) return;
       r.push({k: 'activer', id, i});
@@ -149,7 +150,7 @@ function actionsPossibles(P, j) {
   const peut = J.main.some(id => estEphemere(obj(P, id).def)) ||
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return lancableDuCimetiere(d, obj(P, id), P) && estEphemere(d); }) ||
-    J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) && estEphemere(o.def); }) ||
+    J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure || exilLancable(P, o, false)) && estEphemere(o.def); }) ||
     cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) ||
     champDe(P, j).some(o => retournable(P, j, o)) ||
     P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && capacitesDe(P, o).some(k => k.genre === 'activee' && !k.zone && k.vitesse !== 'rituel'); });

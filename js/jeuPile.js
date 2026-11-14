@@ -83,6 +83,7 @@ function* resoudre(P, item) {
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
     if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
     if (n != null && item.variante === 'dash') apresDash(P, obj(P, n));
+    else if (n != null && item.variante) apresVariante(P, obj(P, n), item.variante);
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
