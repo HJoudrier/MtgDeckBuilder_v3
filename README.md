@@ -103,6 +103,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
   forgeEffetsG.js   les mécaniques de partie : boucles des scripts, dés, monarque, tours en plus, phasing, goad
   forgeEffetsH.js   doubler ou déplacer des marqueurs, nommer une carte, détenir, blocage imposé, dégâts de chacun, endurer, détourner un sort, une phase de plus
+  forgeEffetsI.js   deux piles, clash, vote, sauter une étape, l'initiative, earthbend, airbend ; un sort de permanent à coût additionnel ; exhaust
   forgeEntrees.js   les entrées : remplacements des autres, de soi, « paie avant d'entrer », copies ; restrictions de cible
   forgeDurees.js    ce qui dure sur un objet (prochain tour, fin du combat, tant que la source reste) ; préparée, enfourchée
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
@@ -977,6 +978,30 @@ lancement, ou un ajout au lancement :
   n'avaient pas de couleur (`forgeCoutMana()`) ;
 - « When you cast this spell » (`SpellCast` sur `Card.Self`) ne se déclenchait pas, la carte étant sur
   la pile et non sur le champ (`declencheursDeLancement()`).
+
+**Les effets nouveaux, II** (lot F38, `js/forgeEffetsI.js`).
+
+- *Deux piles* (Fact or Fiction) : un joueur sépare, un autre choisit, la chaîne de chaque pile se joue
+  avec elle pour mémoire. L'IA met la meilleure carte seule.
+- *Le clash* : la plus grande valeur de mana gagne, chacun peut mettre sa carte dessous.
+- *Le vote* : le plus voté se joue (Will of the council). Avec Council's dilemma, chaque choix se joue
+  avec son nombre de voix (`VoteNum`).
+- *Sauter une étape* : le saut est retenu pour le joueur et levé à la première étape sautée ; sauter
+  le combat saute toutes ses étapes.
+- *L'initiative* : on s'aventure dans le donjon simplifié de `Venture`, à la prise et à son entretien.
+  Qui blesse au combat le joueur qui l'a la lui prend.
+- *Earthbend* : un terrain devient une créature 0/0 avec des marqueurs ; mort ou exilé, il revient
+  engagé. Forge le fait cibler ; il est choisi ici à la résolution.
+- *Airbend* : exilé, il se relance pour {2}.
+
+*Les paramètres de plus* :
+- un sort de permanent qui porte un coût additionnel (`PermanentCreature`) ;
+- viser un sort qui cible une créature (`TargetValidTargeting`) ;
+- choisir au hasard, lancer la copie d'une carte ;
+- chaque marqueur d'une source, défausser autant qu'on veut ;
+- Exhaust : une capacité qu'un objet n'active qu'une fois.
+
+`;` sépare les choix d'un coût Forge (`tapXType<2/Artifact;Creature;Land>`) : il se lit désormais comme `,`.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

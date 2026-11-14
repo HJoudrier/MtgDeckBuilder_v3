@@ -72,6 +72,8 @@ function iaCartes(P, q) {
   const j = q.joueur, t = q.texte;
   /* Dévorer (js/forgeMotsClesD.js) : les jetons et ce qui vaut moins qu'un
      marqueur ou deux. */
+  /* Deux piles : la meilleure carte seule d'un côté. */
+  if (t === 'Séparer en deux piles') return q.options.length ? [q.options.map((id, i) => [i, obj(P, id) ? valeurDef(obj(P, id).def) : 0]).sort((a, b) => b[1] - a[1])[0][0]] : [];
   if (t === 'Dévorer') return q.options.map((id, i) => [i, obj(P, id)]).filter(([, o]) => o && (o.jeton || valeurObjet(P, o) < 2)).map(x => x[0]);
   const pire = t === 'Défausser' || t === 'Sacrifier' || t === 'Engager' || t === 'Mettre dessous' || t === 'Convoquer' ||
     t === 'Explorer' || t === 'Exiler du cimetière' || t === 'Renvoyer en main';

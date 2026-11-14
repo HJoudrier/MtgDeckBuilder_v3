@@ -25,7 +25,8 @@ function genreMarqueur(t) {
    js/jeuCibles.js sait parcourir : joueurs, objets du champ, sorts, cartes
    d'une autre zone. */
 function descForge(valid, zone, sort) {
-  const v = String(valid || '').replace(/\bAny\b/g, 'Creature,Planeswalker,Battle,Player');
+  /* `;` sépare les choix dans un coût (`tapXType<2/Artifact;Creature;Land>`), `,` ailleurs. */
+  const v = String(valid || '').replace(/;/g, ',').replace(/\bAny\b/g, 'Creature,Planeswalker,Battle,Player');
   const alts = forgeFiltre(v);
   const joueurs = alts.some(a => a.joueur), objets = alts.some(a => !a.joueur);
   const z = ZONES_FORGE[zone] || 'champ';
@@ -61,7 +62,7 @@ function emplacementForge(t, face) {
   /* « Target spell with a single target ». */
   if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
   const restrB = {...(t.TargetsWithDefinedController ? {ctrlDefini: t.TargetsWithDefinedController} : {}),
-    ...(/^\d+$/.test(t.MaxTotalTargetCMC || '') ? {cmcMax: +t.MaxTotalTargetCMC} : {})};
+    ...(/^\d+$/.test(t.MaxTotalTargetCMC || '') ? {cmcMax: +t.MaxTotalTargetCMC} : {}), ...(t.TargetValidTargeting ? {visant: t.TargetValidTargeting} : {})};
   return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr} : {}), ...restrB,
     /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
     ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'

@@ -94,7 +94,7 @@ function capaciteForge(def, face, t, jetons) {
   if (!c) return false;
   const api = forgeApi(t);
   if (t.SP) {
-    if (api === 'Attach') { if (!t.ValidTgts) return false; def.aura = descForge(t.ValidTgts); return true; }
+    if (api === 'Attach' || /^Permanent(Creature|Noncreature)$/.test(api)) return sortPermanentForge(def, t, c);
     if (def.sort) return false;
     const e = effetForge(face, t, jetons, true);
     if (!e) return false;

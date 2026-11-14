@@ -91,7 +91,7 @@ function familleProp(p) {
   if (/^with(out)?/.test(p)) return p;
   if (/^named/.test(p)) return 'named';
   if (/^(ControlledBy|OwnedBy) /.test(p)) return p.split(' ')[0];
-  if (/^inZone(Battlefield|Graveyard|Hand|Exile|Library|Stack)$/.test(p)) return 'inZone';
+  if (/^in(Real)?Zone(Battlefield|Graveyard|Hand|Exile|Library|Stack)$/.test(p)) return 'inZone';
   return p;
 }
 
@@ -231,7 +231,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     return m[1] ? (c.mots & bit) === 0 : (c.mots & bit) !== 0;
   }
   if ((m = /^named(.+)$/.exec(p))) return o.def.nom === m[1];
-  if ((m = /^inZone(\w+)$/.exec(p))) return ZONES_FORGE[m[1]] === (o.lki ? 'champ' : o.zone);
+  if ((m = /^in(?:Real)?Zone(\w+)$/.exec(p))) return ZONES_FORGE[m[1]] === (o.lki ? 'champ' : o.zone);
   if ((m = /^non(.+)$/.exec(p))) {
     const q = aQualite(c, m[1]);
     if (q !== null) return !q;

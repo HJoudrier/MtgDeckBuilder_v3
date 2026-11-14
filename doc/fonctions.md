@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1566 fonctions**, 218 modules, 1581 Ko de JavaScript.
+**1570 fonctions**, 219 modules, 1599 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -48,7 +48,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 220 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
-| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 68 |
+| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 69 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 146 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 225 |
@@ -75,7 +75,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 113 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 280 |
-| [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 70 |
+| [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 71 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 149 |
@@ -110,9 +110,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 216 |
 | [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 236 |
 | [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 276 |
+| [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 284 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
-| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 126 |
+| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 128 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
 | [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 82 |
 | [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 1 | 34 |
@@ -923,7 +924,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 55 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 68 lignes, 3.1 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 69 lignes, 3.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1384,7 +1385,7 @@ Le langage de filtres de Forge. *12 fonctions, 280 lignes, 16 Ko.*
 
 ## js/forgeDescripteurs.js
 
-Ce que les filtres de Forge deviennent pour. *4 fonctions, 70 lignes, 4.5 Ko.*
+Ce que les filtres de Forge deviennent pour. *4 fonctions, 71 lignes, 4.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2015,6 +2016,23 @@ Les mots-clés de lancement, II. *10 fonctions, 276 lignes, 15 Ko.*
 | `CAP_CADEAU` | À l'arrivée : la créature de Sneak attaque ; le cadeau d'un permanent se donne en entrant ; le marchandage se retient. |
 | `CAP_CHIFFRE` | — |
 
+## js/forgeEffetsI.js
+
+Les effets nouveaux, II. *4 fonctions, 284 lignes, 18 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `sortPermanentForge(def, t, c)` | « As an additional cost to cast this spell, tap two untapped artifacts… » : la capacité de lancement d'un permanent, lue par js/forgeDefinition.js `capaciteForge()` ; elle ne porte que… |
+| `prendInitiative(P, j, env)` | Prendre l'initiative, c'est s'aventurer dans l'Undercity — le donjon simplifié de `Venture` (js/forgeEffetsG.js). |
+| `initiativeVolee(P, e)` | Les blessures de combat au joueur qui a l'initiative (js/jeuHistorique.js). |
+| `epuisable(k)` | Exhaust : une capacité qu'un objet n'active qu'une fois. |
+
+| Donnée | Rôle |
+|---|---|
+| `ETAPES_SAUTEES` | —— Sauter une étape ————————————————————————————————————————————— |
+| `ETAPES_DU_COMBAT` | — |
+| `CAP_TERRE` | Earthbend N : un terrain qu'on contrôle devient une créature 0/0 avec la célérité, et reçoit N marqueurs +1/+1 ; mort ou exilé, il revient engagé. |
+
 ## js/forgeDefinition.js
 
 D'un script de Forge à une définition de jeu. *13 fonctions, 301 lignes, 17 Ko.*
@@ -2063,7 +2081,7 @@ Ce que vaut une carte, un permanent, un adversaire. *8 fonctions, 85 lignes, 3.9
 
 ## js/iaChoix.js
 
-Les choix du joueur automatique hors de la priorité. *8 fonctions, 126 lignes, 5.5 Ko.*
+Les choix du joueur automatique hors de la priorité. *8 fonctions, 128 lignes, 5.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
