@@ -97,6 +97,7 @@ js/                 modules, chargés dans cet ordre :
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
+  forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
   forgeDefinition.js  d'un script de Forge à une définition de jeu
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
@@ -706,6 +707,14 @@ en route (`ctx.vars`) passe avant la SVar écrite. Le monarque pioche à son ét
 couronne aux dégâts de combat ; un tour supplémentaire passe devant le suivant (`P.toursEnPlus`) ; un
 permanent hors phase quitte `P.champ` sans départ ni entrée et revient au dégagement de son contrôleur.
 Simplifications annoncées : un donjon générique de quatre salles, et l'Anneau au premier niveau seulement.
+
+**Les mots-clés des permanents, suite** (`js/forgeMotsClesB.js`, lot F18). Soulshift, undying, persist,
+modular, evolve, extort, flanking, vanishing, fading, melee, battle cry deviennent des déclencheurs de
+Forge écrits comme Forge les écrirait (`synthese()`), avec les SVars qu'ils demandent ; level up et
+outlast, des capacités activées. Wither, toxic, shadow, horsemanship, skulk, unleash et umbra armor
+posent un paramètre que les dégâts, le combat ou `detruitObjet()` lisent. Living weapon, afterlife et
+partner with ont leur opération propre. Simplification annoncée : fabricate et riot prennent toujours
+les marqueurs.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

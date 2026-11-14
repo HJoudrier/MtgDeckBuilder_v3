@@ -70,6 +70,7 @@ function car(P, o) {
     for (const m of o.mods) if (m.retire) mots &= ~m.retire;
     if (o.protTemp && o.protTemp.length) mots |= MOT.PROTECTION;
     if (o.suspect) { mots |= MOT.MENACE; nePeutBloquer = true; }
+    if (d.params && d.params.dechaine && (o.marq['+1/+1'] || 0) > 0) nePeutBloquer = true;
     if (o.porteAnneau) supersAnneau = true;
   }
   o._c = {force, endurance, mots, types, sousTypes, couleurs, changelin: a.changelin,

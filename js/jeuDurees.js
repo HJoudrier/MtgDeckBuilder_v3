@@ -123,6 +123,9 @@ function capacitesDe(P, o) {
    est détruit. */
 function detruitObjet(P, o, sansRegeneration) {
   if (!o || o.zone !== 'champ') return false;
+  /* Umbra armor : l'aura est détruite à sa place, et ses blessures partent. */
+  const armure = P.champ.map(id => obj(P, id)).find(a => a.att === o.id && a.def.params && a.def.params.armure);
+  if (armure) { o.bless = 0; o.toucheMortel = false; deplace(P, armure.id, 'cimetiere'); return false; }
   if (o.regen > 0 && !sansRegeneration) {
     o.regen--; o.engage = true; o.bless = 0; o.toucheMortel = false;
     if (P.combat) { P.combat.attaquants.delete(o.id); P.combat.bloqueurs.delete(o.id); P.combat.bloquesPar.delete(o.id); }

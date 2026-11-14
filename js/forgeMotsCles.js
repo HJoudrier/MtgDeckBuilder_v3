@@ -178,6 +178,8 @@ function motCleForge(def, k, face, jetons) {
   /* La traîne (js/forgeTraine.js). */
   const t = motCleTraine(def, k, face, jetons, tete, reste);
   if (t != null) return t;
+  const t2 = motCleTraineB(def, k, face, jetons, tete, reste);
+  if (t2 != null) return t2;
   return false;
 }
 

@@ -28,6 +28,10 @@ function peutBloquer(P, b, a) {
   if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
   if ((ca.mots & MOT.VOL) && !(cb.mots & (MOT.VOL | MOT.PORTEE))) return false;
+  /* Ombre, cavalerie, furtivité (js/forgeMotsClesB.js). */
+  if (!!a.def.params.ombre !== !!b.def.params.ombre) return false;
+  if (a.def.params.cavalerie && !b.def.params.cavalerie) return false;
+  if (a.def.params.furtif && cb.force > ca.force) return false;
   if ((ca.mots & MOT.PROTECTION) && protectionsDe(a).some(k => cb.couleurs.includes(k))) return false;
   if (protegeFiltre(P, a, b)) return false;
   /* Le porteur de l'Anneau (js/forgeEffetsG.js). */

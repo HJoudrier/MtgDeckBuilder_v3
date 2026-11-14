@@ -87,6 +87,13 @@ function compteDuTour(P, q, env) {
   }
   if ((k = /^Adamant_\d+\.(\w+)\.(.+)$/.exec(q))) { const m = manaDepenseDe(src) || {}; return siAlors(P, 'x.' + k[2], (m[COULEURS_FORGE_LETTRE[k[1]]] || 0) >= 3, env); }
   if (q === 'YouDrewThisTurn') return J.piochesTour || 0;
+  /* Evolve : la créature qui entre a-t-elle plus de force ou d'endurance ? */
+  if (q === 'EvolveTest') {
+    const o = objetEvt(P, env.ctx), s = src && !src.lki ? obj(P, src.id) : null;
+    if (!o || !s || o.zone !== 'champ') return 0;
+    const a = car(P, o), b = car(P, s);
+    return a.force > b.force || a.endurance > b.endurance ? 1 : 0;
+  }
   if (q === 'LifeOppsLostThisTurn') return adversaires(P, j).reduce((s, i) => s + (h.perdu[i] || 0), 0);
   if (q === 'ResolvedThisTurn') return h.resolus[src ? src.id : -1] || 0;
   if (q === 'CountersAddedThisTurn') return h.marqueurs;
