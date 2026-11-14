@@ -49,6 +49,8 @@ function effetCiblable(P, j, src, effet, couleurs) {
 
 /* Le coût d'activation, hors mana, peut-il être payé ? */
 function coutAutrePossible(P, j, o, c) {
+  /* X le plus petit, « tous » ce que porte la carte (js/jeuCoutsX.js). */
+  if (aCoutX(c)) c = coutResolu(c, 0, o);
   if (c.engage && !peutEngagerSoi(P, o)) return false;
   if (c.degage && !o.engage) return false;
   if (c.vie && P.joueurs[j].vie < c.vie) return false;
@@ -205,7 +207,7 @@ function coutDeGarde(P, j, effets) {
   let n = 0;
   effets.forEach(ef => ef.cibles.forEach(cs => cs.forEach(c => {
     const o = typeof c === 'number' ? obj(P, c) : null;
-    if (o && o.zone === 'champ' && o.ctrl !== j && (car(P, o).mots & MOT.GARDE)) n += o.def.params.garde || 2;
+    if (o && o.zone === 'champ' && o.ctrl !== j && (car(P, o).mots & MOT.GARDE)) n += o.def.params.garde != null ? o.def.params.garde : 2;
   })));
   return n;
 }

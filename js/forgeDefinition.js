@@ -112,7 +112,12 @@ function capaciteForge(def, face, t, jetons) {
     def.capacites.push({genre: 'mana', cout: c.cout, options: [], reflete: {valid: t.Valid, type: t.ColorOrType === 'Type'}, texte: texteForge(face, t)});
     return true;
   }
-  if (api === 'Mana' && !t.SubAbility) {
+  /* « It doesn't untap during your next untap step » (Cinder Marsh) : un
+     drapeau de la source, que le paiement pose (js/jeuMana.js). */
+  const resteEngage = api === 'Mana' && t.SubAbility && /^DB\$ Effect \| ReplacementEffects\$ DontUntap \| RememberObjects\$ Self\b/.test(face.svars[t.SubAbility] || '');
+  /* Le planificateur de paiement ne sait ni choisir X ni payer ces morceaux. */
+  if (api === 'Mana' && (aCoutX(c.cout) || c.cout.renvoieSoi || c.cout.ajoute || c.cout.exileChamp)) return false;
+  if (api === 'Mana' && (!t.SubAbility || resteEngage)) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */
     if (/^Combo ColorIdentity$/.test(t.Produced || '') && (t.Amount || '1') === '1' && tableJouable(t)) {
@@ -122,11 +127,14 @@ function capaciteForge(def, face, t, jetons) {
     /* La couleur choisie (« add one mana of the chosen color »), une
        quantité calculée : js/jeuMana.js les lit au moment de payer. */
     const choisie = t.Produced === 'Chosen';
+    /* « For each color among permanents you control, add one mana of that color ». */
+    const parmi = (/^Special EachColorAmong_Valid (.+)$/.exec(t.Produced || '') || [])[1];
     const n = /^\d+$/.test(t.Amount || '1') ? +(t.Amount || 1) : 1;
-    const options = choisie ? [] : optionsMana(t.Produced, n);
-    if ((!options.length && !choisie) || !tableJouable(t)) return false;
+    const options = choisie || parmi ? [] : optionsMana(t.Produced, n);
+    if ((!options.length && !choisie && !parmi) || !tableJouable(t)) return false;
     def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {}),
-      ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face})});
+      ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face}),
+      ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {})});
     return true;
   }
   const effet = effetForge(face, t, jetons, true);

@@ -68,6 +68,7 @@ js/                 modules, chargés dans cet ordre :
   jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho, folie, suspension
   jeuVariantesB.js  coût alternatif, escape, retrace, jump-start, dash, spectacle, surge, split second, rebound
   jeuCoutsB.js      les morceaux de coût de plus : meuler, exert, blight, collecter des indices…
+  jeuCoutsX.js      les coûts dont la quantité est X ; se renvoyer, se marquer, exiler un permanent ; la garde non-mana ; « unless pays Y »
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
   jeuFacesB.js      jour et nuit, loups-garous, craft, omen, fuse, prototype
@@ -841,6 +842,24 @@ additionnel qu'impose une statique (waterbend), l'équipement moins cher. Corrig
 la bibliothèque de chaque joueur désigné, et la couverture examine une expression écrite en place
 (`ConditionCheckSVar$ Count$Presence_Dragon.1.0`) comme celle d'une SVar. Restent hors du lot : les
 Avatars de Vanguard, « can block an additional creature » (un bloqueur pour plusieurs attaquants).
+
+**Les coûts en X, le mana, la garde** (lot F32). Un coût lu par `coutForge()` garde `'X'` (ou `'All'`,
+« remove all counters ») là où il porte une quantité : vie, énergie, marqueurs, sacrifices, défausses,
+cartes du cimetière, créatures à engager. `js/jeuCoutsX.js` le résout avant de juger ou de payer : X
+est celui du sort, ou celui qu'on choisit en activant, jamais plus que ce qu'on peut payer, et l'IA
+ménage sa vie. S'y ajoutent les coûts qui touchent la carte elle-même (se renvoyer en main, poser un
+marqueur sur soi), exiler un permanent qu'on contrôle, remettre une carte de sa main sur sa
+bibliothèque, « unless its controller pays {Y} » quand Y est une SVar (jusque-là, un X ainsi écrit ne
+coûtait rien), la garde payée autrement qu'en mana (« Ward—Discard a card »), l'entretien cumulatif en
+vie ou en sacrifices. Un sort paie désormais son mana avant le reste de son coût (règle 601.2g-h) : un
+terrain engagé peut être sacrifié, et un paiement qui échoue ne laisse rien de payé à moitié.
+
+Côté mana : la source qui ne se dégagera pas (Cinder Marsh), deux couleurs différentes, une couleur
+par couleur parmi ses permanents (Bloom Tender), et Mana Flare — le mana produit voyage avec
+l'évènement d'engagement, et le déclencheur monte sur la pile (simplification annoncée). Le
+planificateur de paiement compte enfin chaque mana d'une source qui en produit plusieurs à la fois
+(« WG » paie {G} et {W}). Restent de côté les terrains de stockage, dont X se choisirait au milieu
+d'un paiement, et le mana « quand il est dépensé ».
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

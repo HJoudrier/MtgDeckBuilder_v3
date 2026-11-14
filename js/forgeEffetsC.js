@@ -60,11 +60,27 @@ forgeEffet('UntapAll', ['ValidCards'], function* (P, t, env) {
 function optionsMana(produit, montant) {
   const p = String(produit || '').trim(), n = Math.max(1, montant || 1);
   if (p === 'Any' || p === 'Combo Any') return ['W', 'U', 'B', 'R', 'G'].map(k => k.repeat(n));
+  /* « Two mana of different colors » : chaque combinaison de n couleurs. */
+  if (p === 'Combo AnyDifferent') return combinaisons(['W', 'U', 'B', 'R', 'G'], Math.min(n, 5)).map(l => l.join(''));
   const m = /^Combo (.+)$/.exec(p);
   if (m) return m[1].split(/\s+/).filter(k => /^[WUBRGC]$/.test(k)).map(k => k.repeat(n));
   const lettres = p.split(/\s+/).filter(k => /^[WUBRGC]$/.test(k));
   return lettres.length ? [lettres.join('').repeat(n)] : [];
 }
+
+function combinaisons(l, k) {
+  if (!k) return [[]];
+  return l.flatMap((x, i) => combinaisons(l.slice(i + 1), k - 1).map(r => [x, ...r]));
+}
+
+/* « Whenever a land is tapped for mana, its controller adds one mana of
+   any type that land produced » (Mana Flare) : le déclencheur monte sur
+   la pile, simplification annoncée ; le mana produit vient de l'évènement
+   (js/jeuGestes.js `engageObjet()`). */
+forgeEffet('ManaReflected', [], function* (P, t, env) {
+  const e = env.ctx.evt || {}, j = joueursForge(P, t, env)[0];
+  if (j != null && typeof e.mana === 'string' && e.mana) ajouteMana(P, j, e.mana[0]);
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => t.ReflectProperty === 'Produced' && t.ColorOrType === 'Type' && !!t.Defined});
 
 forgeEffet('Mana', ['Produced', 'Amount', 'RestrictValid'], function* (P, t, env) {
   const opts = optionsMana(t.Produced, forgeNombre(P, t.Amount || 1, env));

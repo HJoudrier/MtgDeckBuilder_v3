@@ -42,7 +42,7 @@ function sourcesMana(P, j, pour) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
-    let options = null, rang = 0, sac = false, vie = 0;
+    let options = null, rang = 0, sac = false, vie = 0, reste = false;
     for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
@@ -53,7 +53,8 @@ function sourcesMana(P, j, pour) {
         c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || coutSpecial(c)) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
-      let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.reflete ? manaReflete(P, j, o, k) : k.options;
+      let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.reflete ? manaReflete(P, j, o, k)
+        : k.couleursParmi ? [couleursParmi(P, j, o, k.couleursParmi)].filter(Boolean) : k.options;
       if (!opts.length) continue;
       if (k.montant) {
         const n = forgeNombre(P, k.montant, {face: k.face, ctx: {cibles: [], memo: [], memoJ: [], x: 0}, src: o, ctrl: j, op: {}, base: true});
@@ -68,14 +69,24 @@ function sourcesMana(P, j, pour) {
       options = (options || []).concat(opts);
       if (c.sacSoi) sac = true;
       if (c.vie) vie = c.vie;
+      if (k.resteEngage) reste = true;
     }
     if (!options) continue;
-    rang = estType(o, 'land') ? 0 : sac ? 3 : estCreature(o) ? 2 : 1;
+    /* Une source qui ne se dégagera pas passe après les autres. */
+    rang = (estType(o, 'land') ? 0 : sac ? 3 : estCreature(o) ? 2 : 1) + (reste ? 2 : 0);
     const couleurs = [...new Set(options.join('').split(''))];
-    r.push({id, options, rang, sac, vie, couleurs, cap: Math.max(...options.map(s => s.length))});
+    r.push({id, options, rang, sac, vie, reste, couleurs, cap: Math.max(...options.map(s => s.length))});
   }
   r.sort((a, b) => a.rang - b.rang || a.couleurs.length - b.couleurs.length);
   return r;
+}
+
+/* Les couleurs parmi les permanents qu'on contrôle qui répondent au
+   filtre, une lettre chacune — Bloom Tender. */
+function couleursParmi(P, j, o, valid) {
+  const r = new Set();
+  champDe(P, j).forEach(x => { if (forgeValideObjet(P, x, valid, o, j, null)) car(P, x).couleurs.forEach(c => r.add(c)); });
+  return ['W', 'U', 'B', 'R', 'G'].filter(c => r.has(c)).join('');
 }
 
 /* Compter les objets du champ qui répondent à un descripteur, vus d'un
@@ -91,7 +102,13 @@ function compteObjets(P, desc, src, j) {
    `null` si le coût ne peut pas être payé. Rien n'est touché. */
 function planPaiement(P, j, cout, x, pour) {
   const pool = {...P.joueurs[j].pool};
-  const src = sourcesMana(P, j, pour);
+  /* Une source qui produit plusieurs manas d'un coup (« WG », « CC ») compte
+     pour chacun d'eux : une part par lettre, activée une seule fois. */
+  const src = [];
+  sourcesMana(P, j, pour).forEach(s => {
+    if (s.options.length === 1 && s.options[0].length > 1) s.options[0].split('').forEach(l => src.push({...s, options: [l], couleurs: [l], cap: 1, base: s}));
+    else src.push(s);
+  });
   const besoins = [];
   LETTRES_MANA.forEach(k => { for (let n = 0; n < (cout.couleurs[k] || 0); n++) besoins.push([k]); });
   cout.hybrides.forEach(h => besoins.push(h));
@@ -113,18 +130,26 @@ function planPaiement(P, j, cout, x, pour) {
   let generique = (cout.generique || 0) + (cout.x || 0) * (x || 0);
   const resteReserve = LETTRES_MANA.reduce((s, k) => s + pool[k], 0);
   generique -= Math.min(generique, resteReserve);
-  const plan = [];
+  const plan = [], actives = new Set();
+  /* Une part d'une source : la source entière, une fois. */
+  const ajoute = (s, option) => {
+    if (s.base) { if (!actives.has(s.id)) { actives.add(s.id); plan.push({s: s.base, option: s.base.options[0]}); } return; }
+    plan.push({s, option});
+  };
   src.forEach((s, si) => {
     if (affecte[si] < 0) return;
     const voulu = restants[affecte[si]];
-    plan.push({s, option: s.options.find(o => voulu.some(c => o.includes(c)))});
+    ajoute(s, s.options.find(o => voulu.some(c => o.includes(c))));
   });
+  /* Les parts d'une source déjà activée paient le générique d'office. */
+  for (let si = 0; si < src.length && generique > 0; si++) if (affecte[si] < 0 && src[si].base && actives.has(src[si].id)) { generique--; affecte[si] = -2; }
   for (let si = 0; si < src.length && generique > 0; si++) {
-    if (affecte[si] >= 0) continue;
+    if (affecte[si] !== -1) continue;
     const s = src[si];
     const option = s.options.reduce((a, b) => b.length > a.length ? b : a);
-    plan.push({s, option});
+    ajoute(s, option);
     generique -= option.length;
+    if (s.base) for (let k = si + 1; k < src.length && generique > 0; k++) if (src[k].id === s.id && affecte[k] === -1) { affecte[k] = -2; generique--; }
   }
   return generique > 0 ? null : plan;
 }
@@ -166,7 +191,8 @@ function paieMana(P, j, cout, x, pour) {
   for (const {s, option} of plan) {
     const o = obj(P, s.id);
     if (!o) continue;
-    engageObjet(P, o, true);
+    engageObjet(P, o, option || true);
+    if (s.reste) o.exerce = true;
     if (s.vie) J.vie -= s.vie;
     if (s.sac) deplace(P, s.id, 'cimetiere');
     ajouteMana(P, j, option);

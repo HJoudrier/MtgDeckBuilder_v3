@@ -45,6 +45,8 @@ function* paieAutre(P, j, o, c) {
   if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); defausseCarte(P, o.id, j); }
   if (c.sacSoi && obj(P, o.id)) { lki = instantane(P, o); sacrifie(P, o.id); }
   if (c.exileSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'exil'); }
+  /* Renvoyer la carte elle-même en main (« Return CARDNAME to its owner's hand »). */
+  if (c.renvoieSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'main'); }
   return lki;
 }
 
@@ -86,22 +88,37 @@ function* lanceSort(P, j, a) {
   }
   if (!effets) return annule();
   let x = 0;
-  if (d.cout.x) {
-    const max = maxX(P, j, cout0);
-    const opts = Array.from({length: max + 1}, (_, i) => i);
-    x = opts[(yield question(P, j, 'x', opts, {defaut: max, source: nid}))] || 0;
+  /* X se choisit une fois, pour le mana comme pour le reste du coût
+     (« pay X life », « sacrifice X Spirits »). */
+  const autreX = aCoutX(v.autre);
+  if (d.cout.x || autreX) {
+    let max = d.cout.x ? maxX(P, j, cout0) : 30;
+    if (autreX) max = Math.min(max, maxXAutre(P, j, s, v.autre));
+    if (!d.cout.x) x = yield* choisitXAutre(P, j, s, v.autre, max, nid);
+    else {
+      const opts = Array.from({length: max + 1}, (_, i) => i);
+      x = opts[(yield question(P, j, 'x', opts, {defaut: max, source: nid}))] || 0;
+    }
   }
+  const autre = coutResolu(v.autre, x, s);
   const garde = coutDeGarde(P, j, effets) - reductionParCibles(P, j, s, effets);
   const gen = Math.max(0, cout0.generique + garde);
   let cout = garde ? {...cout0, generique: gen, total: cout0.total + gen - cout0.generique} : cout0;
   /* Strive : plus cher pour chaque cible de plus (js/forgeMotsClesD.js). */
   if (d.strive) cout = coutStrive(P, j, s, d, effets, cout, x);
   if (!payableAvec(P, j, s, cout, x)) return annule();
-  if (v.autre && !coutAutrePossible(P, j, s, v.autre)) return annule();
+  if (autre && !coutAutrePossible(P, j, s, autre)) return annule();
+  /* La garde payée autrement qu'en mana (js/jeuCoutsX.js). */
+  const ga = gardeAutre(P, j, effets);
+  if (ga && !coutAutrePossible(P, j, s, ga)) return annule();
   cout = yield* paieReductions(P, j, s, cout, x);
   if (!cout) return annule();
-  if (v.autre) yield* paieAutre(P, j, s, v.autre);
+  /* Le mana d'abord (règle 601.2g-h : on engage pour du mana avant de payer
+     le reste) : un terrain engagé peut ensuite être sacrifié, et un échec
+     de paiement ne laisse rien de payé à moitié. */
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
+  if (autre) yield* paieAutre(P, j, s, autre);
+  if (ga) yield* paieAutre(P, j, s, ga);
   s.x = x;
   s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
@@ -132,7 +149,7 @@ function* activeCapacite(P, j, a) {
   const k = capacitesDe(P, o)[a.i];
   const effets = yield* prepareEffets(P, j, o, k.effet, o.def.couleurs);
   if (!effets) return false;
-  let x = 0, lki = null;
+  let x = 0, lki = null, retires = 0;
   if (k.genre === 'loyaute') {
     let delta = k.delta;
     if (delta === 'X') {
@@ -145,15 +162,23 @@ function* activeCapacite(P, j, a) {
     P.ver++;
   } else {
     if (k.cout.mana.x) x = maxX(P, j, k.cout.mana);
-    if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, x, {capacite: o})) return false;
-    lki = yield* paieAutre(P, j, o, k.cout);
+    /* X dans le reste du coût : choisi, sans dépasser ce qu'on peut payer
+       (js/jeuCoutsX.js) ; « remove all counters » se compte ici. */
+    if (aCoutX(k.cout) && CHAMPS_X.some(([a, b]) => valeurX(k.cout, a, b) === 'X')) {
+      const max = Math.min(k.cout.mana.x ? x : 30, maxXAutre(P, j, o, k.cout));
+      x = yield* choisitXAutre(P, j, o, k.cout, max, o.id);
+    }
+    const cout = coutResolu(k.cout, x, o);
+    retires = cout.retire ? cout.retire.n : 0;
+    if (!coutAutrePossible(P, j, o, cout) || !planPaiement(P, j, cout.mana, x, {capacite: o})) return false;
+    lki = yield* paieAutre(P, j, o, cout);
     if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
     if (k.unefois) P.unefois.add(a.id + '|a' + a.i);
     /* Un cycle s'entend : « when you cycle ~ » écoute à travers
        l'instantané de la carte, partie au cimetière. */
     if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }
   }
-  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom});
+  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, retires});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
   emet(P, {t: 'active', id: o.id, joueur: j, loyaute: k.genre === 'loyaute', lki});
   emetCibles(P, j, o, effets);

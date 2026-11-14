@@ -62,10 +62,12 @@ function exprDesignations(P, tete, q, env) {
     if (q === 'OpponentsAttackedThisTurn') return new Set(((histoire(P).attaques || {})[j] || [])).size;
   }
   if (tete === 'TriggeredTarget' && q === 'LifeTotal') return evt.joueur != null ? P.joueurs[evt.joueur].vie : 0;
+  /* Les marqueurs que le coût a retirés (js/jeuActions.js `activeCapacite()`). */
+  if (tete === 'SVar' && q === 'CostCountersRemoved') return (env.ctx || {}).retires || 0;
   return undefined;
 }
 
-forgeSait('expr', 'Count$Presence', 'Count$Blessing', 'Count$Monarch', 'Count$StartingPlayer', 'Count$wasCastFromGraveyard', 'Count$YourCountersExperience',
+forgeSait('expr', 'SVar$CostCountersRemoved', 'Count$Presence', 'Count$Blessing', 'Count$Monarch', 'Count$StartingPlayer', 'Count$wasCastFromGraveyard', 'Count$YourCountersExperience',
   'Count$YourCountersEnergy', 'Count$YourCountersRad', 'Count$YourCountersTicket', 'Count$TotalCommanderCastFromCommandZone',
   'PlayerCountPropertyYou$HasPropertyBeenAttackedThisCombat', 'PlayerCountPropertyYou$OpponentsAttackedThisTurn',
   'TriggeredTarget$LifeTotal', 'TargetedPlayer$CardsInLibrary', 'TriggeredPlayer$CardsInLibrary');

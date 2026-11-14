@@ -33,7 +33,7 @@ function coutAutrePossibleB(P, j, o, c) {
   if (c.exilVersCim && J.exil.filter(id => correspond(P, obj(P, id), c.exilVersCim.desc, o, j)).length < c.exilVersCim.n) return false;
   if (c.contemple && [...champDe(P, j).map(x => x.id), ...J.main].filter(id => id !== o.id && correspond(P, obj(P, id), c.contemple.desc, o, j)).length < c.contemple.n) return false;
   if (c.versBib && J.cimetiere.filter(id => id !== o.id && correspond(P, obj(P, id), c.versBib.desc, o, j)).length < c.versBib.n) return false;
-  return true;
+  return coutAutrePossibleX(P, j, o, c);
 }
 
 function* paieAutreB(P, j, o, c) {
@@ -73,4 +73,5 @@ function* paieAutreB(P, j, o, c) {
     const ids = J.cimetiere.filter(id => id !== o.id && correspond(P, obj(P, id), c.versBib.desc, o, j));
     (yield* choisitCartes(P, j, ids, c.versBib.n, 'Sous la bibliothèque')).forEach(id => deplace(P, id, 'dessous'));
   }
+  yield* paieAutreX(P, j, o, c);
 }

@@ -284,8 +284,9 @@ const CAP_CUMUL = {genre: 'declenchee', ecoutes: [{evt: 'cumul'}], texte: 'Entre
 
 OPS.cumul = function* (P, op, ctx) {
   const s = sourceCtx(P, ctx);
-  if (!s || s.lki || s.zone !== 'champ' || !s.def.cumul) return;
+  if (!s || s.lki || s.zone !== 'champ' || !(s.def.cumul || s.def.cumulAutre)) return;
   s.marq.age = (s.marq.age || 0) + 1; P.ver++;
+  if (s.def.cumulAutre) return yield* cumulAutre(P, ctx, s);
   let c = coutManaVide();
   for (let k = 0; k < s.marq.age; k++) c = sommeMana(c, s.def.cumul);
   if (planPaiement(P, ctx.ctrl, c, 0)) {

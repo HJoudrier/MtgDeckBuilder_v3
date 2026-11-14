@@ -71,10 +71,15 @@ function motCleForge(def, k, face, jetons) {
     return true;
   }
   switch (tete) {
+    /* La garde : du mana générique, et ce qu'on paie d'autre (« Ward—Discard a
+       card », « Ward—{2}, Pay 2 life ») — js/jeuCoutsX.js `gardeAutre()`. */
     case 'Ward': {
-      const n = /^\d+$/.test(reste[0] || '') ? +reste[0] : (m = /^PayLife<(\d+)>$/.exec(reste[0] || '')) ? +m[1] : null;
-      if (n == null) return false;
-      def.mots |= MOT.GARDE; def.params.garde = n; return true;
+      const c = reste.length === 1 ? coutForge(reste[0]) : null, autre = c && autresCout(c.cout);
+      if (!c || c.cout.mana.total !== c.cout.mana.generique || c.cout.mana.x || aCoutX(c.cout) ||
+        (autre && Object.keys(autre).some(k => !/^(vie|defausse|sac)$/.test(k)))) return false;
+      def.mots |= MOT.GARDE; def.params.garde = c.cout.mana.generique;
+      if (autre) def.params.gardeAutre = autre;
+      return true;
     }
     case 'Equip': {
       const c = coutForge(reste[0]);
@@ -136,10 +141,13 @@ function motCleForge(def, k, face, jetons) {
     case 'Partner': return true;
     case 'ETBReplacement': return entreeForgeMotCle(def, face, jetons, reste);
     case 'Changeling': def.params.changelin = true; return !reste.length;
+    /* L'entretien cumulatif : du mana, ou des points de vie, un sacrifice
+       (`PayLife<1>:Pay 1 life.`), payés une fois par marqueur d'âge. */
     case 'Cumulative upkeep': {
-      const c = reste.length === 1 ? manaSeul(reste[0]) : null;
-      if (!c) return false;
-      def.cumul = c.mana; def.capacites.push(CAP_CUMUL); return true;
+      const c = reste.length >= 1 && reste.length <= 2 ? coutForge(reste[0]) : null, autre = c && autresCout(c.cout);
+      if (!c || (autre && (c.cout.mana.total || Object.keys(autre).some(k => !/^(vie|sac)$/.test(k))))) return false;
+      if (autre) def.cumulAutre = autre; else def.cumul = c.cout.mana;
+      def.capacites.push(CAP_CUMUL); return true;
     }
     /* Une saga : un effet par chapitre (js/jeuFaces.js `ajouteLore()`). */
     case 'Chapter': {

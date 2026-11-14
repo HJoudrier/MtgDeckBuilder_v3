@@ -37,51 +37,66 @@ function coutForge(txt) {
        Food — simplification : toujours le cimetière). */
     if (m === 'Forage') { cout.exileCimetiere = {n: 3, desc: descForge('Card')}; continue; }
     const tout = /^(\w+)<([^>]*)>$/.exec(m), parts = tout ? tout[2].split('/') : [];
-    const nb = /^\d+$/.test(parts[0] || '') ? +parts[0] : null;
+    /* Une quantité X (« remove X storage counters », « pay X life ») : X se
+       choisit à l'activation, ou c'est celui du sort (js/jeuCoutsX.js). */
+    const nb = /^\d+$/.test(parts[0] || '') ? +parts[0] : parts[0] === 'X' && X_COUTS_B.includes((tout || [])[1]) ? 'X' : null;
     if (tout && COUTS_B[tout[1]]) { if (nb == null && tout[1] !== 'Exert') return null; if (!COUTS_B[tout[1]](cout, nb, parts, mana)) return null; continue; }
     const k = /^(\w+)<([^/>]+)(?:\/([^/>]+))?(?:\/[^>]*)?>$/.exec(m);
     if (!k) return null;
     const n = /^\d+$/.test(k[2]) ? +k[2] : k[2];
     const type = k[3] || '';
     const soi = type === 'CARDNAME' || type === 'Self' || type === 'NICKNAME';
+    /* Un nombre, ou X là où le moteur sait le payer. */
+    const nx = typeof n === 'number' || n === 'X';
     switch (k[1]) {
       case 'Sac':
         if (soi) cout.sacSoi = true;
-        else if (typeof n === 'number') cout.sac = {desc: descForge(type), n};
+        else if (nx) cout.sac = {desc: descForge(type), n};
         else return null;
         break;
-      case 'PayLife': if (typeof n !== 'number') return null; cout.vie = n; break;
+      case 'PayLife': if (!nx) return null; cout.vie = n; break;
       case 'Discard':
-        if (typeof n !== 'number') return null;
+        if (!nx) return null;
         if (soi) { if (n !== 1) return null; cout.defausseSoi = true; break; }
         cout.defausse = type === 'Card' || !type ? {n} : {n, desc: {...descForge(type), genre: 'carte', zone: 'main'}};
         break;
       /* Exiler une carte de sa main (Force of Will) : comme une défausse,
          vers l'exil. */
       case 'ExileFromHand':
+        /* Exiler la carte elle-même de sa main (les Spirit Guides). */
+        if (soi && n === 1) { cout.exileSoi = true; break; }
         if (typeof n !== 'number' || soi) return null;
         cout.defausse = {n, desc: type && type !== 'Card' ? {...descForge(type.replace(/\+Other$/, '')), genre: 'carte', zone: 'main'} : undefined, exil: true};
         break;
       case 'ExileFromGrave':
-        if (typeof n !== 'number') return null;
+        if (!nx) return null;
         if (soi) cout.exileSoi = true; else cout.exileCimetiere = {n, desc: descForge(type || 'Card')};
         break;
-      case 'Return': if (soi || typeof n !== 'number') return null; cout.renvoie = {n, desc: descForge(type || 'Permanent')}; break;
+      case 'Return':
+        if (soi) { if (n !== 1) return null; cout.renvoieSoi = true; break; }
+        if (typeof n !== 'number') return null; cout.renvoie = {n, desc: descForge(type || 'Permanent')}; break;
       case 'Reveal': if (typeof n !== 'number') return null; if (!soi) cout.revele = {n, desc: descForge(type || 'Card')}; break;
-      case 'PayEnergy': if (typeof n !== 'number') return null; cout.energie = n; break;
-      case 'Draw': if (typeof n !== 'number' || (type && type !== 'You')) return null; cout.pioche = n; break;
+      case 'PayEnergy': if (!nx) return null; cout.energie = n; break;
+      case 'Draw': if (!nx || (type && type !== 'You')) return null; cout.pioche = n; break;
       case 'SubCounter': case 'AddCounter': {
         const g = genreMarqueur(type);
         if (g === 'loyaute') { loyaute = n === 'X' ? 'X' : typeof n === 'number' ? (k[1] === 'AddCounter' ? n : -n) : null; if (loyaute == null) return null; break; }
-        if (k[1] === 'AddCounter' || typeof n !== 'number') return null;
+        /* Poser un marqueur sur la carte elle-même (« put a -1/-1 counter on
+           CARDNAME »). Retirer X marqueurs, ou tous. */
+        if (k[1] === 'AddCounter') { if (typeof n !== 'number' || m.split('/').length !== 2) return null; cout.ajoute = {genre: g, n}; break; }
+        if (!nx && n !== 'All') return null;
         cout.retire = {genre: g, n};
         break;
       }
       case 'tapXType':
-        if (typeof n !== 'number') return null;
+        if (!nx) return null;
         cout.engageAutres = {n, desc: descForge(type)};
         break;
-      case 'Exile': if (!soi) return null; cout.exileSoi = true; break;
+      /* Exiler la carte, ou un permanent qu'on contrôle (« exile a creature you control »). */
+      case 'Exile':
+        if (soi) { cout.exileSoi = true; break; }
+        if (typeof n !== 'number' || !type) return null;
+        cout.exileChamp = {n, desc: descForge(type)}; break;
       default: return null;
     }
   }
@@ -108,8 +123,14 @@ const COUTS_B = {
   ExiledMoveToGrave: (c, n, p) => !/ExiledWithSource|Triggered/.test(p[1] || '') && (c.exilVersCim = {n, desc: descForge(p[1] || 'Card')}),
   Behold: (c, n, p) => !/Chosen/.test(p[1] || '') && (c.contemple = {n, desc: descForge(p[1] || 'Card')}),
   PutCardToLibFromGrave: (c, n, p) => (c.versBib = {n, desc: descForge(String(p[2] || 'Card').split(';')[0])}),
+  PutCardToLibFromHand: (c, n, p) => (c.mainVersBib = {n, desc: descForge(String(p[2] || 'Card').split(';')[0])}),
 };
 
+/* Les morceaux de COUTS_B qui savent une quantité X. */
+const X_COUTS_B = ['RemoveAnyCounter', 'Blight', 'CollectEvidence', 'Waterbend', 'ExileFromTop', 'Mill'];
+
+/* `Y`, `Z`, `N` : un « unless … pays » calculé (js/jeuCoutsX.js `coutUnless()`). */
+forgeSait('cout', 'Y', 'Z', 'N');
 forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'ExileFromHand', 'Mandatory', 'XMin1', 'Forage', ...Object.keys(COUTS_B), 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
   'Return', 'Reveal', 'PayEnergy', 'Draw');
 

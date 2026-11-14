@@ -61,7 +61,7 @@ function statiqueTenable(t) {
   if (t.GainControl && t.GainControl !== 'You') return false;
   if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl)$/.test(x.trim()))) return false;
   if (t.UnlessDefender && !DEFENSEUR_PROPRIETE.test(t.UnlessDefender)) return false;
-  if (t.Mode === 'CantAttackUnless' && !/^\d+$/.test(t.Cost || '')) return false;
+  if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z])$/.test(t.Cost || '')) return false;
   if (t.Mode === 'CastWithFlash' && t.ValidSA && t.ValidSA !== 'Spell') return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
   if (t.Mode === 'AlternativeCost') return /^(All|Hand)$/.test(t.EffectZone || 'All') && (t.ValidSA === 'Spell.Self' || (t.ValidSA === 'Spell' && t.ValidCard === 'Card.Self')) && !!coutForge(t.Cost);

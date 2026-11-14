@@ -13,7 +13,8 @@
 function engageObjet(P, o, pourMana, attaque) {
   if (!o || o.engage) return;
   o.engage = true; P.ver++;
-  emet(P, {t: 'engage', id: o.id, mana: !!pourMana, attaque: !!attaque, ctrl: o.ctrl, joueur: o.ctrl});
+  /* `mana` : le mana produit quand on le sait (une chaîne), sinon vrai ou faux. */
+  emet(P, {t: 'engage', id: o.id, mana: typeof pourMana === 'string' ? pourMana : !!pourMana, attaque: !!attaque, ctrl: o.ctrl, joueur: o.ctrl});
 }
 
 function degageObjet(P, o) {

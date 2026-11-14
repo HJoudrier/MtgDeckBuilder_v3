@@ -72,8 +72,8 @@ function conditionForge(P, t, env) {
    non. */
 function* paieUnlessForge(P, t, env) {
   const payeurs = forgeDefinis(P, t.UnlessPayer || (env.op.slot != null ? 'TargetedController' : 'You'), env).map(x => joueurDe(x));
-  const c = coutForge(t.UnlessCost);
-  if (!c || c.cout.engage || c.cout.sacSoi || c.cout.defausseSoi || c.cout.exileSoi) return false;
+  const c = coutUnless(P, t.UnlessCost, env);
+  if (!c || c.cout.engage || c.cout.sacSoi || c.cout.defausseSoi || c.cout.exileSoi || c.cout.renvoieSoi) return false;
   const autre = autresCout(c.cout), porteur = env.src && !env.src.lki ? env.src : {id: -1, zone: '', marq: {}};
   for (const j of payeurs) {
     if (j == null || P.joueurs[j].elimine) continue;
@@ -112,7 +112,7 @@ function* executeForge(P, op, ctx) {
   /* Un coût à la résolution : refusé ou impayable, la capacité s'arrête
      là, sous-capacités comprises. */
   if (op.coutInterne) {
-    const c = coutForge(op.coutInterne), autre = autresCout(c.cout), porteur = src && !src.lki ? src : {id: -1, zone: '', marq: {}};
+    const c = coutUnless(P, op.coutInterne, env), autre = autresCout(c.cout), porteur = src && !src.lki ? src : {id: -1, zone: '', marq: {}};
     const decl = c.cout.exileDeclencheur ? objetEvt(P, ctx) : null;
     const ok = planPaiement(P, ctx.ctrl, c.cout.mana, 0) && (!autre || coutAutrePossible(P, ctx.ctrl, porteur, autre)) &&
       (!c.cout.exileDeclencheur || (!!decl && decl.zone === 'cimetiere'));
