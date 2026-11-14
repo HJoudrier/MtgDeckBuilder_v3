@@ -190,7 +190,7 @@ function scoreLancer(P, j, a) {
   else if (/^squad\d$/.test(a.variante || '')) s += 1.5 * +a.variante.slice(-1);
   else if (a.variante === 'casualty') s = s * 1.6 - 1;
   else if (a.variante === 'entwine') s += 1.5;
-  else if (a.variante === 'offspring') s += 1;
+  else if (a.variante === 'offspring' || a.variante === 'optionnel') s += 1;
   else if (a.variante === 'blitz' || a.variante === 'warp') s *= 0.7;
   return s;
 }

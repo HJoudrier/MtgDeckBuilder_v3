@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1479 fonctions**, 209 modules, 1483 Ko de JavaScript.
+**1499 fonctions**, 210 modules, 1499 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -44,29 +44,29 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 143 |
 | [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 12 | 191 |
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 124 |
-| [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 169 |
+| [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 172 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 214 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 54 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 65 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 139 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 146 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 11 | 198 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 9 | 217 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 169 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 140 |
-| [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 97 |
-| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 11 | 226 |
+| [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 98 |
+| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 11 | 228 |
 | [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 203 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 298 |
-| [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 70 |
+| [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 71 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 77 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 155 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 138 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
-| [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 6 | 79 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 135 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 206 |
+| [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 136 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 207 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 123 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 61 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
@@ -77,12 +77,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 149 |
-| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 4 | 77 |
+| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 4 | 85 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 121 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 291 |
-| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 4 | 201 |
+| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 208 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 4 | 140 |
-| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 187 |
+| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 194 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 132 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 151 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 103 |
@@ -92,16 +92,17 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 7 | 276 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 9 | 142 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
-| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 206 |
+| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 224 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 282 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
+| [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 157 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 192 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 171 |
-| [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 215 |
-| [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 230 |
-| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 290 |
+| [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 216 |
+| [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 235 |
+| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 291 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 126 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
@@ -836,7 +837,7 @@ Lire un script de carte de Forge. *8 fonctions, 124 lignes, 5.8 Ko.*
 
 ## js/forgeCouverture.js
 
-Ce qu'une carte de Forge demande au moteur. *8 fonctions, 169 lignes, 9.5 Ko.*
+Ce qu'une carte de Forge demande au moteur. *8 fonctions, 172 lignes, 9.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -926,7 +927,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 65 lignes, 2.9 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 139 lignes, 6.9 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 146 lignes, 7.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1036,7 +1037,7 @@ Des évènements aux capacités déclenchées. *7 fonctions, 140 lignes, 6.9 Ko.
 
 ## js/jeuEtatsDeJeu.js
 
-Les actions d'état, et un joueur qui perd. *2 fonctions, 97 lignes, 4.2 Ko.*
+Les actions d'état, et un joueur qui perd. *2 fonctions, 98 lignes, 4.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1045,7 +1046,7 @@ Les actions d'état, et un joueur qui perd. *2 fonctions, 97 lignes, 4.2 Ko.*
 
 ## js/jeuLancer.js
 
-Ce qu'un joueur peut faire de sa priorité, et le faire. *11 fonctions, 226 lignes, 13 Ko.*
+Ce qu'un joueur peut faire de sa priorité, et le faire. *11 fonctions, 228 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1115,7 +1116,7 @@ Les autres façons de lancer et de payer. *18 fonctions, 298 lignes, 14 Ko.*
 
 ## js/jeuVariantesB.js
 
-Les façons de lancer, suite. *6 fonctions, 70 lignes, 3.8 Ko.*
+Les façons de lancer, suite. *6 fonctions, 71 lignes, 3.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1199,7 +1200,7 @@ Les faces, suite : jour et nuit, loups-garous,. *7 fonctions, 75 lignes, 3.3 Ko.
 
 ## js/jeuPermis.js
 
-Jouer une carte depuis une autre zone. *6 fonctions, 79 lignes, 3.6 Ko.*
+Jouer une carte depuis une autre zone. *7 fonctions, 91 lignes, 4.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1208,6 +1209,7 @@ Jouer une carte depuis une autre zone. *6 fonctions, 79 lignes, 3.6 Ko.*
 | `permisDeJouer(P, j, o)` | La permission qui laisse `j` jouer `o` depuis sa zone : `{src, s}`, ou `null`. |
 | `cartesPermises(P, j)` | Les cartes qu'un joueur peut jouer d'ailleurs que sa main : l'exil de tous (une carte adverse exilée par un de ses permanents), son cimetière, le dessus de sa bibliothèque. |
 | `coutPermis(P, j, o, depuis, x)` | Le coût d'un sort joué avec une permission. |
+| `autrePermis(d, x)` | La part non-mana d'un sort joué avec une permission : son coût additionnel, et celui que la permission ajoute (« by removing six counters »). |
 | `permisUtilise(P, j, o)` | Une permission « une fois par tour » a servi. |
 
 | Donnée | Rôle |
@@ -1216,7 +1218,7 @@ Jouer une carte depuis une autre zone. *6 fonctions, 79 lignes, 3.6 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 135 lignes, 6.5 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 136 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1232,7 +1234,7 @@ La priorité, la pile, la résolution. *5 fonctions, 135 lignes, 6.5 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 206 lignes, 10 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 207 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1411,7 +1413,7 @@ Ce que `Defined$` désigne. *6 fonctions, 149 lignes, 9.6 Ko.*
 
 ## js/forgeDesignations.js
 
-Ce que Forge désigne encore : des joueurs. *4 fonctions, 77 lignes, 4.3 Ko.*
+Ce que Forge désigne encore : des joueurs. *4 fonctions, 85 lignes, 4.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1462,10 +1464,11 @@ Exécuter une capacité de Forge : le registre, la. *13 fonctions, 291 lignes, 1
 
 ## js/forgeEffetsB.js
 
-Les effets de Forge : regarder la bibliothèque,. *4 fonctions, 201 lignes, 13 Ko.*
+Les effets de Forge : regarder la bibliothèque,. *5 fonctions, 208 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `fouilleForge(P, t, env, j)` | Fouiller le dessus d'une bibliothèque : en prendre, renvoyer le reste. |
 | `regardeForge(P, j, n, cimetiere)` | Regarder le dessus et en envoyer une part dessous (regard) ou au cimetière (surveillance). |
 | `sourceDegats(P, t, env)` | La source des dégâts : `DamageSource$`, sinon la source de la capacité. |
 | `detruitForge(P, objets, sansRegeneration)` | Détruire : l'indestructible reste. |
@@ -1484,7 +1487,7 @@ Les effets de Forge : pompes, engagements, mana,. *4 fonctions, 140 lignes, 8.9 
 
 ## js/forgeEffetsD.js
 
-Les effets de Forge qui durent : régénération,. *6 fonctions, 187 lignes, 11 Ko.*
+Les effets de Forge qui durent : régénération,. *6 fonctions, 194 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1641,7 +1644,7 @@ Les déclencheurs de Forge, suite : engager,. *6 fonctions, 125 lignes, 7.9 Ko.*
 
 ## js/forgeStatiques.js
 
-Les capacités statiques de Forge. *10 fonctions, 206 lignes, 12 Ko.*
+Les capacités statiques de Forge. *10 fonctions, 224 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1722,6 +1725,37 @@ Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 113 lignes, 6.
 |---|---|
 | `TYPES_TERRAIN` | Les types de terrain que les statiques retirent avec `RemoveLandTypes`. |
 
+## js/forgeStatiquesB.js
+
+Les statiques hors du champ. *18 fonctions, 203 lignes, 10 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `zoneChamp(t)` | La statique touche-t-elle le champ ? `All` et une liste qui le nomme : oui, et seulement lui — simplification annoncée, le reste des zones est ignoré. |
+| `horsChampTenable(t)` | Une statique qui n'accorde que des mots-clés hors du champ, tous lus. |
+| `texteCoutForge(c)` | Le coût de mana d'une carte écrit comme Forge l'écrit (`2 U U`). |
+| `motNormalise(k, cout)` | « Flashback » sans coût, `CardManaCost` : le coût de mana de la carte. |
+| `defEssai()` | — |
+| `motAccordable(k)` | Le mot-clé se lit-il ? Essayé sur une définition factice. |
+| `defAvecMots(base, mots)` | — |
+| `statiquesAccord(P)` | Les statiques qui accordent un mot-clé hors du champ, une fois par version. |
+| `statiquePourLancer(s)` | « Les sorts que tu lances » s'écrit souvent `Card.YouCtrl+wasCast` : jugée sur la carte qu'on s'apprête à lancer, cette part tient d'avance. |
+| `couchesHorsChamp(P)` | La passe : chaque carte visée reçoit sa définition augmentée, chaque carte qui ne l'est plus retrouve la sienne. |
+| `couleursStatique(P, src, v)` | `All`, la couleur choisie, ou des couleurs nommées. |
+| `variantesOptionnelles(P, j, o, depuis, essaie)` | « As an additional cost to cast this spell, you may collect evidence 6 » : une façon de lancer de plus, et la condition `OptionalCost` que l'effet lit (js/jeuPile.js pose `ctx.optionnel`). |
+| `optionnelTenable(t)` | — |
+| `exertTenable(t)` | « You may exert CARDNAME as it attacks. When you do, … » : il ne se dégagera pas à son prochain dégagement, et la capacité réflexe monte sur la pile. |
+| `exertsAttaque(P, j, choisis)` | — |
+| `hausseTenable(t)` | « As an additional cost to cast this spell, waterbend {5} / sacrifice a creature » : la statique de la carte devient une part de son coût, posée à la construction (js/forgeDefinition.js). |
+| `hausseDeCout(def)` | — |
+| `coutEquipement(P, j, o)` | Le coût d'équipement, réduit par « equip abilities you activate cost {1} less » (`ValidSpell$ Activated.Equip`). |
+
+| Donnée | Rôle |
+|---|---|
+| `ZONES_ACCORD` | Ce que « AffectedZone » désigne hors du champ : pour « Stack » (« les sorts que tu lances »), les cartes qu'on pourrait lancer. |
+| `CLES_ACCORD` | — |
+| `DEFS_ACCORDEES` | Une définition augmentée de mots-clés, une fois par définition et par liste : les copies d'une même carte la partagent. |
+
 ## js/forgeRemplacements.js
 
 Les remplacements de Forge (`R:`). *9 fonctions, 157 lignes, 9.5 Ko.*
@@ -1785,7 +1819,7 @@ Les mots-clés des permanents, suite. *5 fonctions, 171 lignes, 11 Ko.*
 
 ## js/forgeMotsClesC.js
 
-Les mots-clés de lancement, suite. *14 fonctions, 215 lignes, 11 Ko.*
+Les mots-clés de lancement, suite. *14 fonctions, 216 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1811,7 +1845,7 @@ Les mots-clés de lancement, suite. *14 fonctions, 215 lignes, 11 Ko.*
 
 ## js/forgeMotsClesD.js
 
-Les mots-clés des permanents, troisième partie. *7 fonctions, 230 lignes, 13 Ko.*
+Les mots-clés des permanents, troisième partie. *7 fonctions, 235 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1829,7 +1863,7 @@ Les mots-clés des permanents, troisième partie. *7 fonctions, 230 lignes, 13 K
 
 ## js/forgeDefinition.js
 
-D'un script de Forge à une définition de jeu. *13 fonctions, 290 lignes, 15 Ko.*
+D'un script de Forge à une définition de jeu. *13 fonctions, 291 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|

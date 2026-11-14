@@ -44,6 +44,14 @@ function exprDesignations(P, tete, q, env) {
     if ((k = /^StartingPlayer\./.exec(q))) return siAlors(P, q, P.premier === j, env);
     if ((k = /^wasCastFromGraveyard\./.exec(q))) return siAlors(P, q, !!(src && src.lance && src.lance.depuis === 'cimetiere'), env);
     if ((k = /^YourCounters(\w+)$/.exec(q))) return marqueursJoueur(P.joueurs[j], k[1].toLowerCase());
+    /* « If you revealed a Dragon card or controlled a Dragon as you cast
+       this spell » : le coût facultatif payé, ou un Dragon en jeu — jugé à
+       la résolution, simplification annoncée. */
+    if ((k = /^Presence_(\w+)\./.exec(q))) {
+      const st = k[1].toLowerCase();
+      return siAlors(P, q.replace(/^Presence_\w+/, 'x'), !!((env.ctx || {}).optionnel || (src && src.optionnel)) ||
+        champDe(P, j).some(o => car(P, o).sousTypes.includes(st) || !!car(P, o).changelin), env);
+    }
     /* Les sorts de commandant lancés depuis la zone de commandement : la
        taxe en compte un par lancer. */
     if (q === 'TotalCommanderCastFromCommandZone') return Object.values(P.joueurs[j].taxe || {}).reduce((s, n) => s + n, 0);
@@ -57,7 +65,7 @@ function exprDesignations(P, tete, q, env) {
   return undefined;
 }
 
-forgeSait('expr', 'Count$Blessing', 'Count$Monarch', 'Count$StartingPlayer', 'Count$wasCastFromGraveyard', 'Count$YourCountersExperience',
+forgeSait('expr', 'Count$Presence', 'Count$Blessing', 'Count$Monarch', 'Count$StartingPlayer', 'Count$wasCastFromGraveyard', 'Count$YourCountersExperience',
   'Count$YourCountersEnergy', 'Count$YourCountersRad', 'Count$YourCountersTicket', 'Count$TotalCommanderCastFromCommandZone',
   'PlayerCountPropertyYou$HasPropertyBeenAttackedThisCombat', 'PlayerCountPropertyYou$OpponentsAttackedThisTurn',
   'TriggeredTarget$LifeTotal', 'TargetedPlayer$CardsInLibrary', 'TriggeredPlayer$CardsInLibrary');

@@ -113,10 +113,10 @@ function variantesSort(P, j, o, depuis) {
   if (depuis === 'exil' && o.folie) { essaie('folie', coutSort(P, j, o, depuis, coutComplet(d.folie).mana), null); return r; }
   if (depuis === 'exil' && o.suspendu) { if (!o.temps) essaie('suspension', coutManaVide(), null); return r; }
   if (depuis === 'exil' && o.gratuit) { essaie('gratuit', coutManaVide(), null); return r; }
-  if (depuis !== 'main' && depuis !== 'commandement') {
-    const px = permisDeJouer(P, j, o);
-    if (px) essaie('permis', coutPermis(P, j, o, depuis, px), d.coutSup || null);
-  }
+  /* Une permission de jouer d'ailleurs, ou de lancer gratuitement depuis
+     la main (js/jeuPermis.js). */
+  const px = depuis !== 'commandement' && (depuis !== 'main' || statiquesPermis(P).length) ? permisDeJouer(P, j, o) : null;
+  if (px && (depuis !== 'main' || px.s.t.MayPlayWithoutManaCost === 'True')) essaie('permis', coutPermis(P, j, o, depuis, px), autrePermis(d, px));
   const base = coutSort(P, j, o, depuis);
   /* Deux coûts additionnels au choix : l'un des deux est dû, jamais aucun. */
   if (d.coutsAuChoix) d.coutsAuChoix.forEach((c, i) => essaie(i ? 'choixB' : 'choixA', sommeMana(base, c.cout.mana), fusionAutres(d.coutSup, autresCout(c.cout))));

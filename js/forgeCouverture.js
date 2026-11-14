@@ -100,6 +100,9 @@ function elementsTable(face, t, genre, out, vus) {
       vus.add(val);
       expressionsDe(face.svars[val]).forEach(e => out.add(e));
     }
+    /* Une expression écrite en place (`ConditionCheckSVar$ Count$Presence_Dragon.1.0`)
+       compte comme celle d'une SVar. */
+    else if (/^[A-Za-z]+\$[A-Za-z]/.test(val) && !FORGE_DESCRIPTIFS.test(k)) expressionsDe(val).forEach(e => out.add(e));
   });
   out.delete('x');
   return out;

@@ -25,6 +25,8 @@ function estEphemere(def) {
 function coutSort(P, j, o, depuis, imprime) {
   let cout = imprime || (depuis === 'cimetiere' && o.def.flashback ? o.def.flashback
     : depuis === 'exil' && o.def.presage ? o.def.presage : o.def.cout);
+  /* Un coût additionnel en mana qu'une statique impose (js/forgeStatiquesB.js). */
+  if (o.def.hausseMana) cout = sommeMana(cout, o.def.hausseMana);
   let plus = 0, moins = 0;
   if (o.def.params.affinite) moins += champDe(P, j).filter(x => correspond(P, x, {forge: o.def.params.affinite}, o, j)).length;
   for (const {src, s} of statiquesEnJeu(P)) {
@@ -132,7 +134,7 @@ function actionsLegales(P, j) {
         r.push({k: 'activer', id, i});
       }
     });
-    if (o.def.equipe && rituel && planPaiement(P, j, o.def.equipe, 0, {capacite: o}) &&
+    if (o.def.equipe && rituel && planPaiement(P, j, coutEquipement(P, j, o), 0, {capacite: o}) &&
         champDe(P, j).some(c => estCreature(c) && c.id !== o.att)) r.push({k: 'equiper', id});
   }
   r.push(PASSE);

@@ -165,7 +165,7 @@ function* equipe(P, j, a) {
   const o = obj(P, a.id);
   const slot = {desc: {genre: 'objet', types: ['creature'], non: [], sousTypes: [], couleurs: [], filtres: [], zone: 'champ', mots: 0, ctrl: 'vous', autre: true}, min: 1, max: 1};
   const c = yield* choisitCibles(P, j, o, [slot], o.def.couleurs, {equipe: true});
-  if (!c || !c[0].length || !paieMana(P, j, o.def.equipe, 0, {capacite: o})) return false;
+  if (!c || !c[0].length || !paieMana(P, j, coutEquipement(P, j, o), 0, {capacite: o})) return false;
   P.pile.push({id: P.prochainId++, capacite: true, source: o.id, ctrl: j, x: 0, nom: o.def.nom,
     effets: [{ops: [{op: 'attache', a: {cible: 0}}], slots: [slot], cibles: c}]});
   return true;

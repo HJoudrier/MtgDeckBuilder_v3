@@ -87,7 +87,8 @@ function* resoudre(P, item) {
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
-    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ};
+    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ,
+    optionnel: item.variante === 'optionnel'};
   for (const ef of item.effets) {
     ctx.cibles = ef.cibles;
     yield* executeOps(P, ef.ops, ctx);

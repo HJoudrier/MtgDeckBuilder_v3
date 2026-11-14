@@ -237,6 +237,7 @@ function definitionDepuisScript(s, fiche, jetons) {
     essaie(!!st, t.Mode);
   });
   face.r.forEach(t => essaie(remplacementForge(def, face, t), t.Event));
+  hausseDeCout(def);
   face.k.forEach(k => essaie(motCleForge(def, k, face, jetons), k.split(':')[0]));
   def.kickerUtile = !!def.kicker && /Kicked|kicked/.test(JSON.stringify([face.a, face.t, face.svars]));
   capacitesImplicites(def, fiche);

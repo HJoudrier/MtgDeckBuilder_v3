@@ -79,7 +79,7 @@ function libelleAction(P, a) {
       morph: ' (face cachée)', dash: ' (dash)', spectacle: ' (spectacle)', surge: ' (surge)', escape: ' (escape)', retrace: ' (retrace)',
       jumpstart: ' (jump-start)', disturb: ' (disturb)', aftermath: ' (aftermath)', prototype: ' (prototype)', fuse: ' (fuse)',
       omen: o && o.def.dos ? ` (${o.def.dos.nom})` : '', entwine: ' (entwine)', casualty: ' (casualty)', offspring: ' (offspring)',
-      blitz: ' (blitz)', warp: ' (warp)'}[a.variante] || (/^(replicate|squad)\d$/.test(a.variante || '') ? ` (${a.variante.slice(0, -1)} ×${a.variante.slice(-1)})` : '') || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
+      blitz: ' (blitz)', warp: ' (warp)', optionnel: ' (coût facultatif)'}[a.variante] || (/^(replicate|squad)\d$/.test(a.variante || '') ? ` (${a.variante.slice(0, -1)} ×${a.variante.slice(-1)})` : '') || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
   const k = o && capacitesDe(P, o)[a.i];
   return nom + ' — ' + ((k && k.texte) || 'capacité');
 }

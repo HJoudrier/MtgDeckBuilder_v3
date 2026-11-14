@@ -62,6 +62,7 @@ function motClePermanent(def, k, face, jetons, tete, reste) {
     case 'Assist': return !reste.length;
     case 'You may choose not to untap CARDNAME during your untap step.': return true;
     case 'CARDNAME must be blocked if able.': def.params.doitEtreBloque = true; return true;
+    case 'All creatures able to block CARDNAME do so.': def.params.leurre = true; return true;
     case 'MayEffectFromOpeningHand': {
       const t = reste[0] && forgeSousCapacite(face, reste[0]), e = t && effetForge(face, t, jetons);
       if (!e || e.modes || e.cibles.length || (reste[1] && reste[1] !== '!PlayFirst') || reste.length > 2) return false;
@@ -74,7 +75,7 @@ function motClePermanent(def, k, face, jetons, tete, reste) {
 
 forgeSait('kw', 'Annihilator', 'Renown', 'Rampage', 'Mobilize', 'Myriad', 'Mentor', 'Graft', 'For Mirrodin', 'Job select', 'Backup', 'Scavenge',
   'Reinforce', 'Sunburst', 'Devour', 'Ascend', 'Strive', 'Assist', 'You may choose not to untap CARDNAME during your untap step.',
-  'CARDNAME must be blocked if able.', 'MayEffectFromOpeningHand');
+  'CARDNAME must be blocked if able.', 'All creatures able to block CARDNAME do so.', 'MayEffectFromOpeningHand');
 
 /* —— Au combat ——————————————————————————————————————————————————— */
 
@@ -156,8 +157,12 @@ OPS.porteJeton = function* (P, op, ctx) {
 
 /* « Must be blocked if able » : un bloqueur libre qui le peut s'y met. */
 function bloqueursImposes(P, atts, blqs, pose) {
-  const cb = P.combat;
-  atts.filter(a => obj(P, a).def.params.doitEtreBloque && !(cb.bloquesPar.get(a) || []).length).forEach(a => {
+  const cb = P.combat, fg = new Map(atts.map(a => [a, statiquesForgeSur(P, obj(P, a))]));
+  /* L'attirance (Lure) : toute créature qui peut le bloquer le bloque. */
+  atts.filter(a => obj(P, a).def.params.leurre || fg.get(a).leurre).forEach(a => {
+    blqs.forEach(b => { if (!cb.bloqueurs.has(b) && peutBloquer(P, obj(P, b), obj(P, a))) pose(b, a); });
+  });
+  atts.filter(a => (obj(P, a).def.params.doitEtreBloque || fg.get(a).doitEtreBloque) && !(cb.bloquesPar.get(a) || []).length).forEach(a => {
     const b = blqs.find(x => !cb.bloqueurs.has(x) && peutBloquer(P, obj(P, x), obj(P, a)));
     if (b != null) pose(b, a);
   });

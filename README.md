@@ -102,6 +102,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsH.js   doubler ou déplacer des marqueurs, nommer une carte, détenir, blocage imposé, dégâts de chacun, endurer, détourner un sort, une phase de plus
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
+  forgeStatiquesB.js les statiques hors du champ : mots-clés accordés aux sorts, au cimetière, à la main ; coûts facultatifs, exercer, équiper moins cher
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
@@ -821,6 +822,25 @@ centaines. Les plus gros manques restants : les statiques continues que Forge é
 inconnue, Station, Bestow, les classes, la vitesse (« Start your engines »), Splice, Overload. Une
 partie entre deux decks ordinaires prend 18 ms ; le banc aléatoire joue 300 parties sur des cartes de
 Forge tirées au hasard sans erreur ni invariant rompu.
+
+**Les statiques hors du champ** (lot F31). « Spells you cast have cascade », « instant and sorcery cards
+in your graveyard have flashback », « creature cards in your hand have cycling » : `js/forgeStatiquesB.js`
+tient une couche de plus, à côté de celle du champ. À chaque passe des actions d'état, une carte de la
+main, du cimetière, de l'exil ou de la zone de commandement que vise une telle statique reçoit une
+définition augmentée des mots-clés accordés, lus par l'analyseur des scripts (`motCleForge()`) ; elle
+retrouve la sienne quand la statique cesse. « Les sorts que tu lances » vise les cartes qu'on pourrait
+lancer, et `wasCast` s'y juge d'avance. Un sort lancé emporte sa définition augmentée sur la pile ; la
+carte qui change ensuite de zone repart de son imprimé. Les mots-clés que l'analyseur ne lit pas
+(démonstration, miracle…) laissent la statique, et la carte, refusées.
+
+Dans le même lot : les statiques qui agissent depuis le cimetière (les Incarnations), « n'est pas une
+créature » (`RemoveType`, les dieux de Theros), la couleur de tout ou de son choix, l'attirance (Lure),
+la permission de lancer depuis la main sans payer (Omniscience) ou avec du mana de tout type, le coût
+additionnel facultatif (`OptionalCost`, et la condition qui le lit), exercer en attaquant, un coût
+additionnel qu'impose une statique (waterbend), l'équipement moins cher. Corrigé en chemin : Dig fouille
+la bibliothèque de chaque joueur désigné, et la couverture examine une expression écrite en place
+(`ConditionCheckSVar$ Count$Presence_Dragon.1.0`) comme celle d'une SVar. Restent hors du lot : les
+Avatars de Vanguard, « can block an additional creature » (un bloqueur pour plusieurs attaquants).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

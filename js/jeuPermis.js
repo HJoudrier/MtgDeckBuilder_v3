@@ -66,7 +66,19 @@ function coutPermis(P, j, o, depuis, x) {
   const c = coutSort(P, j, o, depuis, o.def.cout);
   /* « Spend mana as though it were mana of any color » : le coloré se paie
      comme du générique. */
-  return x.s.t.MayPlayIgnoreColor === 'True' ? {...coutManaVide(), generique: c.total - (c.x || 0), total: c.total} : c;
+  /* MayPlayIgnoreType : de même, le mana de tout type. */
+  const libre = x.s.t.MayPlayIgnoreColor === 'True' || x.s.t.MayPlayIgnoreType === 'True';
+  const m = libre ? {...coutManaVide(), generique: c.total - (c.x || 0), total: c.total} : c;
+  const h = x.s.t.RaiseCost ? coutForge(x.s.t.RaiseCost) : null;
+  return h && h.cout.mana.total ? sommeMana(m, h.cout.mana) : m;
+}
+
+/* La part non-mana d'un sort joué avec une permission : son coût
+   additionnel, et celui que la permission ajoute (« by removing six
+   counters »). Rend `undefined` si les deux se recouvrent. */
+function autrePermis(d, x) {
+  const h = x.s.t.RaiseCost ? coutForge(x.s.t.RaiseCost) : null;
+  return fusionAutres(d.coutSup || null, h ? autresCout(h.cout) : null);
 }
 
 /* Une permission « une fois par tour » a servi. */

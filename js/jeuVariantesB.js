@@ -24,6 +24,7 @@ function variantesEtendues(P, j, o, depuis, essaie) {
     if (d.prototype && depuis === 'main') essaie('prototype', coutSort(P, j, o, depuis, d.prototype.cout), null, defPrototype(d));
     if ((d.fuse || (d.dos && d.dos.fuse)) && d.dos && depuis === 'main') { const f = defFusionnee(d); if (f) essaie('fuse', coutSort(P, j, o, depuis, sommeMana(d.cout, d.dos.cout)), null, f); }
     variantesLancement(P, j, o, depuis, essaie);
+    variantesOptionnelles(P, j, o, depuis, essaie);
   }
   if (depuis === 'cimetiere') {
     if (d.escape) essaie('escape', coutSort(P, j, o, depuis, d.escape.mana), autresCout(d.escape));

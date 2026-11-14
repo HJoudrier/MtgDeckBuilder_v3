@@ -62,6 +62,7 @@ function* declareAttaquants(P) {
     if (def) choisis.set(id, def);
   });
   yield* paieTaxesAttaque(P, j, choisis);
+  yield* exertsAttaque(P, j, choisis);
   for (const [id, def] of choisis) {
     const o = obj(P, id);
     P.combat.attaquants.set(id, def);

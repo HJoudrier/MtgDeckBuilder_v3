@@ -23,6 +23,11 @@ function statiquesEnJeu(P) {
     if (o.anime) o.anime.forEach(a => (a.statiques || []).forEach(s => r.push({src: o, s})));
   }
   if (P.effets) P.effets.forEach(e => e.def.statiques.forEach(s => r.push({src: e, s})));
+  /* Les statiques qui agissent depuis le cimetière (les Incarnations). */
+  for (const J of P.joueurs) for (const id of J.cimetiere) {
+    const o = obj(P, id);
+    if (o && o.def.statiques.length) o.def.statiques.forEach(s => { if (s.s === 'forge' && s.t.EffectZone === 'Graveyard' && s.t.Mode === 'Continuous' && !s.t.MayPlay) r.push({src: o, s}); });
+  }
   P._statV = P.ver; P._stat = r;
   /* Les statiques accordées par une statique : la liste est déjà posée,
      si bien que juger qui elles visent ne la recalcule pas. */
@@ -103,6 +108,8 @@ function animation(o) {
     changelin: !!(d.params && d.params.changelin)};
   for (const a of o.anime) {
     if (a.retireTypes) r.types = [];
+    /* « N'est pas une créature » tant que la dévotion manque (les dieux de Theros). */
+    if (a.retireType) r.types = r.types.filter(t => !a.retireType.includes(t));
     if (a.changelin) r.changelin = true;
     if (a.perdTout) r.mots = 0;
     if (a.retireMots) r.mots &= ~a.retireMots;
@@ -120,7 +127,7 @@ function animation(o) {
 
 function aMot(P, o, m) { return (car(P, o).mots & m) !== 0; }
 function estType(o, t) {
-  if (o.anime && o.anime.some(a => a.retireTypes)) return animation(o).types.includes(t);
+  if (o.anime && o.anime.some(a => a.retireTypes || a.retireType)) return animation(o).types.includes(t);
   return o.def.types.includes(t) || (!!o.anime && o.anime.some(a => (a.types || []).includes(t)));
 }
 function estCreature(o) { return estType(o, 'creature'); }

@@ -10,8 +10,16 @@
 
 forgeEffet('Dig', ['DigNum', 'ChangeNum', 'ChangeValid', 'DestinationZone', 'DestinationZone2', 'LibraryPosition',
   'LibraryPosition2', 'DefinedPlayer', 'AnyNumber', 'Optional', 'RememberChanged'], function* (P, t, env) {
-  const j = t.DefinedPlayer ? forgeDefinis(P, t.DefinedPlayer, env).map(x => joueurDe(x))[0] : env.ctrl;
-  if (j == null) return;
+  /* La bibliothèque de chaque joueur désigné (`Defined$ Player` : de tous),
+     ou ciblé. */
+  const qui = t.DefinedPlayer ? [...new Set(forgeDefinis(P, t.DefinedPlayer, env).map(x => joueurDe(x)).filter(j => j != null))]
+    : joueursForge(P, t, env);
+  for (const j of qui) yield* fouilleForge(P, t, env, j);
+}, (t, op) => { op.op = 'cherche'; op.n = 1; op.hostile = false; op.desc = {types: /Land/.test(t.ChangeValid || '') ? ['land'] : []}; },
+{optionnel: true});
+
+/* Fouiller le dessus d'une bibliothèque : en prendre, renvoyer le reste. */
+function* fouilleForge(P, t, env, j) {
   const B = P.joueurs[j].bibliotheque, n = forgeNombre(P, t.DigNum || 1, env);
   const dessus = B.slice(-n).reverse();
   if (!dessus.length) return;
@@ -28,8 +36,7 @@ forgeEffet('Dig', ['DigNum', 'ChangeNum', 'ChangeValid', 'DestinationZone', 'Des
     if (d2 === 'bibliotheque') { if (t.LibraryPosition2 !== '0') { retireDe(B, id); B.unshift(id); } }
     else yield* deplaceForge(P, obj(P, id), d2, env, {});
   }
-}, (t, op) => { op.op = 'cherche'; op.n = 1; op.hostile = false; op.desc = {types: /Land/.test(t.ChangeValid || '') ? ['land'] : []}; },
-{optionnel: true});
+}
 
 /* Regarder le dessus et en envoyer une part dessous (regard) ou au
    cimetière (surveillance). */

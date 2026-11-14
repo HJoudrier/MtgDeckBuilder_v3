@@ -37,15 +37,25 @@ function statiqueTenable(t) {
   /* Jouer depuis une autre zone : la pioche d'impulsion, le cimetière, le
      dessus de la bibliothèque (js/jeuPermis.js). */
   if (t.MayPlay) {
-    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library)(,(Exile|Graveyard|Library))*$/.test(t.AffectedZone || '')) return false;
-    if (t.MayPlayAltManaCost || t.MayPlayIgnoreType || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
-    if (t.EffectZone && !(/^(Graveyard|Exile|All)$/.test(t.EffectZone) && t.Affected === 'Card.Self')) return false;
+    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand)(,(Exile|Graveyard|Library|Hand))*$/.test(t.AffectedZone || '')) return false;
+    if (t.MayPlayAltManaCost || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
+    /* Depuis la main, la permission ne sert que si elle rend le sort gratuit. */
+    if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True') return false;
+    if (t.RaiseCost && !coutForge(t.RaiseCost)) return false;
+    if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(/^(Graveyard|Exile|All)$/.test(t.EffectZone) && t.Affected === 'Card.Self')) return false;
     return true;
   }
   /* Regarder le dessus de sa bibliothèque : une information, sans effet sur
      le jeu du moteur. */
   if (t.MayLookAt && !t.AddKeyword && !t.AddPower && !t.AddAbility) return true;
-  if (t.AffectedZone && t.AffectedZone !== 'Battlefield') return false;
+  /* Hors du champ : des mots-clés accordés (js/forgeStatiquesB.js). */
+  if (t.AffectedZone && !zoneChamp(t)) return horsChampTenable(t);
+  if (t.Mode === 'OptionalCost') return optionnelTenable(t);
+  if (t.Mode === 'OptionalAttackCost') return exertTenable(t);
+  if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t);
+  if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip')) return false;
+  if (t.Mode === 'MustAttack' && t.MustAttack && !/^(Player\.Other|Player|Opponent)$/.test(t.MustAttack)) return false;
+  if (t.RemoveType && !typesForge(t.RemoveType).types.length) return false;
   if (t.AddType && /ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType') return false;
   if (t.AddHiddenKeyword && !t.AddHiddenKeyword.split('&').every(k => CACHES_TENUS[k.trim()])) return false;
   if (t.GainControl && t.GainControl !== 'You') return false;
@@ -55,14 +65,19 @@ function statiqueTenable(t) {
   if (t.Mode === 'CastWithFlash' && t.ValidSA && t.ValidSA !== 'Spell') return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
   if (t.Mode === 'AlternativeCost') return /^(All|Hand)$/.test(t.EffectZone || 'All') && (t.ValidSA === 'Spell.Self' || (t.ValidSA === 'Spell' && t.ValidCard === 'Card.Self')) && !!coutForge(t.Cost);
-  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
-  if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/Colorless/.test(t.SetColor || '')) return false;
+  /* Les Incarnations : « as long as this card is in your graveyard… ». */
+  const cimetiere = t.EffectZone === 'Graveyard' && t.Mode === 'Continuous' && t.Affected && t.Affected !== 'Card.Self';
+  /* Une caractéristique qui se définit dans toutes les zones : seul le champ compte ici. */
+  if (t.EffectZone === 'All' && t.CharacteristicDefining === 'True' && t.Mode === 'Continuous') return true;
+  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !cimetiere && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
+  if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/^(Colorless|All|ChosenColor)$/.test(t.SetColor || t.AddColor)) return false;
   return true;
 }
 
 /* Les mots-clés cachés que le moteur tient : des interdictions. */
 const CACHES_TENUS = {"CARDNAME can't block.": {blocage: true}, "CARDNAME can't attack.": {attaque: true},
-  "CARDNAME can't attack or block.": {attaque: true, blocage: true}};
+  "CARDNAME can't attack or block.": {attaque: true, blocage: true}, 'All creatures able to block CARDNAME do so.': {leurre: true},
+  'CARDNAME must be blocked if able.': {doitEtreBloque: true}};
 
 function forgeStatique(mode, params, f) {
   FORGE_STATIQUES[mode] = f;
@@ -95,7 +110,7 @@ forgeSait('param', 'Continuous.EffectZone', 'Continuous.MayPlay', 'Continuous.Af
 forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'AffectedDefined', 'AddPower', 'AddToughness', 'AddKeyword', 'SetPower', 'SetToughness',
   'CharacteristicDefining'], (P, src, s, o, r) => {
   const t = s.t;
-  if (t.MayPlay || t.MayLookAt || (t.AffectedZone && t.AffectedZone !== 'Battlefield')) return;
+  if (t.MayPlay || t.MayLookAt || !zoneChamp(t)) return;
   const cda = t.CharacteristicDefining === 'True' && !t.Affected && !t.AffectedDefined;
   const env = cda ? (src.id === o.id ? envStatique(src, s) : null) : viseForge(P, src, s, o);
   if (cda && env && !conditionForge(P, t, env)) return;
@@ -109,11 +124,14 @@ forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'Aff
   if (t.RemoveKeyword) r.retire = (r.retire || 0) | motsForge(t.RemoveKeyword);
   if (t.SetPower) r.setF = n(t.SetPower);
   if (t.SetToughness) r.setE = n(t.SetToughness);
-  if (t.AddHiddenKeyword) t.AddHiddenKeyword.split('&').forEach(k => { const c = CACHES_TENUS[k.trim()] || {}; if (c.attaque) r.attaque = true; if (c.blocage) r.blocage = true; });
+  if (t.AddHiddenKeyword) t.AddHiddenKeyword.split('&').forEach(k => {
+    const c = CACHES_TENUS[k.trim()] || {};
+    if (c.attaque) r.attaque = true; if (c.blocage) r.blocage = true; if (c.leurre) r.leurre = true; if (c.doitEtreBloque) r.doitEtreBloque = true;
+  });
   if (t.AddType === 'ChosenType') { const k = choixDe(P, src).type; if (k) r.sousTypes.push(k); }
   else if (t.AddType) { const ty = typesForge(t.AddType); r.types.push(...ty.types); r.sousTypes.push(...ty.sousTypes); }
-  if (t.SetColor) r.couleurs = couleursMots(t.SetColor);
-  if (t.AddColor) r.couleurs = [...new Set([...(r.couleurs || o.def.couleurs), ...couleursMots(t.AddColor)])];
+  if (t.SetColor) r.couleurs = couleursStatique(P, src, t.SetColor);
+  if (t.AddColor) r.couleurs = [...new Set([...(r.couleurs || o.def.couleurs), ...couleursStatique(P, src, t.AddColor)])];
 });
 
 /* Une interdiction qui dépend du défenseur se juge à la déclaration
@@ -157,7 +175,7 @@ function coutsForge(P, j, o) {
   for (const {src, s} of [...statiquesEnJeu(P).filter(x => x.src.id !== o.id || !x.s.t || !x.s.t.EffectZone), ...siennes]) {
     if (s.s !== 'forge' || (s.t.Mode !== 'ReduceCost' && s.t.Mode !== 'RaiseCost')) continue;
     const t = s.t;
-    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget) continue;
+    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget || t.Cost || (t.ValidSpell && !/^Spell/.test(t.ValidSpell))) continue;
     if (t.Activator === 'You' && j !== src.ctrl) continue;
     if (t.Activator === 'Opponent' && j === src.ctrl) continue;
     if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id)) continue;

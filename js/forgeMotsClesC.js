@@ -125,6 +125,7 @@ function apresVariante(P, o, v) {
   else if (foisVariante(v, 'squad')) plus({capacites: [capArrivee('Squad', {op: 'copiesSoi', n: foisVariante(v, 'squad')})]});
   else if (v === 'offspring') plus({capacites: [capArrivee('Offspring', {op: 'copiesSoi', n: 1, petit: true})]});
   else if (v === 'warp') { o.finEtape = 'exil'; o.warp = true; }
+  else if (v === 'optionnel') o.optionnel = true;
 }
 
 /* Une copie-jeton d'une définition, avec ce qu'on lui change. */

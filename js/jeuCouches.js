@@ -20,8 +20,8 @@ function statiquesCouches(P) {
   if (P._couchesV === P.ver) return P._couches;
   P._couches = statiquesMode(P, 'Continuous').filter(x => {
     const t = x.s.t;
-    return !t.MayPlay && !t.MayLookAt && (!t.AffectedZone || t.AffectedZone === 'Battlefield') &&
-      !!(t.AddType || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.GainControl || t.RemoveLandTypes || t.AddAllCreatureTypes);
+    return !t.MayPlay && !t.MayLookAt && zoneChamp(t) &&
+      !!(t.AddType || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.GainControl || t.RemoveLandTypes || t.AddAllCreatureTypes || t.RemoveType);
   });
   P._couchesV = P.ver;
   return P._couches;
@@ -66,10 +66,10 @@ function couchesStatiques(P) {
       const v = voulu.get(id);
       if (t.GainControl === 'You') v.ctrl = x.src.ctrl;
       const ty = t.AddType ? typesCouche(P, x.src, t.AddType) : null;
-      if (ty || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.RemoveLandTypes || t.AddAllCreatureTypes) {
+      if (ty || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.RemoveLandTypes || t.AddAllCreatureTypes || t.RemoveType) {
         v.anime.push({stat: true, types: ty ? ty.types : [], sousTypes: ty ? ty.sousTypes : [], changelin: !!(ty && ty.changelin) || t.AddAllCreatureTypes === 'True',
           retireTypes: t.RemoveCardTypes === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True', perdTout: t.RemoveAllAbilities === 'True',
-          retireTerrains: t.RemoveLandTypes === 'True'});
+          retireTerrains: t.RemoveLandTypes === 'True', ...(t.RemoveType ? {retireType: typesForge(t.RemoveType).types} : {})});
       }
     }
   }

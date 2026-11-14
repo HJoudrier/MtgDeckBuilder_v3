@@ -16,6 +16,13 @@
 function statiqueForge(face, t, jetons) {
   if (!String(t.Mode || '').split(',').every(m => FORGE_STATIQUES[m.trim()]) || !statiqueTenable(t)) return null;
   const s = {s: 'forge', t, face, jetons};
+  /* Exercer en attaquant : la capacité réflexe « when you do »
+     (js/forgeStatiquesB.js `exertsAttaque()`). */
+  if (t.Mode === 'OptionalAttackCost' && t.Trigger) {
+    const r = forgeSousCapacite(face, t.Trigger), e = r && effetForge(face, r, jetons);
+    if (!e) return null;
+    s.reflexe = e;
+  }
   if (t.AddAbility || t.AddTrigger) {
     const tmp = {capacites: [], statiques: [], params: {}, mots: 0};
     for (const n of String(t.AddAbility || '').split('&').map(x => x.trim()).filter(Boolean)) {
