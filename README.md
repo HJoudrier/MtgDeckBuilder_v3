@@ -92,6 +92,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursB.js  la suite : engager, cibler, marqueurs, attaque déclarée, crime, déclencheurs d'état
   forgeExprB.js     les expressions de Forge, suite : mémoire, cibles, évènement, comptes du tour
   forgeEffetsE.js   la bibliothèque et ce qu'on révèle ; lancer une carte depuis un effet ; découvrir
+  forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -690,6 +691,12 @@ Scales, Parallel Lives, Boon Reflection, Torbran — passent tous par `quantiteR
 fois, dans l'ordre du champ. « Enters tapped unless… » se juge à l'entrée sur n'importe quelle
 expression ; « creatures your opponents control enter tapped » et « if it would be put into a
 graveyard, put it on top of its owner's library instead » sont des formes de remplacement.
+
+**Les paramètres de plus** (`js/forgeEffetsF.js`, lot F16). « Tapped and attacking », « sacrifice it at
+the beginning of the next end step », « choose flying or lifelink », bolster, adapt, « if it would die
+this turn, exile it instead »… s'ajoutent à des effets déjà écrits : `etendEffet()` enveloppe l'effet
+d'un avant (qui peut changer la table) et d'un après (qui reçoit les objets visés et ceux entrés
+pendant), et inscrit les paramètres. Le fichier se charge après tous les effets qu'il enveloppe.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

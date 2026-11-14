@@ -72,6 +72,7 @@
   "forgeChoix.js",
   "forgeCopies.js",
   "forgeTraine.js",
+  "forgeEffetsF.js",
   "forgeDeclencheurs.js",
   "forgeDeclencheursB.js",
   "forgeStatiques.js",
@@ -3894,6 +3895,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "etendEffet",
     "forgeCout.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
@@ -3902,6 +3904,7 @@
     "forgeEffet",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
     "forgeInterdits.js (chargement)",
@@ -4184,6 +4187,7 @@
     "emetCibles",
     "equipe",
     "estAMoi",
+    "etendEffet",
     "executeForge",
     "exhumeesFin",
     "finDuTour",
@@ -4195,6 +4199,7 @@
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeTraine.js (chargement)",
     "forgeValideJoueur",
     "hotePart",
@@ -4532,6 +4537,7 @@
     "compteDuTour",
     "compteJoueurs",
     "declareAttaquants",
+    "entreAttaquant",
     "etat.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeDefinis",
@@ -4563,6 +4569,7 @@
     "forceDeFrappe",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpression",
     "iaAttaquants",
     "iaCartes",
@@ -4681,6 +4688,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeEffetsB.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeTraine.js (chargement)",
     "infligeDegats",
     "jeuOpsB.js (chargement)",
@@ -4841,6 +4849,7 @@
     "forceDeFrappe",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpression",
     "frappe",
     "iaAttaquants",
@@ -4949,6 +4958,7 @@
     "equipiers",
     "forceDeFrappe",
     "forgeEffetsC.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "iaAttaquants",
     "iaCibles",
     "impactCapacite",
@@ -5568,6 +5578,7 @@
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeTraine.js (chargement)",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
@@ -7889,6 +7900,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpression",
     "forgeValideDef",
     "manaPermis",
@@ -7971,6 +7983,7 @@
     "entreeForge",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpression",
     "marqueurPose",
     "motCleForge",
@@ -8031,6 +8044,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpression",
     "forgeStatiques.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -8084,6 +8098,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeExpression"
    ]
   },
@@ -8348,6 +8363,7 @@
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "joueursForge",
     "objetsForge"
    ]
@@ -8419,6 +8435,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "joueursForge",
     "objetsForge",
     "paieUnlessForge",
@@ -8465,6 +8482,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeTraine.js (chargement)"
    ]
   },
@@ -8589,6 +8607,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeTraine.js (chargement)"
    ]
   },
@@ -8738,6 +8757,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "etendEffet",
     "executeForge"
    ]
   },
@@ -9247,7 +9267,8 @@
    "appeleePar": [
     "forgeChoix.js (chargement)",
     "forgeEffetsC.js (chargement)",
-    "forgeEffetsE.js (chargement)"
+    "forgeEffetsE.js (chargement)",
+    "forgeEffetsF.js (chargement)"
    ]
   },
   {
@@ -9449,6 +9470,79 @@
    "appelleParHtml": [],
    "appeleePar": [
     "motCleForge"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeEffetsF.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "car",
+    "champDe",
+    "choisitCartes",
+    "choisitUn",
+    "ciblesForge",
+    "entreAttaquant",
+    "etendEffet",
+    "finEtapeForge",
+    "forgeDefinis",
+    "forgeEffet",
+    "forgeNombre",
+    "forgeSait",
+    "forgeValideObjet",
+    "genreMarqueur",
+    "obj",
+    "objetsForge",
+    "objetsZone",
+    "poseMarqueurs"
+   ],
+   "appelleDiffere": [
+    "estCreature"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "etendEffet",
+   "fichier": "forgeEffetsF.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [
+    "cibleOuDefinis",
+    "forgeSait",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsF.js (chargement)"
+   ]
+  },
+  {
+   "nom": "finEtapeForge",
+   "fichier": "forgeEffetsF.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsF.js (chargement)"
+   ]
+  },
+  {
+   "nom": "entreAttaquant",
+   "fichier": "forgeEffetsF.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "adversaires"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsF.js (chargement)"
    ]
   },
   {
@@ -10562,7 +10656,7 @@
   {
    "nom": "entreeEngageeParAutre",
    "fichier": "forgeRemplacements.js",
-   "ligne": 91,
+   "ligne": 92,
    "chargement": false,
    "appelle": [
     "forgeValideDef",
@@ -10577,7 +10671,7 @@
   {
    "nom": "degagementEmpeche",
    "fichier": "forgeRemplacements.js",
-   "ligne": 96,
+   "ligne": 97,
    "chargement": false,
    "appelle": [
     "envRemplacement",
@@ -10593,7 +10687,7 @@
   {
    "nom": "incontrecarrable",
    "fichier": "forgeRemplacements.js",
-   "ligne": 103,
+   "ligne": 104,
    "chargement": false,
    "appelle": [
     "forgeValideDef",
@@ -10609,7 +10703,7 @@
   {
    "nom": "degatsApresPrevention",
    "fichier": "forgeRemplacements.js",
-   "ligne": 115,
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "envRemplacement",
@@ -10627,7 +10721,7 @@
   {
    "nom": "quantiteRemplacee",
    "fichier": "forgeRemplacements.js",
-   "ligne": 135,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
     "envRemplacement",

@@ -96,7 +96,7 @@ forgeEffet('Attach', ['Object'], function* (P, t, env) {
 forgeEffet('GainControl', ['NewController', 'LoseControl', 'Untap', 'AddKWs'], function* (P, t, env) {
   const j = t.NewController ? forgeDefinis(P, t.NewController, env).map(x => joueurDe(x))[0] : env.ctrl;
   if (j == null) return;
-  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
+  (t._ids ? t._ids.map(id => obj(P, id)).filter(Boolean) : objetsForge(P, t, env, 'Targeted')).filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
     if (t.LoseControl === 'EOT' && o.ctrlRendu == null) o.ctrlRendu = o.ctrl;
     o.ctrl = j; o.pret = false;
     if (t.Untap === 'True') degageObjet(P, o);

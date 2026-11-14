@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1397 fonctions**, 197 modules, 1357 Ko de JavaScript.
+**1400 fonctions**, 198 modules, 1365 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -82,12 +82,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 150 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 99 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
+| [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 3 | 146 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 9 | 137 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 202 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 27 | 254 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 111 |
-| [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 154 |
+| [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 155 |
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 186 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 280 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
@@ -1462,6 +1463,16 @@ La traîne : des mots-clés et des effets moins. *2 fonctions, 103 lignes, 5.2 K
 | `declencheurSynthetique(def, face, jetons, nom, table, effet)` | Un déclencheur synthétique : une face prolongée d'une SVar, puis `declencheurForge()` comme pour une ligne `T:`. |
 | `motCleTraine(def, k, face, jetons, tete, reste)` | Un mot-clé de la traîne. Rend `null` s'il n'en est pas un. |
 
+## js/forgeEffetsF.js
+
+Les paramètres de plus des effets courants. *3 fonctions, 146 lignes, 7.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `etendEffet(api, params, avant, apres)` | Envelopper un effet : `avant(P, t, env)` peut rendre une table changée, `apres(P, t, env, touches, nouveaux)` reçoit les objets visés avant l'effet et les objets entrés pendant. |
+| `finEtapeForge(objets, v)` | « At the beginning of the next end step, sacrifice / exile it » : le départ que js/forgeCopies.js `copiesFin()` joue à l'étape de fin. |
+| `entreAttaquant(P, o, env)` | Entrer « tapped and attacking » : dans le combat en cours, contre le défenseur de la source si elle attaque, sinon le premier adversaire. |
+
 ## js/forgeDeclencheurs.js
 
 Quand une capacité déclenchée de Forge se. *9 fonctions, 137 lignes, 8.5 Ko.*
@@ -1581,7 +1592,7 @@ Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 111 lignes, 5.
 
 ## js/forgeRemplacements.js
 
-Les remplacements de Forge (`R:`). *9 fonctions, 154 lignes, 9.4 Ko.*
+Les remplacements de Forge (`R:`). *9 fonctions, 155 lignes, 9.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|

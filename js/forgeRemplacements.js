@@ -71,6 +71,7 @@ function envRemplacement(src, x) { return {face: x.face, ctx: {cibles: [], memo:
    ceux des autres, s'ils sont sur le champ. */
 function destinationRemplacee(P, o, depuis, vers) {
   if (vers !== 'cimetiere') return vers;
+  if (depuis === 'champ' && o.exilSiMeurt === P.tour) return 'exil';
   const tous = [...(o.def.remplacements || []).map(r => ({src: o, r})), ...remplacementsEnJeu(P).filter(x => x.src.id !== o.id)];
   for (const {src, r} of tous) {
     if (r.forme !== 'exil') continue;
