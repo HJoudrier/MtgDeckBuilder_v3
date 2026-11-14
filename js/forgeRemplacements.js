@@ -41,11 +41,12 @@ function remplacementsEnJeu(P) {
   if (P._remV === P.ver) return P._rem;
   const r = [];
   for (const id of P.champ) { const o = obj(P, id); (o.def.remplacements || []).forEach(x => r.push({src: o, r: x})); }
+  (P.effets || []).forEach(e => (e.remplacements || []).forEach(x => r.push({src: e, r: x})));
   P._remV = P.ver; P._rem = r;
   return r;
 }
 
-function envRemplacement(src, x) { return {face: x.face, ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: src.ctrl, op: {}, base: true}; }
+function envRemplacement(src, x) { return {face: x.face, ctx: {cibles: [], memo: src.memo || [], memoJ: src.memoJ || []}, src, ctrl: src.ctrl, op: {}, base: true}; }
 
 /* « If ~ would be put into a graveyard, exile it instead » : la zone où
    l'objet va vraiment. Ses propres remplacements valent d'où qu'il parte ;
@@ -85,6 +86,7 @@ function incontrecarrable(P, o) {
    « prevent the next N damage » posés sur un objet ou un joueur. Rend ce
    qui reste à infliger. */
 function degatsApresPrevention(P, src, cible, n, combat) {
+  if (combat && P.brouillard === P.tour) return 0;
   for (const {src: h, r} of remplacementsEnJeu(P)) {
     if (r.forme !== 'prevention') continue;
     const t = r.t, env = envRemplacement(h, r);

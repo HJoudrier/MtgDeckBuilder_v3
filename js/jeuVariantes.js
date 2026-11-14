@@ -102,6 +102,7 @@ function variantesSort(P, j, o, depuis) {
   /* Défaussée avec la folie, ou au bout de sa suspension : une seule façon. */
   if (depuis === 'exil' && o.folie) { essaie('folie', coutSort(P, j, o, depuis, coutComplet(d.folie).mana), null); return r; }
   if (depuis === 'exil' && o.suspendu) { if (!o.temps) essaie('suspension', coutManaVide(), null); return r; }
+  if (depuis === 'exil' && o.gratuit) { essaie('gratuit', coutManaVide(), null); return r; }
   const base = coutSort(P, j, o, depuis);
   essaie(null, base, d.coutSup || null);
   const k = coutComplet(d.kicker);

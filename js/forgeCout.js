@@ -54,6 +54,7 @@ function coutForge(txt) {
       case 'Return': if (soi || typeof n !== 'number') return null; cout.renvoie = {n, desc: descForge(type || 'Permanent')}; break;
       case 'Reveal': if (typeof n !== 'number') return null; if (!soi) cout.revele = {n, desc: descForge(type || 'Card')}; break;
       case 'PayEnergy': if (typeof n !== 'number') return null; cout.energie = n; break;
+      case 'Draw': if (typeof n !== 'number' || (type && type !== 'You')) return null; cout.pioche = n; break;
       case 'SubCounter': case 'AddCounter': {
         const g = genreMarqueur(type);
         if (g === 'loyaute') { loyaute = n === 'X' ? 'X' : typeof n === 'number' ? (k[1] === 'AddCounter' ? n : -n) : null; if (loyaute == null) return null; break; }
@@ -75,4 +76,4 @@ function coutForge(txt) {
 }
 
 forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
-  'Return', 'Reveal', 'PayEnergy');
+  'Return', 'Reveal', 'PayEnergy', 'Draw');

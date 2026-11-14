@@ -122,6 +122,11 @@ function forgeExpression(P, expr, env, prof) {
     return forgeNombre(P, seuilForge(P, forgeNombre(P, k[1], env), k[2], env) ? k[3] : k[4], env);
   }
   if ((k = /^Kicked\.([^.]+)\.(.+)$/.exec(q))) return forgeNombre(P, ctx.kicked || (src && src.kicked) ? k[1] : k[2], env);
+  /* Morbide : une créature est morte ce tour. */
+  if ((k = /^Morbid\.([^.]+)\.(.+)$/.exec(q))) {
+    const mort = (P.entresTour || []).some(x => x.de === 'champ' && x.vers === 'cimetiere' && (x.o.types || x.o.def.types).includes('creature'));
+    return forgeNombre(P, mort ? k[1] : k[2], env);
+  }
   if (q === 'LifeYouGainedThisTurn') return P.joueurs[ctrl].vieTour || 0;
   if (q === 'ChosenNumber') return choixDe(P, src).nombre || 0;
   /* Le domaine : les types de terrain de base parmi vos terrains. */
@@ -141,5 +146,5 @@ forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$V
   'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',
-  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ChosenNumber', 'Count$Domain', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',
+  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ChosenNumber', 'Count$Domain', 'Count$Morbid', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',
   'Count$Compare', 'Count$Kicked', 'Count$LifeYouGainedThisTurn', 'Count$AttackersDeclared', '$CardTypes', '$CardPower', '$CardToughness', '$CardManaCost');

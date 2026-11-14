@@ -57,13 +57,14 @@ forgeEffet('RegenerateAll', ['ValidCards'], function* (P, t, env) {
    moteur ; une autre rend la table injouable. */
 const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainTour', UntilHostLeavesPlay: 'hote'};
 
-forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stackable', 'ForgetOnMoved'], function* (P, t, env) {
+forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stackable', 'ForgetOnMoved', 'ExileOnMoved', 'ReplacementEffects'], function* (P, t, env) {
   const prep = env.op.effet, src = env.src;
   const memo = [], memoJ = [];
   if (t.RememberObjects) forgeDefinis(P, t.RememberObjects, env).forEach(x => { if (x.j != null) memoJ.push(x.j); else memo.push(x.id); });
   poseEffet(P, {nom: t.Name || (src ? 'Effet de ' + src.def.nom : 'Effet'), ctrl: env.ctrl, cid: src ? src.cid : null,
     srcId: src ? src.id : null, hote: src ? src.id : null, fin: FORGE_DUREES[t.Duration || ''],
-    statiques: prep.statiques, capacites: prep.capacites, memo, memoJ});
+    statiques: prep.statiques, capacites: prep.capacites, memo, memoJ, remplacements: prep.remplacements,
+    finSiQuitte: ZONES_FORGE[t.ExileOnMoved] || null});
 }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {
   prepare(t, op) {
     if (!(String(t.Duration || '') in FORGE_DUREES)) return false;
@@ -76,7 +77,14 @@ forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stacka
     for (const n of String(t.Triggers || '').split(',').map(x => x.trim()).filter(Boolean)) {
       if (!face.svars[n] || !declencheurForge(tmp, face, forgeTable(face.svars[n]), op.jetons)) return false;
     }
-    op.effet = {statiques, capacites: tmp.capacites};
+    const remplacements = [];
+    for (const n of String(t.ReplacementEffects || '').split(',').map(x => x.trim()).filter(Boolean)) {
+      const r = face.svars[n] && forgeTable(face.svars[n]), forme = r && formeRemplacement(face, {...r, ActiveZones: undefined});
+      if (!forme) return false;
+      remplacements.push({forme, t: r, face});
+    }
+    if (t.ExileOnMoved && !ZONES_FORGE[t.ExileOnMoved]) return false;
+    op.effet = {statiques, capacites: tmp.capacites, remplacements};
     return true;
   }
 });

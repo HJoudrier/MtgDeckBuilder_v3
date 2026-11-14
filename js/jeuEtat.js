@@ -135,6 +135,7 @@ function deplace(P, id, vers, opts = {}) {
   noteEntree(P, depuis, zone, depuis === 'champ' ? lki : n);
   if (zone === 'champ') emet(P, {t: 'entre', id: n.id, ctrl: n.ctrl});
   if (depuis === 'champ' && P.effets) hotePart(P, id);
+  else if (P.effets && P.effets.length) suiviPart(P, id, depuis);
   return n.id;
 }
 

@@ -80,8 +80,11 @@ forgeEffet('Fight', [], function* (P, t, env) {
   infligeDegats(P, b, a, car(P, b).force, false);
 }, (t, op) => { op.op = 'degats'; op.n = 2; op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null; });
 
-forgeEffet('Attach', [], function* (P, t, env) {
-  const s = forgeDefinis(P, t.Defined || 'Self', env)[0], h = ciblesForge(P, env, false)[0];
+forgeEffet('Attach', ['Object'], function* (P, t, env) {
+  /* `Object$` : ce qu'on attache ; sinon la source. L'hôte : la cible,
+     sinon ce que `Defined$` désigne. */
+  const s = forgeDefinis(P, t.Object || (env.op.slot != null ? t.Defined || 'Self' : 'Self'), env)[0];
+  const h = env.op.slot != null ? ciblesForge(P, env, false)[0] : t.Object ? forgeDefinis(P, t.Defined || 'Self', env)[0] : null;
   if (!s || s.lki || s.zone !== 'champ' || !h || h.j != null || h.zone !== 'champ') return;
   s.att = h.id;
   P.ver++;

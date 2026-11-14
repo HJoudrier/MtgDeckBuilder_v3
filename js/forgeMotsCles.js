@@ -144,6 +144,9 @@ function motCleForge(def, k, face, jetons) {
     def.aura = descForge(v);
     return true;
   }
+  /* La traîne (js/forgeTraine.js). */
+  const t = motCleTraine(def, k, face, jetons, tete, reste);
+  if (t != null) return t;
   return false;
 }
 

@@ -155,10 +155,14 @@ function* creeJetonsForge(P, defs, n, qui, engage, env, retenir) {
   if (defs.length && n) jn(P, `${n * qui.length} jeton(s) ${defs.map(d => d.nom).join(', ')}`);
 }
 
-forgeEffet('Token', ['TokenScript', 'TokenAmount', 'TokenOwner', 'TokenTapped', 'RememberTokens'], function* (P, t, env) {
+forgeEffet('Token', ['TokenScript', 'TokenAmount', 'TokenOwner', 'TokenTapped', 'RememberTokens', 'AttachedTo'], function* (P, t, env) {
   const defs = String(t.TokenScript || '').split(',').map(s => (env.op.jetons || {})[s.trim()]).filter(Boolean);
   const qui = t.TokenOwner ? forgeDefinis(P, t.TokenOwner, env).map(x => joueurDe(x)).filter(j => j != null && !P.joueurs[j].elimine) : [env.ctrl];
+  const avant = P.champ.length;
   yield* creeJetonsForge(P, defs, forgeNombre(P, t.TokenAmount || 1, env), qui, t.TokenTapped === 'True', env, t.RememberTokens === 'True');
+  /* Un jeton qui naît attaché (un équipement, une aura) à ce qu'on désigne. */
+  const hote = t.AttachedTo ? forgeDefinis(P, t.AttachedTo, env).find(x => x && x.j == null && x.zone === 'champ') : null;
+  if (hote) P.champ.slice(avant).forEach(id => { obj(P, id).att = hote.id; P.ver++; });
 }, (t, op) => {
   op.op = 'jetons'; op.n = nombreIA(t.TokenAmount || 1); op.hostile = false;
   op._def = Object.values(op.jetons || {})[0] || {types: ['creature'], force: 1, endurance: 1, mots: 0, capacites: [], statiques: [], mv: 0};

@@ -38,6 +38,7 @@ function* paieAutre(P, j, o, c) {
     (yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main')).forEach(id => deplace(P, id, 'main'));
   }
   if (c.energie) J.energie -= c.energie;
+  if (c.pioche) piocheN(P, j, c.pioche);
   if (c.equipage) yield* paieEquipage(P, j, o, c.equipage);
   if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); defausseCarte(P, o.id, j); }
   if (c.sacSoi && obj(P, o.id)) { lki = instantane(P, o); sacrifie(P, o.id); }

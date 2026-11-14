@@ -28,7 +28,7 @@ const SOUSTYPES_NON_CREATURE = new Set(['plains', 'island', 'swamp', 'mountain',
 
 /* Les propriétés que ce fichier sait juger : les autres ne laissent rien
    passer. */
-const FORGE_PROPS = ['Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
+const FORGE_PROPS = ['enchanted', 'equipped', 'Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
   'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell'];
@@ -132,6 +132,8 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'token': return !!o.jeton;
     case 'kicked': return !!o.kicked;
     case 'IsCommander': return !!o.cmd;
+    case 'enchanted': return !!P && P.champ.some(id => { const a = obj(P, id); return a.att === o.id && !!a.def.aura; });
+    case 'equipped': return !!P && P.champ.some(id => { const a = obj(P, id); return a.att === o.id && !a.def.aura; });
     case 'Historic': return c.types.includes('artifact') || (c.supers || []).includes('legendary') || (c.sousTypes || []).includes('saga');
     case 'ChosenColor': { const k = P && src && choixDe(P, src).couleur; return !!k && c.couleurs.includes(k); }
     case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || !!c.changelin); }

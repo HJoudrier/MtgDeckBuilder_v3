@@ -20,6 +20,10 @@ function peutBloquer(P, b, a) {
   const cb = car(P, b), ca = car(P, a);
   if (b.engage || cb.nePeutBloquer || !estCreature(b)) return false;
   if (ca.mots & MOT.IMBLOCABLE) return false;
+  /* Terreur, intimidation (js/forgeTraine.js) : seuls un artefact ou une
+     créature noire — ou partageant une couleur — bloquent. */
+  if (a.def.params.peur && !estType(b, 'artifact') && !cb.couleurs.includes('B')) return false;
+  if (a.def.params.intimidation && !estType(b, 'artifact') && !cb.couleurs.some(k => ca.couleurs.includes(k))) return false;
   const passe = a.def.params.passage;
   if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;

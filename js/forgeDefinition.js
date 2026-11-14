@@ -30,7 +30,13 @@ function texteForge(face, t) {
 
 /* L'effet d'une table et de sa chaîne : `{ops, cibles, modes}`, ou `null`
    si une table n'est pas jouable. */
-function effetForge(face, t0, jetons) {
+let CHAINES_FORGE = 0;
+
+/* `racine` : la table est celle d'un sort ou d'une capacité activée, dont
+   le coût se paie au lancement. Ailleurs — la capacité qu'un déclencheur
+   exécute, une sous-capacité —, un `Cost$` se propose à la résolution
+   (« you may pay {2}; if you do… »). */
+function effetForge(face, t0, jetons, racine) {
   if (!t0) return null;
   if (forgeApi(t0) === 'Charm') {
     const opts = String(t0.Choices || '').split(',').map(n => n.trim()).filter(Boolean).map(n => {
@@ -43,7 +49,7 @@ function effetForge(face, t0, jetons) {
     if (max == null || min == null) return null;
     return {ops: [], cibles: [], modes: {min, max, options: opts}};
   }
-  const ops = [], cibles = [];
+  const ops = [], cibles = [], chaine = ++CHAINES_FORGE;
   let t = t0, parent = null, garde = 0;
   while (t && garde++ < 20) {
     if (!tableJouable(t)) return null;
@@ -57,7 +63,9 @@ function effetForge(face, t0, jetons) {
       const zone = t.TgtZone || (forgeApi(t) === 'ChangeZone' && t.Origin && !/,/.test(t.Origin) ? t.Origin : null);
       cibles.push({desc: descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || '')), min, max});
     }
-    const op = {op: 'forge', forge: true, api: forgeApi(t), t, face, slot, slotParent: parent, jetons, texte: texteForge(face, t)};
+    const op = {op: 'forge', forge: true, api: forgeApi(t), t, face, slot, slotParent: parent, jetons, texte: texteForge(face, t),
+      chaine, coutInterne: t.Cost && !(racine && t === t0) ? t.Cost : null};
+    if (op.coutInterne && !coutForge(op.coutInterne)) return null;
     if (FORGE_API[op.api].prepare && !FORGE_API[op.api].prepare(t, op)) return null;
     FORGE_API[op.api].ia(t, op);
     ops.push(op);
@@ -88,7 +96,7 @@ function capaciteForge(def, face, t, jetons) {
   if (t.SP) {
     if (api === 'Attach') { if (!t.ValidTgts) return false; def.aura = descForge(t.ValidTgts); return true; }
     if (def.sort) return false;
-    const e = effetForge(face, t, jetons);
+    const e = effetForge(face, t, jetons, true);
     if (!e) return false;
     def.sort = e;
     const autre = Object.keys(c.cout).filter(k => k !== 'mana');
@@ -116,7 +124,7 @@ function capaciteForge(def, face, t, jetons) {
       ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face})});
     return true;
   }
-  const effet = effetForge(face, t, jetons);
+  const effet = effetForge(face, t, jetons, true);
   if (!effet) return false;
   if (t.Planeswalker === 'True') {
     if (c.loyaute == null) return false;

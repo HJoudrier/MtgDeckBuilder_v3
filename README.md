@@ -83,6 +83,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsD.js   régénération, effets temporaires, déclencheurs retardés, capacités accordées
   forgeChoix.js     choisir une couleur, un type, une carte, un joueur, un nombre, un mode ; « en entrant »
   forgeCopies.js    jetons copies, entrer comme copie, copier un sort
+  forgeTraine.js    la traîne : exaltation, terreur, bushido, tempête, cascade, brouillard, comploter, explorer
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -617,6 +618,13 @@ présents chez lui, ou chez l'adversaire quand l'indice `AILogic` le dit. Les ef
 copie, si bien que les déclencheurs d'entrée de la créature copiée partent. Une copie de sort est un
 élément de pile qui se résout comme lui et ne laisse aucune carte. Les dégâts répartis donnent au moins
 1 à chaque cible, puis de quoi tuer dans l'ordre : simplification annoncée, on ne demande pas.
+
+**Le coût d'une capacité qu'on résout** (lot F9). Dans Forge, une capacité exécutée par un déclencheur
+peut porter son propre `Cost$` (« you may pay {2}; if you do… », « you may draw a card; if you do,
+discard ») : `effetForge()` le garde sur l'opération (`coutInterne`) — sauf à la racine d'un sort ou
+d'une capacité activée, payée au lancement —, et `executeForge()` le propose à la résolution ; refusé ou
+impayable, la chaîne s'arrête là (`ctx.coupe`). La traîne (`js/forgeTraine.js`) bâtit plusieurs
+mots-clés en déclencheurs de Forge ordinaires (`declencheurSynthetique()`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

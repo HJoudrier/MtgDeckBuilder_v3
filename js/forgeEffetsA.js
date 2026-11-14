@@ -107,7 +107,17 @@ function* executeForge(P, op, ctx) {
   memoireForge(P, ctx, src);
   const env = {face: op.face, ctx, src, ctrl: ctx.ctrl, op};
   const t = op.t, api = FORGE_API[op.api];
+  if (ctx.coupe === op.chaine) return;
   if (!api || !conditionForge(P, t, env)) return;
+  /* Un coût à la résolution : refusé ou impayable, la capacité s'arrête
+     là, sous-capacités comprises. */
+  if (op.coutInterne) {
+    const c = coutForge(op.coutInterne), autre = autresCout(c.cout), porteur = src && !src.lki ? src : {id: -1, zone: '', marq: {}};
+    const ok = planPaiement(P, ctx.ctrl, c.cout.mana, 0) && (!autre || coutAutrePossible(P, ctx.ctrl, porteur, autre));
+    const r = ok ? yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${op.coutInterne} ?`, source: ctx.source, extra: {ops: [op]}}) : 0;
+    if (r !== 1 || !paieMana(P, ctx.ctrl, c.cout.mana, 0)) { ctx.coupe = op.chaine; return; }
+    if (autre) yield* paieAutre(P, ctx.ctrl, porteur, autre);
+  }
   if ((t.Optional === 'True' || t.OptionalDecider) && !api.optionnel) {
     /* Celui qui décide est nommé, jamais déduit des cibles. */
     const j = t.OptionalDecider ? forgeDefinis(P, t.OptionalDecider, env).map(x => joueurDe(x)).find(x => x != null) : ctx.ctrl;
@@ -155,7 +165,7 @@ function dansOrigine(o, origine) {
 
 forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'Shuffle', 'Tapped', 'LibraryPosition',
   'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration',
-  'WithCountersType', 'WithCountersAmount'], function* (P, t, env) {
+  'WithCountersType', 'WithCountersAmount', 'OriginAlternative'], function* (P, t, env) {
   const dest = zoneForge(t.Destination), ctx = env.ctx;
   if (!dest) return;
   /* « Exile … until ~ leaves the battlefield » : si l'hôte est déjà parti,
@@ -169,7 +179,7 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
   if (cache || (t.ChangeType && env.op.slot == null && !t.Defined)) {
     const j = t.DefinedPlayer ? forgeDefinis(P, t.DefinedPlayer, env).map(x => joueurDe(x))[0] : env.ctrl;
     if (j == null) return;
-    const zones = String(t.Origin || 'Library').split(',').map(z => ZONES_FORGE[z.trim()]).filter(Boolean);
+    const zones = String((t.Origin || 'Library') + (t.OriginAlternative ? ',' + t.OriginAlternative : '')).split(',').map(z => ZONES_FORGE[z.trim()]).filter(Boolean);
     const ids = [].concat(...zones.map(z => z === 'champ' ? P.champ.filter(id => obj(P, id).ctrl === j) : P.joueurs[j][z].slice()))
       .filter(id => !t.ChangeType || forgeValideObjet(P, obj(P, id), t.ChangeType, env.src, env.ctrl, env));
     const n = t.ChangeNum === 'All' ? ids.length : forgeNombre(P, t.ChangeNum || 1, env);

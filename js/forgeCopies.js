@@ -70,17 +70,23 @@ forgeEffet('CopySpellAbility', ['MayChooseTarget', 'Controller'], function* (P, 
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
   for (const o of objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'pile')) {
     const it = P.pile.find(x => x.id === o.id);
-    if (!it || !it.def.sort || it.def.types.some(x => TYPES_PERMANENTS.includes(x))) continue;
-    let effets = it.effets.map(ef => ({...ef, cibles: ef.cibles.map(c => c.slice())}));
-    if (t.MayChooseTarget === 'True') {
-      const nouv = yield* prepareEffets(P, j, o, it.def.sort, it.def.couleurs);
-      if (nouv) effets = nouv;
-    }
-    P.pile.push({id: P.prochainId++, capacite: true, copie: true, source: o.id, lki: instantane(P, o), ctrl: j, effets, x: it.x,
-      nom: it.def.nom + ' (copie)', kicked: it.kicked});
-    jn(P, `${P.joueurs[j].nom} copie ${it.def.nom}`);
+    if (it) yield* copieSort(P, j, o, it, t.MayChooseTarget === 'True');
   }
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
+
+/* Une copie d'un sort de la pile, avec de nouvelles cibles si l'on veut :
+   la copie de Twincast, celles de la tempête. */
+function* copieSort(P, j, o, it, nouvelles) {
+  if (!o || !it.def.sort || it.def.types.some(x => TYPES_PERMANENTS.includes(x))) return;
+  let effets = it.effets.map(ef => ({...ef, cibles: ef.cibles.map(c => c.slice())}));
+  if (nouvelles) {
+    const nouv = yield* prepareEffets(P, j, o, it.def.sort, it.def.couleurs);
+    if (nouv) effets = nouv;
+  }
+  P.pile.push({id: P.prochainId++, capacite: true, copie: true, source: o.id, lki: instantane(P, o), ctrl: j, effets, x: it.x,
+    nom: it.def.nom + ' (copie)', kicked: it.kicked});
+  jn(P, `${P.joueurs[j].nom} copie ${it.def.nom}`);
+}
 
 /* Les jetons copiés « jusqu'à la fin du tour » partent à l'étape de fin. */
 function copiesFin(P) {

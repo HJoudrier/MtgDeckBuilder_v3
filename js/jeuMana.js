@@ -49,7 +49,7 @@ function sourcesMana(P, j, pour) {
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
-        c.defausseSoi || c.exileSoi || c.revele) continue;
+        c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
       let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.options;

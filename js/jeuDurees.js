@@ -59,6 +59,7 @@ function debutDuTour(P) {
    cessent (règle 610.3). Appelé par `deplace()`. */
 function hotePart(P, id) {
   if (!P.effets) return;
+  suiviPart(P, id, 'champ');
   const effets = P.effets.length;
   P.effets = P.effets.filter(e => !(e.fin === 'hote' && e.hote === id));
   if (P.effets.length !== effets) P.ver++;
@@ -69,6 +70,14 @@ function hotePart(P, id) {
     const o = obj(P, x);
     if (o && o.zone === 'exil') deplace(P, x, 'champ', {ctrl: o.prop});
   }));
+}
+
+/* Un objet qu'un effet suit quitte sa zone (`ExileOnMoved$`) : l'effet
+   cesse. */
+function suiviPart(P, id, depuis) {
+  const n = P.effets.length;
+  P.effets = P.effets.filter(e => !(e.finSiQuitte === depuis && e.memo.includes(id)));
+  if (P.effets.length !== n) P.ver++;
 }
 
 /* Les sources de déclencheurs qui ne sont pas des cartes : les effets. */
