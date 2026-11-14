@@ -112,18 +112,41 @@ function animeForge(P, objets, t, env) {
   const ty = typesForge(t.Types);
   const a = {types: ty.types, sousTypes: ty.sousTypes, mots: motsForge(t.Keywords), fin: t.Duration === 'Permanent' ? 'jamais' : 'tour',
     force: t.Power != null ? forgeNombre(P, t.Power, env) : null, endurance: t.Toughness != null ? forgeNombre(P, t.Toughness, env) : null,
-    couleurs: t.Colors ? couleursMots(t.Colors) : null, ecrase: t.OverwriteColors === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True'};
-  objets.filter(o => o && o.j == null && o.zone === 'champ' && !o.lki).forEach(o => { (o.anime = o.anime || []).push({...a}); P.ver++; });
+    couleurs: t.Colors ? couleursMots(t.Colors) : null, ecrase: t.OverwriteColors === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True',
+    /* Ce que l'animation ôte, et ce qu'elle accorde : capacités, déclencheurs
+       et statiques compilés à la construction (`op.accorde`). */
+    retireTypes: t.RemoveCardTypes === 'True', retireTerrains: t.RemoveLandTypes === 'True', perdTout: t.RemoveAllAbilities === 'True',
+    retireMots: t.RemoveKeywords ? motsForge(t.RemoveKeywords) : 0,
+    capacites: ((env.op && env.op.accorde) || {}).capacites || null, statiques: ((env.op && env.op.accorde) || {}).statiques || null};
+  objets.filter(o => o && o.j == null && o.zone === 'champ' && !o.lki).forEach(o => {
+    (o.anime = o.anime || []).push({...a});
+    if (t.AtEOT) o.finEtape = t.AtEOT === 'Exile' ? 'exil' : 'sacrifice';
+    P.ver++;
+  });
+}
+
+/* Les capacités, déclencheurs et statiques qu'une animation accorde,
+   compilés une fois ; une seule qu'on ne sait pas jouer refuse le tout. */
+function accordeAnimation(t, op) {
+  const tmp = {capacites: [], statiques: [], params: {}, mots: 0}, noms = v => String(v || '').split('&').map(x => x.trim()).filter(Boolean);
+  for (const n of noms(t.Abilities)) { const a = forgeSousCapacite(op.face, n); if (!a || !capaciteForge(tmp, op.face, a, op.jetons)) return false; }
+  for (const n of noms(t.Triggers)) { if (!op.face.svars[n] || !declencheurForge(tmp, op.face, forgeTable(op.face.svars[n]), op.jetons)) return false; }
+  for (const n of noms(t.staticAbilities)) { const s = op.face.svars[n] && statiqueForge(op.face, forgeTable(op.face.svars[n]), op.jetons); if (!s) return false; tmp.statiques.push(s); }
+  if (tmp.capacites.length || tmp.statiques.length) op.accorde = tmp;
+  return true;
 }
 
 /* Ce qu'une animation sait tenir : une durée connue, des couleurs nommées. */
-function animationTenable(t) {
+function animationTenable(t, op) {
   if (t.Duration && t.Duration !== 'Permanent') return false;
+  if ((t.Abilities || t.Triggers || t.staticAbilities) && !(op && accordeAnimation(t, op))) return false;
+  if (t.AtEOT && !/^(Sacrifice|Exile)$/.test(t.AtEOT)) return false;
   if (t.Colors && !couleursMots(t.Colors).length) return false;
   return true;
 }
 
-const PARAMS_ANIME = ['Power', 'Toughness', 'Types', 'Keywords', 'Colors', 'OverwriteColors', 'Duration', 'RemoveCreatureTypes'];
+const PARAMS_ANIME = ['Power', 'Toughness', 'Types', 'Keywords', 'Colors', 'OverwriteColors', 'Duration', 'RemoveCreatureTypes', 'RemoveCardTypes',
+  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT'];
 
 forgeEffet('Animate', PARAMS_ANIME, function* (P, t, env) { animeForge(P, objetsForge(P, t, env), t, env); },
   (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: animationTenable});

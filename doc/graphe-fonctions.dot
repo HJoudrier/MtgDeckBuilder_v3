@@ -713,6 +713,7 @@ digraph appels {
     "capacitesAccordees" [label="capacitesAccordees", fillcolor="#6da88c33", color="#6da88c"];
     "regenere" [label="regenere", fillcolor="#6da88c33", color="#6da88c"];
     "animeForge" [label="animeForge", fillcolor="#6da88c33", color="#6da88c"];
+    "accordeAnimation" [label="accordeAnimation", fillcolor="#6da88c33", color="#6da88c"];
     "animationTenable" [label="animationTenable", fillcolor="#6da88c33", color="#6da88c"];
   }
   subgraph "cluster_68" {
@@ -3269,6 +3270,12 @@ digraph appels {
   "animeForge" -> "motsForge" [color="#6da88c99"];
   "animeForge" -> "forgeNombre" [color="#6da88c99"];
   "animeForge" -> "couleursMots" [color="#6da88c99"];
+  "accordeAnimation" -> "forgeSousCapacite" [color="#6da88c99"];
+  "accordeAnimation" -> "capaciteForge" [color="#6da88c99"];
+  "accordeAnimation" -> "declencheurForge" [color="#6da88c99"];
+  "accordeAnimation" -> "forgeTable" [color="#6da88c99"];
+  "accordeAnimation" -> "statiqueForge" [color="#6da88c99"];
+  "animationTenable" -> "accordeAnimation" [color="#6da88c99"];
   "animationTenable" -> "couleursMots" [color="#6da88c99"];
   "forgeEffetsD.js (chargement)" -> "forgeSait" [color="#6da88c99"];
   "forgeEffetsD.js (chargement)" -> "forgeEffet" [color="#6da88c99"];

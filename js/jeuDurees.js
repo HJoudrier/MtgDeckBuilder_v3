@@ -112,7 +112,7 @@ function capacitesDe(P, o) {
      celles qu'on lui accorde. */
   const terrain = o.anime ? capacitesTerrain(o) : null;
   const base = terrain || (o.anime && sansCapacites(o) ? [] : o.def.capacites);
-  const plus = capacitesAccordees(P, o);
+  const plus = [...capacitesAccordees(P, o), ...(o.anime ? o.anime.flatMap(a => a.capacites || []) : [])];
   o._cap = plus.length ? base.concat(plus) : base;
   o._capV = P.ver;
   return o._cap;

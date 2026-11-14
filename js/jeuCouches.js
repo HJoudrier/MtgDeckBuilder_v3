@@ -53,7 +53,9 @@ function couchesStatiques(P) {
     if (st.length) o.anime = o.anime.filter(a => !a.stat);
     if (o.ctrlAvant != null) { o.ctrl = o.ctrlAvant; o.ctrlAvant = null; }
   }
-  if (poses.size) P.ver++;
+  /* Les couches levées puis reposées à l'identique ne changent rien : la
+     version ne bouge qu'à un vrai changement, sans quoi chaque passe des
+     actions d'état viderait tous les caches de `car()`. */
   const voulu = new Map();
   for (const x of statiquesCouches(P)) {
     const t = x.s.t;
@@ -80,7 +82,7 @@ function couchesStatiques(P) {
     if (o.ctrl !== avant.ctrl) { o.pret = false; change = true; }
     if (v.anime.length || o.ctrlAvant != null) actives++;
   }
-  if (change || poses.size) P.ver++;
+  if (change) P.ver++;
   P.couchesActives = actives;
   return change;
 }
@@ -99,7 +101,7 @@ const TYPES_TERRAIN = new Set(['plains', 'island', 'swamp', 'mountain', 'forest'
    intrinsèques des types de base (règle 305.6). Rend `null` si aucune
    statique ne touche ses types de terrain. */
 function capacitesTerrain(o) {
-  const st = (o.anime || []).filter(a => a.stat && (a.retireTerrains || (a.sousTypes || []).some(s => MANA_DES_TYPES[s])));
+  const st = (o.anime || []).filter(a => a.retireTerrains || (a.sousTypes || []).some(s => MANA_DES_TYPES[s]));
   if (!st.length || !estType(o, 'land')) return null;
   const efface = st.some(a => a.retireTerrains);
   const base = efface ? [] : o.def.capacites;

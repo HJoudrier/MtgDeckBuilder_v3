@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1411 fonctions** dans 201 modules, **4030 appels** relevés.
+**1412 fonctions** dans 201 modules, **4036 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1415,7 +1415,7 @@ Appelée par : `jeuOpsB.js (chargement)`, `scoreEffet`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `elementsTable`, `forgeEffetsD.js (chargement)`, `forgeSousCapacite`, `lisScriptForge`, `motCleForge`, `statiqueForge`, `unitesForge`
+Appelée par : `accordeAnimation`, `elementsTable`, `forgeEffetsD.js (chargement)`, `forgeSousCapacite`, `lisScriptForge`, `motCleForge`, `statiqueForge`, `unitesForge`
 
 ### `forgeApi()` — ligne 33
 
@@ -1451,7 +1451,7 @@ Appelée par : `definitionForge`, `jetonsForge`, `manquesDecks`, `mesureBaseForg
 
 Appelle : `forgeTable()` *(forgeScript.js)*
 
-Appelée par : `declencheurForge`, `destinationRemplacee`, `effetForge`, `entreeForge`, `entreeForgeMotCle`, `forgeChoix.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `formeRemplacement`, `motCleForge`, `quantiteRemplacee`, `sousEffets`, `statiqueForge`
+Appelée par : `accordeAnimation`, `declencheurForge`, `destinationRemplacee`, `effetForge`, `entreeForge`, `entreeForgeMotCle`, `forgeChoix.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `formeRemplacement`, `motCleForge`, `quantiteRemplacee`, `sousEffets`, `statiqueForge`
 
 ### `ficheDeScriptForge()` — ligne 113
 
@@ -1727,49 +1727,49 @@ Appelle : `obj()` *(jeuEtat.js)*, `sansCapacites()` *(jeuCouches.js)*
 
 Appelée par : `capacitesAccordees`, `car`, `coutSort`, `coutsForge`, `reductionParCibles`, `statiquesForgeSur`, `statiquesMode`, `statiquesPermis`
 
-### `statiqueVise()` — ligne 31
+### `statiqueVise()` — ligne 33
 
 Appelle : `correspondBase()` *(jeuCibles.js)*
 
 Appelée par : `car`
 
-### `car()` — ligne 40
+### `car()` — ligne 42
 
 Appelle : `animation()` *(jeuCaracteristiques.js)*, `statiqueVise()` *(jeuCaracteristiques.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*, `statiquesForgeSur()` *(forgeStatiques.js)*
 
 Appelée par : `aMot`, `agregeForge`, `appliqueSBA`, `caracForge`, `caracsJugees`, `ciblable`, `compteDuTour`, `coutDeGarde`, `declareBloqueurs`, `equipagePossible`, `forceDeCombat`, `forceDeFrappe`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeExpression`, `frappe`, `iaAttaquants`, `iaBloqueurs`, `iaCibles`, `infligeDegats`, `instantane`, `jeuOpsA.js (chargement)`, `meilleureCibleHostile`, `objetVue`, `paieEquipage`, `peutAttaquer`, `peutBloquer`, `repartition`, `tue`, `valeur`, `valeurObjet`
 
-### `animation()` — ligne 86
+### `animation()` — ligne 88
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `capacitesTerrain`, `car`, `caracsJugees`, `estType`
 
-### `aMot()` — ligne 110
+### `aMot()` — ligne 113
 
 Appelle : `car()` *(jeuCaracteristiques.js)*
 
 Appelée par : `declareAttaquants`, `declareBloqueurs`, `degatsCombat`, `detruitForge`, `iaBloqueurs`, `initiativeEnJeu`, `jeuOpsA.js (chargement)`, `peutAttaquer`, `peutEngagerSoi`, `questionPourUI`, `repartition`
 
-### `estType()` — ligne 111
+### `estType()` — ligne 114
 
 Appelle : `animation()` *(jeuCaracteristiques.js)*
 
 Appelée par : `actionsLegales`, `appliqueSBA`, `capacitesTerrain`, `declareAttaquants`, `estCreature`, `forgeEffetsA.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeExpression`, `forgeTraine.js (chargement)`, `iaCartes`, `iaScrute`, `infligeDegats`, `lanceDepuisEffet`, `notePrincipale`, `peutBloquer`, `sourcesMana`, `terrainsEnMain`, `utiliteEnMain`
 
-### `estCreature()` — ligne 115
+### `estCreature()` — ligne 118
 
 Appelle : `estType()` *(jeuCaracteristiques.js)*
 
 Appelée par : `actionsLegales`, `appliqueSBA`, `compteDuTour`, `convocables`, `declareBloqueurs`, `equipiers`, `forceDeFrappe`, `forgeEffetsC.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `iaAttaquants`, `iaCibles`, `impactCapacite`, `impactSort`, `infligeDegats`, `meilleureCibleHostile`, `objetVue`, `peutAttaquer`, `peutBloquer`, `peutEngagerSoi`, `proprieteDefenseur`, `scoreEffet`, `sourcesMana`, `valeurObjet`
 
-### `peutEngagerSoi()` — ligne 120
+### `peutEngagerSoi()` — ligne 123
 
 Appelle : `aMot()` *(jeuCaracteristiques.js)*, `estCreature()` *(jeuCaracteristiques.js)*
 
 Appelée par : `coutAutrePossible`, `sourcesMana`
 
-### `mvDe()` — ligne 127
+### `mvDe()` — ligne 130
 
 N'appelle aucune fonction du projet.
 
@@ -3171,7 +3171,7 @@ Appelle : `animeForge()` *(forgeEffetsD.js)*, `ciblesForge()` *(forgeDefini.js)*
 
 Appelle : `capaciteForge()` *(forgeDefinition.js)*, `declencheurForge()` *(forgeDefinition.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `statiqueTenable()` *(forgeStatiques.js)*
 
-Appelée par : `definitionDepuisScript`, `forgeEffetsD.js (chargement)`
+Appelée par : `accordeAnimation`, `definitionDepuisScript`, `forgeEffetsD.js (chargement)`
 
 ### `capacitesAccordees()` — ligne 34
 
@@ -3191,9 +3191,15 @@ Appelle : `couleursMots()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js
 
 Appelée par : `forgeEffetsD.js (chargement)`
 
-### `animationTenable()` — ligne 120
+### `accordeAnimation()` — ligne 130
 
-Appelle : `couleursMots()` *(forgeStatiques.js)*
+Appelle : `capaciteForge()` *(forgeDefinition.js)*, `declencheurForge()` *(forgeDefinition.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `statiqueForge()` *(forgeEffetsD.js)*
+
+Appelée par : `animationTenable`
+
+### `animationTenable()` — ligne 140
+
+Appelle : `accordeAnimation()` *(forgeEffetsD.js)*, `couleursMots()` *(forgeStatiques.js)*
 
 Appelée par : `forgeEffetsD.js (chargement)`
 
@@ -3733,13 +3739,13 @@ Appelle : `obj()` *(jeuEtat.js)*, `statiquesCouches()` *(jeuCouches.js)*, `types
 
 Appelée par : `appliqueSBA`
 
-### `sansCapacites()` — ligne 91
+### `sansCapacites()` — ligne 93
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `capacitesDe`, `remplacementsEnJeu`, `statiquesEnJeu`
 
-### `capacitesTerrain()` — ligne 101
+### `capacitesTerrain()` — ligne 103
 
 Appelle : `animation()` *(jeuCaracteristiques.js)*, `coutManaVide()` *(oracleCouts.js)*, `estType()` *(jeuCaracteristiques.js)*
 
@@ -3905,13 +3911,13 @@ Appelée par : `definitionForge`
 
 Appelle : `coutForge()` *(forgeCout.js)*, `descForge()` *(forgeValide.js)*, `effetForge()` *(forgeDefinition.js)*, `forgeApi()` *(forgeScript.js)*, `optionsMana()` *(forgeEffetsC.js)*, `tableJouable()` *(forgeDefinition.js)*, `texteForge()` *(forgeDefinition.js)*
 
-Appelée par : `activeeSynthese`, `definitionDepuisScript`, `statiqueForge`
+Appelée par : `accordeAnimation`, `activeeSynthese`, `definitionDepuisScript`, `statiqueForge`
 
 ### `declencheurForge()` — ligne 138
 
 Appelle : `effetForge()` *(forgeDefinition.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `phaseConnue()` *(forgeDeclencheurs.js)*, `texteForge()` *(forgeDefinition.js)*
 
-Appelée par : `declencheurSynthetique`, `definitionDepuisScript`, `forgeEffetsD.js (chargement)`, `statiqueForge`, `synthese`
+Appelée par : `accordeAnimation`, `declencheurSynthetique`, `definitionDepuisScript`, `forgeEffetsD.js (chargement)`, `statiqueForge`, `synthese`
 
 ### `remplacementForge()` — ligne 159
 

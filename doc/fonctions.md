@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1420 fonctions**, 201 modules, 1399 Ko de JavaScript.
+**1421 fonctions**, 201 modules, 1401 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -49,7 +49,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 214 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 54 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 58 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 128 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 131 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 160 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 10 | 186 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 9 | 217 |
@@ -78,7 +78,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 286 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 4 | 196 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 4 | 136 |
-| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 5 | 147 |
+| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 170 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 129 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 150 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 99 |
@@ -89,7 +89,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 203 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 27 | 256 |
-| [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 111 |
+| [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 155 |
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 188 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 148 |
@@ -918,7 +918,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 58 lignes, 2.6 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 128 lignes, 6.3 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 131 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1118,7 +1118,7 @@ Les façons de lancer, suite. *6 fonctions, 65 lignes, 3.1 Ko.*
 
 ## js/jeuDurees.js
 
-Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 154 lignes, 6.6 Ko.*
+Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 154 lignes, 6.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1419,7 +1419,7 @@ Les effets de Forge : pompes, engagements, mana,. *4 fonctions, 136 lignes, 8.5 
 
 ## js/forgeEffetsD.js
 
-Les effets de Forge qui durent : régénération,. *5 fonctions, 147 lignes, 8.4 Ko.*
+Les effets de Forge qui durent : régénération,. *6 fonctions, 170 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1427,7 +1427,8 @@ Les effets de Forge qui durent : régénération,. *5 fonctions, 147 lignes, 8.4
 | `capacitesAccordees(P, o)` | Les capacités que les statiques en jeu accordent à cet objet. |
 | `regenere(P, objets)` | La régénération : un bouclier, jusqu'au nettoyage (js/jeuDurees.js `detruitObjet()`). |
 | `animeForge(P, objets, t, env)` | Animer : la couche propre à l'objet (js/jeuCaracteristiques.js `animation()`) — un terrain qui devient une créature 3/3 jusqu'à la fin du tour, un artefact qui devient une créature pour… |
-| `animationTenable(t)` | Ce qu'une animation sait tenir : une durée connue, des couleurs nommées. |
+| `accordeAnimation(t, op)` | Les capacités, déclencheurs et statiques qu'une animation accorde, compilés une fois ; une seule qu'on ne sait pas jouer refuse le tout. |
+| `animationTenable(t, op)` | Ce qu'une animation sait tenir : une durée connue, des couleurs nommées. |
 
 | Donnée | Rôle |
 |---|---|
@@ -1612,7 +1613,7 @@ Ce que les statiques de Forge interdisent,. *27 fonctions, 256 lignes, 14 Ko.*
 
 ## js/jeuCouches.js
 
-Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 111 lignes, 5.9 Ko.*
+Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 113 lignes, 6.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|

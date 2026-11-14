@@ -56,6 +56,7 @@ digraph modules {
     "jeuLancer.js" [label="js/jeuLancer.js\n10 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "jeuActions.js" [label="js/jeuActions.js\n7 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
     "jeuVariantes.js" [label="js/jeuVariantes.js\n18 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
+    "jeuVariantesB.js" [label="js/jeuVariantesB.js\n6 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "jeuDurees.js" [label="js/jeuDurees.js\n11 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "jeuFaces.js" [label="js/jeuFaces.js\n13 fonctions", fillcolor="#a8846d33", color="#a8846d"];
     "jeuPermis.js" [label="js/jeuPermis.js\n6 fonctions", fillcolor="#6da88c33", color="#6da88c"];
@@ -74,7 +75,7 @@ digraph modules {
     "forgeEffetsA.js" [label="js/forgeEffetsA.js\n13 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "forgeEffetsB.js" [label="js/forgeEffetsB.js\n4 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "forgeEffetsC.js" [label="js/forgeEffetsC.js\n4 fonctions", fillcolor="#a8846d33", color="#a8846d"];
-    "forgeEffetsD.js" [label="js/forgeEffetsD.js\n5 fonctions", fillcolor="#6da88c33", color="#6da88c"];
+    "forgeEffetsD.js" [label="js/forgeEffetsD.js\n6 fonctions", fillcolor="#6da88c33", color="#6da88c"];
     "forgeEffetsE.js" [label="js/forgeEffetsE.js\n1 fonction", fillcolor="#a86d8a33", color="#a86d8a"];
     "forgeChoix.js" [label="js/forgeChoix.js\n6 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "forgeCopies.js" [label="js/forgeCopies.js\n4 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
@@ -227,7 +228,6 @@ digraph modules {
     "gestesTable.js" [label="js/gestesTable.js\n3 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
     "app.js" [label="js/app.js\n1 fonction", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
-    "jeuVariantesB.js" [label="js/jeuVariantesB.js\n6 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
 
   "jeuOpsA.js" -> "jeuEtat.js" [penwidth=4.00, color="#8a7fa8aa", tooltip="19 appel(s)"];
   "jeuActions.js" -> "jeuEtat.js" [penwidth=4.00, color="#6da8a4aa", tooltip="19 appel(s)"];
@@ -272,6 +272,7 @@ digraph modules {
   "jeuActions.js" -> "jeuLancer.js" [penwidth=3.31, color="#6da8a4aa", tooltip="7 appel(s)"];
   "jeuVariantes.js" -> "jeuMana.js" [penwidth=3.31, color="#a89b6daa", tooltip="7 appel(s)"];
   "forgeEffetsB.js" -> "forgeEffetsA.js" [penwidth=3.31, color="#8a7fa8aa", tooltip="7 appel(s)"];
+  "forgeEffetsD.js" -> "forgeDefinition.js" [penwidth=3.31, color="#6da88caa", tooltip="7 appel(s)"];
   "forgeDeclencheursB.js" -> "forgeDeclencheurs.js" [penwidth=3.31, color="#6da88caa", tooltip="7 appel(s)"];
   "forgeStatiques.js" -> "forgeValide.js" [penwidth=3.31, color="#a86d8aaa", tooltip="7 appel(s)"];
   "forgeInterdits.js" -> "forgeValide.js" [penwidth=3.31, color="#96a86daa", tooltip="7 appel(s)"];
@@ -293,6 +294,7 @@ digraph modules {
   "forgeEffetsA.js" -> "forgeValide.js" [penwidth=3.08, color="#6d8ca8aa", tooltip="6 appel(s)"];
   "forgeEffetsA.js" -> "forgeExpr.js" [penwidth=3.08, color="#6d8ca8aa", tooltip="6 appel(s)"];
   "forgeEffetsB.js" -> "forgeDefini.js" [penwidth=3.08, color="#8a7fa8aa", tooltip="6 appel(s)"];
+  "forgeEffetsD.js" -> "forgeScript.js" [penwidth=3.08, color="#6da88caa", tooltip="6 appel(s)"];
   "forgeDeclencheursB.js" -> "jeuEtat.js" [penwidth=3.08, color="#6da88caa", tooltip="6 appel(s)"];
   "iaChoix.js" -> "jeuCaracteristiques.js" [penwidth=3.08, color="#a86d8aaa", tooltip="6 appel(s)"];
   "iaAgent.js" -> "iaChoix.js" [penwidth=3.08, color="#a89b6daa", tooltip="6 appel(s)"];
@@ -321,7 +323,6 @@ digraph modules {
   "forgeExprB.js" -> "forgeValide.js" [penwidth=2.82, color="#96a86daa", tooltip="5 appel(s)"];
   "forgeEffetsB.js" -> "jeuOpsA.js" [penwidth=2.82, color="#8a7fa8aa", tooltip="5 appel(s)"];
   "forgeEffetsD.js" -> "forgeStatiques.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];
-  "forgeEffetsD.js" -> "forgeDefinition.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];
   "forgeEffetsE.js" -> "jeuEtat.js" [penwidth=2.82, color="#a86d8aaa", tooltip="5 appel(s)"];
   "forgeDeclencheurs.js" -> "forgeValide.js" [penwidth=2.82, color="#a8846daa", tooltip="5 appel(s)"];
   "forgeDeclencheursB.js" -> "forgeValide.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];
@@ -370,7 +371,6 @@ digraph modules {
   "forgeEffetsA.js" -> "jeuMana.js" [penwidth=2.50, color="#6d8ca8aa", tooltip="4 appel(s)"];
   "forgeEffetsB.js" -> "forgeValide.js" [penwidth=2.50, color="#8a7fa8aa", tooltip="4 appel(s)"];
   "forgeEffetsC.js" -> "forgeDefini.js" [penwidth=2.50, color="#a8846daa", tooltip="4 appel(s)"];
-  "forgeEffetsD.js" -> "forgeScript.js" [penwidth=2.50, color="#6da88caa", tooltip="4 appel(s)"];
   "forgeEffetsE.js" -> "forgeEffetsA.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
   "forgeEffetsE.js" -> "forgeDefini.js" [penwidth=2.50, color="#a86d8aaa", tooltip="4 appel(s)"];
   "forgeChoix.js" -> "jeuEtat.js" [penwidth=2.50, color="#96a86daa", tooltip="4 appel(s)"];

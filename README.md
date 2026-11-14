@@ -724,6 +724,13 @@ garde que les autres : payables, et jugées sur leur condition. Exiler une carte
 comme une défausse vers l'exil. Le rebound exile le sort lancé depuis la main et le relance gratuitement
 à l'entretien suivant ; split second ne laisse à personne d'autre action que passer.
 
+**L'animation complète** (lot F20). Une animation (`Animate$`, `AnimateAll$`) peut accorder des capacités,
+des déclencheurs et des statiques — compilés une fois à la construction (`accordeAnimation()`) et portés
+par l'entrée de `o.anime`, que `capacitesDe()` et `statiquesEnJeu()` lisent — et ôter des types, des
+mots-clés ou toutes les capacités. **La version de l'état ne bouge qu'à un vrai changement** : la passe des
+couches (js/jeuCouches.js) lève puis repose les couches à l'identique sans toucher à `P.ver`, sans quoi
+chaque passe des actions d'état viderait tous les caches de `car()`.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

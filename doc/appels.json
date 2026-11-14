@@ -3774,6 +3774,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "accordeAnimation",
     "elementsTable",
     "forgeEffetsD.js (chargement)",
     "forgeSousCapacite",
@@ -3866,6 +3867,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "accordeAnimation",
     "declencheurForge",
     "destinationRemplacee",
     "effetForge",
@@ -4842,7 +4844,7 @@
   {
    "nom": "statiqueVise",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 31,
+   "ligne": 33,
    "chargement": false,
    "appelle": [
     "correspondBase"
@@ -4856,7 +4858,7 @@
   {
    "nom": "car",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 40,
+   "ligne": 42,
    "chargement": false,
    "appelle": [
     "animation",
@@ -4905,7 +4907,7 @@
   {
    "nom": "animation",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 86,
+   "ligne": 88,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4920,7 +4922,7 @@
   {
    "nom": "aMot",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 110,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "car"
@@ -4944,7 +4946,7 @@
   {
    "nom": "estType",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 111,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "animation"
@@ -4975,7 +4977,7 @@
   {
    "nom": "estCreature",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 115,
+   "ligne": 118,
    "chargement": false,
    "appelle": [
     "estType"
@@ -5012,7 +5014,7 @@
   {
    "nom": "peutEngagerSoi",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 120,
+   "ligne": 123,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -5028,7 +5030,7 @@
   {
    "nom": "mvDe",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 127,
+   "ligne": 130,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9261,6 +9263,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "accordeAnimation",
     "definitionDepuisScript",
     "forgeEffetsD.js (chargement)"
    ]
@@ -9310,11 +9313,30 @@
    ]
   },
   {
-   "nom": "animationTenable",
+   "nom": "accordeAnimation",
    "fichier": "forgeEffetsD.js",
-   "ligne": 120,
+   "ligne": 130,
    "chargement": false,
    "appelle": [
+    "capaciteForge",
+    "declencheurForge",
+    "forgeSousCapacite",
+    "forgeTable",
+    "statiqueForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "animationTenable"
+   ]
+  },
+  {
+   "nom": "animationTenable",
+   "fichier": "forgeEffetsD.js",
+   "ligne": 140,
+   "chargement": false,
+   "appelle": [
+    "accordeAnimation",
     "couleursMots"
    ],
    "appelleDiffere": [],
@@ -10878,7 +10900,7 @@
   {
    "nom": "sansCapacites",
    "fichier": "jeuCouches.js",
-   "ligne": 91,
+   "ligne": 93,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10892,7 +10914,7 @@
   {
    "nom": "capacitesTerrain",
    "fichier": "jeuCouches.js",
-   "ligne": 101,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "animation",
@@ -11348,6 +11370,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "accordeAnimation",
     "activeeSynthese",
     "definitionDepuisScript",
     "statiqueForge"
@@ -11367,6 +11390,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "accordeAnimation",
     "declencheurSynthetique",
     "definitionDepuisScript",
     "forgeEffetsD.js (chargement)",

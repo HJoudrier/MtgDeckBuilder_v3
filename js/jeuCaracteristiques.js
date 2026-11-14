@@ -19,6 +19,8 @@ function statiquesEnJeu(P) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.def.statiques.length && !(o.anime && sansCapacites(o))) o.def.statiques.forEach(s => r.push({src: o, s}));
+    /* Les statiques qu'une animation accorde (js/forgeEffetsD.js). */
+    if (o.anime) o.anime.forEach(a => (a.statiques || []).forEach(s => r.push({src: o, s})));
   }
   if (P.effets) P.effets.forEach(e => e.def.statiques.forEach(s => r.push({src: e, s})));
   P._statV = P.ver; P._stat = r;
@@ -95,6 +97,7 @@ function animation(o) {
     if (a.retireTypes) r.types = [];
     if (a.changelin) r.changelin = true;
     if (a.perdTout) r.mots = 0;
+    if (a.retireMots) r.mots &= ~a.retireMots;
     if (a.force != null) r.force = a.force;
     if (a.endurance != null) r.endurance = a.endurance;
     if (a.retireSousTypes) r.sousTypes = [];
