@@ -97,6 +97,7 @@ function* lanceSort(P, j, a) {
   if (v.autre) yield* paieAutre(P, j, s, v.autre);
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   s.x = x;
+  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
     kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension',
     variante: a.variante || null};

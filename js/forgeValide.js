@@ -32,7 +32,11 @@ const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenC
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
   'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell', 'ExiledWithSource', 'EffectSource', 'IsTriggerRemembered',
-  'DefenderCtrl', 'faceDown', 'faceUp', 'YouDontOwn', 'RememberedPlayerCtrl', 'EnchantedControllerCtrl', 'EnchantedController', 'ControlledBy', 'OwnedBy'];
+  'DefenderCtrl', 'faceDown', 'faceUp', 'YouDontOwn', 'RememberedPlayerCtrl', 'EnchantedControllerCtrl', 'EnchantedController', 'ControlledBy', 'OwnedBy',
+  'ThisTurnEntered', 'wasDealtDamageThisTurn', 'DamagedBy', 'wasCast', 'wasCastByYou', 'wasCastFromYourHand', 'wasCastFromYourHandByYou',
+  'wasCastFromYourGraveyard', 'wasCastFromExile', 'wasCastFromGraveyard', 'wasCastFromHand', 'wasNotCast', 'HasCounters', 'modified',
+  'attackedThisTurn', 'blockingSource', 'blockedBySource', 'blocked', 'sameName', 'Outlaw', 'hasXCost', 'suspended', 'AdventureCard',
+  'YourTeamCtrl', 'hasKeywordFlash'];
 
 /* Compiler un filtre : un tableau d'alternatives `{tete, props}`. */
 function forgeFiltre(txt) {
@@ -171,6 +175,32 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'faceUp': return !o.faceCachee;
     case 'YouDontOwn': return o.prop !== ctrl;
     case 'RememberedPlayerCtrl': return !!(env && env.ctx && (env.ctx.memoJ || []).includes(tient));
+    /* L'historique du tour (js/jeuHistorique.js). */
+    case 'ThisTurnEntered': return !!P && o.entreTour === P.tour;
+    case 'wasDealtDamageThisTurn': return !!P && o.blesseTour === P.tour;
+    case 'DamagedBy': return !!P && !!src && o.blesseTour === P.tour && (o.blessePar || []).includes(src.id);
+    case 'attackedThisTurn': return !!P && o.attaqueTour === P.tour;
+    case 'wasCast': case 'wasCastByYou': case 'wasCastFromYourHand': case 'wasCastFromYourHandByYou': case 'wasCastFromYourGraveyard':
+    case 'wasCastFromExile': case 'wasCastFromGraveyard': case 'wasCastFromHand': {
+      const L = o.lance;
+      if (!L) return false;
+      if (/ByYou|Your/.test(p) && L.par !== ctrl) return false;
+      const d = /Hand/.test(p) ? 'main' : /Graveyard/.test(p) ? 'cimetiere' : /Exile/.test(p) ? 'exil' : null;
+      return !d || L.depuis === d;
+    }
+    case 'wasNotCast': return !o.lance;
+    case 'HasCounters': return Object.values(o.marq || {}).some(n => n > 0);
+    case 'modified': return Object.values(o.marq || {}).some(n => n > 0) || (!!P && P.champ.some(id => obj(P, id).att === o.id && (!obj(P, id).def.aura || obj(P, id).ctrl === tient)));
+    case 'blockingSource': return !!P && !!P.combat && !!src && P.combat.bloqueurs.get(o.id) === src.id;
+    case 'blockedBySource': return !!P && !!P.combat && !!src && P.combat.bloqueurs.get(src.id) === o.id;
+    case 'blocked': return !!P && !!P.combat && P.combat.bloque.has(o.id);
+    case 'sameName': return !!src && !!src.def && o.def.nom === src.def.nom;
+    case 'Outlaw': return ['assassin', 'mercenary', 'pirate', 'rogue', 'warlock'].some(t => (c.sousTypes || []).includes(t)) || !!c.changelin;
+    case 'hasXCost': return !!(o.def.cout && o.def.cout.x);
+    case 'suspended': return o.zone === 'exil' && !!o.suspendu;
+    case 'AdventureCard': return o.def.modeFaces === 'Adventure';
+    case 'YourTeamCtrl': return tient === ctrl;
+    case 'hasKeywordFlash': return (c.mots & MOT.FLASH) !== 0;
     case 'EnchantedControllerCtrl': { const h = P && src && src.att != null ? obj(P, src.att) : null; return !!h && h.ctrl === tient; }
   }
   let m;

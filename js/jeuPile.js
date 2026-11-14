@@ -58,6 +58,7 @@ function* stabilise(P) {
 function* resoudre(P, item) {
   P.suivi = new Map();
   P.lkis = new Map();
+  noteResolution(P, item);
   const src = item.sort ? obj(P, item.id) : (obj(P, item.source) || item.lki);
   const couleurs = src ? (src.lki ? src.couleurs : src.def.couleurs) : [];
   let avait = false, reste = false;
@@ -77,9 +78,10 @@ function* resoudre(P, item) {
   if (item.sort && item.def.types.some(t => TYPES_PERMANENTS.includes(t))) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
-    const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid];
-    yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu,
+    const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance;
+    const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu,
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
+    if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,

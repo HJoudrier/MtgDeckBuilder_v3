@@ -80,6 +80,13 @@ function agregeForge(P, l, agg) {
   if (!agg) return l.length;
   if (agg === 'CardTypes') return new Set([].concat(...l.map(o => o.def.types))).size;
   if (agg === 'CardPower' || agg === 'CardToughness' || agg === 'CardManaCost') return l.reduce((s, o) => s + caracForge(P, o, agg), 0);
+  /* La plus grande, le nombre de valeurs différentes, le nombre de
+     couleurs réunies. */
+  let m;
+  if ((m = /^Greatest(Card\w+)$/.exec(agg))) return l.reduce((s, o) => Math.max(s, caracForge(P, o, m[1])), 0);
+  if ((m = /^Different(Card\w+)$/.exec(agg))) return new Set(l.map(o => m[1] === 'CardNames' ? o.def.nom : caracForge(P, o, m[1]))).size;
+  if (agg === 'DifferentCardNames') return new Set(l.map(o => o.def.nom)).size;
+  if (agg === 'Colors') return new Set([].concat(...l.map(o => (o.lki ? o.couleurs : o.zone === 'champ' ? car(P, o).couleurs : o.def.couleurs) || []))).size;
   return 0;
 }
 

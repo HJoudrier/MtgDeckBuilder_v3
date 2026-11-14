@@ -55,6 +55,7 @@ js/                 modules, chargés dans cet ordre :
   jeuHasard.js      le hasard semé
   jeuEtat.js        une partie : joueurs, objets, zones, déplacements, questions
   jeuGestes.js      les gestes qui font un évènement : engager, dégager, poser des marqueurs, cibler
+  jeuHistorique.js  ce qui s'est passé ce tour : entrées, blessures, vie perdue, mana dépensé, résolutions
   jeuCaracteristiques.js  force, endurance, mots-clés du moment
   jeuCibles.js      juger un objet contre un descripteur
   jeuMana.js        la réserve, et le paiement automatique
@@ -672,6 +673,13 @@ par `Remembered`, `IsRemembered`, `Remembered$Valid …`. Ce qu'une carte a exil
 L'objet d'un départ se lit sur son instantané : arrivée au cimetière, la carte n'a plus ses marqueurs.
 Les expressions nouvelles passent par `exprEtendue()` (js/forgeExprB.js), que la porte interroge avant
 de rendre zéro.
+
+**L'historique du tour** (`js/jeuHistorique.js`, lot F14). Chaque évènement émis passe par
+`noteHistorique()` : la vie perdue, les sacrifices, les défausses, les marqueurs posés, les cartes
+parties du cimetière (`P.hist`, qui se refait quand le tour change), et sur l'objet son entrée, ses
+blessures et ses attaques du tour. Un sort garde `lance` — qui l'a lancé, d'où, avec quel mana, couleur
+par couleur — jusque sur le permanent qu'il devient : la convergence, « was cast from your hand » et
+« mana spent to cast it » s'en lisent. La dévotion compte les symboles des coûts, hybrides compris.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -115,6 +115,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   const n = deplace(P, id, 'champ', {ctrl, engage});
   const no = obj(P, n);
   if (!no) return n;
+  /* Un sort de permanent garde qui l'a lancé, d'où, avec quel mana. */
+  if (o.lance) no.lance = o.lance;
   if (opts.face) no.def = opts.face;
   if (opts.faceCachee) { no.vraieDef = P.cartes[no.cid].def; no.faceCachee = true; no.def = defFaceCachee(no.vraieDef); }
   if (no.def.loyaute != null) no.marq.loyaute = no.def.loyaute;

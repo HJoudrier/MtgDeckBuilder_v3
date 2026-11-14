@@ -147,7 +147,7 @@ function noteEntree(P, de, vers, o) {
 }
 
 /* Un évènement, que la collecte des déclencheurs lira (js/jeuDeclencheurs.js). */
-function emet(P, e) { P.evts.push(e); }
+function emet(P, e) { P.evts.push(e); if (typeof noteHistorique === 'function') noteHistorique(P, e); }
 
 /* Une ligne de journal — rien du tout quand la partie ne se journalise pas,
    ce qui est le cas de toutes celles d'un lot. */

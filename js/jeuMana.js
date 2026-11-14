@@ -171,9 +171,11 @@ function paieMana(P, j, cout, x, pour) {
     if (s.sac) deplace(P, s.id, 'cimetiere');
     ajouteMana(P, j, option);
   }
-  const avant = LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
+  const avant = LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0), reserve = {...J.pool};
   if (!debite(J.pool, cout, x)) return false;
   J.stats.manaDepense += avant - LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
+  /* Le mana dépensé pour un sort, couleur par couleur (convergence). */
+  if (pour && pour.sort) pour.sort.manaSort = Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]]));
   return true;
 }
 

@@ -38,6 +38,7 @@
   "jeuHasard.js",
   "jeuEtat.js",
   "jeuGestes.js",
+  "jeuHistorique.js",
   "jeuCaracteristiques.js",
   "jeuCibles.js",
   "jeuMana.js",
@@ -4158,6 +4159,7 @@
     "ciblesLegales",
     "collecteDeclencheurs",
     "collecteRetardes",
+    "compteDuTour",
     "compteObjets",
     "copiesFin",
     "couchesStatiques",
@@ -4212,6 +4214,7 @@
     "mulligans",
     "nettoyage",
     "nomObj",
+    "noteHistorique",
     "objetEvt",
     "objetZone",
     "objetsZone",
@@ -4382,7 +4385,9 @@
    "fichier": "jeuEtat.js",
    "ligne": 150,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "noteHistorique"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -4468,6 +4473,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "adversaires",
+    "compteJoueurs",
     "elimine",
     "forgeChoix.js (chargement)",
     "forgeDefinis",
@@ -4514,6 +4520,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "compteDuTour",
+    "compteJoueurs",
     "declareAttaquants",
     "etat.js (chargement)",
     "forgeChoix.js (chargement)",
@@ -4535,11 +4543,13 @@
    "appeleePar": [
     "actionsLegales",
     "actionsPossibles",
+    "compteDuTour",
     "convocables",
     "coutAutrePossible",
     "coutSort",
     "declareAttaquants",
     "declareBloqueurs",
+    "devotion",
     "equipiers",
     "forceDeFrappe",
     "forgeEffetsA.js (chargement)",
@@ -4686,6 +4696,78 @@
    ]
   },
   {
+   "nom": "histoire",
+   "fichier": "jeuHistorique.js",
+   "ligne": 15,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "compteDuTour",
+    "exprEtendue",
+    "noteHistorique",
+    "noteResolution"
+   ]
+  },
+  {
+   "nom": "plusUn",
+   "fichier": "jeuHistorique.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "noteHistorique",
+    "noteResolution"
+   ]
+  },
+  {
+   "nom": "noteHistorique",
+   "fichier": "jeuHistorique.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [
+    "histoire",
+    "obj",
+    "plusUn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "emet"
+   ]
+  },
+  {
+   "nom": "noteResolution",
+   "fichier": "jeuHistorique.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "histoire",
+    "plusUn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "resoudre"
+   ]
+  },
+  {
+   "nom": "manaDepenseDe",
+   "fichier": "jeuHistorique.js",
+   "ligne": 53,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "compteDuTour",
+    "exprEtendue"
+   ]
+  },
+  {
    "nom": "statiquesEnJeu",
    "fichier": "jeuCaracteristiques.js",
    "ligne": 16,
@@ -4736,10 +4818,12 @@
    "appelleParHtml": [],
    "appeleePar": [
     "aMot",
+    "agregeForge",
     "appliqueSBA",
     "caracForge",
     "caracsJugees",
     "ciblable",
+    "compteDuTour",
     "coutDeGarde",
     "declareBloqueurs",
     "equipagePossible",
@@ -4847,6 +4931,7 @@
    "appeleePar": [
     "actionsLegales",
     "appliqueSBA",
+    "compteDuTour",
     "convocables",
     "declareBloqueurs",
     "equipiers",
@@ -5266,7 +5351,7 @@
   {
    "nom": "videReserves",
    "fichier": "jeuMana.js",
-   "ligne": 181,
+   "ligne": 183,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5564,7 +5649,7 @@
   {
    "nom": "proposePaiement",
    "fichier": "jeuOpsB.js",
-   "ligne": 141,
+   "ligne": 143,
    "chargement": false,
    "appelle": [
     "joueursDe",
@@ -5581,7 +5666,7 @@
   {
    "nom": "executeOps",
    "fichier": "jeuOpsB.js",
-   "ligne": 149,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "compteObjets",
@@ -6031,7 +6116,7 @@
   {
    "nom": "activeCapacite",
    "fichier": "jeuActions.js",
-   "ligne": 121,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -6056,7 +6141,7 @@
   {
    "nom": "equipe",
    "fichier": "jeuActions.js",
-   "ligne": 156,
+   "ligne": 157,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6072,7 +6157,7 @@
   {
    "nom": "joueTerrain",
    "fichier": "jeuActions.js",
-   "ligne": 174,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "emet",
@@ -6091,7 +6176,7 @@
   {
    "nom": "executeAction",
    "fichier": "jeuActions.js",
-   "ligne": 184,
+   "ligne": 185,
    "chargement": false,
    "appelle": [
     "activeCapacite",
@@ -6956,6 +7041,7 @@
     "executeOps",
     "jn",
     "metEnJeu",
+    "noteResolution",
     "obj"
    ],
    "appelleDiffere": [],
@@ -6967,7 +7053,7 @@
   {
    "nom": "priorite",
    "fichier": "jeuPile.js",
-   "ligne": 101,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "actionsPossibles",
@@ -7597,7 +7683,7 @@
   {
    "nom": "forgeFiltre",
    "fichier": "forgeValide.js",
-   "ligne": 38,
+   "ligne": 42,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7613,7 +7699,7 @@
   {
    "nom": "famillesFiltre",
    "fichier": "forgeValide.js",
-   "ligne": 55,
+   "ligne": 59,
    "chargement": false,
    "appelle": [
     "familleProp",
@@ -7629,7 +7715,7 @@
   {
    "nom": "sousTypeProbable",
    "fichier": "forgeValide.js",
-   "ligne": 75,
+   "ligne": 79,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7643,7 +7729,7 @@
   {
    "nom": "familleProp",
    "fichier": "forgeValide.js",
-   "ligne": 80,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "sousTypeProbable"
@@ -7657,7 +7743,7 @@
   {
    "nom": "teteConnue",
    "fichier": "forgeValide.js",
-   "ligne": 94,
+   "ligne": 98,
    "chargement": false,
    "appelle": [
     "sousTypeProbable"
@@ -7671,7 +7757,7 @@
   {
    "nom": "compareForge",
    "fichier": "forgeValide.js",
-   "ligne": 99,
+   "ligne": 103,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7684,7 +7770,7 @@
   {
    "nom": "aQualite",
    "fichier": "forgeValide.js",
-   "ligne": 109,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "sousTypeProbable"
@@ -7699,7 +7785,7 @@
   {
    "nom": "teteObjet",
    "fichier": "forgeValide.js",
-   "ligne": 118,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
     "aQualite"
@@ -7713,7 +7799,7 @@
   {
    "nom": "propObjet",
    "fichier": "forgeValide.js",
-   "ligne": 128,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "aQualite",
@@ -7739,7 +7825,7 @@
   {
    "nom": "ciblesJoueurs",
    "fichier": "forgeValide.js",
-   "ligne": 205,
+   "ligne": 235,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7751,7 +7837,7 @@
   {
    "nom": "forgeValideObjet",
    "fichier": "forgeValide.js",
-   "ligne": 211,
+   "ligne": 241,
    "chargement": false,
    "appelle": [
     "caracsJugees",
@@ -7766,6 +7852,8 @@
     "attaquantsDeclares",
     "caracEtendue",
     "cibleOuDefinis",
+    "compteDuTour",
+    "compteJoueurs",
     "conditionForge",
     "correspondObjet",
     "defenseurVise",
@@ -7797,7 +7885,7 @@
   {
    "nom": "forgeValideJoueur",
    "fichier": "forgeValide.js",
-   "ligne": 219,
+   "ligne": 249,
    "chargement": false,
    "appelle": [
     "choixDe",
@@ -7824,7 +7912,7 @@
   {
    "nom": "forgeValideDef",
    "fichier": "forgeValide.js",
-   "ligne": 242,
+   "ligne": 272,
    "chargement": false,
    "appelle": [
     "forgeValideObjet"
@@ -7846,7 +7934,7 @@
   {
    "nom": "genreMarqueur",
    "fichier": "forgeValide.js",
-   "ligne": 249,
+   "ligne": 279,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7866,7 +7954,7 @@
   {
    "nom": "descForge",
    "fichier": "forgeValide.js",
-   "ligne": 257,
+   "ligne": 287,
    "chargement": false,
    "appelle": [
     "forgeFiltre"
@@ -7924,6 +8012,7 @@
     "reductionParCibles",
     "reductionPossible",
     "seuilForge",
+    "siAlors",
     "sortInterdit",
     "sourcesMana",
     "tailleMainMax",
@@ -7956,6 +8045,8 @@
    "appeleePar": [
     "aCopier",
     "cibleOuDefinis",
+    "compteDuTour",
+    "compteJoueurs",
     "conditionForge",
     "forgeChoix.js (chargement)",
     "forgeDefinis",
@@ -8021,6 +8112,7 @@
    "ligne": 79,
    "chargement": false,
    "appelle": [
+    "car",
     "caracForge"
    ],
    "appelleDiffere": [],
@@ -8033,7 +8125,7 @@
   {
    "nom": "forgeExpression",
    "fichier": "forgeExpr.js",
-   "ligne": 87,
+   "ligne": 94,
    "chargement": false,
    "appelle": [
     "adversaires",
@@ -8111,8 +8203,12 @@
     "agregeForge",
     "caracEtendue",
     "caracForge",
+    "compteDuTour",
+    "compteJoueurs",
     "forgeDefinis",
     "forgeValideObjet",
+    "histoire",
+    "manaDepenseDe",
     "objetEvt",
     "passeOuPresent",
     "quantiteJoueur"
@@ -8121,6 +8217,75 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeExpression"
+   ]
+  },
+  {
+   "nom": "devotion",
+   "fichier": "forgeExprB.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [
+    "champDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "compteDuTour"
+   ]
+  },
+  {
+   "nom": "siAlors",
+   "fichier": "forgeExprB.js",
+   "ligne": 76,
+   "chargement": false,
+   "appelle": [
+    "forgeNombre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "compteDuTour"
+   ]
+  },
+  {
+   "nom": "compteDuTour",
+   "fichier": "forgeExprB.js",
+   "ligne": 78,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
+    "car",
+    "champDe",
+    "devotion",
+    "estCreature",
+    "forgeValideObjet",
+    "histoire",
+    "manaDepenseDe",
+    "obj",
+    "objetsZone",
+    "siAlors"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "exprEtendue"
+   ]
+  },
+  {
+   "nom": "compteJoueurs",
+   "fichier": "forgeExprB.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
+    "forgeValideObjet",
+    "objetsZone",
+    "vivants"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "exprEtendue"
    ]
   },
   {
