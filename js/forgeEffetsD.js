@@ -27,6 +27,17 @@ function statiqueForge(face, t, jetons) {
     }
     s.accorde = tmp.capacites;
   }
+  /* Une statique qui accorde une statique (« creatures you control have
+     'this can't be blocked…' ») : compilée ici, posée sur chaque objet
+     visé par js/jeuCaracteristiques.js `statiquesEnJeu()`. */
+  if (t.AddStaticAbility) {
+    s.accordeStat = [];
+    for (const n of String(t.AddStaticAbility).split('&').map(x => x.trim()).filter(Boolean)) {
+      const g = face.svars[n] && statiqueForge(face, forgeTable(face.svars[n]), jetons);
+      if (!g) return null;
+      s.accordeStat.push(g);
+    }
+  }
   return s;
 }
 

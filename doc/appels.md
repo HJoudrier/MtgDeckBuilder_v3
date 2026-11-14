@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1428 fonctions** dans 204 modules, **4106 appels** relevés.
+**1434 fonctions** dans 204 modules, **4129 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1563,7 +1563,7 @@ Appelée par : `creeJetonsForge`, `deplace`, `forgeCopies.js (chargement)`, `for
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `aCopier`, `accordeJourNuit`, `actionsLegales`, `actionsPossibles`, `activeCapacite`, `appliqueSBA`, `attaquantsDeclares`, `carteVue`, `cartesPermises`, `champDe`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `compteDuTour`, `compteObjets`, `copiesFin`, `couchesStatiques`, `coutAutrePossible`, `coutAutrePossibleB`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `declencheursEtat`, `defausseCarte`, `defenseurDe`, `defenseurDeclare`, `defenseurVise`, `degagement`, `degatsCombat`, `deplace`, `detruitObjet`, `ecouteRepond`, `elimine`, `emetCibles`, `equipe`, `estAMoi`, `etendEffet`, `executeForge`, `exhumeesFin`, `finDuTour`, `flashPossible`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeTraine.js (chargement)`, `forgeValideJoueur`, `hotePart`, `iaAttaquants`, `iaBloqueurs`, `iaCartes`, `iaCibles`, `iaPriorite`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `jeuFacesB.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `joueTerrain`, `lanceDepuisEffet`, `lanceSort`, `libelleAction`, `libelleRef`, `manaReflete`, `marqueurPose`, `meilleureCibleHostile`, `metEnJeu`, `mouvementEvt`, `mulligans`, `nettoyage`, `nomObj`, `noteHistorique`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieAutreB`, `paieEquipage`, `paieMana`, `paieReductions`, `paieTaxesAttaque`, `passeOuPresent`, `phasesEntrent`, `piocheN`, `prepareDeclencheur`, `presage`, `propObjet`, `questionPourUI`, `rebondsEntretien`, `reductionParCibles`, `reductionPossible`, `remplacementsEnJeu`, `resoudre`, `resous`, `retourne`, `sacrifie`, `sagasFinies`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCiblante`, `sourceCtx`, `sourcesHorsChamp`, `sourcesMana`, `stabilise`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `utiliteEnMain`, `vue`
+Appelée par : `aCopier`, `accordeJourNuit`, `actionsLegales`, `actionsPossibles`, `activeCapacite`, `appliqueSBA`, `attaquantsDeclares`, `carteVue`, `cartesPermises`, `champDe`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `compteDuTour`, `compteObjets`, `copiesFin`, `couchesStatiques`, `coutAutrePossible`, `coutAutrePossibleB`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `declencheursEtat`, `defausseCarte`, `defenseurDe`, `defenseurDeclare`, `defenseurVise`, `degageAussi`, `degagement`, `degatsCombat`, `deplace`, `detruitObjet`, `ecouteRepond`, `elimine`, `emetCibles`, `equipe`, `estAMoi`, `etendEffet`, `executeForge`, `exhumeesFin`, `finDuTour`, `flashPossible`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeTraine.js (chargement)`, `forgeValideJoueur`, `hotePart`, `iaAttaquants`, `iaBloqueurs`, `iaCartes`, `iaCibles`, `iaPriorite`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `jeuFacesB.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `joueTerrain`, `lanceDepuisEffet`, `lanceSort`, `libelleAction`, `libelleRef`, `manaReflete`, `marqueurPose`, `meilleureCibleHostile`, `metEnJeu`, `mouvementEvt`, `mulligans`, `nettoyage`, `nomObj`, `noteHistorique`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieAutreB`, `paieEquipage`, `paieMana`, `paieReductions`, `paieTaxesAttaque`, `passeOuPresent`, `phasesEntrent`, `piocheN`, `prepareDeclencheur`, `presage`, `propObjet`, `questionPourUI`, `rebondsEntretien`, `reductionParCibles`, `reductionPossible`, `remplacementsEnJeu`, `resoudre`, `resous`, `retourne`, `sacrifie`, `sagasFinies`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCiblante`, `sourceCtx`, `sourcesHorsChamp`, `sourcesMana`, `stabilise`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `utiliteEnMain`, `vue`
 
 ### `suit()` — ligne 66
 
@@ -1673,7 +1673,7 @@ Appelée par : `declareAttaquants`, `forgeEffetsC.js (chargement)`, `jeuOpsB.js 
 
 Appelle : `emet()` *(jeuEtat.js)*
 
-Appelée par : `degagement`, `forgeEffetsC.js (chargement)`, `jeuOpsB.js (chargement)`, `paieAutre`
+Appelée par : `degageAussi`, `degagement`, `forgeEffetsC.js (chargement)`, `jeuOpsB.js (chargement)`, `paieAutre`
 
 ### `poseMarqueurs()` — ligne 27
 
@@ -1723,53 +1723,53 @@ Appelée par : `compteDuTour`, `exprEtendue`
 
 ### `statiquesEnJeu()` — ligne 16
 
-Appelle : `obj()` *(jeuEtat.js)*, `sansCapacites()` *(jeuCouches.js)*
+Appelle : `obj()` *(jeuEtat.js)*, `sansCapacites()` *(jeuCouches.js)*, `viseForge()` *(forgeStatiques.js)*
 
 Appelée par : `capacitesAccordees`, `car`, `coutSort`, `coutsForge`, `reductionParCibles`, `statiquesForgeSur`, `statiquesMode`, `statiquesPermis`
 
-### `statiqueVise()` — ligne 33
+### `statiqueVise()` — ligne 40
 
 Appelle : `correspondBase()` *(jeuCibles.js)*
 
 Appelée par : `car`
 
-### `car()` — ligne 42
+### `car()` — ligne 49
 
 Appelle : `animation()` *(jeuCaracteristiques.js)*, `statiqueVise()` *(jeuCaracteristiques.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*, `statiquesForgeSur()` *(forgeStatiques.js)*
 
 Appelée par : `aMot`, `agregeForge`, `appliqueSBA`, `caracForge`, `caracsJugees`, `ciblable`, `compteDuTour`, `coutDeGarde`, `declareBloqueurs`, `equipagePossible`, `forceDeCombat`, `forceDeFrappe`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeExpression`, `frappe`, `iaAttaquants`, `iaBloqueurs`, `iaCibles`, `infligeDegats`, `instantane`, `jeuOpsA.js (chargement)`, `meilleureCibleHostile`, `objetVue`, `paieEquipage`, `peutAttaquer`, `peutBloquer`, `repartition`, `tue`, `valeur`, `valeurObjet`
 
-### `animation()` — ligne 88
+### `animation()` — ligne 96
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `capacitesTerrain`, `car`, `caracsJugees`, `estType`
 
-### `aMot()` — ligne 113
+### `aMot()` — ligne 121
 
 Appelle : `car()` *(jeuCaracteristiques.js)*
 
 Appelée par : `declareAttaquants`, `declareBloqueurs`, `degatsCombat`, `detruitForge`, `iaBloqueurs`, `initiativeEnJeu`, `jeuOpsA.js (chargement)`, `peutAttaquer`, `peutEngagerSoi`, `questionPourUI`, `repartition`
 
-### `estType()` — ligne 114
+### `estType()` — ligne 122
 
 Appelle : `animation()` *(jeuCaracteristiques.js)*
 
 Appelée par : `actionsLegales`, `appliqueSBA`, `capacitesTerrain`, `convocables`, `declareAttaquants`, `estCreature`, `forgeEffetsA.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeExpression`, `forgeTraine.js (chargement)`, `iaCartes`, `iaScrute`, `infligeDegats`, `lanceDepuisEffet`, `notePrincipale`, `peutBloquer`, `sourcesMana`, `terrainsEnMain`, `utiliteEnMain`
 
-### `estCreature()` — ligne 118
+### `estCreature()` — ligne 126
 
 Appelle : `estType()` *(jeuCaracteristiques.js)*
 
 Appelée par : `actionsLegales`, `appliqueSBA`, `compteDuTour`, `convocables`, `coutAutrePossibleB`, `declareBloqueurs`, `equipiers`, `forceDeFrappe`, `forgeEffetsC.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `iaAttaquants`, `iaCibles`, `impactCapacite`, `impactSort`, `infligeDegats`, `meilleureCibleHostile`, `objetVue`, `paieAutreB`, `peutAttaquer`, `peutBloquer`, `peutEngagerSoi`, `proprieteDefenseur`, `scoreEffet`, `sourcesMana`, `valeurObjet`
 
-### `peutEngagerSoi()` — ligne 123
+### `peutEngagerSoi()` — ligne 131
 
 Appelle : `aMot()` *(jeuCaracteristiques.js)*, `estCreature()` *(jeuCaracteristiques.js)*
 
 Appelée par : `coutAutrePossible`, `sourcesMana`
 
-### `mvDe()` — ligne 130
+### `mvDe()` — ligne 138
 
 N'appelle aucune fonction du projet.
 
@@ -2405,11 +2405,11 @@ Appelée par : `actionsLegales`, `actionsPossibles`, `activeCapacite`, `collecte
 
 ### `detruitObjet()` — ligne 124
 
-Appelle : `deplace()` *(jeuEtat.js)*, `jn()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
+Appelle : `deplace()` *(jeuEtat.js)*, `jn()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `sansRegenerationStat()` *(forgeInterdits.js)*
 
 Appelée par : `appliqueSBA`, `detruitForge`, `jeuOpsA.js (chargement)`
 
-### `defausseCarte()` — ligne 142
+### `defausseCarte()` — ligne 143
 
 Appelle : `deplace()` *(jeuEtat.js)*, `emet()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
 
@@ -2579,7 +2579,7 @@ Appelle : `coutManaVide()` *(oracleCouts.js)*, `coutSort()` *(jeuLancer.js)*
 
 Appelée par : `variantesSort`
 
-### `permisUtilise()` — ligne 69
+### `permisUtilise()` — ligne 73
 
 Appelle : `permisDeJouer()` *(jeuPermis.js)*
 
@@ -2675,17 +2675,17 @@ Appelée par : `degatsCombat`
 
 ### `forceDeCombat()` — ligne 168
 
-Appelle : `car()` *(jeuCaracteristiques.js)*, `degatsParEndurance()` *(forgeInterdits.js)*
+Appelle : `car()` *(jeuCaracteristiques.js)*, `degatsParEndurance()` *(forgeInterdits.js)*, `sansDegatsDeCombat()` *(forgeInterdits.js)*
 
 Appelée par : `degatsCombat`
 
 ### `degatsCombat()` — ligne 172
 
-Appelle : `aMot()` *(jeuCaracteristiques.js)*, `forceDeCombat()` *(jeuCombat.js)*, `frappe()` *(jeuCombat.js)*, `infligeDegats()` *(jeuOpsA.js)*, `obj()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `repartition()` *(jeuCombat.js)*
+Appelle : `aMot()` *(jeuCaracteristiques.js)*, `commeNonBloque()` *(forgeInterdits.js)*, `forceDeCombat()` *(jeuCombat.js)*, `frappe()` *(jeuCombat.js)*, `infligeDegats()` *(jeuOpsA.js)*, `obj()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `repartition()` *(jeuCombat.js)*
 
 Appelée par : `etape`
 
-### `finCombat()` — ligne 199
+### `finCombat()` — ligne 200
 
 N'appelle aucune fonction du projet.
 
@@ -2695,29 +2695,29 @@ Appelée par : `etape`
 
 ### `degagement()` — ligne 20
 
-Appelle : `degageObjet()` *(jeuGestes.js)*, `degagementEmpeche()` *(forgeRemplacements.js)*, `obj()` *(jeuEtat.js)*, `phasesEntrent()` *(forgeEffetsG.js)*
+Appelle : `degageAussi()` *(forgeInterdits.js)*, `degageObjet()` *(jeuGestes.js)*, `degagementEmpeche()` *(forgeRemplacements.js)*, `obj()` *(jeuEtat.js)*, `phasesEntrent()` *(forgeEffetsG.js)*
 
 Appelée par : `etape`
 
-### `nettoyage()` — ligne 34
+### `nettoyage()` — ligne 35
 
 Appelle : `choisitCartes()` *(jeuOpsA.js)*, `collecteDeclencheurs()` *(jeuDeclencheurs.js)*, `defausseCarte()` *(jeuDurees.js)*, `finDuTour()` *(jeuDurees.js)*, `obj()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `tailleMainMax()` *(forgeInterdits.js)*
 
 Appelée par : `etape`
 
-### `etape()` — ligne 56
+### `etape()` — ligne 57
 
 Appelle : `copiesFin()` *(forgeCopies.js)*, `declareAttaquants()` *(jeuCombat.js)*, `declareBloqueurs()` *(jeuCombat.js)*, `degagement()` *(jeuTour.js)*, `degatsCombat()` *(jeuCombat.js)*, `emet()` *(jeuEtat.js)*, `etapeSautee()` *(forgeRemplacementsB.js)*, `exhumeesFin()` *(jeuVariantes.js)*, `finCombat()` *(jeuCombat.js)*, `initiativeEnJeu()` *(jeuCombat.js)*, `loreDebutPrincipale()` *(jeuFaces.js)*, `monarqueFin()` *(forgeEffetsG.js)*, `nettoyage()` *(jeuTour.js)*, `notePrincipale()` *(jeuTour.js)*, `piocheN()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `rebondsEntretien()` *(jeuVariantesB.js)*, `suspensionsEntretien()` *(jeuVariantes.js)*
 
 Appelée par : `tour`
 
-### `notePrincipale()` — ligne 91
+### `notePrincipale()` — ligne 92
 
 Appelle : `champDe()` *(jeuEtat.js)*, `estType()` *(jeuCaracteristiques.js)*, `manaDispo()` *(jeuMana.js)*
 
 Appelée par : `etape`
 
-### `tour()` — ligne 98
+### `tour()` — ligne 99
 
 Appelle : `debutDuTour()` *(jeuDurees.js)*, `etape()` *(jeuTour.js)*, `jn()` *(jeuEtat.js)*, `jourNuitDebut()` *(jeuFacesB.js)*, `noteSortsDuTour()` *(jeuFacesB.js)*, `videReserves()` *(jeuMana.js)*
 
@@ -3119,7 +3119,7 @@ Appelée par : `attaquantsDeclares`, `conditionForge`, `forgeDeclencheurs.js (ch
 
 Appelle : `forgeDefinis()` *(forgeDefini.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideObjet()` *(forgeValide.js)*, `objetsZone()` *(forgeExpr.js)*, `seuilForge()` *(forgeEffetsA.js)*
 
-Appelée par : `bornesBlocage`, `coutsForge`, `declenchementsEnPlus`, `declencheursEtat`, `executeForge`, `forgeDeclenche`, `forgeEffetsG.js (chargement)`, `forgeStatiques.js (chargement)`, `metEnJeu`, `reductionParCibles`, `statiqueQui`, `statiquesJoueur`, `taxeAttaque`, `variantesEtendues`, `viseForge`
+Appelée par : `bornesBlocage`, `coutsForge`, `declenchementsEnPlus`, `declencheursEtat`, `degageAussi`, `executeForge`, `forgeDeclenche`, `forgeEffetsG.js (chargement)`, `forgeStatiques.js (chargement)`, `metEnJeu`, `reductionParCibles`, `statiqueQui`, `statiquesJoueur`, `taxeAttaque`, `variantesEtendues`, `viseForge`
 
 ### `paieUnlessForge()` — ligne 73
 
@@ -3253,31 +3253,31 @@ Appelle : `capaciteForge()` *(forgeDefinition.js)*, `declencheurForge()` *(forge
 
 Appelée par : `accordeAnimation`, `definitionDepuisScript`, `forgeEffetsD.js (chargement)`
 
-### `capacitesAccordees()` — ligne 34
+### `capacitesAccordees()` — ligne 45
 
 Appelle : `statiquesEnJeu()` *(jeuCaracteristiques.js)*, `viseForge()` *(forgeStatiques.js)*
 
 Appelée par : `capacitesDe`
 
-### `regenere()` — ligne 46
+### `regenere()` — ligne 57
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `forgeEffetsD.js (chargement)`
 
-### `animeForge()` — ligne 114
+### `animeForge()` — ligne 125
 
 Appelle : `couleursMots()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `motsForge()` *(forgeEffetsC.js)*, `typesForge()` *(forgeStatiques.js)*
 
 Appelée par : `forgeEffetsD.js (chargement)`
 
-### `accordeAnimation()` — ligne 133
+### `accordeAnimation()` — ligne 144
 
 Appelle : `capaciteForge()` *(forgeDefinition.js)*, `declencheurForge()` *(forgeDefinition.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `statiqueForge()` *(forgeEffetsD.js)*
 
 Appelée par : `animationTenable`
 
-### `animationTenable()` — ligne 143
+### `animationTenable()` — ligne 154
 
 Appelle : `accordeAnimation()` *(forgeEffetsD.js)*, `couleursMots()` *(forgeStatiques.js)*
 
@@ -3599,33 +3599,33 @@ Appelée par : `forgeInterdits.js (chargement)`, `forgeStatiques.js (chargement)
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `bornesBlocage`, `coutsForge`, `declenchementsEnPlus`, `flashPossible`, `forgeStatiques.js (chargement)`, `reductionParCibles`, `reductionPossible`, `statiqueQui`, `statiquesJoueur`, `tailleMainMax`, `taxeAttaque`, `terrainsParTour`, `viseForge`
+Appelée par : `bornesBlocage`, `coutsForge`, `declenchementsEnPlus`, `degageAussi`, `flashPossible`, `forgeStatiques.js (chargement)`, `reductionParCibles`, `reductionPossible`, `statiqueQui`, `statiquesJoueur`, `tailleMainMax`, `taxeAttaque`, `terrainsParTour`, `viseForge`
 
 ### `viseForge()` — ligne 79
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeValideObjet()` *(forgeValide.js)*
 
-Appelée par : `capacitesAccordees`, `couchesStatiques`, `forgeStatiques.js (chargement)`, `permisDeJouer`
+Appelée par : `capacitesAccordees`, `couchesStatiques`, `forgeStatiques.js (chargement)`, `goadStatique`, `permisDeJouer`, `statiquesEnJeu`
 
-### `statiquesForgeSur()` — ligne 134
+### `statiquesForgeSur()` — ligne 135
 
 Appelle : `statiquesEnJeu()` *(jeuCaracteristiques.js)*
 
 Appelée par : `car`
 
-### `coutsForge()` — ligne 149
+### `coutsForge()` — ligne 150
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideDef()` *(forgeValide.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*
 
 Appelée par : `coutSort`
 
-### `reductionParCibles()` — ligne 172
+### `reductionParCibles()` — ligne 173
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideDef()` *(forgeValide.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `forgeValideObjet()` *(forgeValide.js)*, `obj()` *(jeuEtat.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*
 
 Appelée par : `lanceSort`
 
-### `reductionPossible()` — ligne 191
+### `reductionPossible()` — ligne 192
 
 Appelle : `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `forgeValideObjet()` *(forgeValide.js)*, `obj()` *(jeuEtat.js)*
 
@@ -3641,25 +3641,25 @@ Appelle : `forgeSait()` *(forgeCouverture.js)*, `forgeStatique()` *(forgeStatiqu
 
 Appelle : `statiquesEnJeu()` *(jeuCaracteristiques.js)*
 
-Appelée par : `activationInterdite`, `bornesBlocage`, `cibleInterdite`, `declenchementsEnPlus`, `flashPossible`, `statiqueQui`, `statiquesCouches`, `statiquesJoueur`, `taxeAttaque`
+Appelée par : `activationInterdite`, `bornesBlocage`, `cibleInterdite`, `declenchementsEnPlus`, `degageAussi`, `flashPossible`, `goadStatique`, `statiqueQui`, `statiquesCouches`, `statiquesJoueur`, `taxeAttaque`
 
 ### `statiqueQui()` — ligne 31
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `statiquesMode()` *(forgeInterdits.js)*
 
-Appelée par : `activationInterdite`, `attaquePermise`, `cibleInterdite`, `defenseurAttaque`, `degatsParEndurance`, `doitAttaquer`, `doitBloquer`, `flashAccorde`, `preventionInterdite`, `sortInterdit`, `vieBloquee`
+Appelée par : `activationInterdite`, `attaquePermise`, `cibleInterdite`, `commeNonBloque`, `defenseurAttaque`, `degatsParEndurance`, `doitAttaquer`, `doitBloquer`, `flashAccorde`, `preventionInterdite`, `sansDegatsDeCombat`, `sansRegenerationStat`, `sortInterdit`, `terrainsInterdits`, `vieBloquee`
 
 ### `joueurStatique()` — ligne 41
 
 Appelle : `forgeValideJoueur()` *(forgeValide.js)*
 
-Appelée par : `activationInterdite`, `cibleInterdite`, `flashAccorde`, `flashPossible`, `sortInterdit`, `vieBloquee`
+Appelée par : `activationInterdite`, `cibleInterdite`, `flashAccorde`, `flashPossible`, `sortInterdit`, `terrainsInterdits`, `vieBloquee`
 
 ### `objetOuRien()` — ligne 42
 
 Appelle : `forgeValideObjet()` *(forgeValide.js)*
 
-Appelée par : `activationInterdite`, `attaquePermise`, `bornesBlocage`, `cibleInterdite`, `declenchementsEnPlus`, `defenseurAttaque`, `degatsParEndurance`, `doitAttaquer`, `doitBloquer`, `preventionInterdite`, `taxeAttaque`
+Appelée par : `activationInterdite`, `attaquePermise`, `bornesBlocage`, `cibleInterdite`, `commeNonBloque`, `declenchementsEnPlus`, `defenseurAttaque`, `degageAussi`, `degatsParEndurance`, `doitAttaquer`, `doitBloquer`, `preventionInterdite`, `sansDegatsDeCombat`, `sansRegenerationStat`, `taxeAttaque`
 
 ### `zoneOuRien()` — ligne 43
 
@@ -3667,137 +3667,173 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `activationInterdite`, `declenchementsEnPlus`, `sortInterdit`
 
-### `sortInterdit()` — ligne 61
+### `sortInterdit()` — ligne 63
 
 Appelle : `enPhasePrincipale()` *(jeuLancer.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideDef()` *(forgeValide.js)*, `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*, `zoneOuRien()` *(forgeInterdits.js)*
 
 Appelée par : `actionsLegales`
 
-### `flashAccorde()` — ligne 75
+### `flashAccorde()` — ligne 77
 
 Appelle : `forgeValideDef()` *(forgeValide.js)*, `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `actionsLegales`
 
-### `flashPossible()` — ligne 83
+### `flashPossible()` — ligne 85
 
 Appelle : `envStatique()` *(forgeStatiques.js)*, `joueurStatique()` *(forgeInterdits.js)*, `obj()` *(jeuEtat.js)*, `statiquesMode()` *(forgeInterdits.js)*
 
 Appelée par : `actionsPossibles`
 
-### `capaciteVisee()` — ligne 90
+### `capaciteVisee()` — ligne 92
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `activationInterdite`
 
-### `activationInterdite()` — ligne 101
+### `activationInterdite()` — ligne 103
 
 Appelle : `capaciteVisee()` *(forgeInterdits.js)*, `joueurStatique()` *(forgeInterdits.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*, `statiquesMode()` *(forgeInterdits.js)*, `zoneOuRien()` *(forgeInterdits.js)*
 
 Appelée par : `actionsLegales`, `sourcesMana`
 
-### `doitAttaquer()` — ligne 109
+### `doitAttaquer()` — ligne 111
 
-Appelle : `goadActif()` *(forgeEffetsG.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+Appelle : `goadActif()` *(forgeEffetsG.js)*, `goadStatique()` *(forgeInterdits.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `declareAttaquants`
 
-### `doitBloquer()` — ligne 110
+### `doitBloquer()` — ligne 112
 
 Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `declareBloqueurs`
 
-### `defenseurAttaque()` — ligne 111
+### `defenseurAttaque()` — ligne 113
 
 Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `peutAttaquer`
 
-### `degatsParEndurance()` — ligne 112
+### `degatsParEndurance()` — ligne 114
 
 Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `forceDeCombat`
 
-### `bornesBlocage()` — ligne 115
+### `bornesBlocage()` — ligne 117
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiquesMode()` *(forgeInterdits.js)*
 
 Appelée par : `declareBloqueurs`
 
-### `defenseurVise()` — ligne 128
+### `defenseurVise()` — ligne 130
 
 Appelle : `forgeValideObjet()` *(forgeValide.js)*, `obj()` *(jeuEtat.js)*
 
 Appelée par : `attaquePermise`, `taxeAttaque`
 
-### `proprieteDefenseur()` — ligne 141
+### `proprieteDefenseur()` — ligne 143
 
 Appelle : `champDe()` *(jeuEtat.js)*, `forgeValideObjet()` *(forgeValide.js)*, → `estCreature()` *(jeuCaracteristiques.js)*
 
 Appelée par : `attaquePermise`
 
-### `attaquePermise()` — ligne 151
+### `attaquePermise()` — ligne 153
 
 Appelle : `defenseurDe()` *(jeuCombat.js)*, `defenseurVise()` *(forgeInterdits.js)*, `objetOuRien()` *(forgeInterdits.js)*, `proprieteDefenseur()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `declareAttaquants`, `iaAttaquants`
 
-### `taxeAttaque()` — ligne 159
+### `taxeAttaque()` — ligne 161
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `defenseurVise()` *(forgeInterdits.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiquesMode()` *(forgeInterdits.js)*
 
 Appelée par : `declareAttaquants`, `iaAttaquants`, `paieTaxesAttaque`
 
-### `vieBloquee()` — ligne 171
+### `vieBloquee()` — ligne 173
 
 Appelle : `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `gagneVie`
 
-### `preventionInterdite()` — ligne 173
+### `preventionInterdite()` — ligne 175
 
 Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
 
 Appelée par : `degatsApresPrevention`
 
-### `cibleInterdite()` — ligne 179
+### `cibleInterdite()` — ligne 181
 
 Appelle : `joueurStatique()` *(forgeInterdits.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*, `statiquesMode()` *(forgeInterdits.js)*
 
 Appelée par : `ciblable`
 
-### `mouvementEvt()` — ligne 195
+### `mouvementEvt()` — ligne 197
 
 Appelle : `obj()` *(jeuEtat.js)*, `objetZone()` *(forgeDeclencheurs.js)*
 
 Appelée par : `declenchementsEnPlus`
 
-### `declenchementsEnPlus()` — ligne 205
+### `declenchementsEnPlus()` — ligne 207
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `mouvementEvt()` *(forgeInterdits.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiquesMode()` *(forgeInterdits.js)*, `zoneOuRien()` *(forgeInterdits.js)*
 
 Appelée par : `collecteDeclencheurs`
 
-### `statiquesJoueur()` — ligne 224
+### `statiquesJoueur()` — ligne 226
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `statiquesMode()` *(forgeInterdits.js)*
 
 Appelée par : `tailleMainMax`, `terrainsParTour`
 
-### `tailleMainMax()` — ligne 232
+### `tailleMainMax()` — ligne 234
 
 Appelle : `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `statiquesJoueur()` *(forgeInterdits.js)*
 
 Appelée par : `nettoyage`
 
-### `terrainsParTour()` — ligne 243
+### `terrainsParTour()` — ligne 245
 
-Appelle : `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `statiquesJoueur()` *(forgeInterdits.js)*
+Appelle : `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `statiquesJoueur()` *(forgeInterdits.js)*, `terrainsInterdits()` *(forgeInterdits.js)*
 
 Appelée par : `actionsLegales`, `lanceDepuisEffet`
+
+### `sansDegatsDeCombat()` — ligne 262
+
+Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+
+Appelée par : `forceDeCombat`
+
+### `commeNonBloque()` — ligne 263
+
+Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+
+Appelée par : `degatsCombat`
+
+### `sansRegenerationStat()` — ligne 264
+
+Appelle : `objetOuRien()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+
+Appelée par : `detruitObjet`
+
+### `terrainsInterdits()` — ligne 265
+
+Appelle : `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+
+Appelée par : `terrainsParTour`
+
+### `degageAussi()` — ligne 268
+
+Appelle : `conditionForge()` *(forgeEffetsA.js)*, `degageObjet()` *(jeuGestes.js)*, `envStatique()` *(forgeStatiques.js)*, `obj()` *(jeuEtat.js)*, `objetOuRien()` *(forgeInterdits.js)*, `statiquesMode()` *(forgeInterdits.js)*
+
+Appelée par : `degagement`
+
+### `goadStatique()` — ligne 277
+
+Appelle : `statiquesMode()` *(forgeInterdits.js)*, `viseForge()` *(forgeStatiques.js)*
+
+Appelée par : `doitAttaquer`
 
 ## js/jeuCouches.js
 

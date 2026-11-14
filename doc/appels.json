@@ -4203,6 +4203,7 @@
     "defenseurDe",
     "defenseurDeclare",
     "defenseurVise",
+    "degageAussi",
     "degagement",
     "degatsCombat",
     "deplace",
@@ -4720,6 +4721,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "degageAussi",
     "degagement",
     "forgeEffetsC.js (chargement)",
     "jeuOpsB.js (chargement)",
@@ -4847,7 +4849,8 @@
    "chargement": false,
    "appelle": [
     "obj",
-    "sansCapacites"
+    "sansCapacites",
+    "viseForge"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -4865,7 +4868,7 @@
   {
    "nom": "statiqueVise",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 33,
+   "ligne": 40,
    "chargement": false,
    "appelle": [
     "correspondBase"
@@ -4879,7 +4882,7 @@
   {
    "nom": "car",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 42,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "animation",
@@ -4928,7 +4931,7 @@
   {
    "nom": "animation",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 88,
+   "ligne": 96,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4943,7 +4946,7 @@
   {
    "nom": "aMot",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 113,
+   "ligne": 121,
    "chargement": false,
    "appelle": [
     "car"
@@ -4967,7 +4970,7 @@
   {
    "nom": "estType",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 114,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
     "animation"
@@ -4999,7 +5002,7 @@
   {
    "nom": "estCreature",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 118,
+   "ligne": 126,
    "chargement": false,
    "appelle": [
     "estType"
@@ -5038,7 +5041,7 @@
   {
    "nom": "peutEngagerSoi",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 123,
+   "ligne": 131,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -5054,7 +5057,7 @@
   {
    "nom": "mvDe",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 130,
+   "ligne": 138,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6964,7 +6967,8 @@
    "appelle": [
     "deplace",
     "jn",
-    "obj"
+    "obj",
+    "sansRegenerationStat"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -6977,7 +6981,7 @@
   {
    "nom": "defausseCarte",
    "fichier": "jeuDurees.js",
-   "ligne": 142,
+   "ligne": 143,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -7402,7 +7406,7 @@
   {
    "nom": "permisUtilise",
    "fichier": "jeuPermis.js",
-   "ligne": 69,
+   "ligne": 73,
    "chargement": false,
    "appelle": [
     "permisDeJouer"
@@ -7688,7 +7692,8 @@
    "chargement": false,
    "appelle": [
     "car",
-    "degatsParEndurance"
+    "degatsParEndurance",
+    "sansDegatsDeCombat"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -7703,6 +7708,7 @@
    "chargement": false,
    "appelle": [
     "aMot",
+    "commeNonBloque",
     "forceDeCombat",
     "frappe",
     "infligeDegats",
@@ -7719,7 +7725,7 @@
   {
    "nom": "finCombat",
    "fichier": "jeuCombat.js",
-   "ligne": 199,
+   "ligne": 200,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7734,6 +7740,7 @@
    "ligne": 20,
    "chargement": false,
    "appelle": [
+    "degageAussi",
     "degageObjet",
     "degagementEmpeche",
     "obj",
@@ -7748,7 +7755,7 @@
   {
    "nom": "nettoyage",
    "fichier": "jeuTour.js",
-   "ligne": 34,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "choisitCartes",
@@ -7768,7 +7775,7 @@
   {
    "nom": "etape",
    "fichier": "jeuTour.js",
-   "ligne": 56,
+   "ligne": 57,
    "chargement": false,
    "appelle": [
     "copiesFin",
@@ -7799,7 +7806,7 @@
   {
    "nom": "notePrincipale",
    "fichier": "jeuTour.js",
-   "ligne": 91,
+   "ligne": 92,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -7815,7 +7822,7 @@
   {
    "nom": "tour",
    "fichier": "jeuTour.js",
-   "ligne": 98,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "debutDuTour",
@@ -9086,6 +9093,7 @@
     "coutsForge",
     "declenchementsEnPlus",
     "declencheursEtat",
+    "degageAussi",
     "executeForge",
     "forgeDeclenche",
     "forgeEffetsG.js (chargement)",
@@ -9539,7 +9547,7 @@
   {
    "nom": "capacitesAccordees",
    "fichier": "forgeEffetsD.js",
-   "ligne": 34,
+   "ligne": 45,
    "chargement": false,
    "appelle": [
     "statiquesEnJeu",
@@ -9554,7 +9562,7 @@
   {
    "nom": "regenere",
    "fichier": "forgeEffetsD.js",
-   "ligne": 46,
+   "ligne": 57,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9566,7 +9574,7 @@
   {
    "nom": "animeForge",
    "fichier": "forgeEffetsD.js",
-   "ligne": 114,
+   "ligne": 125,
    "chargement": false,
    "appelle": [
     "couleursMots",
@@ -9583,7 +9591,7 @@
   {
    "nom": "accordeAnimation",
    "fichier": "forgeEffetsD.js",
-   "ligne": 133,
+   "ligne": 144,
    "chargement": false,
    "appelle": [
     "capaciteForge",
@@ -9601,7 +9609,7 @@
   {
    "nom": "animationTenable",
    "fichier": "forgeEffetsD.js",
-   "ligne": 143,
+   "ligne": 154,
    "chargement": false,
    "appelle": [
     "accordeAnimation",
@@ -10536,6 +10544,7 @@
     "bornesBlocage",
     "coutsForge",
     "declenchementsEnPlus",
+    "degageAussi",
     "flashPossible",
     "forgeStatiques.js (chargement)",
     "reductionParCibles",
@@ -10565,13 +10574,15 @@
     "capacitesAccordees",
     "couchesStatiques",
     "forgeStatiques.js (chargement)",
-    "permisDeJouer"
+    "goadStatique",
+    "permisDeJouer",
+    "statiquesEnJeu"
    ]
   },
   {
    "nom": "statiquesForgeSur",
    "fichier": "forgeStatiques.js",
-   "ligne": 134,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
     "statiquesEnJeu"
@@ -10585,7 +10596,7 @@
   {
    "nom": "coutsForge",
    "fichier": "forgeStatiques.js",
-   "ligne": 149,
+   "ligne": 150,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10603,7 +10614,7 @@
   {
    "nom": "reductionParCibles",
    "fichier": "forgeStatiques.js",
-   "ligne": 172,
+   "ligne": 173,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10624,7 +10635,7 @@
   {
    "nom": "reductionPossible",
    "fichier": "forgeStatiques.js",
-   "ligne": 191,
+   "ligne": 192,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -10667,7 +10678,9 @@
     "bornesBlocage",
     "cibleInterdite",
     "declenchementsEnPlus",
+    "degageAussi",
     "flashPossible",
+    "goadStatique",
     "statiqueQui",
     "statiquesCouches",
     "statiquesJoueur",
@@ -10690,13 +10703,17 @@
     "activationInterdite",
     "attaquePermise",
     "cibleInterdite",
+    "commeNonBloque",
     "defenseurAttaque",
     "degatsParEndurance",
     "doitAttaquer",
     "doitBloquer",
     "flashAccorde",
     "preventionInterdite",
+    "sansDegatsDeCombat",
+    "sansRegenerationStat",
     "sortInterdit",
+    "terrainsInterdits",
     "vieBloquee"
    ]
   },
@@ -10716,6 +10733,7 @@
     "flashAccorde",
     "flashPossible",
     "sortInterdit",
+    "terrainsInterdits",
     "vieBloquee"
    ]
   },
@@ -10734,12 +10752,16 @@
     "attaquePermise",
     "bornesBlocage",
     "cibleInterdite",
+    "commeNonBloque",
     "declenchementsEnPlus",
     "defenseurAttaque",
+    "degageAussi",
     "degatsParEndurance",
     "doitAttaquer",
     "doitBloquer",
     "preventionInterdite",
+    "sansDegatsDeCombat",
+    "sansRegenerationStat",
     "taxeAttaque"
    ]
   },
@@ -10760,7 +10782,7 @@
   {
    "nom": "sortInterdit",
    "fichier": "forgeInterdits.js",
-   "ligne": 61,
+   "ligne": 63,
    "chargement": false,
    "appelle": [
     "enPhasePrincipale",
@@ -10779,7 +10801,7 @@
   {
    "nom": "flashAccorde",
    "fichier": "forgeInterdits.js",
-   "ligne": 75,
+   "ligne": 77,
    "chargement": false,
    "appelle": [
     "forgeValideDef",
@@ -10795,7 +10817,7 @@
   {
    "nom": "flashPossible",
    "fichier": "forgeInterdits.js",
-   "ligne": 83,
+   "ligne": 85,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -10812,7 +10834,7 @@
   {
    "nom": "capaciteVisee",
    "fichier": "forgeInterdits.js",
-   "ligne": 90,
+   "ligne": 92,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10824,7 +10846,7 @@
   {
    "nom": "activationInterdite",
    "fichier": "forgeInterdits.js",
-   "ligne": 101,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "capaciteVisee",
@@ -10844,10 +10866,11 @@
   {
    "nom": "doitAttaquer",
    "fichier": "forgeInterdits.js",
-   "ligne": 109,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "goadActif",
+    "goadStatique",
     "objetOuRien",
     "statiqueQui"
    ],
@@ -10860,7 +10883,7 @@
   {
    "nom": "doitBloquer",
    "fichier": "forgeInterdits.js",
-   "ligne": 110,
+   "ligne": 112,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10875,7 +10898,7 @@
   {
    "nom": "defenseurAttaque",
    "fichier": "forgeInterdits.js",
-   "ligne": 111,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10890,7 +10913,7 @@
   {
    "nom": "degatsParEndurance",
    "fichier": "forgeInterdits.js",
-   "ligne": 112,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10905,7 +10928,7 @@
   {
    "nom": "bornesBlocage",
    "fichier": "forgeInterdits.js",
-   "ligne": 115,
+   "ligne": 117,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10922,7 +10945,7 @@
   {
    "nom": "defenseurVise",
    "fichier": "forgeInterdits.js",
-   "ligne": 128,
+   "ligne": 130,
    "chargement": false,
    "appelle": [
     "forgeValideObjet",
@@ -10938,7 +10961,7 @@
   {
    "nom": "proprieteDefenseur",
    "fichier": "forgeInterdits.js",
-   "ligne": 141,
+   "ligne": 143,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -10955,7 +10978,7 @@
   {
    "nom": "attaquePermise",
    "fichier": "forgeInterdits.js",
-   "ligne": 151,
+   "ligne": 153,
    "chargement": false,
    "appelle": [
     "defenseurDe",
@@ -10974,7 +10997,7 @@
   {
    "nom": "taxeAttaque",
    "fichier": "forgeInterdits.js",
-   "ligne": 159,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10995,7 +11018,7 @@
   {
    "nom": "vieBloquee",
    "fichier": "forgeInterdits.js",
-   "ligne": 171,
+   "ligne": 173,
    "chargement": false,
    "appelle": [
     "joueurStatique",
@@ -11010,7 +11033,7 @@
   {
    "nom": "preventionInterdite",
    "fichier": "forgeInterdits.js",
-   "ligne": 173,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -11025,7 +11048,7 @@
   {
    "nom": "cibleInterdite",
    "fichier": "forgeInterdits.js",
-   "ligne": 179,
+   "ligne": 181,
    "chargement": false,
    "appelle": [
     "joueurStatique",
@@ -11042,7 +11065,7 @@
   {
    "nom": "mouvementEvt",
    "fichier": "forgeInterdits.js",
-   "ligne": 195,
+   "ligne": 197,
    "chargement": false,
    "appelle": [
     "obj",
@@ -11057,7 +11080,7 @@
   {
    "nom": "declenchementsEnPlus",
    "fichier": "forgeInterdits.js",
-   "ligne": 205,
+   "ligne": 207,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -11076,7 +11099,7 @@
   {
    "nom": "statiquesJoueur",
    "fichier": "forgeInterdits.js",
-   "ligne": 224,
+   "ligne": 226,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -11094,7 +11117,7 @@
   {
    "nom": "tailleMainMax",
    "fichier": "forgeInterdits.js",
-   "ligne": 232,
+   "ligne": 234,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -11110,18 +11133,113 @@
   {
    "nom": "terrainsParTour",
    "fichier": "forgeInterdits.js",
-   "ligne": 243,
+   "ligne": 245,
    "chargement": false,
    "appelle": [
     "envStatique",
     "forgeNombre",
-    "statiquesJoueur"
+    "statiquesJoueur",
+    "terrainsInterdits"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "actionsLegales",
     "lanceDepuisEffet"
+   ]
+  },
+  {
+   "nom": "sansDegatsDeCombat",
+   "fichier": "forgeInterdits.js",
+   "ligne": 262,
+   "chargement": false,
+   "appelle": [
+    "objetOuRien",
+    "statiqueQui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forceDeCombat"
+   ]
+  },
+  {
+   "nom": "commeNonBloque",
+   "fichier": "forgeInterdits.js",
+   "ligne": 263,
+   "chargement": false,
+   "appelle": [
+    "objetOuRien",
+    "statiqueQui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "degatsCombat"
+   ]
+  },
+  {
+   "nom": "sansRegenerationStat",
+   "fichier": "forgeInterdits.js",
+   "ligne": 264,
+   "chargement": false,
+   "appelle": [
+    "objetOuRien",
+    "statiqueQui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "detruitObjet"
+   ]
+  },
+  {
+   "nom": "terrainsInterdits",
+   "fichier": "forgeInterdits.js",
+   "ligne": 265,
+   "chargement": false,
+   "appelle": [
+    "joueurStatique",
+    "statiqueQui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "terrainsParTour"
+   ]
+  },
+  {
+   "nom": "degageAussi",
+   "fichier": "forgeInterdits.js",
+   "ligne": 268,
+   "chargement": false,
+   "appelle": [
+    "conditionForge",
+    "degageObjet",
+    "envStatique",
+    "obj",
+    "objetOuRien",
+    "statiquesMode"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "degagement"
+   ]
+  },
+  {
+   "nom": "goadStatique",
+   "fichier": "forgeInterdits.js",
+   "ligne": 277,
+   "chargement": false,
+   "appelle": [
+    "statiquesMode",
+    "viseForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "doitAttaquer"
    ]
   },
   {

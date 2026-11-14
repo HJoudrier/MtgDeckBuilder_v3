@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1437 fonctions**, 204 modules, 1422 Ko de JavaScript.
+**1443 fonctions**, 204 modules, 1425 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -49,7 +49,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 214 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 54 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 58 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 131 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 139 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 160 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 11 | 198 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 9 | 217 |
@@ -61,13 +61,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 296 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 69 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 77 |
-| [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 154 |
+| [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 155 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 137 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
-| [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 6 | 75 |
+| [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 6 | 79 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 134 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 200 |
-| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 118 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 201 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 119 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 60 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 110 |
@@ -80,7 +80,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 289 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 4 | 196 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 4 | 140 |
-| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 173 |
+| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 184 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 129 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 150 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 99 |
@@ -89,8 +89,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 8 | 275 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 9 | 142 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
-| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 203 |
-| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 27 | 256 |
+| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 204 |
+| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 281 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 157 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
@@ -921,7 +921,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 58 lignes, 2.6 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 131 lignes, 6.5 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 139 lignes, 6.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1137,7 +1137,7 @@ Les morceaux de coût de plus. *4 fonctions, 77 lignes, 4.6 Ko.*
 
 ## js/jeuDurees.js
 
-Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 154 lignes, 6.7 Ko.*
+Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 155 lignes, 6.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1150,7 +1150,7 @@ Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 154 ligne
 | `sourcesEffets(P)` | Les sources de déclencheurs qui ne sont pas des cartes : les effets. |
 | `collecteRetardes(P, e)` | Les déclencheurs retardés qu'un évènement fait partir. |
 | `capacitesDe(P, o)` | Les capacités d'un permanent en ce moment : les siennes, plus celles que des statiques lui accordent (« equipped creature has… »). |
-| `detruitObjet(P, o, sansRegeneration)` | Détruire un permanent, sauf s'il se régénère : il s'engage, ses blessures partent, il quitte le combat (règle 701.15). |
+| `detruitObjet(P, o, sansRegen)` | Détruire un permanent, sauf s'il se régénère : il s'engage, ses blessures partent, il quitte le combat (règle 701.15). |
 | `defausseCarte(P, id, j)` | Défausser une carte : au cimetière, ou en exil pour une carte à folie, dont la capacité déclenchée propose alors de la lancer (règle 702.35). |
 
 ## js/jeuFaces.js
@@ -1193,7 +1193,7 @@ Les faces, suite : jour et nuit, loups-garous,. *7 fonctions, 75 lignes, 3.3 Ko.
 
 ## js/jeuPermis.js
 
-Jouer une carte depuis une autre zone. *6 fonctions, 75 lignes, 3.3 Ko.*
+Jouer une carte depuis une autre zone. *6 fonctions, 79 lignes, 3.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1226,7 +1226,7 @@ La priorité, la pile, la résolution. *5 fonctions, 134 lignes, 6.3 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 200 lignes, 10 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 201 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1245,7 +1245,7 @@ Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 200 lignes, 10 Ko.*
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *5 fonctions, 118 lignes, 4.9 Ko.*
+Les étapes d'un tour. *5 fonctions, 119 lignes, 4.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1456,7 +1456,7 @@ Les effets de Forge : pompes, engagements, mana,. *4 fonctions, 140 lignes, 8.9 
 
 ## js/forgeEffetsD.js
 
-Les effets de Forge qui durent : régénération,. *6 fonctions, 173 lignes, 10 Ko.*
+Les effets de Forge qui durent : régénération,. *6 fonctions, 184 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1589,7 +1589,7 @@ Les déclencheurs de Forge, suite : engager,. *6 fonctions, 125 lignes, 7.9 Ko.*
 
 ## js/forgeStatiques.js
 
-Les capacités statiques de Forge. *10 fonctions, 203 lignes, 11 Ko.*
+Les capacités statiques de Forge. *10 fonctions, 204 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1611,7 +1611,7 @@ Les capacités statiques de Forge. *10 fonctions, 203 lignes, 11 Ko.*
 
 ## js/forgeInterdits.js
 
-Ce que les statiques de Forge interdisent,. *27 fonctions, 256 lignes, 14 Ko.*
+Ce que les statiques de Forge interdisent,. *33 fonctions, 281 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1642,6 +1642,12 @@ Ce que les statiques de Forge interdisent,. *27 fonctions, 256 lignes, 14 Ko.*
 | `statiquesJoueur(P, j, cle)` | Les statiques `Continuous` qui visent ce joueur (`Affected$ You`). |
 | `tailleMainMax(P, j)` | La taille maximale de la main au nettoyage (Reliquary Tower). |
 | `terrainsParTour(P, j)` | Le nombre de terrains que `j` peut jouer ce tour (Exploration, Azusa). |
+| `sansDegatsDeCombat(P, o)` | —— Combat et dégagement, suite (lot F24) ———————————————————————— |
+| `commeNonBloque(P, o)` | — |
+| `sansRegenerationStat(P, o)` | — |
+| `terrainsInterdits(P, j)` | — |
+| `degageAussi(P)` | Seedborn Muse : ses permanents se dégagent au dégagement des autres. |
+| `goadStatique(P, o)` | Une statique qui incite (« enchanted creature is goaded »). |
 
 | Donnée | Rôle |
 |---|---|

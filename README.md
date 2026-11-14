@@ -757,6 +757,12 @@ où il est posé (`e.pose`) et part au nettoyage du tour suivant de son contrôl
 (Snapcaster Mage) est une marque de tour sur la carte du cimetière. Le coût « you may exile it » d'une
 carte qui vient de mourir se juge et se paie à la résolution, sur la carte de l'évènement.
 
+**Les statiques, suite** (lot F24). Une statique qui accorde une statique (`AddStaticAbility$`) la compile
+une fois ; `statiquesEnJeu()` la pose sur chaque objet visé, une fois la liste de base rangée — juger qui
+elle vise ne recalcule donc pas la liste. Seedborn Muse, Thorn Elemental, « assigns no combat damage »,
+« can't be regenerated », « can't play lands », goad par statique, mots-clés retirés et « spend mana as
+though any color » s'ajoutent à js/forgeInterdits.js et aux règles qu'ils touchent.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -38,7 +38,7 @@ function statiqueTenable(t) {
      dessus de la bibliothèque (js/jeuPermis.js). */
   if (t.MayPlay) {
     if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library)(,(Exile|Graveyard|Library))*$/.test(t.AffectedZone || '')) return false;
-    if (t.MayPlayIgnoreColor || t.MayPlayAltManaCost || t.MayPlayIgnoreType || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
+    if (t.MayPlayAltManaCost || t.MayPlayIgnoreType || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
     if (t.EffectZone && !(/^(Graveyard|Exile|All)$/.test(t.EffectZone) && t.Affected === 'Card.Self')) return false;
     return true;
   }
@@ -104,6 +104,7 @@ forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'Aff
   if (t.AddPower) r.f += n(t.AddPower);
   if (t.AddToughness) r.e += n(t.AddToughness);
   if (t.AddKeyword) r.mots |= motsForge(t.AddKeyword);
+  if (t.RemoveKeyword) r.retire = (r.retire || 0) | motsForge(t.RemoveKeyword);
   if (t.SetPower) r.setF = n(t.SetPower);
   if (t.SetToughness) r.setE = n(t.SetToughness);
   if (t.AddHiddenKeyword) t.AddHiddenKeyword.split('&').forEach(k => { const c = CACHES_TENUS[k.trim()] || {}; if (c.attaque) r.attaque = true; if (c.blocage) r.blocage = true; });

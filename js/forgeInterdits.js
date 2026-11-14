@@ -48,6 +48,8 @@ function zoneOuRien(v, zone) { return !v || v.split(',').some(z => ZONES_FORGE[z
   ['CantGainLife', ['ValidPlayer']], ['CantPreventDamage', ['ValidSource', 'IsCombat']],
   ['CantTarget', ['ValidTarget', 'ValidSource', 'ValidSA', 'Activator', 'AffectedZone']],
   ['Panharmonicon', ['ValidCard', 'ValidMode', 'ValidCause', 'Destination', 'Origin']], ['CantAttackUnless', ['ValidCard', 'Target', 'Cost']],
+  ['AssignNoCombatDamage', ['ValidCard']], ['AssignCombatDamageAsUnblocked', ['ValidCard', 'Optional']], ['CantRegenerate', ['ValidCard']],
+  ['CantPlayLand', ['Player', 'ValidCard', 'Origin']], ['UntapOtherPlayer', ['ValidCard', 'ValidPlayer']],
   /* Le coût alternatif d'une carte se lit dans js/jeuVariantesB.js. */
   ['AlternativeCost', ['ValidSA', 'ValidCard', 'ValidPlayer', 'Cost', 'EffectZone']]]
   .forEach(([mode, params]) => forgeStatique(mode, params, () => {}));
@@ -106,7 +108,7 @@ function activationInterdite(P, j, o, k) {
 
 /* —— Le combat ————————————————————————————————————————————————— */
 
-function doitAttaquer(P, o) { return goadActif(P, o) || !!statiqueQui(P, 'MustAttack', (t, src, env) => objetOuRien(P, o, t.ValidCreature, src, env)); }
+function doitAttaquer(P, o) { return goadActif(P, o) || goadStatique(P, o) || !!statiqueQui(P, 'MustAttack', (t, src, env) => objetOuRien(P, o, t.ValidCreature, src, env)); }
 function doitBloquer(P, o) { return !!statiqueQui(P, 'MustBlock', (t, src, env) => objetOuRien(P, o, t.ValidCreature, src, env)); }
 function defenseurAttaque(P, o) { return !!statiqueQui(P, 'CanAttackDefender', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }
 function degatsParEndurance(P, o) { return !!statiqueQui(P, 'CombatDamageToughness', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }
@@ -241,6 +243,7 @@ function tailleMainMax(P, j) {
 
 /* Le nombre de terrains que `j` peut jouer ce tour (Exploration, Azusa). */
 function terrainsParTour(P, j) {
+  if (terrainsInterdits(P, j)) return 0;
   let n = 1;
   for (const x of statiquesJoueur(P, j, 'AdjustLandPlays')) {
     if (x.s.t.AdjustLandPlays === 'Unlimited') return Infinity;
@@ -253,3 +256,25 @@ forgeSait('param', 'Continuous.SetMaxHandSize', 'Continuous.RaiseMaxHandSize', '
   'Continuous.RemoveAllAbilities', 'Continuous.RemoveCardTypes', 'Continuous.RemoveCreatureTypes', 'Continuous.AddHiddenKeyword',
   'CantAttack.Target', 'CantAttack.UnlessDefender', 'ReduceCost.ValidTarget', 'RaiseCost.ValidTarget', 'CastWithFlash.EffectZone',
   'CantBeCast.EffectZone', 'Continuous.RemoveLandTypes', 'Continuous.AddAllCreatureTypes');
+
+/* —— Combat et dégagement, suite (lot F24) ———————————————————————— */
+
+function sansDegatsDeCombat(P, o) { return !!statiqueQui(P, 'AssignNoCombatDamage', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }
+function commeNonBloque(P, o) { return !!statiqueQui(P, 'AssignCombatDamageAsUnblocked', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }
+function sansRegenerationStat(P, o) { return !!statiqueQui(P, 'CantRegenerate', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }
+function terrainsInterdits(P, j) { return !!statiqueQui(P, 'CantPlayLand', (t, src, env) => joueurStatique(P, j, t.Player, src, env)); }
+
+/* Seedborn Muse : ses permanents se dégagent au dégagement des autres. */
+function degageAussi(P) {
+  for (const x of statiquesMode(P, 'UntapOtherPlayer')) {
+    const env = envStatique(x.src, x.s);
+    if (!conditionForge(P, x.s.t, env)) continue;
+    P.champ.map(id => obj(P, id)).filter(o => o.ctrl !== P.actif && o.engage && objetOuRien(P, o, x.s.t.ValidCard, x.src, env)).forEach(o => degageObjet(P, o));
+  }
+}
+
+/* Une statique qui incite (« enchanted creature is goaded »). */
+function goadStatique(P, o) {
+  return statiquesMode(P, 'Continuous').some(x => x.s.t.Goad && !!viseForge(P, x.src, x.s, o));
+}
+forgeSait('param', 'Continuous.Goad', 'Continuous.RemoveKeyword', 'Continuous.AddStaticAbility', 'Continuous.MayPlayIgnoreColor');

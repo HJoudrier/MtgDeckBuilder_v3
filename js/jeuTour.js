@@ -19,6 +19,7 @@ const ETAPES = ['degagement', 'entretien', 'pioche', 'principale1', 'debutCombat
    cessent d'avoir le mal d'invocation (règle 302.6). */
 function degagement(P) {
   if (typeof phasesEntrent === 'function') phasesEntrent(P);
+  degageAussi(P);
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== P.actif) continue;

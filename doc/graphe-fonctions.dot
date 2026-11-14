@@ -850,6 +850,12 @@ digraph appels {
     "statiquesJoueur" [label="statiquesJoueur", fillcolor="#a89b6d33", color="#a89b6d"];
     "tailleMainMax" [label="tailleMainMax", fillcolor="#a89b6d33", color="#a89b6d"];
     "terrainsParTour" [label="terrainsParTour", fillcolor="#a89b6d33", color="#a89b6d"];
+    "sansDegatsDeCombat" [label="sansDegatsDeCombat", fillcolor="#a89b6d33", color="#a89b6d"];
+    "commeNonBloque" [label="commeNonBloque", fillcolor="#a89b6d33", color="#a89b6d"];
+    "sansRegenerationStat" [label="sansRegenerationStat", fillcolor="#a89b6d33", color="#a89b6d"];
+    "terrainsInterdits" [label="terrainsInterdits", fillcolor="#a89b6d33", color="#a89b6d"];
+    "degageAussi" [label="degageAussi", fillcolor="#a89b6d33", color="#a89b6d"];
+    "goadStatique" [label="goadStatique", fillcolor="#a89b6d33", color="#a89b6d"];
   }
   subgraph "cluster_80" {
     label="js/jeuCouches.js"; fontsize=13; style="rounded,filled"; color="#6d8ca8"; fillcolor="#6d8ca81a"; penwidth=1.4;
@@ -2442,6 +2448,7 @@ digraph appels {
   "noteResolution" -> "histoire" [color="#96a86d99"];
   "statiquesEnJeu" -> "obj" [color="#6da8a499"];
   "statiquesEnJeu" -> "sansCapacites" [color="#6da8a499"];
+  "statiquesEnJeu" -> "viseForge" [color="#6da8a499"];
   "statiqueVise" -> "correspondBase" [color="#6da8a499"];
   "car" -> "animation" [color="#6da8a499"];
   "car" -> "statiquesForgeSur" [color="#6da8a499"];
@@ -2853,6 +2860,7 @@ digraph appels {
   "capacitesDe" -> "capacitesTerrain" [color="#a8846d99"];
   "capacitesDe" -> "sansCapacites" [color="#a8846d99"];
   "capacitesDe" -> "capacitesAccordees" [color="#a8846d99"];
+  "detruitObjet" -> "sansRegenerationStat" [color="#a8846d99"];
   "detruitObjet" -> "obj" [color="#a8846d99"];
   "detruitObjet" -> "deplace" [color="#a8846d99"];
   "detruitObjet" -> "jn" [color="#a8846d99"];
@@ -2982,16 +2990,19 @@ digraph appels {
   "frappe" -> "car" [color="#a89b6d99"];
   "repartition" -> "aMot" [color="#a89b6d99"];
   "repartition" -> "car" [color="#a89b6d99"];
+  "forceDeCombat" -> "sansDegatsDeCombat" [color="#a89b6d99"];
   "forceDeCombat" -> "car" [color="#a89b6d99"];
   "forceDeCombat" -> "degatsParEndurance" [color="#a89b6d99"];
   "degatsCombat" -> "obj" [color="#a89b6d99"];
   "degatsCombat" -> "frappe" [color="#a89b6d99"];
   "degatsCombat" -> "forceDeCombat" [color="#a89b6d99"];
+  "degatsCombat" -> "commeNonBloque" [color="#a89b6d99"];
   "degatsCombat" -> "aMot" [color="#a89b6d99"];
   "degatsCombat" -> "repartition" [color="#a89b6d99"];
   "degatsCombat" -> "infligeDegats" [color="#a89b6d99"];
   "degatsCombat" -> "priorite" [color="#a89b6d99"];
   "degagement" -> "phasesEntrent" [color="#6d8ca899"];
+  "degagement" -> "degageAussi" [color="#6d8ca899"];
   "degagement" -> "obj" [color="#6d8ca899"];
   "degagement" -> "degagementEmpeche" [color="#6d8ca899"];
   "degagement" -> "degageObjet" [color="#6d8ca899"];
@@ -3658,6 +3669,7 @@ digraph appels {
   "activationInterdite" -> "capaciteVisee" [color="#a89b6d99"];
   "activationInterdite" -> "zoneOuRien" [color="#a89b6d99"];
   "doitAttaquer" -> "goadActif" [color="#a89b6d99"];
+  "doitAttaquer" -> "goadStatique" [color="#a89b6d99"];
   "doitAttaquer" -> "statiqueQui" [color="#a89b6d99"];
   "doitAttaquer" -> "objetOuRien" [color="#a89b6d99"];
   "doitBloquer" -> "statiqueQui" [color="#a89b6d99"];
@@ -3709,9 +3721,26 @@ digraph appels {
   "tailleMainMax" -> "statiquesJoueur" [color="#a89b6d99"];
   "tailleMainMax" -> "forgeNombre" [color="#a89b6d99"];
   "tailleMainMax" -> "envStatique" [color="#a89b6d99"];
+  "terrainsParTour" -> "terrainsInterdits" [color="#a89b6d99"];
   "terrainsParTour" -> "statiquesJoueur" [color="#a89b6d99"];
   "terrainsParTour" -> "forgeNombre" [color="#a89b6d99"];
   "terrainsParTour" -> "envStatique" [color="#a89b6d99"];
+  "sansDegatsDeCombat" -> "statiqueQui" [color="#a89b6d99"];
+  "sansDegatsDeCombat" -> "objetOuRien" [color="#a89b6d99"];
+  "commeNonBloque" -> "statiqueQui" [color="#a89b6d99"];
+  "commeNonBloque" -> "objetOuRien" [color="#a89b6d99"];
+  "sansRegenerationStat" -> "statiqueQui" [color="#a89b6d99"];
+  "sansRegenerationStat" -> "objetOuRien" [color="#a89b6d99"];
+  "terrainsInterdits" -> "statiqueQui" [color="#a89b6d99"];
+  "terrainsInterdits" -> "joueurStatique" [color="#a89b6d99"];
+  "degageAussi" -> "statiquesMode" [color="#a89b6d99"];
+  "degageAussi" -> "envStatique" [color="#a89b6d99"];
+  "degageAussi" -> "conditionForge" [color="#a89b6d99"];
+  "degageAussi" -> "obj" [color="#a89b6d99"];
+  "degageAussi" -> "objetOuRien" [color="#a89b6d99"];
+  "degageAussi" -> "degageObjet" [color="#a89b6d99"];
+  "goadStatique" -> "statiquesMode" [color="#a89b6d99"];
+  "goadStatique" -> "viseForge" [color="#a89b6d99"];
   "forgeInterdits.js (chargement)" -> "forgeStatique" [color="#a89b6d99"];
   "forgeInterdits.js (chargement)" -> "forgeSait" [color="#a89b6d99"];
   "statiquesCouches" -> "statiquesMode" [color="#6d8ca899"];

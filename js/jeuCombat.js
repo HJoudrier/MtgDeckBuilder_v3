@@ -165,7 +165,7 @@ function repartition(P, a, bs, force) {
 
 /* Doran : une créature peut infliger ses dégâts de combat selon son
    endurance. */
-function forceDeCombat(P, o) { const c = car(P, o); return degatsParEndurance(P, o) ? c.endurance : c.force; }
+function forceDeCombat(P, o) { if (sansDegatsDeCombat(P, o)) return 0; const c = car(P, o); return degatsParEndurance(P, o) ? c.endurance : c.force; }
 
 /* Les dégâts de combat d'une passe (règle 510) : tout est assigné, puis
    infligé d'un coup. */
@@ -180,7 +180,8 @@ function* degatsCombat(P, passe) {
     const force = forceDeCombat(P, a);
     if (force <= 0) continue;
     const cible = def.j != null ? (P.joueurs[def.j].elimine ? null : {j: def.j}) : obj(P, def.pw);
-    if (!cb.bloque.has(aid)) { if (cible) coups.push([a, cible, force]); continue; }
+    /* Thorn Elemental : ses dégâts vont au joueur comme s'il n'était pas bloqué. */
+    if (!cb.bloque.has(aid) || commeNonBloque(P, a)) { if (cible) coups.push([a, cible, force]); continue; }
     const bs = (cb.bloquesPar.get(aid) || []).map(id => obj(P, id)).filter(Boolean);
     if (!bs.length) { if (aMot(P, a, MOT.PIETINEMENT) && cible) coups.push([a, cible, force]); continue; }
     repartition(P, a, bs, force).forEach(([b, n]) => { const c = b || cible; if (c) coups.push([a, c, n]); });

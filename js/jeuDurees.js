@@ -121,7 +121,8 @@ function capacitesDe(P, o) {
 /* Détruire un permanent, sauf s'il se régénère : il s'engage, ses
    blessures partent, il quitte le combat (règle 701.15). Rend vrai s'il
    est détruit. */
-function detruitObjet(P, o, sansRegeneration) {
+function detruitObjet(P, o, sansRegen) {
+  const sansRegeneration = sansRegen || (o && o.zone === 'champ' && typeof sansRegenerationStat === 'function' && sansRegenerationStat(P, o));
   if (!o || o.zone !== 'champ') return false;
   /* Umbra armor : l'aura est détruite à sa place, et ses blessures partent. */
   const armure = P.champ.map(id => obj(P, id)).find(a => a.att === o.id && a.def.params && a.def.params.armure);

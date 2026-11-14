@@ -62,7 +62,11 @@ function cartesPermises(P, j) {
 
 /* Le coût d'un sort joué avec une permission. */
 function coutPermis(P, j, o, depuis, x) {
-  return x.s.t.MayPlayWithoutManaCost === 'True' ? coutManaVide() : coutSort(P, j, o, depuis, o.def.cout);
+  if (x.s.t.MayPlayWithoutManaCost === 'True') return coutManaVide();
+  const c = coutSort(P, j, o, depuis, o.def.cout);
+  /* « Spend mana as though it were mana of any color » : le coloré se paie
+     comme du générique. */
+  return x.s.t.MayPlayIgnoreColor === 'True' ? {...coutManaVide(), generique: c.total - (c.x || 0), total: c.total} : c;
 }
 
 /* Une permission « une fois par tour » a servi. */

@@ -24,6 +24,13 @@ function statiquesEnJeu(P) {
   }
   if (P.effets) P.effets.forEach(e => e.def.statiques.forEach(s => r.push({src: e, s})));
   P._statV = P.ver; P._stat = r;
+  /* Les statiques accordées par une statique : la liste est déjà posée,
+     si bien que juger qui elles visent ne la recalcule pas. */
+  const accordees = r.filter(x => x.s.accordeStat);
+  for (const {src, s} of accordees) for (const id of P.champ) {
+    const o = obj(P, id);
+    if (viseForge(P, src, s, o)) s.accordeStat.forEach(g => r.push({src: o, s: g}));
+  }
   return r;
 }
 
@@ -53,6 +60,7 @@ function car(P, o) {
       if (fg.setF != null) force = fg.setF;
       if (fg.setE != null) endurance = fg.setE;
       force += fg.f; endurance += fg.e; mots |= fg.mots;
+      if (fg.retire) mots &= ~fg.retire;
       nePeutAttaquer = fg.attaque; nePeutBloquer = fg.blocage; pasPar = fg.pasPar;
       if (fg.types.length) types = [...new Set([...types, ...fg.types])];
       if (fg.sousTypes.length) sousTypes = [...new Set([...sousTypes, ...fg.sousTypes])];
