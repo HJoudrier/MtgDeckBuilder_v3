@@ -258,3 +258,22 @@ OPS.suspension = function* (P, op, ctx) {
   if (!s || s.lki || s.zone !== 'exil' || !s.suspendu || s.temps) return;
   yield* lanceSort(P, s.prop, {k: 'lancer', id: s.id, depuis: 'exil', variante: 'suspension'});
 };
+
+/* L'entretien cumulatif : à chaque entretien, un marqueur d'âge, puis payer
+   le coût autant de fois qu'il y a de marqueurs, ou sacrifier. */
+const CAP_CUMUL = {genre: 'declenchee', ecoutes: [{evt: 'cumul'}], texte: 'Entretien cumulatif',
+  effet: {ops: [{op: 'cumul', hostile: false}], cibles: [], modes: null}};
+
+OPS.cumul = function* (P, op, ctx) {
+  const s = sourceCtx(P, ctx);
+  if (!s || s.lki || s.zone !== 'champ' || !s.def.cumul) return;
+  s.marq.age = (s.marq.age || 0) + 1; P.ver++;
+  let c = coutManaVide();
+  for (let k = 0; k < s.marq.age; k++) c = sommeMana(c, s.def.cumul);
+  if (planPaiement(P, ctx.ctrl, c, 0)) {
+    const r = yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer l'entretien de ${s.def.nom} (${s.marq.age}) ?`, source: s.id,
+      extra: {saufForge: {contre: false}}});
+    if (r === 1 && paieMana(P, ctx.ctrl, c, 0)) return;
+  }
+  sacrifie(P, s.id);
+};

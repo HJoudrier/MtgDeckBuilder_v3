@@ -81,6 +81,8 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsB.js   bibliothèque, dégâts et vie, retraits, jetons et marqueurs
   forgeEffetsC.js   pompes, engagements, mana, combats, contrôle, mémoire, réflexes
   forgeEffetsD.js   régénération, effets temporaires, déclencheurs retardés, capacités accordées
+  forgeChoix.js     choisir une couleur, un type, une carte, un joueur, un nombre, un mode ; « en entrant »
+  forgeCopies.js    jetons copies, entrer comme copie, copier un sort
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -605,6 +607,16 @@ jouent ; retourner une créature face cachée est une action spéciale, sans la 
 ses marqueurs de lore et part quand plus aucun chapitre n'attend ; un véhicule piloté entre dans la
 couche `o.anime` jusqu'au nettoyage. Une carte transformable n'est dite complète que si un effet la
 transforme vraiment.
+
+**Choix et copies** (`js/forgeChoix.js`, `js/forgeCopies.js`, lot F8). Un choix appartient à la carte
+qui l'a fait (`P.cartes[cid].choix` : couleur, type, cartes, joueur, nombre) et se relit aussi longtemps
+qu'elle reste (`ChosenType`, `ChosenColor`…). Le joueur répond par une question « modes » ; le joueur
+automatique prend ce que le moteur lui désigne (`extra.prefere`) — la couleur ou le type les plus
+présents chez lui, ou chez l'adversaire quand l'indice `AILogic` le dit. Les effets « en entrant »
+(`K:ETBReplacement`) se jouent dans `metEnJeu()` avant que quiconque voie l'objet : un clone y devient
+copie, si bien que les déclencheurs d'entrée de la créature copiée partent. Une copie de sort est un
+élément de pile qui se résout comme lui et ne laisse aucune carte. Les dégâts répartis donnent au moins
+1 à chaque cible, puis de quoi tuer dans l'ordre : simplification annoncée, on ne demande pas.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

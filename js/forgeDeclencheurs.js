@@ -56,7 +56,8 @@ forgeMode('ChangesZone', ['Origin', 'Destination', 'ValidCard'], (P, t, e, s, en
 /* `NoResolvingCheck` : ne pas revérifier la condition à la résolution —
    le moteur ne la revérifie jamais. */
 forgeSait('param', 'Attacks.NoResolvingCheck', 'ChangesZone.NoResolvingCheck', 'Phase.NoResolvingCheck');
-forgeMode('Attacks', ['ValidCard', 'Attacked'], (P, t, e, s, env) => e.t === 'attaque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env) &&
+forgeMode('Attacks', ['ValidCard', 'Attacked', 'Alone'], (P, t, e, s, env) => e.t === 'attaque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env) &&
+  (t.Alone !== 'True' || (!!P.combat && P.combat.attaquants.size === 1)) &&
   (!t.Attacked || (t.Attacked === 'Player' ? e.defenseur != null : false)));
 forgeMode('Blocks', ['ValidCard'], (P, t, e, s, env) => e.t === 'bloque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
 forgeMode('AttackerBlocked', ['ValidCard'], (P, t, e, s, env) => e.t === 'estBloque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));

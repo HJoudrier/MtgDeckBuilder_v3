@@ -11,7 +11,7 @@
 
 const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
   'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity', 'Unearth', 'Madness',
-  'Suspend', 'Partner', 'Chapter', 'Crew', 'Morph', 'Megamorph', 'Disguise'];
+  'Suspend', 'Partner', 'Chapter', 'Crew', 'Morph', 'Megamorph', 'Disguise', 'ETBReplacement', 'Changeling', 'Cumulative upkeep'];
 
 /* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
    cycle de type (`TypeCycling:Plains:2`), chercher une carte de ce type. */
@@ -63,8 +63,13 @@ function motCleForge(def, k, face, jetons) {
     }
     case 'etbCounter': {
       const g = genreMarqueur(reste[0]), n = reste[1] === 'X' ? 'X' : /^\d+$/.test(reste[1] || '') ? +reste[1] : null;
-      if (n == null || reste.length > 2) return false;
-      def.entree = Object.assign(def.entree || {}, {marqueurs: n, genre: g}); return true;
+      if (n != null && reste.length <= 2) { def.entree = Object.assign(def.entree || {}, {marqueurs: n, genre: g}); return true; }
+      /* Un nombre calculé (`Y`, une SVar), ou une condition (`CheckSVar$
+         WasKicked`) : lus à l'entrée par js/jeuOpsB.js `metEnJeu()`. */
+      if (!reste[1] || reste.length > 4) return false;
+      const cond = reste[2] ? forgeTable(reste[2]) : null;
+      if (cond && Object.keys(cond).some(k => !/^(CheckSVar|SVarCompare)$/.test(k))) return false;
+      def.entree = Object.assign(def.entree || {}, {marqueursForge: {genre: g, n: reste[1], cond, face}}); return true;
     }
     case 'Devoid': def.couleurs = []; return true;
     case 'Cycling': return reste.length === 1 && cycleForge(def, face, jetons, reste[0], null);
@@ -98,6 +103,13 @@ function motCleForge(def, k, face, jetons) {
     case 'Convoke': def.params.convocation = true; return !reste.length;
     /* Le partenaire ne joue qu'à la construction du deck. */
     case 'Partner': return true;
+    case 'ETBReplacement': return entreeForgeMotCle(def, face, jetons, reste);
+    case 'Changeling': def.params.changelin = true; return !reste.length;
+    case 'Cumulative upkeep': {
+      const c = reste.length === 1 ? manaSeul(reste[0]) : null;
+      if (!c) return false;
+      def.cumul = c.mana; def.capacites.push(CAP_CUMUL); return true;
+    }
     /* Une saga : un effet par chapitre (js/jeuFaces.js `ajouteLore()`). */
     case 'Chapter': {
       const ch = String(reste[1] || '').split(',').map(n => effetForge(face, forgeSousCapacite(face, n.trim()), jetons));

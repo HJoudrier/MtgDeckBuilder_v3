@@ -20,9 +20,15 @@ const FORGE_SUPERS = {Legendary: 'legendary', Basic: 'basic', Snow: 'snow'};
 const FORGE_TETES_JOUEUR = new Set(['Player', 'Opponent', 'You']);
 const FORGE_FILTRES = new Map();
 
+/* Les sous-types qui ne sont pas des types de créature : un changelin ne
+   les a pas. */
+const SOUSTYPES_NON_CREATURE = new Set(['plains', 'island', 'swamp', 'mountain', 'forest', 'equipment', 'aura', 'vehicle', 'saga',
+  'treasure', 'clue', 'food', 'gate', 'desert', 'lair', 'locus', 'mine', 'tower', 'shrine', 'curse', 'cartouche', 'class', 'role',
+  'rune', 'background', 'shard', 'case', 'room', 'blood', 'gold', 'incubator', 'powerstone', 'map', 'fortification', 'cave', 'sphere']);
+
 /* Les propriétés que ce fichier sait juger : les autres ne laissent rien
    passer. */
-const FORGE_PROPS = ['IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
+const FORGE_PROPS = ['Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
   'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell'];
@@ -99,7 +105,7 @@ function aQualite(c, mot) {
   if (FORGE_COULEURS[mot]) return c.couleurs.includes(FORGE_COULEURS[mot]);
   if (FORGE_SUPERS[mot]) return (c.supers || []).includes(FORGE_SUPERS[mot]);
   if (mot === 'Permanent') return c.types.some(t => TYPES_PERMANENTS.includes(t));
-  if (sousTypeProbable(mot)) return (c.sousTypes || []).includes(mot.toLowerCase());
+  if (sousTypeProbable(mot)) return (c.sousTypes || []).includes(mot.toLowerCase()) || (!!c.changelin && !SOUSTYPES_NON_CREATURE.has(mot.toLowerCase()));
   return null;
 }
 
@@ -126,6 +132,11 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'token': return !!o.jeton;
     case 'kicked': return !!o.kicked;
     case 'IsCommander': return !!o.cmd;
+    case 'Historic': return c.types.includes('artifact') || (c.supers || []).includes('legendary') || (c.sousTypes || []).includes('saga');
+    case 'ChosenColor': { const k = P && src && choixDe(P, src).couleur; return !!k && c.couleurs.includes(k); }
+    case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || !!c.changelin); }
+    case 'ChosenCard': return !!(P && src && (choixDe(P, src).cartes || []).includes(o.id));
+    case 'ChosenCtrl': return !!(P && src && choixDe(P, src).joueur === tient);
     case 'nonToken': return !o.jeton;
     case 'Colorless': return !c.couleurs.length;
     case 'nonColorless': return c.couleurs.length > 0;
@@ -194,6 +205,7 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
         case 'Active': return j === P.actif;
         case 'NonActive': return j !== P.actif;
         case 'IsRemembered': return !!(env && env.ctx && (env.ctx.memoJ || []).includes(j));
+        case 'Chosen': case 'ChosenPlayer': return !!(env && env.src && choixDe(P, env.src).joueur === j);
       }
       return false;
     });

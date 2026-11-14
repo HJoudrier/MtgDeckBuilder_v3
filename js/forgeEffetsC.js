@@ -37,6 +37,14 @@ forgeEffet('Tap', [], function* (P, t, env) { objetsForge(P, t, env).filter(o =>
   (t, op) => { op.op = 'engage'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.slot != null; });
 forgeEffet('Untap', [], function* (P, t, env) { objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.engage = false; P.ver++; }); },
   (t, op) => { op.op = 'degage'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = false; });
+/* Engager ou dégager : l'IA engage ce qui est à l'adversaire et dégage ce
+   qui est à elle. */
+forgeEffet('TapOrUntap', [], function* (P, t, env) {
+  for (const o of objetsForge(P, t, env).filter(x => x.zone === 'champ' && !x.lki)) {
+    const i = yield* choisitUn(P, env.ctrl, ['Engager', 'Dégager'], `${o.def.nom} : engager ou dégager ?`, o.ctrl === env.ctrl ? 1 : 0, env.ctx.source);
+    o.engage = i === 0; P.ver++;
+  }
+}, (t, op) => { op.op = 'engage'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.slot != null; });
 forgeEffet('TapAll', ['ValidCards'], function* (P, t, env) {
   objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Creature', env.src, env.ctrl, env)).forEach(o => { o.engage = true; P.ver++; });
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });

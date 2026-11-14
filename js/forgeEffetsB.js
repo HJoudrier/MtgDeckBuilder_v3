@@ -53,9 +53,25 @@ function sourceDegats(P, t, env) {
   return (t.DamageSource ? forgeDefinis(P, t.DamageSource, env).find(x => x.j == null) : null) || env.src;
 }
 
-forgeEffet('DealDamage', ['NumDmg', 'DamageSource'], function* (P, t, env) {
+forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose'], function* (P, t, env) {
   const n = forgeNombre(P, t.NumDmg || 0, env), src = sourceDegats(P, t, env);
   const cibles = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Targeted', env);
+  if (t.DividedAsYouChoose && cibles.length > 1) {
+    /* Réparti : de quoi tuer chaque créature dans l'ordre des cibles, le
+       reste à la dernière. Simplification annoncée : on ne demande pas. */
+    /* Au moins 1 à chaque cible (règle 601.2d), puis ce qu'il faut pour
+       tuer chaque créature dans l'ordre, le reste à la dernière. */
+    let reste = forgeNombre(P, t.DividedAsYouChoose, env) - cibles.length;
+    const parts = cibles.map(() => 1);
+    cibles.forEach((c, i) => {
+      if (i === cibles.length - 1 || reste <= 0 || c.j != null || c.zone !== 'champ') return;
+      const plus = Math.min(reste, Math.max(0, car(P, c).endurance - c.bless - 1));
+      parts[i] += plus; reste -= plus;
+    });
+    if (reste > 0) parts[parts.length - 1] += reste;
+    cibles.forEach((c, i) => infligeDegats(P, src, c, parts[i], false));
+    return;
+  }
   for (const c of cibles) infligeDegats(P, src, c, n, false);
 }, (t, op) => { op.op = 'degats'; op.n = nombreIA(t.NumDmg || 0); op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null || /Opponent/.test(t.Defined || ''); });
 

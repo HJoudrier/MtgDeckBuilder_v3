@@ -15,7 +15,7 @@ function caracsJugees(P, o, base) {
   if (base || o.zone !== 'champ') {
     const a = animation(o);
     return {force: a.force, endurance: a.endurance, mots: a.mots, types: a.types,
-      sousTypes: a.sousTypes, couleurs: a.couleurs, supers: o.def.supers};
+      sousTypes: a.sousTypes, couleurs: a.couleurs, supers: o.def.supers, changelin: a.changelin};
   }
   return car(P, o);
 }

@@ -123,6 +123,9 @@ function forgeExpression(P, expr, env, prof) {
   }
   if ((k = /^Kicked\.([^.]+)\.(.+)$/.exec(q))) return forgeNombre(P, ctx.kicked || (src && src.kicked) ? k[1] : k[2], env);
   if (q === 'LifeYouGainedThisTurn') return P.joueurs[ctrl].vieTour || 0;
+  if (q === 'ChosenNumber') return choixDe(P, src).nombre || 0;
+  /* Le domaine : les types de terrain de base parmi vos terrains. */
+  if (q === 'Domain') return ['plains', 'island', 'swamp', 'mountain', 'forest'].filter(t => champDe(P, ctrl).some(o => estType(o, 'land') && car(P, o).sousTypes.includes(t))).length;
   if (q === 'AttackersDeclared') return P.attaquantsTour || 0;
   if (q === 'YourLifeTotal') return P.joueurs[ctrl].vie;
   if (q === 'YourCountersEnergy') return P.joueurs[ctrl].energie || 0;
@@ -138,5 +141,5 @@ forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$V
   'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',
-  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',
+  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ChosenNumber', 'Count$Domain', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',
   'Count$Compare', 'Count$Kicked', 'Count$LifeYouGainedThisTurn', 'Count$AttackersDeclared', '$CardTypes', '$CardPower', '$CardToughness', '$CardManaCost');

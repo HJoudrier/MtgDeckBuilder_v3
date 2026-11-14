@@ -70,6 +70,7 @@ function ecouteRepond(P, ec, e, s) {
     case 'quitte': return e.t === 'zone' && e.de === 'champ' && e.ancien === s.id;
     case 'forge': return forgeDeclenche(P, ec, e, s);
     case 'echo': return e.t === 'etape' && e.etape === 'entretien' && e.actif === s.ctrl && !!s.echoDu;
+    case 'cumul': return e.t === 'etape' && e.etape === 'entretien' && e.actif === s.ctrl;
   }
   return false;
 }

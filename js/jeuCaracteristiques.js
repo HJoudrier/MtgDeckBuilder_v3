@@ -66,7 +66,7 @@ function car(P, o) {
     }
     for (const m of o.mods) { force += m.f || 0; endurance += m.e || 0; mots |= m.mots || 0; }
   }
-  o._c = {force, endurance, mots, types, sousTypes, couleurs,
+  o._c = {force, endurance, mots, types, sousTypes, couleurs, changelin: a.changelin,
     supers: d.supers, nePeutAttaquer, nePeutBloquer, pasPar, loyaute: o.marq.loyaute || 0};
   o._v = P.ver;
   return o._c;
@@ -79,9 +79,11 @@ function car(P, o) {
 function animation(o) {
   const d = o.def;
   if (!o.anime || !o.anime.length) {
-    return {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types, sousTypes: d.sousTypes, couleurs: d.couleurs};
+    return {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types, sousTypes: d.sousTypes, couleurs: d.couleurs,
+      changelin: !!(d.params && d.params.changelin)};
   }
-  const r = {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types.slice(), sousTypes: d.sousTypes.slice(), couleurs: d.couleurs};
+  const r = {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types.slice(), sousTypes: d.sousTypes.slice(), couleurs: d.couleurs,
+    changelin: !!(d.params && d.params.changelin)};
   for (const a of o.anime) {
     if (a.force != null) r.force = a.force;
     if (a.endurance != null) r.endurance = a.endurance;

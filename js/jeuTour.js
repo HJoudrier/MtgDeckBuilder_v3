@@ -74,7 +74,7 @@ function* etape(P, e) {
       finCombat(P); P.sansCombat = false;
       return;
     case 'principale2': emet(P, {t: 'etape', etape: 'principale2', actif: P.actif}); break;
-    case 'fin': exhumeesFin(P); emet(P, {t: 'etape', etape: 'fin', actif: P.actif}); break;
+    case 'fin': exhumeesFin(P); copiesFin(P); emet(P, {t: 'etape', etape: 'fin', actif: P.actif}); break;
     case 'nettoyage': yield* nettoyage(P); return;
   }
   yield* priorite(P);

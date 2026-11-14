@@ -67,19 +67,22 @@ function conditionForge(P, t, env) {
   return true;
 }
 
-/* « Unless … pays » : rend vrai si le payeur a payé. Seuls le mana et la
-   vie se proposent. */
+/* « Unless … pays » : rend vrai si le payeur a payé. Le mana, la vie, un
+   sacrifice, une défausse se proposent ; s'engager ou se sacrifier soi-même,
+   non. */
 function* paieUnlessForge(P, t, env) {
   const payeurs = forgeDefinis(P, t.UnlessPayer || (env.op.slot != null ? 'TargetedController' : 'You'), env).map(x => joueurDe(x));
   const c = coutForge(t.UnlessCost);
-  if (!c || c.cout.engage || c.cout.sac || c.cout.defausse || c.cout.sacSoi) return false;
+  if (!c || c.cout.engage || c.cout.sacSoi || c.cout.defausseSoi || c.cout.exileSoi) return false;
+  const autre = autresCout(c.cout), porteur = env.src && !env.src.lki ? env.src : {id: -1, zone: '', marq: {}};
   for (const j of payeurs) {
     if (j == null || P.joueurs[j].elimine) continue;
     if (c.cout.vie && P.joueurs[j].vie <= c.cout.vie) continue;
+    if (autre && !coutAutrePossible(P, j, porteur, autre)) continue;
     if (!planPaiement(P, j, c.cout.mana, 0)) continue;
     const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: `Payer ${t.UnlessCost} ?`, source: env.ctx.source,
       extra: {saufForge: {contre: t.UnlessSwitched !== 'True'}}});
-    if (r === 1 && paieMana(P, j, c.cout.mana, 0)) { if (c.cout.vie) P.joueurs[j].vie -= c.cout.vie; return true; }
+    if (r === 1 && paieMana(P, j, c.cout.mana, 0)) { if (autre) yield* paieAutre(P, j, porteur, autre); return true; }
   }
   return false;
 }
@@ -138,7 +141,7 @@ function* deplaceForge(P, o, dest, env, opts = {}) {
   if (dest === 'champ') {
     if (!o.def.types.some(x => TYPES_PERMANENTS.includes(x))) return null;
     const ctrl = opts.ctrl != null ? opts.ctrl : o.prop;
-    return yield* metEnJeu(P, o.id, ctrl, {engage: !!opts.engage});
+    return yield* metEnJeu(P, o.id, ctrl, {engage: !!opts.engage, marqueurs: opts.marqueurs});
   }
   if (dest === 'bibliotheque') return deplace(P, o.id, opts.dessous ? 'dessous' : 'dessus');
   return deplace(P, o.id, dest);
@@ -151,14 +154,16 @@ function dansOrigine(o, origine) {
 }
 
 forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'Shuffle', 'Tapped', 'LibraryPosition',
-  'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration'], function* (P, t, env) {
+  'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration',
+  'WithCountersType', 'WithCountersAmount'], function* (P, t, env) {
   const dest = zoneForge(t.Destination), ctx = env.ctx;
   if (!dest) return;
   /* « Exile … until ~ leaves the battlefield » : si l'hôte est déjà parti,
      rien n'est exilé (règle 610.3c). */
   const jusqua = t.Duration === 'UntilHostLeavesPlay';
   if (jusqua && (!env.src || env.src.lki || env.src.zone !== 'champ')) return;
-  const opts = {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null, dessous: t.LibraryPosition === '-1'};
+  const opts = {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null, dessous: t.LibraryPosition === '-1',
+    marqueurs: t.WithCountersType ? {[genreMarqueur(t.WithCountersType)]: forgeNombre(P, t.WithCountersAmount || 1, env)} : null};
   const cache = /Library|Hand/.test(t.Origin || '') && env.op.slot == null && !t.Defined;
   let objets;
   if (cache || (t.ChangeType && env.op.slot == null && !t.Defined)) {

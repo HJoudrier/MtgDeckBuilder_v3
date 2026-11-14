@@ -52,8 +52,13 @@ function sourcesMana(P, j, pour) {
         c.defausseSoi || c.exileSoi || c.revele) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
-      let opts = k.identite ? identiteJoueur(P, j) : k.options;
+      let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.options;
       if (!opts.length) continue;
+      if (k.montant) {
+        const n = forgeNombre(P, k.montant, {face: k.face, ctx: {cibles: [], memo: [], memoJ: [], x: 0}, src: o, ctrl: j, op: {}, base: true});
+        if (n <= 0) continue;
+        opts = opts.map(s => s.repeat(n));
+      }
       if (k.parChaque) {
         const n = compteObjets(P, k.parChaque, o, j);
         if (!n) continue;

@@ -52,7 +52,10 @@ function effetForge(face, t0, jetons) {
       const min = t.TargetMin != null ? (/^\d+$/.test(t.TargetMin) ? +t.TargetMin : 0) : 1;
       const max = t.TargetMax != null ? (/^\d+$/.test(t.TargetMax) ? +t.TargetMax : 1) : Math.max(1, min);
       slot = cibles.length;
-      cibles.push({desc: descForge(t.ValidTgts || 'Card', t.TgtZone, /Spell/.test(t.TargetType || '')), min, max});
+      /* Sans `TgtZone$`, un déplacement cible dans sa zone d'origine :
+         « return target creature card from your graveyard ». */
+      const zone = t.TgtZone || (forgeApi(t) === 'ChangeZone' && t.Origin && !/,/.test(t.Origin) ? t.Origin : null);
+      cibles.push({desc: descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || '')), min, max});
     }
     const op = {op: 'forge', forge: true, api: forgeApi(t), t, face, slot, slotParent: parent, jetons, texte: texteForge(face, t)};
     if (FORGE_API[op.api].prepare && !FORGE_API[op.api].prepare(t, op)) return null;
@@ -103,10 +106,14 @@ function capaciteForge(def, face, t, jetons) {
       def.capacites.push({genre: 'mana', cout: c.cout, options: [], identite: true, texte: texteForge(face, t)});
       return true;
     }
-    const n = /^\d+$/.test(t.Amount || '1') ? +(t.Amount || 1) : null;
-    const options = n == null ? [] : optionsMana(t.Produced, n);
-    if (!options.length || !tableJouable(t)) return false;
-    def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {})});
+    /* La couleur choisie (« add one mana of the chosen color »), une
+       quantité calculée : js/jeuMana.js les lit au moment de payer. */
+    const choisie = t.Produced === 'Chosen';
+    const n = /^\d+$/.test(t.Amount || '1') ? +(t.Amount || 1) : 1;
+    const options = choisie ? [] : optionsMana(t.Produced, n);
+    if ((!options.length && !choisie) || !tableJouable(t)) return false;
+    def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {}),
+      ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face})});
     return true;
   }
   const effet = effetForge(face, t, jetons);

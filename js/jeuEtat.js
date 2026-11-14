@@ -87,7 +87,7 @@ function retireDe(t, id) {
 function instantane(P, o) {
   const c = car(P, o);
   return {id: o.id, cid: o.cid, def: o.def, ctrl: o.ctrl, prop: o.prop, force: c.force, endurance: c.endurance,
-    mots: c.mots, types: c.types, sousTypes: c.sousTypes, couleurs: c.couleurs, marq: {...o.marq}, jeton: o.jeton,
+    mots: c.mots, types: c.types, sousTypes: c.sousTypes, couleurs: c.couleurs, changelin: c.changelin, marq: {...o.marq}, jeton: o.jeton,
     cmd: o.cmd, att: o.att, zone: o.zone, lki: true,
     caps: o.zone === 'champ' && capacitesDe(P, o) !== o.def.capacites ? capacitesDe(P, o) : null};
 }

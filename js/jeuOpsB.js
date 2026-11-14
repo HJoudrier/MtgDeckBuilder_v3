@@ -130,6 +130,12 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (no.def.chapitres) ajouteLore(P, no, 1);
   if (opts.evoque) P.enAttente.push({src: n, ctrl, cap: CAP_EVOCATION, evt: {t: 'entre', id: n}});
   P.ver++;
+  if (no.def.entree && no.def.entree.forge) yield* effetsEntree(P, no);
+  if (ent.marqueursForge && obj(P, n)) {
+    const m = ent.marqueursForge, env = {face: m.face, ctx: {x, kicked: !!opts.kicked, cibles: [], memo: [], memoJ: []}, src: no, ctrl, op: {}};
+    if (!m.cond || conditionForge(P, m.cond, env)) { const k = forgeNombre(P, m.n, env); if (k > 0) { no.marq[m.genre] = (no.marq[m.genre] || 0) + k; P.ver++; } }
+  }
+  if (opts.marqueurs) Object.entries(opts.marqueurs).forEach(([g, k]) => { const y = obj(P, n); if (y) { y.marq[g] = (y.marq[g] || 0) + k; P.ver++; } });
   return n;
 }
 

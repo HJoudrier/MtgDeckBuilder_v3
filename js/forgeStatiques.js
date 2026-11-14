@@ -33,7 +33,9 @@ function couleursMots(txt) {
    créature par une statique (le combat et les actions d'état ne le
    verraient pas), ni un type qui n'en est pas un. */
 function statiqueTenable(t) {
-  if (t.AddType && (/\bCreature\b|AllCreatureTypes|ChosenType/.test(t.AddType))) return false;
+  if (t.AddType && (/\bCreature\b|AllCreatureTypes/.test(t.AddType) || (/ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType'))) return false;
+  /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
+  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(t.Mode === 'ReduceCost' && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
   if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/Colorless/.test(t.SetColor || '')) return false;
   return true;
 }
@@ -62,6 +64,7 @@ function viseForge(P, src, s, o, cle) {
   return conditionForge(P, s.t, env) ? env : null;
 }
 
+forgeSait('param', 'Continuous.EffectZone');
 forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'AffectedDefined', 'AddPower', 'AddToughness', 'AddKeyword', 'SetPower', 'SetToughness',
   'CharacteristicDefining'], (P, src, s, o, r) => {
   const t = s.t;
@@ -74,7 +77,8 @@ forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'Aff
   if (t.AddKeyword) r.mots |= motsForge(t.AddKeyword);
   if (t.SetPower) r.setF = forgeNombre(P, t.SetPower, env);
   if (t.SetToughness) r.setE = forgeNombre(P, t.SetToughness, env);
-  if (t.AddType) { const ty = typesForge(t.AddType); r.types.push(...ty.types); r.sousTypes.push(...ty.sousTypes); }
+  if (t.AddType === 'ChosenType') { const k = choixDe(P, src).type; if (k) r.sousTypes.push(k); }
+  else if (t.AddType) { const ty = typesForge(t.AddType); r.types.push(...ty.types); r.sousTypes.push(...ty.sousTypes); }
   if (t.SetColor) r.couleurs = couleursMots(t.SetColor);
   if (t.AddColor) r.couleurs = [...new Set([...(r.couleurs || o.def.couleurs), ...couleursMots(t.AddColor)])];
 });
@@ -89,7 +93,7 @@ forgeStatique('CantBlockBy', ['ValidAttacker', 'ValidBlocker'], (P, src, s, o, r
   if (!s.t.ValidBlocker) r.mots |= MOT.IMBLOCABLE;
   else (r.pasPar = r.pasPar || []).push({v: s.t.ValidBlocker, src});
 });
-forgeStatique('ReduceCost', ['ValidCard', 'Type', 'Activator', 'Amount'], () => {});
+forgeStatique('ReduceCost', ['ValidCard', 'Type', 'Activator', 'Amount', 'EffectZone'], () => {});
 forgeStatique('RaiseCost', ['ValidCard', 'Type', 'Activator', 'Amount'], () => {});
 
 /* Ce que les statiques de Forge font à un objet : bonus, mots-clés,
@@ -112,7 +116,10 @@ function statiquesForgeSur(P, o) {
    lance : `[plus, moins]`. */
 function coutsForge(P, j, o) {
   let plus = 0, moins = 0;
-  for (const {src, s} of statiquesEnJeu(P)) {
+  /* « This spell costs {1} less for each… » : la statique de la carte
+     elle-même, où qu'elle soit. */
+  const siennes = o.def.statiques.filter(s => s.s === 'forge' && s.t.EffectZone && s.t.EffectZone !== 'Battlefield').map(s => ({src: o, s}));
+  for (const {src, s} of [...statiquesEnJeu(P).filter(x => x.src.id !== o.id || !x.s.t || !x.s.t.EffectZone), ...siennes]) {
     if (s.s !== 'forge' || (s.t.Mode !== 'ReduceCost' && s.t.Mode !== 'RaiseCost')) continue;
     const t = s.t;
     if (t.Type && t.Type !== 'Spell') continue;
