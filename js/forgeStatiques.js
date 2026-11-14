@@ -54,6 +54,7 @@ function statiqueTenable(t) {
   if (t.Mode === 'CantAttackUnless' && !/^\d+$/.test(t.Cost || '')) return false;
   if (t.Mode === 'CastWithFlash' && t.ValidSA && t.ValidSA !== 'Spell') return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
+  if (t.Mode === 'AlternativeCost') return /^(All|Hand)$/.test(t.EffectZone || 'All') && (t.ValidSA === 'Spell.Self' || (t.ValidSA === 'Spell' && t.ValidCard === 'Card.Self')) && !!coutForge(t.Cost);
   if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
   if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/Colorless/.test(t.SetColor || '')) return false;
   return true;

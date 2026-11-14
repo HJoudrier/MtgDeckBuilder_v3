@@ -26,7 +26,8 @@ function* paieAutre(P, j, o, c) {
   }
   if (c.defausse) {
     const ids = P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j)));
-    (yield* choisitCartes(P, j, ids, c.defausse.n, 'Défausser', 'defausse')).forEach(id => defausseCarte(P, id, j));
+    (yield* choisitCartes(P, j, ids, c.defausse.n, c.defausse.exil ? 'Exiler de la main' : 'Défausser', 'defausse'))
+      .forEach(id => { if (c.defausse.exil) deplace(P, id, 'exil'); else defausseCarte(P, id, j); });
   }
   const J = P.joueurs[j];
   if (c.exileCimetiere) {

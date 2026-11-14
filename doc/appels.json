@@ -49,6 +49,7 @@
   "jeuLancer.js",
   "jeuActions.js",
   "jeuVariantes.js",
+  "jeuVariantesB.js",
   "jeuDurees.js",
   "jeuFaces.js",
   "jeuPermis.js",
@@ -4257,6 +4258,7 @@
     "presage",
     "propObjet",
     "questionPourUI",
+    "rebondsEntretien",
     "reductionParCibles",
     "reductionPossible",
     "remplacementsEnJeu",
@@ -4566,7 +4568,8 @@
     "forgeDefinis",
     "forgeEffetsG.js (chargement)",
     "forgeExpression",
-    "iaAttaquants"
+    "iaAttaquants",
+    "variantesEtendues"
    ]
   },
   {
@@ -4753,7 +4756,8 @@
     "compteDuTour",
     "exprEtendue",
     "noteHistorique",
-    "noteResolution"
+    "noteResolution",
+    "variantesEtendues"
    ]
   },
   {
@@ -5957,6 +5961,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "coutPermis",
+    "variantesEtendues",
     "variantesFaces",
     "variantesSort"
    ]
@@ -6018,9 +6023,11 @@
     "estEphemere",
     "estType",
     "flashAccorde",
+    "lancableDuCimetiere",
     "obj",
     "planPaiement",
     "retournable",
+    "secondeFendue",
     "sortInterdit",
     "suspendable",
     "terrainsParTour",
@@ -6035,7 +6042,7 @@
   {
    "nom": "actionsPossibles",
    "fichier": "jeuLancer.js",
-   "ligne": 144,
+   "ligne": 145,
    "chargement": false,
    "appelle": [
     "actionsLegales",
@@ -6045,6 +6052,7 @@
     "enPhasePrincipale",
     "estEphemere",
     "flashPossible",
+    "lancableDuCimetiere",
     "obj",
     "retournable"
    ],
@@ -6057,7 +6065,7 @@
   {
    "nom": "choisitCibles",
    "fichier": "jeuLancer.js",
-   "ligne": 160,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "ciblesLegales",
@@ -6074,7 +6082,7 @@
   {
    "nom": "prepareEffets",
    "fichier": "jeuLancer.js",
-   "ligne": 175,
+   "ligne": 176,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6093,7 +6101,7 @@
   {
    "nom": "coutDeGarde",
    "fichier": "jeuLancer.js",
-   "ligne": 194,
+   "ligne": 195,
    "chargement": false,
    "appelle": [
     "car",
@@ -6149,7 +6157,7 @@
   {
    "nom": "maxX",
    "fichier": "jeuActions.js",
-   "ligne": 50,
+   "ligne": 51,
    "chargement": false,
    "appelle": [
     "planPaiement"
@@ -6164,7 +6172,7 @@
   {
    "nom": "lanceSort",
    "fichier": "jeuActions.js",
-   "ligne": 57,
+   "ligne": 58,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6199,7 +6207,7 @@
   {
    "nom": "activeCapacite",
    "fichier": "jeuActions.js",
-   "ligne": 122,
+   "ligne": 123,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -6224,7 +6232,7 @@
   {
    "nom": "equipe",
    "fichier": "jeuActions.js",
-   "ligne": 157,
+   "ligne": 158,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6240,7 +6248,7 @@
   {
    "nom": "joueTerrain",
    "fichier": "jeuActions.js",
-   "ligne": 175,
+   "ligne": 176,
    "chargement": false,
    "appelle": [
     "emet",
@@ -6260,7 +6268,7 @@
   {
    "nom": "executeAction",
    "fichier": "jeuActions.js",
-   "ligne": 185,
+   "ligne": 186,
    "chargement": false,
    "appelle": [
     "activeCapacite",
@@ -6326,6 +6334,7 @@
     "executeForge",
     "forgeChoix.js (chargement)",
     "paieUnlessForge",
+    "variantesEtendues",
     "variantesSort"
    ]
   },
@@ -6463,6 +6472,7 @@
     "payableAvec",
     "permisDeJouer",
     "sommeMana",
+    "variantesEtendues",
     "variantesFaces"
    ],
    "appelleDiffere": [],
@@ -6475,7 +6485,7 @@
   {
    "nom": "varianteDe",
    "fichier": "jeuVariantes.js",
-   "ligne": 131,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "variantesSort"
@@ -6490,7 +6500,7 @@
   {
    "nom": "paieReductions",
    "fichier": "jeuVariantes.js",
-   "ligne": 140,
+   "ligne": 141,
    "chargement": false,
    "appelle": [
     "choisitCartes",
@@ -6512,7 +6522,7 @@
   {
    "nom": "presage",
    "fichier": "jeuVariantes.js",
-   "ligne": 174,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -6529,7 +6539,7 @@
   {
    "nom": "exhumeesFin",
    "fichier": "jeuVariantes.js",
-   "ligne": 237,
+   "ligne": 238,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -6544,7 +6554,7 @@
   {
    "nom": "suspendable",
    "fichier": "jeuVariantes.js",
-   "ligne": 244,
+   "ligne": 245,
    "chargement": false,
    "appelle": [
     "estEphemere",
@@ -6559,7 +6569,7 @@
   {
    "nom": "suspend",
    "fichier": "jeuVariantes.js",
-   "ligne": 249,
+   "ligne": 250,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -6576,7 +6586,7 @@
   {
    "nom": "suspensionsEntretien",
    "fichier": "jeuVariantes.js",
-   "ligne": 260,
+   "ligne": 261,
    "chargement": false,
    "appelle": [
     "obj"
@@ -6585,6 +6595,90 @@
    "appelleParHtml": [],
    "appeleePar": [
     "etape"
+   ]
+  },
+  {
+   "nom": "variantesEtendues",
+   "fichier": "jeuVariantesB.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
+    "autresCout",
+    "conditionForge",
+    "coutForge",
+    "coutSort",
+    "descForge",
+    "histoire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "variantesSort"
+   ]
+  },
+  {
+   "nom": "lancableDuCimetiere",
+   "fichier": "jeuVariantesB.js",
+   "ligne": 33,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "actionsLegales",
+    "actionsPossibles"
+   ]
+  },
+  {
+   "nom": "secondeFendue",
+   "fichier": "jeuVariantesB.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "actionsLegales"
+   ]
+  },
+  {
+   "nom": "exileApresResolution",
+   "fichier": "jeuVariantesB.js",
+   "ligne": 41,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "resoudre"
+   ]
+  },
+  {
+   "nom": "rebondsEntretien",
+   "fichier": "jeuVariantesB.js",
+   "ligne": 48,
+   "chargement": false,
+   "appelle": [
+    "lanceDepuisEffet",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etape"
+   ]
+  },
+  {
+   "nom": "apresDash",
+   "fichier": "jeuVariantesB.js",
+   "ligne": 59,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "resoudre"
    ]
   },
   {
@@ -7121,9 +7215,11 @@
    "ligne": 58,
    "chargement": false,
    "appelle": [
+    "apresDash",
     "cibleEncoreLegale",
     "deplace",
     "executeOps",
+    "exileApresResolution",
     "jn",
     "metEnJeu",
     "noteResolution",
@@ -7138,7 +7234,7 @@
   {
    "nom": "priorite",
    "fichier": "jeuPile.js",
-   "ligne": 103,
+   "ligne": 105,
    "chargement": false,
    "appelle": [
     "actionsPossibles",
@@ -7435,6 +7531,7 @@
     "notePrincipale",
     "piocheN",
     "priorite",
+    "rebondsEntretien",
     "suspensionsEntretien"
    ],
    "appelleDiffere": [],
@@ -7710,7 +7807,7 @@
   {
    "nom": "questionPourUI",
    "fichier": "jeuVue.js",
-   "ligne": 87,
+   "ligne": 88,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -8067,7 +8164,8 @@
     "entreeForge",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
-    "motCleForge"
+    "motCleForge",
+    "variantesEtendues"
    ]
   },
   {
@@ -8614,7 +8712,10 @@
     "forgeChoix.js (chargement)",
     "manaSeul",
     "motCleForge",
-    "paieUnlessForge"
+    "motCleTraineB",
+    "paieUnlessForge",
+    "statiqueTenable",
+    "variantesEtendues"
    ]
   },
   {
@@ -8726,6 +8827,7 @@
     "statiqueQui",
     "statiquesJoueur",
     "taxeAttaque",
+    "variantesEtendues",
     "viseForge"
    ]
   },
@@ -9269,7 +9371,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsE.js (chargement)"
+    "forgeEffetsE.js (chargement)",
+    "rebondsEntretien"
    ]
   },
   {
@@ -10102,7 +10205,8 @@
    "ligne": 36,
    "chargement": false,
    "appelle": [
-    "couleursMots"
+    "couleursMots",
+    "coutForge"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -10113,7 +10217,7 @@
   {
    "nom": "forgeStatique",
    "fichier": "forgeStatiques.js",
-   "ligne": 66,
+   "ligne": 67,
    "chargement": false,
    "appelle": [
     "forgeSait"
@@ -10128,7 +10232,7 @@
   {
    "nom": "envStatique",
    "fichier": "forgeStatiques.js",
-   "ligne": 73,
+   "ligne": 74,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10152,7 +10256,7 @@
   {
    "nom": "viseForge",
    "fichier": "forgeStatiques.js",
-   "ligne": 78,
+   "ligne": 79,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10172,7 +10276,7 @@
   {
    "nom": "statiquesForgeSur",
    "fichier": "forgeStatiques.js",
-   "ligne": 133,
+   "ligne": 134,
    "chargement": false,
    "appelle": [
     "statiquesEnJeu"
@@ -10186,7 +10290,7 @@
   {
    "nom": "coutsForge",
    "fichier": "forgeStatiques.js",
-   "ligne": 148,
+   "ligne": 149,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10204,7 +10308,7 @@
   {
    "nom": "reductionParCibles",
    "fichier": "forgeStatiques.js",
-   "ligne": 171,
+   "ligne": 172,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10225,7 +10329,7 @@
   {
    "nom": "reductionPossible",
    "fichier": "forgeStatiques.js",
-   "ligne": 190,
+   "ligne": 191,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -10361,7 +10465,7 @@
   {
    "nom": "sortInterdit",
    "fichier": "forgeInterdits.js",
-   "ligne": 59,
+   "ligne": 61,
    "chargement": false,
    "appelle": [
     "enPhasePrincipale",
@@ -10380,7 +10484,7 @@
   {
    "nom": "flashAccorde",
    "fichier": "forgeInterdits.js",
-   "ligne": 73,
+   "ligne": 75,
    "chargement": false,
    "appelle": [
     "forgeValideDef",
@@ -10396,7 +10500,7 @@
   {
    "nom": "flashPossible",
    "fichier": "forgeInterdits.js",
-   "ligne": 81,
+   "ligne": 83,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -10413,7 +10517,7 @@
   {
    "nom": "capaciteVisee",
    "fichier": "forgeInterdits.js",
-   "ligne": 88,
+   "ligne": 90,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10425,7 +10529,7 @@
   {
    "nom": "activationInterdite",
    "fichier": "forgeInterdits.js",
-   "ligne": 99,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "capaciteVisee",
@@ -10445,7 +10549,7 @@
   {
    "nom": "doitAttaquer",
    "fichier": "forgeInterdits.js",
-   "ligne": 107,
+   "ligne": 109,
    "chargement": false,
    "appelle": [
     "goadActif",
@@ -10461,7 +10565,7 @@
   {
    "nom": "doitBloquer",
    "fichier": "forgeInterdits.js",
-   "ligne": 108,
+   "ligne": 110,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10476,7 +10580,7 @@
   {
    "nom": "defenseurAttaque",
    "fichier": "forgeInterdits.js",
-   "ligne": 109,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10491,7 +10595,7 @@
   {
    "nom": "degatsParEndurance",
    "fichier": "forgeInterdits.js",
-   "ligne": 110,
+   "ligne": 112,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10506,7 +10610,7 @@
   {
    "nom": "bornesBlocage",
    "fichier": "forgeInterdits.js",
-   "ligne": 113,
+   "ligne": 115,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10523,7 +10627,7 @@
   {
    "nom": "defenseurVise",
    "fichier": "forgeInterdits.js",
-   "ligne": 126,
+   "ligne": 128,
    "chargement": false,
    "appelle": [
     "forgeValideObjet",
@@ -10539,7 +10643,7 @@
   {
    "nom": "proprieteDefenseur",
    "fichier": "forgeInterdits.js",
-   "ligne": 139,
+   "ligne": 141,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -10556,7 +10660,7 @@
   {
    "nom": "attaquePermise",
    "fichier": "forgeInterdits.js",
-   "ligne": 149,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "defenseurDe",
@@ -10575,7 +10679,7 @@
   {
    "nom": "taxeAttaque",
    "fichier": "forgeInterdits.js",
-   "ligne": 157,
+   "ligne": 159,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10596,7 +10700,7 @@
   {
    "nom": "vieBloquee",
    "fichier": "forgeInterdits.js",
-   "ligne": 169,
+   "ligne": 171,
    "chargement": false,
    "appelle": [
     "joueurStatique",
@@ -10611,7 +10715,7 @@
   {
    "nom": "preventionInterdite",
    "fichier": "forgeInterdits.js",
-   "ligne": 171,
+   "ligne": 173,
    "chargement": false,
    "appelle": [
     "objetOuRien",
@@ -10626,7 +10730,7 @@
   {
    "nom": "cibleInterdite",
    "fichier": "forgeInterdits.js",
-   "ligne": 177,
+   "ligne": 179,
    "chargement": false,
    "appelle": [
     "joueurStatique",
@@ -10643,7 +10747,7 @@
   {
    "nom": "mouvementEvt",
    "fichier": "forgeInterdits.js",
-   "ligne": 193,
+   "ligne": 195,
    "chargement": false,
    "appelle": [
     "obj",
@@ -10658,7 +10762,7 @@
   {
    "nom": "declenchementsEnPlus",
    "fichier": "forgeInterdits.js",
-   "ligne": 203,
+   "ligne": 205,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10677,7 +10781,7 @@
   {
    "nom": "statiquesJoueur",
    "fichier": "forgeInterdits.js",
-   "ligne": 222,
+   "ligne": 224,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10695,7 +10799,7 @@
   {
    "nom": "tailleMainMax",
    "fichier": "forgeInterdits.js",
-   "ligne": 230,
+   "ligne": 232,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -10711,7 +10815,7 @@
   {
    "nom": "terrainsParTour",
    "fichier": "forgeInterdits.js",
-   "ligne": 241,
+   "ligne": 243,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -11114,6 +11218,7 @@
    "chargement": false,
    "appelle": [
     "activeeSynthese",
+    "coutForge",
     "genreMarqueur",
     "marqueursEntree",
     "synthese"
@@ -11127,7 +11232,7 @@
   {
    "nom": "jetonSimple",
    "fichier": "forgeMotsClesB.js",
-   "ligne": 113,
+   "ligne": 125,
    "chargement": false,
    "appelle": [
     "coutManaVide",

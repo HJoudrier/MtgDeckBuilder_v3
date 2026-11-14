@@ -96,6 +96,17 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
       def.capacites.push({genre: 'declenchee', ecoutes: [{evt: 'meurt', sujet: 'soi'}], texte: 'Afterlife ' + n,
         effet: {ops: [{op: 'esprits', n, hostile: false}], cibles: [], modes: null}});
       return true;
+    /* Les façons de lancer (js/jeuVariantesB.js). */
+    case 'Escape': case 'Dash': case 'Spectacle': case 'Surge': {
+      const c = reste.length === 1 ? coutForge(reste[0]) : null;
+      if (!c || c.cout.engage || c.cout.sacSoi) return false;
+      def[{Escape: 'escape', Dash: 'dash', Spectacle: 'spectacle', Surge: 'surge'}[tete]] = c.cout;
+      return true;
+    }
+    case 'Retrace': def.retrace = true; return !reste.length;
+    case 'Jump-start': def.jumpstart = true; return !reste.length;
+    case 'Rebound': def.rebond = true; return !reste.length;
+    case 'Split second': def.params.splitSecond = true; return !reste.length;
     case 'Melee':
       return synthese(def, face, jetons, 'Melee', {Mode: 'Attacks', ValidCard: 'Card.Self'}, 'DB$ Pump | Defined$ Self | NumAtt$ +1 | NumDef$ +1');
     case 'Battle cry':
@@ -106,7 +117,8 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
 
 forgeSait('kw', 'Soulshift', 'Undying', 'Persist', 'Modular', 'Bloodthirst', 'Fabricate', 'Riot', 'Evolve', 'Extort', 'Wither', 'Toxic', 'Shadow',
   'Horsemanship', 'Skulk', 'Flanking', 'Level up', 'Outlast', 'Vanishing', 'Fading', 'Living Weapon', 'Umbra armor', 'Totem armor', 'Unleash',
-  'Partner with', 'Choose a Background', "Doctor's companion", 'Friends forever', 'Afterlife', 'Melee', 'Battle cry');
+  'Partner with', 'Choose a Background', "Doctor's companion", 'Friends forever', 'Afterlife', 'Melee', 'Battle cry', 'Escape', 'Dash', 'Spectacle',
+  'Surge', 'Retrace', 'Jump-start', 'Rebound', 'Split second');
 
 /* Un jeton de Forge écrit à la main : une créature d'un type, d'une force,
    de couleurs et de mots-clés donnés. */

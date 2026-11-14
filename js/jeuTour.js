@@ -55,7 +55,7 @@ function* nettoyage(P) {
 function* etape(P, e) {
   switch (e) {
     case 'degagement': degagement(P); return;
-    case 'entretien': suspensionsEntretien(P); emet(P, {t: 'etape', etape: 'entretien', actif: P.actif}); break;
+    case 'entretien': suspensionsEntretien(P); yield* rebondsEntretien(P); emet(P, {t: 'etape', etape: 'entretien', actif: P.actif}); break;
     case 'pioche':
       if (!(P.nb === 2 && P.tour === 1)) piocheN(P, P.actif, 1);
       emet(P, {t: 'etape', etape: 'pioche', actif: P.actif});

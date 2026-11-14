@@ -82,6 +82,7 @@ function* resoudre(P, item) {
     const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu,
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
     if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
+    if (n != null && item.variante === 'dash') apresDash(P, obj(P, n));
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
@@ -93,8 +94,9 @@ function* resoudre(P, item) {
   }
   if (item.sort && obj(P, item.id)) {
     /* Une aventure part en exil, d'où la créature se lancera. */
-    const flashback = item.depuis === 'cimetiere' && item.variante !== 'permis';
+    const flashback = exileApresResolution(item);
     const n = deplace(P, item.id, flashback || item.variante === 'aventure' ? 'exil' : item.rachat ? 'main' : 'cimetiere');
+    if (item.depuis === 'main' && item.def.rebond && obj(P, n) && obj(P, n).zone === 'exil') obj(P, n).rebond = {tour: P.tour};
     if (item.variante === 'aventure' && obj(P, n)) obj(P, n).aventure = true;
   }
 }

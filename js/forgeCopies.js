@@ -93,6 +93,6 @@ function* copieSort(P, j, o, it, nouvelles) {
 function copiesFin(P) {
   P.champ.filter(id => obj(P, id).finEtape).forEach(id => {
     const o = obj(P, id);
-    if (o.finEtape === 'exil') deplace(P, id, 'exil'); else sacrifie(P, id);
+    if (o.finEtape === 'exil' || o.finEtape === 'main') deplace(P, id, o.finEtape); else sacrifie(P, id);
   });
 }

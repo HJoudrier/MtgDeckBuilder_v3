@@ -72,10 +72,11 @@ function libelleAction(P, a) {
   if (a.k === 'equiper') return 'Équiper : ' + nom;
   if (a.k === 'presager') return 'Présager ' + nom;
   if (a.k === 'suspendre') return 'Suspendre ' + nom;
-  if (a.k === 'lancer') return 'Lancer ' + nom + (a.depuis === 'commandement' ? ' (commandant)' : a.depuis === 'cimetiere' ? ' (flashback)' :
+  if (a.k === 'lancer') return 'Lancer ' + nom + (a.depuis === 'commandement' ? ' (commandant)' : a.depuis === 'cimetiere' && !a.variante ? ' (flashback)' :
     a.variante === 'permis' ? ` (depuis ${ZONES_DEPUIS[a.depuis]})` : a.depuis === 'exil' ? ' (présage)' : '') + (({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)', folie: ' (folie)', suspension: ' (suspension)',
       choixA: o && o.def.coutsAuChoix ? ` (${o.def.coutsAuChoix[0].texte})` : '', choixB: o && o.def.coutsAuChoix ? ` (${o.def.coutsAuChoix[1].texte})` : '',
-      morph: ' (face cachée)'}[a.variante] || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
+      morph: ' (face cachée)', dash: ' (dash)', spectacle: ' (spectacle)', surge: ' (surge)', escape: ' (escape)', retrace: ' (retrace)',
+      jumpstart: ' (jump-start)'}[a.variante] || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
   const k = o && capacitesDe(P, o)[a.i];
   return nom + ' — ' + ((k && k.texte) || 'capacité');
 }

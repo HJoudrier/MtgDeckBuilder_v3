@@ -51,7 +51,7 @@ function coutAutrePossible(P, j, o, c) {
   if (c.degage && !o.engage) return false;
   if (c.vie && P.joueurs[j].vie < c.vie) return false;
   if (c.sac && champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j)).length < c.sac.n) return false;
-  if (c.defausse && P.joueurs[j].main.filter(id => id !== o.id).length < c.defausse.n) return false;
+  if (c.defausse && P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j))).length < c.defausse.n) return false;
   if (c.retire && (o.marq[c.retire.genre] || 0) < c.retire.n) return false;
   if (c.engageAutres && champDe(P, j).filter(x => !x.engage && x.id !== o.id && correspond(P, x, c.engageAutres.desc, o, j)).length < c.engageAutres.n) return false;
   if ((c.sacSoi && o.zone !== 'champ') || (c.defausseSoi && o.zone !== 'main')) return false;
@@ -67,6 +67,7 @@ function coutAutrePossible(P, j, o, c) {
 /* Les actions légales d'un joueur qui a la priorité. `PASSE` est toujours la
    dernière. */
 function actionsLegales(P, j) {
+  if (secondeFendue(P)) return [PASSE];
   const J = P.joueurs[j], r = [];
   const rituel = enPhasePrincipale(P, j);
   const terrains = rituel && J.terrainsJoues < terrainsParTour(P, j);
@@ -92,7 +93,7 @@ function actionsLegales(P, j) {
   };
   J.main.forEach(id => essaie(id, 'main'));
   J.commandement.forEach(id => essaie(id, 'commandement'));
-  J.cimetiere.forEach(id => { if (obj(P, id).def.flashback) essaie(id, 'cimetiere'); });
+  J.cimetiere.forEach(id => { if (lancableDuCimetiere(obj(P, id).def)) essaie(id, 'cimetiere'); });
   /* Ce qu'une permission laisse jouer d'ailleurs (js/jeuPermis.js). */
   cartesPermises(P, j).forEach(({o, depuis}) => {
     if (estType(o, 'land')) { if (terrains) r.push({k: 'terrain', id: o.id, depuis}); }
@@ -147,7 +148,7 @@ function actionsPossibles(P, j) {
   const horsChamp = (ids, zone) => ids.some(id => obj(P, id).def.capacites.some(k => k.zone === zone && k.vitesse !== 'rituel'));
   const peut = J.main.some(id => estEphemere(obj(P, id).def)) ||
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
-    J.cimetiere.some(id => { const d = obj(P, id).def; return d.flashback && estEphemere(d); }) ||
+    J.cimetiere.some(id => { const d = obj(P, id).def; return lancableDuCimetiere(d) && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) && estEphemere(o.def); }) ||
     cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) ||
     champDe(P, j).some(o => retournable(P, j, o)) ||

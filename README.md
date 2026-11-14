@@ -66,6 +66,7 @@ js/                 modules, chargés dans cet ordre :
   jeuLancer.js      les actions légales, le coût d'un sort, le choix des cibles
   jeuActions.js     jouer un terrain, lancer, activer, équiper
   jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho, folie, suspension
+  jeuVariantesB.js  coût alternatif, escape, retrace, jump-start, dash, spectacle, surge, split second, rebound
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
   jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
@@ -715,6 +716,13 @@ outlast, des capacités activées. Wither, toxic, shadow, horsemanship, skulk, u
 posent un paramètre que les dégâts, le combat ou `detruitObjet()` lisent. Living weapon, afterlife et
 partner with ont leur opération propre. Simplification annoncée : fabricate et riot prennent toujours
 les marqueurs.
+
+**Les façons de lancer, suite** (`js/jeuVariantesB.js`, lot F19). Le coût alternatif qu'une carte porte
+(`S:Mode$ AlternativeCost`, Force of Will, Fierce Guardianship), escape, retrace et jump-start depuis le
+cimetière, dash, spectacle et surge sont des variantes de plus (`variantesEtendues()`), sous la même
+garde que les autres : payables, et jugées sur leur condition. Exiler une carte de sa main se paie
+comme une défausse vers l'exil. Le rebound exile le sort lancé depuis la main et le relance gratuitement
+à l'entretien suivant ; split second ne laisse à personne d'autre action que passer.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

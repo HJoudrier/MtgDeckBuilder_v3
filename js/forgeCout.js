@@ -47,6 +47,12 @@ function coutForge(txt) {
         if (soi) { if (n !== 1) return null; cout.defausseSoi = true; break; }
         cout.defausse = type === 'Card' || !type ? {n} : {n, desc: {...descForge(type), genre: 'carte', zone: 'main'}};
         break;
+      /* Exiler une carte de sa main (Force of Will) : comme une défausse,
+         vers l'exil. */
+      case 'ExileFromHand':
+        if (typeof n !== 'number' || soi) return null;
+        cout.defausse = {n, desc: type && type !== 'Card' ? {...descForge(type.replace(/\+Other$/, '')), genre: 'carte', zone: 'main'} : undefined, exil: true};
+        break;
       case 'ExileFromGrave':
         if (typeof n !== 'number') return null;
         if (soi) cout.exileSoi = true; else cout.exileCimetiere = {n, desc: descForge(type || 'Card')};
@@ -75,5 +81,5 @@ function coutForge(txt) {
   return {cout, loyaute};
 }
 
-forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
+forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'ExileFromHand', 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
   'Return', 'Reveal', 'PayEnergy', 'Draw');

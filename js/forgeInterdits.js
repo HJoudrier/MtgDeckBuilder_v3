@@ -47,7 +47,9 @@ function zoneOuRien(v, zone) { return !v || v.split(',').some(z => ZONES_FORGE[z
   ['CanAttackDefender', ['ValidCard']], ['MinMaxBlocker', ['ValidCard', 'Min', 'Max']], ['CombatDamageToughness', ['ValidCard']],
   ['CantGainLife', ['ValidPlayer']], ['CantPreventDamage', ['ValidSource', 'IsCombat']],
   ['CantTarget', ['ValidTarget', 'ValidSource', 'ValidSA', 'Activator', 'AffectedZone']],
-  ['Panharmonicon', ['ValidCard', 'ValidMode', 'ValidCause', 'Destination', 'Origin']], ['CantAttackUnless', ['ValidCard', 'Target', 'Cost']]]
+  ['Panharmonicon', ['ValidCard', 'ValidMode', 'ValidCause', 'Destination', 'Origin']], ['CantAttackUnless', ['ValidCard', 'Target', 'Cost']],
+  /* Le coût alternatif d'une carte se lit dans js/jeuVariantesB.js. */
+  ['AlternativeCost', ['ValidSA', 'ValidCard', 'ValidPlayer', 'Cost', 'EffectZone']]]
   .forEach(([mode, params]) => forgeStatique(mode, params, () => {}));
 forgeSait('stat', 'CantAttack,CantBlock,CantBeActivated');
 forgeSait('param', 'CantAttack,CantBlock,CantBeActivated.ValidCard', 'CantBlock,CantAttack.ValidCard');
