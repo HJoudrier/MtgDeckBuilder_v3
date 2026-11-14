@@ -14,7 +14,8 @@ const FORGE_DEFINIS = ['Self', 'You', 'Targeted', 'TargetedPlayer', 'TargetedCon
   'TriggeredNewCardLKICopy', 'TriggeredCardController', 'TriggeredCardOwner', 'TriggeredPlayer', 'TriggeredTarget',
   'TriggeredAttacker', 'TriggeredDefendingPlayer', 'TriggeredSource', 'TriggeredSourceController', 'Enchanted',
   'Equipped', 'EnchantedController', 'EquippedController', 'Player', 'Opponent', 'Player.Opponent', 'Player.Other',
-  'ActivePlayer', 'Valid', 'ValidGraveyard', 'ValidHand', 'TriggeredActivator', 'OppNonTargeted', 'ExiledWith'];
+  'ActivePlayer', 'Valid', 'ValidGraveyard', 'ValidHand', 'TriggeredActivator', 'OppNonTargeted', 'ExiledWith',
+  'DelayTriggerRemembered', 'DelayTriggerRememberedLKI', 'TriggeredAttackerLKICopy', 'TriggeredBlocker'];
 
 /* Les cibles prises par l'emplacement de la capacité en cours, ou de celle
    qu'elle suit. */
@@ -53,11 +54,15 @@ function forgeDefinis(P, val, env) {
     case 'TargetedPlayer': return ciblesForge(P, env, false).filter(x => x.j != null);
     case 'TargetedController': return uniquesJ(ciblesForge(P, env, false).map(x => joueurDe(x)));
     case 'TargetedOwner': return uniquesJ(ciblesForge(P, env, false).map(x => joueurDe(x, true)));
+    /* Ce qu'un déclencheur retardé a retenu en naissant : sa mémoire est
+       celle du contexte (js/jeuDurees.js). */
+    case 'DelayTriggerRemembered': case 'DelayTriggerRememberedLKI':
     case 'Remembered': return [...(ctx.memo || []).map(id => obj(P, suit(P, id)) || P.lkis.get(id)).filter(Boolean),
       ...(ctx.memoJ || []).map(j => ({j}))];
     case 'RememberedController': return uniquesJ((ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean).map(o => o.ctrl));
     case 'RememberedOwner': return uniquesJ((ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean).map(o => o.prop));
     case 'TriggeredCard': case 'TriggeredCardLKICopy': case 'TriggeredNewCardLKICopy': case 'TriggeredAttacker':
+    case 'TriggeredAttackerLKICopy': case 'TriggeredBlocker':
     case 'TriggeredSource': {
       const o = v === 'TriggeredSource' ? (evt.source != null ? obj(P, suit(P, evt.source)) : null) : objetEvt(P, ctx);
       return o ? [o] : [];

@@ -55,6 +55,7 @@ function effetForge(face, t0, jetons) {
       cibles.push({desc: descForge(t.ValidTgts || 'Card', t.TgtZone, /Spell/.test(t.TargetType || '')), min, max});
     }
     const op = {op: 'forge', forge: true, api: forgeApi(t), t, face, slot, slotParent: parent, jetons, texte: texteForge(face, t)};
+    if (FORGE_API[op.api].prepare && !FORGE_API[op.api].prepare(t, op)) return null;
     FORGE_API[op.api].ia(t, op);
     ops.push(op);
     if (slot != null) parent = slot;
@@ -120,7 +121,7 @@ function capaciteForge(def, face, t, jetons) {
 
 /* Un déclencheur `T:`. */
 function declencheurForge(def, face, t, jetons) {
-  if (!FORGE_MODES[t.Mode]) return false;
+  if (!FORGE_MODES[t.Mode] || !phaseConnue(t)) return false;
   /* Hors du champ, seul « when you cycle ~ » s'entend : la carte cyclée
      écoute à travers son instantané (js/jeuActions.js). */
   if (t.TriggerZones && t.TriggerZones !== 'Battlefield' && !(t.Mode === 'Cycled' && /^(Hand|Graveyard)$/.test(t.TriggerZones))) return false;
@@ -190,9 +191,9 @@ function definitionDepuisScript(s, fiche, jetons) {
   face.a.forEach(t => essaie(capaciteForge(def, face, t, jetons), forgeApi(t)));
   face.t.forEach(t => essaie(declencheurForge(def, face, t, jetons), t.Mode));
   face.s.forEach(t => {
-    const ok = String(t.Mode || '').split(',').every(m => FORGE_STATIQUES[m.trim()]);
-    if (ok) def.statiques.push({s: 'forge', t, face});
-    essaie(ok, t.Mode);
+    const st = statiqueForge(face, t, jetons);
+    if (st) def.statiques.push(st);
+    essaie(!!st, t.Mode);
   });
   face.r.forEach(t => essaie(remplacementForge(def, face, t), t.Event));
   face.k.forEach(k => essaie(motCleForge(def, k, face, jetons), k.split(':')[0]));

@@ -63,7 +63,8 @@ js/                 modules, chargés dans cet ordre :
   jeuEtatsDeJeu.js  les actions d'état, et un joueur qui perd
   jeuLancer.js      les actions légales, le coût d'un sort, le choix des cibles
   jeuActions.js     jouer un terrain, lancer, activer, équiper
-  jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho
+  jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho, folie, suspension
+  jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
   jeuTour.js        les étapes d'un tour
@@ -78,6 +79,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsA.js   le registre des effets, la porte `executeForge()`, zones et cartes
   forgeEffetsB.js   bibliothèque, dégâts et vie, retraits, jetons et marqueurs
   forgeEffetsC.js   pompes, engagements, mana, combats, contrôle, mémoire, réflexes
+  forgeEffetsD.js   régénération, effets temporaires, déclencheurs retardés, capacités accordées
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
@@ -496,9 +498,9 @@ le classement compare les decks sur une même table.
 
 **Ce que le lot 1 ne fait pas**, et que la couverture ne peut pas toujours dire : pas de système de
 couches complet (les bonus s'additionnent), ni copie, ni changement de contrôle, ni remplacement ou
-prévention généraux ; parmi les coûts alternatifs et additionnels, ni madness, ni suspend, ni
-exhumation (lot F3 : flashback, kicker, rachat, évocation, présage, convocation, exploration, affinité,
-écho, cycle) ; faces arrière, aventures
+prévention généraux (la régénération exceptée) ; parmi les coûts alternatifs et additionnels, ceux
+des lots F3 et F4 seulement — flashback, kicker, rachat, évocation, présage, convocation,
+exploration, affinité, écho, cycle, folie, suspension, exhumation ; faces arrière, aventures
 et cartes partagées ignorées ; ni tours ou combats supplémentaires, ni monarque, ni initiative ;
 capacités de mana qui coûtent du mana absentes du paiement automatique ; pas d'alliance en
 multijoueur. Les joueurs automatiques comparent des valeurs sans chercher dans l'arbre des coups :
@@ -561,6 +563,18 @@ peuvent porter une zone (`zone: 'main' | 'cimetiere'`) : le cycle, et les `Activ
 se proposent depuis la main ou le cimetière. Ces champs vivent sur la définition, quelle que soit sa
 source : le cycle que l'oracle lit se joue désormais aussi. L'énergie est un compteur du joueur
 (`J.energie`).
+
+**Ce qui dure** (`js/jeuDurees.js`, lot F4). Trois listes vivent sur la partie : `P.effets`, des
+effets sans carte — les statiques et les déclencheurs d'un `Effect` de Forge —, qui se présentent au
+moteur comme des objets (`statiquesEnJeu()` et la collecte des déclencheurs les lisent comme des
+cartes) et finissent au nettoyage, au prochain tour de leur contrôleur, au départ de leur hôte ou
+jamais ; `P.retardes`, des déclencheurs qui ne partent qu'une fois ; `P.retours`, des cartes
+exilées jusqu'au départ de leur hôte (`hotePart()`, appelé par `deplace()`). Une statique peut
+accorder des capacités (`AddAbility`, `AddTrigger`) : `capacitesDe(P, o)` rend celles d'un permanent
+en ce moment, et remplace `o.def.capacites` partout où l'on active, paie ou écoute. Toute destruction
+passe par `detruitObjet()`, qui sait régénérer ; toute défausse par `defausseCarte()`, qui sait la
+folie. Un déclencheur de phase dont la phase est inconnue est refusé à la construction : il ne
+partirait jamais.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

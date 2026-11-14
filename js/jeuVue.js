@@ -70,9 +70,10 @@ function libelleAction(P, a) {
   if (a.k === 'terrain') return 'Jouer ' + nom;
   if (a.k === 'equiper') return 'Équiper : ' + nom;
   if (a.k === 'presager') return 'Présager ' + nom;
+  if (a.k === 'suspendre') return 'Suspendre ' + nom;
   if (a.k === 'lancer') return 'Lancer ' + nom + (a.depuis === 'commandement' ? ' (commandant)' : a.depuis === 'cimetiere' ? ' (flashback)' :
-    a.depuis === 'exil' ? ' (présage)' : '') + ({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)'}[a.variante] || '');
-  const k = o && o.def.capacites[a.i];
+    a.depuis === 'exil' ? ' (présage)' : '') + ({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)', folie: ' (folie)', suspension: ' (suspension)'}[a.variante] || '');
+  const k = o && capacitesDe(P, o)[a.i];
   return nom + ' — ' + ((k && k.texte) || 'capacité');
 }
 

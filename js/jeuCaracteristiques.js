@@ -20,6 +20,7 @@ function statiquesEnJeu(P) {
     const o = obj(P, id);
     if (o.def.statiques.length) o.def.statiques.forEach(s => r.push({src: o, s}));
   }
+  if (P.effets) P.effets.forEach(e => e.def.statiques.forEach(s => r.push({src: e, s})));
   P._statV = P.ver; P._stat = r;
   return r;
 }

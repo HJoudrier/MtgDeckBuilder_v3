@@ -25,7 +25,7 @@ function* prepareDeclencheur(P, t) {
   const effets = yield* prepareEffets(P, t.ctrl, src, t.cap.effet, src ? src.def.couleurs : [], {declencheur: true});
   if (!effets) return null;
   return {id: P.prochainId++, capacite: true, source: t.src, lki: t.lki, ctrl: t.ctrl, effets, x: 0, evt: t.evt,
-    nom: src ? src.def.nom : '?'};
+    nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ};
 }
 
 /* Stabiliser avant une priorité (règle 117.5). */
@@ -71,11 +71,11 @@ function* resoudre(P, item) {
   if (item.sort && item.def.types.some(t => TYPES_PERMANENTS.includes(t))) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
-    yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque});
+    yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu});
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
-    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked};
+    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ};
   for (const ef of item.effets) {
     ctx.cibles = ef.cibles;
     yield* executeOps(P, ef.ops, ctx);

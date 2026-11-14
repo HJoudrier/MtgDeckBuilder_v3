@@ -153,13 +153,13 @@ OPS.defausse = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
   for (const j of joueursDe(P, op.qui, ctx)) {
     const choix = yield* choisitCartes(P, j, P.joueurs[j].main.slice(), n, 'Défausser', 'defausse');
-    choix.forEach(id => { deplace(P, id, 'cimetiere'); emet(P, {t: 'defausse', joueur: j}); });
+    choix.forEach(id => defausseCarte(P, id, j));
   }
 };
 OPS.detruit = function* (P, op, ctx) {
   const cibles = resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ' && !aMot(P, o, MOT.INDESTRUCTIBLE));
   if (cibles.length) jn(P, `Détruit : ${cibles.map(o => o.def.nom).join(', ')}`);
-  cibles.forEach(o => deplace(P, o.id, 'cimetiere'));
+  cibles.forEach(o => detruitObjet(P, o));
 };
 OPS.exile = function* (P, op, ctx) {
   resous(P, op.a, ctx).filter(o => o.j == null && !o.lki).forEach(o => {

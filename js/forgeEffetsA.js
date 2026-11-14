@@ -151,9 +151,13 @@ function dansOrigine(o, origine) {
 }
 
 forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'Shuffle', 'Tapped', 'LibraryPosition',
-  'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder'], function* (P, t, env) {
+  'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration'], function* (P, t, env) {
   const dest = zoneForge(t.Destination), ctx = env.ctx;
   if (!dest) return;
+  /* « Exile … until ~ leaves the battlefield » : si l'hôte est déjà parti,
+     rien n'est exilé (règle 610.3c). */
+  const jusqua = t.Duration === 'UntilHostLeavesPlay';
+  if (jusqua && (!env.src || env.src.lki || env.src.zone !== 'champ')) return;
   const opts = {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null, dessous: t.LibraryPosition === '-1'};
   const cache = /Library|Hand/.test(t.Origin || '') && env.op.slot == null && !t.Defined;
   let objets;
@@ -172,6 +176,7 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
     const n = yield* deplaceForge(P, o, dest, env, opts);
     if (n != null && t.RememberChanged === 'True') retiensForge(ctx, n);
     if (n != null && dest === 'exil' && env.src && P.cartes[env.src.cid]) (P.cartes[env.src.cid].exilees = P.cartes[env.src.cid].exilees || []).push(n);
+    if (n != null && jusqua && dest === 'exil') durees(P).retours.push({hote: env.src.id, ids: [n]});
   }
   if (ctx._melange != null) { melangeHasard(P.rng, P.joueurs[ctx._melange].bibliotheque); ctx._melange = null; }
 }, (t, op) => {
@@ -184,7 +189,7 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
     op.a = op.slot != null ? {cible: op.slot} : {soi: 1};
     op.hostile = d !== 'Battlefield';
   } else { op.op = 'place'; op.vers = d === 'Battlefield' ? 'champ' : 'main'; op.hostile = false; }
-}, {optionnel: false});
+}, {optionnel: false, prepare: t => !t.Duration || t.Duration === 'UntilHostLeavesPlay'});
 
 forgeEffet('ChangeZoneAll', ['Origin', 'Destination', 'ChangeType', 'Shuffle', 'LibraryPosition', 'RememberChanged'], function* (P, t, env) {
   const dest = zoneForge(t.Destination);
@@ -217,7 +222,7 @@ forgeEffet('Discard', ['NumCards', 'Mode', 'DiscardValid', 'RememberDiscarded'],
     else if (t.Mode === 'RevealYouChoose') ids = yield* choisitCartes(P, env.ctrl, main, n, 'Faire défausser', 'defausse');
     else if (!t.Mode || t.Mode === 'TgtChoose') ids = yield* choisitCartes(P, j, main, n, 'Défausser', 'defausse');
     else return;
-    ids.forEach(id => { const nid = deplace(P, id, 'cimetiere'); emet(P, {t: 'defausse', joueur: j}); if (t.RememberDiscarded === 'True') retiensForge(env.ctx, nid); });
+    ids.forEach(id => { const nid = defausseCarte(P, id, j); if (t.RememberDiscarded === 'True') retiensForge(env.ctx, nid); });
   }
 }, (t, op) => { op.op = 'defausse'; op.n = nombreIA(t.NumCards || 1); op.qui = quiIA(t, op); op.hostile = !(op.qui && op.qui.vous); });
 

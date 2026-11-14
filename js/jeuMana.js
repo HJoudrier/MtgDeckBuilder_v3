@@ -30,7 +30,7 @@ function sourcesMana(P, j) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
     let options = null, rang = 0, sac = false, vie = 0;
-    for (const k of o.def.capacites) {
+    for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;

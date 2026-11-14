@@ -84,16 +84,18 @@ function collecteDeclencheurs(P) {
   const evts = P.evts, partis = P.partis;
   P.evts = []; P.partis = [];
   const sources = [];
-  for (const id of P.champ) { const o = obj(P, id); if (ecoute(o.def)) sources.push(o); }
-  for (const l of partis) if (ecoute(l.def)) sources.push(l);
-  if (!sources.length) return;
+  for (const id of P.champ) { const o = obj(P, id); if (ecoute(o.def) || capacitesDe(P, o) !== o.def.capacites) sources.push(o); }
+  for (const l of partis) if (ecoute(l.def) || l.caps) sources.push(l);
+  sources.push(...sourcesEffets(P));
   for (const e of evts) {
+    collecteRetardes(P, e);
     for (const s of sources) {
       if (s.lki && e.t !== 'meurt' && e.t !== 'sacrifie' && e.t !== 'zone' && e.t !== 'cycle') continue;
       if (P.joueurs[s.ctrl].elimine) continue;
       if (e.t === 'lance' && !s.lki && (s.def.mots & MOT.PROUESSE) && s.ctrl === e.joueur && !e.def.types.includes('creature'))
         P.enAttente.push({src: s.id, ctrl: s.ctrl, cap: CAP_PROUESSE, evt: e});
-      s.def.capacites.forEach((cap, i) => {
+      const caps = s.lki ? (s.caps || s.def.capacites) : s.zone === 'effet' ? s.def.capacites : capacitesDe(P, s);
+      caps.forEach((cap, i) => {
         if (cap.genre !== 'declenchee') return;
         if (!cap.ecoutes.some(ec => ecouteRepond(P, ec, e, s))) return;
         if (cap.unefois) {
@@ -101,7 +103,8 @@ function collecteDeclencheurs(P) {
           if (P.unefois.has(cle)) return;
           P.unefois.add(cle);
         }
-        P.enAttente.push({src: s.id, lki: s.lki ? s : null, ctrl: s.ctrl, cap, evt: e});
+        if (s.zone === 'effet') P.enAttente.push({src: s.srcId, lki: s, ctrl: s.ctrl, cap, evt: e, memo: s.memo, memoJ: s.memoJ});
+        else P.enAttente.push({src: s.id, lki: s.lki ? s : null, ctrl: s.ctrl, cap, evt: e});
       });
     }
   }

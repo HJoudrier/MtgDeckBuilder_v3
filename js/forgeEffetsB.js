@@ -77,17 +77,17 @@ forgeEffet('LoseLife', ['LifeAmount'], function* (P, t, env) {
 }, (t, op) => { op.op = 'perdVie'; op.n = nombreIA(t.LifeAmount || 0); op.qui = quiIA(t, op); op.hostile = !(op.qui && op.qui.vous); });
 
 /* Détruire : l'indestructible reste. */
-function detruitForge(P, objets) {
+function detruitForge(P, objets, sansRegeneration) {
   const ok = objets.filter(o => o.zone === 'champ' && !o.lki && !aMot(P, o, MOT.INDESTRUCTIBLE));
   if (ok.length) jn(P, `Détruit : ${ok.map(o => o.def.nom).join(', ')}`);
-  ok.forEach(o => deplace(P, o.id, 'cimetiere'));
+  ok.forEach(o => detruitObjet(P, o, sansRegeneration));
 }
 
-forgeEffet('Destroy', ['NoRegen'], function* (P, t, env) { detruitForge(P, objetsForge(P, t, env, 'Targeted')); },
+forgeEffet('Destroy', ['NoRegen'], function* (P, t, env) { detruitForge(P, objetsForge(P, t, env, 'Targeted'), t.NoRegen === 'True'); },
   (t, op) => { op.op = 'detruit'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.slot != null; });
 
 forgeEffet('DestroyAll', ['ValidCards', 'NoRegen'], function* (P, t, env) {
-  detruitForge(P, objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env)));
+  detruitForge(P, objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env)), t.NoRegen === 'True');
 }, (t, op) => { op.op = 'detruit'; op.a = {chaque: descForge(t.ValidCards || 'Permanent')}; op.hostile = false; });
 
 forgeEffet('Sacrifice', ['SacValid', 'Amount', 'RememberSacrificed'], function* (P, t, env) {

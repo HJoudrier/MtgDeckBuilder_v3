@@ -10,7 +10,8 @@
    ===================================================================== */
 
 const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
-  'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity'];
+  'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity', 'Unearth', 'Madness',
+  'Suspend'];
 
 /* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
    cycle de type (`TypeCycling:Plains:2`), chercher une carte de ce type. */
@@ -80,6 +81,19 @@ function motCleForge(def, k, face, jetons) {
       else if (tete === 'Foretell') def.presage = c.mana;
       else { def.echo = c; def.capacites.push(CAP_ECHO); }
       return true;
+    }
+    case 'Unearth': {
+      const c = reste.length === 1 ? coutForge(reste[0]) : null;
+      if (!c || c.cout.engage || c.cout.sacSoi) return false;
+      def.capacites.push({genre: 'activee', zone: 'cimetiere', vitesse: 'rituel', cout: c.cout, texte: 'Unearth — ' + reste[0],
+        effet: {ops: [{op: 'exhume', hostile: false}], cibles: [], modes: null}});
+      return true;
+    }
+    case 'Madness': { const c = reste.length === 1 ? manaSeul(reste[0]) : null; if (!c) return false; def.folie = c; return true; }
+    case 'Suspend': {
+      const c = reste.length === 2 && /^\d+$/.test(reste[0]) ? manaSeul(reste[1]) : null;
+      if (!c) return false;
+      def.suspension = {n: +reste[0], cout: c.mana}; return true;
     }
     case 'Convoke': def.params.convocation = true; return !reste.length;
     case 'Delve': def.params.delve = true; return !reste.length;

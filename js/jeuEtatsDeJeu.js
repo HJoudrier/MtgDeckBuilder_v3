@@ -72,8 +72,12 @@ function appliqueSBA(P) {
       if (!autre || obj(P, autre).ts < o.ts) legendes.set(cle, id);
     }
   }
-  for (const id of [...auCimetiere, ...detruits]) {
+  for (const id of auCimetiere) {
     if (obj(P, id) && obj(P, id).zone === 'champ') { deplace(P, id, 'cimetiere'); change = true; }
+  }
+  /* Les blessures mortelles détruisent : une créature peut s'en régénérer. */
+  for (const id of detruits) {
+    if (!auCimetiere.has(id) && obj(P, id) && obj(P, id).zone === 'champ') { detruitObjet(P, obj(P, id)); change = true; }
   }
   /* Le commandant qui finit au cimetière ou en exil retourne dans la zone
      de commandement (règle 903.9a) : le joueur automatique le veut toujours. */

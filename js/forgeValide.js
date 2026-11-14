@@ -22,7 +22,7 @@ const FORGE_FILTRES = new Map();
 
 /* Les propriétés que ce fichier sait juger : les autres ne laissent rien
    passer. */
-const FORGE_PROPS = ['kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
+const FORGE_PROPS = ['IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
   'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell'];
@@ -124,6 +124,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'Self': case 'StrictlySelf': return !!src && (o.id === src.id || (P && suit(P, src.id) === o.id));
     case 'token': return !!o.jeton;
     case 'kicked': return !!o.kicked;
+    case 'IsCommander': return !!o.cmd;
     case 'nonToken': return !o.jeton;
     case 'Colorless': return !c.couleurs.length;
     case 'nonColorless': return c.couleurs.length > 0;

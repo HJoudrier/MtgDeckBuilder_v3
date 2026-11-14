@@ -99,6 +99,9 @@ function variantesSort(P, j, o, depuis) {
     if (autre && !coutAutrePossible(P, j, o, autre)) return;
     r.push({variante, mana, autre});
   };
+  /* Défaussée avec la folie, ou au bout de sa suspension : une seule façon. */
+  if (depuis === 'exil' && o.folie) { essaie('folie', coutSort(P, j, o, depuis, coutComplet(d.folie).mana), null); return r; }
+  if (depuis === 'exil' && o.suspendu) { if (!o.temps) essaie('suspension', coutManaVide(), null); return r; }
   const base = coutSort(P, j, o, depuis);
   essaie(null, base, d.coutSup || null);
   const k = coutComplet(d.kicker);
@@ -183,4 +186,74 @@ OPS.echo = function* (P, op, ctx) {
     if (r === 1 && paieMana(P, ctx.ctrl, c.mana, 0)) return;
   }
   sacrifie(P, s.id);
+};
+
+/* La folie : la carte défaussée attend en exil ; sa capacité propose de la
+   lancer pour son coût de folie, sinon elle va au cimetière. */
+const CAP_FOLIE = {genre: 'declenchee', texte: 'Folie', effet: {ops: [{op: 'folie', hostile: false}], cibles: [], modes: null}};
+
+OPS.folie = function* (P, op, ctx) {
+  const s = sourceCtx(P, ctx);
+  if (!s || s.lki || s.zone !== 'exil' || !s.folie) return;
+  const j = s.prop, cid = s.cid;
+  let lance = false;
+  if (varianteDe(P, j, s, 'exil', 'folie')) {
+    const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: `Lancer ${s.def.nom} pour son coût de folie ?`, source: s.id});
+    if (r === 1) lance = yield* lanceSort(P, j, {k: 'lancer', id: s.id, depuis: 'exil', variante: 'folie'});
+  }
+  if (!lance) {
+    const reste = P.joueurs[j].exil.find(id => obj(P, id).cid === cid);
+    if (reste != null) deplace(P, reste, 'cimetiere');
+  }
+};
+
+/* L'exhumation : la carte revient du cimetière avec la célérité, part en
+   exil à la prochaine étape de fin, et en exil où qu'elle aille. */
+OPS.exhume = function* (P, op, ctx) {
+  const s = sourceCtx(P, ctx);
+  if (!s || s.lki || s.zone !== 'cimetiere') return;
+  const n = yield* metEnJeu(P, s.id, ctx.ctrl, {});
+  const no = obj(P, n);
+  if (!no) return;
+  no.exhume = true;
+  no.mods.push({f: 0, e: 0, mots: MOT.CELERITE, fin: 'jamais'});
+  P.ver++;
+};
+
+function exhumeesFin(P) {
+  P.champ.filter(id => obj(P, id).exhume).forEach(id => deplace(P, id, 'exil'));
+}
+
+/* La suspension : payer et exiler la carte avec des marqueurs de temps ; à
+   chaque entretien de son propriétaire, un marqueur part ; au dernier, elle
+   se lance sans payer son coût, et une créature gagne la célérité. */
+function suspendable(P, j, o, rituel) {
+  const s = o.def.suspension;
+  return !!s && (rituel || estEphemere(o.def)) && !!planPaiement(P, j, s.cout, 0);
+}
+
+function* suspend(P, j, a) {
+  const o = obj(P, a.id);
+  if (!o || o.zone !== 'main' || !paieMana(P, j, o.def.suspension.cout, 0)) return false;
+  const n = obj(P, deplace(P, a.id, 'exil'));
+  n.suspendu = true; n.temps = o.def.suspension.n;
+  jn(P, `${P.joueurs[j].nom} suspend ${o.def.nom} (${n.temps})`);
+  return true;
+}
+
+const CAP_SUSPENSION = {genre: 'declenchee', texte: 'Suspension', effet: {ops: [{op: 'suspension', hostile: false}], cibles: [], modes: null}};
+
+function suspensionsEntretien(P) {
+  P.joueurs[P.actif].exil.forEach(id => {
+    const o = obj(P, id);
+    if (!o.suspendu || !o.temps) return;
+    o.temps--;
+    if (!o.temps) P.enAttente.push({src: id, ctrl: P.actif, cap: CAP_SUSPENSION, evt: {t: 'etape', etape: 'entretien', actif: P.actif}});
+  });
+}
+
+OPS.suspension = function* (P, op, ctx) {
+  const s = sourceCtx(P, ctx);
+  if (!s || s.lki || s.zone !== 'exil' || !s.suspendu || s.temps) return;
+  yield* lanceSort(P, s.prop, {k: 'lancer', id: s.id, depuis: 'exil', variante: 'suspension'});
 };

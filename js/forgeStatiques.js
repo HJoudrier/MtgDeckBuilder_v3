@@ -23,7 +23,7 @@ function forgeStatique(mode, params, f) {
 
 /* Le contexte d'une statique : sa source en est le seul repère. */
 function envStatique(src, s) {
-  return {face: s.face, ctx: {cibles: [], memo: [], memoJ: [], x: 0}, src, ctrl: src.ctrl, op: {}, base: true};
+  return {face: s.face, ctx: {cibles: [], memo: src.memo || [], memoJ: src.memoJ || [], x: 0}, src, ctrl: src.ctrl, op: {}, base: true};
 }
 
 /* La statique vise-t-elle cet objet, et ses conditions tiennent-elles ? */

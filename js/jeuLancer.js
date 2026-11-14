@@ -81,6 +81,7 @@ function actionsLegales(P, j) {
   J.cimetiere.forEach(id => { if (obj(P, id).def.flashback) essaie(id, 'cimetiere'); });
   J.exil.forEach(id => { const o = obj(P, id); if (o.presageTour != null && o.presageTour < P.tour) essaie(id, 'exil'); });
   if (P.actif === j) J.main.forEach(id => { if (obj(P, id).def.presage && planPaiement(P, j, MANA_DEUX, 0)) r.push({k: 'presager', id}); });
+  J.main.forEach(id => { if (suspendable(P, j, obj(P, id), rituel)) r.push({k: 'suspendre', id}); });
   /* Les capacités qui s'activent depuis la main (cycle) ou le cimetière. */
   [['main', J.main], ['cimetiere', J.cimetiere]].forEach(([zone, ids]) => ids.forEach(id => {
     const o = obj(P, id);
@@ -94,7 +95,7 @@ function actionsLegales(P, j) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
-    o.def.capacites.forEach((k, i) => {
+    capacitesDe(P, o).forEach((k, i) => {
       if (k.zone) return;
       if (k.genre === 'activee') {
         if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
@@ -127,7 +128,7 @@ function actionsPossibles(P, j) {
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return d.flashback && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return o.presageTour != null && o.presageTour < P.tour && estEphemere(o.def); }) ||
-    P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && o.def.capacites.some(k => k.genre === 'activee' && k.vitesse !== 'rituel'); });
+    P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && capacitesDe(P, o).some(k => k.genre === 'activee' && !k.zone && k.vitesse !== 'rituel'); });
   return peut ? actionsLegales(P, j) : [PASSE];
 }
 

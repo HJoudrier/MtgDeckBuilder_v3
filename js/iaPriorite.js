@@ -54,6 +54,8 @@ function scoreEffet(P, j, effet, src) {
       case 'pompe': s += P.combat ? 2 : 0; break;
       case 'contre': break;
       case 'mana': s += 0.5; break;
+      case 'exhume': s += 3; break;
+      case 'regenere': s += regenUtile(P, j, src) ? 4 : -1; break;
       default: s += 0.5;
     }
   }
@@ -80,7 +82,7 @@ function impactSort(P, j, o) {
 
 /* L'effet d'une capacité qu'on activerait maintenant. */
 function impactCapacite(P, j, o, k, ag) {
-  const cle = P.tour + '|' + o.id + '|' + o.def.capacites.indexOf(k);
+  const cle = P.tour + '|' + o.id + '|' + capacitesDe(P, o).indexOf(k);
   if ((ag.activations.get(cle) || 0) >= 3) return -1;
   let s = scoreEffet(P, j, k.effet, o);
   if (k.genre === 'loyaute') return typeof k.delta === 'number' ? s + k.delta * 0.6 + 1 : s;
@@ -127,8 +129,10 @@ function iaReponse(P, j, actions, ag) {
       } else if (P.combat && P.etape === 'attaquants' && P.actif !== j && d.sort && d.sort.ops.some(opHostile)) {
         s = scoreEffet(P, j, d.sort, o);
       } else if (finAvantMoi || (P.actif === j && P.etape === 'fin')) s = impactSort(P, j, o);
-    } else if (a.k === 'activer' && (finAvantMoi || (P.actif === j && P.etape === 'fin'))) {
-      s = impactCapacite(P, j, o, o.def.capacites[a.i], ag);
+    } else if (a.k === 'activer') {
+      const k = capacitesDe(P, o)[a.i];
+      const regen = k && k.effet && k.effet.ops.some(op => op.op === 'regenere');
+      if (regen || finAvantMoi || (P.actif === j && P.etape === 'fin')) s = impactCapacite(P, j, o, k, ag);
     }
     if (s > score + 0.01 && s >= 2) { best = i; score = s; }
   });
@@ -152,11 +156,21 @@ function iaPriorite(P, q, ag) {
     let s = -1;
     if (a.k === 'lancer') s = scoreLancer(P, j, a);
     else if (a.k === 'presager') s = 1.1;
-    else if (a.k === 'activer') s = impactCapacite(P, j, obj(P, a.id), obj(P, a.id).def.capacites[a.i], ag);
+    else if (a.k === 'suspendre') s = impactSort(P, j, obj(P, a.id)) * 0.5;
+    else if (a.k === 'activer') s = impactCapacite(P, j, obj(P, a.id), capacitesDe(P, obj(P, a.id))[a.i], ag);
     else if (a.k === 'equiper') s = obj(P, a.id).att == null ? 2.5 : -1;
     if (s > score && s >= 1) { best = i; score = s; }
   });
   return best >= 0 ? noteActivation(P, actions[best], ag, best) : passe;
+}
+
+/* Une régénération sert-elle maintenant : la créature est au combat, ou
+   un sort adverse au sommet de la pile pourrait la détruire ? */
+function regenUtile(P, j, o) {
+  if (!o || o.zone !== 'champ' || o.regen > 0) return false;
+  if (P.combat && (P.combat.attaquants.has(o.id) || P.combat.bloqueurs.has(o.id)) && (P.etape === 'bloqueurs' || P.etape === 'attaquants')) return true;
+  const s = P.pile[P.pile.length - 1];
+  return !!s && s.ctrl !== j && s.effets.some(ef => ef.ops.some(op => opHostile(op)) && [].concat(...ef.cibles).includes(o.id));
 }
 
 /* Ce que vaut une façon de lancer : le kicker seulement s'il change

@@ -26,7 +26,7 @@ function* paieAutre(P, j, o, c) {
   }
   if (c.defausse) {
     const ids = P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j)));
-    (yield* choisitCartes(P, j, ids, c.defausse.n, 'Défausser', 'defausse')).forEach(id => deplace(P, id, 'cimetiere'));
+    (yield* choisitCartes(P, j, ids, c.defausse.n, 'Défausser', 'defausse')).forEach(id => defausseCarte(P, id, j));
   }
   const J = P.joueurs[j];
   if (c.exileCimetiere) {
@@ -38,7 +38,7 @@ function* paieAutre(P, j, o, c) {
     (yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main')).forEach(id => deplace(P, id, 'main'));
   }
   if (c.energie) J.energie -= c.energie;
-  if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'cimetiere'); emet(P, {t: 'defausse', joueur: j}); }
+  if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); defausseCarte(P, o.id, j); }
   if (c.sacSoi && obj(P, o.id)) { lki = instantane(P, o); sacrifie(P, o.id); }
   if (c.exileSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'exil'); }
   return lki;
@@ -90,7 +90,7 @@ function* lanceSort(P, j, a) {
   if (!paieMana(P, j, cout, x)) return annule();
   s.x = x;
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
-    kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation'};
+    kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension'};
   P.pile.push(item);
   if (a.depuis === 'commandement') {
     J.taxe[cid] = (J.taxe[cid] || 0) + 1;
@@ -111,7 +111,7 @@ function* lanceSort(P, j, a) {
 function* activeCapacite(P, j, a) {
   const o = obj(P, a.id);
   if (!o) return false;
-  const k = o.def.capacites[a.i];
+  const k = capacitesDe(P, o)[a.i];
   const effets = yield* prepareEffets(P, j, o, k.effet, o.def.couleurs);
   if (!effets) return false;
   let x = 0, lki = null;
@@ -173,5 +173,6 @@ function* executeAction(P, j, a) {
   if (a.k === 'activer') return yield* activeCapacite(P, j, a);
   if (a.k === 'equiper') return yield* equipe(P, j, a);
   if (a.k === 'presager') return yield* presage(P, j, a);
+  if (a.k === 'suspendre') return yield* suspend(P, j, a);
   return false;
 }

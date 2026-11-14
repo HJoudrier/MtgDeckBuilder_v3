@@ -88,7 +88,8 @@ function instantane(P, o) {
   const c = car(P, o);
   return {id: o.id, cid: o.cid, def: o.def, ctrl: o.ctrl, prop: o.prop, force: c.force, endurance: c.endurance,
     mots: c.mots, types: c.types, sousTypes: c.sousTypes, couleurs: c.couleurs, marq: {...o.marq}, jeton: o.jeton,
-    cmd: o.cmd, att: o.att, zone: o.zone, lki: true};
+    cmd: o.cmd, att: o.att, zone: o.zone, lki: true,
+    caps: o.zone === 'champ' && capacitesDe(P, o) !== o.def.capacites ? capacitesDe(P, o) : null};
 }
 
 /* Déplacer un objet. Rend l'identifiant du nouvel objet, ou `null` pour un
@@ -98,6 +99,8 @@ function deplace(P, id, vers, opts = {}) {
   const o = obj(P, id);
   if (!o) return null;
   const depuis = o.zone;
+  /* Exhumée, elle part en exil où qu'elle aille (règle 702.84a). */
+  if (o.exhume && depuis === 'champ' && vers !== 'exil') vers = 'exil';
   const lki = depuis === 'champ' ? instantane(P, o) : null;
   retireDe(tableauZone(P, o), id);
   if (depuis === 'champ') {
@@ -111,7 +114,11 @@ function deplace(P, id, vers, opts = {}) {
   const zone = vers === 'dessus' || vers === 'dessous' ? 'bibliotheque' : vers;
   if (depuis === 'champ' && zone === 'cimetiere' && lki.types.includes('creature'))
     emet(P, {t: 'meurt', ancien: id, lki, ctrl: lki.ctrl});
-  if (o.jeton && zone !== 'champ') { emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, lki}); return null; }
+  if (o.jeton && zone !== 'champ') {
+    emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, lki});
+    if (depuis === 'champ' && P.effets) hotePart(P, id);
+    return null;
+  }
   const n = creeObjet(P, o.cid, o.prop, zone, zone === 'champ' ? (opts.ctrl != null ? opts.ctrl : o.prop) : o.prop);
   P.suivi.set(id, n.id);
   if (zone === 'champ') {
@@ -124,6 +131,7 @@ function deplace(P, id, vers, opts = {}) {
   else P.joueurs[o.prop][zone].push(n.id);
   emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, id: n.id, lki});
   if (zone === 'champ') emet(P, {t: 'entre', id: n.id, ctrl: n.ctrl});
+  if (depuis === 'champ' && P.effets) hotePart(P, id);
   return n.id;
 }
 
