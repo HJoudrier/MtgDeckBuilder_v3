@@ -19,12 +19,14 @@ function estEphemere(def) {
   return def._eph;
 }
 
-/* Le coût total d'un sort : imprimé (ou flashback), plus les taxes de
-   tout le monde (Thalia), moins les réductions de son lanceur, plus la taxe
-   de commandant. */
-function coutSort(P, j, o, depuis) {
-  let cout = depuis === 'cimetiere' && o.def.flashback ? o.def.flashback : o.def.cout;
+/* Le coût total d'un sort : imprimé (ou flashback, ou présage, ou le coût
+   `imprime` d'une variante), plus les taxes de tout le monde (Thalia), moins
+   les réductions de son lanceur et l'affinité, plus la taxe de commandant. */
+function coutSort(P, j, o, depuis, imprime) {
+  let cout = imprime || (depuis === 'cimetiere' && o.def.flashback ? o.def.flashback
+    : depuis === 'exil' && o.def.presage ? o.def.presage : o.def.cout);
   let plus = 0, moins = 0;
+  if (o.def.params.affinite) moins += champDe(P, j).filter(x => correspond(P, x, {forge: o.def.params.affinite}, o, j)).length;
   for (const {src, s} of statiquesEnJeu(P)) {
     if (s.s === 'taxe' && defCorrespond(o.def, s.desc)) plus += s.n;
     if (s.s === 'reduction' && src.ctrl === j && defCorrespond(o.def, s.desc)) moins += s.n;
@@ -52,6 +54,12 @@ function coutAutrePossible(P, j, o, c) {
   if (c.defausse && P.joueurs[j].main.filter(id => id !== o.id).length < c.defausse.n) return false;
   if (c.retire && (o.marq[c.retire.genre] || 0) < c.retire.n) return false;
   if (c.engageAutres && champDe(P, j).filter(x => !x.engage && x.id !== o.id && correspond(P, x, c.engageAutres.desc, o, j)).length < c.engageAutres.n) return false;
+  if ((c.sacSoi && o.zone !== 'champ') || (c.defausseSoi && o.zone !== 'main')) return false;
+  const J = P.joueurs[j], compte = (ids, d) => ids.filter(id => id !== o.id && correspond(P, obj(P, id), d, o, j)).length;
+  if (c.exileCimetiere && compte(J.cimetiere, c.exileCimetiere.desc) < c.exileCimetiere.n) return false;
+  if (c.renvoie && champDe(P, j).filter(x => correspond(P, x, c.renvoie.desc, o, j)).length < c.renvoie.n) return false;
+  if (c.revele && compte(J.main, c.revele.desc) < c.revele.n) return false;
+  if (c.energie && (J.energie || 0) < c.energie) return false;
   return true;
 }
 
@@ -64,19 +72,30 @@ function actionsLegales(P, j) {
   const essaie = (id, depuis) => {
     const o = obj(P, id), d = o.def;
     if (d.types.includes('land') || (!rituel && !estEphemere(d))) return;
-    if (!planPaiement(P, j, coutSort(P, j, o, depuis), 0)) return;
-    if (d.coutSup && !coutAutrePossible(P, j, o, d.coutSup)) return;
     if (d.sort && !effetCiblable(P, j, o, d.sort, d.couleurs)) return;
     if (d.aura && !ciblesLegales(P, {desc: d.aura, min: 1, max: 1}, o, j, d.couleurs).length) return;
-    r.push({k: 'lancer', id, depuis});
+    variantesSort(P, j, o, depuis).forEach(v => r.push(v.variante ? {k: 'lancer', id, depuis, variante: v.variante} : {k: 'lancer', id, depuis}));
   };
   J.main.forEach(id => essaie(id, 'main'));
   J.commandement.forEach(id => essaie(id, 'commandement'));
   J.cimetiere.forEach(id => { if (obj(P, id).def.flashback) essaie(id, 'cimetiere'); });
+  J.exil.forEach(id => { const o = obj(P, id); if (o.presageTour != null && o.presageTour < P.tour) essaie(id, 'exil'); });
+  if (P.actif === j) J.main.forEach(id => { if (obj(P, id).def.presage && planPaiement(P, j, MANA_DEUX, 0)) r.push({k: 'presager', id}); });
+  /* Les capacités qui s'activent depuis la main (cycle) ou le cimetière. */
+  [['main', J.main], ['cimetiere', J.cimetiere]].forEach(([zone, ids]) => ids.forEach(id => {
+    const o = obj(P, id);
+    o.def.capacites.forEach((k, i) => {
+      if (k.zone !== zone || k.genre !== 'activee') return;
+      if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
+      if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
+      r.push({k: 'activer', id, i});
+    });
+  }));
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
     o.def.capacites.forEach((k, i) => {
+      if (k.zone) return;
       if (k.genre === 'activee') {
         if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
         if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0)) return;
@@ -103,8 +122,11 @@ function actionsLegales(P, j) {
 function actionsPossibles(P, j) {
   if (enPhasePrincipale(P, j)) return actionsLegales(P, j);
   const J = P.joueurs[j];
+  const horsChamp = (ids, zone) => ids.some(id => obj(P, id).def.capacites.some(k => k.zone === zone && k.vitesse !== 'rituel'));
   const peut = J.main.some(id => estEphemere(obj(P, id).def)) ||
-    J.commandement.some(id => estEphemere(obj(P, id).def)) ||
+    J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
+    J.cimetiere.some(id => { const d = obj(P, id).def; return d.flashback && estEphemere(d); }) ||
+    J.exil.some(id => { const o = obj(P, id); return o.presageTour != null && o.presageTour < P.tour && estEphemere(o.def); }) ||
     P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && o.def.capacites.some(k => k.genre === 'activee' && k.vitesse !== 'rituel'); });
   return peut ? actionsLegales(P, j) : [PASSE];
 }

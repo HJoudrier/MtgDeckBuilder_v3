@@ -38,7 +38,11 @@ function seuilForge(P, v, cmp, env) {
 const FORGE_CONDITIONS = {
   Threshold: (P, env) => P.joueurs[env.ctrl].cimetiere.length >= 7,
   Hellbent: (P, env) => !P.joueurs[env.ctrl].main.length,
-  Metalcraft: (P, env) => champDe(P, env.ctrl).filter(o => estType(o, 'artifact')).length >= 3
+  Metalcraft: (P, env) => champDe(P, env.ctrl).filter(o => estType(o, 'artifact')).length >= 3,
+  PlayerTurn: (P, env) => P.actif === env.ctrl,
+  NotPlayerTurn: (P, env) => P.actif !== env.ctrl,
+  Delirium: (P, env) => new Set([].concat(...P.joueurs[env.ctrl].cimetiere.map(id => obj(P, id).def.types))).size >= 4,
+  Kicked: (P, env) => !!(env.ctx.kicked || (env.src && env.src.kicked))
 };
 
 /* Les conditions d'une table : `Condition*`, `CheckSVar`, `IsPresent`,
@@ -102,7 +106,8 @@ function* executeForge(P, op, ctx) {
   const t = op.t, api = FORGE_API[op.api];
   if (!api || !conditionForge(P, t, env)) return;
   if ((t.Optional === 'True' || t.OptionalDecider) && !api.optionnel) {
-    const j = t.OptionalDecider ? joueursForge(P, t, env, 'OptionalDecider')[0] : ctx.ctrl;
+    /* Celui qui décide est nommé, jamais déduit des cibles. */
+    const j = t.OptionalDecider ? forgeDefinis(P, t.OptionalDecider, env).map(x => joueurDe(x)).find(x => x != null) : ctx.ctrl;
     if (j == null) return;
     const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: op.texte || 'Le faire ?', source: ctx.source, extra: {ops: [op]}});
     if (r !== 1) return;

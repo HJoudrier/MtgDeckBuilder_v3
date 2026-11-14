@@ -28,6 +28,17 @@ function* paieAutre(P, j, o, c) {
     const ids = P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j)));
     (yield* choisitCartes(P, j, ids, c.defausse.n, 'Défausser', 'defausse')).forEach(id => deplace(P, id, 'cimetiere'));
   }
+  const J = P.joueurs[j];
+  if (c.exileCimetiere) {
+    const ids = J.cimetiere.filter(id => id !== o.id && correspond(P, obj(P, id), c.exileCimetiere.desc, o, j));
+    (yield* choisitCartes(P, j, ids, c.exileCimetiere.n, 'Exiler du cimetière')).forEach(id => deplace(P, id, 'exil'));
+  }
+  if (c.renvoie) {
+    const ids = champDe(P, j).filter(x => correspond(P, x, c.renvoie.desc, o, j)).map(x => x.id);
+    (yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main')).forEach(id => deplace(P, id, 'main'));
+  }
+  if (c.energie) J.energie -= c.energie;
+  if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'cimetiere'); emet(P, {t: 'defausse', joueur: j}); }
   if (c.sacSoi && obj(P, o.id)) { lki = instantane(P, o); sacrifie(P, o.id); }
   if (c.exileSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'exil'); }
   return lki;
@@ -45,11 +56,17 @@ function* lanceSort(P, j, a) {
   const J = P.joueurs[j], o0 = obj(P, a.id);
   if (!o0) return false;
   const d = o0.def, cid = o0.cid;
-  const cout0 = coutSort(P, j, o0, a.depuis);
+  const v = varianteDe(P, j, o0, a.depuis, a.variante);
+  if (!v) return false;
+  const cout0 = v.mana, presageTour = o0.presageTour;
   const nid = deplace(P, a.id, 'pile');
   const s = obj(P, nid);
   s.ctrl = j;
-  const annule = () => { deplace(P, nid, a.depuis === 'commandement' ? 'commandement' : a.depuis); return false; };
+  const annule = () => {
+    const r = deplace(P, nid, a.depuis === 'commandement' ? 'commandement' : a.depuis);
+    if (r != null && presageTour != null) obj(P, r).presageTour = presageTour;
+    return false;
+  };
   let effets = [];
   if (d.sort) effets = yield* prepareEffets(P, j, s, d.sort, d.couleurs);
   else if (d.aura) {
@@ -64,15 +81,16 @@ function* lanceSort(P, j, a) {
     x = opts[(yield question(P, j, 'x', opts, {defaut: max, source: nid}))] || 0;
   }
   const garde = coutDeGarde(P, j, effets);
-  const cout = garde ? {...cout0, generique: cout0.generique + garde, total: cout0.total + garde} : cout0;
-  if (!planPaiement(P, j, cout, x)) return annule();
-  if (d.coutSup) {
-    if (!coutAutrePossible(P, j, s, d.coutSup)) return annule();
-    yield* paieAutre(P, j, s, d.coutSup);
-  }
+  let cout = garde ? {...cout0, generique: cout0.generique + garde, total: cout0.total + garde} : cout0;
+  if (!payableAvec(P, j, s, cout, x)) return annule();
+  if (v.autre && !coutAutrePossible(P, j, s, v.autre)) return annule();
+  cout = yield* paieReductions(P, j, s, cout, x);
+  if (!cout) return annule();
+  if (v.autre) yield* paieAutre(P, j, s, v.autre);
   if (!paieMana(P, j, cout, x)) return annule();
   s.x = x;
-  const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis};
+  const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
+    kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation'};
   P.pile.push(item);
   if (a.depuis === 'commandement') {
     J.taxe[cid] = (J.taxe[cid] || 0) + 1;
@@ -113,6 +131,9 @@ function* activeCapacite(P, j, a) {
     lki = yield* paieAutre(P, j, o, k.cout);
     if (!paieMana(P, j, k.cout.mana, x)) return false;
     if (k.unefois) P.unefois.add(a.id + '|a' + a.i);
+    /* Un cycle s'entend : « when you cycle ~ » écoute à travers
+       l'instantané de la carte, partie au cimetière. */
+    if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }
   }
   P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
@@ -151,5 +172,6 @@ function* executeAction(P, j, a) {
   if (a.k === 'lancer') return yield* lanceSort(P, j, a);
   if (a.k === 'activer') return yield* activeCapacite(P, j, a);
   if (a.k === 'equiper') return yield* equipe(P, j, a);
+  if (a.k === 'presager') return yield* presage(P, j, a);
   return false;
 }

@@ -120,6 +120,9 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (ent.marqueurs) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
   if (opts.attache != null) no.att = opts.attache;
   no.x = x;
+  if (opts.kicked) no.kicked = true;
+  if (o.def.echo) no.echoDu = true;
+  if (opts.evoque) P.enAttente.push({src: n, ctrl, cap: CAP_EVOCATION, evt: {t: 'entre', id: n}});
   P.ver++;
   return n;
 }

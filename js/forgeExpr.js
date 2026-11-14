@@ -112,6 +112,7 @@ function forgeExpression(P, expr, env, prof) {
   if ((k = /^CardCounters\.(\w+)$/.exec(q))) return src && !src.j ? (src.marq || {})[genreMarqueur(k[1])] || 0 : 0;
   if (q === 'CardPower' || q === 'CardToughness' || q === 'CardManaCost') return caracForge(P, src, q);
   if (q === 'YourLifeTotal') return P.joueurs[ctrl].vie;
+  if (q === 'YourCountersEnergy') return P.joueurs[ctrl].energie || 0;
   if (q === 'CardsInYourHand' || q === 'InYourHand') return P.joueurs[ctrl].main.length;
   if (q === 'InYourGraveyard') return P.joueurs[ctrl].cimetiere.length;
   return 0;
@@ -124,4 +125,4 @@ forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$V
   'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',
-  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', '$CardTypes', '$CardPower', '$CardToughness', '$CardManaCost');
+  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', '$CardTypes', '$CardPower', '$CardToughness', '$CardManaCost');

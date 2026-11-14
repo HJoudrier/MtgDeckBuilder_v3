@@ -84,6 +84,8 @@ function impactCapacite(P, j, o, k, ag) {
   if ((ag.activations.get(cle) || 0) >= 3) return -1;
   let s = scoreEffet(P, j, k.effet, o);
   if (k.genre === 'loyaute') return typeof k.delta === 'number' ? s + k.delta * 0.6 + 1 : s;
+  /* Cycler, c'est renoncer à la carte : ce qu'elle vaudrait en main se paie. */
+  if (k.cycle) s -= 0.4 * utiliteEnMain(P, j, o.id);
   const c = k.cout;
   if (c.sacSoi) s -= valeurObjet(P, o) * 0.8 + 0.5;
   if (c.sac) s -= 2.5;
@@ -148,12 +150,24 @@ function iaPriorite(P, q, ag) {
       return;
     }
     let s = -1;
-    if (a.k === 'lancer') s = impactSort(P, j, obj(P, a.id));
+    if (a.k === 'lancer') s = scoreLancer(P, j, a);
+    else if (a.k === 'presager') s = 1.1;
     else if (a.k === 'activer') s = impactCapacite(P, j, obj(P, a.id), obj(P, a.id).def.capacites[a.i], ag);
     else if (a.k === 'equiper') s = obj(P, a.id).att == null ? 2.5 : -1;
     if (s > score && s >= 1) { best = i; score = s; }
   });
   return best >= 0 ? noteActivation(P, actions[best], ag, best) : passe;
+}
+
+/* Ce que vaut une façon de lancer : le kicker seulement s'il change
+   l'effet, le rachat parce qu'il rend la carte, l'évocation faute de mieux. */
+function scoreLancer(P, j, a) {
+  const o = obj(P, a.id);
+  let s = impactSort(P, j, o);
+  if (a.variante === 'kicker') s += o.def.kickerUtile ? 1.5 : -5;
+  else if (a.variante === 'rachat') s += 2;
+  else if (a.variante === 'evocation') s *= 0.6;
+  return s;
 }
 
 /* Compter les activations d'une capacité dans le tour, pour qu'une capacité

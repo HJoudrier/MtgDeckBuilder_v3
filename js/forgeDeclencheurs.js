@@ -72,6 +72,8 @@ forgeMode('Drawn', ['ValidCard'], (P, t, e, s) => e.t === 'pioche' && joueurDeCa
 forgeMode('Discarded', ['ValidCard'], (P, t, e, s) => e.t === 'defausse' && joueurDeCarte(e.joueur, t.ValidCard, s.ctrl));
 forgeMode('LifeGained', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'vie' && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
 forgeMode('LifeLost', ['ValidPlayer'], (P, t, e, s, env) => (e.t === 'perteVie' || e.t === 'degatsJoueur') && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
+forgeMode('Cycled', ['ValidCard', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'cycle' && valideOuRien(P, e.lki, t.ValidCard, s, env) &&
+  joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
 forgeMode('Sacrificed', ['ValidCard', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'sacrifie' && valideOuRien(P, e.lki, t.ValidCard, s, env) &&
   joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
 

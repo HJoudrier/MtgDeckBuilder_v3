@@ -9,10 +9,32 @@
    le dit.
    ===================================================================== */
 
-const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk'];
+const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
+  'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity'];
+
+/* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
+   cycle de type (`TypeCycling:Plains:2`), chercher une carte de ce type. */
+function cycleForge(def, face, jetons, cout, type) {
+  const c = coutForge(cout);
+  if (!c || c.cout.engage || c.cout.sacSoi) return false;
+  const filtre = type == null ? null : type === 'Basic' ? 'Land.Basic' : 'Card.' + type;
+  const table = filtre ? {DB: 'ChangeZone', Origin: 'Library', Destination: 'Hand', ChangeType: filtre, ChangeNum: '1'}
+    : {DB: 'Draw', NumCards: '1'};
+  const effet = effetForge(face, table, jetons);
+  if (!effet) return false;
+  def.capacites.push({genre: 'activee', zone: 'main', cout: {...c.cout, defausseSoi: true}, effet, cycle: true, vitesse: null,
+    texte: (type ? type + 'cycling' : 'Cycling') + ' — ' + cout});
+  return true;
+}
+
+/* Un coût de mot-clé en mana seul (évocation, écho, présage). */
+function manaSeul(txt) {
+  const c = coutForge(txt);
+  return c && !Object.keys(c.cout).some(k => k !== 'mana') ? c.cout : null;
+}
 
 /* Verser un mot-clé dans une définition. Rend vrai s'il est compris. */
-function motCleForge(def, k) {
+function motCleForge(def, k, face, jetons) {
   const [tete, ...reste] = k.split(':');
   const bit = MOTS_ANGLAIS[tete.toLowerCase()];
   if (bit != null && !reste.length) { def.mots |= bit; return true; }
@@ -44,6 +66,24 @@ function motCleForge(def, k) {
       def.entree = Object.assign(def.entree || {}, {marqueurs: n, genre: g}); return true;
     }
     case 'Devoid': def.couleurs = []; return true;
+    case 'Cycling': return reste.length === 1 && cycleForge(def, face, jetons, reste[0], null);
+    case 'TypeCycling': return reste.length === 2 && /^[A-Z][a-z]+$/.test(reste[0]) && cycleForge(def, face, jetons, reste[1], reste[0]);
+    case 'Kicker': case 'Buyback': {
+      const c = reste.length === 1 ? coutForge(reste[0]) : null;
+      if (!c || c.cout.sacSoi || c.cout.exileSoi) return false;
+      def[tete === 'Kicker' ? 'kicker' : 'rachat'] = c.cout; return true;
+    }
+    case 'Evoke': case 'Echo': case 'Foretell': {
+      const c = reste.length === 1 ? manaSeul(reste[0]) : null;
+      if (!c) return false;
+      if (tete === 'Evoke') def.evocation = c;
+      else if (tete === 'Foretell') def.presage = c.mana;
+      else { def.echo = c; def.capacites.push(CAP_ECHO); }
+      return true;
+    }
+    case 'Convoke': def.params.convocation = true; return !reste.length;
+    case 'Delve': def.params.delve = true; return !reste.length;
+    case 'Affinity': if (!reste[0]) return false; def.params.affinite = reste[0]; return true;
   }
   /* La traversée (`Landwalk:Swamp`, `Landwalk:Land.Legendary`) : un filtre
      de terrain, que js/jeuCombat.js juge chez le défenseur. */

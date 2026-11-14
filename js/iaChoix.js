@@ -70,7 +70,8 @@ function iaCibles(P, q) {
 /* Choisir parmi des cartes ou des permanents selon ce qu'on en fait. */
 function iaCartes(P, q) {
   const j = q.joueur, t = q.texte;
-  const pire = t === 'Défausser' || t === 'Sacrifier' || t === 'Engager' || t === 'Mettre dessous';
+  const pire = t === 'Défausser' || t === 'Sacrifier' || t === 'Engager' || t === 'Mettre dessous' || t === 'Convoquer' ||
+    t === 'Explorer' || t === 'Exiler du cimetière' || t === 'Renvoyer en main';
   const note = id => {
     const o = obj(P, id);
     if (!o) return 0;

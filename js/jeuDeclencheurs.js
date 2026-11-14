@@ -69,6 +69,7 @@ function ecouteRepond(P, ec, e, s) {
     case 'sacrifie': return e.t === 'sacrifie' && e.joueur === s.ctrl && (!sujet || correspond(P, e.lki, sujet, s, s.ctrl));
     case 'quitte': return e.t === 'zone' && e.de === 'champ' && e.ancien === s.id;
     case 'forge': return forgeDeclenche(P, ec, e, s);
+    case 'echo': return e.t === 'etape' && e.etape === 'entretien' && e.actif === s.ctrl && !!s.echoDu;
   }
   return false;
 }
@@ -88,7 +89,7 @@ function collecteDeclencheurs(P) {
   if (!sources.length) return;
   for (const e of evts) {
     for (const s of sources) {
-      if (s.lki && e.t !== 'meurt' && e.t !== 'sacrifie' && e.t !== 'zone') continue;
+      if (s.lki && e.t !== 'meurt' && e.t !== 'sacrifie' && e.t !== 'zone' && e.t !== 'cycle') continue;
       if (P.joueurs[s.ctrl].elimine) continue;
       if (e.t === 'lance' && !s.lki && (s.def.mots & MOT.PROUESSE) && s.ctrl === e.joueur && !e.def.types.includes('creature'))
         P.enAttente.push({src: s.id, ctrl: s.ctrl, cap: CAP_PROUESSE, evt: e});

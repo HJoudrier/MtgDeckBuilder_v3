@@ -147,9 +147,14 @@ forgeEffet('Token', ['TokenScript', 'TokenAmount', 'TokenOwner', 'TokenTapped', 
   op._def = Object.values(op.jetons || {})[0] || {types: ['creature'], force: 1, endurance: 1, mots: 0, capacites: [], statiques: [], mv: 0};
 });
 
+/* Des marqueurs sur des permanents, ou — énergie, poison — sur des joueurs. */
 forgeEffet('PutCounter', ['CounterType', 'CounterNum', 'ETB'], function* (P, t, env) {
   const g = genreMarqueur(t.CounterType), n = forgeNombre(P, t.CounterNum || 1, env);
-  objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.marq[g] = (o.marq[g] || 0) + n; P.ver++; });
+  const l = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Self', env);
+  l.forEach(x => {
+    if (x.j != null) { const J = P.joueurs[x.j]; if (g === 'energy') J.energie = (J.energie || 0) + n; else if (g === 'poison') J.poison += n; return; }
+    if (x.zone === 'champ' && !x.lki) { x.marq[g] = (x.marq[g] || 0) + n; P.ver++; }
+  });
 }, (t, op) => { op.op = 'marqueurs'; op.genre = genreMarqueur(t.CounterType); op.n = nombreIA(t.CounterNum || 1); op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.genre === '-1/-1'; });
 
 forgeEffet('PutCounterAll', ['CounterType', 'CounterNum', 'ValidCards'], function* (P, t, env) {

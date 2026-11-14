@@ -91,7 +91,10 @@ function capaciteForge(def, face, t, jetons) {
     if (autre.length) def.coutSup = c.cout;
     return true;
   }
-  if (t.ActivationZone && t.ActivationZone !== 'Battlefield') return false;
+  /* Depuis la main ou le cimetière : js/jeuLancer.js les propose aussi. */
+  const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
+  if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
+  if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage || c.cout.sac)) return false;
   if (api === 'Mana' && !t.SubAbility) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */
@@ -111,14 +114,16 @@ function capaciteForge(def, face, t, jetons) {
     if (c.loyaute == null) return false;
     def.capacites.push({genre: 'loyaute', delta: c.loyaute, effet, texte: texteForge(face, t)});
   } else def.capacites.push({genre: 'activee', cout: c.cout, effet, vitesse: t.SorcerySpeed === 'True' ? 'rituel' : null,
-    unefois: !!t.ActivationLimit, texte: texteForge(face, t)});
+    unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {})});
   return true;
 }
 
 /* Un déclencheur `T:`. */
 function declencheurForge(def, face, t, jetons) {
   if (!FORGE_MODES[t.Mode]) return false;
-  if (t.TriggerZones && t.TriggerZones !== 'Battlefield') return false;
+  /* Hors du champ, seul « when you cycle ~ » s'entend : la carte cyclée
+     écoute à travers son instantané (js/jeuActions.js). */
+  if (t.TriggerZones && t.TriggerZones !== 'Battlefield' && !(t.Mode === 'Cycled' && /^(Hand|Graveyard)$/.test(t.TriggerZones))) return false;
   const exe = forgeSousCapacite(face, t.Execute);
   const effet = effetForge(face, exe, jetons);
   if (!effet) return false;
@@ -190,7 +195,8 @@ function definitionDepuisScript(s, fiche, jetons) {
     essaie(ok, t.Mode);
   });
   face.r.forEach(t => essaie(remplacementForge(def, face, t), t.Event));
-  face.k.forEach(k => essaie(motCleForge(def, k), k.split(':')[0]));
+  face.k.forEach(k => essaie(motCleForge(def, k, face, jetons), k.split(':')[0]));
+  def.kickerUtile = !!def.kicker && /Kicked|kicked/.test(JSON.stringify([face.a, face.t, face.svars]));
   capacitesImplicites(def, fiche);
   /* Une aura qui nuit à ce qu'elle enchante : l'IA la pose chez l'adversaire. */
   if (def.aura && (face.svars.AttachAILogic === 'Curse' || face.a.some(t => t.AILogic === 'Curse' || t.IsCurse === 'True'))) def.auraHostile = true;

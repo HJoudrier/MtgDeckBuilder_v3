@@ -46,7 +46,8 @@ const FORGE_COMMUNS = new Set(['Cost', 'SubAbility', 'ValidTgts', 'TargetMin', '
   'Optional', 'OptionalDecider', 'UnlessCost', 'UnlessPayer', 'UnlessSwitched', 'ConditionDefined', 'ConditionPresent',
   'ConditionCompare', 'ConditionCheckSVar', 'ConditionSVarCompare', 'ConditionZone', 'ConditionPlayerTurn', 'Condition',
   'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones',
-  'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'PlayerTurn', 'TargetUnique', 'Mandatory']);
+  'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'PlayerTurn', 'TargetUnique', 'Mandatory',
+  'ActivationZone']);
 
 /* Les paramètres dont la valeur nomme une autre SVar à suivre. */
 const FORGE_RENVOIS = ['SubAbility', 'Execute', 'ReplaceWith', 'RepeatSubAbility', 'FallbackAbility', 'Choices',

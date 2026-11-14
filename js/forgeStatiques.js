@@ -42,7 +42,9 @@ function viseForge(P, src, s, o, cle) {
 forgeStatique('Continuous', ['Affected', 'AffectedDefined', 'AddPower', 'AddToughness', 'AddKeyword', 'SetPower', 'SetToughness',
   'CharacteristicDefining'], (P, src, s, o, r) => {
   const t = s.t;
-  const env = t.CharacteristicDefining === 'True' && !t.Affected ? (src.id === o.id ? envStatique(src, s) : null) : viseForge(P, src, s, o);
+  const cda = t.CharacteristicDefining === 'True' && !t.Affected && !t.AffectedDefined;
+  const env = cda ? (src.id === o.id ? envStatique(src, s) : null) : viseForge(P, src, s, o);
+  if (cda && env && !conditionForge(P, t, env)) return;
   if (!env) return;
   if (t.AddPower) r.f += forgeNombre(P, t.AddPower, env);
   if (t.AddToughness) r.e += forgeNombre(P, t.AddToughness, env);

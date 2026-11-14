@@ -71,17 +71,17 @@ function* resoudre(P, item) {
   if (item.sort && item.def.types.some(t => TYPES_PERMANENTS.includes(t))) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
-    yield* metEnJeu(P, item.id, item.ctrl, {attache: aura});
+    yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque});
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
-    evt: item.evt, cibles: [], trouves: [], fait: undefined};
+    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked};
   for (const ef of item.effets) {
     ctx.cibles = ef.cibles;
     yield* executeOps(P, ef.ops, ctx);
     if (P.fin) return;
   }
-  if (item.sort && obj(P, item.id)) deplace(P, item.id, item.depuis === 'cimetiere' ? 'exil' : 'cimetiere');
+  if (item.sort && obj(P, item.id)) deplace(P, item.id, item.depuis === 'cimetiere' ? 'exil' : item.rachat ? 'main' : 'cimetiere');
 }
 
 /* Un tour de priorité, jusqu'à ce que tous passent sur une pile vide. */
@@ -91,7 +91,7 @@ function* priorite(P) {
      dernier moment — n'est plus proposée de ce passage : sans quoi le même
      joueur la choisirait en boucle. */
   const echecs = new Set();
-  const cle = a => a.k + a.id + '|' + (a.i == null ? '' : a.i);
+  const cle = a => a.k + a.id + '|' + (a.i == null ? '' : a.i) + '|' + (a.variante || '') + (a.depuis || '');
   for (;;) {
     yield* stabilise(P);
     if (P.fin || P.finTour) return;

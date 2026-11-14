@@ -50,7 +50,7 @@ function libelleRef(P, c) {
 function vue(P, j) {
   const cartes = {};
   const joueurs = P.joueurs.map(J => ({
-    i: J.i, nom: J.nom, vie: J.vie, poison: J.poison, main: J.main.length, bib: J.bibliotheque.length,
+    i: J.i, nom: J.nom, vie: J.vie, poison: J.poison, energie: J.energie || 0, main: J.main.length, bib: J.bibliotheque.length,
     cim: J.cimetiere.map(id => carteVue(P, id, cartes)), exil: J.exil.map(id => carteVue(P, id, cartes)),
     cmd: J.commandement.map(id => carteVue(P, id, cartes)), degatsCmd: {...J.degatsCmd},
     elimine: J.elimine, raison: J.raison, pool: {...J.pool}}));
@@ -69,7 +69,9 @@ function libelleAction(P, a) {
   const o = obj(P, a.id), nom = o ? o.def.nom : '?';
   if (a.k === 'terrain') return 'Jouer ' + nom;
   if (a.k === 'equiper') return 'Équiper : ' + nom;
-  if (a.k === 'lancer') return 'Lancer ' + nom + (a.depuis === 'commandement' ? ' (commandant)' : a.depuis === 'cimetiere' ? ' (flashback)' : '');
+  if (a.k === 'presager') return 'Présager ' + nom;
+  if (a.k === 'lancer') return 'Lancer ' + nom + (a.depuis === 'commandement' ? ' (commandant)' : a.depuis === 'cimetiere' ? ' (flashback)' :
+    a.depuis === 'exil' ? ' (présage)' : '') + ({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)'}[a.variante] || '');
   const k = o && o.def.capacites[a.i];
   return nom + ' — ' + ((k && k.texte) || 'capacité');
 }

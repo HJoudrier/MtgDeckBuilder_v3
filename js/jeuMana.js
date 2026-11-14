@@ -34,7 +34,8 @@ function sourcesMana(P, j) {
       if (k.genre !== 'mana') continue;
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;
-      if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage) continue;
+      if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
+        c.defausseSoi || c.exileSoi || c.revele) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
       let opts = k.identite ? identiteJoueur(P, j) : k.options;

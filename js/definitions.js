@@ -87,6 +87,14 @@ function capacitesImplicites(def, fiche) {
     def.capacites.push({genre: 'mana', cout: {mana: coutManaVide(), engage: true}, options: couleurs, implicite: true});
 }
 
+/* Le cycle que l'oracle a lu (« Cycling {2} ») devient une capacité de
+   main : défausser la carte, piocher (js/jeuLancer.js la propose). */
+function cycleImplicite(def) {
+  if (!def.cycling || def.capacites.some(k => k.cycle)) return;
+  def.capacites.push({genre: 'activee', zone: 'main', cout: {mana: def.cycling, defausseSoi: true}, cycle: true, vitesse: null,
+    effet: {ops: [{op: 'pioche', n: 1, qui: {vous: 1}}], cibles: [], modes: null}, texte: 'Cycle'});
+}
+
 /* Compiler une fiche. `comportement` remplace le texte oracle quand
    l'utilisateur a décrit la carte à la main (js/fenComportement.js). */
 function compileDefinition(fiche, comportement) {
@@ -123,6 +131,7 @@ function compileDefinition(fiche, comportement) {
     def.sort = modal || {ops: [].concat(...effs.map(e => e.ops)), cibles: contexteSort.cibles, modes: null};
   }
   capacitesImplicites(def, fiche);
+  cycleImplicite(def);
   def.couverture = couverture(compilees, def, fiche, directive, manuel);
   return def;
 }

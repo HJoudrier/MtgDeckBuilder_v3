@@ -63,6 +63,7 @@ js/                 modules, chargés dans cet ordre :
   jeuEtatsDeJeu.js  les actions d'état, et un joueur qui perd
   jeuLancer.js      les actions légales, le coût d'un sort, le choix des cibles
   jeuActions.js     jouer un terrain, lancer, activer, équiper
+  jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
   jeuTour.js        les étapes d'un tour
@@ -495,7 +496,9 @@ le classement compare les decks sur une même table.
 
 **Ce que le lot 1 ne fait pas**, et que la couverture ne peut pas toujours dire : pas de système de
 couches complet (les bonus s'additionnent), ni copie, ni changement de contrôle, ni remplacement ou
-prévention généraux ; coûts alternatifs limités au flashback et à la taxe ; faces arrière, aventures
+prévention généraux ; parmi les coûts alternatifs et additionnels, ni madness, ni suspend, ni
+exhumation (lot F3 : flashback, kicker, rachat, évocation, présage, convocation, exploration, affinité,
+écho, cycle) ; faces arrière, aventures
 et cartes partagées ignorées ; ni tours ou combats supplémentaires, ni monarque, ni initiative ;
 capacités de mana qui coûtent du mana absentes du paiement automatique ; pas d'alliance en
 multijoueur. Les joueurs automatiques comparent des valeurs sans chercher dans l'arbre des coups :
@@ -547,6 +550,17 @@ vos decks d'abord : c'est la feuille de route.
 `forgeMode()` pour un déclencheur, `forgeStatique()` pour une statique, une branche de
 `motCleForge()` pour un mot-clé. Un paramètre qu'un effet ne déclare pas rend sa table injouable : on
 n'inscrit que ce qu'on lit vraiment.
+
+**Les autres façons de lancer et de payer** (`js/jeuVariantes.js`, lot F3). Kicker, rachat, évocation
+et présage sont des **variantes** : chacune devient une action de priorité distincte
+(`{k: 'lancer', variante}`) avec son propre coût, que `variantesSort()` calcule et vérifie. La
+convocation et l'exploration paient une part du coût en engageant des créatures — chacune paie un
+mana de sa couleur, sinon un générique — ou en exilant des cartes du cimetière ; rien n'est engagé ni
+exilé avant que le paiement soit assuré. L'affinité réduit le coût dans `coutSort()`. Les capacités
+peuvent porter une zone (`zone: 'main' | 'cimetiere'`) : le cycle, et les `ActivationZone$` de Forge,
+se proposent depuis la main ou le cimetière. Ces champs vivent sur la définition, quelle que soit sa
+source : le cycle que l'oracle lit se joue désormais aussi. L'énergie est un compteur du joueur
+(`J.energie`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
