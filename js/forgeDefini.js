@@ -17,7 +17,8 @@ const FORGE_DEFINIS = ['Self', 'You', 'Targeted', 'TargetedPlayer', 'TargetedCon
   'ActivePlayer', 'Valid', 'ValidGraveyard', 'ValidHand', 'TriggeredActivator', 'OppNonTargeted', 'ExiledWith',
   'DelayTriggerRemembered', 'DelayTriggerRememberedLKI', 'TriggeredAttackerLKICopy', 'TriggeredBlocker',
   /* L'objet qu'un remplacement détourne : lu par js/forgeRemplacements.js. */
-  'ReplacedCard', 'TriggeredTargetLKICopy', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted'];
+  'ReplacedCard', 'TriggeredTargetLKICopy', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
+  'RememberedCard'];
 
 /* Les cibles prises par l'emplacement de la capacité en cours, ou de celle
    qu'elle suit. */
@@ -58,7 +59,7 @@ function forgeDefinis(P, val, env) {
     case 'TargetedOwner': return uniquesJ(ciblesForge(P, env, false).map(x => joueurDe(x, true)));
     /* Ce qu'un déclencheur retardé a retenu en naissant : sa mémoire est
        celle du contexte (js/jeuDurees.js). */
-    case 'DelayTriggerRemembered': case 'DelayTriggerRememberedLKI':
+    case 'DelayTriggerRemembered': case 'DelayTriggerRememberedLKI': case 'RememberedCard':
     case 'Remembered': return [...(ctx.memo || []).map(id => obj(P, suit(P, id)) || P.lkis.get(id)).filter(Boolean),
       ...(ctx.memoJ || []).map(j => ({j}))];
     case 'RememberedController': return uniquesJ((ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean).map(o => o.ctrl));

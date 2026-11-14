@@ -64,6 +64,7 @@ function* lanceSort(P, j, a) {
      cachée — l'objet sur la pile la porte (js/jeuFaces.js). */
   const d = v.def || o0.def;
   const cout0 = v.mana, presageTour = o0.presageTour;
+  if (a.variante === 'permis') permisUtilise(P, j, o0);
   const nid = deplace(P, a.id, 'pile');
   const s = obj(P, nid);
   s.ctrl = j;
@@ -168,6 +169,7 @@ OPS.attache = function* (P, op, ctx) {
 /* Jouer un terrain : pas de pile, un par tour (règle 305). */
 function* joueTerrain(P, j, a) {
   P.joueurs[j].terrainsJoues++;
+  if (a.depuis) permisUtilise(P, j, obj(P, a.id));
   jn(P, `${P.joueurs[j].nom} joue ${nomObj(P, a.id)}`);
   yield* metEnJeu(P, a.id, j, a.variante === 'dos' ? {face: obj(P, a.id).def.dos} : {});
   return true;

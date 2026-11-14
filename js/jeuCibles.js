@@ -99,13 +99,21 @@ function defCorrespond(def, d) {
 /* Linceul, défense talismanique, protection : un objet peut-il être ciblé
    par ce joueur, avec une source de ces couleurs ? La garde se paie au
    lancement (js/jeuLancer.js), elle n'interdit rien. */
-function ciblable(P, o, ctrl, couleurs) {
+function ciblable(P, o, ctrl, couleurs, src) {
   if (o.zone !== 'champ') return true;
   const m = car(P, o).mots;
   if (m & MOT.INTOUCHABLE) return false;
   if ((m & MOT.LINCEUL) && o.ctrl !== ctrl) return false;
   if ((m & MOT.PROTECTION) && couleurs && (o.def.params.protection || []).some(k => couleurs.includes(k))) return false;
+  if (src && protegeFiltre(P, o, src)) return false;
   return true;
+}
+
+/* La protection par filtre (« protection from artifacts ») : la source
+   répond-elle à l'un des filtres de l'objet protégé ? */
+function protegeFiltre(P, o, src) {
+  const f = o.def.params && o.def.params.protectionFiltres;
+  return !!f && !!src && src.j == null && f.some(v => forgeValideObjet(P, src, v, o, o.ctrl, null, true));
 }
 
 /* Les candidats légaux d'un emplacement de cible : des identifiants
@@ -131,7 +139,7 @@ function ciblesLegales(P, slot, src, ctrl, couleurs) {
   }
   for (const id of P.champ) {
     const o = obj(P, id);
-    if (correspond(P, o, d, src, ctrl) && ciblable(P, o, ctrl, couleurs)) r.push(id);
+    if (correspond(P, o, d, src, ctrl) && ciblable(P, o, ctrl, couleurs, src)) r.push(id);
   }
   return r;
 }
@@ -142,5 +150,5 @@ function cibleEncoreLegale(P, cand, slot, src, ctrl, couleurs) {
   const o = obj(P, cand);
   if (!o) return false;
   if (slot.desc.genre === 'sort') return o.zone === 'pile' && correspond(P, o, slot.desc, src, ctrl);
-  return correspond(P, o, slot.desc, src, ctrl) && ciblable(P, o, ctrl, couleurs);
+  return correspond(P, o, slot.desc, src, ctrl) && ciblable(P, o, ctrl, couleurs, src);
 }

@@ -85,7 +85,8 @@ function* resoudre(P, item) {
   }
   if (item.sort && obj(P, item.id)) {
     /* Une aventure part en exil, d'où la créature se lancera. */
-    const n = deplace(P, item.id, item.depuis === 'cimetiere' || item.variante === 'aventure' ? 'exil' : item.rachat ? 'main' : 'cimetiere');
+    const flashback = item.depuis === 'cimetiere' && item.variante !== 'permis';
+    const n = deplace(P, item.id, flashback || item.variante === 'aventure' ? 'exil' : item.rachat ? 'main' : 'cimetiere');
     if (item.variante === 'aventure' && obj(P, n)) obj(P, n).aventure = true;
   }
 }

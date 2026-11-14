@@ -33,6 +33,18 @@ function couleursMots(txt) {
    créature par une statique (le combat et les actions d'état ne le
    verraient pas), ni un type qui n'en est pas un. */
 function statiqueTenable(t) {
+  /* Jouer depuis une autre zone : la pioche d'impulsion, le cimetière, le
+     dessus de la bibliothèque (js/jeuPermis.js). */
+  if (t.MayPlay) {
+    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library)(,(Exile|Graveyard|Library))*$/.test(t.AffectedZone || '')) return false;
+    if (t.MayPlayIgnoreColor || t.MayPlayAltManaCost || t.MayPlayIgnoreType || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
+    if (t.EffectZone && !(/^(Graveyard|Exile|All)$/.test(t.EffectZone) && t.Affected === 'Card.Self')) return false;
+    return true;
+  }
+  /* Regarder le dessus de sa bibliothèque : une information, sans effet sur
+     le jeu du moteur. */
+  if (t.MayLookAt && !t.AddKeyword && !t.AddPower && !t.AddAbility) return true;
+  if (t.AffectedZone && t.AffectedZone !== 'Battlefield') return false;
   if (t.AddType && (/\bCreature\b|AllCreatureTypes/.test(t.AddType) || (/ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType'))) return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
   if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(t.Mode === 'ReduceCost' && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
@@ -64,10 +76,12 @@ function viseForge(P, src, s, o, cle) {
   return conditionForge(P, s.t, env) ? env : null;
 }
 
-forgeSait('param', 'Continuous.EffectZone');
+forgeSait('param', 'Continuous.EffectZone', 'Continuous.MayPlay', 'Continuous.AffectedZone', 'Continuous.MayPlayWithoutManaCost',
+  'Continuous.MayPlayLimit', 'Continuous.MayLookAt');
 forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'AffectedDefined', 'AddPower', 'AddToughness', 'AddKeyword', 'SetPower', 'SetToughness',
   'CharacteristicDefining'], (P, src, s, o, r) => {
   const t = s.t;
+  if (t.MayPlay || t.MayLookAt || (t.AffectedZone && t.AffectedZone !== 'Battlefield')) return;
   const cda = t.CharacteristicDefining === 'True' && !t.Affected && !t.AffectedDefined;
   const env = cda ? (src.id === o.id ? envStatique(src, s) : null) : viseForge(P, src, s, o);
   if (cda && env && !conditionForge(P, t, env)) return;

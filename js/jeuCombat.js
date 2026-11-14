@@ -29,6 +29,7 @@ function peutBloquer(P, b, a) {
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
   if ((ca.mots & MOT.VOL) && !(cb.mots & (MOT.VOL | MOT.PORTEE))) return false;
   if ((ca.mots & MOT.PROTECTION) && (a.def.params.protection || []).some(k => cb.couleurs.includes(k))) return false;
+  if (protegeFiltre(P, a, b)) return false;
   return true;
 }
 

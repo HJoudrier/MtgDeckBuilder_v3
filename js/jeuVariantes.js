@@ -103,8 +103,14 @@ function variantesSort(P, j, o, depuis) {
   if (depuis === 'exil' && o.folie) { essaie('folie', coutSort(P, j, o, depuis, coutComplet(d.folie).mana), null); return r; }
   if (depuis === 'exil' && o.suspendu) { if (!o.temps) essaie('suspension', coutManaVide(), null); return r; }
   if (depuis === 'exil' && o.gratuit) { essaie('gratuit', coutManaVide(), null); return r; }
+  if (depuis !== 'main' && depuis !== 'commandement') {
+    const px = permisDeJouer(P, j, o);
+    if (px) essaie('permis', coutPermis(P, j, o, depuis, px), d.coutSup || null);
+  }
   const base = coutSort(P, j, o, depuis);
-  essaie(null, base, d.coutSup || null);
+  /* Deux coûts additionnels au choix : l'un des deux est dû, jamais aucun. */
+  if (d.coutsAuChoix) d.coutsAuChoix.forEach((c, i) => essaie(i ? 'choixB' : 'choixA', sommeMana(base, c.cout.mana), fusionAutres(d.coutSup, autresCout(c.cout))));
+  else essaie(null, base, d.coutSup || null);
   const k = coutComplet(d.kicker);
   if (k) essaie('kicker', sommeMana(base, k.mana), fusionAutres(d.coutSup, autresCout(k)));
   const b = coutComplet(d.rachat);

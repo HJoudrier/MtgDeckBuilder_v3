@@ -11,7 +11,7 @@
 
 const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
   'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity', 'Unearth', 'Madness',
-  'Suspend', 'Partner', 'Chapter', 'Crew', 'Morph', 'Megamorph', 'Disguise', 'ETBReplacement', 'Changeling', 'Cumulative upkeep'];
+  'Suspend', 'AlternateAdditionalCost', 'Partner', 'Chapter', 'Crew', 'Morph', 'Megamorph', 'Disguise', 'ETBReplacement', 'Changeling', 'Cumulative upkeep'];
 
 /* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
    cycle de type (`TypeCycling:Plains:2`), chercher une carte de ce type. */
@@ -34,6 +34,21 @@ function manaSeul(txt) {
   return c && !Object.keys(c.cout).some(k => k !== 'mana') ? c.cout : null;
 }
 
+const PROTECTIONS_MOTS = {artifacts: 'Artifact', creatures: 'Creature', enchantments: 'Enchantment', everything: 'Card',
+  multicolored: 'Card.MultiColor', instants: 'Instant', sorceries: 'Sorcery', planeswalkers: 'Planeswalker', lands: 'Land'};
+
+/* Le filtre d'une protection qui n'est pas de couleur, ou `'couleurs'`
+   pour « from each color », ou `null`. */
+function protectionFiltre(tete, reste) {
+  if (tete === 'Protection' && reste[0] && !/^Card\.(White|Blue|Black|Red|Green)$/.test(reste[0])) return /ChosenColor/.test(reste[0]) ? null : reste[0];
+  const m = /^Protection from (.+)$/.exec(tete);
+  if (!m) return null;
+  if (m[1] === 'each color' || m[1] === 'all colors') return 'couleurs';
+  if (PROTECTIONS_MOTS[m[1]]) return PROTECTIONS_MOTS[m[1]];
+  const k = /^([A-Z][a-z]+)s$/.exec(m[1]);
+  return k ? k[1] : null;
+}
+
 /* Verser un mot-clé dans une définition. Rend vrai s'il est compris. */
 function motCleForge(def, k, face, jetons) {
   const [tete, ...reste] = k.split(':');
@@ -43,6 +58,16 @@ function motCleForge(def, k, face, jetons) {
   if ((m = /^Protection from (white|blue|black|red|green)(?: and from (white|blue|black|red|green))?$/i.exec(tete))) {
     def.mots |= MOT.PROTECTION;
     def.params.protection = [...(def.params.protection || []), ...[m[1], m[2]].filter(Boolean).map(c => COULEURS_ANGLAIS[c.toLowerCase()])];
+    return true;
+  }
+  /* La protection contre autre chose qu'une couleur : un filtre de Forge
+     (`K:Protection:Artifact`, `Protection from creatures`), que
+     js/jeuCibles.js `protegeContre()` juge contre la source. */
+  const pf = protectionFiltre(tete, reste);
+  if (pf) {
+    def.mots |= MOT.PROTECTION;
+    if (pf === 'couleurs') def.params.protection = ['W', 'U', 'B', 'R', 'G'];
+    else def.params.protectionFiltres = [...(def.params.protectionFiltres || []), pf];
     return true;
   }
   switch (tete) {
@@ -101,6 +126,12 @@ function motCleForge(def, k, face, jetons) {
       def.suspension = {n: +reste[0], cout: c.mana}; return true;
     }
     case 'Convoke': def.params.convocation = true; return !reste.length;
+    /* Deux coûts additionnels, l'un ou l'autre (js/jeuVariantes.js). */
+    case 'AlternateAdditionalCost': {
+      const cs = reste.slice(0, 2).map(x => coutForge(x));
+      if (reste.length !== 2 || cs.some(c => !c || c.cout.sacSoi || c.cout.exileSoi)) return false;
+      def.coutsAuChoix = cs.map((c, i) => ({cout: c.cout, texte: reste[i]})); return true;
+    }
     /* Le partenaire ne joue qu'à la construction du deck. */
     case 'Partner': return true;
     case 'ETBReplacement': return entreeForgeMotCle(def, face, jetons, reste);

@@ -66,6 +66,7 @@ js/                 modules, chargés dans cet ordre :
   jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho, folie, suspension
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
+  jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
   jeuTour.js        les étapes d'un tour
@@ -625,6 +626,17 @@ discard ») : `effetForge()` le garde sur l'opération (`coutInterne`) — sauf 
 d'une capacité activée, payée au lancement —, et `executeForge()` le propose à la résolution ; refusé ou
 impayable, la chaîne s'arrête là (`ctx.coupe`). La traîne (`js/forgeTraine.js`) bâtit plusieurs
 mots-clés en déclencheurs de Forge ordinaires (`declencheurSynthetique()`).
+
+**Jouer d'ailleurs que sa main** (`js/jeuPermis.js`, lot F10). Une statique `MayPlay$` de Forge —
+portée par un permanent, par un effet dont la mémoire désigne les cartes exilées (la pioche
+d'impulsion), ou par la carte elle-même depuis sa zone (`EffectZone$`) — permet de jouer une carte de
+l'exil de n'importe quel joueur, de son propre cimetière ou du dessus de sa bibliothèque.
+`actionsLegales()` parcourt ces zones seulement si une telle statique existe : le cas courant ne coûte
+rien. Un sort ainsi permis est une variante (`permis`) au coût imprimé, ou sans mana ; il garde son
+moment, et un sort permis depuis le cimetière y retourne, au contraire du flashback. La permission
+« une fois par tour » se note dans `P.unefois`. **La protection** accepte aussi un filtre de Forge
+(« from artifacts », `K:Protection:Creature.Black`) : `protegeFiltre()` le juge contre la source, au
+ciblage, au blocage et aux dégâts.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

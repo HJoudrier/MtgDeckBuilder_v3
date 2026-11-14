@@ -77,9 +77,10 @@ function actionsLegales(P, j) {
   champDe(P, j).forEach(o => { if (retournable(P, j, o)) r.push({k: 'retourner', id: o.id}); });
   /* Chaque façon de lancer se juge sur la face qu'elle joue : la face
      arrière d'une carte modale peut être un éphémère, l'avant un terrain. */
-  const essaie = (id, depuis) => {
+  const essaie = (id, depuis, seulement) => {
     const o = obj(P, id);
     variantesSort(P, j, o, depuis).forEach(v => {
+      if (seulement && v.variante !== seulement) return;
       const d = v.def || o.def;
       if (d.types.includes('land') || (!rituel && !estEphemere(d))) return;
       if (d.sort && !effetCiblable(P, j, o, d.sort, d.couleurs)) return;
@@ -90,6 +91,11 @@ function actionsLegales(P, j) {
   J.main.forEach(id => essaie(id, 'main'));
   J.commandement.forEach(id => essaie(id, 'commandement'));
   J.cimetiere.forEach(id => { if (obj(P, id).def.flashback) essaie(id, 'cimetiere'); });
+  /* Ce qu'une permission laisse jouer d'ailleurs (js/jeuPermis.js). */
+  cartesPermises(P, j).forEach(({o, depuis}) => {
+    if (estType(o, 'land')) { if (rituel && J.terrainsJoues < 1) r.push({k: 'terrain', id: o.id, depuis}); }
+    else essaie(o.id, depuis, 'permis');
+  });
   J.exil.forEach(id => { const o = obj(P, id); if ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) essaie(id, 'exil'); });
   if (P.actif === j) J.main.forEach(id => { if (obj(P, id).def.presage && planPaiement(P, j, MANA_DEUX, 0)) r.push({k: 'presager', id}); });
   J.main.forEach(id => { if (suspendable(P, j, obj(P, id), rituel)) r.push({k: 'suspendre', id}); });
@@ -139,6 +145,7 @@ function actionsPossibles(P, j) {
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return d.flashback && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) && estEphemere(o.def); }) ||
+    cartesPermises(P, j).some(x => estEphemere(x.o.def)) ||
     champDe(P, j).some(o => retournable(P, j, o)) ||
     P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && capacitesDe(P, o).some(k => k.genre === 'activee' && !k.zone && k.vitesse !== 'rituel'); });
   return peut ? actionsLegales(P, j) : [PASSE];

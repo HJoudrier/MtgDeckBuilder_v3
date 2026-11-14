@@ -68,6 +68,7 @@ forgeEffet('Clone', ['Choices', 'AddTypes', 'AddKeywords', 'SetPower', 'SetTough
    nouvelles cibles si l'on veut, et qui ne laisse aucune carte. */
 forgeEffet('CopySpellAbility', ['MayChooseTarget', 'Controller'], function* (P, t, env) {
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
+  if (j == null) return;
   for (const o of objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'pile')) {
     const it = P.pile.find(x => x.id === o.id);
     if (it) yield* copieSort(P, j, o, it, t.MayChooseTarget === 'True');

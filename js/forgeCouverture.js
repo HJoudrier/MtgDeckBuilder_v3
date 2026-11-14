@@ -24,7 +24,7 @@ const FORGE_SAIT = {api: new Set(), trig: new Set(), stat: new Set(), repl: new 
    qui désignent (js/forgeDefini.js) : leurs propriétés et leurs valeurs
    comptent dans la couverture comme des éléments à part entière. */
 const FORGE_CLES_FILTRE = /^(ValidTgts|ValidCards?|Affected|ChangeType|ChangeValid|SacValid|ValidTarget|ValidSource|ValidPlayers?|ValidActivatingPlayer|ValidAttacker|ValidBlocker|IsPresent|ValidDefender)$/;
-const FORGE_CLES_DEFINI = /^Defined(Player|Cards)?$/;
+const FORGE_CLES_DEFINI = /^(Defined(Player|Cards)?|RememberObjects|ForgetDefined|AttachedTo|TokenOwner|NewController|DamageSource|Controller)$/;
 
 /* Inscrire ce qu'un module du moteur sait faire. */
 function forgeSait(genre, ...noms) { noms.forEach(n => FORGE_SAIT[genre].add(n)); }
@@ -119,7 +119,12 @@ function unitesForge(face) {
     const tete = k.split(':')[0].replace(/^Protection.*/, 'Protection').replace(/^(\w+)walk$/, 'Landwalk').replace(/^Enchant\b.*/, 'Enchant');
     const el = new Set(['kw:' + tete]);
     k.split(':').slice(1).forEach(seg => seg.split(',').forEach(x => {
-      if (face.svars[x.trim()] != null) elementsTable(face, forgeTable(face.svars[x.trim()]), null, el, new Set());
+      const v = face.svars[x.trim()];
+      if (v == null) return;
+      /* Une capacité ou un déclencheur se suit comme une table ; une
+         expression (`Count$Valid …`) n'en est pas une. */
+      if (/^\s*((DB|AB|SP)\$|Mode\$)/.test(v)) elementsTable(face, forgeTable(v), null, el, new Set());
+      else expressionsDe(v).forEach(e => el.add(e));
     }));
     u.push({genre: 'motcle', texte: k, elements: el});
   });
