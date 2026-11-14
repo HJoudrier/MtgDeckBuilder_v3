@@ -89,6 +89,7 @@ js/                 modules, chargés dans cet ordre :
   forgeTraine.js    la traîne : exaltation, terreur, bushido, tempête, cascade, brouillard, comploter, explorer
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeDeclencheursB.js  la suite : engager, cibler, marqueurs, attaque déclarée, crime, déclencheurs d'état
+  forgeExprB.js     les expressions de Forge, suite : mémoire, cibles, évènement, comptes du tour
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -663,6 +664,14 @@ partent qu'une fois par collecte ; « only once each turn » se compte par sourc
 (`P.declTour`). Une carte écoute aussi depuis son cimetière, la zone de commandement ou l'exil
 (`TriggerZones$`, `cap.zones`). Un déclencheur d'état (`Always`) part dès que sa condition tient, et
 pas de nouveau tant qu'il attend ou qu'il est sur la pile.
+
+**La mémoire des cartes** (lot F13). Ce qu'un effet retient (`RememberObjects$`, et après coup
+`RememberDestroyed$`, `RememberCountered$`, `RememberDamaged$`) vit dans `P.cartes[cid].memo` et se lit
+par `Remembered`, `IsRemembered`, `Remembered$Valid …`. Ce qu'une carte a exilé (`exilees`) répond à
+`ExiledWithSource`. `ControlledBy X` et `OwnedBy X` jugent le contrôleur contre une désignation.
+L'objet d'un départ se lit sur son instantané : arrivée au cimetière, la carte n'a plus ses marqueurs.
+Les expressions nouvelles passent par `exprEtendue()` (js/forgeExprB.js), que la porte interroge avant
+de rendre zéro.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

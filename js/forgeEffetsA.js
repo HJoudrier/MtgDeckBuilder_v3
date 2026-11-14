@@ -129,12 +129,35 @@ function* executeForge(P, op, ctx) {
     const paye = yield* paieUnlessForge(P, t, env);
     if (paye === (t.UnlessSwitched !== 'True')) return;
   }
+  /* Oublier avant de retenir : « forget all other remembered ». */
+  if (t.ForgetOtherRemembered === 'True' || t.ForgetOtherTargets === 'True') { ctx.memo.length = 0; ctx.memoJ.length = 0; }
   if (t.RememberObjects) forgeDefinis(P, t.RememberObjects, env).forEach(x => retiensForge(ctx, x));
   if (t.RememberTargets) ciblesForge(P, env, false).forEach(x => retiensForge(ctx, x));
+  /* « Remember the destroyed / the damaged / the countered » : ce qui a
+     quitté sa place, ou ce que l'effet a touché, se retient après coup. */
+  const retenir = RETENIR_APRES.find(k => t[k] === 'True');
+  const avant = retenir ? cibleOuDefinis(P, t, env) : null;
   yield* api.gen(P, t, env);
+  if (retenir) avant.filter(x => x.j != null || retenir === 'RememberDamaged' || retenir === 'RememberControlled' || !obj(P, x.id) || obj(P, x.id).zone !== x.zone)
+    .forEach(x => retiensForge(ctx, x));
 }
 
 OPS.forge = executeForge;
+
+/* Les paramètres qui retiennent ce que l'effet a fait, jugés après lui. */
+const RETENIR_APRES = ['RememberDestroyed', 'RememberCountered', 'RememberDamaged', 'RememberControlled'];
+forgeSait('param', ...['Destroy', 'DestroyAll'].map(a => a + '.RememberDestroyed'), 'Counter.RememberCountered', 'DealDamage.RememberDamaged',
+  'GainControl.RememberControlled', ...['ChangeZone', 'ChangeZoneAll', 'Destroy', 'Pump', 'PutCounter', 'Sacrifice', 'Effect', 'DealDamage', 'Draw']
+  .flatMap(a => [a + '.ForgetOtherRemembered', a + '.ForgetOtherTargets']), 'ChangeZone.RememberLKI', 'ChangeZone.ForgetChanged',
+  'Effect.ForgetOnCast', 'Effect.ForgetCounter', 'CopyPermanent.RememberTokens');
+
+/* Les objets qu'un effet touche : ses cibles, ou ce que `Defined$` désigne,
+   ou — pour un effet de masse — ce qui répond à `ValidCards$`. */
+function cibleOuDefinis(P, t, env) {
+  if (env.op.slot != null) return ciblesForge(P, env, false).slice();
+  if (t.ValidCards) return objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards, env.src, env.ctrl, env));
+  return forgeDefinis(P, t.Defined || 'Self', env).slice();
+}
 
 /* Une zone de destination de Forge, dans le vocabulaire du moteur. */
 function zoneForge(z) {
@@ -189,7 +212,8 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
   } else objets = objetsForge(P, t, env).filter(o => dansOrigine(o, t.Origin));
   for (const o of objets) {
     const n = yield* deplaceForge(P, o, dest, env, opts);
-    if (n != null && t.RememberChanged === 'True') retiensForge(ctx, n);
+    if (n != null && (t.RememberChanged === 'True' || t.RememberLKI === 'True')) retiensForge(ctx, n);
+    if (t.ForgetChanged === 'True') { const i = ctx.memo.indexOf(o.id); if (i >= 0) ctx.memo.splice(i, 1); }
     if (n != null && dest === 'exil' && env.src && P.cartes[env.src.cid]) (P.cartes[env.src.cid].exilees = P.cartes[env.src.cid].exilees || []).push(n);
     if (n != null && jusqua && dest === 'exil') durees(P).retours.push({hote: env.src.id, ids: [n]});
   }

@@ -18,7 +18,8 @@ const FORGE_DEFINIS = ['Self', 'You', 'Targeted', 'TargetedPlayer', 'TargetedCon
   'DelayTriggerRemembered', 'DelayTriggerRememberedLKI', 'TriggeredAttackerLKICopy', 'TriggeredBlocker',
   /* L'objet qu'un remplacement détourne : lu par js/forgeRemplacements.js. */
   'ReplacedCard', 'TriggeredTargetLKICopy', 'TriggeredBlockerLKICopy', 'TriggeredAttackers', 'TriggeredAttackerController',
-  'TriggeredBlockerController', 'TriggeredTargetController', 'TriggeredDefender', 'TriggeredSourceLKICopy', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
+  'TriggeredBlockerController', 'TriggeredTargetController', 'TriggeredDefender', 'TriggeredSourceLKICopy', 'RememberedLKI', 'Parent',
+  'TargetedAndYou', 'ThisTargetedCard', 'ThisTargetedPlayer', 'TriggeredSourceSA', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
   'RememberedCard'];
 
 /* Les cibles prises par l'emplacement de la capacité en cours, ou de celle
@@ -53,14 +54,20 @@ function forgeDefinis(P, val, env) {
   switch (v) {
     case 'Self': { const o = src && !src.lki ? obj(P, suit(P, src.id)) : src; return o ? [o] : []; }
     case 'You': return [{j: ctrl}];
-    case 'Targeted': return ciblesForge(P, env, false);
+    case 'Targeted': case 'ThisTargetedCard': return ciblesForge(P, env, false).filter(x => v === 'Targeted' || x.j == null);
+    case 'ThisTargetedPlayer': return ciblesForge(P, env, false).filter(x => x.j != null);
+    case 'TargetedAndYou': return [...ciblesForge(P, env, false), ...(ciblesForge(P, env, false).some(x => x.j === ctrl) ? [] : [{j: ctrl}])];
+    /* Le sort lui-même, sur la pile (« shuffle this spell into its owner's
+       library »). */
+    case 'Parent': { const o = src && !src.lki ? obj(P, suit(P, src.id)) : null; return o ? [o] : []; }
+    case 'TriggeredSourceSA': { const o = evt.source != null ? obj(P, suit(P, evt.source)) : null; return o ? [o] : []; }
     case 'ParentTarget': return ciblesForge(P, env, true);
     case 'TargetedPlayer': return ciblesForge(P, env, false).filter(x => x.j != null);
     case 'TargetedController': return uniquesJ(ciblesForge(P, env, false).map(x => joueurDe(x)));
     case 'TargetedOwner': return uniquesJ(ciblesForge(P, env, false).map(x => joueurDe(x, true)));
     /* Ce qu'un déclencheur retardé a retenu en naissant : sa mémoire est
        celle du contexte (js/jeuDurees.js). */
-    case 'DelayTriggerRemembered': case 'DelayTriggerRememberedLKI': case 'RememberedCard':
+    case 'DelayTriggerRemembered': case 'DelayTriggerRememberedLKI': case 'RememberedCard': case 'RememberedLKI':
     case 'Remembered': return [...(ctx.memo || []).map(id => obj(P, suit(P, id)) || P.lkis.get(id)).filter(Boolean),
       ...(ctx.memoJ || []).map(j => ({j}))];
     case 'RememberedController': return uniquesJ((ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean).map(o => o.ctrl));

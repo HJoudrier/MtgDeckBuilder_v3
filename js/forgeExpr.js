@@ -93,6 +93,8 @@ function forgeExpression(P, expr, env, prof) {
   if (i < 0) return prof < 4 && env.face && env.face.svars[s] != null ? forgeExpression(P, env.face.svars[s], env, prof + 1) : 0;
   const tete = s.slice(0, i), q = s.slice(i + 1);
   const ctx = env.ctx || {}, src = env.src, ctrl = env.ctrl;
+  const etendue = exprEtendue(P, tete, q, env);
+  if (etendue !== undefined) return etendue;
   if (tete === 'Number') return +q || 0;
   if (tete === 'SVar') return prof < 4 ? forgeExpression(P, env.face.svars[q] || '0', env, prof + 1) : 0;
   if (tete === 'TriggerCount') return q === 'DamageAmount' || q === 'Amount' ? (ctx.evt && ctx.evt.n) || 0 : 0;

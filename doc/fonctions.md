@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1380 fonctions**, 194 modules, 1323 Ko de JavaScript.
+**1384 fonctions**, 195 modules, 1331 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -68,11 +68,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 108 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
-| [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 15 | 255 |
-| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 151 |
-| [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 142 |
+| [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 15 | 278 |
+| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 153 |
+| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 3 | 63 |
+| [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 149 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 80 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 12 | 262 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 286 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 4 | 196 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 4 | 136 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 5 | 147 |
@@ -1240,7 +1241,7 @@ Quand demander à un joueur humain. *2 fonctions, 33 lignes, 1.6 Ko.*
 
 ## js/forgeValide.js
 
-Le langage de filtres de Forge. *15 fonctions, 255 lignes, 14 Ko.*
+Le langage de filtres de Forge. *15 fonctions, 278 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1274,7 +1275,7 @@ Le langage de filtres de Forge. *15 fonctions, 255 lignes, 14 Ko.*
 
 ## js/forgeExpr.js
 
-Les quantités de Forge. *8 fonctions, 151 lignes, 8.4 Ko.*
+Les quantités de Forge. *8 fonctions, 153 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1291,9 +1292,19 @@ Les quantités de Forge. *8 fonctions, 151 lignes, 8.4 Ko.*
 |---|---|
 | `FORGE_MATHS` | — |
 
+## js/forgeExprB.js
+
+Les expressions de Forge, suite : la mémoire, les. *3 fonctions, 63 lignes, 3.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `caracEtendue(P, o, q, env)` | Une caractéristique de plus que `caracForge()` : les marqueurs, et « répond-il au filtre » (1 ou 0). |
+| `quantiteJoueur(P, j, q)` | La taille de main ou de cimetière, la vie d'un joueur désigné. |
+| `exprEtendue(P, tete, q, env)` | — |
+
 ## js/forgeDefini.js
 
-Ce que `Defined$` désigne. *6 fonctions, 142 lignes, 8.8 Ko.*
+Ce que `Defined$` désigne. *6 fonctions, 149 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1320,7 +1331,7 @@ Lire un coût de Forge. *3 fonctions, 80 lignes, 3.8 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, la. *12 fonctions, 262 lignes, 15 Ko.*
+Exécuter une capacité de Forge : le registre, la. *13 fonctions, 286 lignes, 17 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1331,6 +1342,7 @@ Exécuter une capacité de Forge : le registre, la. *12 fonctions, 262 lignes, 1
 | `memoireForge(P, ctx, src)` | La mémoire de la carte source : les objets et les joueurs retenus. |
 | `retiensForge(ctx, x)` | — |
 | `executeForge(P, op, ctx)` | La porte : une table de Forge, résolue. |
+| `cibleOuDefinis(P, t, env)` | Les objets qu'un effet touche : ses cibles, ou ce que `Defined$` désigne, ou — pour un effet de masse — ce qui répond à `ValidCards$`. |
 | `zoneForge(z)` | Une zone de destination de Forge, dans le vocabulaire du moteur. |
 | `deplaceForge(P, o, dest, env, opts = {})` | Déplacer un objet où Forge le dit. Rend le nouvel identifiant. |
 | `dansOrigine(o, origine)` | Les objets d'une zone d'origine (`Battlefield,Graveyard`, `Any`). |
@@ -1341,6 +1353,7 @@ Exécuter une capacité de Forge : le registre, la. *12 fonctions, 262 lignes, 1
 |---|---|
 | `FORGE_API` | — |
 | `FORGE_CONDITIONS` | — |
+| `RETENIR_APRES` | Les paramètres qui retiennent ce que l'effet a fait, jugés après lui. |
 
 ## js/forgeEffetsB.js
 
@@ -1401,7 +1414,7 @@ Les choix de Forge : une couleur, un type, une. *7 fonctions, 150 lignes, 7.9 Ko
 
 ## js/forgeCopies.js
 
-Les copies de Forge : un jeton copie d'un. *4 fonctions, 99 lignes, 5.2 Ko.*
+Les copies de Forge : un jeton copie d'un. *4 fonctions, 99 lignes, 5.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|

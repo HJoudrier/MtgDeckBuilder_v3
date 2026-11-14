@@ -45,7 +45,7 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
       P.ver++;
       emet(P, {t: 'entre', id: o.id, ctrl: j, jeton: true});
       noteEntree(P, null, 'champ', o);
-      if (t.RememberCopied === 'True') retiensForge(env.ctx, o.id);
+      if (t.RememberCopied === 'True' || t.RememberTokens === 'True') retiensForge(env.ctx, o.id);
     }
     jn(P, `${n} copie(s) de ${m.def.nom}`);
   }

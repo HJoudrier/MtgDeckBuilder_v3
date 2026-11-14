@@ -31,7 +31,8 @@ const SOUSTYPES_NON_CREATURE = new Set(['plains', 'island', 'swamp', 'mountain',
 const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
-  'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell'];
+  'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell', 'ExiledWithSource', 'EffectSource', 'IsTriggerRemembered',
+  'DefenderCtrl', 'faceDown', 'faceUp', 'YouDontOwn', 'RememberedPlayerCtrl', 'EnchantedControllerCtrl', 'EnchantedController', 'ControlledBy', 'OwnedBy'];
 
 /* Compiler un filtre : un tableau d'alternatives `{tete, props}`. */
 function forgeFiltre(txt) {
@@ -55,7 +56,11 @@ function famillesFiltre(txt) {
   const r = [];
   forgeFiltre(txt).forEach(a => {
     if (!teteConnue(a.tete)) r.push('filtre:' + a.tete);
-    a.props.forEach(p => r.push('filtre:' + familleProp(p)));
+    a.props.forEach(p => {
+      r.push('filtre:' + familleProp(p));
+      const m = /^!?(?:ControlledBy|OwnedBy) (\S+)/.exec(p);
+      if (m) r.push('defini:' + m[1].split('.')[0]);
+    });
   });
   return r;
 }
@@ -81,12 +86,13 @@ function familleProp(p) {
   if (/^counters_/.test(p)) return 'counters';
   if (/^with(out)?/.test(p)) return p;
   if (/^named/.test(p)) return 'named';
+  if (/^(ControlledBy|OwnedBy) /.test(p)) return p.split(' ')[0];
   if (/^inZone(Battlefield|Graveyard|Hand|Exile|Library|Stack)$/.test(p)) return 'inZone';
   return p;
 }
 
 function teteConnue(t) {
-  return t === 'Card' || t === 'Permanent' || t === 'Spell' || t === 'Any' || FORGE_TETES_JOUEUR.has(t) ||
+  return t === 'Card' || t === 'Permanent' || t === 'Spell' || t === 'SpellAbility' || t === 'Any' || FORGE_TETES_JOUEUR.has(t) ||
     FORGE_TYPES_CARTE[t] != null || sousTypeProbable(t);
 }
 
@@ -110,7 +116,7 @@ function aQualite(c, mot) {
 }
 
 function teteObjet(t, c, o) {
-  if (t === 'Card') return true;
+  if (t === 'Card' || t === 'SpellAbility') return true;
   if (t === 'Spell') return o.zone === 'pile';
   if (t === 'Any') return c.types.includes('creature') || c.types.includes('planeswalker') || c.types.includes('battle');
   return aQualite(c, t) === true;
@@ -155,8 +161,24 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'IsNotRemembered': return !(env && env.ctx && (env.ctx.memo || []).some(x => x === o.id));
     case 'TargetedPlayerCtrl': return !!(env && env.ctx && ciblesJoueurs(env).includes(tient));
     case 'ActivePlayerCtrl': return !!P && tient === P.actif;
+    /* Ce que la source a exilé (`P.cartes[cid].exilees`), la source d'un
+       effet, la mémoire d'un déclencheur retardé. */
+    case 'ExiledWithSource': { const k = P && src && P.cartes[src.cid]; return !!k && (k.exilees || []).some(x => x === o.id || suit(P, x) === o.id); }
+    case 'EffectSource': return !!src && (src.srcId === o.id || src.id === o.id);
+    case 'IsTriggerRemembered': return propObjet(P, o, c, 'IsRemembered', src, ctrl, env);
+    case 'DefenderCtrl': return !!P && !!P.combat && !!src && P.combat.attaquants.has(src.id) && defenseurDe(P, P.combat.attaquants.get(src.id)) === tient;
+    case 'faceDown': return !!o.faceCachee;
+    case 'faceUp': return !o.faceCachee;
+    case 'YouDontOwn': return o.prop !== ctrl;
+    case 'RememberedPlayerCtrl': return !!(env && env.ctx && (env.ctx.memoJ || []).includes(tient));
+    case 'EnchantedControllerCtrl': { const h = P && src && src.att != null ? obj(P, src.att) : null; return !!h && h.ctrl === tient; }
   }
   let m;
+  if ((m = /^(ControlledBy|OwnedBy) (.+)$/.exec(p))) {
+    if (!P || !env) return false;
+    const qui = forgeDefinis(P, m[2], {...env, src: src || env.src}).map(x => joueurDe(x));
+    return qui.includes(m[1] === 'OwnedBy' ? o.prop : tient);
+  }
   if ((m = /^(power|toughness|cmc)(GE|LE|GT|LT|EQ|NE)(.+)$/.exec(p))) {
     const v = m[1] === 'cmc' ? mvDe(o) : m[1] === 'power' ? c.force : c.endurance;
     const n = /^-?\d+$/.test(m[3]) ? +m[3] : env ? forgeNombre(P, m[3], env) : 0;
@@ -209,6 +231,7 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
         case 'NonActive': return j !== P.actif;
         case 'IsRemembered': return !!(env && env.ctx && (env.ctx.memoJ || []).includes(j));
         case 'Chosen': case 'ChosenPlayer': return !!(env && env.src && choixDe(P, env.src).joueur === j);
+        case 'EnchantedController': { const h = env && env.src && env.src.att != null ? obj(P, env.src.att) : null; return !!h && h.ctrl === j; }
       }
       return false;
     });
