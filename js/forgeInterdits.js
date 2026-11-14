@@ -101,7 +101,7 @@ function capaciteVisee(v, k) {
 
 /* Null Rod, Pithing Needle, Arrest : la capacité ne s'active pas. */
 function activationInterdite(P, j, o, k) {
-  if (o.detenu && detenu(P, o)) return true;
+  if ((o.detenu && detenu(P, o)) || palierInterdit(o, k)) return true;
   return statiquesMode(P, 'CantBeActivated').length > 0 && !!statiqueQui(P, 'CantBeActivated', (t, src, env) =>
     objetOuRien(P, o, t.ValidCard, src, env) && joueurStatique(P, j, t.Activator, src, env) && capaciteVisee(t.ValidSA, k) &&
     zoneOuRien(t.AffectedZone, o.zone));

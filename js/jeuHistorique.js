@@ -26,6 +26,7 @@ function noteHistorique(P, e) {
   switch (e.t) {
     case 'perteVie': case 'degatsJoueur':
       plusUn(h.perdu, e.joueur, e.n || 0);
+      if (P.vitesses) vitesseMonte(P, e);
       /* Infliger des dégâts de combat au monarque prend la couronne. */
       if (e.t === 'degatsJoueur' && e.combat && P.monarque === e.joueur) { const s = obj(P, e.source) || P.lkis.get(e.source); if (s && s.ctrl != null) P.monarque = s.ctrl; }
       break;

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1550 fonctions**, 216 modules, 1555 Ko de JavaScript.
+**1556 fonctions**, 217 modules, 1564 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -48,7 +48,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 220 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
-| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 67 |
+| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 68 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 146 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 224 |
@@ -57,7 +57,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 140 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 98 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 11 | 233 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 229 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 232 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 299 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 71 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -79,7 +79,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 149 |
-| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 105 |
+| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 108 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 291 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 208 |
@@ -104,7 +104,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 157 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
-| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 202 |
+| [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 147 |
+| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 204 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 171 |
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 216 |
 | [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 236 |
@@ -921,7 +922,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 55 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 67 lignes, 3.1 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 68 lignes, 3.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1076,7 +1077,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *11 fonctions, 233 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 229 lignes, 11 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 232 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1451,7 +1452,7 @@ Ce que `Defined$` désigne. *6 fonctions, 149 lignes, 9.6 Ko.*
 
 ## js/forgeDesignations.js
 
-Ce que Forge désigne encore : des joueurs. *5 fonctions, 105 lignes, 6.3 Ko.*
+Ce que Forge désigne encore : des joueurs. *5 fonctions, 108 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1899,9 +1900,22 @@ Les remplacements de Forge, suite, et. *4 fonctions, 49 lignes, 3 Ko.*
 | `etapeSautee(P, e)` | Une étape que le joueur actif saute (pioche, dégagement). |
 | `flashbackAccorde(P, o)` | Le flashback accordé jusqu'à la fin du tour (« target instant card in your graveyard gains flashback ») : une marque sur la carte, que js/jeuVariantesB.js `lancableDuCimetiere()` lit. |
 
+## js/forgePaliers.js
+
+Les paliers : Station, classes, Rooms, vitesse. *6 fonctions, 147 lignes, 8.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `motClePalier(def, tete, reste, face, jetons)` | Les mots-clés des paliers, lus par js/forgeMotsCles.js `motCleForge()`. |
+| `niveauForge(def, reste, face, jetons)` | `K:Class:N:coût:AddTrigger$ … \| AddStaticAbility$ …` : la capacité de monter au niveau N, et ce que ce niveau accorde, gardé par la condition « ce permanent est au niveau N ou plus ». |
+| `palierInterdit(o, k)` | Une capacité de palier ne s'active qu'au niveau d'avant (js/forgeInterdits.js `activationInterdite()`). |
+| `portesRoom(def)` | Une Room : chaque moitié porte la capacité de déverrouiller l'autre, à la vitesse d'un rituel. |
+| `defRoomOuverte(k)` | Les deux portes ouvertes : une définition qui les réunit, gardée sur la carte. |
+| `vitesseMonte(P, e)` | Une perte de vie d'un adversaire pendant ton tour : ta vitesse monte, une fois par tour, jusqu'à 4 (js/jeuHistorique.js `noteHistorique()`). |
+
 ## js/forgeMotsCles.js
 
-Les mots-clés de Forge (`K:`). *4 fonctions, 202 lignes, 11 Ko.*
+Les mots-clés de Forge (`K:`). *4 fonctions, 204 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|

@@ -292,7 +292,7 @@ function definitionAFaces(s, fiche, jetons) {
   /* Une carte transformable est jouée si quelque chose la transforme : un
      effet, le jour et la nuit, disturb, craft, ou un retour « transformed ». */
   const tenu = FORGE_FACES.includes(s.mode) && (!/^(DoubleFaced|Flip)$/.test(s.mode) || /SetState|Daybound|Nightbound|Disturb|Craft|Transformed\$ True/.test(brut));
-  if (tenu) { def.dos = ar.def; def.modeFaces = s.mode; }
+  if (tenu) { def.dos = ar.def; def.modeFaces = s.mode; portesRoom(def); }
   const manque = tenu ? ar.def.couverture.manque.filter(e => !c.manque.includes(e)) : ['construction:' + (s.mode || 'faces')];
   if (c.etat === 'complete' && (manque.length || ar.def.couverture.etat !== 'complete')) c.etat = 'partielle';
   c.manque = c.manque.concat(manque);

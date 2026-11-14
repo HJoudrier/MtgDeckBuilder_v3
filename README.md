@@ -111,6 +111,7 @@ js/                 modules, chargés dans cet ordre :
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
   forgeRemplacementsC.js les dégâts remplacés : prévenir N, détourner, partager ; choisir une source ; l'effet qui s'exile
+  forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
   forgeMotsClesD.js les mots-clés des permanents, troisième partie : annihilator, renown, rampage, mobilize, mentor, graft, backup, sunburst, devour, ascend, strive, Leylines
@@ -936,6 +937,22 @@ générateur : combien et à qui se décident sur-le-champ, et la chaîne qui su
 - « exile this effect » met fin à l'effet ;
 - `DamageResolve` ne fait rien de plus, puisque les dégâts sont déjà infligés à mesure ;
 - un permanent hors phase qu'un effet déplace quitte aussi la liste du phasing.
+
+**Les paliers : Station, classes, Rooms, vitesse** (lot F36, `js/forgePaliers.js`).
+
+- *Station.* Engager une autre créature pose autant de marqueurs charge que sa force. Le coût
+  retient les créatures engagées (`ctx.engages`). Les seuils « STATION N+ » sont déjà des statiques à
+  condition de marqueurs.
+- *Les classes.* Chaque niveau est une capacité de rituel qui ne s'active qu'au niveau d'avant
+  (`palier`, jugé par `activationInterdite()`). Ce qu'il accorde (déclencheurs, statiques) est
+  compilé avec la condition « ce permanent est au niveau N ou plus » (`ClassLevelGE`).
+- *Les Rooms.* Chaque moitié porte la capacité de déverrouiller l'autre. L'objet joue la moitié
+  lancée, puis les deux réunies (`defRoomOuverte()`). « When you unlock this door » écoute la moitié
+  qu'on vient d'ouvrir. Forge en fait une action spéciale ; ici une capacité, à laquelle on peut
+  répondre.
+- *La vitesse.* « Start your engines! » donne la vitesse 1. Elle monte d'un cran par tour, jusqu'à 4,
+  quand un adversaire perd des points de vie pendant ton tour (`noteHistorique()`) : sur-le-champ, là
+  où Forge passe par un déclencheur.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

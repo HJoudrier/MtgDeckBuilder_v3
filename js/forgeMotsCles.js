@@ -194,6 +194,8 @@ function motCleForge(def, k, face, jetons) {
   if (t4 != null) return t4;
   const t5 = motClePioche(def, tete, reste);
   if (t5 != null) return t5;
+  const t6 = motClePalier(def, tete, reste, face, jetons);
+  if (t6 != null) return t6;
   return false;
 }
 

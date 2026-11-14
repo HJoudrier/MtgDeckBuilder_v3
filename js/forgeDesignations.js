@@ -72,6 +72,7 @@ function exprDesignations(P, tete, q, env) {
     }
     /* Les sorts de commandant lancés depuis la zone de commandement : la
        taxe en compte un par lancer. */
+    if (q === 'YourSpeed') return P.joueurs[j].vitesse || 0;
     if (q === 'TotalCommanderCastFromCommandZone') return Object.values(P.joueurs[j].taxe || {}).reduce((s, n) => s + n, 0);
   }
   if (tete === 'PlayerCountPropertyYou') {
@@ -92,6 +93,8 @@ forgeSait('expr', 'SVar$CostCountersRemoved', 'Count$Presence', 'Count$Blessing'
 
 /* Les propriétés de plus des filtres (js/forgeValide.js). */
 function proprieteDesignee(P, o, p) {
+  /* Le niveau d'une classe, gardé par js/forgePaliers.js. */
+  if (p.startsWith('ClassLevelGE')) return (o.niveau || 1) >= +p.slice(12);
   switch (p) {
     case 'IsMonstrous': return !!o.monstrueux;
     case 'IsGoaded': return !!P && typeof goadActif === 'function' && goadActif(P, o);
