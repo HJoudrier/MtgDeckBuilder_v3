@@ -182,6 +182,8 @@ function motCleForge(def, k, face, jetons) {
   if (t2 != null) return t2;
   const t3 = motCleLancement(def, k, face, jetons, tete, reste);
   if (t3 != null) return t3;
+  const t4 = motClePermanent(def, k, face, jetons, tete, reste);
+  if (t4 != null) return t4;
   return false;
 }
 

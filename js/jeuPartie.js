@@ -45,6 +45,7 @@ function* mulligans(P) {
 function* partie(P) {
   P.joueurs.forEach(J => melangeHasard(P.rng, J.bibliotheque));
   yield* mulligans(P);
+  yield* effetsOuverture(P);
   while (!P.fin) {
     yield* tour(P);
     if (P.fin) break;

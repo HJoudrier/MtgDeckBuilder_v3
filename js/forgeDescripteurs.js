@@ -45,3 +45,23 @@ forgeSait('filtre', ...FORGE_PROPS, 'inZone', 'Soustype', 'nonSoustype', 'powerX
     const avec = k.replace(/(^|\s)([a-z])/g, (_, s, l) => s + l.toUpperCase()), sans = avec.replace(/\s/g, '');
     return ['with' + avec, 'without' + avec, 'with' + sans, 'without' + sans];
   }));
+
+/* Un emplacement de cible d'une table de Forge : son descripteur, son
+   nombre de cibles, et les restrictions entre elles. */
+function emplacementForge(t, face) {
+  const min = t.TargetMin != null ? (/^\d+$/.test(t.TargetMin) ? +t.TargetMin : 0) : 1;
+  const max = t.TargetMax != null ? (/^\d+$/.test(t.TargetMax) ? +t.TargetMax : 1) : Math.max(1, min);
+  /* « Any number of target … » : un maximum calculé au choix des cibles
+     (js/jeuLancer.js), sauf X payé en mana, choisi ici après elles. */
+  const maxExpr = t.TargetMax != null && !/^\d+$/.test(t.TargetMax) ? String(face.svars[t.TargetMax] || t.TargetMax) : null;
+  /* Sans `TgtZone$`, un déplacement cible dans sa zone d'origine :
+     « return target creature card from your graveyard ». */
+  const zone = t.TgtZone || (forgeApi(t) === 'ChangeZone' && t.Origin && !/,/.test(t.Origin) ? t.Origin : null);
+  const desc = descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || ''));
+  /* « Target spell with a single target ». */
+  if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
+  return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr} : {}),
+    /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
+    ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'
+      ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', parJoueur: t.TargetsForEachPlayer === 'True'}} : {})};
+}

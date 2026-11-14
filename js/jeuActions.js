@@ -94,6 +94,8 @@ function* lanceSort(P, j, a) {
   const garde = coutDeGarde(P, j, effets) - reductionParCibles(P, j, s, effets);
   const gen = Math.max(0, cout0.generique + garde);
   let cout = garde ? {...cout0, generique: gen, total: cout0.total + gen - cout0.generique} : cout0;
+  /* Strive : plus cher pour chaque cible de plus (js/forgeMotsClesD.js). */
+  if (d.strive) cout = coutStrive(P, j, s, d, effets, cout, x);
   if (!payableAvec(P, j, s, cout, x)) return annule();
   if (v.autre && !coutAutrePossible(P, j, s, v.autre)) return annule();
   cout = yield* paieReductions(P, j, s, cout, x);

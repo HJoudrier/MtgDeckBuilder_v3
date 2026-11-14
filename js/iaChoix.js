@@ -70,6 +70,9 @@ function iaCibles(P, q) {
 /* Choisir parmi des cartes ou des permanents selon ce qu'on en fait. */
 function iaCartes(P, q) {
   const j = q.joueur, t = q.texte;
+  /* Dévorer (js/forgeMotsClesD.js) : les jetons et ce qui vaut moins qu'un
+     marqueur ou deux. */
+  if (t === 'Dévorer') return q.options.map((id, i) => [i, obj(P, id)]).filter(([, o]) => o && (o.jeton || valeurObjet(P, o) < 2)).map(x => x[0]);
   const pire = t === 'Défausser' || t === 'Sacrifier' || t === 'Engager' || t === 'Mettre dessous' || t === 'Convoquer' ||
     t === 'Explorer' || t === 'Exiler du cimetière' || t === 'Renvoyer en main';
   const note = id => {

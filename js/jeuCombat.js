@@ -117,6 +117,7 @@ function* declareBloqueurs(P) {
     for (const paire of Array.isArray(r) ? r : []) pose(blqs[paire[0]], atts[paire[1]]);
     /* « Blocks each combat if able », « blocks CARDNAME this turn if able ». */
     blqs.forEach(b => { if (!cb.bloqueurs.has(b)) pose(b, attaquantImpose(P, obj(P, b), atts)); });
+    bloqueursImposes(P, atts, blqs, pose);
   }
   /* La menace, et « can't be blocked except by three or more » : un
      attaquant bloqué par trop peu de créatures ne l'est pas. */
@@ -197,4 +198,8 @@ function* degatsCombat(P, passe) {
   yield* priorite(P);
 }
 
-function finCombat(P) { P.combat = null; }
+/* La fin du combat ; les copies de myriad partent en exil. */
+function finCombat(P) {
+  P.champ.filter(id => obj(P, id).finCombat).forEach(id => deplace(P, id, 'exil'));
+  P.combat = null;
+}

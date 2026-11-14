@@ -166,7 +166,8 @@ function* choisitCibles(P, j, src, slots, couleurs, extra) {
     const cands = ciblesLegales(P, sl, src, j, couleurs);
     if (cands.length < sl.min) return null;
     if (!cands.length) { choix.push([]); continue; }
-    const max = Math.min(sl.max, cands.length);
+    const plafond = sl.maxExpr ? Math.max(sl.min, forgeNombre(P, sl.maxExpr, {ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: j, op: {}})) : sl.max;
+    const max = Math.min(plafond, cands.length);
     const r = yield question(P, j, 'cibles', cands, {min: sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
     choix.push(restreintCibles(P, sl, (Array.isArray(r) ? r : [r]).map(i => cands[i]).filter(x => x != null)));
   }

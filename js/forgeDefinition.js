@@ -55,19 +55,8 @@ function effetForge(face, t0, jetons, racine) {
     if (!tableJouable(t)) return null;
     let slot = null;
     if (t.ValidTgts || t.TargetType) {
-      const min = t.TargetMin != null ? (/^\d+$/.test(t.TargetMin) ? +t.TargetMin : 0) : 1;
-      const max = t.TargetMax != null ? (/^\d+$/.test(t.TargetMax) ? +t.TargetMax : 1) : Math.max(1, min);
       slot = cibles.length;
-      /* Sans `TgtZone$`, un déplacement cible dans sa zone d'origine :
-         « return target creature card from your graveyard ». */
-      const zone = t.TgtZone || (forgeApi(t) === 'ChangeZone' && t.Origin && !/,/.test(t.Origin) ? t.Origin : null);
-      const desc = descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || ''));
-      /* « Target spell with a single target ». */
-      if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
-      cibles.push({desc, min, max,
-        /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
-        ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'
-          ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', parJoueur: t.TargetsForEachPlayer === 'True'}} : {})});
+      cibles.push(emplacementForge(t, face));
     }
     const op = {op: 'forge', forge: true, api: forgeApi(t), t, face, slot, slotParent: parent, jetons, texte: texteForge(face, t),
       chaine, coutInterne: t.Cost && !(racine && t === t0) ? t.Cost : null};
