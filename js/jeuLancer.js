@@ -117,6 +117,7 @@ function actionsLegales(P, j) {
     if (o.ctrl !== j) continue;
     capacitesDe(P, o).forEach((k, i) => {
       if (k.zone || ((k.genre === 'activee' || k.genre === 'loyaute') && activationInterdite(P, j, o, k))) return;
+      if (k.phases && !dansPhases(P, k.phases)) return;
       if (k.genre === 'activee') {
         if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
         if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o})) return;

@@ -45,7 +45,8 @@ const FORGE_DESCRIPTIFS = /Desc(ription)?$|^TgtPrompt$|^AI|^Stack|^Secondary$|^I
 const FORGE_COMMUNS = new Set(['Cost', 'SubAbility', 'ValidTgts', 'TargetMin', 'TargetMax', 'TgtZone', 'TargetType', 'Defined',
   'Optional', 'OptionalDecider', 'UnlessCost', 'UnlessPayer', 'UnlessSwitched', 'ConditionDefined', 'ConditionPresent',
   'ConditionCompare', 'ConditionCheckSVar', 'ConditionSVarCompare', 'ConditionZone', 'ConditionPlayerTurn', 'Condition',
-  'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones',
+  'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones', 'ActivationPhases',
+  'ForgetOtherRemembered', 'ForgetOtherTargets',
   'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'PlayerTurn', 'TargetUnique', 'Mandatory',
   'ActivationZone']);
 

@@ -91,6 +91,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeDeclencheursB.js  la suite : engager, cibler, marqueurs, attaque déclarée, crime, déclencheurs d'état
   forgeExprB.js     les expressions de Forge, suite : mémoire, cibles, évènement, comptes du tour
+  forgeEffetsE.js   la bibliothèque et ce qu'on révèle ; lancer une carte depuis un effet ; découvrir
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -680,6 +681,15 @@ parties du cimetière (`P.hist`, qui se refait quand le tour change), et sur l'o
 blessures et ses attaques du tour. Un sort garde `lance` — qui l'a lancé, d'où, avec quel mana, couleur
 par couleur — jusque sur le permanent qu'il devient : la convergence, « was cast from your hand » et
 « mana spent to cast it » s'en lisent. La dévotion compte les symboles des coûts, hybrides compris.
+
+**La bibliothèque et les remplacements, suite** (lot F15). Lancer une carte depuis un effet (cascade,
+« cast it without paying », découvrir) passe par `lanceSort()` avec une variante que la carte porte
+le temps du lancement (`o.lanceEffet`). Les remplacements de quantité — Doubling Season, Hardened
+Scales, Parallel Lives, Boon Reflection, Torbran — passent tous par `quantiteRemplacee()`, qu'appellent
+`poseMarqueurs()`, la création de jetons, `gagneVie()` et `infligeDegats()` ; chacun s'applique une
+fois, dans l'ordre du champ. « Enters tapped unless… » se juge à l'entrée sur n'importe quelle
+expression ; « creatures your opponents control enter tapped » et « if it would be put into a
+graveyard, put it on top of its owner's library instead » sont des formes de remplacement.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

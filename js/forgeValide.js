@@ -36,7 +36,7 @@ const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenC
   'ThisTurnEntered', 'wasDealtDamageThisTurn', 'DamagedBy', 'wasCast', 'wasCastByYou', 'wasCastFromYourHand', 'wasCastFromYourHandByYou',
   'wasCastFromYourGraveyard', 'wasCastFromExile', 'wasCastFromGraveyard', 'wasCastFromHand', 'wasNotCast', 'HasCounters', 'modified',
   'attackedThisTurn', 'blockingSource', 'blockedBySource', 'blocked', 'sameName', 'Outlaw', 'hasXCost', 'suspended', 'AdventureCard',
-  'YourTeamCtrl', 'hasKeywordFlash'];
+  'YourTeamCtrl', 'hasKeywordFlash', 'WhiteSource', 'BlueSource', 'BlackSource', 'RedSource', 'GreenSource'];
 
 /* Compiler un filtre : un tableau d'alternatives `{tete, props}`. */
 function forgeFiltre(txt) {
@@ -201,6 +201,8 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'AdventureCard': return o.def.modeFaces === 'Adventure';
     case 'YourTeamCtrl': return tient === ctrl;
     case 'hasKeywordFlash': return (c.mots & MOT.FLASH) !== 0;
+    case 'WhiteSource': case 'BlueSource': case 'BlackSource': case 'RedSource': case 'GreenSource':
+      return c.couleurs.includes(FORGE_COULEURS[p.replace('Source', '')]);
     case 'EnchantedControllerCtrl': { const h = P && src && src.att != null ? obj(P, src.att) : null; return !!h && h.ctrl === tient; }
   }
   let m;

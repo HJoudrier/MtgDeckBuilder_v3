@@ -80,6 +80,7 @@ function valeur(P, q, ctx) {
 
 function gagneVie(P, j, n) {
   if (n <= 0 || P.joueurs[j].elimine || vieBloquee(P, j)) return;
+  n = quantiteRemplacee(P, 'GainLife', n, {j});
   P.joueurs[j].vie += n;
   P.joueurs[j].vieTour = (P.joueurs[j].vieTour || 0) + n;
   emet(P, {t: 'vie', joueur: j, n});
@@ -90,6 +91,7 @@ function gagneVie(P, j, n) {
    ici, pour le combat comme pour un sort. */
 function infligeDegats(P, src, cible, n, combat) {
   if (n <= 0 || !src) return 0;
+  n = quantiteRemplacee(P, 'DamageDone', n, {src, cible, combat});
   n = degatsApresPrevention(P, src, cible, n, combat);
   if (n <= 0) return 0;
   const cs = src.lki ? src : caracsJugees(P, src);

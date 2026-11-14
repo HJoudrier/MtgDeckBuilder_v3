@@ -107,6 +107,12 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   const ent = d0.entree || {};
   let engage = !!opts.engage || !!ent.engagee;
   if (ent.engagee && ent.sauf && ent.sauf.some(d => champDe(P, ctrl).some(x => correspondBase(P, x, d, null, ctrl)))) engage = false;
+  if (ent.engagee && ent.condForge && !opts.engage) {
+    const env = {face: ent.condForge.face, ctx: {cibles: [], memo: [], memoJ: []}, src: o, ctrl, op: {}};
+    engage = conditionForge(P, ent.condForge.t, env);
+  }
+  /* « Creatures your opponents control enter tapped » (js/forgeRemplacements.js). */
+  if (!engage && entreeEngageeParAutre(P, d0, ctrl, o)) engage = true;
   if (ent.engagee && ent.payeVie && !opts.engage) {
     const r = yield question(P, ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${ent.payeVie} PV pour qu'il entre dégagé ?`, source: id});
     if (r === 1) { P.joueurs[ctrl].vie -= ent.payeVie; engage = false; }
@@ -120,7 +126,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (opts.face) no.def = opts.face;
   if (opts.faceCachee) { no.vraieDef = P.cartes[no.cid].def; no.faceCachee = true; no.def = defFaceCachee(no.vraieDef); }
   if (no.def.loyaute != null) no.marq.loyaute = no.def.loyaute;
-  if (ent.marqueurs) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
+  if (ent.marqueurs && (!ent.siKicke || opts.kicked)) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
   if (opts.attache != null) no.att = opts.attache;
   no.x = x;
   if (opts.kicked) no.kicked = true;

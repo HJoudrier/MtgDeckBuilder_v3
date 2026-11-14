@@ -12,6 +12,18 @@
 const FORGE_PHASES = {Upkeep: 'entretien', Draw: 'pioche', Main1: 'principale1', BeginCombat: 'debutCombat',
   'Beginning of Combat': 'debutCombat', EndCombat: 'finCombat', Main2: 'principale2', 'End of Turn': 'fin', 'End Of Turn': 'fin'};
 
+/* « Activate only during your upkeep », « only during combat » : l'étape
+   en cours tombe-t-elle dans l'une des plages `A->B` ? */
+const FORGE_ETAPES = {...FORGE_PHASES, 'Declare Attackers': 'attaquants', 'Declare Blockers': 'bloqueurs', 'First Strike Damage': 'initiative',
+  'Combat Damage': 'degats', Cleanup: 'nettoyage', Untap: 'degagement', End: 'fin'};
+function dansPhases(P, v) {
+  return String(v).split(',').some(plage => {
+    const [a, b] = plage.split('->').map(x => ETAPES.indexOf(FORGE_ETAPES[x.trim()]));
+    const i = ETAPES.indexOf(P.etape);
+    return a >= 0 && i >= 0 && (b == null ? i === a : b >= 0 && i >= a && i <= b);
+  });
+}
+
 /* Un déclencheur de phase dont la phase est inconnue ne partirait jamais :
    il est refusé à la construction. */
 function phaseConnue(t) { return t.Mode !== 'Phase' || !!FORGE_PHASES[String(t.Phase || '').trim()]; }

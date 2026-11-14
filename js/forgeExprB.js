@@ -52,6 +52,7 @@ function exprEtendue(P, tete, q, env) {
   }
   if (tete === 'TriggeredCard' && q === 'CastTotalManaSpent') { const m = manaDepenseDe(objetEvt(P, ctx)) || {}; return Object.values(m).reduce((a, n) => a + n, 0); }
   if (tete === 'TriggeredSpellAbility') { const d = evt.def; return d && /^CardManaCost/.test(q) ? d.mv || 0 : 0; }
+  if (tete === 'ReplaceCount') return (ctx.remplace || {}).n || 0;
   if (tete === 'Count' && q === 'RememberedSize') return (ctx.memo || []).length + (ctx.memoJ || []).length;
   if (tete === 'Count') return compteDuTour(P, q, env);
   if (tete === 'PlayerCountOpponents' || tete === 'PlayerCountPlayers') return compteJoueurs(P, tete, q, env);

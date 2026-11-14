@@ -140,8 +140,8 @@ forgeEffet('Counter', ['Destination'], function* (P, t, env) {
 }, (t, op) => { op.op = 'contre'; op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = true; });
 
 /* Créer des jetons, d'après leurs scripts (`TokenScript$ b_2_2_zombie`). */
-function* creeJetonsForge(P, defs, n, qui, engage, env, retenir) {
-  for (const j of qui) for (const def of defs) for (let k = 0; k < n; k++) {
+function* creeJetonsForge(P, defs, n0, qui, engage, env, retenir) {
+  for (const j of qui) for (const def of defs) for (let k = 0, n = quantiteRemplacee(P, 'CreateToken', n0, {def, j}); k < n; k++) {
     if (P.champ.length >= PLAFOND_CHAMP) { P.fin = P.fin || {nulle: true, raison: 'plafond'}; return; }
     const o = creeObjet(P, nouvelleCarte(P, def, j, false, true), j, 'champ');
     o.engage = !!engage;
@@ -152,7 +152,7 @@ function* creeJetonsForge(P, defs, n, qui, engage, env, retenir) {
     noteEntree(P, null, 'champ', o);
     if (retenir) retiensForge(env.ctx, o.id);
   }
-  if (defs.length && n) jn(P, `${n * qui.length} jeton(s) ${defs.map(d => d.nom).join(', ')}`);
+  if (defs.length && n0) jn(P, `${n0 * qui.length} jeton(s) ${defs.map(d => d.nom).join(", ")}`);
 }
 
 forgeEffet('Token', ['TokenScript', 'TokenAmount', 'TokenOwner', 'TokenTapped', 'RememberTokens', 'AttachedTo'], function* (P, t, env) {

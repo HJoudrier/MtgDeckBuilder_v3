@@ -130,7 +130,7 @@ function capaciteForge(def, face, t, jetons) {
     if (c.loyaute == null) return false;
     def.capacites.push({genre: 'loyaute', delta: c.loyaute, effet, texte: texteForge(face, t)});
   } else def.capacites.push({genre: 'activee', cout: c.cout, effet, vitesse: t.SorcerySpeed === 'True' ? 'rituel' : null,
-    unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {})});
+    unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {})});
   return true;
 }
 
@@ -166,23 +166,26 @@ function remplacementForge(def, face, r) {
 
 /* L'entrée sur le champ remplacée : engagée, ou avec des marqueurs. */
 function entreeForge(def, face, r) {
-  if (r.Event !== 'Moved' || r.Destination !== 'Battlefield' || !/^(Card|Permanent|Creature|Land)\.Self$/.test(r.ValidCard || '')) return false;
+  const v = /^(Card|Permanent|Creature|Land)\.Self(\+kicked)?$/.exec(r.ValidCard || '');
+  if (r.Event !== 'Moved' || r.Destination !== 'Battlefield' || !v) return false;
   const w = forgeSousCapacite(face, r.ReplaceWith);
   if (!w || w.Defined !== 'Self' || w.ETB !== 'True') return false;
   const ent = def.entree = def.entree || {};
-  if (w.DB === 'Tap') {
+  if (w.DB === 'Tap' && !v[2]) {
     ent.engagee = true;
     if (w.UnlessCost) { const m = /^PayLife<(\d+)>$/.exec(w.UnlessCost); if (!m) return false; ent.payeVie = +m[1]; }
     if (r.CheckSVar || w.ConditionCheckSVar) {
       const sv = face.svars[r.CheckSVar || w.ConditionCheckSVar] || '', cmp = r.SVarCompare || w.ConditionSVarCompare;
       const m = /^Count\$Valid (.+)$/.exec(sv.trim());
-      if (!m || !/^(EQ0|LT1)$/.test(cmp)) return false;
-      ent.sauf = [descForge(m[1])];
+      if (m && /^(EQ0|LT1)$/.test(cmp)) ent.sauf = [descForge(m[1])];
+      /* Toute autre condition (« unless a player has 13 or less life ») :
+         engagée si elle tient, jugée à l'entrée. */
+      else ent.condForge = {t: {CheckSVar: r.CheckSVar || w.ConditionCheckSVar, SVarCompare: cmp || 'GE1'}, face};
     }
     return true;
   }
   if (w.DB === 'PutCounter' && /^\d+$/.test(w.CounterNum || '1')) {
-    ent.marqueurs = +(w.CounterNum || 1); ent.genre = genreMarqueur(w.CounterType); return true;
+    ent.marqueurs = +(w.CounterNum || 1); ent.genre = genreMarqueur(w.CounterType); ent.siKicke = !!v[2]; return true;
   }
   return false;
 }

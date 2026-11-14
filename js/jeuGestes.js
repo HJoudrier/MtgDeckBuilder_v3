@@ -26,6 +26,8 @@ function degageObjet(P, o) {
    aussi (règle 122.6). Rend le nombre posé. */
 function poseMarqueurs(P, o, genre, n, src) {
   if (!o || n <= 0) return 0;
+  n = quantiteRemplacee(P, 'AddCounter', n, {genre, o, src});
+  if (n <= 0) return 0;
   o.marq[genre] = (o.marq[genre] || 0) + n; P.ver++;
   emet(P, {t: 'marqueur', id: o.id, genre, n, source: src ? src.id : null});
   return n;
