@@ -57,11 +57,20 @@ forgeEffet('ChooseColor', [], function* (P, t, env) {
 forgeEffet('ChooseType', ['Type'], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
   if (j == null) return;
+  /* Un type de terrain de base : celui que l'on joue le plus, ou
+     l'adversaire pour une malédiction. */
+  if (/Land/.test(t.Type || '')) {
+    const qui = /Opp|Human|Curse/.test(t.AILogic || '') ? adversaires(P, j) : [j], n = {};
+    P.cartes.forEach(k => { if (qui.includes(k.prop)) (k.def.sousTypes || []).forEach(s => { if (MANA_DES_TYPES[s]) n[s] = (n[s] || 0) + 1; }); });
+    const opts = ['plains', 'island', 'swamp', 'mountain', 'forest'].sort((a, b) => (n[b] || 0) - (n[a] || 0));
+    choixDe(P, env.src).type = opts[yield* choisitUn(P, j, opts.map(majuscule), 'Choisir un type de terrain de base', 0, env.ctx.source)];
+    return;
+  }
   const types = /Opp|Human/.test(t.AILogic || '') ? adversaires(P, j).flatMap(x => typesFrequents(P, x)) : typesFrequents(P, j);
   const options = (types.length ? types : ['human']).slice(0, 12);
   const i = yield* choisitUn(P, j, options.map(majuscule), 'Choisir un type de créature', 0, env.ctx.source);
   choixDe(P, env.src).type = options[i];
-}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !t.Type || t.Type === 'Creature'});
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !t.Type || /^(Creature|Basic Land|Land)$/.test(t.Type)});
 
 forgeEffet('ChoosePlayer', ['Choices'], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
@@ -127,12 +136,15 @@ forgeEffet('GenericChoice', ['Choices', 'ShowChoice', 'TempRemember'], function*
    se joue au moment où l'objet arrive, avant que quiconque le voie
    (js/jeuOpsB.js `metEnJeu()`). `K:ETBReplacement:Other:SVar[:Optional]`. */
 function entreeForgeMotCle(def, face, jetons, reste) {
-  const [genre, nom, mode] = reste;
-  if ((genre !== 'Other' && genre !== 'Copy') || reste.length > 3 || (mode && !/^(Optional|Mandatory)$/.test(mode))) return false;
+  const [genre, nom, mode, zone, valid] = reste;
+  if ((genre !== 'Other' && genre !== 'Copy') || reste.length > 5 || (mode && !/^(Optional|Mandatory)$/.test(mode))) return false;
   const effet = effetForge(face, forgeSousCapacite(face, nom), jetons);
   if (!effet || effet.cibles.length || effet.modes) return false;
+  /* `…:Battlefield:Creature.Other+YouCtrl` : pour les autres qui entrent
+     (js/forgeEntrees.js). Sans zone, une condition sur soi (`Card.Self+kicked`). */
+  if (zone) return zone === 'Battlefield' && !!valid && entreeAutres(def, effet, valid, mode === 'Optional');
   const ent = def.entree = def.entree || {};
-  (ent.forge = ent.forge || []).push({effet, optionnel: mode === 'Optional'});
+  (ent.forge = ent.forge || []).push({effet, optionnel: mode === 'Optional', ...(valid ? {valid} : {})});
   return true;
 }
 
@@ -141,10 +153,11 @@ function* effetsEntree(P, no) {
   const l = no.def.entree && no.def.entree.forge;
   if (!l) return;
   for (const e of l) {
+    if (e.valid && !forgeValideObjet(P, no, e.valid, no, no.ctrl, null, true)) continue;
     if (e.optionnel) {
       const r = yield question(P, no.ctrl, 'oui', ['non', 'oui'], {texte: `${no.def.nom} : le faire ?`, source: no.id});
       if (r !== 1) continue;
     }
-    yield* executeOps(P, e.effet.ops, {source: no.id, ctrl: no.ctrl, cibles: [], trouves: [], x: no.x || 0});
+    yield* executeOps(P, e.effet.ops, {source: no.id, ctrl: no.ctrl, cibles: [], trouves: [], x: no.x || 0, evt: {t: 'entre', id: no.id}});
   }
 }

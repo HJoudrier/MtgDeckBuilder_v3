@@ -98,7 +98,7 @@ function motCleForge(def, k, face, jetons) {
          WasKicked`) : lus à l'entrée par js/jeuOpsB.js `metEnJeu()`. */
       if (!reste[1] || reste.length > 4) return false;
       const cond = reste[2] ? forgeTable(reste[2]) : null;
-      if (cond && Object.keys(cond).some(k => !/^(CheckSVar|SVarCompare)$/.test(k))) return false;
+      if (cond && Object.keys(cond).some(k => !/^(CheckSVar|SVarCompare|ValidCard|IsPresent|PresentCompare|Adamant|Revolt)$/.test(k))) return false;
       def.entree = Object.assign(def.entree || {}, {marqueursForge: {genre: g, n: reste[1], cond, face}}); return true;
     }
     case 'Devoid': def.couleurs = []; return true;

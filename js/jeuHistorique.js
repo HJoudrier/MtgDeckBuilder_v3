@@ -52,6 +52,8 @@ function noteHistorique(P, e) {
     case 'zone':
       if (e.de === 'cimetiere') h.quitteCimetiere.push(e.lki || obj(P, e.id));
       if (e.de === 'champ' && e.lki && !(e.lki.types || []).includes('land')) h.vide = true;
+      /* Revolt : un permanent qu'on contrôlait a quitté le champ ce tour. */
+      if (e.de === 'champ' && e.lki) (h.revolte = h.revolte || {})[e.lki.ctrl] = true;
       break;
   }
 }

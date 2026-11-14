@@ -12,6 +12,8 @@
 function definisEtendus(P, v, env) {
   const ctx = env.ctx || {}, evt = ctx.evt || {}, ctrl = env.ctrl;
   switch (v) {
+    /* L'objet qu'un remplacement d'entrée touche (js/forgeEntrees.js). */
+    case 'ReplacedCard': { const o = objetEvt(P, ctx); return o ? [o] : []; }
     case 'Player.IsRemembered': return (ctx.memoJ || []).filter(j => P.joueurs[j] && !P.joueurs[j].elimine).map(j => ({j}));
     /* La carte du dessus de sa bibliothèque. */
     case 'TopOfLibrary': { const B = P.joueurs[ctrl].bibliotheque; return B.length ? [obj(P, B[B.length - 1])] : []; }

@@ -142,7 +142,7 @@ function objetsForge(P, t, env, defaut = 'Self') {
   let l;
   if (env.op && env.op.slot != null) l = ciblesForge(P, env, false);
   else l = forgeDefinis(P, t.Defined || defaut, env);
-  return l.filter(x => x && x.j == null);
+  return avecDefinisEnPlus(P, t, env, l).filter(x => x && x.j == null);
 }
 
 forgeSait('defini', ...FORGE_DEFINIS);

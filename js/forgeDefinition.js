@@ -104,7 +104,7 @@ function capaciteForge(def, face, t, jetons) {
   /* Depuis la main ou le cimetière : js/jeuLancer.js les propose aussi. */
   const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
   if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
-  if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage || c.cout.sac)) return false;
+  if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage)) return false;
   /* « Add one mana of any color a land you control could produce »
      (Reflecting Pool, Exotic Orchard) : les couleurs se lisent au moment
      de payer (js/jeuMana.js `manaReflete()`). */
@@ -170,7 +170,7 @@ let FORGE_UID = 0;
    carte entre engagée (sauf si l'on contrôle tel terrain, ou en payant de
    la vie), ou avec des marqueurs. */
 function remplacementForge(def, face, r) {
-  if (entreeForge(def, face, r)) return true;
+  if (entreeForge(def, face, r) || entreeSoiForge(def, face, r)) return true;
   const forme = formeRemplacement(face, r);
   if (!forme) return false;
   (def.remplacements = def.remplacements || []).push({forme, t: r, face});

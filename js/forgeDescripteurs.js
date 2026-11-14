@@ -60,7 +60,9 @@ function emplacementForge(t, face) {
   const desc = descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || ''));
   /* « Target spell with a single target ». */
   if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
-  return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr} : {}),
+  const restrB = {...(t.TargetsWithDefinedController ? {ctrlDefini: t.TargetsWithDefinedController} : {}),
+    ...(/^\d+$/.test(t.MaxTotalTargetCMC || '') ? {cmcMax: +t.MaxTotalTargetCMC} : {})};
+  return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr} : {}), ...restrB,
     /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
     ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'
       ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', parJoueur: t.TargetsForEachPlayer === 'True'}} : {})};

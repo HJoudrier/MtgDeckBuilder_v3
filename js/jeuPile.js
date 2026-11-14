@@ -22,7 +22,7 @@ function retireDeLaPile(P, id) {
    modes, ses cibles. `null` si elle n'a pas de cible légale. */
 function* prepareDeclencheur(P, t) {
   const src = obj(P, t.src) || t.lki || null;
-  const effets = yield* prepareEffets(P, t.ctrl, src, t.cap.effet, src ? src.def.couleurs : [], {declencheur: true});
+  const effets = yield* prepareEffets(P, t.ctrl, src, t.cap.effet, src ? src.def.couleurs : [], {declencheur: true, evt: t.evt});
   if (!effets) return null;
   return {id: P.prochainId++, capacite: true, source: t.src, lki: t.lki, ctrl: t.ctrl, effets, x: 0, evt: t.evt,
     nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ, declencheur: t.cap};
@@ -79,7 +79,7 @@ function* resoudre(P, item) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
     const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance;
-    const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu,
+    const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu, escaped: item.variante === 'escape',
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
     if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
     if (n != null && item.variante === 'dash') apresDash(P, obj(P, n));

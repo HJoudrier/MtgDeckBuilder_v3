@@ -105,6 +105,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   const o = obj(P, id);
   const d0 = opts.face || o.def;
   const ent = d0.entree || {};
+  /* Payer avant d'entrer, sinon le cimetière (js/forgeEntrees.js). */
+  if (ent.payeAvant && !(yield* payeAvantEntree(P, id, ctrl, ent.payeAvant))) { deplace(P, id, 'cimetiere'); return null; }
   let engage = !!opts.engage || !!ent.engagee;
   if (ent.engagee && ent.sauf && ent.sauf.some(d => champDe(P, ctrl).some(x => correspondBase(P, x, d, null, ctrl)))) engage = false;
   if (ent.engagee && ent.condForge && !opts.engage) {
@@ -132,15 +134,19 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (opts.attache != null) no.att = opts.attache;
   no.x = x;
   if (opts.kicked) no.kicked = true;
+  if (opts.escaped) no.escaped = true;
   if (opts.suspendu) no.mods.push({f: 0, e: 0, mots: MOT.CELERITE, fin: 'jamais'});
   if (no.def.echo) no.echoDu = true;
   if (no.def.chapitres) ajouteLore(P, no, 1);
   if (opts.evoque) P.enAttente.push({src: n, ctrl, cap: CAP_EVOCATION, evt: {t: 'entre', id: n}});
   P.ver++;
   if (no.def.entree && no.def.entree.forge) yield* effetsEntree(P, no);
+  /* Ce que les autres permanents font à ce qui entre (js/forgeEntrees.js). */
+  yield* entreesAutres(P, no);
   if (ent.marqueursForge && obj(P, n)) {
     const m = ent.marqueursForge, env = {face: m.face, ctx: {x, kicked: !!opts.kicked, cibles: [], memo: [], memoJ: []}, src: no, ctrl, op: {}};
-    if (!m.cond || conditionForge(P, m.cond, env)) { const k = forgeNombre(P, m.n, env); if (k > 0) poseMarqueurs(P, no, m.genre, k, no); }
+    const vise = (!m.cond || !m.cond.ValidCard || forgeValideObjet(P, no, m.cond.ValidCard, no, ctrl, env, true)) && conditionEntree(P, m.cond, no, ctrl);
+    if (vise && (!m.cond || conditionForge(P, m.cond, env))) { const k = forgeNombre(P, m.n, env); if (k > 0) poseMarqueurs(P, no, m.genre, k, no); }
   }
   if (opts.marqueurs) Object.entries(opts.marqueurs).forEach(([g, k]) => { const y = obj(P, n); if (y) poseMarqueurs(P, y, g, k, y); });
   return n;

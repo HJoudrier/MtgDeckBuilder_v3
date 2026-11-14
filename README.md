@@ -101,6 +101,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
   forgeEffetsG.js   les mécaniques de partie : boucles des scripts, dés, monarque, tours en plus, phasing, goad
   forgeEffetsH.js   doubler ou déplacer des marqueurs, nommer une carte, détenir, blocage imposé, dégâts de chacun, endurer, détourner un sort, une phase de plus
+  forgeEntrees.js   les entrées : remplacements des autres, de soi, « paie avant d'entrer », copies ; restrictions de cible
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeStatiquesB.js les statiques hors du champ : mots-clés accordés aux sorts, au cimetière, à la main ; coûts facultatifs, exercer, équiper moins cher
@@ -860,6 +861,28 @@ l'évènement d'engagement, et le déclencheur monte sur la pile (simplification
 planificateur de paiement compte enfin chaque mana d'une source qui en produit plusieurs à la fois
 (« WG » paie {G} et {W}). Restent de côté les terrains de stockage, dont X se choisirait au milieu
 d'un paiement, et le mana « quand il est dépensé ».
+
+**Les entrées et les zones d'activation** (lot F33). `js/forgeEntrees.js` lit les entrées que Forge écrit
+en long :
+- `K:ETBReplacement:…:Battlefield:Creature.Other+YouCtrl` est un remplacement porté par un permanent
+  et joué sur l'objet qui entre (`entreesAutres()`, depuis `metEnJeu()`). `ReplacedCard` désigne enfin
+  cet objet. Exemples : Grumgully, Essence of the Wild — et son Clone dont `CloneTarget$` devient la
+  copie.
+- La même forme sans zone porte une condition sur la carte elle-même (`Card.Self+kicked`,
+  `+escaped`).
+- Un remplacement `Moved` de la carte qui ne fait que préparer son entrée (choisir, marquer,
+  s'engager) devient un effet d'entrée.
+- La famille « sacrifie une Forêt à la place ; sinon, au cimetière » (Heart of Yavimaya, Mox Diamond)
+  se paie avant d'entrer.
+
+S'y ajoutent :
+- les conditions Adamant et Revolt des marqueurs d'entrée (le tour retient qui a vu partir un de ses
+  permanents) ;
+- les capacités activées depuis le cimetière qui sacrifient ;
+- le type de terrain de base choisi ;
+- les cibles restreintes au contrôleur que désigne le déclencheur (`TargetsWithDefinedController`), à
+  une valeur de mana totale (`MaxTotalTargetCMC`), ou augmentées de la carte elle-même
+  (`ThisDefinedAndTgts`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -159,7 +159,7 @@ forgeSait('param', ...['Destroy', 'DestroyAll'].map(a => a + '.RememberDestroyed
 /* Les objets qu'un effet touche : ses cibles, ou ce que `Defined$` désigne,
    ou — pour un effet de masse — ce qui répond à `ValidCards$`. */
 function cibleOuDefinis(P, t, env) {
-  if (env.op.slot != null) return ciblesForge(P, env, false).slice();
+  if (env.op.slot != null) return avecDefinisEnPlus(P, t, env, ciblesForge(P, env, false).slice());
   if (t.ValidCards) return objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards, env.src, env.ctrl, env));
   return forgeDefinis(P, t.Defined || 'Self', env).slice();
 }

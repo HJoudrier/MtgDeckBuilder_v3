@@ -144,7 +144,7 @@ function animeForge(P, objets, t, env) {
     capacites: ((env.op && env.op.accorde) || {}).capacites || null, statiques: ((env.op && env.op.accorde) || {}).statiques || null};
   objets.filter(o => o && o.j == null && o.zone === 'champ' && !o.lki).forEach(o => {
     (o.anime = o.anime || []).push({...a});
-    if (t.AtEOT) o.finEtape = t.AtEOT === 'Exile' ? 'exil' : 'sacrifice';
+    if (t.AtEOT) o.finEtape = t.AtEOT === 'Exile' ? 'exil' : t.AtEOT === 'Hand' ? 'main' : 'sacrifice';
     P.ver++;
   });
 }
@@ -164,7 +164,7 @@ function accordeAnimation(t, op) {
 function animationTenable(t, op) {
   if (t.Duration && t.Duration !== 'Permanent') return false;
   if ((t.Abilities || t.Triggers || t.staticAbilities) && !(op && accordeAnimation(t, op))) return false;
-  if (t.AtEOT && !/^(Sacrifice|Exile)$/.test(t.AtEOT)) return false;
+  if (t.AtEOT && !/^(Sacrifice|Exile|Hand)$/.test(t.AtEOT)) return false;
   if (t.Colors && !couleursMots(t.Colors).length) return false;
   return true;
 }
