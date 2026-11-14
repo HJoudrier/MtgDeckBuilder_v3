@@ -39,6 +39,7 @@ function poseEffet(P, e) {
 /* Les effets et les déclencheurs retardés qui finissent au nettoyage. */
 function finDuTour(P) {
   P.champ.forEach(id => { const o = obj(P, id); if (o.ctrlRendu != null) { o.ctrl = o.ctrlRendu; o.ctrlRendu = null; P.ver++; } });
+  restaureClones(P);
   if (!P.effets) return;
   const n = P.effets.length;
   P.effets = P.effets.filter(e => e.fin !== 'tour' && !(e.fin === 'finProchainTour' && e.ctrl === P.actif && e.pose < P.tour));
@@ -48,6 +49,8 @@ function finDuTour(P) {
 
 /* Au début d'un tour : ce qui durait « jusqu'à votre prochain tour ». */
 function debutDuTour(P) {
+  /* Les bonus et animations posés jusqu'à ce tour-ci (js/forgeDurees.js). */
+  leveDureesObjets(P, m => m.fin === 'prochainTour' && m.par === P.actif);
   if (!P.effets) return;
   const n = P.effets.length;
   P.effets = P.effets.filter(e => !(e.fin === 'prochainTour' && e.ctrl === P.actif));

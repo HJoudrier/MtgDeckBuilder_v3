@@ -202,5 +202,6 @@ function* degatsCombat(P, passe) {
 /* La fin du combat ; les copies de myriad partent en exil. */
 function finCombat(P) {
   P.champ.filter(id => obj(P, id).finCombat).forEach(id => deplace(P, id, 'exil'));
+  leveDureesObjets(P, m => m.fin === 'combat');
   P.combat = null;
 }

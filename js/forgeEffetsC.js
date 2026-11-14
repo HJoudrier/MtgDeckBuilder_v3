@@ -19,8 +19,10 @@ function bonusIA(v) { const s = String(v == null ? '0' : v); return /^[+-]?\d+$/
 /* Poser un bonus sur des objets du champ. */
 function pompeForge(P, objets, t, env) {
   const f = forgeNombre(P, t.NumAtt || 0, env), e = forgeNombre(P, t.NumDef || 0, env), mots = motsForge(t.KW);
-  const fin = t.Duration === 'Permanent' ? 'jamais' : 'tour';
-  objets.filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f, e, mots, fin}); P.ver++; });
+  /* La durée (js/forgeDurees.js) ; une durée qu'on ne sait pas tenir finit au nettoyage. */
+  const fd = finForge(t, env) || {fin: 'tour'};
+  if (fd.fin === 'hote') P.hotesSuivis = true;
+  objets.filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f, e, mots, ...fd}); P.ver++; });
 }
 
 forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) {

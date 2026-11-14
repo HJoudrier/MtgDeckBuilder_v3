@@ -73,6 +73,7 @@ js/                 modules, chargés dans cet ordre :
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
   jeuFacesB.js      jour et nuit, loups-garous, craft, omen, fuse, prototype
   jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
+  jeuPrepare.js     lancer la copie du sort d'une créature préparée
   jeuCouches.js     ce qu'une statique fait devenir un permanent : contrôleur, types, capacités
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
@@ -102,6 +103,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsG.js   les mécaniques de partie : boucles des scripts, dés, monarque, tours en plus, phasing, goad
   forgeEffetsH.js   doubler ou déplacer des marqueurs, nommer une carte, détenir, blocage imposé, dégâts de chacun, endurer, détourner un sort, une phase de plus
   forgeEntrees.js   les entrées : remplacements des autres, de soi, « paie avant d'entrer », copies ; restrictions de cible
+  forgeDurees.js    ce qui dure sur un objet (prochain tour, fin du combat, tant que la source reste) ; préparée, enfourchée
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeStatiquesB.js les statiques hors du champ : mots-clés accordés aux sorts, au cimetière, à la main ; coûts facultatifs, exercer, équiper moins cher
@@ -883,6 +885,27 @@ S'y ajoutent :
 - les cibles restreintes au contrôleur que désigne le déclencheur (`TargetsWithDefinedController`), à
   une valeur de mana totale (`MaxTotalTargetCMC`), ou augmentées de la carte elle-même
   (`ThisDefinedAndTgts`).
+
+**Prepare, les durées, les attributs** (lot F34).
+
+*Prepare.* Une carte Prepare est une créature qui porte un sort (sa face `dos`). Tant qu'elle est
+préparée, son contrôleur lance une copie de ce sort, et cela la déprépare (`js/jeuPrepare.js`). La
+copie est un jeton glissé en main le temps du lancement. Il passe par le lancement ordinaire, puis
+cesse d'exister en quittant la pile : `deplace()` le laisse vivre sur la pile et nulle part ailleurs.
+
+*Les durées.* Un bonus ou une animation posés sur un objet (`o.mods`, `o.anime`) prennent les mêmes
+durées que les effets (`js/forgeDurees.js` `finForge()`) :
+- jusqu'à ton prochain tour, levée au début du tour ;
+- jusqu'à la fin du combat, levée par `finCombat()` ;
+- tant que la source reste, levée au départ de l'hôte, comme le contrôle pris « for as long as » ;
+- le clone d'un tour redevient lui-même au nettoyage.
+
+*Aussi dans ce lot* :
+- « doesn't untap during your next untap step » écrit en effet ;
+- le propriétaire d'un effet (`EffectOwner`) ;
+- l'incolore d'une animation ;
+- les charmes dont le nombre de modes se calcule au lancement (Akroma's Will) ;
+- les attributs préparée, enfourchée (Saddle, `IsSaddled`) et comploté.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

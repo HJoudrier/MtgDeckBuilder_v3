@@ -216,6 +216,7 @@ function* joueTerrain(P, j, a) {
 /* Exécuter une action choisie. */
 function* executeAction(P, j, a) {
   if (a.k === 'terrain') return yield* joueTerrain(P, j, a);
+  if (a.k === 'lancer' && a.variante === 'prepare') return yield* lancePrepare(P, j, a);
   if (a.k === 'lancer') return yield* lanceSort(P, j, a);
   if (a.k === 'activer') return yield* activeCapacite(P, j, a);
   if (a.k === 'equiper') return yield* equipe(P, j, a);

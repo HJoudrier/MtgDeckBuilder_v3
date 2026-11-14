@@ -28,7 +28,7 @@ const SOUSTYPES_NON_CREATURE = new Set(['plains', 'island', 'swamp', 'mountain',
 
 /* Les propriétés que ce fichier sait juger : les autres ne laissent rien
    passer. */
-const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'NamedCard', 'IsRenowned', 'escaped', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
+const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'NamedCard', 'IsRenowned', 'escaped', 'IsSaddled', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
   'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell', 'ExiledWithSource', 'EffectSource', 'IsTriggerRemembered',
@@ -150,6 +150,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || !!c.changelin); }
     case 'IsRenowned': return !!o.renomme;
     case 'escaped': return !!o.escaped;
+    case 'IsSaddled': return !!P && o.enfourche === P.tour;
     case 'NamedCard': { const k = P && src && choixDe(P, src).nom; return !!k && o.def.nom === k; }
     case 'ChosenCard': return !!(P && src && (choixDe(P, src).cartes || []).includes(o.id));
     case 'ChosenCtrl': return !!(P && src && choixDe(P, src).joueur === tient);

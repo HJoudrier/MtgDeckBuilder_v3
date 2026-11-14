@@ -32,6 +32,7 @@ function defVariante(o, variante) {
   if (variante === 'dos' || variante === 'aventure') return o.def.dos;
   if (variante === 'morph') return defFaceCachee(o.def);
   if (variante === 'entwine') return defEnlacee(o.def);
+  if (variante === 'prepare') return o.def.dos;
   return o.def;
 }
 

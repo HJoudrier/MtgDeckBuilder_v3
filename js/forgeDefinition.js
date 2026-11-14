@@ -44,10 +44,12 @@ function effetForge(face, t0, jetons, racine) {
       return e && !e.modes ? {texte: texteForge(face, sub) || n, ops: e.ops, cibles: e.cibles} : null;
     });
     if (!opts.length || opts.some(o => !o)) return null;
-    const max = /^\d+$/.test(t0.CharmNum || '1') ? +(t0.CharmNum || 1) : null;
+    /* « Choose one. If you control a commander, choose both » : un plafond calculé au lancement. */
+    const maxV = t0.CharmNum && !/^\d+$/.test(t0.CharmNum) ? String(face.svars[t0.CharmNum] || t0.CharmNum) : null;
+    const max = maxV ? (/xPaid/.test(maxV) || t0.MinCharmNum == null ? null : opts.length) : +(t0.CharmNum || 1);
     const min = t0.MinCharmNum != null ? (/^\d+$/.test(t0.MinCharmNum) ? +t0.MinCharmNum : null) : max;
     if (max == null || min == null) return null;
-    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null}};
+    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null, ...(maxV ? {maxForge: {v: maxV, face}} : {})}};
   }
   const ops = [], cibles = [], chaine = ++CHAINES_FORGE;
   let t = t0, parent = null, garde = 0;
@@ -277,7 +279,7 @@ function nomsJetonsForge(texte) {
 /* Les modes de cartes à deux faces que le moteur sait jouer : la face
    arrière d'une carte modale, partagée ou à aventure se lance ; celle d'une
    carte transformable n'est jouée que si un effet la transforme. */
-const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced', 'Flip', 'Omen'];
+const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced', 'Flip', 'Omen', 'Prepare'];
 
 /* Une carte à deux faces : la définition de chacune, la face arrière
    rangée dans `def.dos`. La carte n'est complète que si les deux le sont,

@@ -116,7 +116,9 @@ function deplace(P, id, vers, opts = {}) {
   const zone = vers === 'dessus' || vers === 'dessous' ? 'bibliotheque' : vers;
   if (depuis === 'champ' && zone === 'cimetiere' && lki.types.includes('creature'))
     emet(P, {t: 'meurt', ancien: id, lki, ctrl: lki.ctrl});
-  if (o.jeton && zone !== 'champ') {
+  /* Un jeton hors du champ cesse d'exister — sauf la copie de sort qu'on
+     lance (js/jeuPrepare.js), qui vit sur la pile. */
+  if (o.jeton && zone !== 'champ' && !(zone === 'pile' && P.cartes[o.cid].copieSort)) {
     emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, lki});
     if (depuis === 'champ' && P.effets) hotePart(P, id);
     return null;
@@ -136,6 +138,8 @@ function deplace(P, id, vers, opts = {}) {
   if (zone === 'champ') emet(P, {t: 'entre', id: n.id, ctrl: n.ctrl});
   if (depuis === 'champ' && P.effets) hotePart(P, id);
   else if (P.effets && P.effets.length) suiviPart(P, id, depuis);
+  /* Ce qui durait avec lui sur d'autres objets (js/forgeDurees.js). */
+  if (depuis === 'champ' && P.hotesSuivis) hotePartObjets(P, id);
   return n.id;
 }
 

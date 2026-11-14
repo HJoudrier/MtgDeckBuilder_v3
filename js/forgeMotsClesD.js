@@ -56,6 +56,7 @@ function motClePermanent(def, k, face, jetons, tete, reste) {
     case 'Sunburst': return !reste.length && entree({op: 'sunburst'});
     case 'Devour': return n != null && reste.length === 1 && entree({op: 'devore', n});
     case 'Ascend': def.params.ascend = true; return !reste.length;
+    case 'Saddle': return motCleSelle(def, reste);
     case 'Strive': { const c = reste.length === 1 ? coutForge(reste[0]) : null; if (!c || autresCout(c.cout)) return false; def.strive = c.cout.mana; return true; }
     /* Assist : personne n'aide à payer — simplification annoncée, sans
        effet à deux joueurs. Ne pas dégager : il se dégage toujours. */
