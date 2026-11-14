@@ -68,7 +68,7 @@ function* etape(P, e) {
       loreDebutPrincipale(P);
       emet(P, {t: 'etape', etape: 'principale1', actif: P.actif});
       break;
-    case 'debutCombat': emet(P, {t: 'etape', etape: 'debutCombat', actif: P.actif}); break;
+    case 'debutCombat': P.combatsTour = (P.combatsTour || 0) + 1; emet(P, {t: 'etape', etape: 'debutCombat', actif: P.actif}); break;
     case 'attaquants':
       if (!(yield* declareAttaquants(P))) { P.sansCombat = true; return; }
       break;
@@ -109,8 +109,12 @@ function* tour(P) {
   P.actionsTour = 0; P.finTour = false; P.sansCombat = false; P.combat = null; P.etape = '';
   debutDuTour(P);
   jn(P, `— Tour ${P.tour} : ${J.nom} —`);
-  for (const e of ETAPES) {
+  /* La file des étapes : une phase de plus (js/forgeEffetsH.js, `AddPhase`)
+     s'y insère pendant le tour. */
+  P.fileEtapes = ETAPES.slice(); P.combatsTour = 0;
+  for (P.iEtape = 0; P.iEtape < P.fileEtapes.length; P.iEtape++) {
     if (P.fin || P.finTour) break;
+    const e = P.fileEtapes[P.iEtape];
     P.etape = e;
     yield* etape(P, e);
     videReserves(P);

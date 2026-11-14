@@ -129,7 +129,11 @@ function ciblesLegales(P, slot, src, ctrl, couleurs) {
     P.joueurs.forEach(J => { if (joueurCorrespond(P, J.i, d, ctrl)) r.push({j: J.i}); });
   if (d.genre === 'joueur') return r;
   if (d.genre === 'sort') {
-    P.pile.forEach(it => { if (it.sort) { const o = obj(P, it.id); if (o && o.id !== (src && src.id) && correspond(P, o, d, src, ctrl)) r.push(o.id); } });
+    P.pile.forEach(it => {
+      if (!it.sort || (d.uneCible && it.effets.reduce((s, ef) => s + ef.cibles.reduce((u, cs) => u + cs.length, 0), 0) !== 1)) return;
+      const o = obj(P, it.id);
+      if (o && o.id !== (src && src.id) && correspond(P, o, d, src, ctrl)) r.push(o.id);
+    });
     return r;
   }
   if (d.genre === 'carte' || (d.zone && d.zone !== 'champ')) {

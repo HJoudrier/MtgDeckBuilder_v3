@@ -11,14 +11,14 @@
    ===================================================================== */
 
 function peutAttaquer(P, o) {
-  if (!estCreature(o) || o.engage || !(o.pret || aMot(P, o, MOT.CELERITE))) return false;
+  if (!estCreature(o) || o.engage || !(o.pret || aMot(P, o, MOT.CELERITE)) || detenu(P, o)) return false;
   const c = car(P, o);
   return !((c.mots & MOT.DEFENSEUR) && !defenseurAttaque(P, o)) && !c.nePeutAttaquer;
 }
 
 function peutBloquer(P, b, a) {
   const cb = car(P, b), ca = car(P, a);
-  if (b.engage || cb.nePeutBloquer || !estCreature(b)) return false;
+  if (b.engage || cb.nePeutBloquer || !estCreature(b) || detenu(P, b)) return false;
   if (ca.mots & MOT.IMBLOCABLE) return false;
   /* Terreur, intimidation (js/forgeTraine.js) : seuls un artefact ou une
      créature noire — ou partageant une couleur — bloquent. */
@@ -115,8 +115,8 @@ function* declareBloqueurs(P) {
       cb.bloquesPar.get(a).push(b);
     };
     for (const paire of Array.isArray(r) ? r : []) pose(blqs[paire[0]], atts[paire[1]]);
-    /* « Blocks each combat if able ». */
-    blqs.forEach(b => { if (!cb.bloqueurs.has(b) && doitBloquer(P, obj(P, b))) pose(b, atts.find(a => peutBloquer(P, obj(P, b), obj(P, a)))); });
+    /* « Blocks each combat if able », « blocks CARDNAME this turn if able ». */
+    blqs.forEach(b => { if (!cb.bloqueurs.has(b)) pose(b, attaquantImpose(P, obj(P, b), atts)); });
   }
   /* La menace, et « can't be blocked except by three or more » : un
      attaquant bloqué par trop peu de créatures ne l'est pas. */

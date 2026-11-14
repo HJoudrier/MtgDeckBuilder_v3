@@ -81,6 +81,7 @@ js/                 modules, chargés dans cet ordre :
   jeuVue.js         ce qu'un joueur voit de la partie, et une question lisible par un humain
   jeuArrets.js      quand demander à un joueur humain
   forgeValide.js    le langage de filtres de Forge (`Creature.OppCtrl+powerLE2`)
+  forgeDescripteurs.js  ce qu'un filtre devient pour le moteur : emplacement de cible, genre de marqueur, zone
   forgeExpr.js      les quantités de Forge (`Count$Valid …`, `Count$xPaid`, `/Twice`)
   forgeDefini.js    ce que `Defined$` désigne (`Targeted`, `Remembered`, `TriggeredCard`…)
   forgeCout.js      lire un coût de Forge (`2 R T Sac<1/CARDNAME>`)
@@ -97,6 +98,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsE.js   la bibliothèque et ce qu'on révèle ; lancer une carte depuis un effet ; découvrir
   forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
   forgeEffetsG.js   les mécaniques de partie : boucles des scripts, dés, monarque, tours en plus, phasing, goad
+  forgeEffetsH.js   doubler ou déplacer des marqueurs, nommer une carte, détenir, blocage imposé, dégâts de chacun, endurer, détourner un sort, une phase de plus
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -773,6 +775,15 @@ jusque sur la pile.
 « this turn ») garde les modes pris dans `P.cartes[cid].modesPris`. Les jetons X/X, les copies multiples,
 la cible d'un clone, les durées « until end of turn or until the host leaves » et « as long as you
 control » s'ajoutent par `etendEffet()`.
+
+**Les effets nouveaux** (lot F27). `js/forgeEffetsH.js` joue les effets que Forge écrit chacun sous son
+nom : doubler (`MultiplyCounter`), déplacer (`MoveCounter`) ou retirer partout des marqueurs, nommer une
+carte (`NameCard`, lue par le filtre `NamedCard` : Pithing Needle), détenir, protéger tout un camp,
+imposer un blocage, faire infliger à chacun des dégâts égaux à sa force, endurer, apprendre — sans
+réserve de leçons, « défausser pour piocher » —, détourner un sort à cible unique. Le tour devient une
+file d'étapes (`P.fileEtapes`) où `AddPhase` insère un combat ou une phase principale de plus. Un
+effet de Forge qui cible dit désormais à l'IA ce qu'il vise (`op.a`), ce qui lui fait choisir la
+bonne cible pour une détention ou un goad.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

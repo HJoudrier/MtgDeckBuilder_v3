@@ -116,7 +116,9 @@ function* executeForge(P, op, ctx) {
     const decl = c.cout.exileDeclencheur ? objetEvt(P, ctx) : null;
     const ok = planPaiement(P, ctx.ctrl, c.cout.mana, 0) && (!autre || coutAutrePossible(P, ctx.ctrl, porteur, autre)) &&
       (!c.cout.exileDeclencheur || (!!decl && decl.zone === 'cimetiere'));
-    const r = ok ? yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${op.coutInterne} ?`, source: ctx.source, extra: {ops: [op]}}) : 0;
+    /* `Mandatory` : le coût se paie sans qu'on le demande, s'il le peut. */
+    const r = !ok ? 0 : /\bMandatory\b/.test(op.coutInterne) ? 1
+      : yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${op.coutInterne} ?`, source: ctx.source, extra: {ops: [op]}});
     if (r !== 1 || !paieMana(P, ctx.ctrl, c.cout.mana, 0)) { ctx.coupe = op.chaine; return; }
     if (autre) yield* paieAutre(P, ctx.ctrl, porteur, autre);
     if (decl) deplace(P, decl.id, 'exil');

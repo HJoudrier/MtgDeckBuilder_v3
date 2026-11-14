@@ -46,7 +46,8 @@ const majuscule = s => s.charAt(0).toUpperCase() + s.slice(1);
 forgeEffet('ChooseColor', [], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
   if (j == null) return;
-  const pourAdv = /Human|Opp/.test(t.AILogic || '');
+  /* « MostProminentAttackers » : la couleur de qui attaque, l'adversaire. */
+  const pourAdv = /Human|Opp|Attackers/.test(t.AILogic || '');
   const ordre = couleursFrequentes(P, pourAdv ? adversaires(P, j) : [j]);
   const options = ['W', 'U', 'B', 'R', 'G'];
   const i = yield* choisitUn(P, j, options.map(c => NOMS_COULEURS[c]), 'Choisir une couleur', options.indexOf(ordre[0]), env.ctx.source);

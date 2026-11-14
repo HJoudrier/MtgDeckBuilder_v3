@@ -61,7 +61,10 @@ function effetForge(face, t0, jetons, racine) {
       /* Sans `TgtZone$`, un déplacement cible dans sa zone d'origine :
          « return target creature card from your graveyard ». */
       const zone = t.TgtZone || (forgeApi(t) === 'ChangeZone' && t.Origin && !/,/.test(t.Origin) ? t.Origin : null);
-      cibles.push({desc: descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || '')), min, max,
+      const desc = descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || ''));
+      /* « Target spell with a single target ». */
+      if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
+      cibles.push({desc, min, max,
         /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
         ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'
           ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', parJoueur: t.TargetsForEachPlayer === 'True'}} : {})});
@@ -71,6 +74,9 @@ function effetForge(face, t0, jetons, racine) {
     if (op.coutInterne && !coutForge(op.coutInterne)) return null;
     if (FORGE_API[op.api].prepare && !FORGE_API[op.api].prepare(t, op)) return null;
     FORGE_API[op.api].ia(t, op);
+    /* Ce que l'IA lit pour juger une cible (js/iaValeur.js `opsSurCible()`) :
+       un effet qui cible vise sa cible, même s'il ne l'a pas dit. */
+    if (slot != null && !op.a && !op.qui && !op.b) op.a = {cible: slot};
     ops.push(op);
     if (slot != null) parent = slot;
     const suite = t.SubAbility;

@@ -137,23 +137,31 @@ forgeEffet('SetLife', ['LifeAmount'], function* (P, t, env) {
 forgeEffet('Goad', ['Duration'], function* (P, t, env) {
   objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.goad = {par: env.ctrl, tour: P.tour}; P.ver++; });
 }, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration || t.Duration === 'UntilYourNextTurn'});
+/* Ce que la protection gagnée sait lire : des couleurs, nommées ou au
+   choix ; pas encore « protection from artifacts ». */
+function gainsProtection(t) { return /^(Choice|ChosenColor)$/.test(t.Gains || '') || String(t.Gains || '').split(',').every(c => FORGE_COULEURS[majuscule(c.trim())]); }
 function goadActif(P, o) { return !!o.goad && !(P.actif === o.goad.par && P.tour > o.goad.tour); }
+
+/* Les couleurs d'une protection gagnée : nommées (`Gains$ Red,Blue`), ou
+   une au choix — l'IA prend celle que l'adversaire joue le plus. */
+function* couleursProtection(P, t, env) {
+  if (t.Gains === 'ChosenColor') return choixDe(P, env.src).couleur ? [choixDe(P, env.src).couleur] : [];
+  if (!/Choice/.test(t.Gains || '')) return String(t.Gains || '').split(',').map(c => FORGE_COULEURS[majuscule(c.trim())]).filter(Boolean);
+  let opts = String(t.Choices || '').split(',').map(c => c.trim()).filter(c => FORGE_COULEURS[c]);
+  if (!opts.length) opts = ['White', 'Blue', 'Black', 'Red', 'Green'];
+  const compte = c => P.champ.filter(id => obj(P, id).ctrl !== env.ctrl && car(P, obj(P, id)).couleurs.includes(FORGE_COULEURS[c])).length;
+  const pref = opts.indexOf(opts.slice().sort((a, b) => compte(b) - compte(a))[0]);
+  return [FORGE_COULEURS[opts[yield* choisitUn(P, env.ctrl, opts, 'Protection contre…', pref, env.ctx.source)] || opts[0]]];
+}
 
 /* La protection gagnée jusqu'à la fin du tour, d'une couleur au choix ou
    de couleurs nommées. */
 forgeEffet('Protection', ['Gains', 'Choices'], function* (P, t, env) {
   const objets = objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki);
-  let couleurs = String(t.Gains || '').split(',').map(c => FORGE_COULEURS[c.trim()]).filter(Boolean);
-  if (/Choice/.test(t.Gains || '')) {
-    let opts = String(t.Choices || '').split(',').map(c => c.trim()).filter(c => FORGE_COULEURS[c]);
-    if (!opts.length) opts = ['White', 'Blue', 'Black', 'Red', 'Green'];
-    const compte = c => P.champ.filter(id => obj(P, id).ctrl !== env.ctrl && car(P, obj(P, id)).couleurs.includes(FORGE_COULEURS[c])).length;
-    const pref = opts.indexOf(opts.slice().sort((a, b) => compte(b) - compte(a))[0]);
-    couleurs = [FORGE_COULEURS[opts[yield* choisitUn(P, env.ctrl, opts, 'Protection contre…', pref, env.ctx.source)] || opts[0]]];
-  }
+  const couleurs = yield* couleursProtection(P, t, env);
   objets.forEach(o => { o.protTemp = [...(o.protTemp || []), ...couleurs]; P.ver++; });
 }, (t, op) => { op.op = 'pompe'; op.f = 0; op.e = 0; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = false; },
-{prepare: t => !t.Duration && !t.Radiance});
+{prepare: t => !t.Duration && !t.Radiance && gainsProtection(t)});
 
 forgeEffet('Debuff', ['Keywords'], function* (P, t, env) {
   const m = motsForge(t.Keywords);

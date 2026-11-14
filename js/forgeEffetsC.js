@@ -136,4 +136,4 @@ forgeEffet('ImmediateTrigger', ['Execute', 'RememberObjects'], function* (P, t, 
 
 /* Les modes : choisis au lancement (js/forgeDefinition.js), jamais
    exécutés comme un effet. */
-forgeEffet('Charm', ['Choices', 'CharmNum', 'MinCharmNum'], function* () {}, (t, op) => { op.op = 'rien'; op.hostile = false; });
+forgeEffet('Charm', ['Choices', 'CharmNum', 'MinCharmNum', 'ChoiceRestriction'], function* () {}, (t, op) => { op.op = 'rien'; op.hostile = false; });

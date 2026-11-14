@@ -28,7 +28,7 @@ const SOUSTYPES_NON_CREATURE = new Set(['plains', 'island', 'swamp', 'mountain',
 
 /* Les propriétés que ce fichier sait juger : les autres ne laissent rien
    passer. */
-const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
+const FORGE_PROPS = ['TopLibrary', 'enchanted', 'equipped', 'Historic', 'ChosenColor', 'ChosenType', 'ChosenCard', 'NamedCard', 'ChosenCtrl', 'IsCommander', 'kicked', 'StrictlyOther', 'YouCtrl', 'OppCtrl', 'YouOwn', 'OppOwn', 'YouDontCtrl', 'Other', 'Self', 'StrictlySelf', 'token',
   'nonToken', 'Colorless', 'MultiColor', 'MonoColor', 'tapped', 'untapped', 'attacking', 'blocking', 'unblocked',
   'EnchantedBy', 'EquippedBy', 'AttachedBy', 'IsRemembered', 'IsNotRemembered', 'TargetedPlayerCtrl', 'ActivePlayerCtrl',
   'Opponent', 'You', 'Active', 'NonActive', 'nonColorless', 'Permanent', 'Card', 'Spell', 'ExiledWithSource', 'EffectSource', 'IsTriggerRemembered',
@@ -148,6 +148,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'Historic': return c.types.includes('artifact') || (c.supers || []).includes('legendary') || (c.sousTypes || []).includes('saga');
     case 'ChosenColor': { const k = P && src && choixDe(P, src).couleur; return !!k && c.couleurs.includes(k); }
     case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || !!c.changelin); }
+    case 'NamedCard': { const k = P && src && choixDe(P, src).nom; return !!k && o.def.nom === k; }
     case 'ChosenCard': return !!(P && src && (choixDe(P, src).cartes || []).includes(o.id));
     case 'ChosenCtrl': return !!(P && src && choixDe(P, src).joueur === tient);
     case 'nonToken': return !o.jeton;
@@ -269,41 +270,3 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
     });
   });
 }
-
-/* Une définition — un sort lancé, une carte qu'on réduit — répond-elle ? */
-function forgeValideDef(def, valid, ctrl, lanceur, id) {
-  const pseudo = {id, def, lki: true, zone: 'pile', ctrl: lanceur, prop: lanceur, types: def.types, sousTypes: def.sousTypes,
-    supers: def.supers, couleurs: def.couleurs, mots: def.mots, force: def.force || 0, endurance: def.endurance || 0, marq: {}};
-  return forgeValideObjet(null, pseudo, valid, {id}, ctrl, null);
-}
-
-/* Le genre de marqueur de Forge (`P1P1`) dans le vocabulaire du moteur. */
-function genreMarqueur(t) {
-  return {P1P1: '+1/+1', M1M1: '-1/-1', LOYALTY: 'loyaute'}[t] || String(t || '').toLowerCase();
-}
-
-/* Un descripteur d'emplacement de cible, lu dans `ValidTgts$` et
-   `TgtZone$`. Il porte le filtre Forge (`forge`) et le genre que
-   js/jeuCibles.js sait parcourir : joueurs, objets du champ, sorts, cartes
-   d'une autre zone. */
-function descForge(valid, zone, sort) {
-  const v = String(valid || '').replace(/\bAny\b/g, 'Creature,Planeswalker,Battle,Player');
-  const alts = forgeFiltre(v);
-  const joueurs = alts.some(a => a.joueur), objets = alts.some(a => !a.joueur);
-  const z = ZONES_FORGE[zone] || 'champ';
-  const genre = sort || z === 'pile' ? 'sort' : !objets ? 'joueur' : z !== 'champ' ? 'carte' : joueurs ? 'nimporte' : 'objet';
-  return {forge: v, genre, zone: genre === 'carte' ? z : genre === 'sort' ? 'pile' : 'champ', types: [], non: [], sousTypes: [],
-    couleurs: [], filtres: [], mots: 0, ctrl: alts.every(a => a.props.includes('YouCtrl')) ? 'vous' : null};
-}
-
-const ZONES_FORGE = {Battlefield: 'champ', Graveyard: 'cimetiere', Hand: 'main', Library: 'bibliotheque', Exile: 'exil',
-  Stack: 'pile', Command: 'commandement'};
-
-forgeSait('filtre', ...FORGE_PROPS, 'inZone', 'Soustype', 'nonSoustype', 'powerXX', 'toughnessXX', 'cmcXX', 'counters', 'named',
-  ...Object.keys(FORGE_TYPES_CARTE), ...Object.keys(FORGE_COULEURS), ...Object.keys(FORGE_SUPERS),
-  ...Object.keys(FORGE_TYPES_CARTE).map(t => 'non' + t), ...Object.keys(FORGE_COULEURS).map(t => 'non' + t),
-  ...Object.keys(FORGE_SUPERS).map(t => 'non' + t),
-  ...Object.keys(MOTS_ANGLAIS).flatMap(k => {
-    const avec = k.replace(/(^|\s)([a-z])/g, (_, s, l) => s + l.toUpperCase()), sans = avec.replace(/\s/g, '');
-    return ['with' + avec, 'without' + avec, 'with' + sans, 'without' + sans];
-  }));
