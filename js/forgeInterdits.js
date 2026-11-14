@@ -104,7 +104,7 @@ function activationInterdite(P, j, o, k) {
 
 /* —— Le combat ————————————————————————————————————————————————— */
 
-function doitAttaquer(P, o) { return !!statiqueQui(P, 'MustAttack', (t, src, env) => objetOuRien(P, o, t.ValidCreature, src, env)); }
+function doitAttaquer(P, o) { return goadActif(P, o) || !!statiqueQui(P, 'MustAttack', (t, src, env) => objetOuRien(P, o, t.ValidCreature, src, env)); }
 function doitBloquer(P, o) { return !!statiqueQui(P, 'MustBlock', (t, src, env) => objetOuRien(P, o, t.ValidCreature, src, env)); }
 function defenseurAttaque(P, o) { return !!statiqueQui(P, 'CanAttackDefender', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }
 function degatsParEndurance(P, o) { return !!statiqueQui(P, 'CombatDamageToughness', (t, src, env) => objetOuRien(P, o, t.ValidCard, src, env)); }

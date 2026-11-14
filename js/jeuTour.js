@@ -18,6 +18,7 @@ const ETAPES = ['degagement', 'entretien', 'pioche', 'principale1', 'debutCombat
 /* Le dégagement : les permanents du joueur actif se dégagent, ses créatures
    cessent d'avoir le mal d'invocation (règle 302.6). */
 function degagement(P) {
+  if (typeof phasesEntrent === 'function') phasesEntrent(P);
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== P.actif) continue;
@@ -42,6 +43,7 @@ function* nettoyage(P) {
     const o = obj(P, id);
     o.bless = 0; o.toucheMortel = false; o.regen = 0;
     if (o.mods.length) { o.mods = o.mods.filter(m => m.fin !== 'tour'); P.ver++; }
+    if (o.protTemp) { o.protTemp = null; P.ver++; }
     if (o.anime && o.anime.length) { o.anime = o.anime.filter(m => m.fin !== 'tour'); P.ver++; }
     o.prevention = 0;
   }
@@ -75,7 +77,7 @@ function* etape(P, e) {
       finCombat(P); P.sansCombat = false;
       return;
     case 'principale2': emet(P, {t: 'etape', etape: 'principale2', actif: P.actif}); break;
-    case 'fin': exhumeesFin(P); copiesFin(P); emet(P, {t: 'etape', etape: 'fin', actif: P.actif}); break;
+    case 'fin': exhumeesFin(P); copiesFin(P); if (typeof monarqueFin === 'function') monarqueFin(P); emet(P, {t: 'etape', etape: 'fin', actif: P.actif}); break;
     case 'nettoyage': yield* nettoyage(P); return;
   }
   yield* priorite(P);

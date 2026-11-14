@@ -24,7 +24,11 @@ function plusUn(m, k, n) { m[k] = (m[k] || 0) + (n == null ? 1 : n); }
 function noteHistorique(P, e) {
   const h = histoire(P);
   switch (e.t) {
-    case 'perteVie': case 'degatsJoueur': plusUn(h.perdu, e.joueur, e.n || 0); break;
+    case 'perteVie': case 'degatsJoueur':
+      plusUn(h.perdu, e.joueur, e.n || 0);
+      /* Infliger des dégâts de combat au monarque prend la couronne. */
+      if (e.t === 'degatsJoueur' && e.combat && P.monarque === e.joueur) { const s = obj(P, e.source) || P.lkis.get(e.source); if (s && s.ctrl != null) P.monarque = s.ctrl; }
+      break;
     case 'sacrifie': plusUn(h.sacrifies, e.joueur); break;
     case 'defausse': plusUn(h.defausses, e.joueur); break;
     case 'marqueur': h.marqueurs += e.n || 0; break;

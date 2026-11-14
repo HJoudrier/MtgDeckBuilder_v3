@@ -97,12 +97,16 @@ function forgeExpression(P, expr, env, prof) {
   if (m) return mathForge(forgeExpression(P, s.slice(0, m.index), env, prof), m[1], m[2] ? +m[2] : 0);
   if (/^[+-]?\d+$/.test(s)) return +s;
   const i = s.indexOf('$');
+  /* Une variable que la capacité a posée en cours de route (`StoreSVar`,
+     `ResultSVar` d'un dé) passe avant la SVar écrite. */
+  if (i < 0 && env.ctx && env.ctx.vars && env.ctx.vars[s] != null) return env.ctx.vars[s];
   if (i < 0) return prof < 4 && env.face && env.face.svars[s] != null ? forgeExpression(P, env.face.svars[s], env, prof + 1) : 0;
   const tete = s.slice(0, i), q = s.slice(i + 1);
   const ctx = env.ctx || {}, src = env.src, ctrl = env.ctrl;
   const etendue = exprEtendue(P, tete, q, env);
   if (etendue !== undefined) return etendue;
   if (tete === 'Number') return +q || 0;
+  if (tete === 'SVar' && ctx.vars && ctx.vars[q] != null) return ctx.vars[q];
   if (tete === 'SVar') return prof < 4 ? forgeExpression(P, env.face.svars[q] || '0', env, prof + 1) : 0;
   if (tete === 'TriggerCount') return q === 'DamageAmount' || q === 'Amount' ? (ctx.evt && ctx.evt.n) || 0 : 0;
   if (tete === 'TriggeredCard') return caracForge(P, objetEvt(P, ctx), q);

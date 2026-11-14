@@ -49,7 +49,9 @@ function* partie(P) {
     yield* tour(P);
     if (P.fin) break;
     if (P.tour >= P.plafondTours * P.nb) { P.fin = {nulle: true, raison: 'plafond'}; break; }
-    P.actif = suivantVivant(P, P.actif);
+    /* Un tour supplémentaire passe devant le suivant (js/forgeEffetsG.js). */
+    const enPlus = (P.toursEnPlus || []).shift();
+    P.actif = enPlus != null && !P.joueurs[enPlus].elimine ? enPlus : suivantVivant(P, P.actif);
   }
   P.fin.tour = P.tour;
   P.fin.tours = P.joueurs.map(J => J.tours);

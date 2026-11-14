@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1400 fonctions**, 198 modules, 1365 Ko de JavaScript.
+**1409 fonctions**, 199 modules, 1384 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -48,9 +48,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 214 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 54 |
-| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 54 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 121 |
-| [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 11 | 156 |
+| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 58 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 127 |
+| [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 160 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 10 | 186 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 9 | 216 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 167 |
@@ -63,14 +63,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 136 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 6 | 75 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 130 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 193 |
-| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 112 |
-| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 58 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 196 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 114 |
+| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 60 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 108 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 15 | 310 |
-| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 160 |
+| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 139 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 149 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 80 |
@@ -83,6 +83,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 99 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 3 | 146 |
+| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 8 | 269 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 9 | 137 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 202 |
@@ -903,7 +904,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 54 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 54 lignes, 2.3 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 58 lignes, 2.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -915,7 +916,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 54 lignes, 2.3 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 121 lignes, 5.7 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 127 lignes, 6.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -931,7 +932,7 @@ Ce qu'un permanent est en ce moment. *9 fonctions, 121 lignes, 5.7 Ko.*
 
 ## js/jeuCibles.js
 
-Juger un objet contre un descripteur. *11 fonctions, 156 lignes, 7.4 Ko.*
+Juger un objet contre un descripteur. *12 fonctions, 160 lignes, 7.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -943,6 +944,7 @@ Juger un objet contre un descripteur. *11 fonctions, 156 lignes, 7.4 Ko.*
 | `joueurCorrespond(P, j, d, ctrl)` | Un joueur répond-il au descripteur ? |
 | `defCorrespond(def, d)` | Une définition de sort répond-elle (déclencheurs « whenever you cast a noncreature spell ») ? |
 | `ciblable(P, o, ctrl, couleurs, src)` | Linceul, défense talismanique, protection : un objet peut-il être ciblé par ce joueur, avec une source de ces couleurs ? La garde se paie au lancement (js/jeuLancer.js), elle n'interdit… |
+| `protectionsDe(o)` | Les couleurs dont un objet est protégé : imprimées, ou gagnées jusqu'à la fin du tour (`o.protTemp`, js/forgeEffetsG.js). |
 | `protegeFiltre(P, o, src)` | La protection par filtre (« protection from artifacts ») : la source répond-elle à l'un des filtres de l'objet protégé ? |
 | `ciblesLegales(P, slot, src, ctrl, couleurs)` | Les candidats légaux d'un emplacement de cible : des identifiants d'objets, ou `{j}` pour un joueur. |
 | `cibleEncoreLegale(P, cand, slot, src, ctrl, couleurs)` | Une cible choisie l'est-elle encore à la résolution (règle 608.2b) ? |
@@ -1176,7 +1178,7 @@ La priorité, la pile, la résolution. *5 fonctions, 130 lignes, 5.9 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 193 lignes, 9.6 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 196 lignes, 9.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1195,7 +1197,7 @@ Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 193 lignes, 9.6 Ko.*
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *5 fonctions, 112 lignes, 4.6 Ko.*
+Les étapes d'un tour. *5 fonctions, 114 lignes, 4.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1211,7 +1213,7 @@ Les étapes d'un tour. *5 fonctions, 112 lignes, 4.6 Ko.*
 
 ## js/jeuPartie.js
 
-Une partie, du mélange à la fin. *2 fonctions, 58 lignes, 2.1 Ko.*
+Une partie, du mélange à la fin. *2 fonctions, 60 lignes, 2.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1290,7 +1292,7 @@ Le langage de filtres de Forge. *15 fonctions, 310 lignes, 18 Ko.*
 
 ## js/forgeExpr.js
 
-Les quantités de Forge. *8 fonctions, 160 lignes, 9.1 Ko.*
+Les quantités de Forge. *8 fonctions, 164 lignes, 9.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1472,6 +1474,25 @@ Les paramètres de plus des effets courants. *3 fonctions, 146 lignes, 7.7 Ko.*
 | `etendEffet(api, params, avant, apres)` | Envelopper un effet : `avant(P, t, env)` peut rendre une table changée, `apres(P, t, env, touches, nouveaux)` reçoit les objets visés avant l'effet et les objets entrés pendant. |
 | `finEtapeForge(objets, v)` | « At the beginning of the next end step, sacrifice / exile it » : le départ que js/forgeCopies.js `copiesFin()` joue à l'étape de fin. |
 | `entreAttaquant(P, o, env)` | Entrer « tapped and attacking » : dans le combat en cours, contre le défenseur de la source si elle attaque, sinon le premier adversaire. |
+
+## js/forgeEffetsG.js
+
+Les mécaniques de partie de Forge. *8 fonctions, 269 lignes, 17 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `sousEffets(op, noms)` | Compiler les sous-capacités qu'une table nomme ; refuser s'il en est une qu'on ne sait pas jouer, ou qui cible. |
+| `joueSous(P, env, nom)` | — |
+| `varsDe(ctx)` | — |
+| `tranchesDe(v)` | `1-9:DBA,10-19:DBB,20:DBC` : la sous-capacité de la tranche tirée. |
+| `monarqueFin(P)` | Le monarque pioche à son étape de fin (js/jeuTour.js). |
+| `goadActif(P, o)` | — |
+| `phasesEntrent(P)` | — |
+| `manifeste(P, j, id)` | Manifester : le dessus de la bibliothèque, face cachée, en 2/2. |
+
+| Donnée | Rôle |
+|---|---|
+| `PROFONDEUR_SOUS` | — |
 
 ## js/forgeDeclencheurs.js
 

@@ -106,7 +106,7 @@ function infligeDegats(P, src, cible, n, combat) {
   } else {
     const o = cible;
     if (!o || o.zone !== 'champ') return 0;
-    if ((car(P, o).mots & MOT.PROTECTION) && (o.def.params.protection || []).some(k => cs.couleurs.includes(k))) return 0;
+    if ((car(P, o).mots & MOT.PROTECTION) && protectionsDe(o).some(k => cs.couleurs.includes(k))) return 0;
     if (protegeFiltre(P, o, src)) return 0;
     if (estType(o, 'planeswalker') && !estCreature(o)) { o.marq.loyaute = (o.marq.loyaute || 0) - n; P.ver++; }
     else if (mots & MOT.INFECTION) poseMarqueurs(P, o, '-1/-1', n, src);

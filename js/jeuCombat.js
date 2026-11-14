@@ -28,8 +28,10 @@ function peutBloquer(P, b, a) {
   if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
   if ((ca.mots & MOT.VOL) && !(cb.mots & (MOT.VOL | MOT.PORTEE))) return false;
-  if ((ca.mots & MOT.PROTECTION) && (a.def.params.protection || []).some(k => cb.couleurs.includes(k))) return false;
+  if ((ca.mots & MOT.PROTECTION) && protectionsDe(a).some(k => cb.couleurs.includes(k))) return false;
   if (protegeFiltre(P, a, b)) return false;
+  /* Le porteur de l'Anneau (js/forgeEffetsG.js). */
+  if (a.porteAnneau && (P.joueurs[a.ctrl].anneau || 0) >= 1 && cb.force > ca.force) return false;
   return true;
 }
 
@@ -51,7 +53,8 @@ function* declareAttaquants(P) {
      attaque le premier défenseur permis, si son contrôleur l'a oubliée. */
   cands.forEach(id => {
     if (choisis.has(id) || !doitAttaquer(P, obj(P, id))) return;
-    const def = defenseurs.find(d => attaquePermise(P, obj(P, id), d) && !taxeAttaque(P, obj(P, id), d));
+    const goad = obj(P, id).goad, libres = defenseurs.filter(d => attaquePermise(P, obj(P, id), d) && !taxeAttaque(P, obj(P, id), d));
+    const def = libres.find(d => !goad || d.j !== goad.par) || libres[0];
     if (def) choisis.set(id, def);
   });
   yield* paieTaxesAttaque(P, j, choisis);

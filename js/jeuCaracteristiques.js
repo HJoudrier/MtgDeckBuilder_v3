@@ -42,7 +42,7 @@ function car(P, o) {
   const d = o.def, a = animation(o);
   let force = a.force, endurance = a.endurance, mots = a.mots;
   let types = a.types, sousTypes = a.sousTypes, couleurs = a.couleurs;
-  let nePeutAttaquer = false, nePeutBloquer = false, pasPar = null;
+  let nePeutAttaquer = false, nePeutBloquer = false, pasPar = null, supersAnneau = false;
   if (o.zone === 'champ') {
     /* Les statiques de Forge d'abord : une force fixée (« base power and
        toughness ») remplace l'imprimée avant marqueurs et bonus. */
@@ -65,9 +65,15 @@ function car(P, o) {
       else { if (s.attaque) nePeutAttaquer = true; if (s.blocage) nePeutBloquer = true; }
     }
     for (const m of o.mods) { force += m.f || 0; endurance += m.e || 0; mots |= m.mots || 0; }
+    /* Ce qu'un effet retire (« loses flying until end of turn »), après ce
+       qu'on ajoute ; la protection gagnée compte comme un mot-clé. */
+    for (const m of o.mods) if (m.retire) mots &= ~m.retire;
+    if (o.protTemp && o.protTemp.length) mots |= MOT.PROTECTION;
+    if (o.suspect) { mots |= MOT.MENACE; nePeutBloquer = true; }
+    if (o.porteAnneau) supersAnneau = true;
   }
   o._c = {force, endurance, mots, types, sousTypes, couleurs, changelin: a.changelin,
-    supers: d.supers, nePeutAttaquer, nePeutBloquer, pasPar, loyaute: o.marq.loyaute || 0};
+    supers: supersAnneau && !d.supers.includes('legendary') ? [...d.supers, 'legendary'] : d.supers, nePeutAttaquer, nePeutBloquer, pasPar, loyaute: o.marq.loyaute || 0};
   o._v = P.ver;
   return o._c;
 }

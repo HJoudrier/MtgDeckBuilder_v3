@@ -93,6 +93,7 @@ js/                 modules, chargés dans cet ordre :
   forgeExprB.js     les expressions de Forge, suite : mémoire, cibles, évènement, comptes du tour
   forgeEffetsE.js   la bibliothèque et ce qu'on révèle ; lancer une carte depuis un effet ; découvrir
   forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
+  forgeEffetsG.js   les mécaniques de partie : boucles des scripts, dés, monarque, tours en plus, phasing, goad
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
@@ -697,6 +698,14 @@ the beginning of the next end step », « choose flying or lifelink », bolster,
 this turn, exile it instead »… s'ajoutent à des effets déjà écrits : `etendEffet()` enveloppe l'effet
 d'un avant (qui peut changer la table) et d'un après (qui reçoit les objets visés et ceux entrés
 pendant), et inscrit les paramètres. Le fichier se charge après tous les effets qu'il enveloppe.
+
+**Les mécaniques de partie** (`js/forgeEffetsG.js`, lot F17). Les boucles des scripts — `RepeatEach`
+(« for each player »), `Repeat`, `Branch`, `StoreSVar` — exécutent une sous-capacité nommée, compilée à
+la construction et sans cible (`sousEffets()`), jouée à la résolution (`joueSous()`) ; une variable posée
+en route (`ctx.vars`) passe avant la SVar écrite. Le monarque pioche à son étape de fin et perd la
+couronne aux dégâts de combat ; un tour supplémentaire passe devant le suivant (`P.toursEnPlus`) ; un
+permanent hors phase quitte `P.champ` sans départ ni entrée et revient au dégagement de son contrôleur.
+Simplifications annoncées : un donjon générique de quatre salles, et l'Anneau au premier niveau seulement.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
