@@ -38,6 +38,7 @@ function* paieAutre(P, j, o, c) {
     (yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main')).forEach(id => deplace(P, id, 'main'));
   }
   if (c.energie) J.energie -= c.energie;
+  if (c.equipage) yield* paieEquipage(P, j, o, c.equipage);
   if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); defausseCarte(P, o.id, j); }
   if (c.sacSoi && obj(P, o.id)) { lki = instantane(P, o); sacrifie(P, o.id); }
   if (c.exileSoi && obj(P, o.id)) { lki = instantane(P, o); deplace(P, o.id, 'exil'); }
@@ -55,13 +56,17 @@ function maxX(P, j, cout) {
 function* lanceSort(P, j, a) {
   const J = P.joueurs[j], o0 = obj(P, a.id);
   if (!o0) return false;
-  const d = o0.def, cid = o0.cid;
+  const cid = o0.cid;
   const v = varianteDe(P, j, o0, a.depuis, a.variante);
   if (!v) return false;
+  /* La face jouée : l'arrière d'une carte modale, l'aventure, la face
+     cachée — l'objet sur la pile la porte (js/jeuFaces.js). */
+  const d = v.def || o0.def;
   const cout0 = v.mana, presageTour = o0.presageTour;
   const nid = deplace(P, a.id, 'pile');
   const s = obj(P, nid);
   s.ctrl = j;
+  if (d !== s.def) s.def = d;
   const annule = () => {
     const r = deplace(P, nid, a.depuis === 'commandement' ? 'commandement' : a.depuis);
     if (r != null && presageTour != null) obj(P, r).presageTour = presageTour;
@@ -90,7 +95,8 @@ function* lanceSort(P, j, a) {
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   s.x = x;
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
-    kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension'};
+    kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension',
+    variante: a.variante || null};
   P.pile.push(item);
   if (a.depuis === 'commandement') {
     J.taxe[cid] = (J.taxe[cid] || 0) + 1;
@@ -162,7 +168,7 @@ OPS.attache = function* (P, op, ctx) {
 function* joueTerrain(P, j, a) {
   P.joueurs[j].terrainsJoues++;
   jn(P, `${P.joueurs[j].nom} joue ${nomObj(P, a.id)}`);
-  yield* metEnJeu(P, a.id, j, {});
+  yield* metEnJeu(P, a.id, j, a.variante === 'dos' ? {face: obj(P, a.id).def.dos} : {});
   return true;
 }
 
@@ -174,5 +180,6 @@ function* executeAction(P, j, a) {
   if (a.k === 'equiper') return yield* equipe(P, j, a);
   if (a.k === 'presager') return yield* presage(P, j, a);
   if (a.k === 'suspendre') return yield* suspend(P, j, a);
+  if (a.k === 'retourner') return yield* retourne(P, j, a);
   return false;
 }

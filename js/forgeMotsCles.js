@@ -11,7 +11,7 @@
 
 const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
   'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity', 'Unearth', 'Madness',
-  'Suspend', 'Partner'];
+  'Suspend', 'Partner', 'Chapter', 'Crew', 'Morph', 'Megamorph', 'Disguise'];
 
 /* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
    cycle de type (`TypeCycling:Plains:2`), chercher une carte de ce type. */
@@ -98,6 +98,23 @@ function motCleForge(def, k, face, jetons) {
     case 'Convoke': def.params.convocation = true; return !reste.length;
     /* Le partenaire ne joue qu'à la construction du deck. */
     case 'Partner': return true;
+    /* Une saga : un effet par chapitre (js/jeuFaces.js `ajouteLore()`). */
+    case 'Chapter': {
+      const ch = String(reste[1] || '').split(',').map(n => effetForge(face, forgeSousCapacite(face, n.trim()), jetons));
+      if (!ch.length || ch.some(e => !e) || ch.length !== +reste[0]) return false;
+      def.chapitres = ch; return true;
+    }
+    case 'Crew': {
+      if (!/^\d+$/.test(reste[0] || '')) return false;
+      def.capacites.push({genre: 'activee', cout: {mana: coutManaVide(), equipage: +reste[0]}, texte: 'Crew ' + reste[0],
+        effet: {ops: [{op: 'equipage', hostile: false}], cibles: [], modes: null}});
+      return true;
+    }
+    case 'Morph': case 'Megamorph': case 'Disguise': {
+      const c = reste.length === 1 ? manaSeul(reste[0]) : null;
+      if (!c) return false;
+      def.morph = {cout: c.mana, mega: tete === 'Megamorph', garde: tete === 'Disguise'}; return true;
+    }
     case 'Delve': def.params.delve = true; return !reste.length;
     case 'Affinity': if (!reste[0]) return false; def.params.affinite = reste[0]; return true;
   }

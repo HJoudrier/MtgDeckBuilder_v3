@@ -48,6 +48,7 @@
   "jeuActions.js",
   "jeuVariantes.js",
   "jeuDurees.js",
+  "jeuFaces.js",
   "jeuPile.js",
   "jeuCombat.js",
   "jeuTour.js",
@@ -3034,8 +3035,10 @@
     "compileDefinition",
     "coutActivation",
     "coutForge",
+    "defFaceCachee",
     "definitionDepuisScript",
     "manaForge",
+    "motCleForge",
     "variantesSort"
    ]
   },
@@ -3846,6 +3849,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "formeRemplacement",
+    "motCleForge",
     "statiqueForge"
    ]
   },
@@ -3958,7 +3962,7 @@
   {
    "nom": "couvertureForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 129,
+   "ligne": 131,
    "chargement": false,
    "appelle": [
     "forgeConnu",
@@ -3976,7 +3980,7 @@
   {
    "nom": "manquesForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 149,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "couvertureForge"
@@ -4158,6 +4162,7 @@
     "initiativeEnJeu",
     "jeuOpsB.js (chargement)",
     "jeuVariantes.js (chargement)",
+    "joueTerrain",
     "lanceSort",
     "libelleAction",
     "libelleRef",
@@ -4170,6 +4175,7 @@
     "objetZone",
     "objetsZone",
     "paieAutre",
+    "paieEquipage",
     "paieMana",
     "paieReductions",
     "passeOuPresent",
@@ -4180,7 +4186,9 @@
     "remplacementsEnJeu",
     "resoudre",
     "resous",
+    "retourne",
     "sacrifie",
+    "sagasFinies",
     "scoreEffet",
     "scoreLancer",
     "scoreTerrain",
@@ -4338,7 +4346,9 @@
     "jeuOpsB.js (chargement)",
     "lanceSort",
     "piocheN",
-    "sacrifie"
+    "retourneFace",
+    "sacrifie",
+    "transforme"
    ]
   },
   {
@@ -4366,8 +4376,10 @@
     "partie",
     "presage",
     "resoudre",
+    "retourneFace",
     "suspend",
-    "tour"
+    "tour",
+    "transforme"
    ]
   },
   {
@@ -4459,11 +4471,13 @@
    "appelleParHtml": [],
    "appeleePar": [
     "actionsLegales",
+    "actionsPossibles",
     "convocables",
     "coutAutrePossible",
     "coutSort",
     "declareAttaquants",
     "declareBloqueurs",
+    "equipiers",
     "forceDeFrappe",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -4474,6 +4488,7 @@
     "impactSort",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
+    "loreDebutPrincipale",
     "menace",
     "metEnJeu",
     "notePrincipale",
@@ -4580,6 +4595,7 @@
     "coutDeGarde",
     "declareBloqueurs",
     "degatsCombat",
+    "equipagePossible",
     "forceDeFrappe",
     "forgeEffetsC.js (chargement)",
     "frappe",
@@ -4591,6 +4607,7 @@
     "jeuOpsA.js (chargement)",
     "meilleureCibleHostile",
     "objetVue",
+    "paieEquipage",
     "peutAttaquer",
     "peutBloquer",
     "repartition",
@@ -4675,6 +4692,7 @@
     "appliqueSBA",
     "convocables",
     "declareBloqueurs",
+    "equipiers",
     "forceDeFrappe",
     "forgeEffetsC.js (chargement)",
     "iaAttaquants",
@@ -4687,6 +4705,7 @@
     "peutAttaquer",
     "peutBloquer",
     "peutEngagerSoi",
+    "scoreEffet",
     "sourcesMana",
     "valeurObjet"
    ]
@@ -4983,6 +5002,7 @@
     "paieUnlessForge",
     "payableAvec",
     "proposePaiement",
+    "retournable",
     "suspendable"
    ]
   },
@@ -5051,6 +5071,7 @@
     "paieUnlessForge",
     "presage",
     "proposePaiement",
+    "retourne",
     "suspend"
    ]
   },
@@ -5113,6 +5134,7 @@
     "executeForge",
     "executeOps",
     "jeuActions.js (chargement)",
+    "jeuFaces.js (chargement)",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
     "jeuVariantes.js (chargement)",
@@ -5255,6 +5277,7 @@
     "mulligans",
     "nettoyage",
     "paieAutre",
+    "paieEquipage",
     "paieReductions",
     "regardeForge"
    ]
@@ -5316,8 +5339,10 @@
    "ligne": 107,
    "chargement": false,
    "appelle": [
+    "ajouteLore",
     "champDe",
     "correspondBase",
+    "defFaceCachee",
     "deplace",
     "obj",
     "question"
@@ -5335,7 +5360,7 @@
   {
    "nom": "proposePaiement",
    "fichier": "jeuOpsB.js",
-   "ligne": 134,
+   "ligne": 138,
    "chargement": false,
    "appelle": [
     "joueursDe",
@@ -5352,7 +5377,7 @@
   {
    "nom": "executeOps",
    "fichier": "jeuOpsB.js",
-   "ligne": 142,
+   "ligne": 146,
    "chargement": false,
    "appelle": [
     "compteObjets",
@@ -5488,7 +5513,8 @@
     "elimine",
     "estCreature",
     "estType",
-    "obj"
+    "obj",
+    "sagasFinies"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5539,6 +5565,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "variantesFaces",
     "variantesSort"
    ]
   },
@@ -5564,6 +5591,7 @@
    "appelle": [
     "champDe",
     "correspond",
+    "equipagePossible",
     "obj",
     "peutEngagerSoi"
    ],
@@ -5579,7 +5607,7 @@
   {
    "nom": "actionsLegales",
    "fichier": "jeuLancer.js",
-   "ligne": 68,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -5593,6 +5621,7 @@
     "estType",
     "obj",
     "planPaiement",
+    "retournable",
     "suspendable",
     "variantesSort"
    ],
@@ -5605,14 +5634,16 @@
   {
    "nom": "actionsPossibles",
    "fichier": "jeuLancer.js",
-   "ligne": 123,
+   "ligne": 134,
    "chargement": false,
    "appelle": [
     "actionsLegales",
     "capacitesDe",
+    "champDe",
     "enPhasePrincipale",
     "estEphemere",
-    "obj"
+    "obj",
+    "retournable"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5623,7 +5654,7 @@
   {
    "nom": "choisitCibles",
    "fichier": "jeuLancer.js",
-   "ligne": 137,
+   "ligne": 149,
    "chargement": false,
    "appelle": [
     "ciblesLegales",
@@ -5640,7 +5671,7 @@
   {
    "nom": "prepareEffets",
    "fichier": "jeuLancer.js",
-   "ligne": 152,
+   "ligne": 164,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -5658,7 +5689,7 @@
   {
    "nom": "coutDeGarde",
    "fichier": "jeuLancer.js",
-   "ligne": 171,
+   "ligne": 183,
    "chargement": false,
    "appelle": [
     "car",
@@ -5696,6 +5727,7 @@
     "deplace",
     "instantane",
     "obj",
+    "paieEquipage",
     "sacrifie"
    ],
    "appelleDiffere": [],
@@ -5708,7 +5740,7 @@
   {
    "nom": "maxX",
    "fichier": "jeuActions.js",
-   "ligne": 48,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "planPaiement"
@@ -5723,7 +5755,7 @@
   {
    "nom": "lanceSort",
    "fichier": "jeuActions.js",
-   "ligne": 55,
+   "ligne": 56,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -5753,7 +5785,7 @@
   {
    "nom": "activeCapacite",
    "fichier": "jeuActions.js",
-   "ligne": 111,
+   "ligne": 117,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -5777,7 +5809,7 @@
   {
    "nom": "equipe",
    "fichier": "jeuActions.js",
-   "ligne": 144,
+   "ligne": 150,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -5793,12 +5825,13 @@
   {
    "nom": "joueTerrain",
    "fichier": "jeuActions.js",
-   "ligne": 162,
+   "ligne": 168,
    "chargement": false,
    "appelle": [
     "jn",
     "metEnJeu",
-    "nomObj"
+    "nomObj",
+    "obj"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5809,7 +5842,7 @@
   {
    "nom": "executeAction",
    "fichier": "jeuActions.js",
-   "ligne": 170,
+   "ligne": 176,
    "chargement": false,
    "appelle": [
     "activeCapacite",
@@ -5817,6 +5850,7 @@
     "joueTerrain",
     "lanceSort",
     "presage",
+    "retourne",
     "suspend"
    ],
    "appelleDiffere": [],
@@ -6001,7 +6035,8 @@
     "coutSort",
     "fusionAutres",
     "payableAvec",
-    "sommeMana"
+    "sommeMana",
+    "variantesFaces"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -6013,7 +6048,7 @@
   {
    "nom": "varianteDe",
    "fichier": "jeuVariantes.js",
-   "ligne": 117,
+   "ligne": 118,
    "chargement": false,
    "appelle": [
     "variantesSort"
@@ -6028,7 +6063,7 @@
   {
    "nom": "paieReductions",
    "fichier": "jeuVariantes.js",
-   "ligne": 126,
+   "ligne": 127,
    "chargement": false,
    "appelle": [
     "choisitCartes",
@@ -6049,7 +6084,7 @@
   {
    "nom": "presage",
    "fichier": "jeuVariantes.js",
-   "ligne": 160,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -6066,7 +6101,7 @@
   {
    "nom": "exhumeesFin",
    "fichier": "jeuVariantes.js",
-   "ligne": 223,
+   "ligne": 224,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -6081,7 +6116,7 @@
   {
    "nom": "suspendable",
    "fichier": "jeuVariantes.js",
-   "ligne": 230,
+   "ligne": 231,
    "chargement": false,
    "appelle": [
     "estEphemere",
@@ -6096,7 +6131,7 @@
   {
    "nom": "suspend",
    "fichier": "jeuVariantes.js",
-   "ligne": 235,
+   "ligne": 236,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -6113,7 +6148,7 @@
   {
    "nom": "suspensionsEntretien",
    "fichier": "jeuVariantes.js",
-   "ligne": 246,
+   "ligne": 247,
    "chargement": false,
    "appelle": [
     "obj"
@@ -6280,6 +6315,217 @@
    ]
   },
   {
+   "nom": "chargement du module",
+   "fichier": "jeuFaces.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "sourceCtx"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "defFaceCachee",
+   "fichier": "jeuFaces.js",
+   "ligne": 20,
+   "chargement": false,
+   "appelle": [
+    "coutManaVide"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "defVariante",
+    "metEnJeu",
+    "variantesFaces"
+   ]
+  },
+  {
+   "nom": "defVariante",
+   "fichier": "jeuFaces.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [
+    "defFaceCachee"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "scoreLancer"
+   ]
+  },
+  {
+   "nom": "variantesFaces",
+   "fichier": "jeuFaces.js",
+   "ligne": 40,
+   "chargement": false,
+   "appelle": [
+    "coutSort",
+    "defFaceCachee"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "variantesSort"
+   ]
+  },
+  {
+   "nom": "retournable",
+   "fichier": "jeuFaces.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "planPaiement"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "actionsLegales",
+    "actionsPossibles",
+    "retourne"
+   ]
+  },
+  {
+   "nom": "retourne",
+   "fichier": "jeuFaces.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "obj",
+    "paieMana",
+    "retournable",
+    "retourneFace"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "executeAction"
+   ]
+  },
+  {
+   "nom": "retourneFace",
+   "fichier": "jeuFaces.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "emet",
+    "jn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsD.js (chargement)",
+    "retourne"
+   ]
+  },
+  {
+   "nom": "transforme",
+   "fichier": "jeuFaces.js",
+   "ligne": 72,
+   "chargement": false,
+   "appelle": [
+    "emet",
+    "jn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "ajouteLore",
+   "fichier": "jeuFaces.js",
+   "ligne": 84,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "loreDebutPrincipale",
+    "metEnJeu"
+   ]
+  },
+  {
+   "nom": "loreDebutPrincipale",
+   "fichier": "jeuFaces.js",
+   "ligne": 96,
+   "chargement": false,
+   "appelle": [
+    "ajouteLore",
+    "champDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etape"
+   ]
+  },
+  {
+   "nom": "sagasFinies",
+   "fichier": "jeuFaces.js",
+   "ligne": 102,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueSBA"
+   ]
+  },
+  {
+   "nom": "equipiers",
+   "fichier": "jeuFaces.js",
+   "ligne": 109,
+   "chargement": false,
+   "appelle": [
+    "champDe",
+    "estCreature"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "equipagePossible",
+    "paieEquipage"
+   ]
+  },
+  {
+   "nom": "equipagePossible",
+   "fichier": "jeuFaces.js",
+   "ligne": 113,
+   "chargement": false,
+   "appelle": [
+    "car",
+    "equipiers"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "coutAutrePossible"
+   ]
+  },
+  {
+   "nom": "paieEquipage",
+   "fichier": "jeuFaces.js",
+   "ligne": 117,
+   "chargement": false,
+   "appelle": [
+    "car",
+    "choisitCartes",
+    "equipiers",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "paieAutre"
+   ]
+  },
+  {
    "nom": "retireDeLaPile",
    "fichier": "jeuPile.js",
    "ligne": 16,
@@ -6348,7 +6594,7 @@
   {
    "nom": "priorite",
    "fichier": "jeuPile.js",
-   "ligne": 88,
+   "ligne": 94,
    "chargement": false,
    "appelle": [
     "actionsPossibles",
@@ -6588,6 +6834,7 @@
     "exhumeesFin",
     "finCombat",
     "initiativeEnJeu",
+    "loreDebutPrincipale",
     "nettoyage",
     "notePrincipale",
     "piocheN",
@@ -6603,7 +6850,7 @@
   {
    "nom": "notePrincipale",
    "fichier": "jeuTour.js",
-   "ligne": 85,
+   "ligne": 86,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -6619,7 +6866,7 @@
   {
    "nom": "tour",
    "fichier": "jeuTour.js",
-   "ligne": 92,
+   "ligne": 93,
    "chargement": false,
    "appelle": [
     "debutDuTour",
@@ -6867,7 +7114,7 @@
   {
    "nom": "questionPourUI",
    "fichier": "jeuVue.js",
-   "ligne": 84,
+   "ligne": 86,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -7982,8 +8229,10 @@
     "phaseConnue",
     "poseEffet",
     "regenere",
+    "retourneFace",
     "statiqueForge",
-    "texteForge"
+    "texteForge",
+    "transforme"
    ],
    "appelleDiffere": [
     "animationTenable"
@@ -8190,7 +8439,7 @@
   {
    "nom": "forgeDeclenche",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 101,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "conditionForge"
@@ -8513,8 +8762,11 @@
    "chargement": false,
    "appelle": [
     "coutForge",
+    "coutManaVide",
     "cycleForge",
     "descForge",
+    "effetForge",
+    "forgeSousCapacite",
     "genreMarqueur",
     "manaSeul"
    ],
@@ -8585,7 +8837,8 @@
     "cycleForge",
     "declencheurForge",
     "forgeEffetsC.js (chargement)",
-    "forgeEffetsD.js (chargement)"
+    "forgeEffetsD.js (chargement)",
+    "motCleForge"
    ]
   },
   {
@@ -8700,6 +8953,7 @@
     "coutManaVide",
     "couvertureForge",
     "declencheurForge",
+    "definitionAFaces",
     "forgeApi",
     "forgeLigneType",
     "lisTypeLigne",
@@ -8710,6 +8964,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "definitionAFaces",
     "definitionForge",
     "jetonsForge"
    ]
@@ -8717,7 +8972,7 @@
   {
    "nom": "definitionForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 222,
+   "ligne": 223,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",
@@ -8733,13 +8988,27 @@
   {
    "nom": "nomsJetonsForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 229,
+   "ligne": 230,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "avecForge"
+   ]
+  },
+  {
+   "nom": "definitionAFaces",
+   "fichier": "forgeDefinition.js",
+   "ligne": 245,
+   "chargement": false,
+   "appelle": [
+    "definitionDepuisScript"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "definitionDepuisScript"
    ]
   },
   {
@@ -8768,6 +9037,7 @@
    "appeleePar": [
     "iaCartes",
     "iaCibles",
+    "iaPriorite",
     "iaReponse",
     "impactSort",
     "meilleureCibleHostile",
@@ -9042,6 +9312,7 @@
    "appelle": [
     "correspond",
     "definitionJeton",
+    "estCreature",
     "manaDispo",
     "meilleureCibleHostile",
     "obj",
@@ -9061,7 +9332,7 @@
   {
    "nom": "impactSort",
    "fichier": "iaPriorite.js",
-   "ligne": 66,
+   "ligne": 67,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -9082,7 +9353,7 @@
   {
    "nom": "impactCapacite",
    "fichier": "iaPriorite.js",
-   "ligne": 84,
+   "ligne": 85,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -9101,7 +9372,7 @@
   {
    "nom": "scoreTerrain",
    "fichier": "iaPriorite.js",
-   "ligne": 101,
+   "ligne": 102,
    "chargement": false,
    "appelle": [
     "obj",
@@ -9116,7 +9387,7 @@
   {
    "nom": "iaReponse",
    "fichier": "iaPriorite.js",
-   "ligne": 113,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -9139,7 +9410,7 @@
   {
    "nom": "iaPriorite",
    "fichier": "iaPriorite.js",
-   "ligne": 143,
+   "ligne": 144,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -9150,7 +9421,8 @@
     "noteActivation",
     "obj",
     "scoreLancer",
-    "scoreTerrain"
+    "scoreTerrain",
+    "valeurDef"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -9161,7 +9433,7 @@
   {
    "nom": "regenUtile",
    "fichier": "iaPriorite.js",
-   "ligne": 169,
+   "ligne": 172,
    "chargement": false,
    "appelle": [
     "opHostile"
@@ -9175,9 +9447,10 @@
   {
    "nom": "scoreLancer",
    "fichier": "iaPriorite.js",
-   "ligne": 178,
+   "ligne": 181,
    "chargement": false,
    "appelle": [
+    "defVariante",
     "impactSort",
     "obj"
    ],
@@ -9190,7 +9463,7 @@
   {
    "nom": "noteActivation",
    "fichier": "iaPriorite.js",
-   "ligne": 189,
+   "ligne": 192,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],

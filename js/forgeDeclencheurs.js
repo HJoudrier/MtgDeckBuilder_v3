@@ -92,6 +92,8 @@ forgeMode('LifeGained', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'vie' && j
 forgeMode('LifeLost', ['ValidPlayer'], (P, t, e, s, env) => (e.t === 'perteVie' || e.t === 'degatsJoueur') && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
 forgeMode('Cycled', ['ValidCard', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'cycle' && valideOuRien(P, e.lki, t.ValidCard, s, env) &&
   joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
+forgeMode('TurnFaceUp', ['ValidCard'], (P, t, e, s, env) => e.t === 'retourne' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
+forgeMode('Transformed', ['ValidCard'], (P, t, e, s, env) => e.t === 'transforme' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
 forgeMode('Sacrificed', ['ValidCard', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'sacrifie' && valideOuRien(P, e.lki, t.ValidCard, s, env) &&
   joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
 

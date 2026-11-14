@@ -72,6 +72,7 @@ function appliqueSBA(P) {
       if (!autre || obj(P, autre).ts < o.ts) legendes.set(cle, id);
     }
   }
+  sagasFinies(P).forEach(id => auCimetiere.add(id));
   for (const id of auCimetiere) {
     if (obj(P, id) && obj(P, id).zone === 'champ') { deplace(P, id, 'cimetiere'); change = true; }
   }

@@ -55,6 +55,7 @@ function scoreEffet(P, j, effet, src) {
       case 'contre': break;
       case 'mana': s += 0.5; break;
       case 'exhume': s += 3; break;
+      case 'equipage': s += P.actif === j && P.etape === 'principale1' && src && !estCreature(src) ? 2.5 : -1; break;
       case 'regenere': s += regenUtile(P, j, src) ? 4 : -1; break;
       default: s += 0.5;
     }
@@ -149,13 +150,15 @@ function iaPriorite(P, q, ag) {
   let best = -1, score = 0;
   actions.forEach((a, i) => {
     if (a.k === 'terrain') {
-      const s = 100 + scoreTerrain(P, j, obj(P, a.id));
+      const t = obj(P, a.id);
+      const s = 100 + scoreTerrain(P, j, a.variante === 'dos' ? {...t, def: t.def.dos} : t) - (a.variante === 'dos' ? 0.5 : 0);
       if (s > score) { best = i; score = s; }
       return;
     }
     let s = -1;
     if (a.k === 'lancer') s = scoreLancer(P, j, a);
     else if (a.k === 'presager') s = 1.1;
+    else if (a.k === 'retourner') s = valeurDef(obj(P, a.id).vraieDef) - 1;
     else if (a.k === 'suspendre') s = impactSort(P, j, obj(P, a.id)) * 0.5;
     else if (a.k === 'activer') s = impactCapacite(P, j, obj(P, a.id), capacitesDe(P, obj(P, a.id))[a.i], ag);
     else if (a.k === 'equiper') s = obj(P, a.id).att == null ? 2.5 : -1;
@@ -176,8 +179,8 @@ function regenUtile(P, j, o) {
 /* Ce que vaut une façon de lancer : le kicker seulement s'il change
    l'effet, le rachat parce qu'il rend la carte, l'évocation faute de mieux. */
 function scoreLancer(P, j, a) {
-  const o = obj(P, a.id);
-  let s = impactSort(P, j, o);
+  const o = obj(P, a.id), dv = defVariante(o, a.variante);
+  let s = impactSort(P, j, dv && dv !== o.def ? {...o, def: dv} : o);
   if (a.variante === 'kicker') s += o.def.kickerUtile ? 1.5 : -5;
   else if (a.variante === 'rachat') s += 2;
   else if (a.variante === 'evocation') s *= 0.6;

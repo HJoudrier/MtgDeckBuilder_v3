@@ -60,6 +60,7 @@ function coutAutrePossible(P, j, o, c) {
   if (c.renvoie && champDe(P, j).filter(x => correspond(P, x, c.renvoie.desc, o, j)).length < c.renvoie.n) return false;
   if (c.revele && compte(J.main, c.revele.desc) < c.revele.n) return false;
   if (c.energie && (J.energie || 0) < c.energie) return false;
+  if (c.equipage && !equipagePossible(P, j, o, c.equipage)) return false;
   return true;
 }
 
@@ -68,18 +69,28 @@ function coutAutrePossible(P, j, o, c) {
 function actionsLegales(P, j) {
   const J = P.joueurs[j], r = [];
   const rituel = enPhasePrincipale(P, j);
-  if (rituel && J.terrainsJoues < 1) J.main.forEach(id => { if (estType(obj(P, id), 'land')) r.push({k: 'terrain', id}); });
+  if (rituel && J.terrainsJoues < 1) J.main.forEach(id => {
+    const d = obj(P, id).def;
+    if (estType(obj(P, id), 'land')) r.push({k: 'terrain', id});
+    if (d.dos && d.modeFaces === 'Modal' && d.dos.types.includes('land')) r.push({k: 'terrain', id, variante: 'dos'});
+  });
+  champDe(P, j).forEach(o => { if (retournable(P, j, o)) r.push({k: 'retourner', id: o.id}); });
+  /* Chaque façon de lancer se juge sur la face qu'elle joue : la face
+     arrière d'une carte modale peut être un éphémère, l'avant un terrain. */
   const essaie = (id, depuis) => {
-    const o = obj(P, id), d = o.def;
-    if (d.types.includes('land') || (!rituel && !estEphemere(d))) return;
-    if (d.sort && !effetCiblable(P, j, o, d.sort, d.couleurs)) return;
-    if (d.aura && !ciblesLegales(P, {desc: d.aura, min: 1, max: 1}, o, j, d.couleurs).length) return;
-    variantesSort(P, j, o, depuis).forEach(v => r.push(v.variante ? {k: 'lancer', id, depuis, variante: v.variante} : {k: 'lancer', id, depuis}));
+    const o = obj(P, id);
+    variantesSort(P, j, o, depuis).forEach(v => {
+      const d = v.def || o.def;
+      if (d.types.includes('land') || (!rituel && !estEphemere(d))) return;
+      if (d.sort && !effetCiblable(P, j, o, d.sort, d.couleurs)) return;
+      if (d.aura && !ciblesLegales(P, {desc: d.aura, min: 1, max: 1}, o, j, d.couleurs).length) return;
+      r.push(v.variante ? {k: 'lancer', id, depuis, variante: v.variante} : {k: 'lancer', id, depuis});
+    });
   };
   J.main.forEach(id => essaie(id, 'main'));
   J.commandement.forEach(id => essaie(id, 'commandement'));
   J.cimetiere.forEach(id => { if (obj(P, id).def.flashback) essaie(id, 'cimetiere'); });
-  J.exil.forEach(id => { const o = obj(P, id); if (o.presageTour != null && o.presageTour < P.tour) essaie(id, 'exil'); });
+  J.exil.forEach(id => { const o = obj(P, id); if ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) essaie(id, 'exil'); });
   if (P.actif === j) J.main.forEach(id => { if (obj(P, id).def.presage && planPaiement(P, j, MANA_DEUX, 0)) r.push({k: 'presager', id}); });
   J.main.forEach(id => { if (suspendable(P, j, obj(P, id), rituel)) r.push({k: 'suspendre', id}); });
   /* Les capacités qui s'activent depuis la main (cycle) ou le cimetière. */
@@ -127,7 +138,8 @@ function actionsPossibles(P, j) {
   const peut = J.main.some(id => estEphemere(obj(P, id).def)) ||
     J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return d.flashback && estEphemere(d); }) ||
-    J.exil.some(id => { const o = obj(P, id); return o.presageTour != null && o.presageTour < P.tour && estEphemere(o.def); }) ||
+    J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure) && estEphemere(o.def); }) ||
+    champDe(P, j).some(o => retournable(P, j, o)) ||
     P.champ.some(id => { const o = obj(P, id); return o.ctrl === j && capacitesDe(P, o).some(k => k.genre === 'activee' && !k.zone && k.vitesse !== 'rituel'); });
   return peut ? actionsLegales(P, j) : [PASSE];
 }

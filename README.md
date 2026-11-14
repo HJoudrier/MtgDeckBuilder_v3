@@ -65,6 +65,7 @@ js/                 modules, chargés dans cet ordre :
   jeuActions.js     jouer un terrain, lancer, activer, équiper
   jeuVariantes.js   kicker, rachat, évocation, présage, convocation, exploration, écho, folie, suspension
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
+  jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
   jeuTour.js        les étapes d'un tour
@@ -501,8 +502,7 @@ le classement compare les decks sur une même table.
 couches complet (les bonus s'additionnent), ni copie, ni changement de contrôle, ni remplacement ou
 prévention généraux (la régénération exceptée) ; parmi les coûts alternatifs et additionnels, ceux
 des lots F3 et F4 seulement — flashback, kicker, rachat, évocation, présage, convocation,
-exploration, affinité, écho, cycle, folie, suspension, exhumation ; faces arrière, aventures
-et cartes partagées ignorées ; ni tours ou combats supplémentaires, ni monarque, ni initiative ;
+exploration, affinité, écho, cycle, folie, suspension, exhumation ; ni mutation, ni fusion (meld), ni cartes retournées (flip) ; ni tours ou combats supplémentaires, ni monarque, ni initiative ;
 capacités de mana qui coûtent du mana absentes du paiement automatique ; pas d'alliance en
 multijoueur. Les joueurs automatiques comparent des valeurs sans chercher dans l'arbre des coups :
 ils avantagent les decks qui jouent leurs menaces et sous-jouent combo, contrôle et politique. Le
@@ -595,6 +595,16 @@ créature, fixe une force de base, ajoute des types, des couleurs, des mots-clé
 si bien que le combat et les actions d'état voient l'objet animé. Les statiques ajoutent des sous-types
 et changent des couleurs ; elles n'ajoutent jamais le type créature, que seule la couche de l'objet
 sait faire voir partout. Le contrôle repris jusqu'à la fin du tour revient au nettoyage.
+
+**Les faces** (`js/jeuFaces.js`, lot F7). Une carte porte une définition par face (`def.dos`,
+`def.modeFaces`) ; un objet peut jouer une autre face que l'imprimée — l'arrière d'une carte modale,
+d'une carte partagée ou d'une aventure, la face transformée, la face cachée d'un morph — : `o.def`
+change, la carte (`P.cartes[cid].def`) jamais, et hors du champ la carte reprend sa face avant. Ces
+façons de lancer sont des variantes comme les autres (`variantesFaces()`), jugées sur la face qu'elles
+jouent ; retourner une créature face cachée est une action spéciale, sans la pile. Une saga compte
+ses marqueurs de lore et part quand plus aucun chapitre n'attend ; un véhicule piloté entre dans la
+couche `o.anime` jusqu'au nettoyage. Une carte transformable n'est dite complète que si un effet la
+transforme vraiment.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -59,6 +59,7 @@ function* etape(P, e) {
       break;
     case 'principale1':
       notePrincipale(P);
+      loreDebutPrincipale(P);
       emet(P, {t: 'etape', etape: 'principale1', actif: P.actif});
       break;
     case 'debutCombat': emet(P, {t: 'etape', etape: 'debutCombat', actif: P.actif}); break;

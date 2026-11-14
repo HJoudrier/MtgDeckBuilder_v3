@@ -180,6 +180,7 @@ function couleursForge(txt) {
    `echecs`, l'indice de l'unité (dans l'ordre de `unitesForge()`) et la
    raison. */
 function definitionDepuisScript(s, fiche, jetons) {
+  if (s.faces.length > 1) return definitionAFaces(s, fiche, jetons);
   const face = s.faces[0];
   const typeLigne = forgeLigneType(face.types), ti = lisTypeLigne(typeLigne);
   const cout = coutMana(face.cout) || coutManaVide();
@@ -231,4 +232,25 @@ function nomsJetonsForge(texte) {
   for (const m of String(texte || '').matchAll(/TokenScript\$\s*([\w,]+)/g)) m[1].split(',').forEach(x => n.add(x.trim()));
   if (/\$ Investigate\b/.test(texte || '')) n.add('c_a_clue_draw');
   return [...n];
+}
+
+/* Les modes de cartes à deux faces que le moteur sait jouer : la face
+   arrière d'une carte modale, partagée ou à aventure se lance ; celle d'une
+   carte transformable n'est jouée que si un effet la transforme. */
+const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced'];
+
+/* Une carte à deux faces : la définition de chacune, la face arrière
+   rangée dans `def.dos`. La carte n'est complète que si les deux le sont,
+   et que le moteur sait passer de l'une à l'autre. */
+function definitionAFaces(s, fiche, jetons) {
+  const av = definitionDepuisScript({faces: [s.faces[0]], mode: ''}, fiche, jetons);
+  const ar = definitionDepuisScript({faces: [s.faces[1]], mode: ''}, {nom: s.faces[1].nom, jeton: fiche.jeton}, jetons);
+  const def = av.def, c = def.couverture;
+  const brut = JSON.stringify(s.faces.map(f => [f.a, f.t, f.svars]));
+  const tenu = FORGE_FACES.includes(s.mode) && (s.mode !== 'DoubleFaced' || /SetState/.test(brut));
+  if (tenu) { def.dos = ar.def; def.modeFaces = s.mode; }
+  const manque = tenu ? ar.def.couverture.manque.filter(e => !c.manque.includes(e)) : ['construction:' + (s.mode || 'faces')];
+  if (c.etat === 'complete' && (manque.length || ar.def.couverture.etat !== 'complete')) c.etat = 'partielle';
+  c.manque = c.manque.concat(manque);
+  return av;
 }

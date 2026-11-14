@@ -106,7 +106,8 @@ const TYPES_PERMANENTS = ['creature', 'artifact', 'enchantment', 'land', 'planes
    d'un planeswalker. Rend l'identifiant du nouvel objet. */
 function* metEnJeu(P, id, ctrl, opts = {}) {
   const o = obj(P, id);
-  const ent = o.def.entree || {};
+  const d0 = opts.face || o.def;
+  const ent = d0.entree || {};
   let engage = !!opts.engage || !!ent.engagee;
   if (ent.engagee && ent.sauf && ent.sauf.some(d => champDe(P, ctrl).some(x => correspondBase(P, x, d, null, ctrl)))) engage = false;
   if (ent.engagee && ent.payeVie && !opts.engage) {
@@ -117,13 +118,16 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   const n = deplace(P, id, 'champ', {ctrl, engage});
   const no = obj(P, n);
   if (!no) return n;
-  if (o.def.loyaute != null) no.marq.loyaute = o.def.loyaute;
+  if (opts.face) no.def = opts.face;
+  if (opts.faceCachee) { no.vraieDef = P.cartes[no.cid].def; no.faceCachee = true; no.def = defFaceCachee(no.vraieDef); }
+  if (no.def.loyaute != null) no.marq.loyaute = no.def.loyaute;
   if (ent.marqueurs) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
   if (opts.attache != null) no.att = opts.attache;
   no.x = x;
   if (opts.kicked) no.kicked = true;
   if (opts.suspendu) no.mods.push({f: 0, e: 0, mots: MOT.CELERITE, fin: 'jamais'});
-  if (o.def.echo) no.echoDu = true;
+  if (no.def.echo) no.echoDu = true;
+  if (no.def.chapitres) ajouteLore(P, no, 1);
   if (opts.evoque) P.enAttente.push({src: n, ctrl, cap: CAP_EVOCATION, evt: {t: 'entre', id: n}});
   P.ver++;
   return n;

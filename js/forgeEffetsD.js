@@ -129,3 +129,10 @@ forgeEffet('PreventDamage', ['Amount'], function* (P, t, env) {
   const l = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Self', env);
   l.forEach(x => { const p = x.j != null ? P.joueurs[x.j] : x; p.prevention = (p.prevention || 0) + n; });
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
+
+/* Changer de face : se transformer, ou se retourner face visible. */
+forgeEffet('SetState', ['Mode'], function* (P, t, env) {
+  objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
+    if (t.Mode === 'Transform') transforme(P, o); else retourneFace(P, o);
+  });
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => t.Mode === 'Transform' || t.Mode === 'TurnFaceUp'});

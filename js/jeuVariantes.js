@@ -94,10 +94,10 @@ function payableAvec(P, j, o, mana, x) {
    mana, autre}]`, la façon ordinaire en tête. */
 function variantesSort(P, j, o, depuis) {
   const d = o.def, r = [];
-  const essaie = (variante, mana, autre) => {
+  const essaie = (variante, mana, autre, def) => {
     if (autre === undefined || !payableAvec(P, j, o, mana, 0)) return;
     if (autre && !coutAutrePossible(P, j, o, autre)) return;
-    r.push({variante, mana, autre});
+    r.push({variante, mana, autre, def: def || null});
   };
   /* Défaussée avec la folie, ou au bout de sa suspension : une seule façon. */
   if (depuis === 'exil' && o.folie) { essaie('folie', coutSort(P, j, o, depuis, coutComplet(d.folie).mana), null); return r; }
@@ -110,6 +110,7 @@ function variantesSort(P, j, o, depuis) {
   if (b) essaie('rachat', sommeMana(base, b.mana), fusionAutres(d.coutSup, autresCout(b)));
   const e = coutComplet(d.evocation);
   if (e && depuis === 'main') essaie('evocation', coutSort(P, j, o, depuis, e.mana), d.coutSup || null);
+  variantesFaces(P, j, o, depuis, essaie);
   return r;
 }
 

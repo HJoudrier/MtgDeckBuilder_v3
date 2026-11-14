@@ -118,7 +118,9 @@ function unitesForge(face) {
   face.k.forEach(k => {
     const tete = k.split(':')[0].replace(/^Protection.*/, 'Protection').replace(/^(\w+)walk$/, 'Landwalk').replace(/^Enchant\b.*/, 'Enchant');
     const el = new Set(['kw:' + tete]);
-    k.split(':').slice(1).forEach(x => { if (face.svars[x] != null) elementsTable(face, forgeTable(face.svars[x]), null, el, new Set()); });
+    k.split(':').slice(1).forEach(seg => seg.split(',').forEach(x => {
+      if (face.svars[x.trim()] != null) elementsTable(face, forgeTable(face.svars[x.trim()]), null, el, new Set());
+    }));
     u.push({genre: 'motcle', texte: k, elements: el});
   });
   return u;
