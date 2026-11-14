@@ -33,7 +33,14 @@ function noteHistorique(P, e) {
     case 'defausse': plusUn(h.defausses, e.joueur); break;
     case 'marqueur': h.marqueurs += e.n || 0; break;
     case 'entre': { const o = obj(P, e.id); if (o) { o.entreTour = P.tour; jourNuitEntree(P, o); } break; }
-    case 'attaque': { const o = obj(P, e.id); if (o) o.attaqueTour = P.tour; break; }
+    case 'attaque': {
+      const o = obj(P, e.id);
+      if (o) o.attaqueTour = P.tour;
+      /* Les adversaires attaqués ce tour, par attaquant (js/forgeDesignations.js). */
+      const d = e.defenseur, j = d && (d.j != null ? d.j : d.pw != null && obj(P, d.pw) ? obj(P, d.pw).ctrl : null);
+      if (o && j != null) ((h.attaques = h.attaques || {})[o.ctrl] = h.attaques[o.ctrl] || []).push(j);
+      break;
+    }
     case 'degatsObjet': {
       const o = obj(P, e.id);
       if (!o) break;

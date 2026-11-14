@@ -207,6 +207,9 @@ function propObjet(P, o, c, p, src, ctrl, env) {
       return c.couleurs.includes(FORGE_COULEURS[p.replace('Source', '')]);
     case 'EnchantedControllerCtrl': { const h = P && src && src.att != null ? obj(P, src.att) : null; return !!h && h.ctrl === tient; }
   }
+  /* Monstrueux, incité, ombre (js/forgeDesignations.js). */
+  const pd = proprieteDesignee(P, o, p);
+  if (pd !== undefined) return pd;
   let m;
   if ((m = /^(ControlledBy|OwnedBy) (.+)$/.exec(p))) {
     if (!P || !env) return false;

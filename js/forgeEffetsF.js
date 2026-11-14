@@ -97,12 +97,14 @@ etendEffet('GainControl', ['AllValid'], (P, t, env) => {
    parmi `Choices`. */
 FORGE_API.PutCounter.gen = (g => function* (P, t, env) {
   const g2 = genreMarqueur(t.CounterType || 'P1P1'), n = () => forgeNombre(P, t.CounterNum || (/^\d+$/.test(t.Bolster || t.Adapt || '') ? t.Bolster || t.Adapt : 1), env);
-  /* Monstruosité : une fois seulement, et l'évènement que BecomeMonstrous
-     écoute (js/forgeRemplacementsB.js). */
-  if (t.Monstrosity === 'True') {
+  /* Monstruosité N (`Monstrosity$ 3`, `X`) : N marqueurs +1/+1, une fois
+     seulement, et l'évènement que BecomeMonstrous écoute
+     (js/forgeRemplacementsB.js). */
+  if (t.Monstrosity != null) {
     const o = forgeDefinis(P, t.Defined || 'Self', env)[0];
     if (!o || o.zone !== 'champ' || o.monstrueux) return;
-    poseMarqueurs(P, o, g2, n(), env.src); o.monstrueux = true; emet(P, {t: 'monstrueux', id: o.id});
+    poseMarqueurs(P, o, g2, t.Monstrosity === 'True' ? n() : forgeNombre(P, t.Monstrosity, env), env.src);
+    o.monstrueux = true; P.ver++; emet(P, {t: 'monstrueux', id: o.id});
     return;
   }
   if (t.Bolster) {

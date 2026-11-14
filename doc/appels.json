@@ -67,6 +67,7 @@
   "forgeExpr.js",
   "forgeExprB.js",
   "forgeDefini.js",
+  "forgeDesignations.js",
   "forgeCout.js",
   "forgeEffetsA.js",
   "forgeEffetsB.js",
@@ -3925,6 +3926,7 @@
     "forgeDefini.js (chargement)",
     "forgeDefinition.js (chargement)",
     "forgeDescripteurs.js (chargement)",
+    "forgeDesignations.js (chargement)",
     "forgeEffet",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsD.js (chargement)",
@@ -4222,6 +4224,7 @@
     "defenseurDe",
     "defenseurDeclare",
     "defenseurVise",
+    "definisEtendus",
     "degageAussi",
     "degagement",
     "degatsCombat",
@@ -4236,6 +4239,7 @@
     "etendEffet",
     "executeForge",
     "exhumeesFin",
+    "exprDesignations",
     "finCombat",
     "finDuTour",
     "flashPossible",
@@ -4820,6 +4824,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "compteDuTour",
+    "exprDesignations",
     "exprEtendue",
     "noteHistorique",
     "noteResolution",
@@ -4859,7 +4864,7 @@
   {
    "nom": "noteResolution",
    "fichier": "jeuHistorique.js",
-   "ligne": 54,
+   "ligne": 61,
    "chargement": false,
    "appelle": [
     "histoire",
@@ -4874,7 +4879,7 @@
   {
    "nom": "manaDepenseDe",
    "fichier": "jeuHistorique.js",
-   "ligne": 57,
+   "ligne": 64,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -8356,6 +8361,7 @@
     "joueurDe",
     "mvDe",
     "obj",
+    "proprieteDesignee",
     "suit"
    ],
    "appelleDiffere": [],
@@ -8367,7 +8373,7 @@
   {
    "nom": "ciblesJoueurs",
    "fichier": "forgeValide.js",
-   "ligne": 239,
+   "ligne": 242,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -8379,7 +8385,7 @@
   {
    "nom": "forgeValideObjet",
    "fichier": "forgeValide.js",
-   "ligne": 245,
+   "ligne": 248,
    "chargement": false,
    "appelle": [
     "caracsJugees",
@@ -8433,7 +8439,7 @@
   {
    "nom": "forgeValideJoueur",
    "fichier": "forgeValide.js",
-   "ligne": 253,
+   "ligne": 256,
    "chargement": false,
    "appelle": [
     "choixDe",
@@ -8803,7 +8809,7 @@
   {
    "nom": "exprEtendue",
    "fichier": "forgeExprB.js",
-   "ligne": 29,
+   "ligne": 30,
    "chargement": false,
    "appelle": [
     "agregeForge",
@@ -8812,6 +8818,7 @@
     "caracForge",
     "compteDuTour",
     "compteJoueurs",
+    "exprDesignations",
     "forgeDefinis",
     "forgeValideObjet",
     "histoire",
@@ -8829,7 +8836,7 @@
   {
    "nom": "devotion",
    "fichier": "forgeExprB.js",
-   "ligne": 68,
+   "ligne": 72,
    "chargement": false,
    "appelle": [
     "champDe"
@@ -8843,7 +8850,7 @@
   {
    "nom": "siAlors",
    "fichier": "forgeExprB.js",
-   "ligne": 78,
+   "ligne": 82,
    "chargement": false,
    "appelle": [
     "forgeNombre"
@@ -8851,13 +8858,14 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "compteDuTour"
+    "compteDuTour",
+    "exprDesignations"
    ]
   },
   {
    "nom": "compteDuTour",
    "fichier": "forgeExprB.js",
-   "ligne": 80,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "adversaires",
@@ -8882,7 +8890,7 @@
   {
    "nom": "compteJoueurs",
    "fichier": "forgeExprB.js",
-   "ligne": 116,
+   "ligne": 120,
    "chargement": false,
    "appelle": [
     "adversaires",
@@ -8977,6 +8985,7 @@
     "ciblesDuSort",
     "ciblesForge",
     "defenseurDe",
+    "definisEtendus",
     "forgeValideObjet",
     "joueurDe",
     "obj",
@@ -8992,6 +9001,7 @@
    "appeleePar": [
     "cibleOuDefinis",
     "conditionForge",
+    "definisEtendus",
     "executeForge",
     "exprEtendue",
     "forgeCopies.js (chargement)",
@@ -9055,6 +9065,76 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeTraine.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeDesignations.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "forgeSait"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "definisEtendus",
+   "fichier": "forgeDesignations.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "forgeDefinis",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDefinis"
+   ]
+  },
+  {
+   "nom": "marqueursJoueur",
+   "fichier": "forgeDesignations.js",
+   "ligne": 36,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "exprDesignations"
+   ]
+  },
+  {
+   "nom": "exprDesignations",
+   "fichier": "forgeDesignations.js",
+   "ligne": 39,
+   "chargement": false,
+   "appelle": [
+    "histoire",
+    "marqueursJoueur",
+    "obj",
+    "siAlors"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "exprEtendue"
+   ]
+  },
+  {
+   "nom": "proprieteDesignee",
+   "fichier": "forgeDesignations.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [
+    "goadActif"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "propObjet"
    ]
   },
   {
@@ -10316,7 +10396,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "doitAttaquer"
+    "doitAttaquer",
+    "proprieteDesignee"
    ]
   },
   {
@@ -10899,7 +10980,7 @@
   {
    "nom": "statiquesForgeSur",
    "fichier": "forgeStatiques.js",
-   "ligne": 135,
+   "ligne": 137,
    "chargement": false,
    "appelle": [
     "statiquesEnJeu"
@@ -10913,7 +10994,7 @@
   {
    "nom": "coutsForge",
    "fichier": "forgeStatiques.js",
-   "ligne": 150,
+   "ligne": 152,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10931,7 +11012,7 @@
   {
    "nom": "reductionParCibles",
    "fichier": "forgeStatiques.js",
-   "ligne": 173,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -10952,7 +11033,7 @@
   {
    "nom": "reductionPossible",
    "fichier": "forgeStatiques.js",
-   "ligne": 192,
+   "ligne": 194,
    "chargement": false,
    "appelle": [
     "envStatique",

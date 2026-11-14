@@ -80,6 +80,8 @@ function viseForge(P, src, s, o, cle) {
   const env = envStatique(src, s);
   if (!cle && s.t.AffectedDefined) {
     if (!forgeDefinis(P, s.t.AffectedDefined, env).some(x => x.id === o.id)) return null;
+    /* `AffectedDefined$ Self | Affected$ Card.IsMonstrous` : les deux. */
+    if (s.t.Affected && !forgeValideObjet(P, o, s.t.Affected, src, src.ctrl, env, true)) return null;
     return conditionForge(P, s.t, env) ? env : null;
   }
   const v = s.t[cle || 'Affected'];

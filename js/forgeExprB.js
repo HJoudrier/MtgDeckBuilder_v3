@@ -23,7 +23,8 @@ function caracEtendue(P, o, q, env) {
 function quantiteJoueur(P, j, q) {
   if (j == null) return 0;
   const J = P.joueurs[j];
-  return q === 'CardsInHand' ? J.main.length : q === 'CardsInGraveyard' ? J.cimetiere.length : q === 'LifeTotal' ? J.vie : 0;
+  return q === 'CardsInHand' ? J.main.length : q === 'CardsInGraveyard' ? J.cimetiere.length : q === 'LifeTotal' ? J.vie :
+    q === 'CardsInLibrary' ? J.bibliotheque.length : 0;
 }
 
 function exprEtendue(P, tete, q, env) {
@@ -55,10 +56,13 @@ function exprEtendue(P, tete, q, env) {
   if (tete === 'ReplaceCount') return (ctx.remplace || {}).n || 0;
   if (tete === 'Count' && q === 'Blessing') return benediction(P, env.ctrl, env.src) ? 1 : 0;
   if (tete === 'Count' && q === 'RememberedSize') return (ctx.memo || []).length + (ctx.memoJ || []).length;
-  if (tete === 'Count') return compteDuTour(P, q, env);
+  if (tete === 'Count') { const r = compteDuTour(P, q, env); if (r !== undefined) return r; }
   if (tete === 'PlayerCountOpponents' || tete === 'PlayerCountPlayers') return compteJoueurs(P, tete, q, env);
-  if (tete === 'PlayerCountPropertyYou') { const h = histoire(P); return q === 'SacrificedThisTurn' ? h.sacrifies[env.ctrl] || 0 : q === 'CardsDiscardedThisTurn' ? h.defausses[env.ctrl] || 0 : undefined; }
-  return undefined;
+  if (tete === 'PlayerCountPropertyYou' && (q === 'SacrificedThisTurn' || q === 'CardsDiscardedThisTurn')) {
+    const h = histoire(P);
+    return q === 'SacrificedThisTurn' ? h.sacrifies[env.ctrl] || 0 : h.defausses[env.ctrl] || 0;
+  }
+  return exprDesignations(P, tete, q, env);
 }
 
 const COULEURS_FORGE_LETTRE = {White: 'W', Blue: 'U', Black: 'B', Red: 'R', Green: 'G'};

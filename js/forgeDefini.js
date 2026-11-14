@@ -123,7 +123,7 @@ function forgeDefinis(P, val, env) {
       return ((k && k.exilees) || []).map(id => obj(P, id)).filter(o => o && o.zone === 'exil');
     }
   }
-  return [];
+  return definisEtendus(P, v, env);
 }
 
 /* Les joueurs d'une capacité : ceux qu'elle cible, sinon ceux que

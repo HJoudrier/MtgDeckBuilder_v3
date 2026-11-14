@@ -84,6 +84,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDescripteurs.js  ce qu'un filtre devient pour le moteur : emplacement de cible, genre de marqueur, zone
   forgeExpr.js      les quantités de Forge (`Count$Valid …`, `Count$xPaid`, `/Twice`)
   forgeDefini.js    ce que `Defined$` désigne (`Targeted`, `Remembered`, `TriggeredCard`…)
+  forgeDesignations.js  ce que Forge désigne encore : joueurs retenus, dessus de la bibliothèque, monarque, marqueurs d'un joueur, monstrueux
   forgeCout.js      lire un coût de Forge (`2 R T Sac<1/CARDNAME>`)
   forgeEffetsA.js   le registre des effets, la porte `executeForge()`, zones et cartes
   forgeEffetsB.js   bibliothèque, dégâts et vie, retraits, jetons et marqueurs
@@ -804,6 +805,22 @@ qui revient au même. Les Leylines jouent leur effet après les mulligans. Un ma
 SVar (`TargetMax$ X`, « any number of target … ») se calcule au choix des cibles, et non plus 1.
 Simplifications annoncées : mentor choisit sa créature à la résolution, ne pas se dégager n'est jamais
 choisi, personne n'aide à payer (assist).
+
+**Les désignations, et un bilan** (lot F30). `js/forgeDesignations.js` est consulté en dernier par
+`forgeDefinis()`, les expressions et les filtres : les joueurs retenus (`Player.IsRemembered`), le
+dessus de la bibliothèque, l'objet imprimé (rangé, comme Forge l'écrit, avec la mémoire de la carte),
+le monarque, le premier joueur, les marqueurs d'un joueur autres que l'énergie et le poison
+(`J.marqueurs`), les adversaires attaqués ce tour, monstrueux, incité, ombre. En chemin, deux erreurs
+anciennes : la monstruosité lit enfin son nombre (`Monstrosity$ 3`, jamais `True`), et une statique
+qui porte `AffectedDefined$` et `Affected$` exige les deux.
+
+Au terme des lots F21 à F30, 73,4 % des 34 234 cartes de Forge sont entièrement comprises, 75,1 % hors
+des formats à part (Alchemy, Un-, Planechase, Archenemy, Conspiracy). Des 9 116 cartes restantes,
+5 081 ne manquent que d'un élément : la traîne est longue, et chaque lot n'en gagne plus que quelques
+centaines. Les plus gros manques restants : les statiques continues que Forge écrit d'une forme encore
+inconnue, Station, Bestow, les classes, la vitesse (« Start your engines »), Splice, Overload. Une
+partie entre deux decks ordinaires prend 18 ms ; le banc aléatoire joue 300 parties sur des cartes de
+Forge tirées au hasard sans erreur ni invariant rompu.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

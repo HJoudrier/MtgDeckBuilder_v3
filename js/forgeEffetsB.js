@@ -173,7 +173,12 @@ forgeEffet('PutCounter', ['CounterType', 'CounterNum', 'ETB'], function* (P, t, 
   const g = genreMarqueur(t.CounterType), n = forgeNombre(P, t.CounterNum || 1, env);
   const l = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Self', env);
   l.forEach(x => {
-    if (x.j != null) { const J = P.joueurs[x.j]; if (g === 'energy') J.energie = (J.energie || 0) + n; else if (g === 'poison') J.poison += n; return; }
+    if (x.j != null) {
+      const J = P.joueurs[x.j];
+      if (g === 'energy') J.energie = (J.energie || 0) + n; else if (g === 'poison') J.poison += n;
+      else (J.marqueurs = J.marqueurs || {})[g] = ((J.marqueurs || {})[g] || 0) + n;
+      return;
+    }
     if (x.zone === 'champ' && !x.lki) poseMarqueurs(P, x, g, n, env.src);
   });
 }, (t, op) => { op.op = 'marqueurs'; op.genre = genreMarqueur(t.CounterType); op.n = nombreIA(t.CounterNum || 1); op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.genre === '-1/-1'; });
