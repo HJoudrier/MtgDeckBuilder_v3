@@ -69,6 +69,8 @@ function* lanceSort(P, j, a) {
   if (a.variante === 'permis') permisUtilise(P, j, o0);
   const nid = deplace(P, a.id, 'pile');
   const s = obj(P, nid);
+  /* Lancée par un effet qui l'exile au lieu du cimetière (js/forgeEffetsE.js). */
+  if (o0.exilApres) s.exilApres = true;
   s.ctrl = j;
   if (d !== s.def) s.def = d;
   const annule = () => {

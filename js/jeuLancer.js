@@ -167,7 +167,7 @@ function* choisitCibles(P, j, src, slots, couleurs, extra) {
     if (!cands.length) { choix.push([]); continue; }
     const max = Math.min(sl.max, cands.length);
     const r = yield question(P, j, 'cibles', cands, {min: sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
-    choix.push((Array.isArray(r) ? r : [r]).map(i => cands[i]).filter(x => x != null));
+    choix.push(restreintCibles(P, sl, (Array.isArray(r) ? r : [r]).map(i => cands[i]).filter(x => x != null)));
   }
   return choix;
 }
@@ -199,4 +199,20 @@ function coutDeGarde(P, j, effets) {
     if (o && o.zone === 'champ' && o.ctrl !== j && (car(P, o).mots & MOT.GARDE)) n += o.def.params.garde || 2;
   })));
   return n;
+}
+
+/* « Targets with the same controller », « with different names », « one
+   per player » : les cibles choisies qui enfreignent la restriction sont
+   écartées, dans l'ordre du choix. */
+function restreintCibles(P, sl, l) {
+  if (!sl.restr) return l;
+  const r = [], qui = c => typeof c === 'object' ? c.j : (obj(P, c) || {}).ctrl;
+  for (const c of l) {
+    const o = typeof c === 'number' ? obj(P, c) : null;
+    if (sl.restr.meme && r.length && qui(c) !== qui(r[0])) continue;
+    if (sl.restr.noms && o && r.some(x => typeof x === 'number' && obj(P, x) && obj(P, x).def.nom === o.def.nom)) continue;
+    if (sl.restr.parJoueur && r.some(x => qui(x) === qui(c))) continue;
+    r.push(c);
+  }
+  return r;
 }

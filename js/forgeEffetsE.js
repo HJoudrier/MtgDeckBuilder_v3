@@ -90,6 +90,7 @@ function* lanceDepuisEffet(P, j, o, gratuit) {
     return yield* joueTerrain(P, j, {id: o.id, depuis: o.zone});
   }
   o.lanceEffet = {gratuit};
+  if (o._exilApres) o.exilApres = true;
   const ok = yield* lanceSort(P, j, {k: 'lancer', id: o.id, depuis: o.zone, variante: gratuit ? 'gratuit' : 'permis'});
   if (obj(P, o.id)) delete obj(P, o.id).lanceEffet;
   return ok;
@@ -104,10 +105,12 @@ forgeEffet('Play', ['Valid', 'ValidZone', 'ValidSA', 'Amount', 'Controller', 'Wi
   const n = t.Amount === 'All' ? l.length : forgeNombre(P, t.Amount || 1, env);
   const ids = l.length > n ? yield* choisitCartes(P, j, l.map(o => o.id), n, 'Jouer', 'cartes', 0) : l.map(o => o.id);
   for (const id of ids) {
+    if (t.ReplaceGraveyard === 'Exile' && obj(P, id)) obj(P, id)._exilApres = true;
     const ok = yield* lanceDepuisEffet(P, j, obj(P, id), t.WithoutManaCost === 'True');
     if (ok && t.RememberPlayed === 'True') retiensForge(env.ctx, id);
   }
-}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !t.CopyCard && !t.ReplaceGraveyard});
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !t.CopyCard && (!t.ReplaceGraveyard || t.ReplaceGraveyard === 'Exile')});
+forgeSait('param', 'Play.ReplaceGraveyard');
 
 /* Découvrir N : exiler du dessus jusqu'à une carte non-terrain de valeur
    de mana N ou moins, la lancer gratuitement ou la prendre en main ; le

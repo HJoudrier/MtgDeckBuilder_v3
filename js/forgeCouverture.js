@@ -46,7 +46,7 @@ const FORGE_COMMUNS = new Set(['Cost', 'SubAbility', 'ValidTgts', 'TargetMin', '
   'Optional', 'OptionalDecider', 'UnlessCost', 'UnlessPayer', 'UnlessSwitched', 'ConditionDefined', 'ConditionPresent',
   'ConditionCompare', 'ConditionCheckSVar', 'ConditionSVarCompare', 'ConditionZone', 'ConditionPlayerTurn', 'Condition',
   'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones', 'ActivationPhases',
-  'ForgetOtherRemembered', 'ForgetOtherTargets',
+  'ForgetOtherRemembered', 'ForgetOtherTargets', 'TargetsWithSameController', 'DifferentNames', 'TargetsForEachPlayer',
   'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'PlayerTurn', 'TargetUnique', 'Mandatory',
   'ActivationZone']);
 

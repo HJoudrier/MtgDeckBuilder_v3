@@ -472,6 +472,7 @@ digraph appels {
     "choisitCibles" [label="choisitCibles", fillcolor="#96a86d33", color="#96a86d"];
     "prepareEffets" [label="prepareEffets", fillcolor="#96a86d33", color="#96a86d"];
     "coutDeGarde" [label="coutDeGarde", fillcolor="#96a86d33", color="#96a86d"];
+    "restreintCibles" [label="restreintCibles", fillcolor="#96a86d33", color="#96a86d"];
   }
   subgraph "cluster_46" {
     label="js/jeuActions.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
@@ -2692,11 +2693,13 @@ digraph appels {
   "actionsPossibles" -> "capacitesDe" [color="#96a86d99"];
   "choisitCibles" -> "ciblesLegales" [color="#96a86d99"];
   "choisitCibles" -> "question" [color="#96a86d99"];
+  "choisitCibles" -> "restreintCibles" [color="#96a86d99"];
   "prepareEffets" -> "ciblesLegales" [color="#96a86d99"];
   "prepareEffets" -> "question" [color="#96a86d99"];
   "prepareEffets" -> "choisitCibles" [color="#96a86d99"];
   "coutDeGarde" -> "obj" [color="#96a86d99"];
   "coutDeGarde" -> "car" [color="#96a86d99"];
+  "restreintCibles" -> "obj" [color="#96a86d99"];
   "paieAutre" -> "engageObjet" [color="#6da8a499"];
   "paieAutre" -> "degageObjet" [color="#6da8a499"];
   "paieAutre" -> "champDe" [color="#6da8a499"];
@@ -3414,6 +3417,7 @@ digraph appels {
   "forgeEffetsE.js (chargement)" -> "objetsForge" [color="#6da8a499"];
   "forgeEffetsE.js (chargement)" -> "forgeValideDef" [color="#6da8a499"];
   "forgeEffetsE.js (chargement)" -> "lanceDepuisEffet" [color="#6da8a499"];
+  "forgeEffetsE.js (chargement)" -> "forgeSait" [color="#6da8a499"];
   "forgeEffetsE.js (chargement)" -> "deplace" [color="#6da8a499"];
   "forgeEffetsE.js (chargement)" -> "estType" [color="#6da8a499"];
   "forgeEffetsE.js (chargement)" -> "mvDe" [color="#6da8a499"];
@@ -3516,6 +3520,9 @@ digraph appels {
   "forgeEffetsF.js (chargement)" -> "forgeEffet" [color="#a8846d99"];
   "forgeEffetsF.js (chargement)" -> "objetsForge" [color="#a8846d99"];
   "forgeEffetsF.js (chargement)" -> "transforme" [color="#a8846d99"];
+  "forgeEffetsF.js (chargement)" -> "statiqueForge" [color="#a8846d99"];
+  "forgeEffetsF.js (chargement)" -> "forgeTable" [color="#a8846d99"];
+  "forgeEffetsF.js (chargement)" -> "poseEffet" [color="#a8846d99"];
   "forgeEffetsF.js (chargement)" -> "estCreature" [style=dashed, color="#a8846d66"];
   "sousEffets" -> "forgeSousCapacite" [color="#6da88c99"];
   "sousEffets" -> "effetForge" [color="#6da88c99"];

@@ -3781,6 +3781,7 @@
     "accordeAnimation",
     "elementsTable",
     "forgeEffetsD.js (chargement)",
+    "forgeEffetsF.js (chargement)",
     "forgeSousCapacite",
     "lisScriptForge",
     "motCleForge",
@@ -3917,6 +3918,7 @@
     "forgeEffet",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeEffetsE.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
@@ -4279,6 +4281,7 @@
     "remplacementsEnJeu",
     "resoudre",
     "resous",
+    "restreintCibles",
     "retourne",
     "sacrifie",
     "sagasFinies",
@@ -6129,7 +6132,8 @@
    "chargement": false,
    "appelle": [
     "ciblesLegales",
-    "question"
+    "question",
+    "restreintCibles"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -6171,6 +6175,20 @@
    "appelleParHtml": [],
    "appeleePar": [
     "lanceSort"
+   ]
+  },
+  {
+   "nom": "restreintCibles",
+   "fichier": "jeuLancer.js",
+   "ligne": 207,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "choisitCibles"
    ]
   },
   {
@@ -6269,7 +6287,7 @@
   {
    "nom": "activeCapacite",
    "fichier": "jeuActions.js",
-   "ligne": 124,
+   "ligne": 126,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -6294,7 +6312,7 @@
   {
    "nom": "equipe",
    "fichier": "jeuActions.js",
-   "ligne": 159,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6310,7 +6328,7 @@
   {
    "nom": "joueTerrain",
    "fichier": "jeuActions.js",
-   "ligne": 177,
+   "ligne": 179,
    "chargement": false,
    "appelle": [
     "emet",
@@ -6330,7 +6348,7 @@
   {
    "nom": "executeAction",
    "fichier": "jeuActions.js",
-   "ligne": 187,
+   "ligne": 189,
    "chargement": false,
    "appelle": [
     "activeCapacite",
@@ -6847,7 +6865,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsD.js (chargement)"
+    "forgeEffetsD.js (chargement)",
+    "forgeEffetsF.js (chargement)"
    ]
   },
   {
@@ -9541,7 +9560,8 @@
    "appeleePar": [
     "accordeAnimation",
     "definitionDepuisScript",
-    "forgeEffetsD.js (chargement)"
+    "forgeEffetsD.js (chargement)",
+    "forgeEffetsF.js (chargement)"
    ]
   },
   {
@@ -9635,6 +9655,7 @@
     "forgeDefinis",
     "forgeEffet",
     "forgeNombre",
+    "forgeSait",
     "forgeValideDef",
     "forgeValideObjet",
     "jn",
@@ -9964,12 +9985,15 @@
     "forgeEffet",
     "forgeNombre",
     "forgeSait",
+    "forgeTable",
     "forgeValideObjet",
     "genreMarqueur",
     "obj",
     "objetsForge",
     "objetsZone",
+    "poseEffet",
     "poseMarqueurs",
+    "statiqueForge",
     "transforme"
    ],
    "appelleDiffere": [
@@ -11814,7 +11838,7 @@
   {
    "nom": "jetonsForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 81,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",
@@ -11829,7 +11853,7 @@
   {
    "nom": "capaciteForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 92,
+   "ligne": 95,
    "chargement": false,
    "appelle": [
     "coutForge",
@@ -11852,7 +11876,7 @@
   {
    "nom": "declencheurForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 145,
+   "ligne": 148,
    "chargement": false,
    "appelle": [
     "effetForge",
@@ -11874,7 +11898,7 @@
   {
    "nom": "remplacementForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 166,
+   "ligne": 169,
    "chargement": false,
    "appelle": [
     "entreeForge",
@@ -11889,7 +11913,7 @@
   {
    "nom": "entreeForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 175,
+   "ligne": 178,
    "chargement": false,
    "appelle": [
     "descForge",
@@ -11905,7 +11929,7 @@
   {
    "nom": "couleursForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 207,
+   "ligne": 210,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11917,7 +11941,7 @@
   {
    "nom": "definitionDepuisScript",
    "fichier": "forgeDefinition.js",
-   "ligne": 215,
+   "ligne": 218,
    "chargement": false,
    "appelle": [
     "capaciteForge",
@@ -11947,7 +11971,7 @@
   {
    "nom": "definitionForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 256,
+   "ligne": 259,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",
@@ -11963,7 +11987,7 @@
   {
    "nom": "nomsJetonsForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 263,
+   "ligne": 266,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11975,7 +11999,7 @@
   {
    "nom": "definitionAFaces",
    "fichier": "forgeDefinition.js",
-   "ligne": 278,
+   "ligne": 281,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript"

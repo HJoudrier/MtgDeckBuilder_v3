@@ -211,11 +211,11 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
     const n = t.ChangeNum === 'All' ? ids.length : forgeNombre(P, t.ChangeNum || 1, env);
     const pris = yield* choisitCartes(P, t.Chooser ? env.ctrl : j, ids, n, 'Chercher', 'cartes', t.Mandatory === 'True' ? n : 0);
     objets = pris.map(id => obj(P, id));
-    if (zones.includes('bibliotheque') && t.Shuffle !== 'False') ctx._melange = j;
+    if (zones.includes('bibliotheque') && t.Shuffle !== 'False' && t.NoShuffle !== 'True') ctx._melange = j;
   } else objets = objetsForge(P, t, env).filter(o => dansOrigine(o, t.Origin));
   for (const o of objets) {
     const n = yield* deplaceForge(P, o, dest, env, opts);
-    if (n != null && (t.RememberChanged === 'True' || t.RememberLKI === 'True')) retiensForge(ctx, n);
+    if (n != null && (t.RememberChanged === 'True' || t.RememberLKI === 'True' || t.Imprint === 'True')) retiensForge(ctx, n);
     if (t.ForgetChanged === 'True') { const i = ctx.memo.indexOf(o.id); if (i >= 0) ctx.memo.splice(i, 1); }
     if (n != null && dest === 'exil' && env.src && P.cartes[env.src.cid]) (P.cartes[env.src.cid].exilees = P.cartes[env.src.cid].exilees || []).push(n);
     if (n != null && jusqua && dest === 'exil') durees(P).retours.push({hote: env.src.id, ids: [n]});

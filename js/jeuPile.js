@@ -94,7 +94,7 @@ function* resoudre(P, item) {
   }
   if (item.sort && obj(P, item.id)) {
     /* Une aventure part en exil, d'où la créature se lancera. */
-    const flashback = exileApresResolution(item);
+    const flashback = exileApresResolution(item) || !!(obj(P, item.id) && obj(P, item.id).exilApres);
     /* Omen : la carte se mélange dans la bibliothèque de son propriétaire. */
     if (item.variante === 'omen') { const n = deplace(P, item.id, 'dessus'); if (n != null) melangeHasard(P.rng, P.joueurs[obj(P, n).prop].bibliotheque); return; }
     const n = deplace(P, item.id, flashback || item.variante === 'aventure' ? 'exil' : item.rachat ? 'main' : 'cimetiere');

@@ -763,6 +763,12 @@ elle vise ne recalcule donc pas la liste. Seedborn Muse, Thorn Elemental, « ass
 « can't be regenerated », « can't play lands », goad par statique, mots-clés retirés et « spend mana as
 though any color » s'ajoutent à js/forgeInterdits.js et aux règles qu'ils touchent.
 
+**Les déplacements, suite** (lot F25). `StaticEffect$` nomme une statique (« that creature is a black
+Zombie in addition ») : un effet permanent la pose et retient l'objet arrivé. Les restrictions entre
+cibles — même contrôleur, noms différents, une par joueur — écartent après le choix les cibles qui les
+enfreignent (`restreintCibles()`). Une carte lancée par un effet « exile it instead » porte la marque
+jusque sur la pile.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -157,3 +157,16 @@ forgeEffet('ExchangeControl', ['Defined'], function* (P, t, env) {
 etendEffet('ChangeZone', ['Transformed'], null, function* (P, t, env, touches, nouveaux) {
   if (t.Transformed === 'True') nouveaux.forEach(o => transforme(P, o));
 });
+
+/* « That creature is a black Zombie in addition » : `StaticEffect$` nomme
+   une statique, posée par un effet permanent qui retient l'objet arrivé
+   (`Affected$ Card.IsRemembered`). */
+etendEffet('ChangeZone', ['StaticEffect', 'Imprint', 'NoShuffle', 'ExileFaceDown', 'AlreadyRevealed'], null, function* (P, t, env, touches, nouveaux) {
+  if (!t.StaticEffect || !nouveaux.length) return;
+  const s = statiqueForge(env.op.face, forgeTable(env.op.face.svars[t.StaticEffect] || ''), env.op.jetons);
+  if (s) poseEffet(P, {ctrl: env.ctrl, statiques: [s], memo: nouveaux.map(o => o.id), fin: null, srcId: env.src ? env.src.id : null, nom: 'Effet'});
+});
+FORGE_API.ChangeZone.prepare = (p0 => (t, op) => (!p0 || p0(t, op)) &&
+  (!t.StaticEffect || !!(op.face.svars[t.StaticEffect] && statiqueForge(op.face, forgeTable(op.face.svars[t.StaticEffect]), op.jetons))))(FORGE_API.ChangeZone.prepare);
+etendEffet('Dig', ['WithMayLook', 'ExileFaceDown'], null, null);
+etendEffet('ChangeZoneAll', ['UseAllOriginZones'], null, null);

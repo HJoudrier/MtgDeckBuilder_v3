@@ -61,7 +61,10 @@ function effetForge(face, t0, jetons, racine) {
       /* Sans `TgtZone$`, un déplacement cible dans sa zone d'origine :
          « return target creature card from your graveyard ». */
       const zone = t.TgtZone || (forgeApi(t) === 'ChangeZone' && t.Origin && !/,/.test(t.Origin) ? t.Origin : null);
-      cibles.push({desc: descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || '')), min, max});
+      cibles.push({desc: descForge(t.ValidTgts || 'Card', zone, /Spell/.test(t.TargetType || '')), min, max,
+        /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
+        ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'
+          ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', parJoueur: t.TargetsForEachPlayer === 'True'}} : {})});
     }
     const op = {op: 'forge', forge: true, api: forgeApi(t), t, face, slot, slotParent: parent, jetons, texte: texteForge(face, t),
       chaine, coutInterne: t.Cost && !(racine && t === t0) ? t.Cost : null};
