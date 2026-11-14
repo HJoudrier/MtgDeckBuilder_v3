@@ -32,7 +32,7 @@ function noteHistorique(P, e) {
     case 'sacrifie': plusUn(h.sacrifies, e.joueur); break;
     case 'defausse': plusUn(h.defausses, e.joueur); break;
     case 'marqueur': h.marqueurs += e.n || 0; break;
-    case 'entre': { const o = obj(P, e.id); if (o) o.entreTour = P.tour; break; }
+    case 'entre': { const o = obj(P, e.id); if (o) { o.entreTour = P.tour; jourNuitEntree(P, o); } break; }
     case 'attaque': { const o = obj(P, e.id); if (o) o.attaqueTour = P.tour; break; }
     case 'degatsObjet': {
       const o = obj(P, e.id);

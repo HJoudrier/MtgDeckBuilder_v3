@@ -143,3 +143,9 @@ forgeEffet('ExchangeControl', ['Defined'], function* (P, t, env) {
   const [a, b] = l, c = a.ctrl;
   a.ctrl = b.ctrl; b.ctrl = c; a.pret = false; b.pret = false; P.ver++;
 }, (t, op) => { op.op = 'forge'; op.hostile = true; });
+
+/* « Return it to the battlefield transformed » (js/jeuFaces.js
+   `transforme()`). */
+etendEffet('ChangeZone', ['Transformed'], null, function* (P, t, env, touches, nouveaux) {
+  if (t.Transformed === 'True') nouveaux.forEach(o => transforme(P, o));
+});

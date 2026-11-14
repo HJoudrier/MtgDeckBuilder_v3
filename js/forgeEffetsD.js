@@ -164,6 +164,6 @@ forgeEffet('PreventDamage', ['Amount'], function* (P, t, env) {
 /* Changer de face : se transformer, ou se retourner face visible. */
 forgeEffet('SetState', ['Mode'], function* (P, t, env) {
   objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
-    if (t.Mode === 'Transform') transforme(P, o); else retourneFace(P, o);
+    if (t.Mode === 'Transform' || t.Mode === 'Flip') transforme(P, o); else retourneFace(P, o);
   });
-}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => t.Mode === 'Transform' || t.Mode === 'TurnFaceUp'});
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => /^(Transform|Flip|TurnFaceUp)$/.test(t.Mode)});

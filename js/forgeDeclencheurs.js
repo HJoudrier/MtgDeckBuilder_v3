@@ -121,6 +121,11 @@ function forgeDeclenche(P, ec, e, s) {
   const t = ec.t, juge = FORGE_MODES[t.Mode];
   if (!juge) return false;
   if (t.PlayerTurn === 'True' && P.actif !== s.ctrl) return false;
+  /* Les loups-garous : aucun sort au tour précédent, ou deux d'un même
+     joueur (js/jeuFacesB.js). */
+  const d = P.sortsDernierTour;
+  if (t.WerewolfTransformCondition === 'True' && (!d || d.total !== 0)) return false;
+  if (t.WerewolfUntransformCondition === 'True' && (!d || d.max < 2)) return false;
   /* « One or more » : une fois par collecte ; « only once each turn » :
      un compte par tour, par source et par déclencheur. */
   const cle = s.id + '|' + (ec.uid || t.Mode);

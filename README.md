@@ -70,6 +70,7 @@ js/                 modules, chargés dans cet ordre :
   jeuCoutsB.js      les morceaux de coût de plus : meuler, exert, blight, collecter des indices…
   jeuDurees.js      ce qui dure : effets, déclencheurs retardés, retours d'exil, régénération
   jeuFaces.js       faces d'une carte, face cachée, transformation, sagas, véhicules
+  jeuFacesB.js      jour et nuit, loups-garous, craft, omen, fuse, prototype
   jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
   jeuCouches.js     ce qu'une statique fait devenir un permanent : contrôleur, types, capacités
   jeuPile.js        la priorité, la pile, la résolution
@@ -739,6 +740,14 @@ la suite des autres ; une capacité de mana qui en porte n'est pas une source gr
 par la convocation, avec les artefacts pour candidats. Le mana reflété (Reflecting Pool) se calcule au
 moment de payer. Simplifications annoncées : le déclencheur de mana monte sur la pile au lieu de se
 résoudre tout de suite, et fourrager exile toujours trois cartes du cimetière.
+
+**Les faces, suite** (`js/jeuFacesB.js`, lot F22). Une carte transformable est jouée si quelque chose la
+transforme : un effet, le jour et la nuit, disturb, craft, ou un retour « transformed ». Le jour et la
+nuit sont un état de la partie (`P.jourNuit`), jugé au début de chaque tour sur les sorts du joueur actif
+du tour précédent (`P.sortsDernierTour`, noté avant que `tour()` ne les efface) ; les loups-garous d'avant
+jugent la même chose. Disturb et aftermath se lancent du cimetière, prototype et fuse sont des
+variantes ; fuse décale les emplacements de cible de la seconde moitié. Un omen se lance comme une
+aventure et se mélange ensuite dans la bibliothèque ; une carte flip se retourne comme une transformable.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

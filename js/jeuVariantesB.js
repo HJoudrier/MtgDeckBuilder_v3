@@ -21,16 +21,20 @@ function variantesEtendues(P, j, o, depuis, essaie) {
     if (d.dash) essaie('dash', coutSort(P, j, o, depuis, d.dash.mana), autresCout(d.dash));
     if (d.spectacle && adversaires(P, j).some(i => (histoire(P).perdu[i] || 0) > 0)) essaie('spectacle', coutSort(P, j, o, depuis, d.spectacle.mana), autresCout(d.spectacle));
     if (d.surge && P.joueurs[j].sortsTour.length > 0) essaie('surge', coutSort(P, j, o, depuis, d.surge.mana), autresCout(d.surge));
+    if (d.prototype && depuis === 'main') essaie('prototype', coutSort(P, j, o, depuis, d.prototype.cout), null, defPrototype(d));
+    if ((d.fuse || (d.dos && d.dos.fuse)) && d.dos && depuis === 'main') { const f = defFusionnee(d); if (f) essaie('fuse', coutSort(P, j, o, depuis, sommeMana(d.cout, d.dos.cout)), null, f); }
   }
   if (depuis === 'cimetiere') {
     if (d.escape) essaie('escape', coutSort(P, j, o, depuis, d.escape.mana), autresCout(d.escape));
     if (d.retrace) essaie('retrace', coutSort(P, j, o, depuis, d.cout), {defausse: {n: 1, desc: {...descForge('Land'), genre: 'carte', zone: 'main'}}});
     if (d.jumpstart) essaie('jumpstart', coutSort(P, j, o, depuis, d.cout), {defausse: {n: 1}});
+    if (d.disturb && d.dos) essaie('disturb', coutSort(P, j, o, depuis, d.disturb.mana), autresCout(d.disturb), d.dos);
+    if (d.dos && d.dos.params.aftermath) essaie('aftermath', coutSort(P, j, o, depuis, d.dos.cout), d.dos.coutSup || null, d.dos);
   }
 }
 
 /* Une carte qui se lance du cimetière autrement que par flashback. */
-function lancableDuCimetiere(d) { return !!(d.flashback || d.escape || d.retrace || d.jumpstart); }
+function lancableDuCimetiere(d) { return !!(d.flashback || d.escape || d.retrace || d.jumpstart || d.disturb || (d.dos && d.dos.params.aftermath)); }
 
 /* Split second : tant qu'il est sur la pile, personne ne lance ni
    n'active. */

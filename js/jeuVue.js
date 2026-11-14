@@ -76,7 +76,8 @@ function libelleAction(P, a) {
     a.variante === 'permis' ? ` (depuis ${ZONES_DEPUIS[a.depuis]})` : a.depuis === 'exil' ? ' (présage)' : '') + (({kicker: ' (kicker)', rachat: ' (rachat)', evocation: ' (évocation)', folie: ' (folie)', suspension: ' (suspension)',
       choixA: o && o.def.coutsAuChoix ? ` (${o.def.coutsAuChoix[0].texte})` : '', choixB: o && o.def.coutsAuChoix ? ` (${o.def.coutsAuChoix[1].texte})` : '',
       morph: ' (face cachée)', dash: ' (dash)', spectacle: ' (spectacle)', surge: ' (surge)', escape: ' (escape)', retrace: ' (retrace)',
-      jumpstart: ' (jump-start)'}[a.variante] || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
+      jumpstart: ' (jump-start)', disturb: ' (disturb)', aftermath: ' (aftermath)', prototype: ' (prototype)', fuse: ' (fuse)',
+      omen: o && o.def.dos ? ` (${o.def.dos.nom})` : ''}[a.variante] || (/^alt\d+$/.test(a.variante || '') ? ' (coût alternatif)' : '') || (a.variante === 'dos' || a.variante === 'aventure' ? ` (${o.def.dos.nom})` : '')));
   const k = o && capacitesDe(P, o)[a.i];
   return nom + ' — ' + ((k && k.texte) || 'capacité');
 }

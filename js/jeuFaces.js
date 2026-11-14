@@ -40,8 +40,9 @@ function defVariante(o, variante) {
 function variantesFaces(P, j, o, depuis, essaie) {
   const d = o.def;
   if (depuis !== 'main') return;
-  if (d.dos && /^(Modal|Split|Adventure)$/.test(d.modeFaces || '') && !d.dos.types.includes('land'))
-    essaie(d.modeFaces === 'Adventure' ? 'aventure' : 'dos', coutSort(P, j, o, depuis, d.dos.cout), d.dos.coutSup || null, d.dos);
+  /* La moitié aftermath ne se lance que du cimetière (js/jeuVariantesB.js). */
+  if (d.dos && /^(Modal|Split|Adventure|Omen)$/.test(d.modeFaces || '') && !d.dos.types.includes('land') && !d.dos.params.aftermath)
+    essaie({Adventure: 'aventure', Omen: 'omen'}[d.modeFaces] || 'dos', coutSort(P, j, o, depuis, d.dos.cout), d.dos.coutSup || null, d.dos);
   if (d.morph) essaie('morph', coutSort(P, j, o, depuis, MANA_TROIS), null, defFaceCachee(d));
 }
 
@@ -71,7 +72,7 @@ function retourneFace(P, o) {
    inversement. */
 function transforme(P, o) {
   const k = P.cartes[o.cid];
-  if (!k || !k.def.dos || k.def.modeFaces !== 'DoubleFaced' || o.zone !== 'champ') return;
+  if (!k || !k.def.dos || !/^(DoubleFaced|Flip)$/.test(k.def.modeFaces) || o.zone !== 'champ') return;
   o.def = o.def === k.def ? k.def.dos : k.def;
   P.ver++;
   jn(P, `${o.def.nom} se transforme`);

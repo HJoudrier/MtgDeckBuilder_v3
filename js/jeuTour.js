@@ -99,7 +99,9 @@ function* tour(P) {
   const J = P.joueurs[P.actif];
   J.tours++;
   J.terrainsJoues = 0;
+  noteSortsDuTour(P);
   P.joueurs.forEach(x => { x.sortsTour = []; x.piochesTour = 0; x.vieTour = 0; });
+  jourNuitDebut(P);
   P.entresTour = []; P.attaquantsTour = 0;
   P.unefois = new Set();
   P.actionsTour = 0; P.finTour = false; P.sansCombat = false; P.combat = null; P.etape = '';

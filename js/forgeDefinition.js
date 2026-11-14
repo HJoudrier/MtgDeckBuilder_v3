@@ -267,7 +267,7 @@ function nomsJetonsForge(texte) {
 /* Les modes de cartes à deux faces que le moteur sait jouer : la face
    arrière d'une carte modale, partagée ou à aventure se lance ; celle d'une
    carte transformable n'est jouée que si un effet la transforme. */
-const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced'];
+const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced', 'Flip', 'Omen'];
 
 /* Une carte à deux faces : la définition de chacune, la face arrière
    rangée dans `def.dos`. La carte n'est complète que si les deux le sont,
@@ -276,8 +276,10 @@ function definitionAFaces(s, fiche, jetons) {
   const av = definitionDepuisScript({faces: [s.faces[0]], mode: ''}, fiche, jetons);
   const ar = definitionDepuisScript({faces: [s.faces[1]], mode: ''}, {nom: s.faces[1].nom, jeton: fiche.jeton}, jetons);
   const def = av.def, c = def.couverture;
-  const brut = JSON.stringify(s.faces.map(f => [f.a, f.t, f.svars]));
-  const tenu = FORGE_FACES.includes(s.mode) && (s.mode !== 'DoubleFaced' || /SetState/.test(brut));
+  const brut = JSON.stringify(s.faces.map(f => [f.a, f.t, f.svars, f.k]));
+  /* Une carte transformable est jouée si quelque chose la transforme : un
+     effet, le jour et la nuit, disturb, craft, ou un retour « transformed ». */
+  const tenu = FORGE_FACES.includes(s.mode) && (!/^(DoubleFaced|Flip)$/.test(s.mode) || /SetState|Daybound|Nightbound|Disturb|Craft|Transformed\$ True/.test(brut));
   if (tenu) { def.dos = ar.def; def.modeFaces = s.mode; }
   const manque = tenu ? ar.def.couverture.manque.filter(e => !c.manque.includes(e)) : ['construction:' + (s.mode || 'faces')];
   if (c.etat === 'complete' && (manque.length || ar.def.couverture.etat !== 'complete')) c.etat = 'partielle';

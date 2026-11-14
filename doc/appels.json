@@ -53,6 +53,7 @@
   "jeuCoutsB.js",
   "jeuDurees.js",
   "jeuFaces.js",
+  "jeuFacesB.js",
   "jeuPermis.js",
   "jeuPile.js",
   "jeuCombat.js",
@@ -3626,6 +3627,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "compileDefinition",
+    "defPrototype",
     "definitionDepuisScript"
    ]
   },
@@ -4105,7 +4107,8 @@
     "forgeTraine.js (chargement)",
     "jeuOpsB.js (chargement)",
     "mulligans",
-    "partie"
+    "partie",
+    "resoudre"
    ]
   },
   {
@@ -4169,6 +4172,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "aCopier",
+    "accordeJourNuit",
     "actionsLegales",
     "actionsPossibles",
     "activeCapacite",
@@ -4232,6 +4236,7 @@
     "iaReponse",
     "iaScrute",
     "initiativeEnJeu",
+    "jeuFacesB.js (chargement)",
     "jeuOpsB.js (chargement)",
     "jeuVariantes.js (chargement)",
     "joueTerrain",
@@ -4483,6 +4488,7 @@
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
     "joueTerrain",
+    "jourNuitDebut",
     "lanceSort",
     "mulligans",
     "partie",
@@ -4791,6 +4797,7 @@
    "chargement": false,
    "appelle": [
     "histoire",
+    "jourNuitEntree",
     "obj",
     "plusUn"
    ],
@@ -5520,6 +5527,7 @@
     "forgeTraine.js (chargement)",
     "jeuActions.js (chargement)",
     "jeuFaces.js (chargement)",
+    "jeuFacesB.js (chargement)",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
     "jeuVariantes.js (chargement)",
@@ -5760,6 +5768,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "deplaceForge",
+    "jeuFacesB.js (chargement)",
     "jeuOpsB.js (chargement)",
     "jeuVariantes.js (chargement)",
     "joueTerrain",
@@ -6390,6 +6399,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "jeuVariantes.js (chargement)",
+    "variantesEtendues",
     "variantesSort"
    ]
   },
@@ -6651,8 +6661,11 @@
     "conditionForge",
     "coutForge",
     "coutSort",
+    "defFusionnee",
+    "defPrototype",
     "descForge",
-    "histoire"
+    "histoire",
+    "sommeMana"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -6663,7 +6676,7 @@
   {
    "nom": "lancableDuCimetiere",
    "fichier": "jeuVariantesB.js",
-   "ligne": 33,
+   "ligne": 37,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6676,7 +6689,7 @@
   {
    "nom": "secondeFendue",
    "fichier": "jeuVariantesB.js",
-   "ligne": 37,
+   "ligne": 41,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6688,7 +6701,7 @@
   {
    "nom": "exileApresResolution",
    "fichier": "jeuVariantesB.js",
-   "ligne": 41,
+   "ligne": 45,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -6700,7 +6713,7 @@
   {
    "nom": "rebondsEntretien",
    "fichier": "jeuVariantesB.js",
-   "ligne": 48,
+   "ligne": 52,
    "chargement": false,
    "appelle": [
     "lanceDepuisEffet",
@@ -6715,7 +6728,7 @@
   {
    "nom": "apresDash",
    "fichier": "jeuVariantesB.js",
-   "ligne": 59,
+   "ligne": 63,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7030,7 +7043,7 @@
   {
    "nom": "retournable",
    "fichier": "jeuFaces.js",
-   "ligne": 50,
+   "ligne": 51,
    "chargement": false,
    "appelle": [
     "planPaiement"
@@ -7046,7 +7059,7 @@
   {
    "nom": "retourne",
    "fichier": "jeuFaces.js",
-   "ligne": 54,
+   "ligne": 55,
    "chargement": false,
    "appelle": [
     "obj",
@@ -7063,7 +7076,7 @@
   {
    "nom": "retourneFace",
    "fichier": "jeuFaces.js",
-   "ligne": 61,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
     "emet",
@@ -7080,7 +7093,7 @@
   {
    "nom": "transforme",
    "fichier": "jeuFaces.js",
-   "ligne": 72,
+   "ligne": 73,
    "chargement": false,
    "appelle": [
     "emet",
@@ -7089,13 +7102,16 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsD.js (chargement)"
+    "accordeJourNuit",
+    "forgeEffetsD.js (chargement)",
+    "forgeEffetsF.js (chargement)",
+    "jourNuitEntree"
    ]
   },
   {
    "nom": "ajouteLore",
    "fichier": "jeuFaces.js",
-   "ligne": 84,
+   "ligne": 85,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -7108,7 +7124,7 @@
   {
    "nom": "loreDebutPrincipale",
    "fichier": "jeuFaces.js",
-   "ligne": 96,
+   "ligne": 97,
    "chargement": false,
    "appelle": [
     "ajouteLore",
@@ -7123,7 +7139,7 @@
   {
    "nom": "sagasFinies",
    "fichier": "jeuFaces.js",
-   "ligne": 102,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "obj"
@@ -7137,7 +7153,7 @@
   {
    "nom": "equipiers",
    "fichier": "jeuFaces.js",
-   "ligne": 109,
+   "ligne": 110,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -7153,7 +7169,7 @@
   {
    "nom": "equipagePossible",
    "fichier": "jeuFaces.js",
-   "ligne": 113,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "car",
@@ -7168,7 +7184,7 @@
   {
    "nom": "paieEquipage",
    "fichier": "jeuFaces.js",
-   "ligne": 117,
+   "ligne": 118,
    "chargement": false,
    "appelle": [
     "car",
@@ -7181,6 +7197,118 @@
    "appelleParHtml": [],
    "appeleePar": [
     "paieAutre"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "jeuFacesB.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "metEnJeu",
+    "obj",
+    "sourceCtx"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "noteSortsDuTour",
+   "fichier": "jeuFacesB.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tour"
+   ]
+  },
+  {
+   "nom": "estJourNuit",
+   "fichier": "jeuFacesB.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "accordeJourNuit",
+    "jourNuitEntree"
+   ]
+  },
+  {
+   "nom": "jourNuitDebut",
+   "fichier": "jeuFacesB.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [
+    "accordeJourNuit",
+    "jn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tour"
+   ]
+  },
+  {
+   "nom": "accordeJourNuit",
+   "fichier": "jeuFacesB.js",
+   "ligne": 33,
+   "chargement": false,
+   "appelle": [
+    "obj",
+    "transforme"
+   ],
+   "appelleDiffere": [
+    "estJourNuit"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "jourNuitDebut"
+   ]
+  },
+  {
+   "nom": "jourNuitEntree",
+   "fichier": "jeuFacesB.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "estJourNuit",
+    "transforme"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "noteHistorique"
+   ]
+  },
+  {
+   "nom": "defFusionnee",
+   "fichier": "jeuFacesB.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "variantesEtendues"
+   ]
+  },
+  {
+   "nom": "defPrototype",
+   "fichier": "jeuFacesB.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "couleursDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "variantesEtendues"
    ]
   },
   {
@@ -7336,6 +7464,7 @@
     "executeOps",
     "exileApresResolution",
     "jn",
+    "melangeHasard",
     "metEnJeu",
     "noteResolution",
     "obj"
@@ -7349,7 +7478,7 @@
   {
    "nom": "priorite",
    "fichier": "jeuPile.js",
-   "ligne": 105,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
     "actionsPossibles",
@@ -7680,6 +7809,8 @@
     "debutDuTour",
     "etape",
     "jn",
+    "jourNuitDebut",
+    "noteSortsDuTour",
     "videReserves"
    ],
    "appelleDiffere": [],
@@ -7922,7 +8053,7 @@
   {
    "nom": "questionPourUI",
    "fichier": "jeuVue.js",
-   "ligne": 88,
+   "ligne": 89,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -8283,6 +8414,7 @@
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "motCleForge",
+    "motCleTraineB",
     "variantesEtendues"
    ]
   },
@@ -9810,7 +9942,8 @@
     "obj",
     "objetsForge",
     "objetsZone",
-    "poseMarqueurs"
+    "poseMarqueurs",
+    "transforme"
    ],
    "appelleDiffere": [
     "estCreature"
@@ -11253,7 +11386,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "motCleForge"
+    "motCleForge",
+    "motCleTraineB"
    ]
   },
   {
@@ -11359,7 +11493,9 @@
    "appelle": [
     "activeeSynthese",
     "coutForge",
+    "descForge",
     "genreMarqueur",
+    "manaSeul",
     "marqueursEntree",
     "synthese"
    ],
@@ -11372,7 +11508,7 @@
   {
    "nom": "jetonSimple",
    "fichier": "forgeMotsClesB.js",
-   "ligne": 126,
+   "ligne": 148,
    "chargement": false,
    "appelle": [
     "coutManaVide",

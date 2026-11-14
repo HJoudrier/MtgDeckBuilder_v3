@@ -104,6 +104,26 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
       return true;
     }
     case 'Retrace': def.retrace = true; return !reste.length;
+    /* Les faces (js/jeuFacesB.js, js/jeuVariantesB.js). */
+    case 'Daybound': def.params.jour = true; return true;
+    case 'Nightbound': def.params.nuit = true; return true;
+    case 'Aftermath': def.params.aftermath = true; return !reste.length;
+    case 'Fuse': def.fuse = true; return !reste.length;
+    case 'Disturb': { const c = reste.length === 1 ? coutForge(reste[0]) : null; if (!c || c.cout.engage) return false; def.disturb = c.cout; return true; }
+    case 'Prototype': {
+      const c = reste.length === 3 ? manaSeul(reste[0]) : null;
+      if (!c || !/^\d+$/.test(reste[1]) || !/^\d+$/.test(reste[2])) return false;
+      def.prototype = {cout: c.mana, force: +reste[1], endurance: +reste[2]}; return true;
+    }
+    case 'Craft': {
+      const m = /^(.*?)\s*ExileCtrlOrGrave<(\d+)\/([^>]+)>$/.exec(reste.join(':'));
+      const c = m ? coutForge(m[1] || '0') : null;
+      if (!c || Object.keys(c.cout).some(x => x !== 'mana')) return false;
+      def.capacites.push({genre: 'activee', vitesse: 'rituel', texte: 'Craft — ' + reste.join(':'),
+        cout: {mana: c.cout.mana, exileSoi: true, exileCimetiere: {n: +m[2], desc: descForge(m[3].replace(/\+Other$|\.Other$/, '') || 'Card')}},
+        effet: {ops: [{op: 'artisanat', hostile: false}], cibles: [], modes: null}});
+      return true;
+    }
     case 'Improvise': def.params.convocation = true; def.params.improvise = true; return !reste.length;
     case 'Jump-start': def.jumpstart = true; return !reste.length;
     case 'Rebound': def.rebond = true; return !reste.length;
@@ -119,7 +139,9 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
 forgeSait('kw', 'Soulshift', 'Undying', 'Persist', 'Modular', 'Bloodthirst', 'Fabricate', 'Riot', 'Evolve', 'Extort', 'Wither', 'Toxic', 'Shadow',
   'Horsemanship', 'Skulk', 'Flanking', 'Level up', 'Outlast', 'Vanishing', 'Fading', 'Living Weapon', 'Umbra armor', 'Totem armor', 'Unleash',
   'Partner with', 'Choose a Background', "Doctor's companion", 'Friends forever', 'Afterlife', 'Melee', 'Battle cry', 'Escape', 'Dash', 'Spectacle',
-  'Surge', 'Retrace', 'Jump-start', 'Rebound', 'Split second', 'Improvise');
+  'Surge', 'Retrace', 'Jump-start', 'Rebound', 'Split second', 'Improvise', 'Daybound', 'Nightbound', 'Aftermath', 'Fuse', 'Disturb',
+  'Prototype', 'Craft');
+forgeSait('param', 'Phase.WerewolfTransformCondition', 'Phase.WerewolfUntransformCondition');
 
 /* Un jeton de Forge écrit à la main : une créature d'un type, d'une force,
    de couleurs et de mots-clés donnés. */
