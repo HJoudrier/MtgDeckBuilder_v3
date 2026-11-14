@@ -59,10 +59,8 @@ function appliqueSBA(P) {
       else if ((o.bless >= c.endurance || (o.toucheMortel && o.bless > 0)) && !(c.mots & MOT.INDESTRUCTIBLE)) detruits.add(id);
     }
     if (estType(o, 'planeswalker') && (o.marq.loyaute || 0) <= 0) auCimetiere.add(id);
-    if (o.def.aura) {
-      const h = o.att != null ? obj(P, o.att) : null;
-      if (!h || h.zone !== 'champ' || !correspondBase(P, h, o.def.aura, o, o.ctrl)) auCimetiere.add(id);
-    } else if (o.att != null) {
+    if (o.def.aura) { if (auraOrpheline(P, o)) auCimetiere.add(id); }
+    else if (o.att != null) {
       const h = obj(P, o.att);
       if (!h || h.zone !== 'champ' || !estCreature(h)) { o.att = null; change = true; }
     }

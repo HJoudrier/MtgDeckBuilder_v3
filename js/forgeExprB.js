@@ -48,7 +48,7 @@ function exprEtendue(P, tete, q, env) {
   }
   if (tete === 'TriggerCount' && (q === 'LifeAmount' || q === 'CounterAmount')) return evt.n || 0;
   if (tete === 'TriggeredPlayer' || tete === 'TargetedPlayer') {
-    const j = tete === 'TriggeredPlayer' ? evt.joueur : (forgeDefinis(P, 'TargetedPlayer', env)[0] || {}).j;
+    const j = tete === 'TriggeredPlayer' ? (evt.joueur != null ? evt.joueur : evt.actif) : (forgeDefinis(P, 'TargetedPlayer', env)[0] || {}).j;
     return quantiteJoueur(P, j, q);
   }
   if (tete === 'TriggeredCard' && q === 'CastTotalManaSpent') { const m = manaDepenseDe(objetEvt(P, ctx)) || {}; return Object.values(m).reduce((a, n) => a + n, 0); }

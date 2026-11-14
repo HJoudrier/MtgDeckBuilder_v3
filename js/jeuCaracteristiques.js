@@ -109,7 +109,8 @@ function animation(o) {
   for (const a of o.anime) {
     if (a.retireTypes) r.types = [];
     /* « N'est pas une créature » tant que la dévotion manque (les dieux de Theros). */
-    if (a.retireType) r.types = r.types.filter(t => !a.retireType.includes(t));
+    /* Reconfigure : pas une créature tant qu'il est attaché (js/forgeAuras.js). */
+    if (a.retireType && (!a.siAttache || o.att != null)) r.types = r.types.filter(t => !a.retireType.includes(t));
     if (a.changelin) r.changelin = true;
     if (a.perdTout) r.mots = 0;
     if (a.retireMots) r.mots &= ~a.retireMots;

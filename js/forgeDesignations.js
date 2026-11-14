@@ -19,6 +19,7 @@ function definisEtendus(P, v, env) {
     case 'ReplacedTarget': { const c = evt.remCible; return !c ? [] : c.j != null ? [{j: c.j}] : [obj(P, c.id) || c]; }
     case 'ReplacedSource': { const s = evt.remSource; return s ? [obj(P, s.id) || s] : []; }
     case 'ReplacedSourceController': { const s = evt.remSource; return s ? [{j: (obj(P, s.id) || s).ctrl}] : []; }
+    case 'EnchantedPlayer': return env.src && env.src.attJoueur != null ? [{j: env.src.attJoueur}] : [];
     case 'Promised': return ctx.promis != null ? [{j: ctx.promis}] : [];
     case 'ReplacedPlayer': return evt.remJoueur != null ? [{j: evt.remJoueur}] : [];
     case 'ChosenCardController': return cartesChoisies(P, env).map(id => obj(P, id)).filter(Boolean).map(o => ({j: o.ctrl}));

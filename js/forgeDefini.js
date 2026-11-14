@@ -101,7 +101,8 @@ function forgeDefinis(P, val, env) {
     case 'TriggeredCardOwner': { const o = objetEvt(P, ctx); return o ? [{j: o.prop}] : []; }
     case 'TriggeredTarget': case 'TriggeredTargetLKICopy': if (evt.t === 'cible' && evt.id != null) return [obj(P, evt.id)].filter(Boolean);
       return evt.joueur != null ? [{j: evt.joueur}] : [];
-    case 'TriggeredPlayer': case 'TriggeredActivator': return evt.joueur != null ? [{j: evt.joueur}] : [];
+    /* Le joueur d'une étape (« at the beginning of each player's upkeep ») est le joueur actif. */
+    case 'TriggeredPlayer': case 'TriggeredActivator': return evt.joueur != null ? [{j: evt.joueur}] : evt.t === 'etape' && evt.actif != null ? [{j: evt.actif}] : [];
     case 'TriggeredDefendingPlayer': {
       const d = evt.defenseur;
       if (d == null) return [];

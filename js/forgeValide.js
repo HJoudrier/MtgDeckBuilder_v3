@@ -90,7 +90,7 @@ function familleProp(p) {
   if (/^counters_/.test(p)) return 'counters';
   if (/^with(out)?/.test(p)) return p;
   if (/^named/.test(p)) return 'named';
-  if (/^(ControlledBy|OwnedBy) /.test(p)) return p.split(' ')[0];
+  if (/^(ControlledBy|OwnedBy|AttachedTo) /.test(p)) return p.split(' ')[0];
   if (/^in(Real)?Zone(Battlefield|Graveyard|Hand|Exile|Library|Stack)$/.test(p)) return 'inZone';
   return p;
 }
@@ -155,6 +155,9 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     /* Un effet garde la carte choisie à sa naissance (js/forgeRemplacementsC.js). */
     case 'ChosenCard': case 'ChosenCardStrict': return !!(P && src && (src.choisies || choixDe(P, src).cartes || []).includes(o.id));
     case 'ChosenCtrl': return !!(P && src && choixDe(P, src).joueur === tient);
+    case 'EnchantedPlayerCtrl': return !!src && src.attJoueur != null && tient === src.attJoueur;
+    case 'EnchantedPlayerOwn': return !!src && src.attJoueur != null && o.prop === src.attJoueur;
+    case 'Attached': return o.att != null || o.attJoueur != null;
     case 'nonToken': return !o.jeton;
     case 'Colorless': return !c.couleurs.length;
     case 'nonColorless': return c.couleurs.length > 0;
@@ -232,6 +235,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
   }
   if ((m = /^named(.+)$/.exec(p))) return o.def.nom === m[1];
   if ((m = /^in(?:Real)?Zone(\w+)$/.exec(p))) return ZONES_FORGE[m[1]] === (o.lki ? 'champ' : o.zone);
+  if ((m = /^AttachedTo (.+)$/.exec(p))) { const h = P && o.att != null ? obj(P, o.att) : null; return !!h && forgeValideObjet(P, h, m[1], src, ctrl, env); }
   if ((m = /^non(.+)$/.exec(p))) {
     const q = aQualite(c, m[1]);
     if (q !== null) return !q;
@@ -271,6 +275,7 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
         case 'NonActive': return j !== P.actif;
         case 'IsRemembered': return !!(env && env.ctx && (env.ctx.memoJ || []).includes(j));
         case 'Chosen': case 'ChosenPlayer': return !!(env && env.src && choixDe(P, env.src).joueur === j);
+        case 'EnchantedBy': return !!(env && env.src && env.src.attJoueur === j);
         case 'EnchantedController': { const h = env && env.src && env.src.att != null ? obj(P, env.src.att) : null; return !!h && h.ctrl === j; }
       }
       return false;

@@ -105,6 +105,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsH.js   doubler ou déplacer des marqueurs, nommer une carte, détenir, blocage imposé, dégâts de chacun, endurer, détourner un sort, une phase de plus
   forgeEffetsI.js   deux piles, clash, vote, sauter une étape, l'initiative, earthbend, airbend ; un sort de permanent à coût additionnel ; exhaust
   forgeEntrees.js   les entrées : remplacements des autres, de soi, « paie avant d'entrer », copies ; restrictions de cible
+  forgeAuras.js     les auras de joueur (Curses), bestow, reconfigure ; attacher ce qu'on choisit
   forgeDurees.js    ce qui dure sur un objet (prochain tour, fin du combat, tant que la source reste) ; préparée, enfourchée
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
   forgeInterdits.js les statiques qui interdisent, imposent ou permettent : lancer, activer, attaquer, bloquer
@@ -1002,6 +1003,24 @@ lancement, ou un ajout au lancement :
 - Exhaust : une capacité qu'un objet n'active qu'une fois.
 
 `;` sépare les choix d'un coût Forge (`tapXType<2/Artifact;Creature;Land>`) : il se lit désormais comme `,`.
+
+**Les auras de joueur, Bestow, Reconfigure** (lot F35, `js/forgeAuras.js`).
+
+- *Les Curses.* Une aura qui enchante un joueur (`K:Enchant:Player`) porte `o.attJoueur` au lieu de
+  `o.att`. `Player.EnchantedBy`, `EnchantedPlayer` et `EnchantedPlayerCtrl` le lisent ; elle tient tant
+  que le joueur joue.
+- *Bestow.* La créature se lance comme une aura pour son coût de bestow : un enchantement Aura sans
+  types de créature (`defBestow()`). Quand son hôte part, elle redevient une créature au lieu d'aller
+  au cimetière (`auraOrpheline()`, appelée par les actions d'état).
+- *Reconfigure.* Deux capacités de rituel, attacher et détacher. Attaché, l'équipement n'est plus une
+  créature : une animation qui ôte le type tant que `o.att` tient.
+
+*Aussi dans ce lot* :
+- attacher ce qu'on choisit (`Attach.Choices`) ;
+- les filtres `AttachedTo …` et `Attached`.
+
+*Défaut trouvé en chemin* : `TriggeredPlayer` ne désignait personne pour un déclencheur d'étape
+(« at the beginning of each player's upkeep, … that player ») ; c'est le joueur actif.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

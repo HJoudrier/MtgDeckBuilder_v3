@@ -179,7 +179,7 @@ function motCleForge(def, k, face, jetons) {
      sort cible. Une aura qui enchante un joueur n'est pas jouée. */
   if ((m = /^Enchant(?: (\w+))?$/.exec(tete))) {
     const v = m[1] ? m[1][0].toUpperCase() + m[1].slice(1) : reste[0];
-    if (!v || /Player|Opponent/.test(v)) return false;
+    if (!v) return false;
     def.aura = descForge(v);
     return true;
   }
@@ -198,6 +198,8 @@ function motCleForge(def, k, face, jetons) {
   if (t6 != null) return t6;
   const t7 = motCleLancementB(def, face, jetons, tete, reste);
   if (t7 != null) return t7;
+  const t8 = motCleAura(def, tete, reste);
+  if (t8 != null) return t8;
   return false;
 }
 

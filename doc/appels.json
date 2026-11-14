@@ -101,6 +101,7 @@
   "forgeMotsClesD.js",
   "forgeMotsClesE.js",
   "forgeEffetsI.js",
+  "forgeAuras.js",
   "forgeDefinition.js",
   "iaValeur.js",
   "iaChoix.js",
@@ -3951,6 +3952,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "etendEffet",
+    "forgeAuras.js (chargement)",
     "forgeCout.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
@@ -4245,6 +4247,7 @@
     "appliqueSBA",
     "attaquantImpose",
     "attaquantsDeclares",
+    "auraOrpheline",
     "bloqueursImposes",
     "candidatsDuControleur",
     "carteVue",
@@ -4301,6 +4304,7 @@
     "finCombat",
     "finDuTour",
     "flashPossible",
+    "forgeAuras.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeDefinis",
@@ -4599,6 +4603,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "activeCapacite",
+    "auraOrpheline",
     "complote",
     "copieSort",
     "creeJetonsForge",
@@ -5118,7 +5123,7 @@
   {
    "nom": "aMot",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 128,
+   "ligne": 129,
    "chargement": false,
    "appelle": [
     "car"
@@ -5142,7 +5147,7 @@
   {
    "nom": "estType",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 129,
+   "ligne": 130,
    "chargement": false,
    "appelle": [
     "animation"
@@ -5176,7 +5181,7 @@
   {
    "nom": "estCreature",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 133,
+   "ligne": 134,
    "chargement": false,
    "appelle": [
     "estType"
@@ -5220,7 +5225,7 @@
   {
    "nom": "peutEngagerSoi",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 138,
+   "ligne": 139,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -5236,7 +5241,7 @@
   {
    "nom": "mvDe",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 145,
+   "ligne": 146,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5345,7 +5350,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "appliqueSBA",
+    "auraOrpheline",
     "metEnJeu",
     "statiqueVise"
    ]
@@ -5736,6 +5741,7 @@
    "appeleePar": [
     "executeForge",
     "executeOps",
+    "forgeAuras.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeMotsClesB.js (chargement)",
@@ -5790,6 +5796,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeAuras.js (chargement)",
     "jeuActions.js (chargement)",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
@@ -5909,6 +5916,7 @@
     "aCopier",
     "encodeChiffre",
     "epissures",
+    "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -6036,7 +6044,7 @@
   {
    "nom": "proposePaiement",
    "fichier": "jeuOpsB.js",
-   "ligne": 157,
+   "ligne": 158,
    "chargement": false,
    "appelle": [
     "joueursDe",
@@ -6053,7 +6061,7 @@
   {
    "nom": "executeOps",
    "fichier": "jeuOpsB.js",
-   "ligne": 165,
+   "ligne": 166,
    "chargement": false,
    "appelle": [
     "compteObjets",
@@ -6213,8 +6221,8 @@
    "ligne": 37,
    "chargement": false,
    "appelle": [
+    "auraOrpheline",
     "car",
-    "correspondBase",
     "couchesHorsChamp",
     "couchesStatiques",
     "deplace",
@@ -6280,6 +6288,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "coutPermis",
+    "forgeAuras.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "variantesEtendues",
     "variantesExilLancement",
@@ -6701,6 +6710,7 @@
    "appeleePar": [
     "eveilForge",
     "jeuVariantes.js (chargement)",
+    "motCleAura",
     "motCleLancementB",
     "motClePioche",
     "niveauForge",
@@ -8839,6 +8849,7 @@
     "etatCombat",
     "forgeDefinis",
     "forgeNombre",
+    "forgeValideObjet",
     "genreMarqueur",
     "joueurDe",
     "mvDe",
@@ -8855,7 +8866,7 @@
   {
    "nom": "ciblesJoueurs",
    "fichier": "forgeValide.js",
-   "ligne": 245,
+   "ligne": 249,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -8867,7 +8878,7 @@
   {
    "nom": "forgeValideObjet",
    "fichier": "forgeValide.js",
-   "ligne": 251,
+   "ligne": 255,
    "chargement": false,
    "appelle": [
     "caracsJugees",
@@ -8895,6 +8906,7 @@
     "effetsEntree",
     "entreesAutres",
     "exprEtendue",
+    "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDefinis",
@@ -8917,6 +8929,7 @@
     "objetOuRien",
     "payeAvantEntree",
     "peutBloquer",
+    "propObjet",
     "proprieteDefenseur",
     "protegeFiltre",
     "quantiteRemplacee",
@@ -8931,7 +8944,7 @@
   {
    "nom": "forgeValideJoueur",
    "fichier": "forgeValide.js",
-   "ligne": 259,
+   "ligne": 263,
    "chargement": false,
    "appelle": [
     "choixDe",
@@ -9037,11 +9050,13 @@
    "appelleParHtml": [],
    "appeleePar": [
     "coutForge",
+    "defBestow",
     "emplacementForge",
     "entreeForge",
     "forgeCout.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
+    "motCleAura",
     "motCleForge",
     "motCleLancement",
     "motClePalier",
@@ -9158,6 +9173,7 @@
     "compteDuTour",
     "compteJoueurs",
     "conditionForge",
+    "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeDefinis",
     "forgeEffetsA.js (chargement)",
@@ -9436,6 +9452,7 @@
    "appeleePar": [
     "cibleOuDefinis",
     "executeForge",
+    "forgeAuras.js (chargement)",
     "forgeDefinis",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -9518,6 +9535,7 @@
     "definisEtendus",
     "executeForge",
     "exprEtendue",
+    "forgeAuras.js (chargement)",
     "forgeCopies.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
@@ -9541,7 +9559,7 @@
   {
    "nom": "joueursForge",
    "fichier": "forgeDefini.js",
-   "ligne": 131,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "ciblesForge",
@@ -9565,7 +9583,7 @@
   {
    "nom": "objetsForge",
    "fichier": "forgeDefini.js",
-   "ligne": 141,
+   "ligne": 142,
    "chargement": false,
    "appelle": [
     "avecDefinisEnPlus",
@@ -9622,7 +9640,7 @@
   {
    "nom": "cartesChoisies",
    "fichier": "forgeDesignations.js",
-   "ligne": 48,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "choixDe"
@@ -9637,7 +9655,7 @@
   {
    "nom": "marqueursJoueur",
    "fichier": "forgeDesignations.js",
-   "ligne": 55,
+   "ligne": 56,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9649,7 +9667,7 @@
   {
    "nom": "exprDesignations",
    "fichier": "forgeDesignations.js",
-   "ligne": 58,
+   "ligne": 59,
    "chargement": false,
    "appelle": [
     "car",
@@ -9668,7 +9686,7 @@
   {
    "nom": "proprieteDesignee",
    "fichier": "forgeDesignations.js",
-   "ligne": 98,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "goadActif"
@@ -9921,6 +9939,7 @@
    "appeleePar": [
     "creeJetonsForge",
     "executeForge",
+    "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeCopies.js (chargement)",
     "forgeEffetsA.js (chargement)",
@@ -12502,6 +12521,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "actionsLegales",
+    "forgeAuras.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "sourcesMana"
    ]
@@ -13604,6 +13624,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "motCleAura",
     "motCleForge",
     "motCleLancementB",
     "motClePioche",
@@ -13641,6 +13662,7 @@
     "forgeTable",
     "genreMarqueur",
     "manaSeul",
+    "motCleAura",
     "motCleLancement",
     "motCleLancementB",
     "motClePalier",
@@ -14185,6 +14207,7 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeAuras.js (chargement)",
     "variantesEtendues"
    ]
   },
@@ -14356,6 +14379,78 @@
    "appelleParHtml": [],
    "appeleePar": [
     "noteHistorique"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeAuras.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "choisitCartes",
+    "ciblesForge",
+    "coutSort",
+    "defBestow",
+    "forgeDefinis",
+    "forgeSait",
+    "forgeValideObjet",
+    "obj",
+    "objetsZone",
+    "resous",
+    "retiensForge",
+    "sourceCtx"
+   ],
+   "appelleDiffere": [
+    "activationInterdite",
+    "variantesMotsClesE"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "motCleAura",
+   "fichier": "forgeAuras.js",
+   "ligne": 17,
+   "chargement": false,
+   "appelle": [
+    "coutComplet",
+    "descForge",
+    "manaSeul"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "motCleForge"
+   ]
+  },
+  {
+   "nom": "defBestow",
+   "fichier": "forgeAuras.js",
+   "ligne": 40,
+   "chargement": false,
+   "appelle": [
+    "descForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeAuras.js (chargement)"
+   ]
+  },
+  {
+   "nom": "auraOrpheline",
+   "fichier": "forgeAuras.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [
+    "correspondBase",
+    "jn",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueSBA"
    ]
   },
   {

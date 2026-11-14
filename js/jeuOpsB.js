@@ -131,7 +131,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (opts.faceCachee) { no.vraieDef = P.cartes[no.cid].def; no.faceCachee = true; no.def = defFaceCachee(no.vraieDef); }
   if (no.def.loyaute != null) no.marq.loyaute = no.def.loyaute;
   if (ent.marqueurs && (!ent.siKicke || opts.kicked)) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
-  if (opts.attache != null) no.att = opts.attache;
+  /* Une aura de joueur (js/forgeAuras.js) tient au joueur, pas à un objet. */
+  if (opts.attache != null) { if (typeof opts.attache === 'object') no.attJoueur = opts.attache.j; else no.att = opts.attache; }
   no.x = x;
   if (opts.kicked) no.kicked = true;
   if (opts.escaped) no.escaped = true;
