@@ -14,6 +14,15 @@ function definisEtendus(P, v, env) {
   switch (v) {
     /* L'objet qu'un remplacement d'entrée touche (js/forgeEntrees.js). */
     case 'ReplacedCard': { const o = objetEvt(P, ctx); return o ? [o] : []; }
+    /* L'évènement qu'un remplacement de dégâts ou de pioche a changé
+       (js/forgeRemplacementsC.js, js/jeuPioche.js). */
+    case 'ReplacedTarget': { const c = evt.remCible; return !c ? [] : c.j != null ? [{j: c.j}] : [obj(P, c.id) || c]; }
+    case 'ReplacedSource': { const s = evt.remSource; return s ? [obj(P, s.id) || s] : []; }
+    case 'ReplacedSourceController': { const s = evt.remSource; return s ? [{j: (obj(P, s.id) || s).ctrl}] : []; }
+    case 'ReplacedPlayer': return evt.remJoueur != null ? [{j: evt.remJoueur}] : [];
+    case 'ChosenCardController': return cartesChoisies(P, env).map(id => obj(P, id)).filter(Boolean).map(o => ({j: o.ctrl}));
+    /* Le joueur ciblé, ou le contrôleur du planeswalker ciblé (Bonfire of the Damned). */
+    case 'TargetedOrController': return forgeDefinis(P, 'Targeted', env).map(x => x.j != null ? x : {j: x.ctrl});
     case 'Player.IsRemembered': return (ctx.memoJ || []).filter(j => P.joueurs[j] && !P.joueurs[j].elimine).map(j => ({j}));
     /* La carte du dessus de sa bibliothèque. */
     case 'TopOfLibrary': { const B = P.joueurs[ctrl].bibliotheque; return B.length ? [obj(P, B[B.length - 1])] : []; }
@@ -31,7 +40,14 @@ function definisEtendus(P, v, env) {
   return [];
 }
 
-forgeSait('defini', 'Player.IsRemembered', 'TopOfLibrary', 'Imprinted', 'EffectSource', 'TriggeredAttackingPlayer');
+forgeSait('defini', 'Player.IsRemembered', 'TopOfLibrary', 'Imprinted', 'EffectSource', 'TriggeredAttackingPlayer', 'ChosenCardController', 'TargetedOrController');
+
+/* Les cartes choisies : celles qu'un effet a gardées en naissant
+   (js/forgeRemplacementsC.js), sinon celles de la source. */
+function cartesChoisies(P, env) {
+  const ef = env.ctx && env.ctx.effet;
+  return (ef && ef.choisies) || (env.src && env.src.choisies) || choixDe(P, env.src).cartes || [];
+}
 
 /* Les marqueurs d'un joueur autres que l'énergie et le poison :
    expérience, rad, ticket… (js/forgeEffetsB.js, `PutCounter`). */

@@ -74,6 +74,7 @@ js/                 modules, chargés dans cet ordre :
   jeuFacesB.js      jour et nuit, loups-garous, craft, omen, fuse, prototype
   jeuPermis.js      jouer une carte depuis l'exil, le cimetière ou le dessus de la bibliothèque
   jeuPrepare.js     lancer la copie du sort d'une créature préparée
+  jeuPioche.js      la pioche d'une partie : « if you would draw… instead », Dredge, Miracle
   jeuCouches.js     ce qu'une statique fait devenir un permanent : contrôleur, types, capacités
   jeuPile.js        la priorité, la pile, la résolution
   jeuCombat.js      attaquants, bloqueurs, dégâts de combat
@@ -109,6 +110,7 @@ js/                 modules, chargés dans cet ordre :
   forgeStatiquesB.js les statiques hors du champ : mots-clés accordés aux sorts, au cimetière, à la main ; coûts facultatifs, exercer, équiper moins cher
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
+  forgeRemplacementsC.js les dégâts remplacés : prévenir N, détourner, partager ; choisir une source ; l'effet qui s'exile
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
   forgeMotsClesD.js les mots-clés des permanents, troisième partie : annihilator, renown, rampage, mobilize, mentor, graft, backup, sunburst, devour, ascend, strive, Leylines
@@ -906,6 +908,34 @@ durées que les effets (`js/forgeDurees.js` `finForge()`) :
 - l'incolore d'une animation ;
 - les charmes dont le nombre de modes se calcule au lancement (Akroma's Will) ;
 - les attributs préparée, enfourchée (Saddle, `IsSaddled`) et comploté.
+
+**La pioche et les dégâts remplacés** (lot F37).
+
+*La pioche.* `piocheN()` pioche sans rien demander : la main de départ s'en sert. La pioche d'une partie
+en cours passe par `pioche()` (`js/jeuPioche.js`), carte par carte :
+- un remplacement `Draw` porté par un permanent ou un effet se joue à la place (Thought Reflection,
+  Notion Thief). Il ne s'applique pas aux pioches qu'il fait lui-même (règle 614.5) : deux Thought
+  Reflection font piocher quatre cartes ;
+- Dredge meule N et reprend la carte du cimetière ;
+- la première carte piochée du tour se lance pour son coût de miracle, par la voie des lancements
+  depuis un effet. Forge en fait un déclencheur ; ici elle se lance aussitôt — la même chose tant que
+  personne ne répond au déclencheur.
+
+*Les dégâts.* Un remplacement `DamageDone` à `ReplaceWith$` (`js/forgeRemplacementsC.js`) :
+- prévient N (`ReplaceDamage`) : le bouclier d'un effet (`ShieldAmount`) s'use, un montant calculé
+  (Temple Altisaur) se recalcule ;
+- détourne les dégâts (Pariah) ou une part d'entre eux (Warrior en-Kor) ;
+- ou joue une chaîne à la place (Vigor : des marqueurs pour les dégâts prévenus).
+
+Chaque remplacement s'applique au plus une fois à un évènement. `infligeDegats()` n'est pas un
+générateur : combien et à qui se décident sur-le-champ, et la chaîne qui suit attend dans
+`P.suitesRemp` jusqu'au pas suivant d'`executeOps()` ou de `priorite()`.
+
+*Aussi dans ce lot* :
+- choisir une source (Circle of Protection) : l'effet garde la carte choisie en naissant ;
+- « exile this effect » met fin à l'effet ;
+- `DamageResolve` ne fait rien de plus, puisque les dégâts sont déjà infligés à mesure ;
+- un permanent hors phase qu'un effet déplace quitte aussi la liste du phasing.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

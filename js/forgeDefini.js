@@ -116,7 +116,7 @@ function forgeDefinis(P, val, env) {
     case 'ActivePlayer': return [{j: P.actif}];
     case 'TriggeredSpellAbility': { const o = evt.t === 'lance' && evt.id != null ? obj(P, evt.id) : null; return o && o.zone === 'pile' ? [o] : []; }
     case 'TriggeredSpellAbilityTargeted': return evt.t === 'lance' ? ciblesDuSort(P, evt.id) : [];
-    case 'ChosenCard': return (choixDe(P, src).cartes || []).map(id => obj(P, id)).filter(Boolean);
+    case 'ChosenCard': return cartesChoisies(P, env).map(id => obj(P, id)).filter(Boolean);
     case 'ChosenPlayer': { const j = choixDe(P, src).joueur; return j != null ? [{j}] : []; }
     case 'ExiledWith': {
       const k = src && P.cartes[src.cid];

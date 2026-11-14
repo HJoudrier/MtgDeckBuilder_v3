@@ -79,7 +79,7 @@ forgeEffet('Connive', ['Num'], function* (P, t, env) {
   const n = forgeNombre(P, t.Num || 1, env);
   for (const o of objetsForge(P, t, env).filter(x => x.zone === 'champ' && !x.lki)) {
     const j = o.ctrl;
-    piocheN(P, j, n);
+    yield* pioche(P, j, n);
     const pris = yield* choisitCartes(P, j, P.joueurs[j].main.slice(), n, 'Défausser', 'defausse');
     const nonTerrains = pris.filter(id => !estType(obj(P, id), 'land')).length;
     pris.forEach(id => defausseCarte(P, id, j));

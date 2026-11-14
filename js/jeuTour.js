@@ -60,7 +60,7 @@ function* etape(P, e) {
     case 'degagement': degagement(P); return;
     case 'entretien': suspensionsEntretien(P); yield* rebondsEntretien(P); emet(P, {t: 'etape', etape: 'entretien', actif: P.actif}); break;
     case 'pioche':
-      if (!(P.nb === 2 && P.tour === 1)) piocheN(P, P.actif, 1);
+      if (!(P.nb === 2 && P.tour === 1)) yield* pioche(P, P.actif, 1);
       emet(P, {t: 'etape', etape: 'pioche', actif: P.actif});
       break;
     case 'principale1':
@@ -80,7 +80,7 @@ function* etape(P, e) {
       finCombat(P); P.sansCombat = false;
       return;
     case 'principale2': emet(P, {t: 'etape', etape: 'principale2', actif: P.actif}); break;
-    case 'fin': exhumeesFin(P); copiesFin(P); if (typeof monarqueFin === 'function') monarqueFin(P); emet(P, {t: 'etape', etape: 'fin', actif: P.actif}); break;
+    case 'fin': exhumeesFin(P); copiesFin(P); yield* monarqueFin(P); emet(P, {t: 'etape', etape: 'fin', actif: P.actif}); break;
     case 'nettoyage': yield* nettoyage(P); return;
   }
   yield* priorite(P);

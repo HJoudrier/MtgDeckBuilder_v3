@@ -105,6 +105,8 @@ function deplace(P, id, vers, opts = {}) {
   if (vers === 'cimetiere' && typeof destinationRemplacee === 'function') vers = destinationRemplacee(P, o, depuis, vers);
   const lki = depuis === 'champ' ? instantane(P, o) : null;
   retireDe(tableauZone(P, o), id);
+  /* Un permanent hors phase qu'un effet déplace quitte aussi la liste d'attente. */
+  if (depuis === 'champ' && P.horsPhase && P.horsPhase.length) P.horsPhase = P.horsPhase.filter(x => x.id !== id);
   if (depuis === 'champ') {
     lki.attaches = [];
     P.champ.forEach(k => { const a = obj(P, k); if (a.att === id) { a.att = null; lki.attaches.push(k); } });

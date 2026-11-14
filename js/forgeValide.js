@@ -152,7 +152,8 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'escaped': return !!o.escaped;
     case 'IsSaddled': return !!P && o.enfourche === P.tour;
     case 'NamedCard': { const k = P && src && choixDe(P, src).nom; return !!k && o.def.nom === k; }
-    case 'ChosenCard': return !!(P && src && (choixDe(P, src).cartes || []).includes(o.id));
+    /* Un effet garde la carte choisie à sa naissance (js/forgeRemplacementsC.js). */
+    case 'ChosenCard': case 'ChosenCardStrict': return !!(P && src && (src.choisies || choixDe(P, src).cartes || []).includes(o.id));
     case 'ChosenCtrl': return !!(P && src && choixDe(P, src).joueur === tient);
     case 'nonToken': return !o.jeton;
     case 'Colorless': return !c.couleurs.length;

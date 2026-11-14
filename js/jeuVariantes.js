@@ -106,7 +106,7 @@ function variantesSort(P, j, o, depuis) {
     r.push({variante, mana, autre, def: def || null});
   };
   /* Lancée par un effet (js/forgeEffetsE.js) : gratuitement, ou à son coût. */
-  if (o.lanceEffet) { essaie(o.lanceEffet.gratuit ? 'gratuit' : 'permis', o.lanceEffet.gratuit ? coutManaVide() : coutSort(P, j, o, depuis), d.coutSup || null); return r; }
+  if (o.lanceEffet) { essaie(o.lanceEffet.gratuit ? 'gratuit' : 'permis', o.lanceEffet.gratuit ? coutManaVide() : coutSort(P, j, o, depuis, o.lanceEffet.mana), d.coutSup || null); return r; }
   /* Défaussée avec la folie, ou au bout de sa suspension : une seule façon. */
   /* Comploté, ou exilé par warp (js/forgeMotsClesC.js). */
   if (depuis === 'exil' && variantesExilLancement(P, j, o, essaie)) return r;

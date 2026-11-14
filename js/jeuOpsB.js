@@ -170,5 +170,6 @@ function* executeOps(P, ops, ctx) {
     const f = op.forge ? executeForge : OPS[op.op];
     if (!f) continue;
     for (let k = 0; k < fois && !P.fin; k++) yield* f(P, op, ctx);
+    if (P.suitesRemp && P.suitesRemp.length) yield* joueSuitesRemplacement(P);
   }
 }

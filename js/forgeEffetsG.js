@@ -108,7 +108,7 @@ forgeEffet('BecomeMonarch', [], function* (P, t, env) {
 }, (t, op) => { op.op = 'pioche'; op.n = 1; op.qui = {vous: 1}; op.hostile = false; });
 
 /* Le monarque pioche à son étape de fin (js/jeuTour.js). */
-function monarqueFin(P) { if (P.monarque === P.actif && !P.joueurs[P.actif].elimine) piocheN(P, P.actif, 1); }
+function* monarqueFin(P) { if (P.monarque === P.actif && !P.joueurs[P.actif].elimine) yield* pioche(P, P.actif, 1); }
 
 forgeEffet('AddTurn', ['NumTurns'], function* (P, t, env) {
   const n = forgeNombre(P, t.NumTurns || 1, env);
@@ -272,7 +272,7 @@ forgeEffet('Venture', [], function* (P, t, env) {
   if (J.donjon === 1) yield* FORGE_API.Scry.gen(P, {ScryNum: '1'}, env);
   else if (J.donjon === 2) { adversaires(P, env.ctrl).forEach(i => { P.joueurs[i].vie -= 1; emet(P, {t: 'perteVie', joueur: i, n: 1}); }); gagneVie(P, env.ctrl, 1); }
   else if (J.donjon === 3) { const c = champDe(P, env.ctrl).filter(estCreature).sort((a, b) => car(P, b).force - car(P, a).force)[0]; if (c) poseMarqueurs(P, c, '+1/+1', 1, env.src); }
-  else { piocheN(P, env.ctrl, 1); J.donjon = 0; J.donjonsFinis = (J.donjonsFinis || 0) + 1; }
+  else { yield* pioche(P, env.ctrl, 1); J.donjon = 0; J.donjonsFinis = (J.donjonsFinis || 0) + 1; }
 }, (t, op) => { op.op = 'pioche'; op.n = 1; op.qui = {vous: 1}; op.hostile = false; });
 
 /* Suspect : la menace, et ne peut bloquer (js/jeuCaracteristiques.js). */

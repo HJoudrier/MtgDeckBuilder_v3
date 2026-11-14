@@ -212,7 +212,7 @@ forgeEffet('Learn', [], function* (P, t, env) {
   const ch = yield* choisitCartes(P, j, J.main.slice(), 1, 'Défausser', 'defausse');
   if (!ch.length) return;
   defausseCarte(P, ch[0], j);
-  piocheN(P, j, 1);
+  yield* pioche(P, j, 1);
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* —— Détourner un sort ——————————————————————————————————————————— */

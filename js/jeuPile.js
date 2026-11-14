@@ -114,6 +114,7 @@ function* priorite(P) {
   const echecs = new Set();
   const cle = a => a.k + a.id + '|' + (a.i == null ? '' : a.i) + '|' + (a.variante || '') + (a.depuis || '');
   for (;;) {
+    if (P.suitesRemp && P.suitesRemp.length) yield* joueSuitesRemplacement(P);
     yield* stabilise(P);
     if (P.fin || P.finTour) return;
     if (P.joueurs[j].elimine) j = suivantVivant(P, j);

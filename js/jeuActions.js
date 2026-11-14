@@ -39,7 +39,7 @@ function* paieAutre(P, j, o, c) {
     (yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main')).forEach(id => deplace(P, id, 'main'));
   }
   if (c.energie) J.energie -= c.energie;
-  if (c.pioche) piocheN(P, j, c.pioche);
+  if (c.pioche) yield* pioche(P, j, c.pioche);
   if (c.equipage) yield* paieEquipage(P, j, o, c.equipage);
   if (coutSpecial(c)) yield* paieAutreB(P, j, o, c);
   if (c.defausseSoi && obj(P, o.id)) { lki = instantane(P, o); defausseCarte(P, o.id, j); }

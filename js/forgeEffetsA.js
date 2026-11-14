@@ -251,7 +251,7 @@ forgeEffet('Draw', ['NumCards', 'RememberDrawn'], function* (P, t, env) {
   const n = forgeNombre(P, t.NumCards || 1, env);
   for (const j of joueursForge(P, t, env)) {
     const avant = P.joueurs[j].main.slice();
-    piocheN(P, j, n);
+    yield* pioche(P, j, n);
     if (t.RememberDrawn === 'True') P.joueurs[j].main.filter(id => !avant.includes(id)).forEach(id => retiensForge(env.ctx, id));
   }
 }, (t, op) => { op.op = 'pioche'; op.n = nombreIA(t.NumCards || 1); op.qui = quiIA(t, op); op.hostile = false; });

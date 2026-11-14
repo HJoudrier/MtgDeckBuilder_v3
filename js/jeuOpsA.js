@@ -92,6 +92,11 @@ function gagneVie(P, j, n) {
 function infligeDegats(P, src, cible, n, combat) {
   if (n <= 0 || !src) return 0;
   n = quantiteRemplacee(P, 'DamageDone', n, {src, cible, combat});
+  /* Prévenus, détournés, partagés (js/forgeRemplacementsC.js). */
+  return degatsRemplaces(P, src, cible, n, combat).reduce((s, [c, k]) => s + infligeUnePart(P, src, c, k, combat), 0);
+}
+
+function infligeUnePart(P, src, cible, n, combat) {
   n = degatsApresPrevention(P, src, cible, n, combat);
   if (n <= 0) return 0;
   const cs = src.lki ? src : caracsJugees(P, src);
@@ -148,7 +153,7 @@ OPS.perdVie = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
   joueursDe(P, op.qui, ctx).forEach(j => { if (n > 0) P.joueurs[j].vie -= n; });
 };
-OPS.pioche = function* (P, op, ctx) { const n = valeur(P, op.n, ctx); joueursDe(P, op.qui, ctx).forEach(j => piocheN(P, j, n)); };
+OPS.pioche = function* (P, op, ctx) { const n = valeur(P, op.n, ctx); for (const j of joueursDe(P, op.qui, ctx)) yield* pioche(P, j, n); };
 OPS.meule = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
   for (const j of joueursDe(P, op.qui, ctx)) {
