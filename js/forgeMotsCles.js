@@ -11,7 +11,7 @@
 
 const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
   'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity', 'Unearth', 'Madness',
-  'Suspend'];
+  'Suspend', 'Partner'];
 
 /* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
    cycle de type (`TypeCycling:Plains:2`), chercher une carte de ce type. */
@@ -96,6 +96,8 @@ function motCleForge(def, k, face, jetons) {
       def.suspension = {n: +reste[0], cout: c.mana}; return true;
     }
     case 'Convoke': def.params.convocation = true; return !reste.length;
+    /* Le partenaire ne joue qu'à la construction du deck. */
+    case 'Partner': return true;
     case 'Delve': def.params.delve = true; return !reste.length;
     case 'Affinity': if (!reste[0]) return false; def.params.affinite = reste[0]; return true;
   }

@@ -14,7 +14,7 @@
    accorde, construites d'avance. `null` si un mode ou une capacité
    accordée est inconnu. */
 function statiqueForge(face, t, jetons) {
-  if (!String(t.Mode || '').split(',').every(m => FORGE_STATIQUES[m.trim()])) return null;
+  if (!String(t.Mode || '').split(',').every(m => FORGE_STATIQUES[m.trim()]) || !statiqueTenable(t)) return null;
   const s = {s: 'forge', t, face, jetons};
   if (t.AddAbility || t.AddTrigger) {
     const tmp = {capacites: [], statiques: [], params: {}, mots: 0};
@@ -81,13 +81,14 @@ forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stacka
   }
 });
 
-forgeEffet('DelayedTrigger', ['Mode', 'Phase', 'ValidPlayer', 'Execute', 'ThisTurn', 'ValidCard', 'Origin', 'Destination'],
+forgeEffet('DelayedTrigger', ['Mode', 'Phase', 'ValidPlayer', 'Execute', 'ThisTurn', 'NextTurn', 'ValidCard', 'Origin', 'Destination'],
   function* (P, t, env) {
     const memo = [], memoJ = [];
     if (t.RememberObjects) forgeDefinis(P, t.RememberObjects, env).forEach(x => { if (x.j != null) memoJ.push(x.j); else memo.push(x.id); });
     const src = env.src;
     durees(P).retardes.push({t, face: env.op.face, effet: env.op.effetRetarde, src: src ? src.id : null, lki: src && src.lki ? src : null,
-      ctrl: env.ctrl, memo, memoJ, ceTour: t.ThisTurn === 'True', nom: src ? src.def.nom : '?', texte: texteForge(env.op.face, t)});
+      ctrl: env.ctrl, memo, memoJ, ceTour: t.ThisTurn === 'True', apresTour: t.NextTurn === 'True' ? P.tour : null,
+      nom: src ? src.def.nom : '?', texte: texteForge(env.op.face, t)});
   }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {
     prepare(t, op) {
       if (!FORGE_MODES[t.Mode] || !phaseConnue(t)) return false;
@@ -95,3 +96,36 @@ forgeEffet('DelayedTrigger', ['Mode', 'Phase', 'ValidPlayer', 'Execute', 'ThisTu
       return !!op.effetRetarde;
     }
   });
+
+/* Animer : la couche propre à l'objet (js/jeuCaracteristiques.js
+   `animation()`) — un terrain qui devient une créature 3/3 jusqu'à la fin
+   du tour, un artefact qui devient une créature pour toujours. */
+function animeForge(P, objets, t, env) {
+  const ty = typesForge(t.Types);
+  const a = {types: ty.types, sousTypes: ty.sousTypes, mots: motsForge(t.Keywords), fin: t.Duration === 'Permanent' ? 'jamais' : 'tour',
+    force: t.Power != null ? forgeNombre(P, t.Power, env) : null, endurance: t.Toughness != null ? forgeNombre(P, t.Toughness, env) : null,
+    couleurs: t.Colors ? couleursMots(t.Colors) : null, ecrase: t.OverwriteColors === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True'};
+  objets.filter(o => o && o.j == null && o.zone === 'champ' && !o.lki).forEach(o => { (o.anime = o.anime || []).push({...a}); P.ver++; });
+}
+
+/* Ce qu'une animation sait tenir : une durée connue, des couleurs nommées. */
+function animationTenable(t) {
+  if (t.Duration && t.Duration !== 'Permanent') return false;
+  if (t.Colors && !couleursMots(t.Colors).length) return false;
+  return true;
+}
+
+const PARAMS_ANIME = ['Power', 'Toughness', 'Types', 'Keywords', 'Colors', 'OverwriteColors', 'Duration', 'RemoveCreatureTypes'];
+
+forgeEffet('Animate', PARAMS_ANIME, function* (P, t, env) { animeForge(P, objetsForge(P, t, env), t, env); },
+  (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: animationTenable});
+forgeEffet('AnimateAll', ['ValidCards', ...PARAMS_ANIME], function* (P, t, env) {
+  animeForge(P, objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env)), t, env);
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: animationTenable});
+
+/* Prévenir les N prochains dégâts : un bouclier jusqu'au nettoyage. */
+forgeEffet('PreventDamage', ['Amount'], function* (P, t, env) {
+  const n = t.Amount === 'All' ? Infinity : forgeNombre(P, t.Amount || 1, env);
+  const l = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Self', env);
+  l.forEach(x => { const p = x.j != null ? P.joueurs[x.j] : x; p.prevention = (p.prevention || 0) + n; });
+}, (t, op) => { op.op = 'forge'; op.hostile = false; });

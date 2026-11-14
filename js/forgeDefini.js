@@ -15,7 +15,9 @@ const FORGE_DEFINIS = ['Self', 'You', 'Targeted', 'TargetedPlayer', 'TargetedCon
   'TriggeredAttacker', 'TriggeredDefendingPlayer', 'TriggeredSource', 'TriggeredSourceController', 'Enchanted',
   'Equipped', 'EnchantedController', 'EquippedController', 'Player', 'Opponent', 'Player.Opponent', 'Player.Other',
   'ActivePlayer', 'Valid', 'ValidGraveyard', 'ValidHand', 'TriggeredActivator', 'OppNonTargeted', 'ExiledWith',
-  'DelayTriggerRemembered', 'DelayTriggerRememberedLKI', 'TriggeredAttackerLKICopy', 'TriggeredBlocker'];
+  'DelayTriggerRemembered', 'DelayTriggerRememberedLKI', 'TriggeredAttackerLKICopy', 'TriggeredBlocker',
+  /* L'objet qu'un remplacement détourne : lu par js/forgeRemplacements.js. */
+  'ReplacedCard', 'TriggeredTargetLKICopy'];
 
 /* Les cibles prises par l'emplacement de la capacité en cours, ou de celle
    qu'elle suit. */
@@ -72,7 +74,7 @@ function forgeDefinis(P, val, env) {
       return o ? [{j: o.ctrl}] : evt.ctrl != null ? [{j: evt.ctrl}] : [];
     }
     case 'TriggeredCardOwner': { const o = objetEvt(P, ctx); return o ? [{j: o.prop}] : []; }
-    case 'TriggeredPlayer': case 'TriggeredTarget': case 'TriggeredActivator': return evt.joueur != null ? [{j: evt.joueur}] : [];
+    case 'TriggeredPlayer': case 'TriggeredTarget': case 'TriggeredActivator': case 'TriggeredTargetLKICopy': return evt.joueur != null ? [{j: evt.joueur}] : [];
     case 'TriggeredDefendingPlayer': return evt.defenseur != null ? [{j: evt.defenseur}] : [];
     case 'Enchanted': case 'Equipped': { const a = src && src.att != null ? obj(P, src.att) : null; return a ? [a] : []; }
     case 'EnchantedController': case 'EquippedController': { const a = src && src.att != null ? obj(P, src.att) : null; return a ? [{j: a.ctrl}] : []; }

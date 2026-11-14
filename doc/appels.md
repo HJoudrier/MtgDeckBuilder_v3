@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1275 fonctions** dans 184 modules, **3403 appels** relevés.
+**1289 fonctions** dans 185 modules, **3443 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1451,7 +1451,7 @@ Appelée par : `definitionForge`, `jetonsForge`, `manquesDecks`, `mesureBaseForg
 
 Appelle : `forgeTable()` *(forgeScript.js)*
 
-Appelée par : `declencheurForge`, `effetForge`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `remplacementForge`, `statiqueForge`
+Appelée par : `declencheurForge`, `effetForge`, `entreeForge`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `formeRemplacement`, `statiqueForge`
 
 ### `ficheDeScriptForge()` — ligne 113
 
@@ -1463,7 +1463,7 @@ Appelle : `forgeLigneType()` *(forgeScript.js)*
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `forgeCout.js (chargement)`, `forgeDeclencheurs.js (chargement)`, `forgeDefini.js (chargement)`, `forgeDefinition.js (chargement)`, `forgeEffet`, `forgeEffetsA.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeExpr.js (chargement)`, `forgeMode`, `forgeMotsCles.js (chargement)`, `forgeStatique`, `forgeStatiques.js (chargement)`, `forgeValide.js (chargement)`
+Appelée par : `forgeCout.js (chargement)`, `forgeDeclencheurs.js (chargement)`, `forgeDefini.js (chargement)`, `forgeDefinition.js (chargement)`, `forgeEffet`, `forgeEffetsA.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeExpr.js (chargement)`, `forgeMode`, `forgeMotsCles.js (chargement)`, `forgeRemplacements.js (chargement)`, `forgeStatique`, `forgeStatiques.js (chargement)`, `forgeValide.js (chargement)`
 
 ### `forgeConnu()` — ligne 32
 
@@ -1563,7 +1563,7 @@ Appelée par : `creeJetonsForge`, `deplace`, `jeuOpsB.js (chargement)`, `nouvell
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `actionsLegales`, `actionsPossibles`, `activeCapacite`, `appliqueSBA`, `carteVue`, `champDe`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `compteObjets`, `coutAutrePossible`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `defausseCarte`, `defenseurDe`, `degagement`, `degatsCombat`, `deplace`, `ecouteRepond`, `elimine`, `equipe`, `estAMoi`, `exhumeesFin`, `forgeDeclencheurs.js (chargement)`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `hotePart`, `iaAttaquants`, `iaBloqueurs`, `iaCartes`, `iaCibles`, `iaPriorite`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `libelleAction`, `libelleRef`, `meilleureCibleHostile`, `metEnJeu`, `mulligans`, `nettoyage`, `nomObj`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieMana`, `paieReductions`, `passeOuPresent`, `piocheN`, `prepareDeclencheur`, `presage`, `questionPourUI`, `resoudre`, `resous`, `sacrifie`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCtx`, `sourcesMana`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `utiliteEnMain`, `vue`
+Appelée par : `actionsLegales`, `actionsPossibles`, `activeCapacite`, `appliqueSBA`, `carteVue`, `champDe`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `compteObjets`, `coutAutrePossible`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `defausseCarte`, `defenseurDe`, `degagement`, `degatsCombat`, `deplace`, `ecouteRepond`, `elimine`, `equipe`, `estAMoi`, `exhumeesFin`, `finDuTour`, `forgeDeclencheurs.js (chargement)`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `hotePart`, `iaAttaquants`, `iaBloqueurs`, `iaCartes`, `iaCibles`, `iaPriorite`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `libelleAction`, `libelleRef`, `meilleureCibleHostile`, `metEnJeu`, `mulligans`, `nettoyage`, `nomObj`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieMana`, `paieReductions`, `passeOuPresent`, `piocheN`, `prepareDeclencheur`, `presage`, `questionPourUI`, `remplacementsEnJeu`, `resoudre`, `resous`, `sacrifie`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCtx`, `sourcesMana`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `utiliteEnMain`, `vue`
 
 ### `suit()` — ligne 66
 
@@ -1591,71 +1591,71 @@ Appelée par : `deplace`, `forgeEffetsB.js (chargement)`, `paieAutre`, `sacrifie
 
 ### `deplace()` — ligne 98
 
-Appelle : `creeObjet()` *(jeuEtat.js)*, `emet()` *(jeuEtat.js)*, `hotePart()` *(jeuDurees.js)*, `instantane()` *(jeuEtat.js)*, `noteEntree()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `retireDe()` *(jeuEtat.js)*, `tableauZone()` *(jeuEtat.js)*
+Appelle : `creeObjet()` *(jeuEtat.js)*, `destinationRemplacee()` *(forgeRemplacements.js)*, `emet()` *(jeuEtat.js)*, `hotePart()` *(jeuDurees.js)*, `instantane()` *(jeuEtat.js)*, `noteEntree()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `retireDe()` *(jeuEtat.js)*, `tableauZone()` *(jeuEtat.js)*
 
 Appelée par : `appliqueSBA`, `defausseCarte`, `deplaceForge`, `detruitObjet`, `elimine`, `exhumeesFin`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `hotePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `metEnJeu`, `paieAutre`, `paieMana`, `paieReductions`, `presage`, `regardeForge`, `resoudre`, `sacrifie`, `suspend`
 
-### `noteEntree()` — ligne 142
+### `noteEntree()` — ligne 144
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `creeJetonsForge`, `deplace`, `jeuOpsB.js (chargement)`
 
-### `emet()` — ligne 147
+### `emet()` — ligne 149
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `activeCapacite`, `creeJetonsForge`, `declareAttaquants`, `declareBloqueurs`, `defausseCarte`, `deplace`, `etape`, `forgeEffetsB.js (chargement)`, `gagneVie`, `infligeDegats`, `jeuOpsB.js (chargement)`, `lanceSort`, `piocheN`, `sacrifie`
 
-### `jn()` — ligne 151
+### `jn()` — ligne 153
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `activeCapacite`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `elimine`, `forgeEffetsB.js (chargement)`, `infligeDegats`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `lanceSort`, `mulligans`, `partie`, `presage`, `resoudre`, `suspend`, `tour`
 
-### `nomObj()` — ligne 153
+### `nomObj()` — ligne 155
 
 Appelle : `obj()` *(jeuEtat.js)*
 
 Appelée par : `declareAttaquants`, `joueTerrain`
 
-### `vivants()` — ligne 158
+### `vivants()` — ligne 160
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `adversaires`, `elimine`, `forgeDefinis`, `forgeEffetsB.js (chargement)`, `priorite`
 
-### `suivantVivant()` — ligne 161
+### `suivantVivant()` — ligne 163
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `iaReponse`, `partie`, `priorite`
 
-### `ordreApnap()` — ligne 170
+### `ordreApnap()` — ligne 172
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `declareBloqueurs`, `mulligans`, `stabilise`
 
-### `adversaires()` — ligne 179
+### `adversaires()` — ligne 181
 
 Appelle : `vivants()` *(jeuEtat.js)*
 
 Appelée par : `declareAttaquants`, `etat.js (chargement)`, `forgeDefinis`, `forgeExpression`, `iaAttaquants`
 
-### `champDe()` — ligne 182
+### `champDe()` — ligne 184
 
 Appelle : `obj()` *(jeuEtat.js)*
 
 Appelée par : `actionsLegales`, `convocables`, `coutAutrePossible`, `coutSort`, `declareAttaquants`, `declareBloqueurs`, `forceDeFrappe`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `iaAttaquants`, `iaCartes`, `iaReponse`, `iaScrute`, `impactSort`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `menace`, `metEnJeu`, `notePrincipale`, `paieAutre`, `peutBloquer`, `utiliteEnMain`
 
-### `piocheN()` — ligne 186
+### `piocheN()` — ligne 188
 
 Appelle : `emet()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
 
 Appelée par : `etape`, `forgeEffetsA.js (chargement)`, `jeuOpsA.js (chargement)`, `mulligans`
 
-### `question()` — ligne 205
+### `question()` — ligne 207
 
 N'appelle aucune fonction du projet.
 
@@ -1677,35 +1677,41 @@ Appelée par : `car`
 
 ### `car()` — ligne 40
 
-Appelle : `statiqueVise()` *(jeuCaracteristiques.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*, `statiquesForgeSur()` *(forgeStatiques.js)*
+Appelle : `animation()` *(jeuCaracteristiques.js)*, `statiqueVise()` *(jeuCaracteristiques.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*, `statiquesForgeSur()` *(forgeStatiques.js)*
 
 Appelée par : `aMot`, `appliqueSBA`, `caracForge`, `caracsJugees`, `ciblable`, `coutDeGarde`, `declareBloqueurs`, `degatsCombat`, `forceDeFrappe`, `forgeEffetsC.js (chargement)`, `frappe`, `iaAttaquants`, `iaBloqueurs`, `iaCibles`, `infligeDegats`, `instantane`, `jeuOpsA.js (chargement)`, `meilleureCibleHostile`, `objetVue`, `peutAttaquer`, `peutBloquer`, `repartition`, `tue`, `valeur`, `valeurObjet`
 
-### `aMot()` — ligne 71
+### `animation()` — ligne 79
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `car`, `caracsJugees`
+
+### `aMot()` — ligne 97
 
 Appelle : `car()` *(jeuCaracteristiques.js)*
 
 Appelée par : `declareAttaquants`, `declareBloqueurs`, `degatsCombat`, `detruitForge`, `iaBloqueurs`, `initiativeEnJeu`, `jeuOpsA.js (chargement)`, `peutAttaquer`, `peutEngagerSoi`, `questionPourUI`, `repartition`
 
-### `estType()` — ligne 72
+### `estType()` — ligne 98
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `actionsLegales`, `appliqueSBA`, `declareAttaquants`, `forgeEffetsA.js (chargement)`, `iaCartes`, `iaScrute`, `infligeDegats`, `notePrincipale`, `peutBloquer`, `sourcesMana`, `terrainsEnMain`, `utiliteEnMain`
+Appelée par : `actionsLegales`, `appliqueSBA`, `declareAttaquants`, `estCreature`, `forgeEffetsA.js (chargement)`, `iaCartes`, `iaScrute`, `infligeDegats`, `notePrincipale`, `peutBloquer`, `sourcesMana`, `terrainsEnMain`, `utiliteEnMain`
 
-### `estCreature()` — ligne 73
+### `estCreature()` — ligne 99
 
-N'appelle aucune fonction du projet.
+Appelle : `estType()` *(jeuCaracteristiques.js)*
 
 Appelée par : `actionsLegales`, `appliqueSBA`, `convocables`, `declareBloqueurs`, `forceDeFrappe`, `forgeEffetsC.js (chargement)`, `iaAttaquants`, `iaCibles`, `impactCapacite`, `impactSort`, `infligeDegats`, `meilleureCibleHostile`, `objetVue`, `peutAttaquer`, `peutBloquer`, `peutEngagerSoi`, `sourcesMana`, `valeurObjet`
 
-### `peutEngagerSoi()` — ligne 78
+### `peutEngagerSoi()` — ligne 104
 
 Appelle : `aMot()` *(jeuCaracteristiques.js)*, `estCreature()` *(jeuCaracteristiques.js)*
 
 Appelée par : `coutAutrePossible`, `sourcesMana`
 
-### `mvDe()` — ligne 85
+### `mvDe()` — ligne 111
 
 N'appelle aucune fonction du projet.
 
@@ -1715,7 +1721,7 @@ Appelée par : `caracForge`, `correspondObjet`, `propObjet`, `valeur`
 
 ### `caracsJugees()` — ligne 13
 
-Appelle : `car()` *(jeuCaracteristiques.js)*
+Appelle : `animation()` *(jeuCaracteristiques.js)*, `car()` *(jeuCaracteristiques.js)*
 
 Appelée par : `correspondObjet`, `forgeValideObjet`, `infligeDegats`
 
@@ -1839,7 +1845,7 @@ Appelée par : `tour`
 
 ### `chargement du module`
 
-Appelle : `aMot()` *(jeuCaracteristiques.js)*, `car()` *(jeuCaracteristiques.js)*, `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `correspond()` *(jeuCibles.js)*, `defausseCarte()` *(jeuDurees.js)*, `deplace()` *(jeuEtat.js)*, `detruitObjet()` *(jeuDurees.js)*, `executeOps()` *(jeuOpsB.js)*, `gagneVie()` *(jeuOpsA.js)*, `infligeDegats()` *(jeuOpsA.js)*, `jn()` *(jeuEtat.js)*, `joueursDe()` *(jeuOpsA.js)*, `piocheN()` *(jeuEtat.js)*, `question()` *(jeuEtat.js)*, `resous()` *(jeuOpsA.js)*, `retireDeLaPile()` *(jeuPile.js)*, `sacrifie()` *(jeuOpsA.js)*, `sourceCtx()` *(jeuOpsA.js)*, `valeur()` *(jeuOpsA.js)*
+Appelle : `aMot()` *(jeuCaracteristiques.js)*, `car()` *(jeuCaracteristiques.js)*, `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `correspond()` *(jeuCibles.js)*, `defausseCarte()` *(jeuDurees.js)*, `deplace()` *(jeuEtat.js)*, `detruitObjet()` *(jeuDurees.js)*, `executeOps()` *(jeuOpsB.js)*, `gagneVie()` *(jeuOpsA.js)*, `incontrecarrable()` *(forgeRemplacements.js)*, `infligeDegats()` *(jeuOpsA.js)*, `jn()` *(jeuEtat.js)*, `joueursDe()` *(jeuOpsA.js)*, `piocheN()` *(jeuEtat.js)*, `question()` *(jeuEtat.js)*, `resous()` *(jeuOpsA.js)*, `retireDeLaPile()` *(jeuPile.js)*, `sacrifie()` *(jeuOpsA.js)*, `sourceCtx()` *(jeuOpsA.js)*, `valeur()` *(jeuOpsA.js)*
 
 ### `sourceCtx()` — ligne 18
 
@@ -1879,17 +1885,17 @@ Appelée par : `forgeEffetsB.js (chargement)`, `infligeDegats`, `jeuOpsA.js (cha
 
 ### `infligeDegats()` — ligne 91
 
-Appelle : `car()` *(jeuCaracteristiques.js)*, `caracsJugees()` *(jeuCibles.js)*, `emet()` *(jeuEtat.js)*, `estCreature()` *(jeuCaracteristiques.js)*, `estType()` *(jeuCaracteristiques.js)*, `gagneVie()` *(jeuOpsA.js)*, `jn()` *(jeuEtat.js)*
+Appelle : `car()` *(jeuCaracteristiques.js)*, `caracsJugees()` *(jeuCibles.js)*, `degatsApresPrevention()` *(forgeRemplacements.js)*, `emet()` *(jeuEtat.js)*, `estCreature()` *(jeuCaracteristiques.js)*, `estType()` *(jeuCaracteristiques.js)*, `gagneVie()` *(jeuOpsA.js)*, `jn()` *(jeuEtat.js)*
 
 Appelée par : `degatsCombat`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `jeuOpsA.js (chargement)`
 
-### `choisitCartes()` — ligne 119
+### `choisitCartes()` — ligne 121
 
 Appelle : `question()` *(jeuEtat.js)*
 
 Appelée par : `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `mulligans`, `nettoyage`, `paieAutre`, `paieReductions`, `regardeForge`
 
-### `sacrifie()` — ligne 193
+### `sacrifie()` — ligne 195
 
 Appelle : `deplace()` *(jeuEtat.js)*, `emet()` *(jeuEtat.js)*, `instantane()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
 
@@ -2211,47 +2217,47 @@ Appelée par : `forgeEffetsD.js (chargement)`
 
 ### `finDuTour()` — ligne 40
 
-N'appelle aucune fonction du projet.
+Appelle : `obj()` *(jeuEtat.js)*
 
 Appelée par : `nettoyage`
 
-### `debutDuTour()` — ligne 49
+### `debutDuTour()` — ligne 50
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `tour`
 
-### `hotePart()` — ligne 59
+### `hotePart()` — ligne 60
 
 Appelle : `deplace()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
 
 Appelée par : `deplace`
 
-### `sourcesEffets()` — ligne 74
+### `sourcesEffets()` — ligne 75
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `collecteDeclencheurs`
 
-### `collecteRetardes()` — ligne 80
+### `collecteRetardes()` — ligne 81
 
 Appelle : `forgeDeclenche()` *(forgeDeclencheurs.js)*, `obj()` *(jeuEtat.js)*
 
 Appelée par : `collecteDeclencheurs`
 
-### `capacitesDe()` — ligne 96
+### `capacitesDe()` — ligne 98
 
 Appelle : `capacitesAccordees()` *(forgeEffetsD.js)*
 
 Appelée par : `actionsLegales`, `actionsPossibles`, `activeCapacite`, `collecteDeclencheurs`, `iaPriorite`, `iaReponse`, `impactCapacite`, `instantane`, `libelleAction`, `sourcesMana`
 
-### `detruitObjet()` — ligne 108
+### `detruitObjet()` — ligne 110
 
 Appelle : `deplace()` *(jeuEtat.js)*, `jn()` *(jeuEtat.js)*
 
 Appelée par : `appliqueSBA`, `detruitForge`, `jeuOpsA.js (chargement)`
 
-### `defausseCarte()` — ligne 123
+### `defausseCarte()` — ligne 125
 
 Appelle : `deplace()` *(jeuEtat.js)*, `emet()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
 
@@ -2355,29 +2361,29 @@ Appelée par : `etape`
 
 ### `degagement()` — ligne 20
 
-Appelle : `obj()` *(jeuEtat.js)*
+Appelle : `degagementEmpeche()` *(forgeRemplacements.js)*, `obj()` *(jeuEtat.js)*
 
 Appelée par : `etape`
 
-### `nettoyage()` — ligne 31
+### `nettoyage()` — ligne 32
 
 Appelle : `choisitCartes()` *(jeuOpsA.js)*, `collecteDeclencheurs()` *(jeuDeclencheurs.js)*, `defausseCarte()` *(jeuDurees.js)*, `finDuTour()` *(jeuDurees.js)*, `obj()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*
 
 Appelée par : `etape`
 
-### `etape()` — ligne 48
+### `etape()` — ligne 52
 
 Appelle : `declareAttaquants()` *(jeuCombat.js)*, `declareBloqueurs()` *(jeuCombat.js)*, `degagement()` *(jeuTour.js)*, `degatsCombat()` *(jeuCombat.js)*, `emet()` *(jeuEtat.js)*, `exhumeesFin()` *(jeuVariantes.js)*, `finCombat()` *(jeuCombat.js)*, `initiativeEnJeu()` *(jeuCombat.js)*, `nettoyage()` *(jeuTour.js)*, `notePrincipale()` *(jeuTour.js)*, `piocheN()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `suspensionsEntretien()` *(jeuVariantes.js)*
 
 Appelée par : `tour`
 
-### `notePrincipale()` — ligne 81
+### `notePrincipale()` — ligne 85
 
 Appelle : `champDe()` *(jeuEtat.js)*, `estType()` *(jeuCaracteristiques.js)*, `manaDispo()` *(jeuMana.js)*
 
 Appelée par : `etape`
 
-### `tour()` — ligne 88
+### `tour()` — ligne 92
 
 Appelle : `debutDuTour()` *(jeuDurees.js)*, `etape()` *(jeuTour.js)*, `jn()` *(jeuEtat.js)*, `videReserves()` *(jeuMana.js)*
 
@@ -2563,31 +2569,31 @@ Appelée par : `propObjet`
 
 Appelle : `caracsJugees()` *(jeuCibles.js)*, `forgeFiltre()` *(forgeValide.js)*, `propObjet()` *(forgeValide.js)*, `teteObjet()` *(forgeValide.js)*
 
-Appelée par : `conditionForge`, `correspondObjet`, `forgeDeclencheurs.js (chargement)`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeExpression`, `forgeValideDef`, `manaPermis`, `peutBloquer`, `valideOuRien`, `viseForge`
+Appelée par : `conditionForge`, `correspondObjet`, `degagementEmpeche`, `degatsApresPrevention`, `destinationRemplacee`, `forgeDeclencheurs.js (chargement)`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeExpression`, `forgeValideDef`, `manaPermis`, `peutBloquer`, `valideOuRien`, `viseForge`
 
 ### `forgeValideJoueur()` — ligne 183
 
 Appelle : `forgeFiltre()` *(forgeValide.js)*
 
-Appelée par : `forgeDeclencheurs.js (chargement)`, `forgeEffetsB.js (chargement)`, `joueurCorrespond`, `joueurOuRien`
+Appelée par : `degatsApresPrevention`, `forgeDeclencheurs.js (chargement)`, `forgeEffetsB.js (chargement)`, `joueurCorrespond`, `joueurOuRien`
 
 ### `forgeValideDef()` — ligne 204
 
 Appelle : `forgeValideObjet()` *(forgeValide.js)*
 
-Appelée par : `coutsForge`, `defCorrespond`, `forgeDeclencheurs.js (chargement)`, `forgeExpression`, `manaPermis`
+Appelée par : `coutsForge`, `defCorrespond`, `forgeDeclencheurs.js (chargement)`, `forgeExpression`, `incontrecarrable`, `manaPermis`
 
 ### `genreMarqueur()` — ligne 211
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `coutForge`, `forgeEffetsB.js (chargement)`, `forgeExpression`, `motCleForge`, `propObjet`, `remplacementForge`
+Appelée par : `coutForge`, `entreeForge`, `forgeEffetsB.js (chargement)`, `forgeExpression`, `motCleForge`, `propObjet`
 
 ### `descForge()` — ligne 219
 
 Appelle : `forgeFiltre()` *(forgeValide.js)*
 
-Appelée par : `capaciteForge`, `coutForge`, `effetForge`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `motCleForge`, `remplacementForge`
+Appelée par : `capaciteForge`, `coutForge`, `effetForge`, `entreeForge`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `motCleForge`
 
 ## js/forgeExpr.js
 
@@ -2599,7 +2605,7 @@ Appelle : `forgeSait()` *(forgeCouverture.js)*
 
 Appelle : `forgeExpression()` *(forgeExpr.js)*
 
-Appelée par : `conditionForge`, `coutsForge`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeExpression`, `forgeStatiques.js (chargement)`, `pompeForge`, `propObjet`, `seuilForge`
+Appelée par : `animeForge`, `conditionForge`, `coutsForge`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeExpression`, `forgeStatiques.js (chargement)`, `pompeForge`, `propObjet`, `seuilForge`
 
 ### `mathForge()` — ligne 31
 
@@ -2649,37 +2655,37 @@ Appelée par : `forgeNombre`
 
 Appelle : `forgeSait()` *(forgeCouverture.js)*
 
-### `ciblesForge()` — ligne 22
+### `ciblesForge()` — ligne 24
 
 Appelle : `obj()` *(jeuEtat.js)*, `suit()` *(jeuEtat.js)*
 
-Appelée par : `executeForge`, `forgeDefinis`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `joueursForge`, `objetsForge`
+Appelée par : `executeForge`, `forgeDefinis`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `joueursForge`, `objetsForge`
 
-### `joueurDe()` — ligne 30
+### `joueurDe()` — ligne 32
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `executeForge`, `forgeDefinis`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `joueursForge`, `paieUnlessForge`
 
-### `uniquesJ()` — ligne 32
+### `uniquesJ()` — ligne 34
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `forgeDefinis`
 
-### `forgeDefinis()` — ligne 38
+### `forgeDefinis()` — ligne 40
 
 Appelle : `adversaires()` *(jeuEtat.js)*, `ciblesForge()` *(forgeDefini.js)*, `forgeValideObjet()` *(forgeValide.js)*, `joueurDe()` *(forgeDefini.js)*, `obj()` *(jeuEtat.js)*, `objetEvt()` *(forgeExpr.js)*, `objetsZone()` *(forgeExpr.js)*, `passeOuPresent()` *(jeuOpsA.js)*, `suit()` *(jeuEtat.js)*, `uniquesJ()` *(forgeDefini.js)*, `vivants()` *(jeuEtat.js)*
 
 Appelée par : `conditionForge`, `executeForge`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `joueursForge`, `objetsForge`, `paieUnlessForge`, `sourceDegats`, `viseForge`
 
-### `joueursForge()` — ligne 93
+### `joueursForge()` — ligne 95
 
 Appelle : `ciblesForge()` *(forgeDefini.js)*, `forgeDefinis()` *(forgeDefini.js)*, `joueurDe()` *(forgeDefini.js)*
 
 Appelée par : `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`
 
-### `objetsForge()` — ligne 103
+### `objetsForge()` — ligne 105
 
 Appelle : `ciblesForge()` *(forgeDefini.js)*, `forgeDefinis()` *(forgeDefini.js)*
 
@@ -2761,7 +2767,7 @@ Appelée par : `executeOps`, `forgeEffetsA.js (chargement)`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`
+Appelée par : `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `formeRemplacement`
 
 ### `deplaceForge()` — ligne 135
 
@@ -2791,7 +2797,7 @@ Appelée par : `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `ciblesForge()` *(forgeDefini.js)*, `creeJetonsForge()` *(forgeEffetsB.js)*, `deplace()` *(jeuEtat.js)*, `deplaceForge()` *(forgeEffetsA.js)*, `descForge()` *(forgeValide.js)*, `detruitForge()` *(forgeEffetsB.js)*, `emet()` *(jeuEtat.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `forgeValideObjet()` *(forgeValide.js)*, `gagneVie()` *(jeuOpsA.js)*, `genreMarqueur()` *(forgeValide.js)*, `infligeDegats()` *(jeuOpsA.js)*, `instantane()` *(jeuEtat.js)*, `jn()` *(jeuEtat.js)*, `joueurDe()` *(forgeDefini.js)*, `joueursForge()` *(forgeDefini.js)*, `nombreIA()` *(forgeEffetsA.js)*, `obj()` *(jeuEtat.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `quiIA()` *(forgeEffetsA.js)*, `regardeForge()` *(forgeEffetsB.js)*, `retiensForge()` *(forgeEffetsA.js)*, `retireDe()` *(jeuEtat.js)*, `retireDeLaPile()` *(jeuPile.js)*, `sacrifie()` *(jeuOpsA.js)*, `sourceDegats()` *(forgeEffetsB.js)*, `vivants()` *(jeuEtat.js)*, `zoneForge()` *(forgeEffetsA.js)*
+Appelle : `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `ciblesForge()` *(forgeDefini.js)*, `creeJetonsForge()` *(forgeEffetsB.js)*, `deplace()` *(jeuEtat.js)*, `deplaceForge()` *(forgeEffetsA.js)*, `descForge()` *(forgeValide.js)*, `detruitForge()` *(forgeEffetsB.js)*, `emet()` *(jeuEtat.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `forgeValideObjet()` *(forgeValide.js)*, `gagneVie()` *(jeuOpsA.js)*, `genreMarqueur()` *(forgeValide.js)*, `incontrecarrable()` *(forgeRemplacements.js)*, `infligeDegats()` *(jeuOpsA.js)*, `instantane()` *(jeuEtat.js)*, `jn()` *(jeuEtat.js)*, `joueurDe()` *(forgeDefini.js)*, `joueursForge()` *(forgeDefini.js)*, `nombreIA()` *(forgeEffetsA.js)*, `obj()` *(jeuEtat.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `quiIA()` *(forgeEffetsA.js)*, `regardeForge()` *(forgeEffetsB.js)*, `retiensForge()` *(forgeEffetsA.js)*, `retireDe()` *(jeuEtat.js)*, `retireDeLaPile()` *(jeuPile.js)*, `sacrifie()` *(jeuOpsA.js)*, `sourceDegats()` *(forgeEffetsB.js)*, `vivants()` *(jeuEtat.js)*, `zoneForge()` *(forgeEffetsA.js)*
 
 ### `regardeForge()` — ligne 36
 
@@ -2827,7 +2833,7 @@ Appelle : `ajouteMana()` *(jeuMana.js)*, `bonusIA()` *(forgeEffetsC.js)*, `car()
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `forgeEffetsC.js (chargement)`, `forgeStatiques.js (chargement)`, `pompeForge`
+Appelée par : `animeForge`, `forgeEffetsC.js (chargement)`, `forgeStatiques.js (chargement)`, `pompeForge`
 
 ### `bonusIA()` — ligne 17
 
@@ -2851,11 +2857,11 @@ Appelée par : `capaciteForge`, `forgeEffetsC.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `declencheurForge()` *(forgeDefinition.js)*, `durees()` *(jeuDurees.js)*, `effetForge()` *(forgeDefinition.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `forgeValideObjet()` *(forgeValide.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `phaseConnue()` *(forgeDeclencheurs.js)*, `poseEffet()` *(jeuDurees.js)*, `regenere()` *(forgeEffetsD.js)*, `statiqueForge()` *(forgeEffetsD.js)*, `texteForge()` *(forgeDefinition.js)*
+Appelle : `animeForge()` *(forgeEffetsD.js)*, `ciblesForge()` *(forgeDefini.js)*, `declencheurForge()` *(forgeDefinition.js)*, `durees()` *(jeuDurees.js)*, `effetForge()` *(forgeDefinition.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `forgeValideObjet()` *(forgeValide.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `phaseConnue()` *(forgeDeclencheurs.js)*, `poseEffet()` *(jeuDurees.js)*, `regenere()` *(forgeEffetsD.js)*, `statiqueForge()` *(forgeEffetsD.js)*, `texteForge()` *(forgeDefinition.js)*, → `animationTenable()` *(forgeEffetsD.js)*
 
 ### `statiqueForge()` — ligne 16
 
-Appelle : `capaciteForge()` *(forgeDefinition.js)*, `declencheurForge()` *(forgeDefinition.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*
+Appelle : `capaciteForge()` *(forgeDefinition.js)*, `declencheurForge()` *(forgeDefinition.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `statiqueTenable()` *(forgeStatiques.js)*
 
 Appelée par : `definitionDepuisScript`, `forgeEffetsD.js (chargement)`
 
@@ -2868,6 +2874,18 @@ Appelée par : `capacitesDe`
 ### `regenere()` — ligne 46
 
 N'appelle aucune fonction du projet.
+
+Appelée par : `forgeEffetsD.js (chargement)`
+
+### `animeForge()` — ligne 103
+
+Appelle : `couleursMots()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `motsForge()` *(forgeEffetsC.js)*, `typesForge()` *(forgeStatiques.js)*
+
+Appelée par : `forgeEffetsD.js (chargement)`
+
+### `animationTenable()` — ligne 112
+
+Appelle : `couleursMots()` *(forgeStatiques.js)*
 
 Appelée par : `forgeEffetsD.js (chargement)`
 
@@ -2913,13 +2931,13 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `forgeDeclencheurs.js (chargement)`
 
-### `ciblesDuSort()` — ligne 69
+### `ciblesDuSort()` — ligne 72
 
 Appelle : `obj()` *(jeuEtat.js)*
 
 Appelée par : `forgeDeclencheurs.js (chargement)`
 
-### `forgeDeclenche()` — ligne 98
+### `forgeDeclenche()` — ligne 101
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*
 
@@ -2929,37 +2947,103 @@ Appelée par : `collecteRetardes`, `ecouteRepond`
 
 ### `chargement du module`
 
-Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeStatique()` *(forgeStatiques.js)*, `motsForge()` *(forgeEffetsC.js)*, `viseForge()` *(forgeStatiques.js)*
+Appelle : `conditionForge()` *(forgeEffetsA.js)*, `couleursMots()` *(forgeStatiques.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeStatique()` *(forgeStatiques.js)*, `motsForge()` *(forgeEffetsC.js)*, `typesForge()` *(forgeStatiques.js)*, `viseForge()` *(forgeStatiques.js)*
 
-### `forgeStatique()` — ligne 18
+### `typesForge()` — ligne 19
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `animeForge`, `forgeStatiques.js (chargement)`
+
+### `couleursMots()` — ligne 28
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `animationTenable`, `animeForge`, `forgeStatiques.js (chargement)`, `statiqueTenable`
+
+### `statiqueTenable()` — ligne 35
+
+Appelle : `couleursMots()` *(forgeStatiques.js)*
+
+Appelée par : `statiqueForge`
+
+### `forgeStatique()` — ligne 41
 
 Appelle : `forgeSait()` *(forgeCouverture.js)*
 
 Appelée par : `forgeStatiques.js (chargement)`
 
-### `envStatique()` — ligne 25
+### `envStatique()` — ligne 48
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `coutsForge`, `forgeStatiques.js (chargement)`, `viseForge`
 
-### `viseForge()` — ligne 30
+### `viseForge()` — ligne 53
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeValideObjet()` *(forgeValide.js)*
 
 Appelée par : `capacitesAccordees`, `forgeStatiques.js (chargement)`
 
-### `statiquesForgeSur()` — ligne 72
+### `statiquesForgeSur()` — ligne 98
 
 Appelle : `statiquesEnJeu()` *(jeuCaracteristiques.js)*
 
 Appelée par : `car`
 
-### `coutsForge()` — ligne 87
+### `coutsForge()` — ligne 113
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envStatique()` *(forgeStatiques.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideDef()` *(forgeValide.js)*, `statiquesEnJeu()` *(jeuCaracteristiques.js)*
 
 Appelée par : `coutSort`
+
+## js/forgeRemplacements.js
+
+### `chargement du module`
+
+Appelle : `forgeSait()` *(forgeCouverture.js)*
+
+### `formeRemplacement()` — ligne 19
+
+Appelle : `forgeSousCapacite()` *(forgeScript.js)*, `zoneForge()` *(forgeEffetsA.js)*
+
+Appelée par : `remplacementForge`
+
+### `remplacementsEnJeu()` — ligne 40
+
+Appelle : `obj()` *(jeuEtat.js)*
+
+Appelée par : `degagementEmpeche`, `degatsApresPrevention`, `destinationRemplacee`, `incontrecarrable`
+
+### `envRemplacement()` — ligne 48
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `degagementEmpeche`, `degatsApresPrevention`, `destinationRemplacee`
+
+### `destinationRemplacee()` — ligne 53
+
+Appelle : `envRemplacement()` *(forgeRemplacements.js)*, `forgeValideObjet()` *(forgeValide.js)*, `remplacementsEnJeu()` *(forgeRemplacements.js)*
+
+Appelée par : `deplace`
+
+### `degagementEmpeche()` — ligne 68
+
+Appelle : `envRemplacement()` *(forgeRemplacements.js)*, `forgeValideObjet()` *(forgeValide.js)*, `remplacementsEnJeu()` *(forgeRemplacements.js)*
+
+Appelée par : `degagement`
+
+### `incontrecarrable()` — ligne 75
+
+Appelle : `forgeValideDef()` *(forgeValide.js)*, `remplacementsEnJeu()` *(forgeRemplacements.js)*
+
+Appelée par : `forgeEffetsB.js (chargement)`, `jeuOpsA.js (chargement)`
+
+### `degatsApresPrevention()` — ligne 87
+
+Appelle : `envRemplacement()` *(forgeRemplacements.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `forgeValideObjet()` *(forgeValide.js)*, `remplacementsEnJeu()` *(forgeRemplacements.js)*
+
+Appelée par : `infligeDegats`
 
 ## js/forgeMotsCles.js
 
@@ -3029,29 +3113,35 @@ Appelée par : `definitionDepuisScript`, `forgeEffetsD.js (chargement)`, `statiq
 
 ### `remplacementForge()` — ligne 139
 
-Appelle : `descForge()` *(forgeValide.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `genreMarqueur()` *(forgeValide.js)*
+Appelle : `entreeForge()` *(forgeDefinition.js)*, `formeRemplacement()` *(forgeRemplacements.js)*
 
 Appelée par : `definitionDepuisScript`
 
-### `couleursForge()` — ligne 165
+### `entreeForge()` — ligne 148
+
+Appelle : `descForge()` *(forgeValide.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `genreMarqueur()` *(forgeValide.js)*
+
+Appelée par : `remplacementForge`
+
+### `couleursForge()` — ligne 174
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `definitionDepuisScript`
 
-### `definitionDepuisScript()` — ligne 173
+### `definitionDepuisScript()` — ligne 182
 
 Appelle : `capaciteForge()` *(forgeDefinition.js)*, `capacitesImplicites()` *(definitions.js)*, `couleursDe()` *(definitions.js)*, `couleursForge()` *(forgeDefinition.js)*, `coutMana()` *(oracleCouts.js)*, `coutManaVide()` *(oracleCouts.js)*, `couvertureForge()` *(forgeCouverture.js)*, `declencheurForge()` *(forgeDefinition.js)*, `forgeApi()` *(forgeScript.js)*, `forgeLigneType()` *(forgeScript.js)*, `lisTypeLigne()` *(oracleTexte.js)*, `motCleForge()` *(forgeMotsCles.js)*, `remplacementForge()` *(forgeDefinition.js)*, `statiqueForge()` *(forgeEffetsD.js)*
 
 Appelée par : `definitionForge`, `jetonsForge`
 
-### `definitionForge()` — ligne 213
+### `definitionForge()` — ligne 222
 
 Appelle : `definitionDepuisScript()` *(forgeDefinition.js)*, `jetonsForge()` *(forgeDefinition.js)*, `lisScriptForge()` *(forgeScript.js)*
 
 Appelée par : `definitionDe`
 
-### `nomsJetonsForge()` — ligne 220
+### `nomsJetonsForge()` — ligne 229
 
 N'appelle aucune fonction du projet.
 

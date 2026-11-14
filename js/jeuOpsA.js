@@ -90,6 +90,8 @@ function gagneVie(P, j, n) {
    ici, pour le combat comme pour un sort. */
 function infligeDegats(P, src, cible, n, combat) {
   if (n <= 0 || !src) return 0;
+  n = degatsApresPrevention(P, src, cible, n, combat);
+  if (n <= 0) return 0;
   const cs = src.lki ? src : caracsJugees(P, src);
   const mots = cs.mots, ctrl = src.ctrl;
   if (cible.j != null) {
@@ -170,7 +172,7 @@ OPS.exile = function* (P, op, ctx) {
   });
 };
 OPS.contre = function* (P, op, ctx) {
-  resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'pile').forEach(o => {
+  resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'pile' && !incontrecarrable(P, o)).forEach(o => {
     retireDeLaPile(P, o.id);
     deplace(P, o.id, 'cimetiere');
     jn(P, `${o.def.nom} est contrecarré`);

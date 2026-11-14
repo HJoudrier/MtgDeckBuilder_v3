@@ -21,8 +21,9 @@ function degagement(P) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== P.actif) continue;
-    o.engage = false;
     o.pret = true;
+    if (o.engage && typeof degagementEmpeche === 'function' && degagementEmpeche(P, o)) continue;
+    o.engage = false;
   }
 }
 
@@ -35,10 +36,13 @@ function* nettoyage(P) {
     choix.forEach(id => defausseCarte(P, id, P.actif));
   }
   finDuTour(P);
+  P.joueurs.forEach(x => { x.prevention = 0; });
   for (const id of P.champ) {
     const o = obj(P, id);
     o.bless = 0; o.toucheMortel = false; o.regen = 0;
     if (o.mods.length) { o.mods = o.mods.filter(m => m.fin !== 'tour'); P.ver++; }
+    if (o.anime && o.anime.length) { o.anime = o.anime.filter(m => m.fin !== 'tour'); P.ver++; }
+    o.prevention = 0;
   }
   collecteDeclencheurs(P);
   if (P.enAttente.length) yield* priorite(P);

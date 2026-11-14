@@ -79,11 +79,21 @@ forgeEffet('Attach', [], function* (P, t, env) {
   P.ver++;
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
-forgeEffet('GainControl', ['NewController'], function* (P, t, env) {
+/* Prendre le contrôle — pour toujours, ou jusqu'à la fin du tour
+   (« Threaten ») : le contrôleur d'avant revient au nettoyage
+   (js/jeuDurees.js `finDuTour()`). */
+forgeEffet('GainControl', ['NewController', 'LoseControl', 'Untap', 'AddKWs'], function* (P, t, env) {
   const j = t.NewController ? forgeDefinis(P, t.NewController, env).map(x => joueurDe(x))[0] : env.ctrl;
   if (j == null) return;
-  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.ctrl = j; o.pret = false; P.ver++; });
-}, (t, op) => { op.op = 'exile'; op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null; });
+  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
+    if (t.LoseControl === 'EOT' && o.ctrlRendu == null) o.ctrlRendu = o.ctrl;
+    o.ctrl = j; o.pret = false;
+    if (t.Untap === 'True') o.engage = false;
+    if (t.AddKWs) o.mods.push({f: 0, e: 0, mots: motsForge(t.AddKWs), fin: 'tour'});
+    P.ver++;
+  });
+}, (t, op) => { op.op = 'exile'; op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null; },
+{prepare: t => !t.LoseControl || t.LoseControl === 'EOT'});
 
 forgeEffet('Cleanup', ['ClearRemembered', 'ClearImprinted', 'ClearChosenCard', 'ClearChosenType', 'ClearChosenColor',
   'ForgetDefined', 'ClearTriggered'], function* (P, t, env) {

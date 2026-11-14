@@ -15,6 +15,29 @@
 
 const FORGE_STATIQUES = {};
 
+/* `Creature,Elemental` ou `Swamp & Forest` → types et sous-types du moteur. */
+function typesForge(txt) {
+  const r = {types: [], sousTypes: []};
+  String(txt || '').split(/\s*[,&]\s*/).filter(Boolean).forEach(m => {
+    if (FORGE_TYPES_CARTE[m]) r.types.push(FORGE_TYPES_CARTE[m]); else r.sousTypes.push(m.toLowerCase());
+  });
+  return r;
+}
+
+/* `Red`, `Black & Green`, `Colorless` → des couleurs du moteur. */
+function couleursMots(txt) {
+  return String(txt || '').split(/\s*[,&]\s*|\s+/).map(m => FORGE_COULEURS[m]).filter(Boolean);
+}
+
+/* Les valeurs qu'on sait tenir dans une statique : on n'ajoute pas le type
+   créature par une statique (le combat et les actions d'état ne le
+   verraient pas), ni un type qui n'en est pas un. */
+function statiqueTenable(t) {
+  if (t.AddType && (/\bCreature\b|AllCreatureTypes|ChosenType/.test(t.AddType))) return false;
+  if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/Colorless/.test(t.SetColor || '')) return false;
+  return true;
+}
+
 function forgeStatique(mode, params, f) {
   FORGE_STATIQUES[mode] = f;
   forgeSait('stat', mode);
@@ -39,7 +62,7 @@ function viseForge(P, src, s, o, cle) {
   return conditionForge(P, s.t, env) ? env : null;
 }
 
-forgeStatique('Continuous', ['Affected', 'AffectedDefined', 'AddPower', 'AddToughness', 'AddKeyword', 'SetPower', 'SetToughness',
+forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'AffectedDefined', 'AddPower', 'AddToughness', 'AddKeyword', 'SetPower', 'SetToughness',
   'CharacteristicDefining'], (P, src, s, o, r) => {
   const t = s.t;
   const cda = t.CharacteristicDefining === 'True' && !t.Affected && !t.AffectedDefined;
@@ -51,6 +74,9 @@ forgeStatique('Continuous', ['Affected', 'AffectedDefined', 'AddPower', 'AddToug
   if (t.AddKeyword) r.mots |= motsForge(t.AddKeyword);
   if (t.SetPower) r.setF = forgeNombre(P, t.SetPower, env);
   if (t.SetToughness) r.setE = forgeNombre(P, t.SetToughness, env);
+  if (t.AddType) { const ty = typesForge(t.AddType); r.types.push(...ty.types); r.sousTypes.push(...ty.sousTypes); }
+  if (t.SetColor) r.couleurs = couleursMots(t.SetColor);
+  if (t.AddColor) r.couleurs = [...new Set([...(r.couleurs || o.def.couleurs), ...couleursMots(t.AddColor)])];
 });
 
 forgeStatique('CantAttack', ['ValidCard'], (P, src, s, o, r) => { if (viseForge(P, src, s, o, 'ValidCard')) r.attaque = true; });
@@ -70,7 +96,7 @@ forgeStatique('RaiseCost', ['ValidCard', 'Type', 'Activator', 'Amount'], () => {
    force fixée, interdictions. Appelé par `car()` une fois par version de
    l'état. */
 function statiquesForgeSur(P, o) {
-  const r = {f: 0, e: 0, mots: 0, setF: null, setE: null, attaque: false, blocage: false, pasPar: null};
+  const r = {f: 0, e: 0, mots: 0, setF: null, setE: null, attaque: false, blocage: false, pasPar: null, types: [], sousTypes: [], couleurs: null};
   if (P._forgeProfondeur > 2) return r;
   P._forgeProfondeur = (P._forgeProfondeur || 0) + 1;
   try {

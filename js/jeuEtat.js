@@ -101,6 +101,8 @@ function deplace(P, id, vers, opts = {}) {
   const depuis = o.zone;
   /* Exhumée, elle part en exil où qu'elle aille (règle 702.84a). */
   if (o.exhume && depuis === 'champ' && vers !== 'exil') vers = 'exil';
+  /* Les remplacements (« exile it instead », js/forgeRemplacements.js). */
+  if (vers === 'cimetiere' && typeof destinationRemplacee === 'function') vers = destinationRemplacee(P, o, depuis, vers);
   const lki = depuis === 'champ' ? instantane(P, o) : null;
   retireDe(tableauZone(P, o), id);
   if (depuis === 'champ') {

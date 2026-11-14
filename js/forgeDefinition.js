@@ -137,6 +137,15 @@ function declencheurForge(def, face, t, jetons) {
    carte entre engagée (sauf si l'on contrôle tel terrain, ou en payant de
    la vie), ou avec des marqueurs. */
 function remplacementForge(def, face, r) {
+  if (entreeForge(def, face, r)) return true;
+  const forme = formeRemplacement(face, r);
+  if (!forme) return false;
+  (def.remplacements = def.remplacements || []).push({forme, t: r, face});
+  return true;
+}
+
+/* L'entrée sur le champ remplacée : engagée, ou avec des marqueurs. */
+function entreeForge(def, face, r) {
   if (r.Event !== 'Moved' || r.Destination !== 'Battlefield' || !/^(Card|Permanent|Creature|Land)\.Self$/.test(r.ValidCard || '')) return false;
   const w = forgeSousCapacite(face, r.ReplaceWith);
   if (!w || w.Defined !== 'Self' || w.ETB !== 'True') return false;

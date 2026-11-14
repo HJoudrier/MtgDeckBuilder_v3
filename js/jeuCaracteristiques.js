@@ -39,8 +39,9 @@ function statiqueVise(P, src, s, o) {
    laquelle seule la définition compte). */
 function car(P, o) {
   if (o._v === P.ver && o._c) return o._c;
-  const d = o.def;
-  let force = d.force || 0, endurance = d.endurance || 0, mots = d.mots;
+  const d = o.def, a = animation(o);
+  let force = a.force, endurance = a.endurance, mots = a.mots;
+  let types = a.types, sousTypes = a.sousTypes, couleurs = a.couleurs;
   let nePeutAttaquer = false, nePeutBloquer = false, pasPar = null;
   if (o.zone === 'champ') {
     /* Les statiques de Forge d'abord : une force fixée (« base power and
@@ -51,6 +52,9 @@ function car(P, o) {
       if (fg.setE != null) endurance = fg.setE;
       force += fg.f; endurance += fg.e; mots |= fg.mots;
       nePeutAttaquer = fg.attaque; nePeutBloquer = fg.blocage; pasPar = fg.pasPar;
+      if (fg.types.length) types = [...new Set([...types, ...fg.types])];
+      if (fg.sousTypes.length) sousTypes = [...new Set([...sousTypes, ...fg.sousTypes])];
+      if (fg.couleurs) couleurs = fg.couleurs;
     }
     const p = (o.marq['+1/+1'] || 0) - (o.marq['-1/-1'] || 0);
     force += p; endurance += p;
@@ -62,15 +66,37 @@ function car(P, o) {
     }
     for (const m of o.mods) { force += m.f || 0; endurance += m.e || 0; mots |= m.mots || 0; }
   }
-  o._c = {force, endurance, mots, types: d.types, sousTypes: d.sousTypes, couleurs: d.couleurs,
+  o._c = {force, endurance, mots, types, sousTypes, couleurs,
     supers: d.supers, nePeutAttaquer, nePeutBloquer, pasPar, loyaute: o.marq.loyaute || 0};
   o._v = P.ver;
   return o._c;
 }
 
+/* La couche propre à l'objet : ce qu'un effet l'a fait devenir — un terrain
+   qui devient créature, un véhicule piloté (`o.anime`, une liste, la
+   dernière force fixée l'emportant : règle 613, couches 4, 5 et 7b). Sans
+   animation, l'imprimé. */
+function animation(o) {
+  const d = o.def;
+  if (!o.anime || !o.anime.length) {
+    return {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types, sousTypes: d.sousTypes, couleurs: d.couleurs};
+  }
+  const r = {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types.slice(), sousTypes: d.sousTypes.slice(), couleurs: d.couleurs};
+  for (const a of o.anime) {
+    if (a.force != null) r.force = a.force;
+    if (a.endurance != null) r.endurance = a.endurance;
+    if (a.retireSousTypes) r.sousTypes = [];
+    (a.types || []).forEach(t => { if (!r.types.includes(t)) r.types.push(t); });
+    (a.sousTypes || []).forEach(t => { if (!r.sousTypes.includes(t)) r.sousTypes.push(t); });
+    if (a.couleurs) r.couleurs = a.ecrase ? a.couleurs : [...new Set([...r.couleurs, ...a.couleurs])];
+    r.mots |= a.mots || 0;
+  }
+  return r;
+}
+
 function aMot(P, o, m) { return (car(P, o).mots & m) !== 0; }
-function estType(o, t) { return o.def.types.includes(t); }
-function estCreature(o) { return o.def.types.includes('creature'); }
+function estType(o, t) { return o.def.types.includes(t) || (!!o.anime && o.anime.some(a => (a.types || []).includes(t))); }
+function estCreature(o) { return estType(o, 'creature'); }
 
 /* Une créature peut-elle s'engager pour attaquer ou pour une capacité {T} :
    elle est là depuis le début du tour de son contrôleur, ou elle a la

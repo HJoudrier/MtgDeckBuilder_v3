@@ -116,7 +116,7 @@ forgeEffet('SacrificeAll', ['ValidCards'], function* (P, t, env) {
 
 forgeEffet('Counter', ['Destination'], function* (P, t, env) {
   const dest = zoneForge(t.Destination) || 'cimetiere';
-  for (const o of objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'pile')) {
+  for (const o of objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'pile' && !incontrecarrable(P, o))) {
     retireDeLaPile(P, o.id);
     deplace(P, o.id, dest === 'bibliotheque' ? 'dessus' : dest);
     jn(P, `${o.def.nom} est contrecarré`);

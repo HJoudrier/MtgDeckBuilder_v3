@@ -82,6 +82,7 @@ js/                 modules, chargés dans cet ordre :
   forgeEffetsD.js   régénération, effets temporaires, déclencheurs retardés, capacités accordées
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeStatiques.js les statiques de Forge, lues par car(), coutSort(), peutBloquer()
+  forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeMotsCles.js  les mots-clés de Forge (`K:`)
   forgeDefinition.js  d'un script de Forge à une définition de jeu
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
@@ -584,6 +585,16 @@ repartent de zéro à chaque tour ; les expressions de Forge qui les lisent (`Co
 « deuxième sort lancé », « un sort qui le cible » s'y appuient. Une source de mana restreinte (« spend
 this mana only to cast creature spells ») ne sert que si le paiement sait ce qu'il paie : `pour`, le
 sort ou la capacité, suit `planPaiement()` et `paieMana()`.
+
+**Remplacements et couches** (`js/forgeRemplacements.js`, lot F6). Un remplacement ne monte pas
+sur la pile : le moteur l'interroge au moment de l'évènement — `deplace()` pour « exile-la au lieu du
+cimetière », `degagement()` pour « ne se dégage pas », le contre pour « ne peut être contrecarré »,
+`infligeDegats()` pour la prévention (remplacements et boucliers « prevent the next N damage »). Une
+couche propre à l'objet, `o.anime` (`animation()`, js/jeuCaracteristiques.js), fait d'un terrain une
+créature, fixe une force de base, ajoute des types, des couleurs, des mots-clés ; `estType()` la lit,
+si bien que le combat et les actions d'état voient l'objet animé. Les statiques ajoutent des sous-types
+et changent des couleurs ; elles n'ajoutent jamais le type créature, que seule la couche de l'objet
+sait faire voir partout. Le contrôle repris jusqu'à la fin du tour revient au nettoyage.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

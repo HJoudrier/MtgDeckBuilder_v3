@@ -13,9 +13,9 @@
 function caracsJugees(P, o, base) {
   if (o.lki) return o;
   if (base || o.zone !== 'champ') {
-    const d = o.def;
-    return {force: d.force || 0, endurance: d.endurance || 0, mots: d.mots, types: d.types,
-      sousTypes: d.sousTypes, couleurs: d.couleurs, supers: d.supers};
+    const a = animation(o);
+    return {force: a.force, endurance: a.endurance, mots: a.mots, types: a.types,
+      sousTypes: a.sousTypes, couleurs: a.couleurs, supers: o.def.supers};
   }
   return car(P, o);
 }
