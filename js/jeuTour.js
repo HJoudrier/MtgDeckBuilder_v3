@@ -90,7 +90,8 @@ function* tour(P) {
   const J = P.joueurs[P.actif];
   J.tours++;
   J.terrainsJoues = 0;
-  P.joueurs.forEach(x => { x.sortsTour = []; });
+  P.joueurs.forEach(x => { x.sortsTour = []; x.piochesTour = 0; x.vieTour = 0; });
+  P.entresTour = []; P.attaquantsTour = 0;
   P.unefois = new Set();
   P.actionsTour = 0; P.finTour = false; P.sansCombat = false; P.combat = null; P.etape = '';
   debutDuTour(P);

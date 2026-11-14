@@ -111,6 +111,19 @@ function forgeExpression(P, expr, env, prof) {
   }
   if ((k = /^CardCounters\.(\w+)$/.exec(q))) return src && !src.j ? (src.marq || {})[genreMarqueur(k[1])] || 0 : 0;
   if (q === 'CardPower' || q === 'CardToughness' || q === 'CardManaCost') return caracForge(P, src, q);
+  if ((k = /^ThisTurnEntered_([A-Za-z]+)_(?:from_([A-Za-z]+)_)?(.+)$/.exec(q))) {
+    const vers = ZONES_FORGE[k[1]], de = k[2] ? ZONES_FORGE[k[2]] : null;
+    return (P.entresTour || []).filter(x => x.vers === vers && (!de || x.de === de) && forgeValideObjet(P, x.o, k[3], src, ctrl, env)).length;
+  }
+  if ((k = /^ThisTurnCast_(.+)$/.exec(q))) {
+    return P.joueurs.reduce((s, J) => s + (J.sortsTour || []).filter(d => forgeValideDef(d, k[1], ctrl, J.i, null)).length, 0);
+  }
+  if ((k = /^Compare ([^ ]+) ([A-Z]{2}[^.]+)\.([^.]+)\.(.+)$/.exec(q))) {
+    return forgeNombre(P, seuilForge(P, forgeNombre(P, k[1], env), k[2], env) ? k[3] : k[4], env);
+  }
+  if ((k = /^Kicked\.([^.]+)\.(.+)$/.exec(q))) return forgeNombre(P, ctx.kicked || (src && src.kicked) ? k[1] : k[2], env);
+  if (q === 'LifeYouGainedThisTurn') return P.joueurs[ctrl].vieTour || 0;
+  if (q === 'AttackersDeclared') return P.attaquantsTour || 0;
   if (q === 'YourLifeTotal') return P.joueurs[ctrl].vie;
   if (q === 'YourCountersEnergy') return P.joueurs[ctrl].energie || 0;
   if (q === 'CardsInYourHand' || q === 'InYourHand') return P.joueurs[ctrl].main.length;
@@ -125,4 +138,5 @@ forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$V
   'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',
-  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', '$CardTypes', '$CardPower', '$CardToughness', '$CardManaCost');
+  'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',
+  'Count$Compare', 'Count$Kicked', 'Count$LifeYouGainedThisTurn', 'Count$AttackersDeclared', '$CardTypes', '$CardPower', '$CardToughness', '$CardManaCost');

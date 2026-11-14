@@ -576,6 +576,15 @@ passe par `detruitObjet()`, qui sait régénérer ; toute défausse par `defauss
 folie. Un déclencheur de phase dont la phase est inconnue est refusé à la construction : il ne
 partirait jamais.
 
+**Les compteurs du tour** (lot F5). Ce qui entre dans une zone (`P.entresTour`, noté par
+`deplace()` et la création de jetons), les sorts lancés (`J.sortsTour`), la vie gagnée
+(`J.vieTour`), les cartes piochées (`J.piochesTour`) et les attaquants déclarés (`P.attaquantsTour`)
+repartent de zéro à chaque tour ; les expressions de Forge qui les lisent (`Count$ThisTurnEntered_…`,
+`Count$ThisTurnCast_…`, `Count$LifeYouGainedThisTurn`…) et les déclencheurs « deuxième carte piochée »,
+« deuxième sort lancé », « un sort qui le cible » s'y appuient. Une source de mana restreinte (« spend
+this mana only to cast creature spells ») ne sert que si le paiement sait ce qu'il paie : `pour`, le
+sort ou la capacité, suit `planPaiement()` et `paieMana()`.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

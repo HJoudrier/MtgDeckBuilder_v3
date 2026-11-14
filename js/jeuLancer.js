@@ -88,7 +88,7 @@ function actionsLegales(P, j) {
     o.def.capacites.forEach((k, i) => {
       if (k.zone !== zone || k.genre !== 'activee') return;
       if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
-      if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
+      if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o}) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
       r.push({k: 'activer', id, i});
     });
   }));
@@ -99,7 +99,7 @@ function actionsLegales(P, j) {
       if (k.zone) return;
       if (k.genre === 'activee') {
         if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
-        if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0)) return;
+        if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o})) return;
         if (!effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
         r.push({k: 'activer', id, i});
       } else if (k.genre === 'loyaute') {
@@ -109,7 +109,7 @@ function actionsLegales(P, j) {
         r.push({k: 'activer', id, i});
       }
     });
-    if (o.def.equipe && rituel && planPaiement(P, j, o.def.equipe, 0) &&
+    if (o.def.equipe && rituel && planPaiement(P, j, o.def.equipe, 0, {capacite: o}) &&
         champDe(P, j).some(c => estCreature(c) && c.id !== o.att)) r.push({k: 'equiper', id});
   }
   r.push(PASSE);

@@ -42,6 +42,7 @@ function* declareAttaquants(P) {
     if (id == null || !def || P.combat.attaquants.has(id)) continue;
     const o = obj(P, id);
     P.combat.attaquants.set(id, def);
+    P.attaquantsTour = (P.attaquantsTour || 0) + 1;
     if (!aMot(P, o, MOT.VIGILANCE)) o.engage = true;
     emet(P, {t: 'attaque', id, defenseur: def});
   }

@@ -54,7 +54,7 @@ function optionsMana(produit, montant) {
   return lettres.length ? [lettres.join('').repeat(n)] : [];
 }
 
-forgeEffet('Mana', ['Produced', 'Amount'], function* (P, t, env) {
+forgeEffet('Mana', ['Produced', 'Amount', 'RestrictValid'], function* (P, t, env) {
   const opts = optionsMana(t.Produced, forgeNombre(P, t.Amount || 1, env));
   if (!opts.length) return;
   /* Une couleur au choix : celle que la main réclame le plus. */

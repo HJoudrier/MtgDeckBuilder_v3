@@ -24,6 +24,7 @@ OPS.jetons = function* (P, op, ctx) {
       P.champ.push(o.id);
       P.ver++;
       emet(P, {t: 'entre', id: o.id, ctrl: j, jeton: true});
+      noteEntree(P, null, 'champ', o);
     }
   }
   jn(P, `${n} jeton(s) ${op._def.nom}`);

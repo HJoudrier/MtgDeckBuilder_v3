@@ -130,9 +130,17 @@ function deplace(P, id, vers, opts = {}) {
   } else if (vers === 'dessous') P.joueurs[o.prop].bibliotheque.unshift(n.id);
   else P.joueurs[o.prop][zone].push(n.id);
   emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, id: n.id, lki});
+  noteEntree(P, depuis, zone, depuis === 'champ' ? lki : n);
   if (zone === 'champ') emet(P, {t: 'entre', id: n.id, ctrl: n.ctrl});
   if (depuis === 'champ' && P.effets) hotePart(P, id);
   return n.id;
+}
+
+/* Ce qui est arrivé dans une zone ce tour, pour « the number of creatures
+   that died this turn » : l'instantané d'un objet parti du champ, l'objet
+   lui-même sinon. */
+function noteEntree(P, de, vers, o) {
+  (P.entresTour || (P.entresTour = [])).push({de, vers, o});
 }
 
 /* Un évènement, que la collecte des déclencheurs lira (js/jeuDeclencheurs.js). */
@@ -185,7 +193,8 @@ function piocheN(P, j, n) {
     J.main.push(id);
     const st = P.cartes[o.cid].st;
     if (!st.piochee) st.piochee = Math.max(1, J.tours);
-    emet(P, {t: 'pioche', joueur: j});
+    J.piochesTour = (J.piochesTour || 0) + 1;
+    emet(P, {t: 'pioche', joueur: j, n: J.piochesTour});
   }
 }
 

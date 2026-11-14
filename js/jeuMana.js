@@ -24,7 +24,20 @@ function identiteJoueur(P, j) {
 
 /* Les sources de mana qu'un joueur peut activer maintenant, une par objet :
    un objet à deux capacités {T} n'en active qu'une. */
-function sourcesMana(P, j) {
+/* Une source au mana restreint (« spend this mana only to cast creature
+   spells ») sert-elle à payer ceci ? `pour` : `{sort}` ou `{capacite}`
+   — sans lui, jamais : on ne sait pas ce qu'on paie. */
+function manaPermis(P, j, filtre, pour) {
+  if (!pour) return false;
+  return forgeFiltre(filtre).some(a => {
+    const reste = a.props.length ? '.' + a.props.join('+') : '';
+    if (a.tete === 'Spell' && pour.sort) return forgeValideDef(pour.sort.def, 'Card' + reste, j, j, pour.sort.id);
+    if (a.tete === 'Activated' && pour.capacite) return !reste || forgeValideObjet(P, pour.capacite, 'Card' + reste, pour.capacite, j, null, true);
+    return false;
+  });
+}
+
+function sourcesMana(P, j, pour) {
   const r = [];
   for (const id of P.champ) {
     const o = obj(P, id);
@@ -32,6 +45,7 @@ function sourcesMana(P, j) {
     let options = null, rang = 0, sac = false, vie = 0;
     for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
+      if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
@@ -69,9 +83,9 @@ function compteObjets(P, desc, src, j) {
 
 /* Le plan d'un paiement : quelles sources activer, et pour quelle option.
    `null` si le coût ne peut pas être payé. Rien n'est touché. */
-function planPaiement(P, j, cout, x) {
+function planPaiement(P, j, cout, x, pour) {
   const pool = {...P.joueurs[j].pool};
-  const src = sourcesMana(P, j);
+  const src = sourcesMana(P, j, pour);
   const besoins = [];
   LETTRES_MANA.forEach(k => { for (let n = 0; n < (cout.couleurs[k] || 0); n++) besoins.push([k]); });
   cout.hybrides.forEach(h => besoins.push(h));
@@ -139,8 +153,8 @@ function debite(pool, cout, x) {
 /* Payer un coût en mana : activer les sources du plan, verser leur mana
    dans la réserve, puis en retirer le coût. Rend `false` sans rien toucher
    si le coût ne peut pas être payé. */
-function paieMana(P, j, cout, x) {
-  const plan = planPaiement(P, j, cout, x);
+function paieMana(P, j, cout, x, pour) {
+  const plan = planPaiement(P, j, cout, x, pour);
   if (!plan) return false;
   const J = P.joueurs[j];
   for (const {s, option} of plan) {

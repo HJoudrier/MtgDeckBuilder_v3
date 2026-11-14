@@ -59,8 +59,18 @@ forgeMode('Blocks', ['ValidCard'], (P, t, e, s, env) => e.t === 'bloque' && vali
 forgeMode('AttackerBlocked', ['ValidCard'], (P, t, e, s, env) => e.t === 'estBloque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
 forgeMode('Phase', ['Phase', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'etape' && FORGE_PHASES[String(t.Phase || '').trim()] === e.etape &&
   joueurOuRien(P, e.actif, t.ValidPlayer, s, env));
-forgeMode('SpellCast', ['ValidCard', 'ValidActivatingPlayer'], (P, t, e, s, env) => e.t === 'lance' &&
-  (!t.ValidCard || forgeValideDef(e.def, t.ValidCard, s.ctrl, e.joueur, e.id)) && joueurOuRien(P, e.joueur, t.ValidActivatingPlayer, s, env));
+forgeMode('SpellCast', ['ValidCard', 'ValidActivatingPlayer', 'ActivatorThisTurnCast', 'TargetsValid'], (P, t, e, s, env) => e.t === 'lance' &&
+  (!t.ValidCard || forgeValideDef(e.def, t.ValidCard, s.ctrl, e.joueur, e.id)) && joueurOuRien(P, e.joueur, t.ValidActivatingPlayer, s, env) &&
+  (!t.ActivatorThisTurnCast || seuilForge(P, P.joueurs[e.joueur].sortsTour.length, t.ActivatorThisTurnCast, env)) &&
+  (!t.TargetsValid || ciblesDuSort(P, e.id).some(c => c.j != null ? forgeValideJoueur(P, c.j, t.TargetsValid, s.ctrl, env)
+    : forgeValideObjet(P, c, t.TargetsValid, s, s.ctrl, env))));
+
+/* Les cibles d'un sort encore sur la pile. */
+function ciblesDuSort(P, id) {
+  const it = P.pile.find(x => x.id === id);
+  if (!it) return [];
+  return [].concat(...it.effets.map(ef => [].concat(...ef.cibles))).map(c => typeof c === 'object' ? c : obj(P, c)).filter(Boolean);
+}
 forgeMode('DamageDone', ['ValidSource', 'ValidTarget', 'CombatDamage'], (P, t, e, s, env) => {
   if (e.t !== 'degatsJoueur' && e.t !== 'degatsObjet') return false;
   if (t.CombatDamage === 'True' && !e.combat) return false;
@@ -72,7 +82,8 @@ forgeMode('DamageDone', ['ValidSource', 'ValidTarget', 'CombatDamage'], (P, t, e
 FORGE_MODES.DamageDoneOnce = FORGE_MODES.DamageDone;
 forgeSait('trig', 'DamageDoneOnce');
 forgeSait('param', 'DamageDoneOnce.ValidSource', 'DamageDoneOnce.ValidTarget', 'DamageDoneOnce.CombatDamage');
-forgeMode('Drawn', ['ValidCard'], (P, t, e, s) => e.t === 'pioche' && joueurDeCarte(e.joueur, t.ValidCard, s.ctrl));
+forgeMode('Drawn', ['ValidCard', 'Number'], (P, t, e, s) => e.t === 'pioche' && joueurDeCarte(e.joueur, t.ValidCard, s.ctrl) &&
+  (!t.Number || (/^\d+$/.test(t.Number) && +t.Number === e.n)));
 forgeMode('Discarded', ['ValidCard'], (P, t, e, s) => e.t === 'defausse' && joueurDeCarte(e.joueur, t.ValidCard, s.ctrl));
 forgeMode('LifeGained', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'vie' && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
 forgeMode('LifeLost', ['ValidPlayer'], (P, t, e, s, env) => (e.t === 'perteVie' || e.t === 'degatsJoueur') && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));

@@ -83,11 +83,11 @@ function reduit(o, c, creatures, m) {
 
 /* Un coût en mana est-il payable, réductions comprises ? */
 function payableAvec(P, j, o, mana, x) {
-  if (planPaiement(P, j, mana, x)) return true;
+  if (planPaiement(P, j, mana, x, {sort: o})) return true;
   const d = o.def;
   if (!d.params.convocation && !d.params.delve) return false;
   const cim = d.params.delve ? P.joueurs[j].cimetiere.filter(id => id !== o.id).length : 0;
-  return !!planPaiement(P, j, reduit(o, mana, d.params.convocation ? convocables(P, j) : [], cim), x);
+  return !!planPaiement(P, j, reduit(o, mana, d.params.convocation ? convocables(P, j) : [], cim), x, {sort: o});
 }
 
 /* Les façons légales de lancer une carte d'où elle est : `[{variante,
@@ -124,30 +124,30 @@ function varianteDe(P, j, o, depuis, v) {
    n'est engagé ni exilé tant que le paiement n'est pas assuré. Rend le
    coût qui reste, ou `null`. */
 function* paieReductions(P, j, o, mana, x) {
-  const d = o.def;
+  const d = o.def, pour = {sort: o};
   if (!d.params.convocation && !d.params.delve) return mana;
-  if (planPaiement(P, j, mana, x)) return mana;
+  if (planPaiement(P, j, mana, x, pour)) return mana;
   const cands = d.params.convocation ? ordreConvocation(P, j, mana) : [];
   const cim = d.params.delve ? P.joueurs[j].cimetiere.filter(id => id !== o.id) : [];
   let n = 0;
-  while (n < cands.length && !planPaiement(P, j, reduit(o, mana, cands.slice(0, n), cim.length), x)) n++;
-  if (!planPaiement(P, j, reduit(o, mana, cands.slice(0, n), cim.length), x)) return null;
+  while (n < cands.length && !planPaiement(P, j, reduit(o, mana, cands.slice(0, n), cim.length), x, pour)) n++;
+  if (!planPaiement(P, j, reduit(o, mana, cands.slice(0, n), cim.length), x, pour)) return null;
   let pris = cands.slice(0, n);
   if (cands.length && n) {
     const ids = yield* choisitCartes(P, j, cands.map(c => c.id), cands.length, 'Convoquer', 'cartes', n);
     const choix = ids.map(id => obj(P, id));
-    if (planPaiement(P, j, reduit(o, mana, choix, cim.length), x)) pris = choix;
+    if (planPaiement(P, j, reduit(o, mana, choix, cim.length), x, pour)) pris = choix;
   }
   const reste = d.params.convocation ? convoque(mana, pris) : mana;
   let m = 0;
-  while (m < cim.length && !planPaiement(P, j, moinsGenerique(reste, m), x)) m++;
+  while (m < cim.length && !planPaiement(P, j, moinsGenerique(reste, m), x, pour)) m++;
   let exiles = cim.slice(0, m);
   if (m) {
     const ids = yield* choisitCartes(P, j, cim, Math.min(reste.generique, cim.length), 'Explorer', 'cartes', m);
-    if (planPaiement(P, j, moinsGenerique(reste, ids.length), x)) exiles = ids;
+    if (planPaiement(P, j, moinsGenerique(reste, ids.length), x, pour)) exiles = ids;
   }
   const final = moinsGenerique(reste, exiles.length);
-  if (!planPaiement(P, j, final, x)) return null;
+  if (!planPaiement(P, j, final, x, pour)) return null;
   pris.forEach(c => { c.engage = true; });
   exiles.forEach(id => deplace(P, id, 'exil'));
   P.ver++;

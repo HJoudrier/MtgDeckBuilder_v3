@@ -75,6 +75,7 @@ function familleProp(p) {
   if (/^counters_/.test(p)) return 'counters';
   if (/^with(out)?/.test(p)) return p;
   if (/^named/.test(p)) return 'named';
+  if (/^inZone(Battlefield|Graveyard|Hand|Exile|Library|Stack)$/.test(p)) return 'inZone';
   return p;
 }
 
@@ -154,6 +155,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     return m[1] ? (c.mots & bit) === 0 : (c.mots & bit) !== 0;
   }
   if ((m = /^named(.+)$/.exec(p))) return o.def.nom === m[1];
+  if ((m = /^inZone(\w+)$/.exec(p))) return ZONES_FORGE[m[1]] === (o.lki ? 'champ' : o.zone);
   if ((m = /^non(.+)$/.exec(p))) {
     const q = aQualite(c, m[1]);
     if (q !== null) return !q;
@@ -227,7 +229,7 @@ function descForge(valid, zone, sort) {
 const ZONES_FORGE = {Battlefield: 'champ', Graveyard: 'cimetiere', Hand: 'main', Library: 'bibliotheque', Exile: 'exil',
   Stack: 'pile', Command: 'commandement'};
 
-forgeSait('filtre', ...FORGE_PROPS, 'Soustype', 'nonSoustype', 'powerXX', 'toughnessXX', 'cmcXX', 'counters', 'named',
+forgeSait('filtre', ...FORGE_PROPS, 'inZone', 'Soustype', 'nonSoustype', 'powerXX', 'toughnessXX', 'cmcXX', 'counters', 'named',
   ...Object.keys(FORGE_TYPES_CARTE), ...Object.keys(FORGE_COULEURS), ...Object.keys(FORGE_SUPERS),
   ...Object.keys(FORGE_TYPES_CARTE).map(t => 'non' + t), ...Object.keys(FORGE_COULEURS).map(t => 'non' + t),
   ...Object.keys(FORGE_SUPERS).map(t => 'non' + t),

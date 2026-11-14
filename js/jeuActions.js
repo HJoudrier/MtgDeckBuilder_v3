@@ -87,7 +87,7 @@ function* lanceSort(P, j, a) {
   cout = yield* paieReductions(P, j, s, cout, x);
   if (!cout) return annule();
   if (v.autre) yield* paieAutre(P, j, s, v.autre);
-  if (!paieMana(P, j, cout, x)) return annule();
+  if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   s.x = x;
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
     kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension'};
@@ -127,9 +127,9 @@ function* activeCapacite(P, j, a) {
     P.ver++;
   } else {
     if (k.cout.mana.x) x = maxX(P, j, k.cout.mana);
-    if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, x)) return false;
+    if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, x, {capacite: o})) return false;
     lki = yield* paieAutre(P, j, o, k.cout);
-    if (!paieMana(P, j, k.cout.mana, x)) return false;
+    if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
     if (k.unefois) P.unefois.add(a.id + '|a' + a.i);
     /* Un cycle s'entend : « when you cycle ~ » écoute à travers
        l'instantané de la carte, partie au cimetière. */
@@ -145,7 +145,7 @@ function* equipe(P, j, a) {
   const o = obj(P, a.id);
   const slot = {desc: {genre: 'objet', types: ['creature'], non: [], sousTypes: [], couleurs: [], filtres: [], zone: 'champ', mots: 0, ctrl: 'vous', autre: true}, min: 1, max: 1};
   const c = yield* choisitCibles(P, j, o, [slot], o.def.couleurs, {equipe: true});
-  if (!c || !c[0].length || !paieMana(P, j, o.def.equipe, 0)) return false;
+  if (!c || !c[0].length || !paieMana(P, j, o.def.equipe, 0, {capacite: o})) return false;
   P.pile.push({id: P.prochainId++, capacite: true, source: o.id, ctrl: j, x: 0, nom: o.def.nom,
     effets: [{ops: [{op: 'attache', a: {cible: 0}}], slots: [slot], cibles: c}]});
   return true;

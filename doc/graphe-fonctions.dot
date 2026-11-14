@@ -357,6 +357,7 @@ digraph appels {
     "retireDe" [label="retireDe", fillcolor="#6da88c33", color="#6da88c"];
     "instantane" [label="instantane", fillcolor="#6da88c33", color="#6da88c"];
     "deplace" [label="deplace", fillcolor="#6da88c33", color="#6da88c"];
+    "noteEntree" [label="noteEntree", fillcolor="#6da88c33", color="#6da88c"];
     "emet" [label="emet", fillcolor="#6da88c33", color="#6da88c"];
     "jn" [label="jn", fillcolor="#6da88c33", color="#6da88c"];
     "nomObj" [label="nomObj", fillcolor="#6da88c33", color="#6da88c"];
@@ -395,6 +396,7 @@ digraph appels {
   subgraph "cluster_38" {
     label="js/jeuMana.js"; fontsize=13; style="rounded,filled"; color="#6da8a4"; fillcolor="#6da8a41a"; penwidth=1.4;
     "identiteJoueur" [label="identiteJoueur", fillcolor="#6da8a433", color="#6da8a4"];
+    "manaPermis" [label="manaPermis", fillcolor="#6da8a433", color="#6da8a4"];
     "sourcesMana" [label="sourcesMana", fillcolor="#6da8a433", color="#6da8a4"];
     "compteObjets" [label="compteObjets", fillcolor="#6da8a433", color="#6da8a4"];
     "planPaiement" [label="planPaiement", fillcolor="#6da8a433", color="#6da8a4"];
@@ -651,6 +653,7 @@ digraph appels {
     "valideOuRien" [label="valideOuRien", fillcolor="#6da8a433", color="#6da8a4"];
     "joueurOuRien" [label="joueurOuRien", fillcolor="#6da8a433", color="#6da8a4"];
     "joueurDeCarte" [label="joueurDeCarte", fillcolor="#6da8a433", color="#6da8a4"];
+    "ciblesDuSort" [label="ciblesDuSort", fillcolor="#6da8a433", color="#6da8a4"];
     "forgeDeclenche" [label="forgeDeclenche", fillcolor="#6da8a433", color="#6da8a4"];
   }
   subgraph "cluster_63" {
@@ -2188,6 +2191,7 @@ digraph appels {
   "deplace" -> "emet" [color="#6da88c99"];
   "deplace" -> "hotePart" [color="#6da88c99"];
   "deplace" -> "creeObjet" [color="#6da88c99"];
+  "deplace" -> "noteEntree" [color="#6da88c99"];
   "nomObj" -> "obj" [color="#6da88c99"];
   "adversaires" -> "vivants" [color="#6da88c99"];
   "champDe" -> "obj" [color="#6da88c99"];
@@ -2219,8 +2223,12 @@ digraph appels {
   "cibleEncoreLegale" -> "obj" [color="#96a86d99"];
   "cibleEncoreLegale" -> "correspond" [color="#96a86d99"];
   "cibleEncoreLegale" -> "ciblable" [color="#96a86d99"];
+  "manaPermis" -> "forgeFiltre" [color="#6da8a499"];
+  "manaPermis" -> "forgeValideDef" [color="#6da8a499"];
+  "manaPermis" -> "forgeValideObjet" [color="#6da8a499"];
   "sourcesMana" -> "obj" [color="#6da8a499"];
   "sourcesMana" -> "capacitesDe" [color="#6da8a499"];
+  "sourcesMana" -> "manaPermis" [color="#6da8a499"];
   "sourcesMana" -> "peutEngagerSoi" [color="#6da8a499"];
   "sourcesMana" -> "identiteJoueur" [color="#6da8a499"];
   "sourcesMana" -> "compteObjets" [color="#6da8a499"];
@@ -2303,6 +2311,7 @@ digraph appels {
   "jeuOpsB.js (chargement)" -> "nouvelleCarte" [color="#6d8ca899"];
   "jeuOpsB.js (chargement)" -> "creeObjet" [color="#6d8ca899"];
   "jeuOpsB.js (chargement)" -> "emet" [color="#6d8ca899"];
+  "jeuOpsB.js (chargement)" -> "noteEntree" [color="#6d8ca899"];
   "jeuOpsB.js (chargement)" -> "jn" [color="#6d8ca899"];
   "jeuOpsB.js (chargement)" -> "resous" [color="#6d8ca899"];
   "jeuOpsB.js (chargement)" -> "obj" [color="#6d8ca899"];
@@ -2655,6 +2664,9 @@ digraph appels {
   "forgeExpression" -> "forgeValideObjet" [color="#a89b6d99"];
   "forgeExpression" -> "agregeForge" [color="#a89b6d99"];
   "forgeExpression" -> "genreMarqueur" [color="#a89b6d99"];
+  "forgeExpression" -> "forgeValideDef" [color="#a89b6d99"];
+  "forgeExpression" -> "forgeNombre" [color="#a89b6d99"];
+  "forgeExpression" -> "seuilForge" [color="#a89b6d99"];
   "forgeExpr.js (chargement)" -> "forgeSait" [color="#a89b6d99"];
   "ciblesForge" -> "obj" [color="#6d8ca899"];
   "ciblesForge" -> "suit" [color="#6d8ca899"];
@@ -2745,6 +2757,7 @@ digraph appels {
   "creeJetonsForge" -> "creeObjet" [color="#6da88c99"];
   "creeJetonsForge" -> "nouvelleCarte" [color="#6da88c99"];
   "creeJetonsForge" -> "emet" [color="#6da88c99"];
+  "creeJetonsForge" -> "noteEntree" [color="#6da88c99"];
   "creeJetonsForge" -> "retiensForge" [color="#6da88c99"];
   "creeJetonsForge" -> "jn" [color="#6da88c99"];
   "forgeEffetsB.js (chargement)" -> "forgeEffet" [color="#6da88c99"];
@@ -2829,6 +2842,7 @@ digraph appels {
   "objetZone" -> "obj" [color="#6da8a499"];
   "valideOuRien" -> "forgeValideObjet" [color="#6da8a499"];
   "joueurOuRien" -> "forgeValideJoueur" [color="#6da8a499"];
+  "ciblesDuSort" -> "obj" [color="#6da8a499"];
   "forgeDeclenche" -> "conditionForge" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "forgeMode" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "objetZone" [color="#6da8a499"];
@@ -2836,6 +2850,10 @@ digraph appels {
   "forgeDeclencheurs.js (chargement)" -> "valideOuRien" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "joueurOuRien" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "forgeValideDef" [color="#6da8a499"];
+  "forgeDeclencheurs.js (chargement)" -> "seuilForge" [color="#6da8a499"];
+  "forgeDeclencheurs.js (chargement)" -> "ciblesDuSort" [color="#6da8a499"];
+  "forgeDeclencheurs.js (chargement)" -> "forgeValideJoueur" [color="#6da8a499"];
+  "forgeDeclencheurs.js (chargement)" -> "forgeValideObjet" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "passeOuPresent" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "forgeSait" [color="#6da8a499"];
   "forgeDeclencheurs.js (chargement)" -> "joueurDeCarte" [color="#6da8a499"];

@@ -133,6 +133,7 @@ function* creeJetonsForge(P, defs, n, qui, engage, env, retenir) {
     P.champ.push(o.id);
     P.ver++;
     emet(P, {t: 'entre', id: o.id, ctrl: j, jeton: true});
+    noteEntree(P, null, 'champ', o);
     if (retenir) retiensForge(env.ctx, o.id);
   }
   if (defs.length && n) jn(P, `${n * qui.length} jeton(s) ${defs.map(d => d.nom).join(', ')}`);

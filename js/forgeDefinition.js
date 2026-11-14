@@ -106,7 +106,7 @@ function capaciteForge(def, face, t, jetons) {
     const n = /^\d+$/.test(t.Amount || '1') ? +(t.Amount || 1) : null;
     const options = n == null ? [] : optionsMana(t.Produced, n);
     if (!options.length || !tableJouable(t)) return false;
-    def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t)});
+    def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {})});
     return true;
   }
   const effet = effetForge(face, t, jetons);
