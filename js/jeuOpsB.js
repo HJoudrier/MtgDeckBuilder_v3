@@ -115,6 +115,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   }
   /* « Creatures your opponents control enter tapped » (js/forgeRemplacements.js). */
   if (!engage && entreeEngageeParAutre(P, d0, ctrl, o)) engage = true;
+  /* « Lands you control enter untapped » (js/forgeDegagements.js). */
+  if (engage && entreeDegageeParAutre(P, d0, ctrl, o)) engage = false;
   /* « Unless you reveal a Giant card from your hand ». */
   if (ent.engagee && ent.saufRevele && !opts.engage && P.joueurs[ctrl].main.some(x => x !== id && correspond(P, obj(P, x), ent.saufRevele, o, ctrl))) engage = false;
   if (ent.engagee && ent.payeVie && !opts.engage) {

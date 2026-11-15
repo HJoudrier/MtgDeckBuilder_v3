@@ -131,7 +131,8 @@ function teteObjet(t, c, o) {
    seuils écrits en SVar (`cmcLEX`). */
 function propObjet(P, o, c, p, src, ctrl, env) {
   if (p[0] === '!') return !propObjet(P, o, c, p.slice(1), src, ctrl, env);
-  const tient = o.zone === 'champ' || o.zone === 'pile' || o.lki ? o.ctrl : o.prop;
+  /* Un effet (la zone de commandement) n'a pas de propriétaire : son contrôleur le tient. */
+  const tient = o.zone === 'champ' || o.zone === 'pile' || o.zone === 'effet' || o.lki ? o.ctrl : o.prop;
   switch (p) {
     case 'YouCtrl': return tient === ctrl;
     case 'OppCtrl': case 'YouDontCtrl': return tient !== ctrl;

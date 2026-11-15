@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1575 fonctions**, 221 modules, 1611 Ko de JavaScript.
+**1577 fonctions**, 222 modules, 1616 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -53,7 +53,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 225 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 222 |
-| [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 177 |
+| [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 179 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 96 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 11 | 233 |
@@ -74,7 +74,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 113 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
-| [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 285 |
+| [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 286 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 71 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
@@ -94,7 +94,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 7 | 276 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
-| [`forgeRemplacementsC.js`](#jsforgeremplacementscjs) | Les dégâts remplacés | 12 | 201 |
+| [`forgeRemplacementsC.js`](#jsforgeremplacementscjs) | Les dégâts remplacés | 12 | 206 |
 | [`jeuPioche.js`](#jsjeupiochejs) | La pioche remplacée, Dredge, Miracle | 7 | 126 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 9 | 142 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
@@ -114,8 +114,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
+| [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
-| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 128 |
+| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 130 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
 | [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 82 |
 | [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 1 | 34 |
@@ -1017,7 +1018,7 @@ Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 222 lig
 
 ## js/jeuOpsB.js
 
-Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 177 lignes, 9 Ko.*
+Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 179 lignes, 9.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1357,7 +1358,7 @@ Quand demander à un joueur humain. *2 fonctions, 33 lignes, 1.6 Ko.*
 
 ## js/forgeValide.js
 
-Le langage de filtres de Forge. *12 fonctions, 285 lignes, 17 Ko.*
+Le langage de filtres de Forge. *12 fonctions, 286 lignes, 17 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1684,7 +1685,7 @@ Ce qui dure sur un objet, et les attributs. *7 fonctions, 146 lignes, 8.2 Ko.*
 
 ## js/forgeRemplacementsC.js
 
-Les dégâts remplacés. *12 fonctions, 201 lignes, 11 Ko.*
+Les dégâts remplacés. *12 fonctions, 206 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1699,7 +1700,7 @@ Les dégâts remplacés. *12 fonctions, 201 lignes, 11 Ko.*
 | `finEffet(P, e)` | — |
 | `ctxRemplacement(h, src, cible, n)` | Le contexte de la chaîne qui suit : `ReplacedTarget`, `ReplacedSource` et `ReplaceCount$DamageAmount` y lisent l'évènement remplacé. |
 | `suiteRemplacement(P, ops, ctx)` | —— La chaîne qui suit, un instant plus tard ———————————————————————— |
-| `joueSuitesRemplacement(P)` | — |
+| `joueSuitesRemplacement(P)` | Une chaîne qui en relance une autre sans fin s'arrête à dix niveaux : garde-fou, la règle ne le demande pas. |
 
 | Donnée | Rôle |
 |---|---|
@@ -2084,6 +2085,15 @@ Les déclencheurs qui butaient encore. *2 fonctions, 87 lignes, 4.9 Ko.*
 |---|---|
 | `JOUEUR_COCHE` | Les joueurs que `CheckDefinedPlayer$ You.isMonarch` sait juger. |
 
+## js/forgeDegagements.js
+
+Dégager et piocher « jusqu'à ». *2 fonctions, 79 lignes, 4.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `entreeDegageeParAutre(P, d, ctrl, o)` | Un permanent qui entrerait engagé et qu'un autre fait entrer dégagé : le dégagé l'emporte (js/jeuOpsB.js `metEnJeu()`) — le contrôleur choisit l'ordre des remplacements, simplification… |
+| `manaDeCouleurChoisie(P, cout, pour)` | Le générique payé dans la couleur choisie : des symboles de cette couleur à la place. |
+
 ## js/iaValeur.js
 
 Ce que vaut une carte, un permanent, un adversaire. *8 fonctions, 85 lignes, 3.9 Ko.*
@@ -2106,7 +2116,7 @@ Ce que vaut une carte, un permanent, un adversaire. *8 fonctions, 85 lignes, 3.9
 
 ## js/iaChoix.js
 
-Les choix du joueur automatique hors de la priorité. *8 fonctions, 128 lignes, 5.7 Ko.*
+Les choix du joueur automatique hors de la priorité. *8 fonctions, 130 lignes, 5.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|

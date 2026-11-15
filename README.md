@@ -99,6 +99,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeDeclencheursB.js  la suite : engager, cibler, marqueurs, attaque déclarée, crime, déclencheurs d'état
   forgeDeclencheursC.js les déclencheurs qui butaient : revolt, delirium, monarque, contrôleur désigné, une seule fois, seconde phase principale, sort lancé par permission
+  forgeDegagements.js dégager « jusqu'à N », piocher « jusqu'à N », les terrains qui entrent dégagés, le mana d'une couleur choisie
   forgeExprB.js     les expressions de Forge, suite : mémoire, cibles, évènement, comptes du tour
   forgeEffetsE.js   la bibliothèque et ce qu'on révèle ; lancer une carte depuis un effet ; découvrir
   forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
@@ -1062,6 +1063,20 @@ sans erreur ni invariant rompu.
 - `TriggeredPlayer` ne désignait personne pour un déclencheur d'étape (F35) ;
 - un permanent hors phase déplacé restait dans la liste du phasing (F37) ;
 - le `;` des coûts de Forge n'était pas lu comme une alternative (F38).
+
+**Dégager et piocher « jusqu'à »** (lot F41, `js/forgeDegagements.js`). Le premier lot choisi sur la
+mesure des cartes les plus jouées en Commander (EDHREC) :
+- « untap up to N lands » (Frantic Search, Snap, Peregrine Drake) : N permanents engagés du type dit,
+  choisis ; l'IA dégage d'abord les siens ;
+- « may draw up to two cards » (Arcane Denial) : chacun choisit combien ;
+- « lands you control enter untapped » (Spelunking) : le pendant de « enter tapped », qui l'emporte
+  sur lui — le contrôleur choisit l'ordre des remplacements, simplification annoncée ;
+- « spend only mana of the chosen color to activate this ability » (Throne of Eldraine) : le
+  générique de la capacité se paie dans la couleur choisie (`planPaiement()` enveloppé).
+
+*Défaut trouvé en chemin* : un effet (la zone de commandement) n'a pas de propriétaire, et un filtre
+`YouDontCtrl` le croyait adverse. Channel Harm se renvoyait alors ses propres dégâts sans fin. Les
+chaînes de remplacement s'arrêtent désormais à dix niveaux, par garde-fou.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

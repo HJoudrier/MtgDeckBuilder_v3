@@ -104,6 +104,7 @@
   "forgeAuras.js",
   "forgeDefinition.js",
   "forgeDeclencheursC.js",
+  "forgeDegagements.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3830,6 +3831,7 @@
     "elementsTable",
     "emplacementForge",
     "entreeSoiForge",
+    "forgeDegagements.js (chargement)",
     "formeRemplacementC",
     "payeAvantForge",
     "sortPermanentForge",
@@ -3916,6 +3918,7 @@
     "entreeSoiForge",
     "eveilForge",
     "forgeChoix.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsI.js (chargement)",
@@ -3960,6 +3963,7 @@
     "forgeDeclencheursC.js (chargement)",
     "forgeDefini.js (chargement)",
     "forgeDefinition.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeDescripteurs.js (chargement)",
     "forgeDesignations.js (chargement)",
     "forgeDurees.js (chargement)",
@@ -4311,6 +4315,7 @@
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
     "forgeDefinis",
+    "forgeDegagements.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -4886,6 +4891,7 @@
    "appeleePar": [
     "degageAussi",
     "degagement",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "jeuOpsB.js (chargement)",
     "paieAutre"
@@ -5586,6 +5592,7 @@
     "activeCapacite",
     "executeForge",
     "forgeChoix.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "jeuVariantes.js (chargement)",
     "maxX",
     "paieMana",
@@ -5662,6 +5669,7 @@
     "complote",
     "equipe",
     "executeForge",
+    "forgeDegagements.js (chargement)",
     "jeuVariantes.js (chargement)",
     "lanceSort",
     "paieTaxesAttaque",
@@ -5923,6 +5931,7 @@
     "epissures",
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
@@ -6023,6 +6032,7 @@
     "defFaceCachee",
     "deplace",
     "effetsEntree",
+    "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "entreesAutres",
     "forgeNombre",
@@ -6049,7 +6059,7 @@
   {
    "nom": "proposePaiement",
    "fichier": "jeuOpsB.js",
-   "ligne": 158,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "joueursDe",
@@ -6066,7 +6076,7 @@
   {
    "nom": "executeOps",
    "fichier": "jeuOpsB.js",
-   "ligne": 166,
+   "ligne": 168,
    "chargement": false,
    "appelle": [
     "compteObjets",
@@ -8875,7 +8885,7 @@
   {
    "nom": "ciblesJoueurs",
    "fichier": "forgeValide.js",
-   "ligne": 249,
+   "ligne": 250,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -8887,7 +8897,7 @@
   {
    "nom": "forgeValideObjet",
    "fichier": "forgeValide.js",
-   "ligne": 255,
+   "ligne": 256,
    "chargement": false,
    "appelle": [
     "caracsJugees",
@@ -8919,6 +8929,7 @@
     "forgeChoix.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDefinis",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -8953,7 +8964,7 @@
   {
    "nom": "forgeValideJoueur",
    "fichier": "forgeValide.js",
-   "ligne": 263,
+   "ligne": 264,
    "chargement": false,
    "appelle": [
     "choixDe",
@@ -9008,6 +9019,7 @@
    "appeleePar": [
     "coutsForge",
     "defCorrespond",
+    "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "flashAccorde",
     "forgeDeclencheurs.js (chargement)",
@@ -9125,6 +9137,7 @@
     "coutsForge",
     "forgeChoix.js (chargement)",
     "forgeCopies.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -9582,6 +9595,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeChoix.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -9956,6 +9970,7 @@
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeCopies.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
@@ -10581,6 +10596,7 @@
     "forgeRemplacementsC.js (chargement)",
     "forgeStatiques.js (chargement)",
     "forgeValideJoueur",
+    "manaDeCouleurChoisie",
     "propObjet",
     "sourcesMana",
     "typesCouche"
@@ -10601,6 +10617,7 @@
     "donneCadeau",
     "dragage",
     "forgeChoix.js (chargement)",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeEffetsF.js (chargement)",
@@ -11535,6 +11552,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDegagements.js (chargement)",
     "formeRemplacement"
    ]
   },
@@ -11683,7 +11701,7 @@
   {
    "nom": "joueSuitesRemplacement",
    "fichier": "forgeRemplacementsC.js",
-   "ligne": 149,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "executeOps"
@@ -11752,6 +11770,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "etape",
+    "forgeDegagements.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
@@ -13296,6 +13315,7 @@
     "degatsApresPrevention",
     "degatsRemplaces",
     "destinationRemplacee",
+    "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "etapeSautee",
     "incontrecarrable",
@@ -14584,6 +14604,7 @@
     "accordeAnimation",
     "activeeSynthese",
     "definitionDepuisScript",
+    "forgeDegagements.js (chargement)",
     "statiqueForge"
    ]
   },
@@ -14780,6 +14801,64 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeDeclencheursC.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeDegagements.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "choisitCartes",
+    "choisitUn",
+    "degageObjet",
+    "forgeApi",
+    "forgeNombre",
+    "forgeSait",
+    "forgeSousCapacite",
+    "forgeValideObjet",
+    "joueursForge",
+    "manaDeCouleurChoisie",
+    "obj",
+    "pioche",
+    "retiensForge"
+   ],
+   "appelleDiffere": [
+    "capaciteForge",
+    "formeRemplacementC",
+    "paieMana",
+    "planPaiement"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "entreeDegageeParAutre",
+   "fichier": "forgeDegagements.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [
+    "forgeValideDef",
+    "remplacementsEnJeu"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "metEnJeu"
+   ]
+  },
+  {
+   "nom": "manaDeCouleurChoisie",
+   "fichier": "forgeDegagements.js",
+   "ligne": 69,
+   "chargement": false,
+   "appelle": [
+    "choixDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDegagements.js (chargement)"
    ]
   },
   {
@@ -15013,7 +15092,7 @@
   {
    "nom": "iaScrute",
    "fichier": "iaChoix.js",
-   "ligne": 98,
+   "ligne": 100,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -15030,7 +15109,7 @@
   {
    "nom": "iaOui",
    "fichier": "iaChoix.js",
-   "ligne": 109,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "manaDispo"
@@ -15044,7 +15123,7 @@
   {
    "nom": "iaModes",
    "fichier": "iaChoix.js",
-   "ligne": 122,
+   "ligne": 124,
    "chargement": false,
    "appelle": [
     "opHostile"

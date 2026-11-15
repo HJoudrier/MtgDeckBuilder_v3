@@ -146,8 +146,13 @@ function ctxRemplacement(h, src, cible, n) {
 /* —— La chaîne qui suit, un instant plus tard ———————————————————————— */
 
 function suiteRemplacement(P, ops, ctx) { (P.suitesRemp = P.suitesRemp || []).push({ops, ctx}); }
+/* Une chaîne qui en relance une autre sans fin s'arrête à dix niveaux :
+   garde-fou, la règle ne le demande pas. */
 function* joueSuitesRemplacement(P) {
-  while (P.suitesRemp && P.suitesRemp.length && !P.fin) { const s = P.suitesRemp.shift(); yield* executeOps(P, s.ops, s.ctx); }
+  if ((P._profSuites || 0) >= 10) { P.suitesRemp.length = 0; return; }
+  P._profSuites = (P._profSuites || 0) + 1;
+  try { while (P.suitesRemp && P.suitesRemp.length && !P.fin) { const s = P.suitesRemp.shift(); yield* executeOps(P, s.ops, s.ctx); } }
+  finally { P._profSuites--; }
 }
 
 /* « Exile this effect » : `ChangeZone` de `Self` depuis le commandement,
