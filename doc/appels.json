@@ -107,6 +107,8 @@
   "forgeDegagements.js",
   "forgeRemplacementsD.js",
   "forgeManaB.js",
+  "forgeEmpreinte.js",
+  "forgeMemoire.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3834,6 +3836,7 @@
     "emplacementForge",
     "entreeSoiForge",
     "forgeDegagements.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeManaB.js (chargement)",
     "formeRemplacementC",
     "formeRemplacementD",
@@ -3963,6 +3966,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "empreinteAuLieu",
     "etendEffet",
     "forgeAuras.js (chargement)",
     "forgeCout.js (chargement)",
@@ -3981,11 +3985,13 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeEntrees.js (chargement)",
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
     "forgeInterdits.js (chargement)",
     "forgeManaB.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeMode",
     "forgeMotsCles.js (chargement)",
     "forgeMotsClesB.js (chargement)",
@@ -4335,7 +4341,9 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeManaB.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
@@ -4406,6 +4414,7 @@
     "restaureClones",
     "restreintCibles",
     "restreintValeurTotale",
+    "retiensPartis",
     "retourne",
     "saValide",
     "sacrifie",
@@ -4438,7 +4447,10 @@
     "ciblesForge",
     "forgeDefinis",
     "forgeEffetsI.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "objetEvt",
+    "oublieObjets",
     "passeOuPresent",
     "propObjet",
     "resous",
@@ -4696,6 +4708,7 @@
     "forgeChoix.js (chargement)",
     "forgeDefinis",
     "forgeEffetsB.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "priorite"
    ]
   },
@@ -5091,6 +5104,7 @@
     "agregeForge",
     "appliqueSBA",
     "caracForge",
+    "caracsDe",
     "caracsJugees",
     "ciblable",
     "compteDuTour",
@@ -5226,6 +5240,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsG.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
@@ -5278,6 +5293,7 @@
     "coutAutrePossibleB",
     "forgeEffetsE.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeTraine.js (chargement)",
     "paieAutreB",
     "propObjet",
@@ -5353,6 +5369,7 @@
     "coutAutrePossibleX",
     "coutSort",
     "ecouteRepond",
+    "forgeMemoire.js (chargement)",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
     "marqueursRetirables",
@@ -5722,6 +5739,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeEmpreinte.js (chargement)",
     "sourcesMana"
    ]
   },
@@ -5808,6 +5826,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeDefinis",
     "forgeExpression",
+    "forgeMemoire.js (chargement)",
     "resous"
    ]
   },
@@ -6198,6 +6217,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeDeclencheursC.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "nettoyage",
     "stabilise"
    ]
@@ -7393,6 +7413,8 @@
    "appeleePar": [
     "forgeEffetsA.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "poseEffet"
    ]
   },
@@ -8903,6 +8925,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeMemoire.js (chargement)",
     "forgeValideObjet"
    ]
   },
@@ -8963,8 +8986,10 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeExpression",
     "forgeManaB.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeValideDef",
@@ -9242,7 +9267,8 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
-    "forgeExpression"
+    "forgeExpression",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
@@ -9260,7 +9286,9 @@
     "agregeForge",
     "caracEtendue",
     "exprEtendue",
-    "forgeExpression"
+    "forgeEmpreinte.js (chargement)",
+    "forgeExpression",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
@@ -9310,7 +9338,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "exprEtendue",
-    "forgeExpression"
+    "forgeEmpreinte.js (chargement)",
+    "forgeExpression",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
@@ -9409,7 +9439,9 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeExpression"
+    "forgeEmpreinte.js (chargement)",
+    "forgeExpression",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
@@ -9607,7 +9639,9 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeEntrees.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "joueursForge",
     "objetsForge",
     "paieUnlessForge",
@@ -9667,6 +9701,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeTraine.js (chargement)"
    ]
   },
@@ -9696,13 +9731,15 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeDefinis"
+    "forgeDefinis",
+    "forgeEmpreinte.js (chargement)",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
    "nom": "cartesChoisies",
    "fichier": "forgeDesignations.js",
-   "ligne": 49,
+   "ligne": 46,
    "chargement": false,
    "appelle": [
     "choixDe"
@@ -9717,7 +9754,7 @@
   {
    "nom": "marqueursJoueur",
    "fichier": "forgeDesignations.js",
-   "ligne": 56,
+   "ligne": 53,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9729,7 +9766,7 @@
   {
    "nom": "exprDesignations",
    "fichier": "forgeDesignations.js",
-   "ligne": 59,
+   "ligne": 56,
    "chargement": false,
    "appelle": [
     "car",
@@ -9749,7 +9786,7 @@
   {
    "nom": "proprieteDesignee",
    "fichier": "forgeDesignations.js",
-   "ligne": 102,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "goadActif"
@@ -9757,6 +9794,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeEmpreinte.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "propObjet"
    ]
   },
@@ -9823,6 +9862,7 @@
     "cycleForge",
     "effetForge",
     "forgeChoix.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeStatiquesB.js (chargement)",
     "hausseDeCout",
     "manaDeLaMain",
@@ -9850,6 +9890,7 @@
     "deplaceForge",
     "descForge",
     "durees",
+    "empreinteDe",
     "estType",
     "forgeDefinis",
     "forgeEffet",
@@ -9866,6 +9907,7 @@
     "objetsZone",
     "pioche",
     "quiIA",
+    "retiensEmpreinte",
     "retiensForge",
     "zoneForge"
    ],
@@ -9993,7 +10035,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "executeForge"
+    "executeForge",
+    "forgeEmpreinte.js (chargement)"
    ]
   },
   {
@@ -10016,9 +10059,11 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
-    "fouilleForge"
+    "fouilleForge",
+    "retiensPartis"
    ]
   },
   {
@@ -10124,7 +10169,7 @@
   {
    "nom": "nombreIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 284,
+   "ligne": 285,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10139,7 +10184,7 @@
   {
    "nom": "quiIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 287,
+   "ligne": 288,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10205,9 +10250,11 @@
    "appelle": [
     "choisitCartes",
     "deplaceForge",
+    "empreinteDe",
     "forgeNombre",
     "forgeValideObjet",
     "obj",
+    "retiensEmpreinte",
     "retiensForge",
     "retireDe",
     "zoneForge"
@@ -10221,7 +10268,7 @@
   {
    "nom": "regardeForge",
    "fichier": "forgeEffetsB.js",
-   "ligne": 43,
+   "ligne": 44,
    "chargement": false,
    "appelle": [
     "choisitCartes",
@@ -10237,7 +10284,7 @@
   {
    "nom": "sourceDegats",
    "fichier": "forgeEffetsB.js",
-   "ligne": 59,
+   "ligne": 60,
    "chargement": false,
    "appelle": [
     "forgeDefinis"
@@ -10245,13 +10292,14 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsB.js (chargement)"
+    "forgeEffetsB.js (chargement)",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
    "nom": "detruitForge",
    "fichier": "forgeEffetsB.js",
-   "ligne": 103,
+   "ligne": 104,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -10267,7 +10315,7 @@
   {
    "nom": "creeJetonsForge",
    "fichier": "forgeEffetsB.js",
-   "ligne": 150,
+   "ligne": 153,
    "chargement": false,
    "appelle": [
     "creeObjet",
@@ -10543,6 +10591,7 @@
     "choisitUn",
     "deplace",
     "deplaceForge",
+    "empreinteDe",
     "estType",
     "forgeDefinis",
     "forgeEffet",
@@ -10559,6 +10608,7 @@
     "obj",
     "objetsForge",
     "objetsZone",
+    "retiensEmpreinte",
     "retiensForge",
     "retireDe",
     "zoneForge"
@@ -10638,6 +10688,7 @@
     "forgeDefinis",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeExpression",
     "forgeRemplacementsC.js (chargement)",
     "forgeStatiques.js (chargement)",
@@ -10794,7 +10845,7 @@
   {
    "nom": "copieSort",
    "fichier": "forgeCopies.js",
-   "ligne": 80,
+   "ligne": 82,
    "chargement": false,
    "appelle": [
     "instantane",
@@ -10813,7 +10864,7 @@
   {
    "nom": "copiesFin",
    "fichier": "forgeCopies.js",
-   "ligne": 93,
+   "ligne": 95,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -10984,6 +11035,7 @@
     "deplace",
     "elimine",
     "emet",
+    "empreinteDe",
     "entierHasard",
     "forgeDefinis",
     "forgeEffet",
@@ -11061,7 +11113,7 @@
   {
    "nom": "tranchesDe",
    "fichier": "forgeEffetsG.js",
-   "ligne": 82,
+   "ligne": 86,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11073,7 +11125,7 @@
   {
    "nom": "monarqueFin",
    "fichier": "forgeEffetsG.js",
-   "ligne": 111,
+   "ligne": 115,
    "chargement": false,
    "appelle": [
     "pioche"
@@ -11087,7 +11139,7 @@
   {
    "nom": "gainsProtection",
    "fichier": "forgeEffetsG.js",
-   "ligne": 142,
+   "ligne": 146,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11100,7 +11152,7 @@
   {
    "nom": "goadActif",
    "fichier": "forgeEffetsG.js",
-   "ligne": 143,
+   "ligne": 147,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11113,7 +11165,7 @@
   {
    "nom": "couleursProtection",
    "fichier": "forgeEffetsG.js",
-   "ligne": 147,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "car",
@@ -11131,7 +11183,7 @@
   {
    "nom": "phasesEntrent",
    "fichier": "forgeEffetsG.js",
-   "ligne": 185,
+   "ligne": 189,
    "chargement": false,
    "appelle": [
     "obj"
@@ -11145,7 +11197,7 @@
   {
    "nom": "manifeste",
    "fichier": "forgeEffetsG.js",
-   "ligne": 231,
+   "ligne": 235,
    "chargement": false,
    "appelle": [
     "metEnJeu"
@@ -11744,6 +11796,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliqueRemplacementDegats",
+    "forgeMemoire.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "initiativeVolee"
    ]
@@ -11940,7 +11993,7 @@
   {
    "nom": "phaseConnue",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 29,
+   "ligne": 31,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11953,7 +12006,7 @@
   {
    "nom": "forgeMode",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 33,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "forgeSait"
@@ -11972,7 +12025,7 @@
   {
    "nom": "objetZone",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 41,
+   "ligne": 43,
    "chargement": false,
    "appelle": [
     "obj"
@@ -11987,7 +12040,7 @@
   {
    "nom": "valideOuRien",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 46,
+   "ligne": 48,
    "chargement": false,
    "appelle": [
     "forgeValideObjet"
@@ -12007,7 +12060,7 @@
   {
    "nom": "joueurOuRien",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 47,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "forgeValideJoueur"
@@ -12028,7 +12081,7 @@
   {
    "nom": "joueurDeCarte",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 51,
+   "ligne": 53,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12041,7 +12094,7 @@
   {
    "nom": "ciblesDuSort",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 89,
+   "ligne": 91,
    "chargement": false,
    "appelle": [
     "obj"
@@ -12057,7 +12110,7 @@
   {
    "nom": "forgeDeclenche",
    "fichier": "forgeDeclencheurs.js",
-   "ligne": 120,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
     "conditionForge"
@@ -14561,7 +14614,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "appliqueSBA"
+    "appliqueSBA",
+    "forgeMemoire.js (chargement)"
    ]
   },
   {
@@ -14589,6 +14643,7 @@
    "appeleePar": [
     "capaciteForge",
     "effetForge",
+    "forgeEmpreinte.js (chargement)",
     "manaDeLaMain"
    ]
   },
@@ -14606,6 +14661,7 @@
     "effetForge",
     "forgeChoix.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "manaDeLaMain"
    ]
   },
@@ -14683,6 +14739,7 @@
     "activeeSynthese",
     "definitionDepuisScript",
     "forgeDegagements.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
     "forgeManaB.js (chargement)",
     "statiqueForge"
    ]
@@ -14706,6 +14763,7 @@
     "definitionDepuisScript",
     "forgeDeclencheursC.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeMemoire.js (chargement)",
     "niveauForge",
     "statiqueForge",
     "synthese"
@@ -15196,6 +15254,201 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeManaB.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeEmpreinte.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "agregeForge",
+    "caracForge",
+    "choixDe",
+    "coutForge",
+    "durees",
+    "empreinteAuLieu",
+    "empreinteDe",
+    "forgeApi",
+    "forgeDefinis",
+    "forgeSait",
+    "forgeValideObjet",
+    "obj",
+    "oublieObjets",
+    "retiensEmpreinte",
+    "suit",
+    "tableJouable",
+    "texteForge"
+   ],
+   "appelleDiffere": [
+    "capaciteForge",
+    "definisEtendus",
+    "exprEtendue",
+    "manaReflete",
+    "memoireForge",
+    "proprieteDesignee"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "empreinteDe",
+   "fichier": "forgeEmpreinte.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "empreinteAuLieu",
+    "forgeEffetsA.js (chargement)",
+    "forgeEffetsE.js (chargement)",
+    "forgeEffetsG.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
+    "fouilleForge"
+   ]
+  },
+  {
+   "nom": "retiensEmpreinte",
+   "fichier": "forgeEmpreinte.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "empreinteAuLieu",
+    "forgeEffetsA.js (chargement)",
+    "forgeEffetsE.js (chargement)",
+    "forgeEmpreinte.js (chargement)",
+    "fouilleForge"
+   ]
+  },
+  {
+   "nom": "oublieObjets",
+   "fichier": "forgeEmpreinte.js",
+   "ligne": 34,
+   "chargement": false,
+   "appelle": [
+    "suit"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEmpreinte.js (chargement)"
+   ]
+  },
+  {
+   "nom": "empreinteAuLieu",
+   "fichier": "forgeEmpreinte.js",
+   "ligne": 74,
+   "chargement": false,
+   "appelle": [
+    "empreinteDe",
+    "forgeSait",
+    "retiensEmpreinte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEmpreinte.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeMemoire.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "agregeForge",
+    "caracForge",
+    "caracsDe",
+    "correspond",
+    "durees",
+    "estCreature",
+    "forgeDefinis",
+    "forgeSait",
+    "forgeValideObjet",
+    "mvDe",
+    "obj",
+    "objetsForge",
+    "objetsZone",
+    "passeOuPresent",
+    "propObjet",
+    "retiensForge",
+    "retiensPartis",
+    "sourceDegats",
+    "sousTypesCreature",
+    "suit",
+    "suiteRemplacement",
+    "typesDe",
+    "vivants"
+   ],
+   "appelleDiffere": [
+    "auraOrpheline",
+    "collecteDeclencheurs",
+    "declencheurForge",
+    "definisEtendus",
+    "exprEtendue",
+    "proprieteDesignee"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "retiensPartis",
+   "fichier": "forgeMemoire.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "obj",
+    "retiensForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeMemoire.js (chargement)"
+   ]
+  },
+  {
+   "nom": "caracsDe",
+   "fichier": "forgeMemoire.js",
+   "ligne": 129,
+   "chargement": false,
+   "appelle": [
+    "car"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeMemoire.js (chargement)",
+    "typesDe"
+   ]
+  },
+  {
+   "nom": "typesDe",
+   "fichier": "forgeMemoire.js",
+   "ligne": 130,
+   "chargement": false,
+   "appelle": [
+    "caracsDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeMemoire.js (chargement)"
+   ]
+  },
+  {
+   "nom": "sousTypesCreature",
+   "fichier": "forgeMemoire.js",
+   "ligne": 131,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeMemoire.js (chargement)"
    ]
   },
   {

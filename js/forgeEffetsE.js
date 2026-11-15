@@ -108,6 +108,7 @@ forgeEffet('Play', ['Valid', 'ValidZone', 'ValidSA', 'Amount', 'Controller', 'Wi
     if (t.ReplaceGraveyard === 'Exile' && obj(P, id)) obj(P, id)._exilApres = true;
     const ok = yield* lanceDepuisEffet(P, j, obj(P, id), t.WithoutManaCost === 'True');
     if (ok && t.RememberPlayed === 'True') retiensForge(env.ctx, id);
+    if (ok && t.ImprintPlayed === 'True') retiensEmpreinte(empreinteDe(P, env.ctx, env.src), id);
   }
 }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !t.CopyCard && (!t.ReplaceGraveyard || t.ReplaceGraveyard === 'Exile')});
 forgeSait('param', 'Play.ReplaceGraveyard');

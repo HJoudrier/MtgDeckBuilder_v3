@@ -28,9 +28,6 @@ function definisEtendus(P, v, env) {
     case 'Player.IsRemembered': return (ctx.memoJ || []).filter(j => P.joueurs[j] && !P.joueurs[j].elimine).map(j => ({j}));
     /* La carte du dessus de sa bibliothèque. */
     case 'TopOfLibrary': { const B = P.joueurs[ctrl].bibliotheque; return B.length ? [obj(P, B[B.length - 1])] : []; }
-    /* Imprint range ce qu'il exile avec la mémoire de la carte
-       (js/forgeEffetsA.js `retiensForge()`). */
-    case 'Imprinted': return forgeDefinis(P, 'Remembered', env).filter(x => x.j == null);
     /* La source d'un effet : la carte qui l'a créé, que l'effet porte
        comme sa source. */
     case 'EffectSource': return forgeDefinis(P, 'Self', env);
@@ -42,7 +39,7 @@ function definisEtendus(P, v, env) {
   return [];
 }
 
-forgeSait('defini', 'Player.IsRemembered', 'TopOfLibrary', 'Imprinted', 'EffectSource', 'TriggeredAttackingPlayer', 'ChosenCardController', 'TargetedOrController');
+forgeSait('defini', 'Player.IsRemembered', 'TopOfLibrary', 'EffectSource', 'TriggeredAttackingPlayer', 'ChosenCardController', 'TargetedOrController');
 
 /* Les cartes choisies : celles qu'un effet a gardées en naissant
    (js/forgeRemplacementsC.js), sinon celles de la source. */

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1588 fonctions**, 224 modules, 1636 Ko de JavaScript.
+**1599 fonctions**, 226 modules, 1657 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -79,24 +79,24 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
-| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 118 |
+| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 293 |
-| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 208 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 294 |
+| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 211 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 158 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 194 |
-| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 132 |
+| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 133 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 164 |
-| [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 103 |
+| [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 105 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 3 | 207 |
-| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 283 |
+| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 287 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 7 | 276 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
 | [`forgeRemplacementsC.js`](#jsforgeremplacementscjs) | Les dégâts remplacés | 12 | 206 |
 | [`jeuPioche.js`](#jsjeupiochejs) | La pioche remplacée, Dredge, Miracle | 7 | 126 |
-| [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 9 | 142 |
+| [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 144 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 125 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 224 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 282 |
@@ -105,18 +105,20 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 157 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
 | [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 147 |
-| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 208 |
+| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 211 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 171 |
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 216 |
 | [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 236 |
 | [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 276 |
-| [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 284 |
+| [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 287 |
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
 | [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 169 |
+| [`forgeEmpreinte.js`](#jsforgeempreintejs) | L'empreinte | 6 | 150 |
+| [`forgeMemoire.js`](#jsforgememoirejs) | La mémoire, II | 4 | 198 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 130 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
@@ -1181,7 +1183,7 @@ Les coûts dont la quantité est X, et ceux qui. *10 fonctions, 127 lignes, 6.2 
 
 ## js/jeuDurees.js
 
-Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 158 lignes, 7 Ko.*
+Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 158 lignes, 7.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1459,7 +1461,7 @@ Ce que `Defined$` désigne. *6 fonctions, 150 lignes, 9.7 Ko.*
 
 ## js/forgeDesignations.js
 
-Ce que Forge désigne encore : des joueurs. *5 fonctions, 118 lignes, 7.4 Ko.*
+Ce que Forge désigne encore : des joueurs. *5 fonctions, 115 lignes, 7.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1486,7 +1488,7 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, la. *13 fonctions, 293 lignes, 18 Ko.*
+Exécuter une capacité de Forge : le registre, la. *13 fonctions, 294 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1512,7 +1514,7 @@ Exécuter une capacité de Forge : le registre, la. *13 fonctions, 293 lignes, 1
 
 ## js/forgeEffetsB.js
 
-Les effets de Forge : regarder la bibliothèque,. *5 fonctions, 208 lignes, 13 Ko.*
+Les effets de Forge : regarder la bibliothèque,. *5 fonctions, 211 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1524,7 +1526,7 @@ Les effets de Forge : regarder la bibliothèque,. *5 fonctions, 208 lignes, 13 K
 
 ## js/forgeEffetsC.js
 
-Les effets de Forge : pompes, engagements, mana,. *5 fonctions, 158 lignes, 9.9 Ko.*
+Les effets de Forge : pompes, engagements, mana,. *5 fonctions, 158 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1554,7 +1556,7 @@ Les effets de Forge qui durent : régénération,. *6 fonctions, 194 lignes, 12 
 
 ## js/forgeEffetsE.js
 
-Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 132 lignes, 8.2 Ko.*
+Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 133 lignes, 8.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1580,7 +1582,7 @@ Les choix de Forge : une couleur, un type, une. *7 fonctions, 164 lignes, 9 Ko.*
 
 ## js/forgeCopies.js
 
-Les copies de Forge : un jeton copie d'un. *4 fonctions, 103 lignes, 5.5 Ko.*
+Les copies de Forge : un jeton copie d'un. *4 fonctions, 105 lignes, 5.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1610,7 +1612,7 @@ Les paramètres de plus des effets courants. *3 fonctions, 207 lignes, 11 Ko.*
 
 ## js/forgeEffetsG.js
 
-Les mécaniques de partie de Forge. *10 fonctions, 283 lignes, 18 Ko.*
+Les mécaniques de partie de Forge. *10 fonctions, 287 lignes, 19 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1728,12 +1730,13 @@ La pioche remplacée, Dredge, Miracle. *7 fonctions, 126 lignes, 6.4 Ko.*
 
 ## js/forgeDeclencheurs.js
 
-Quand une capacité déclenchée de Forge se. *9 fonctions, 142 lignes, 8.8 Ko.*
+Quand une capacité déclenchée de Forge se. *10 fonctions, 144 lignes, 9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `dansPhases(P, v)` | — |
-| `phaseConnue(t)` | Un déclencheur de phase dont la phase est inconnue ne partirait jamais : il est refusé à la construction. |
+| `phasesForge(t)` | « At the beginning of your next main phase » : `Phase$ Main1,Main2`, l'une ou l'autre. |
+| `phaseConnue(t)` | — |
 | `forgeMode(mode, params, juge)` | — |
 | `objetZone(P, e)` | L'objet dont parle un évènement de zone : l'instantané s'il quitte le champ, le nouvel objet sinon. |
 | `valideOuRien(P, o, v, s, env)` | — |
@@ -1922,7 +1925,7 @@ Les paliers : Station, classes, Rooms, vitesse. *6 fonctions, 147 lignes, 8.1 Ko
 
 ## js/forgeMotsCles.js
 
-Les mots-clés de Forge (`K:`). *4 fonctions, 208 lignes, 11 Ko.*
+Les mots-clés de Forge (`K:`). *4 fonctions, 211 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2023,7 +2026,7 @@ Les mots-clés de lancement, II. *10 fonctions, 276 lignes, 15 Ko.*
 
 ## js/forgeEffetsI.js
 
-Les effets nouveaux, II. *4 fonctions, 284 lignes, 18 Ko.*
+Les effets nouveaux, II. *4 fonctions, 287 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2130,6 +2133,35 @@ Le mana, II. *4 fonctions, 169 lignes, 9.2 Ko.*
 |---|---|
 | `MANA_B` | Ces règles touchent des gestes très fréquents (engager, vider les réserves) : on ne les cherche que si une carte qui les porte a été compilée. |
 | `LETTRE_TYPE` | — |
+
+## js/forgeEmpreinte.js
+
+L'empreinte. *6 fonctions, 150 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `empreinteDe(P, ctx, src)` | L'empreinte de la source : celle de la carte, que ses déplacements ne vident pas (le script la vide lui-même), ou celle d'un effet. |
+| `retiensEmpreinte(l, x)` | — |
+| `oublieObjets(P, l, objets)` | Oublier des objets : par leur numéro, ou par celui qu'ils avaient. |
+| `empreinteEnv(P, env)` | L'empreinte d'un environnement de jugement, qui n'a pas toujours de contexte de résolution (un filtre de déclencheur, une capacité de mana). |
+| `objetsEmpreinte(P, env)` | — |
+| `empreinteAuLieu(api, imprime, retiens)` | « Imprint » plutôt que « remember » : l'effet retient comme d'habitude, puis ce qu'il vient de retenir passe dans l'empreinte. |
+
+## js/forgeMemoire.js
+
+La mémoire, II. *4 fonctions, 198 lignes, 11 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `retiensPartis(P, env, avant)` | Ce qui a quitté le champ, retenu par son instantané. |
+| `caracsDe(P, x)` | — |
+| `typesDe(P, x)` | — |
+| `sousTypesCreature(c)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `PARTAGES` | « Shares a card type / a creature type / a name with » : avec l'un des objets désignés. |
+| `DESIGNES_PARTAGE` | — |
 
 ## js/iaValeur.js
 

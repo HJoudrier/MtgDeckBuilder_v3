@@ -25,7 +25,7 @@ function* prepareDeclencheur(P, t) {
   const effets = yield* prepareEffets(P, t.ctrl, src, t.cap.effet, src ? src.def.couleurs : [], {declencheur: true, evt: t.evt});
   if (!effets) return null;
   return {id: P.prochainId++, capacite: true, source: t.src, lki: t.lki, ctrl: t.ctrl, effets, x: 0, evt: t.evt,
-    nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ, declencheur: t.cap};
+    nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ, nombre: t.nombre, declencheur: t.cap};
 }
 
 /* Stabiliser avant une priorité (règle 117.5). */
@@ -87,7 +87,7 @@ function* resoudre(P, item) {
     return;
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
-    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ,
+    evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ, nombre: item.nombre || 0,
     optionnel: item.variante === 'optionnel', retires: item.retires || 0, engages: item.engages || null, variante: item.variante || null};
   /* Le cadeau promis se donne avant le reste du sort (js/forgeMotsClesE.js). */
   if (item.sort && item.variante === 'gift') yield* donneCadeau(P, item.def, item.id, ctx);

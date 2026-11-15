@@ -36,20 +36,24 @@ function varsDe(ctx) { return ctx.vars || (ctx.vars = {}); }
 
 /* —— Les boucles des scripts —————————————————————————————————————— */
 
-/* Pour chaque joueur, ou chaque carte : la sous-capacité, avec ce joueur
-   ou cette carte pour mémoire (`Remembered`). */
+/* Pour chaque joueur, ou chaque carte : la sous-capacité, ce joueur ou
+   cette carte ajouté à la mémoire (`Remembered`, ou l'empreinte avec
+   `UseImprinted$`) le temps d'un tour de boucle. Ce que la boucle retient
+   d'autre reste retenu après elle (Patriarch's Bidding), et ce qu'on
+   retenait avant reste lisible dedans (Braids, Arisen Nightmare). */
 forgeEffet('RepeatEach', ['RepeatSubAbility', 'RepeatPlayers', 'RepeatCards', 'Zone', 'UseImprinted', 'ChangeZoneTable', 'DamageMap', 'ClearRemembered'],
   function* (P, t, env) {
-    const ctx = env.ctx, memo = ctx.memo, memoJ = ctx.memoJ;
+    const ctx = env.ctx;
     const items = t.RepeatPlayers ? forgeDefinis(P, t.RepeatPlayers, env).map(x => ({j: joueurDe(x)})).filter(x => x.j != null)
       : objetsZone(P, ZONES_FORGE[t.Zone || 'Battlefield'] || 'champ').filter(o => forgeValideObjet(P, o, t.RepeatCards, env.src, env.ctrl, env)).map(o => ({id: o.id}));
-    try {
-      for (const x of items) {
-        ctx.memo = x.id != null ? [x.id] : []; ctx.memoJ = x.j != null ? [x.j] : [];
-        yield* joueSous(P, env, t.RepeatSubAbility);
-        if (P.fin) return;
-      }
-    } finally { ctx.memo = memo; ctx.memoJ = memoJ; }
+    for (const x of items) {
+      const l = x.j != null ? ctx.memoJ : t.UseImprinted === 'True' ? empreinteDe(P, ctx, env.src) : ctx.memo, v = x.j != null ? x.j : x.id;
+      const ajoute = !l.includes(v);
+      if (ajoute) l.push(v);
+      try { yield* joueSous(P, env, t.RepeatSubAbility); }
+      finally { const i = ajoute ? l.indexOf(v) : -1; if (i >= 0) l.splice(i, 1); }
+      if (P.fin) return;
+    }
   }, (t, op) => { op.op = 'forge'; op.hostile = false; },
   {prepare: (t, op) => (!!t.RepeatPlayers || !!t.RepeatCards) && sousEffets(op, [t.RepeatSubAbility])});
 

@@ -30,7 +30,8 @@ function* fouilleForge(P, t, env, j) {
   const d1 = zoneForge(t.DestinationZone) || 'main', d2 = zoneForge(t.DestinationZone2) || 'bibliotheque';
   for (const id of pris) {
     const nid = yield* deplaceForge(P, obj(P, id), d1, env, {dessous: t.LibraryPosition === '-1'});
-    if (nid != null && (t.RememberChanged === 'True' || t.Imprint === 'True')) retiensForge(env.ctx, nid);
+    if (nid != null && t.RememberChanged === 'True') retiensForge(env.ctx, nid);
+    if (nid != null && t.Imprint === 'True') retiensEmpreinte(empreinteDe(P, env.ctx, env.src), nid);
   }
   for (const id of dessus.filter(x => !pris.includes(x))) {
     if (d2 === 'bibliotheque') { if (t.LibraryPosition2 !== '0') { retireDe(B, id); B.unshift(id); } }
@@ -133,8 +134,10 @@ forgeEffet('Sacrifice', ['SacValid', 'Amount', 'RememberSacrificed'], function* 
   }
 }, (t, op) => { op.op = 'sacrifie'; op.n = nombreIA(t.Amount || 1); op.qui = quiIA(t, op); op.hostile = !(op.qui && op.qui.vous); });
 
+/* `Defined$` : ces objets-là seulement (« that creature's controller sacrifices it »). */
 forgeEffet('SacrificeAll', ['ValidCards'], function* (P, t, env) {
-  objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env)).forEach(o => sacrifie(P, o.id));
+  (t.Defined ? forgeDefinis(P, t.Defined, env).filter(o => o.j == null && !o.lki && o.zone === 'champ' && (!t.ValidCards || forgeValideObjet(P, o, t.ValidCards, env.src, env.ctrl, env)))
+    : objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.ValidCards || 'Permanent', env.src, env.ctrl, env))).forEach(o => sacrifie(P, o.id));
 }, (t, op) => { op.op = 'detruit'; op.a = {chaque: descForge(t.ValidCards || 'Permanent')}; op.hostile = false; });
 
 forgeEffet('Counter', ['Destination'], function* (P, t, env) {

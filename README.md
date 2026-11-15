@@ -117,6 +117,8 @@ js/                 modules, chargés dans cet ordre :
   forgeRemplacementsC.js les dégâts remplacés : prévenir N, détourner, partager ; choisir une source ; l'effet qui s'exile
   forgeRemplacementsD.js les remplacements, IV : jetons en plus ou à la place, marqueurs selon qui les pose, vie perdue, tour en plus sauté, meule, prolifération, exil avec une suite
   forgeManaB.js     le mana, II : condition d'activation, depuis la main, incontrecarrable, multikicker, mana gardé, multiplié ou ajouté
+  forgeEmpreinte.js l'empreinte, tenue à part de la mémoire : ce qui y entre, en sort, la lit ; le mana de la carte exilée
+  forgeMemoire.js   la mémoire, II : nombres retenus, instantanés, partages de type, aura qui réanime, déclencheurs statiques
   forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
@@ -1112,6 +1114,27 @@ Les définitions des jetons qu'une forme crée viennent de la compilation en cou
 Ces règles touchent des gestes très fréquents (planifier un paiement, engager, vider les réserves).
 On ne les cherche que si une carte qui les porte a été compilée (`MANA_B`) : sans ce garde, une
 partie ordinaire coûtait 10 % de plus.
+
+**L'empreinte et la mémoire** (lot F43, `js/forgeEmpreinte.js`, `js/forgeMemoire.js`). Trois
+décisions :
+- *L'empreinte est à part de la mémoire*, comme dans Forge (`P.cartes[cid].empreinte`, ou sur
+  l'effet). Elle survit aux déplacements de la carte : c'est le script qui la vide, par un
+  `Cleanup` à la sortie du champ. Chrome Mox paie dans les couleurs de la carte exilée, Isochron
+  Scepter copie l'éphémère imprimé, Breach the Multiverse garde ses choix d'un joueur à l'autre.
+- *`RepeatEach` ajoute à la mémoire, il ne la remplace plus* : le joueur ou la carte du tour de
+  boucle s'ajoute puis s'en va, ce qu'on retenait avant reste lisible dedans (Braids, Arisen
+  Nightmare), ce que la boucle retient reste après elle (Patriarch's Bidding).
+- *Un déclencheur `Static$ True` ne monte pas sur la pile* : sans cible, sans mode ni « you may », sa
+  chaîne se joue dès que l'évènement est relevé (`P.suitesRemp`). C'est le plus souvent le ménage
+  d'une mémoire. Les déclencheurs de mana gardent leur forme.
+
+Avec eux : un nombre retenu (Mana Drain, la valeur du sort contrecarré, emportée par le déclencheur
+retardé ; Creeping Bloodsucker, les blessures infligées) ; l'instantané d'une créature détruite (Saw in
+Half, Noxious Gearhulk) ; les joueurs sans rien de retenu (Plaguecrafter) ; « partage un type, un
+nom avec » ; l'aura qui enchante une carte de cimetière puis la créature qu'elle a rendue (Animate
+Dead, Dance of the Dead). Le lot a corrigé quatre défauts plus anciens : une force de copie écrite en
+SVar (Saw in Half), `Attach | Defined$` sans `Object$`, `SacrificeAll | Defined$` qui aurait tout
+sacrifié, la copie à lancer qui ignorait `Valid$` (Isochron Scepter).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

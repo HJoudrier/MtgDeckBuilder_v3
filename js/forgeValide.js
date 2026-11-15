@@ -215,7 +215,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'EnchantedControllerCtrl': { const h = P && src && src.att != null ? obj(P, src.att) : null; return !!h && h.ctrl === tient; }
   }
   /* Monstrueux, incité, ombre (js/forgeDesignations.js). */
-  const pd = proprieteDesignee(P, o, p);
+  const pd = proprieteDesignee(P, o, p, c, src, ctrl, env);
   if (pd !== undefined) return pd;
   let m;
   if ((m = /^(ControlledBy|OwnedBy) (.+)$/.exec(p))) {

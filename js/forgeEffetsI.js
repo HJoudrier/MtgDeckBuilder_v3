@@ -233,7 +233,10 @@ FORGE_API.Play.gen = (g => function* (P, t, env) {
   if (t.CopyCard !== 'True') return yield* g(P, t, env);
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
   if (j == null) return;
-  for (const o of (t.Valid ? [] : objetsForge(P, t, env, 'Targeted')).filter(x => x && x.j == null && !estType(x, 'land'))) {
+  /* `Valid$` : les cartes de la zone dite qui y répondent (Isochron Scepter). */
+  const l = t.Valid ? [].concat(...String(t.ValidZone || 'Hand').split(',').map(z => objetsZone(P, ZONES_FORGE[z.trim()] || 'main')))
+    .filter(o => forgeValideObjet(P, o, t.Valid, env.src, env.ctrl, env)) : objetsForge(P, t, env, 'Targeted');
+  for (const o of l.filter(x => x && x.j == null && !estType(x, 'land'))) {
     if (t.Optional === 'True' && (yield question(P, j, 'oui', ['non', 'oui'], {texte: `Lancer une copie de ${o.def.nom} ?`, source: o.id})) !== 1) continue;
     const cid = nouvelleCarte(P, P.cartes[o.cid].def, j, false, true);
     P.cartes[cid].copieSort = true;

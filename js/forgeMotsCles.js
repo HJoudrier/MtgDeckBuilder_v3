@@ -180,7 +180,10 @@ function motCleForge(def, k, face, jetons) {
   if ((m = /^Enchant(?: (\w+))?$/.exec(tete))) {
     const v = m[1] ? m[1][0].toUpperCase() + m[1].slice(1) : reste[0];
     if (!v) return false;
-    def.aura = descForge(v);
+    /* « Enchant creature card in a graveyard » (Animate Dead) : la cible
+       est dans un cimetière (js/forgeMemoire.js `auraOrpheline()`). */
+    const cim = /\.inZoneGraveyard$/.test(v);
+    def.aura = cim ? descForge(v.replace(/\.inZoneGraveyard$/, ''), 'Graveyard') : descForge(v);
     return true;
   }
   /* La traîne (js/forgeTraine.js). */

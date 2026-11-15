@@ -26,7 +26,9 @@ function dansPhases(P, v) {
 
 /* Un déclencheur de phase dont la phase est inconnue ne partirait jamais :
    il est refusé à la construction. */
-function phaseConnue(t) { return t.Mode !== 'Phase' || !!FORGE_PHASES[String(t.Phase || '').trim()]; }
+/* « At the beginning of your next main phase » : `Phase$ Main1,Main2`, l'une ou l'autre. */
+const phasesForge = t => String(t.Phase || '').split(',').map(p => FORGE_PHASES[p.trim()]);
+function phaseConnue(t) { return t.Mode !== 'Phase' || phasesForge(t).every(Boolean); }
 
 const FORGE_MODES = {};
 
@@ -76,7 +78,7 @@ forgeMode('Attacks', ['ValidCard', 'Attacked', 'Alone'], (P, t, e, s, env) => e.
 forgeMode('Blocks', ['ValidCard'], (P, t, e, s, env) => e.t === 'bloque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
 forgeMode('AttackerBlocked', ['ValidCard'], (P, t, e, s, env) => e.t === 'estBloque' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env) &&
   (!t.ValidBlocker || (!!P.combat && (P.combat.bloquesPar.get(e.id) || []).some(b => valideOuRien(P, obj(P, b), t.ValidBlocker, s, env)))));
-forgeMode('Phase', ['Phase', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'etape' && FORGE_PHASES[String(t.Phase || '').trim()] === e.etape &&
+forgeMode('Phase', ['Phase', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'etape' && phasesForge(t).includes(e.etape) &&
   joueurOuRien(P, e.actif, t.ValidPlayer, s, env));
 forgeMode('SpellCast', ['ValidCard', 'ValidActivatingPlayer', 'ActivatorThisTurnCast', 'TargetsValid'], (P, t, e, s, env) => e.t === 'lance' &&
   (t.OpponentTurn !== 'True' || P.actif !== s.ctrl) &&

@@ -35,8 +35,10 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
   if (j == null) return;
   const n = forgeNombre(P, t.NumCopies || 1, env);
+  /* Une force écrite en SVar (« half that creature's power ») se calcule ici. */
+  const tc = {...t, SetPower: t.SetPower && String(forgeNombre(P, t.SetPower, env)), SetToughness: t.SetToughness && String(forgeNombre(P, t.SetToughness, env))};
   for (const m of modeles) {
-    const def = defCopie(m.def, t);
+    const def = defCopie(m.def, tc);
     for (let k = 0; k < n; k++) {
       if (P.champ.length >= PLAFOND_CHAMP) { P.fin = P.fin || {nulle: true, raison: 'plafond'}; return; }
       const o = creeObjet(P, nouvelleCarte(P, def, j, false, true), j, 'champ');
