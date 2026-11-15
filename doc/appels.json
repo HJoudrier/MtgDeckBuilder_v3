@@ -62,6 +62,7 @@
   "jeuTour.js",
   "jeuPartie.js",
   "jeuPilote.js",
+  "jeuCopie.js",
   "jeuVue.js",
   "jeuArrets.js",
   "forgeValide.js",
@@ -4668,6 +4669,7 @@
    "appeleePar": [
     "activeCapacite",
     "auraOrpheline",
+    "cloturePartie",
     "complote",
     "copieSort",
     "creeJetonsForge",
@@ -4697,7 +4699,6 @@
     "lanceSort",
     "miracle",
     "mulligans",
-    "partie",
     "piocheRemplacee",
     "prendInitiative",
     "presage",
@@ -4756,8 +4757,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "iaReponse",
-    "partie",
-    "priorite"
+    "priorite",
+    "suiteDesTours"
    ]
   },
   {
@@ -5779,7 +5780,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeManaB.js (chargement)",
-    "tour"
+    "reprise",
+    "suiteDuTour"
    ]
   },
   {
@@ -8235,7 +8237,8 @@
    "appeleePar": [
     "degatsCombat",
     "etape",
-    "nettoyage"
+    "nettoyage",
+    "reprise"
    ]
   },
   {
@@ -8539,7 +8542,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "tour"
+    "reprise",
+    "suiteDuTour"
    ]
   },
   {
@@ -8565,16 +8569,32 @@
    "chargement": false,
    "appelle": [
     "debutDuTour",
-    "etape",
     "jn",
     "jourNuitDebut",
     "noteSortsDuTour",
+    "suiteDuTour"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "partie",
+    "suiteDesTours"
+   ]
+  },
+  {
+   "nom": "suiteDuTour",
+   "fichier": "jeuTour.js",
+   "ligne": 121,
+   "chargement": false,
+   "appelle": [
+    "etape",
     "videReserves"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "partie"
+    "reprise",
+    "tour"
    ]
   },
   {
@@ -8604,10 +8624,25 @@
    "ligne": 45,
    "chargement": false,
    "appelle": [
+    "cloturePartie",
     "effetsOuverture",
-    "jn",
     "melangeHasard",
     "mulligans",
+    "suiteDesTours",
+    "tour"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "creePartie"
+   ]
+  },
+  {
+   "nom": "suiteDesTours",
+   "fichier": "jeuPartie.js",
+   "ligne": 56,
+   "chargement": false,
+   "appelle": [
     "suivantVivant",
     "tour",
     "tourEnPlusSaute"
@@ -8615,7 +8650,23 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "creePartie"
+    "partie",
+    "reprise"
+   ]
+  },
+  {
+   "nom": "cloturePartie",
+   "fichier": "jeuPartie.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [
+    "jn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "partie",
+    "reprise"
    ]
   },
   {
@@ -8647,6 +8698,7 @@
    "appeleePar": [
     "avance",
     "boucleTable",
+    "essaieCoup",
     "repondre"
    ]
   },
@@ -8712,6 +8764,104 @@
    "appeleePar": [
     "rejouePartie"
    ]
+  },
+  {
+   "nom": "estDefinition",
+   "fichier": "jeuCopie.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "copiePartie"
+   ]
+  },
+  {
+   "nom": "marqueDefinition",
+   "fichier": "jeuCopie.js",
+   "ligne": 28,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "copiePartie"
+   ]
+  },
+  {
+   "nom": "copiePartie",
+   "fichier": "jeuCopie.js",
+   "ligne": 45,
+   "chargement": false,
+   "appelle": [
+    "estDefinition",
+    "marqueDefinition"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "essaieCoup"
+   ]
+  },
+  {
+   "nom": "pointDeReprise",
+   "fichier": "jeuCopie.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "essaieCoup"
+   ]
+  },
+  {
+   "nom": "reprise",
+   "fichier": "jeuCopie.js",
+   "ligne": 76,
+   "chargement": false,
+   "appelle": [
+    "cloturePartie",
+    "etape",
+    "priorite",
+    "suiteDesTours",
+    "suiteDuTour",
+    "videReserves"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "essaieCoup"
+   ]
+  },
+  {
+   "nom": "memeQuestion",
+   "fichier": "jeuCopie.js",
+   "ligne": 87,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "essaieCoup"
+   ]
+  },
+  {
+   "nom": "essaieCoup",
+   "fichier": "jeuCopie.js",
+   "ligne": 96,
+   "chargement": false,
+   "appelle": [
+    "copiePartie",
+    "memeQuestion",
+    "pointDeReprise",
+    "reprise",
+    "valideReponse"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "ficheVue",
@@ -15282,7 +15432,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "partie"
+    "suiteDesTours"
    ]
   },
   {

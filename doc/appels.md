@@ -8,13 +8,14 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1603 fonctions** dans 235 modules, **5086 appels** relevés.
+**1613 fonctions** dans 236 modules, **5103 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
 Points d'entrée — appelées depuis le HTML, depuis un écouteur — ou code mort.
 
 - `detailHTML()` *(tableRendu.js)*
+- `essaieCoup()` *(jeuCopie.js)*
 - `ficheDeScriptForge()` *(forgeScript.js)*
 - `nuageFond()` *(nuagePaquet.js)*
 - `pileHTML()` *(tableRendu.js)*
@@ -1611,7 +1612,7 @@ Appelée par : `activeCapacite`, `creeJetonsForge`, `declareAttaquants`, `declar
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `activeCapacite`, `auraOrpheline`, `complote`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeCopies.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `miracle`, `mulligans`, `partie`, `piocheRemplacee`, `prendInitiative`, `presage`, `resoudre`, `retourneFace`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vitesseMonte`
+Appelée par : `activeCapacite`, `auraOrpheline`, `cloturePartie`, `complote`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeCopies.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `miracle`, `mulligans`, `piocheRemplacee`, `prendInitiative`, `presage`, `resoudre`, `retourneFace`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vitesseMonte`
 
 ### `nomObj()` — ligne 162
 
@@ -1629,7 +1630,7 @@ Appelée par : `adversaires`, `compteJoueurs`, `defenseurLePlusRiche`, `elimine`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `iaReponse`, `partie`, `priorite`
+Appelée par : `iaReponse`, `priorite`, `suiteDesTours`
 
 ### `ordreApnap()` — ligne 179
 
@@ -1915,7 +1916,7 @@ Appelée par : `activeCapacite`, `complote`, `equipe`, `executeForge`, `forgeDeg
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `forgeManaB.js (chargement)`, `tour`
+Appelée par : `forgeManaB.js (chargement)`, `reprise`, `suiteDuTour`
 
 ### `manaReflete()` — ligne 226
 
@@ -2709,7 +2710,7 @@ Appelée par : `priorite`
 
 Appelle : `actionsPossibles()` *(jeuLancer.js)*, `executeAction()` *(jeuActions.js)*, `joueSuitesRemplacement()` *(forgeRemplacementsC.js)*, `question()` *(jeuEtat.js)*, `resoudre()` *(jeuPile.js)*, `stabilise()` *(jeuPile.js)*, `suivantVivant()` *(jeuEtat.js)*, `vivants()` *(jeuEtat.js)*
 
-Appelée par : `degatsCombat`, `etape`, `nettoyage`
+Appelée par : `degatsCombat`, `etape`, `nettoyage`, `reprise`
 
 ## js/jeuCombat.js
 
@@ -2803,7 +2804,7 @@ Appelée par : `etape`
 
 Appelle : `copiesFin()` *(forgeCopies.js)*, `declareAttaquants()` *(jeuCombat.js)*, `declareBloqueurs()` *(jeuCombat.js)*, `degagement()` *(jeuTour.js)*, `degatsCombat()` *(jeuCombat.js)*, `emet()` *(jeuEtat.js)*, `etapeSautee()` *(forgeRemplacementsB.js)*, `exhumeesFin()` *(jeuVariantes.js)*, `finCombat()` *(jeuCombat.js)*, `initiativeEnJeu()` *(jeuCombat.js)*, `loreDebutPrincipale()` *(jeuFaces.js)*, `monarqueFin()` *(forgeEffetsG.js)*, `nettoyage()` *(jeuTour.js)*, `notePrincipale()` *(jeuTour.js)*, `pioche()` *(jeuPioche.js)*, `priorite()` *(jeuPile.js)*, `rebondsEntretien()` *(jeuVariantesB.js)*, `suspensionsEntretien()` *(jeuVariantes.js)*
 
-Appelée par : `tour`
+Appelée par : `reprise`, `suiteDuTour`
 
 ### `notePrincipale()` — ligne 92
 
@@ -2813,9 +2814,15 @@ Appelée par : `etape`
 
 ### `tour()` — ligne 99
 
-Appelle : `debutDuTour()` *(jeuDurees.js)*, `etape()` *(jeuTour.js)*, `jn()` *(jeuEtat.js)*, `jourNuitDebut()` *(jeuFacesB.js)*, `noteSortsDuTour()` *(jeuFacesB.js)*, `videReserves()` *(jeuMana.js)*
+Appelle : `debutDuTour()` *(jeuDurees.js)*, `jn()` *(jeuEtat.js)*, `jourNuitDebut()` *(jeuFacesB.js)*, `noteSortsDuTour()` *(jeuFacesB.js)*, `suiteDuTour()` *(jeuTour.js)*
 
-Appelée par : `partie`
+Appelée par : `partie`, `suiteDesTours`
+
+### `suiteDuTour()` — ligne 121
+
+Appelle : `etape()` *(jeuTour.js)*, `videReserves()` *(jeuMana.js)*
+
+Appelée par : `reprise`, `tour`
 
 ## js/jeuPartie.js
 
@@ -2827,9 +2834,21 @@ Appelée par : `partie`
 
 ### `partie()` — ligne 45
 
-Appelle : `effetsOuverture()` *(forgeMotsClesD.js)*, `jn()` *(jeuEtat.js)*, `melangeHasard()` *(jeuHasard.js)*, `mulligans()` *(jeuPartie.js)*, `suivantVivant()` *(jeuEtat.js)*, `tour()` *(jeuTour.js)*, `tourEnPlusSaute()` *(forgeRemplacementsD.js)*
+Appelle : `cloturePartie()` *(jeuPartie.js)*, `effetsOuverture()` *(forgeMotsClesD.js)*, `melangeHasard()` *(jeuHasard.js)*, `mulligans()` *(jeuPartie.js)*, `suiteDesTours()` *(jeuPartie.js)*, `tour()` *(jeuTour.js)*
 
 Appelée par : `creePartie`
+
+### `suiteDesTours()` — ligne 56
+
+Appelle : `suivantVivant()` *(jeuEtat.js)*, `tour()` *(jeuTour.js)*, `tourEnPlusSaute()` *(forgeRemplacementsD.js)*
+
+Appelée par : `partie`, `reprise`
+
+### `cloturePartie()` — ligne 68
+
+Appelle : `jn()` *(jeuEtat.js)*
+
+Appelée par : `partie`, `reprise`
 
 ## js/jeuPilote.js
 
@@ -2843,7 +2862,7 @@ Appelée par : `commenceTable`, `joueJusquauBout`, `joueLot`, `reprendTable`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `avance`, `boucleTable`, `repondre`
+Appelée par : `avance`, `boucleTable`, `essaieCoup`, `repondre`
 
 ### `reponseRecevable()` — ligne 39
 
@@ -2868,6 +2887,48 @@ Appelée par : `boucleTable`, `recoitReponse`, `reprendTable`
 Appelle : `avance()` *(jeuPilote.js)*, `creePartie()` *(jeuPilote.js)*
 
 Appelée par : `rejouePartie`
+
+## js/jeuCopie.js
+
+### `estDefinition()` — ligne 24
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `copiePartie`
+
+### `marqueDefinition()` — ligne 28
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `copiePartie`
+
+### `copiePartie()` — ligne 45
+
+Appelle : `estDefinition()` *(jeuCopie.js)*, `marqueDefinition()` *(jeuCopie.js)*
+
+Appelée par : `essaieCoup`
+
+### `pointDeReprise()` — ligne 68
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `essaieCoup`
+
+### `reprise()` — ligne 76
+
+Appelle : `cloturePartie()` *(jeuPartie.js)*, `etape()` *(jeuTour.js)*, `priorite()` *(jeuPile.js)*, `suiteDesTours()` *(jeuPartie.js)*, `suiteDuTour()` *(jeuTour.js)*, `videReserves()` *(jeuMana.js)*
+
+Appelée par : `essaieCoup`
+
+### `memeQuestion()` — ligne 87
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `essaieCoup`
+
+### `essaieCoup()` — ligne 96
+
+Appelle : `copiePartie()` *(jeuCopie.js)*, `memeQuestion()` *(jeuCopie.js)*, `pointDeReprise()` *(jeuCopie.js)*, `reprise()` *(jeuCopie.js)*, `valideReponse()` *(jeuPilote.js)*
 
 ## js/jeuVue.js
 
@@ -4969,7 +5030,7 @@ Appelée par : `forgeEffetsB.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (ch
 
 Appelle : `jn()` *(jeuEtat.js)*, `remplacementsPour()` *(forgeRemplacementsD.js)*
 
-Appelée par : `partie`
+Appelée par : `suiteDesTours`
 
 ## js/forgeManaB.js
 

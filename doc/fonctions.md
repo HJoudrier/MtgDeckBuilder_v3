@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1631 fonctions**, 235 modules, 1717 Ko de JavaScript.
+**1641 fonctions**, 236 modules, 1723 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -69,9 +69,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 141 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
-| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 123 |
-| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 62 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 130 |
+| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
+| [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 114 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 113 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 286 |
@@ -1310,7 +1311,7 @@ Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 208 lignes, 11 Ko.*
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *5 fonctions, 123 lignes, 5.2 Ko.*
+Les étapes d'un tour. *6 fonctions, 130 lignes, 5.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1319,6 +1320,7 @@ Les étapes d'un tour. *5 fonctions, 123 lignes, 5.2 Ko.*
 | `etape(P, e)` | Une étape. |
 | `notePrincipale(P)` | Ce que les statistiques relèvent au début de chaque phase principale : le mana que le joueur aurait pu produire, et ses terrains au quatrième tour — de quoi dire un manque ou un… |
 | `tour(P)` | Un tour entier. |
+| `suiteDuTour(P)` | Les étapes du tour, de celle où l'on est jusqu'à la dernière : le tour les déroule toutes, la reprise d'une copie repart de la sienne (js/jeuCopie.js). |
 
 | Donnée | Rôle |
 |---|---|
@@ -1326,12 +1328,14 @@ Les étapes d'un tour. *5 fonctions, 123 lignes, 5.2 Ko.*
 
 ## js/jeuPartie.js
 
-Une partie, du mélange à la fin. *2 fonctions, 62 lignes, 2.4 Ko.*
+Une partie, du mélange à la fin. *4 fonctions, 74 lignes, 2.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `mulligans(P)` | Les mulligans, joueur par joueur dans l'ordre du tour. |
 | `partie(P)` | La partie entière : le générateur que le pilote déroule. |
+| `suiteDesTours(P)` | Les tours qui suivent celui qui s'achève, jusqu'à la fin ou au plafond : la partie les enchaîne, la reprise d'une copie aussi (js/jeuCopie.js). |
+| `cloturePartie(P)` | Ce que la fin d'une partie retient. |
 
 ## js/jeuPilote.js
 
@@ -1345,6 +1349,24 @@ Dérouler une partie, question après question. *6 fonctions, 99 lignes, 4.3 Ko.
 | `avance(h, agents, budgetMs, horloge)` | Dérouler une partie. `agents[j]` répond pour le joueur j : `{humain, repond(P, q)}`. Rend `finie`, `attente` (un humain doit répondre), `pause` (budget épuisé) ou `erreur`. `horloge` est… |
 | `repondre(h, agents, r, budgetMs, horloge)` | Répondre à la question en attente (lot 2), puis reprendre. |
 | `joueJusquauBout(cfg, agents)` | Jouer une partie jusqu'au bout d'une traite (tests, rejeu). |
+
+## js/jeuCopie.js
+
+Copier une partie, et la reprendre. *7 fonctions, 114 lignes, 5.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `estDefinition(x)` | Une définition se reconnaît à ses types, ses capacités et ses statiques. |
+| `marqueDefinition(d)` | — |
+| `copiePartie(P)` | Une copie profonde de l'état, qui garde les références partagées et partage les définitions. |
+| `pointDeReprise(P, q)` | Le point de reprise d'une question, ou `null` si elle n'en est pas un. |
+| `reprise(P, point)` | Le moteur repris d'une copie, au point dit, jusqu'à la fin. |
+| `memeQuestion(a, b)` | La reprise repose-t-elle bien la question d'origine ? |
+| `essaieCoup(P, q, reponse, horizon, agents)` | Essayer une réponse sur une copie : copier, reprendre, répondre `reponse` à la question `q`, puis laisser jouer `agents` jusqu'à ce que `horizon` (une question et la copie) dise… |
+
+| Donnée | Rôle |
+|---|---|
+| `PARTIES_DEF` | Tout ce qu'une définition contient, marqué une fois pour toutes. |
 
 ## js/jeuVue.js
 

@@ -81,6 +81,7 @@ js/                 modules, chargés dans cet ordre :
   jeuTour.js        les étapes d'un tour
   jeuPartie.js      mélange, mulligans, la partie entière
   jeuPilote.js      dérouler une partie, question après question
+  jeuCopie.js       copier une partie et la reprendre : la copie partage les définitions, la reprise repart d'un point sûr
   jeuVue.js         ce qu'un joueur voit de la partie, et une question lisible par un humain
   jeuArrets.js      quand demander à un joueur humain
   forgeValide.js    le langage de filtres de Forge (`Creature.OppCtrl+powerLE2`)
@@ -588,6 +589,20 @@ champ : c'est aussi l'IA de la table interactive. Au banc, contre l'IA d'IA1 : 5
 à quatre, 2 fois sur une table Commander à jetons (Krenko) — le calcul y coûte la moitié, des
 parties plus longues l'autre : on bloque mieux. Les poids, essayés au banc (riposte, horloge, plateau), changent peu : leurs écarts restent
 dans le bruit.
+
+**Copier une partie, et la reprendre** (IA3, `js/jeuCopie.js`). Le moteur avance par générateurs, qui
+ne se copient pas ; mais l'état `P` n'est fait que de données. `copiePartie()` le copie en
+profondeur, références partagées comprises, et **partage tout ce qui appartient à une définition** —
+capacités, effets compilés, descripteurs : une définition ne change jamais en place, et une capacité
+qu'une liste de l'état désigne (épuisée, par exemple) reste la même. Une copie coûte 1,6 ms. Puis
+`reprise()` relance le moteur depuis l'un de trois points où il ne garde rien en propre : la priorité
+du joueur actif en phase principale, pile vide ; la déclaration des attaquants ; celle des bloqueurs
+du premier défenseur. Elle enchaîne la suite du tour (`suiteDuTour()`) et les tours suivants
+(`suiteDesTours()`), extraites de `tour()` et de `partie()` pour n'être écrites qu'une fois.
+`essaieCoup()` copie, reprend, vérifie que la question reposée est **la même**, répond, et laisse
+jouer jusqu'à un horizon. Deux propriétés sont vérifiées par le banc : une partie copiée puis
+reprise avec les mêmes réponses finit à l'identique ; une partie dont l'IA essaie des coups sur des
+copies finit comme si elle n'en avait essayé aucun — rien ne fuit d'une copie vers la partie.
 
 ## Le modèle Forge
 

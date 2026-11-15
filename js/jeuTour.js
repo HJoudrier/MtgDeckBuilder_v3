@@ -111,8 +111,15 @@ function* tour(P) {
   jn(P, `— Tour ${P.tour} : ${J.nom} —`);
   /* La file des étapes : une phase de plus (js/forgeEffetsH.js, `AddPhase`)
      s'y insère pendant le tour. */
-  P.fileEtapes = ETAPES.slice(); P.combatsTour = 0;
-  for (P.iEtape = 0; P.iEtape < P.fileEtapes.length; P.iEtape++) {
+  P.fileEtapes = ETAPES.slice(); P.combatsTour = 0; P.iEtape = 0;
+  yield* suiteDuTour(P);
+}
+
+/* Les étapes du tour, de celle où l'on est jusqu'à la dernière : le tour
+   les déroule toutes, la reprise d'une copie repart de la sienne
+   (js/jeuCopie.js). */
+function* suiteDuTour(P) {
+  for (; P.iEtape < P.fileEtapes.length; P.iEtape++) {
     if (P.fin || P.finTour) break;
     const e = P.fileEtapes[P.iEtape];
     P.etape = e;

@@ -46,15 +46,27 @@ function* partie(P) {
   P.joueurs.forEach(J => melangeHasard(P.rng, J.bibliotheque));
   yield* mulligans(P);
   yield* effetsOuverture(P);
+  if (!P.fin) { yield* tour(P); yield* suiteDesTours(P); }
+  cloturePartie(P);
+}
+
+/* Les tours qui suivent celui qui s'achève, jusqu'à la fin ou au
+   plafond : la partie les enchaîne, la reprise d'une copie aussi
+   (js/jeuCopie.js). */
+function* suiteDesTours(P) {
   while (!P.fin) {
-    yield* tour(P);
-    if (P.fin) break;
     if (P.tour >= P.plafondTours * P.nb) { P.fin = {nulle: true, raison: 'plafond'}; break; }
     /* Un tour supplémentaire passe devant le suivant (js/forgeEffetsG.js). */
     const enPlus = (P.toursEnPlus || []).shift();
     /* Un tour en plus qu'un remplacement saute n'a pas lieu (js/forgeRemplacementsD.js). */
     P.actif = enPlus != null && !P.joueurs[enPlus].elimine && !tourEnPlusSaute(P, enPlus) ? enPlus : suivantVivant(P, P.actif);
+    yield* tour(P);
   }
+}
+
+/* Ce que la fin d'une partie retient. */
+function cloturePartie(P) {
+  if (!P.fin) return;
   P.fin.tour = P.tour;
   P.fin.tours = P.joueurs.map(J => J.tours);
   jn(P, P.fin.nulle ? `Partie nulle (${P.fin.raison})` : `${P.joueurs[P.fin.gagnant].nom} gagne`);
