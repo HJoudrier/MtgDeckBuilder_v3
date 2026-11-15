@@ -112,6 +112,7 @@
   "forgeModes.js",
   "forgeMotsClesF.js",
   "forgeDesignes.js",
+  "forgeAlias.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3971,6 +3972,7 @@
    "appeleePar": [
     "empreinteAuLieu",
     "etendEffet",
+    "forgeAlias.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeCout.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
@@ -9001,6 +9003,7 @@
     "effetsEntree",
     "entreesAutres",
     "exprEtendue",
+    "forgeAlias.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
@@ -9288,6 +9291,7 @@
     "compteDuTour",
     "compteJoueurs",
     "conditionForge",
+    "forgeAlias.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeDefinis",
@@ -10096,6 +10100,7 @@
    "appeleePar": [
     "creeJetonsForge",
     "executeForge",
+    "forgeAlias.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeCopies.js (chargement)",
@@ -10461,6 +10466,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeAlias.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeMotsClesF.js (chargement)"
    ]
@@ -15686,6 +15692,23 @@
    "appeleePar": [
     "forgeDesignes.js (chargement)"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeAlias.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "forgeSait",
+    "forgeValideObjet",
+    "objetsZone",
+    "retiensForge"
+   ],
+   "appelleDiffere": [
+    "pompeForge"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "primeMots",
