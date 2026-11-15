@@ -123,6 +123,8 @@ js/                 modules, chargés dans cet ordre :
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
+  forgeActivations.js  la mise sous tension (PowerUp), lancer une copie pour un autre coût, le mana venu de créatures, Count$YourTurns
+  forgeChoixMultiples.js  chacun choisit parmi les siens, DigMultiple, des marqueurs pris parmi plusieurs permanents, la cible chez le joueur du déclencheur, la copie non légendaire
   forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
@@ -1185,6 +1187,32 @@ hier sous ce nom, ils se jouent de la même façon. Seul ajout : `RememberAll$` 
 (Patriarch's Bidding, écrit auparavant `PumpAll | RememberPumped$`). La leçon : l'appareil de
 l'utilisateur lit le Forge du jour, le banc doit mesurer la même copie — un renommage chez Forge se
 voit d'abord comme une chute de la mesure (ici 80,6 → 79,8 % des cartes complètes).
+
+**Onze cartes demandées** (lot F51, `js/forgeActivations.js`, `js/forgeChoixMultiples.js`). Chaque
+carte manquait d'un élément :
+- *Human Torch*, la mise sous tension (`PowerUp$`) : une fois par objet, comme Exhaust, et moins chère
+  de son coût de mana le tour où il entre — `capacitesDe()` rend ce tour-là une copie au coût réduit ;
+- *Blue Mage's Cane*, lancer la copie pour {3} (`PlayCost$`) ;
+- *Inga and Esika*, le mana venu de créatures : `paieMana()` retient sur le sort ce que chaque genre de
+  source a donné ;
+- *Spider-Man 2099*, `Count$YourTurns` ;
+- *Consuming Tide*, chacun choisit l'un de ses permanents (`ControlledByPlayer$ Chooser`), et le compte
+  des adversaires mieux pourvus en main ;
+- *Cultivator Colossus*, `Repeat | RepeatDefined$` ;
+- *Explore the Vastlands*, `DigMultiple` ; chez Forge, `Spell` hors de la pile veut dire éphémère ou
+  rituel ;
+- *Sensational Spider-Man*, des marqueurs retirés un à un parmi plusieurs permanents ;
+- *Shuri*, une copie non légendaire d'un modèle ciblé ;
+- *The Wondrous Wasp*, `Duration$ AsLongAsInPlay` ; *Conjurer's Mantle*, `sharesCreatureTypeWith
+  TriggeredAttacker`.
+
+Deux défauts plus anciens corrigés en chemin :
+- **une cible « que contrôle le joueur défenseur »** (`ValidTgts$ Creature.ControlledBy
+  TriggeredDefendingPlayer`) n'était jamais trouvée : le filtre se jugeait sans l'évènement. Elle est
+  réécrite en `TargetsWithDefinedController$`, que le choix des cibles juge avec lui. Trente-quatre
+  scripts l'écrivent ainsi ;
+- **l'IA jugeait amical « exiler une carte ciblée d'un cimetière »**, et ne visait donc jamais le
+  cimetière adverse.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

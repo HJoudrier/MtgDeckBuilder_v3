@@ -79,7 +79,9 @@ const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainT
   UntilTheEndOfYourNextTurn: 'finProchainTour', UntilEndOfCombat: 'tour', UntilEndOfCombatYourNextTurn: 'finProchainTour',
   /* Jusqu'à la fin du tour, ou plus tôt si l'hôte part : lu comme la fin du
      tour ; jusqu'à votre prochaine étape de fin : comme votre prochain tour. */
-  UntilHostLeavesPlayOrEOT: 'tour', UntilYourNextEndStep: 'prochainTour', AsLongAsControl: 'hote', UntilLoseControlOfHost: 'hote'};
+  UntilHostLeavesPlayOrEOT: 'tour', UntilYourNextEndStep: 'prochainTour', AsLongAsControl: 'hote', UntilLoseControlOfHost: 'hote',
+  /* « For as long as this remains on the battlefield » (The Wondrous Wasp). */
+  AsLongAsInPlay: 'hote'};
 
 forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stackable', 'ForgetOnMoved', 'ExileOnMoved', 'ReplacementEffects'], function* (P, t, env) {
   const prep = env.op.effet, src = env.src;

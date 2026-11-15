@@ -242,7 +242,7 @@ FORGE_API.Play.gen = (g => function* (P, t, env) {
     P.cartes[cid].copieSort = true;
     const c = creeObjet(P, cid, j, 'main');
     P.joueurs[j].main.push(c.id);
-    if (!(yield* lanceDepuisEffet(P, j, c, t.WithoutManaCost === 'True'))) { retireDe(P.joueurs[j].main, c.id); P.objets.delete(c.id); }
+    if (!(yield* lanceDepuisEffet(P, j, c, t.WithoutManaCost === 'True', coutDeJeu(t)))) { retireDe(P.joueurs[j].main, c.id); P.objets.delete(c.id); }
   }
 })(FORGE_API.Play.gen);
 

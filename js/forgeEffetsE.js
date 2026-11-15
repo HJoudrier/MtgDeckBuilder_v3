@@ -85,13 +85,13 @@ forgeEffet('RearrangeTopOfLibrary', ['NumCards', 'MayShuffle'], function* () {},
    its mana cost »), ou jouer un terrain si l'on a encore droit à un
    terrain ce tour. Le sort passe par `lanceSort()`, avec une variante
    que porte la carte le temps du lancement (`o.lanceEffet`). */
-function* lanceDepuisEffet(P, j, o, gratuit) {
+function* lanceDepuisEffet(P, j, o, gratuit, mana) {
   if (!o || o.zone === 'champ' || o.zone === 'pile') return false;
   if (estType(o, 'land')) {
     if (P.joueurs[j].terrainsJoues >= terrainsParTour(P, j)) return false;
     return yield* joueTerrain(P, j, {id: o.id, depuis: o.zone});
   }
-  o.lanceEffet = {gratuit};
+  o.lanceEffet = {gratuit, mana};
   if (o._exilApres) o.exilApres = true;
   const ok = yield* lanceSort(P, j, {k: 'lancer', id: o.id, depuis: o.zone, variante: gratuit ? 'gratuit' : 'permis'});
   if (obj(P, o.id)) delete obj(P, o.id).lanceEffet;

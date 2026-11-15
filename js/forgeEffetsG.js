@@ -58,14 +58,19 @@ forgeEffet('RepeatEach', ['RepeatSubAbility', 'RepeatPlayers', 'RepeatCards', 'Z
   {prepare: (t, op) => (!!t.RepeatPlayers || !!t.RepeatCards) && sousEffets(op, [t.RepeatSubAbility])});
 
 /* Recommencer tant que la condition tient (vingt fois au plus). */
-forgeEffet('Repeat', ['RepeatSubAbility', 'RepeatCheckSVar', 'RepeatSVarCompare', 'MaxRepeat', 'RepeatPresent', 'RepeatCompare', 'RepeatOptional'],
+forgeEffet('Repeat', ['RepeatSubAbility', 'RepeatCheckSVar', 'RepeatSVarCompare', 'MaxRepeat', 'RepeatPresent', 'RepeatCompare', 'RepeatOptional', 'RepeatDefined'],
   function* (P, t, env) {
     const max = t.MaxRepeat ? forgeNombre(P, t.MaxRepeat, env) : 20;
     for (let k = 0; k < Math.min(max, 20) && !P.fin; k++) {
       if (t.RepeatOptional === 'True' && k > 0 && (yield* choisitUn(P, env.ctrl, ['Arrêter', 'Recommencer'], 'Recommencer ?', 1, env.ctx.source)) !== 1) return;
       yield* joueSous(P, env, t.RepeatSubAbility);
       const cond = {CheckSVar: t.RepeatCheckSVar, SVarCompare: t.RepeatSVarCompare, IsPresent: t.RepeatPresent, PresentCompare: t.RepeatCompare};
-      if ((t.RepeatCheckSVar || t.RepeatPresent) && !conditionForge(P, cond, env)) return;
+      /* `RepeatDefined$` : recommencer tant que la désignation porte de quoi
+         (Cultivator Colossus : la terre qu'on vient de poser). */
+      if (t.RepeatDefined && t.RepeatPresent) {
+        const n = forgeDefinis(P, t.RepeatDefined, env).filter(x => x && x.j == null && forgeValideObjet(P, x, t.RepeatPresent, env.src, env.ctrl, env)).length;
+        if (!seuilForge(P, n, t.RepeatCompare || 'GE1', env)) return;
+      } else if ((t.RepeatCheckSVar || t.RepeatPresent) && !conditionForge(P, cond, env)) return;
     }
   }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: (t, op) => sousEffets(op, [t.RepeatSubAbility])});
 

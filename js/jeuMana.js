@@ -189,9 +189,15 @@ function paieMana(P, j, cout, x, pour) {
   const plan = planPaiement(P, j, cout, x, pour);
   if (!plan) return false;
   const J = P.joueurs[j];
+  /* Le mana que chaque genre de source a donné au sort, lu avant
+     l'engagement ou le sacrifice (« three or more mana from creatures »). */
+  const de = {creature: 0, artifact: 0, treasure: 0};
   for (const {s, option} of plan) {
     const o = obj(P, s.id);
     if (!o) continue;
+    const n = typeof option === 'string' ? option.length : 1, c = o.zone === 'champ' ? car(P, o) : o.def;
+    ['creature', 'artifact'].forEach(t => { if ((c.types || []).includes(t)) de[t] += n; });
+    if ((c.sousTypes || []).includes('treasure')) de.treasure += n;
     /* Une source de la main s'exile (js/forgeManaB.js). */
     if (s.main) { deplace(P, s.id, 'exil'); ajouteMana(P, j, option); continue; }
     engageObjet(P, o, option || true);
@@ -205,7 +211,7 @@ function paieMana(P, j, cout, x, pour) {
   if (!debite(J.pool, cout, x)) return false;
   J.stats.manaDepense += avant - LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
   /* Le mana dépensé pour un sort, couleur par couleur (convergence). */
-  if (pour && pour.sort) pour.sort.manaSort = Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]]));
+  if (pour && pour.sort) { pour.sort.manaSort = Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]])); pour.sort.manaDe = de; }
   return true;
 }
 

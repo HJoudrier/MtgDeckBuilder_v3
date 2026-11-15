@@ -113,7 +113,7 @@ function conditionEntree(P, cond, no, j) {
    (« enter as a copy of CARDNAME »). */
 FORGE_API.Clone.gen = (g => function* (P, t, env) {
   if (!t.CloneTarget || /^Valid /.test(t.CloneTarget)) return yield* g(P, t, env);
-  const m = forgeDefinis(P, t.Defined || 'Self', env).find(x => x && x.j == null);
+  const m = forgeDefinis(P, t.Defined || (env.op.slot != null ? 'Targeted' : 'Self'), env).find(x => x && x.j == null);
   const c = forgeDefinis(P, t.CloneTarget, env).find(x => x && x.j == null && !x.lki && x.zone === 'champ');
   if (!m || !c || m.id === c.id) return;
   c.def = defCopie(m.def, t); c.copie = true; P.ver++;

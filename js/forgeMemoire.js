@@ -125,7 +125,8 @@ const PARTAGES = {
   },
   Name: (P, c, x) => !!x.def && x.def.nom === c.nom
 };
-const DESIGNES_PARTAGE = ['Targeted', 'Imprinted', 'Remembered', 'RememberedCard', 'RememberedLKI', 'TriggeredCard', 'ChosenCard', 'Sacrificed', 'Enchanted', 'Equipped', 'Self'];
+const DESIGNES_PARTAGE = ['Targeted', 'Imprinted', 'Remembered', 'RememberedCard', 'RememberedLKI', 'TriggeredCard', 'ChosenCard', 'Sacrificed', 'Enchanted', 'Equipped', 'Self',
+  'TriggeredAttacker', 'TriggeredBlocker'];
 function caracsDe(P, x) { return x.lki ? x : x.zone === 'champ' ? car(P, x) : x.def; }
 function typesDe(P, x) { return caracsDe(P, x).types || []; }
 function sousTypesCreature(c) { return (c.sousTypes || []).filter(t => !SOUSTYPES_NON_CREATURE.has(t)); }
