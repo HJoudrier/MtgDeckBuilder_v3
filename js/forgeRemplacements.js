@@ -60,7 +60,8 @@ forgeSait('param', 'Untap.ValidCard', 'Untap.ValidStepTurnToController', 'Untap.
 function remplacementsEnJeu(P) {
   if (P._remV === P.ver) return P._rem;
   const r = [];
-  for (const id of P.champ) { const o = obj(P, id); if (!sansCapacites(o)) (o.def.remplacements || []).forEach(x => r.push({src: o, r: x})); }
+  /* Un remplacement de classe ne vaut qu'à son niveau (js/forgePaliers.js). */
+  for (const id of P.champ) { const o = obj(P, id); if (!sansCapacites(o)) (o.def.remplacements || []).forEach(x => { if (!x.palier || (o.niveau || 1) >= x.palier) r.push({src: o, r: x}); }); }
   (P.effets || []).forEach(e => (e.remplacements || []).forEach(x => r.push({src: e, r: x})));
   P._remV = P.ver; P._rem = r;
   return r;

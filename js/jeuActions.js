@@ -113,6 +113,8 @@ function* lanceSort(P, j, a) {
   let cout = garde ? {...cout0, generique: gen, total: cout0.total + gen - cout0.generique} : cout0;
   /* Strive : plus cher pour chaque cible de plus (js/forgeMotsClesD.js). */
   if (d.strive) cout = coutStrive(P, j, s, d, effets, cout, x);
+  /* Spree, Tiered, Escalate : le coût des modes choisis (js/forgeModes.js). */
+  if (d.coutModes || d.escalade) cout = coutDesModes(P, j, s, d, effets, cout, x);
   if (!payableAvec(P, j, s, cout, x)) return annule();
   if (autre && !coutAutrePossible(P, j, s, autre)) return annule();
   /* La garde payée autrement qu'en mana (js/jeuCoutsX.js). */

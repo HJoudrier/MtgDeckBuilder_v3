@@ -53,9 +53,16 @@ function niveauForge(def, reste, face, jetons) {
   if (!(n >= 2) || !c) return false;
   const garde = t => t.IsPresent ? null : {...t, IsPresent: 'Card.Self+ClassLevelGE' + n};
   for (const part of reste.slice(2).join(':').split('|').map(x => x.trim()).filter(Boolean)) {
-    const m = /^(AddTrigger|AddStaticAbility)\$ (.+)$/.exec(part);
+    const m = /^(AddTrigger|AddStaticAbility|AddReplacementEffect)\$ (.+)$/.exec(part);
     if (!m) return false;
     for (const nom of m[2].split('&').map(x => x.trim())) {
+      /* Un remplacement porte son niveau (js/forgeRemplacements.js `remplacementsEnJeu()`). */
+      if (m[1] === 'AddReplacementEffect') {
+        const r = face.svars[nom] && forgeTable(face.svars[nom]), k = (def.remplacements || []).length;
+        if (!r || r.Event === 'Moved' || !remplacementForge(def, face, r) || (def.remplacements || []).length !== k + 1) return false;
+        def.remplacements[k].palier = n;
+        continue;
+      }
       const t = face.svars[nom] && garde(forgeTable(face.svars[nom]));
       if (!t) return false;
       if (m[1] === 'AddTrigger') { if (!declencheurForge(def, face, t, jetons)) return false; }

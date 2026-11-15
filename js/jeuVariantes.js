@@ -120,13 +120,14 @@ function variantesSort(P, j, o, depuis) {
   const base = coutSort(P, j, o, depuis);
   /* Deux coûts additionnels au choix : l'un des deux est dû, jamais aucun. */
   if (d.coutsAuChoix) d.coutsAuChoix.forEach((c, i) => essaie(i ? 'choixB' : 'choixA', sommeMana(base, c.cout.mana), fusionAutres(d.coutSup, autresCout(c.cout))));
-  else if (depuis !== 'cimetiere' || d.flashback || flashbackAccorde(P, o)) essaie(null, base, d.coutSup || null);
+  else if (depuis !== 'cimetiere' || d.flashback || flashbackAccorde(P, o))
+    essaie(null, base, depuis === 'cimetiere' && d.flashbackAutre && !flashbackAccorde(P, o) ? fusionAutres(d.coutSup, d.flashbackAutre) : d.coutSup || null);
   const k = coutComplet(d.kicker);
   if (k) essaie('kicker', sommeMana(base, k.mana), fusionAutres(d.coutSup, autresCout(k)));
   const b = coutComplet(d.rachat);
   if (b) essaie('rachat', sommeMana(base, b.mana), fusionAutres(d.coutSup, autresCout(b)));
   const e = coutComplet(d.evocation);
-  if (e && depuis === 'main') essaie('evocation', coutSort(P, j, o, depuis, e.mana), d.coutSup || null);
+  if (e && depuis === 'main') essaie('evocation', coutSort(P, j, o, depuis, e.mana), fusionAutres(d.coutSup, autresCout(e)));
   variantesEtendues(P, j, o, depuis, essaie);
   variantesFaces(P, j, o, depuis, essaie);
   return r;

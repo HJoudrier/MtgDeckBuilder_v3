@@ -125,5 +125,7 @@ function iaModes(P, q) {
   if (q.extra && q.extra.prefere != null) return [q.extra.prefere];
   const opts = (q.extra && q.extra.options) || [];
   const score = op => op.ops.reduce((s, o) => s + (opHostile(o) ? 3 : o.op === 'pioche' ? 2 : 1), 0);
-  return opts.map((o, i) => [i, score(o)]).sort((a, b) => b[1] - a[1]).slice(0, q.max).map(x => x[0]);
+  const ordre = opts.map((o, i) => [i, score(o)]).sort((a, b) => b[1] - a[1]).map(x => x[0]);
+  /* Les modes qui coûtent (Spree, Tiered, Escalate) : js/forgeModes.js. */
+  return modesPayables(P, q, ordre) || ordre.slice(0, q.max);
 }

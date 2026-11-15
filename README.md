@@ -119,6 +119,8 @@ js/                 modules, chargés dans cet ordre :
   forgeManaB.js     le mana, II : condition d'activation, depuis la main, incontrecarrable, multikicker, mana gardé, multiplié ou ajouté
   forgeEmpreinte.js l'empreinte, tenue à part de la mémoire : ce qui y entre, en sort, la lit ; le mana de la carte exilée
   forgeMemoire.js   la mémoire, II : nombres retenus, instantanés, partages de type, aura qui réanime, déclencheurs statiques
+  forgeModes.js     les modes qu'on paie (Spree, Tiered, Escalate), le mode retenu des Sièges
+  forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
   forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
@@ -1135,6 +1137,25 @@ nom avec » ; l'aura qui enchante une carte de cimetière puis la créature qu'e
 Dead, Dance of the Dead). Le lot a corrigé quatre défauts plus anciens : une force de copie écrite en
 SVar (Saw in Half), `Attach | Defined$` sans `Object$`, `SacrificeAll | Defined$` qui aurait tout
 sacrifié, la copie à lancer qui ignorait `Valid$` (Isochron Scepter).
+
+**Les modes et les mots-clés, III** (lot F48, `js/forgeModes.js`, `js/forgeMotsClesF.js`) :
+
+| Mécanique | Ce que le moteur en fait | Cartes |
+|---|---|---|
+| Spree, Tiered, Escalate | Le coût des modes choisis s'ajoute après les cibles, comme Strive. Trop cher, les derniers modes sont lâchés tant qu'il en reste assez. L'IA ne prend que les modes qu'elle peut payer. | Return the Favor, Restoration Magic, Collective Resistance |
+| Les Sièges | Le mode choisi en entrant reste sur la carte (`choixDe(P, o).mode`), et `ChosenModeJeskai` le lit. | Windcrag Siege, Frostcliff Siege |
+| Flashback, Evoke autrement qu'en mana | Sacrifier trois créatures, payer 3 points de vie, exiler une carte verte de sa main. | Dread Return, Deep Analysis, Endurance, Solitude |
+| Classes | Un niveau peut accorder un remplacement, qui ne vaut qu'à ce niveau (`remplacementsEnJeu()`). | Innkeeper's Talent, Artist's Talent |
+| Afflict, Dethrone, Ravenous | Des déclencheurs synthétiques. Ravenous lit le X payé pour le permanent. | Neheb, Treasonous Ogre, Jacked Rabbit |
+| Web-slinging, Freerunning, Harmonize | Des façons de lancer. Harmonize sans la réduction par une créature engagée : une façon légale de payer, la plus chère. | Spider-Sense, Overpowering Attack, Nature's Rhythm |
+| Impending | Des marqueurs temps, et pas une créature tant qu'il en reste (`animation()`). | Overlord of the Hauntwoods |
+| Soulbond | La paire tient tant que les deux sont en jeu chez le même contrôleur ; rien à défaire quand l'un part. | Deadeye Navigator, Tandem Lookout |
+| Harness | Un attribut que `harnessed` lit. | The Soul Stone |
+
+Compleated est accepté sans effet : le moteur ne paie jamais le mana phyrexian en vie, la
+planeswalker entre donc toujours avec tous ses marqueurs. Restent refusés : Necromancy (`MayFlashSac`),
+Paradigm, Alchemist's Talent (le mana d'un Trésor), Fighter Class (`MustBlock` d'un attaquant désigné),
+Scourge of the Throne (« for the first time each turn »).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

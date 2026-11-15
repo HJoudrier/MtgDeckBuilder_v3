@@ -86,10 +86,14 @@ function motCleForge(def, k, face, jetons) {
       if (!c || Object.keys(c.cout).some(x => x !== 'mana')) return false;
       def.equipe = c.cout.mana; return true;
     }
+    /* « Flashback—Sacrifice three creatures », « {1}{U}, Pay 3 life » : le
+       reste du coût se paie avec le mana (js/jeuVariantes.js). */
     case 'Flashback': {
-      const c = coutForge(reste[0]);
-      if (!c || Object.keys(c.cout).some(x => x !== 'mana')) return false;
-      def.flashback = c.cout.mana; return true;
+      const c = coutForge(reste[0]), autre = c && autresCout(c.cout);
+      if (!c || (autre && Object.keys(autre).some(k => !/^(sac|vie|defausse)$/.test(k)))) return false;
+      def.flashback = c.cout.mana;
+      if (autre) def.flashbackAutre = autre;
+      return true;
     }
     case 'etbCounter': {
       const g = genreMarqueur(reste[0]), n = reste[1] === 'X' ? 'X' : /^\d+$/.test(reste[1] || '') ? +reste[1] : null;
@@ -110,7 +114,9 @@ function motCleForge(def, k, face, jetons) {
       def[tete === 'Kicker' ? 'kicker' : 'rachat'] = c.cout; return true;
     }
     case 'Evoke': case 'Echo': case 'Foretell': {
-      const c = reste.length === 1 ? manaSeul(reste[0]) : null;
+      /* « Evoke—Exile a green card from your hand » (Endurance). */
+      const ce = tete === 'Evoke' && reste.length === 1 ? coutForge(reste[0]) : null;
+      const c = ce && !Object.keys(ce.cout).some(k => k !== 'mana' && k !== 'defausse') ? ce.cout : reste.length === 1 ? manaSeul(reste[0]) : null;
       if (!c) return false;
       if (tete === 'Evoke') def.evocation = c;
       else if (tete === 'Foretell') def.presage = c.mana;

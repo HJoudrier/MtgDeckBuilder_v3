@@ -128,7 +128,7 @@ function* declareBloqueurs(P) {
   }
   for (const [a, bs] of cb.bloquesPar) {
     cb.bloque.add(a);
-    emet(P, {t: 'estBloque', id: a});
+    emet(P, {t: 'estBloque', id: a, defenseur: P.combat.attaquants.get(a)});
     bs.forEach(b => { emet(P, {t: 'bloque', id: b}); emet(P, {t: 'bloquePar', id: a, bloqueur: b}); });
   }
   for (const a of cb.attaquants.keys()) if (!cb.bloque.has(a)) emet(P, {t: 'nonBloque', id: a});
