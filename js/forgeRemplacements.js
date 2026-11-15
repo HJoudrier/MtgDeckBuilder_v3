@@ -143,7 +143,7 @@ function quantiteRemplacee(P, evenement, n, quoi) {
     const objet = (v, o) => !v || (!!o && (o.j != null ? forgeValideJoueur(P, o.j, v, src.ctrl, env) : forgeValideObjet(P, o, v, src, src.ctrl, env, true)));
     if (evenement === 'AddCounter') {
       const type = t.ValidCounterType || w.ValidCounterType;
-      if ((type && genreMarqueur(type) !== quoi.genre) || !objet(t.ValidCard || t.ValidObject, quoi.o) || !objet(t.ValidSource, quoi.src)) continue;
+      if ((type && genreMarqueur(type) !== quoi.genre) || !objet(t.ValidCard || t.ValidObject, quoi.o) || !sourceDeMarqueurs(P, t.ValidSource, quoi.src, src, env)) continue;
     }
     if (evenement === 'CreateToken' && t.ValidToken && !forgeValideDef(quoi.def, t.ValidToken, src.ctrl, quoi.j)) continue;
     if (evenement === 'GainLife' && t.ValidPlayer && !forgeValideJoueur(P, quoi.j, t.ValidPlayer, src.ctrl, env)) continue;

@@ -96,7 +96,7 @@ forgeEffet('GainLife', ['LifeAmount'], function* (P, t, env) {
 
 forgeEffet('LoseLife', ['LifeAmount'], function* (P, t, env) {
   const n = forgeNombre(P, t.LifeAmount || 0, env);
-  joueursForge(P, t, env).forEach(j => { if (n > 0) { P.joueurs[j].vie -= n; emet(P, {t: 'perteVie', joueur: j, n}); } });
+  joueursForge(P, t, env).forEach(j => { const k = vieReduite(P, j, n, false); if (k > 0) { P.joueurs[j].vie -= k; emet(P, {t: 'perteVie', joueur: j, n: k}); } });
 }, (t, op) => { op.op = 'perdVie'; op.n = nombreIA(t.LifeAmount || 0); op.qui = quiIA(t, op); op.hostile = !(op.qui && op.qui.vous); });
 
 /* Détruire : l'indestructible reste. */

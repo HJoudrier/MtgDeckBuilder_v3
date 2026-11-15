@@ -52,7 +52,8 @@ function* partie(P) {
     if (P.tour >= P.plafondTours * P.nb) { P.fin = {nulle: true, raison: 'plafond'}; break; }
     /* Un tour supplémentaire passe devant le suivant (js/forgeEffetsG.js). */
     const enPlus = (P.toursEnPlus || []).shift();
-    P.actif = enPlus != null && !P.joueurs[enPlus].elimine ? enPlus : suivantVivant(P, P.actif);
+    /* Un tour en plus qu'un remplacement saute n'a pas lieu (js/forgeRemplacementsD.js). */
+    P.actif = enPlus != null && !P.joueurs[enPlus].elimine && !tourEnPlusSaute(P, enPlus) ? enPlus : suivantVivant(P, P.actif);
   }
   P.fin.tour = P.tour;
   P.fin.tours = P.joueurs.map(J => J.tours);

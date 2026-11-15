@@ -105,6 +105,7 @@
   "forgeDefinition.js",
   "forgeDeclencheursC.js",
   "forgeDegagements.js",
+  "forgeRemplacementsD.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3833,6 +3834,7 @@
     "entreeSoiForge",
     "forgeDegagements.js (chargement)",
     "formeRemplacementC",
+    "formeRemplacementD",
     "payeAvantForge",
     "sortPermanentForge",
     "tableJouable"
@@ -3924,14 +3926,17 @@
     "forgeEffetsI.js (chargement)",
     "formeRemplacement",
     "formeRemplacementC",
+    "formeRemplacementD",
     "motCleForge",
     "motCleLancementB",
     "motClePermanent",
+    "nombreRemplace",
     "payeAvantForge",
     "quantiteRemplacee",
     "sousEffets",
     "statiqueForge",
-    "surchargeForge"
+    "surchargeForge",
+    "vieReduite"
    ]
   },
   {
@@ -3987,6 +3992,7 @@
     "forgeRemplacements.js (chargement)",
     "forgeRemplacementsB.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "forgeStatique",
     "forgeStatiques.js (chargement)",
     "forgeStatiquesB.js (chargement)",
@@ -4527,6 +4533,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "forgeTraine.js (chargement)",
     "hotePart",
     "jeuOpsA.js (chargement)",
@@ -4649,6 +4656,7 @@
     "retourneFace",
     "suspend",
     "tour",
+    "tourEnPlusSaute",
     "transforme",
     "vitesseMonte"
    ]
@@ -5734,7 +5742,8 @@
     "retireDeLaPile",
     "sacrifie",
     "sourceCtx",
-    "valeur"
+    "valeur",
+    "vieReduite"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5907,7 +5916,8 @@
     "jn",
     "poseMarqueurs",
     "protectionsDe",
-    "protegeFiltre"
+    "protegeFiltre",
+    "vieReduite"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5918,7 +5928,7 @@
   {
    "nom": "choisitCartes",
    "fichier": "jeuOpsA.js",
-   "ligne": 130,
+   "ligne": 131,
    "chargement": false,
    "appelle": [
     "question"
@@ -5961,7 +5971,7 @@
   {
    "nom": "sacrifie",
    "fichier": "jeuOpsA.js",
-   "ligne": 204,
+   "ligne": 205,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -8488,7 +8498,8 @@
     "melangeHasard",
     "mulligans",
     "suivantVivant",
-    "tour"
+    "tour",
+    "tourEnPlusSaute"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -8941,6 +8952,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
     "forgeRemplacementsC.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "forgeValideDef",
     "fouilleForge",
     "manaPermis",
@@ -8957,6 +8969,7 @@
     "reductionPossible",
     "remplacementDegatsVaut",
     "sourceCiblante",
+    "sourceDeMarqueurs",
     "valideOuRien",
     "viseForge"
    ]
@@ -8982,6 +8995,7 @@
     "forgeDeclencheursB.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "joueurCorrespond",
     "joueurOuRien",
     "joueurStatique",
@@ -8991,7 +9005,10 @@
     "reductionParCibles",
     "reductionPossible",
     "remplacementDegatsVaut",
-    "statiquesJoueur"
+    "remplacementsPour",
+    "sourceDeMarqueurs",
+    "statiquesJoueur",
+    "vieReduite"
    ]
   },
   {
@@ -9025,6 +9042,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeExpression",
+    "forgeRemplacementsD.js (chargement)",
     "incontrecarrable",
     "manaPermis",
     "nomsDesignables",
@@ -9148,10 +9166,12 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
+    "forgeRemplacementsD.js (chargement)",
     "forgeStatiques.js (chargement)",
     "forgeTraine.js (chargement)",
     "fouilleForge",
     "metEnJeu",
+    "nombreRemplace",
     "pompeForge",
     "prepareEffets",
     "propObjet",
@@ -9603,7 +9623,8 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
-    "forgeRemplacementsC.js (chargement)"
+    "forgeRemplacementsC.js (chargement)",
+    "forgeRemplacementsD.js (chargement)"
    ]
   },
   {
@@ -9881,7 +9902,8 @@
     "forgeExpression",
     "forgeRemplacementsB.js (chargement)",
     "marqueurPose",
-    "remplacementDegatsVaut"
+    "remplacementDegatsVaut",
+    "vieReduite"
    ]
   },
   {
@@ -9919,6 +9941,7 @@
     "statiquesJoueur",
     "taxeAttaque",
     "variantesEtendues",
+    "vieReduite",
     "viseForge"
    ]
   },
@@ -9977,6 +10000,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "fouilleForge"
    ]
   },
@@ -10045,6 +10069,7 @@
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "formeRemplacement",
     "fouilleForge"
    ]
@@ -10147,6 +10172,7 @@
     "retireDeLaPile",
     "sacrifie",
     "sourceDegats",
+    "vieReduite",
     "vivants",
     "zoneForge"
    ],
@@ -10242,7 +10268,8 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeMotsClesC.js (chargement)",
-    "forgeMotsClesD.js (chargement)"
+    "forgeMotsClesD.js (chargement)",
+    "forgeRemplacementsD.js (chargement)"
    ]
   },
   {
@@ -11553,6 +11580,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeDegagements.js (chargement)",
+    "forgeRemplacementsD.js (chargement)",
     "formeRemplacement"
    ]
   },
@@ -11682,7 +11710,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "appliqueRemplacementDegats"
+    "appliqueRemplacementDegats",
+    "forgeRemplacementsD.js (chargement)"
    ]
   },
   {
@@ -11695,6 +11724,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliqueRemplacementDegats",
+    "forgeRemplacementsD.js (chargement)",
     "initiativeVolee"
    ]
   },
@@ -13318,10 +13348,13 @@
     "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "etapeSautee",
+    "forgeRemplacementsD.js (chargement)",
     "incontrecarrable",
     "nePeutPerdre",
     "piocheRemplacee",
-    "quantiteRemplacee"
+    "quantiteRemplacee",
+    "remplacementsPour",
+    "vieReduite"
    ]
   },
   {
@@ -13338,10 +13371,14 @@
     "degatsApresPrevention",
     "destinationRemplacee",
     "etapeSautee",
+    "forgeRemplacementsD.js (chargement)",
     "nePeutPerdre",
+    "nombreRemplace",
     "piocheRemplacee",
     "quantiteRemplacee",
-    "remplacementDegatsVaut"
+    "remplacementDegatsVaut",
+    "remplacementsPour",
+    "vieReduite"
    ]
   },
   {
@@ -13359,7 +13396,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "deplace"
+    "deplace",
+    "forgeRemplacementsD.js (chargement)"
    ]
   },
   {
@@ -13440,12 +13478,14 @@
     "forgeValideJoueur",
     "forgeValideObjet",
     "genreMarqueur",
-    "remplacementsEnJeu"
+    "remplacementsEnJeu",
+    "sourceDeMarqueurs"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "creeJetonsForge",
+    "forgeRemplacementsD.js (chargement)",
     "gagneVie",
     "infligeDegats",
     "poseMarqueurs"
@@ -14560,6 +14600,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "formeRemplacementD",
     "motCleForge",
     "motCleLancementB",
     "motClePermanent",
@@ -14704,6 +14745,7 @@
    "appeleePar": [
     "definitionAFaces",
     "definitionForge",
+    "forgeRemplacementsD.js (chargement)",
     "jetonsForge"
    ]
   },
@@ -14859,6 +14901,156 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeDegagements.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "ctxRemplacement",
+    "deplace",
+    "envRemplacement",
+    "forgeNombre",
+    "forgeSait",
+    "forgeValideDef",
+    "forgeValideJoueur",
+    "forgeValideObjet",
+    "formeRemplacementD",
+    "infoRemp",
+    "joueursForge",
+    "nombreRemplace",
+    "quantiteRemplacee",
+    "remplacementsEnJeu",
+    "remplacementsPour",
+    "retiensForge",
+    "suiteRemplacement",
+    "zoneForge"
+   ],
+   "appelleDiffere": [
+    "creeJetonsForge",
+    "definitionDepuisScript",
+    "destinationRemplacee",
+    "formeRemplacementC"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "infoRemp",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 27,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeRemplacementsD.js (chargement)",
+    "formeRemplacementD"
+   ]
+  },
+  {
+   "nom": "formeRemplacementD",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "effetForge",
+    "forgeApi",
+    "forgeSousCapacite",
+    "infoRemp"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeRemplacementsD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "remplacementsPour",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 64,
+   "chargement": false,
+   "appelle": [
+    "envRemplacement",
+    "forgeValideJoueur",
+    "remplacementsEnJeu"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeRemplacementsD.js (chargement)",
+    "tourEnPlusSaute"
+   ]
+  },
+  {
+   "nom": "nombreRemplace",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 68,
+   "chargement": false,
+   "appelle": [
+    "envRemplacement",
+    "forgeNombre",
+    "forgeSousCapacite"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeRemplacementsD.js (chargement)",
+    "vieReduite"
+   ]
+  },
+  {
+   "nom": "sourceDeMarqueurs",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 109,
+   "chargement": false,
+   "appelle": [
+    "forgeValideJoueur",
+    "forgeValideObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "quantiteRemplacee"
+   ]
+  },
+  {
+   "nom": "vieReduite",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 122,
+   "chargement": false,
+   "appelle": [
+    "conditionForge",
+    "envRemplacement",
+    "forgeSousCapacite",
+    "forgeValideJoueur",
+    "nombreRemplace",
+    "remplacementsEnJeu",
+    "seuilForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsB.js (chargement)",
+    "infligeUnePart",
+    "jeuOpsA.js (chargement)"
+   ]
+  },
+  {
+   "nom": "tourEnPlusSaute",
+   "fichier": "forgeRemplacementsD.js",
+   "ligne": 141,
+   "chargement": false,
+   "appelle": [
+    "jn",
+    "remplacementsPour"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "partie"
    ]
   },
   {

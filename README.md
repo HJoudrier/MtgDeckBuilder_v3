@@ -115,6 +115,7 @@ js/                 modules, chargés dans cet ordre :
   forgeRemplacements.js  les remplacements de Forge : exil au lieu du cimetière, dégagement, contre, prévention
   forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
   forgeRemplacementsC.js les dégâts remplacés : prévenir N, détourner, partager ; choisir une source ; l'effet qui s'exile
+  forgeRemplacementsD.js les remplacements, IV : jetons en plus ou à la place, marqueurs selon qui les pose, vie perdue, tour en plus sauté, meule, prolifération, exil avec une suite
   forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
@@ -1077,6 +1078,22 @@ mesure des cartes les plus jouées en Commander (EDHREC) :
 *Défaut trouvé en chemin* : un effet (la zone de commandement) n'a pas de propriétaire, et un filtre
 `YouDontCtrl` le croyait adverse. Channel Harm se renvoyait alors ses propres dégâts sans fin. Les
 chaînes de remplacement s'arrêtent désormais à dix niveaux, par garde-fou.
+
+**Les remplacements, IV** (lot F46, `js/forgeRemplacementsD.js`). Le second lot tiré de la mesure
+EDHREC :
+
+| Remplacement | Ce que le moteur en fait | Cartes |
+|---|---|---|
+| Jetons en plus | Les jetons s'ajoutent à ceux de l'évènement, sans repasser par la quantité (Doubling Season ne double pas deux fois). | Chatterfang, Xorn, Peregrin Took |
+| Jetons à la place | D'autres sortes remplacent celles de l'évènement. Deux Academy Manufactor ne se composent pas — simplification annoncée. | Divine Visitation, Academy Manufactor |
+| Marqueurs selon qui les pose | `ValidSource$ You` juge le contrôleur de la source. | Vorinclex |
+| Vie perdue | Doublée pendant le tour de son contrôleur, ou arrêtée à 1. Payer de la vie n'est pas une perte qu'on remplace. | Bloodletter of Aclazotz, Angel's Grace |
+| Tour en plus sauté | Le tour en plus d'un adversaire n'a pas lieu. | Trouble in Pairs |
+| Meuler et proliférer | Meuler quatre de plus, proliférer deux fois. | The Water Crystal, Tekuthal |
+| Exil au lieu du cimetière | La chaîne qui suit (gagner 2 points de vie, créer un jeton) attend son tour dans `P.suitesRemp`. | The Darkness Crystal, Nemata |
+
+Les définitions des jetons qu'une forme crée viennent de la compilation en cours (`JETONS_COURANTS`,
+`definitionDepuisScript()` enveloppé).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

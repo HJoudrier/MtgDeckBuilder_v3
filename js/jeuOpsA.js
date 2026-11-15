@@ -104,7 +104,8 @@ function infligeUnePart(P, src, cible, n, combat) {
   if (cible.j != null) {
     const J = P.joueurs[cible.j];
     if (J.elimine) return 0;
-    if (mots & MOT.INFECTION) J.poison += n; else J.vie -= n;
+    /* La vie perdue passe par ses remplacements (js/forgeRemplacementsD.js). */
+    if (mots & MOT.INFECTION) J.poison += n; else J.vie -= vieReduite(P, cible.j, n, true);
     if (combat && src.cmd) J.degatsCmd[src.cid] = (J.degatsCmd[src.cid] || 0) + n;
     if (P.joueurs[ctrl]) P.joueurs[ctrl].stats.degats += n;
     emet(P, {t: 'degatsJoueur', source: src.id, joueur: cible.j, n, combat, ctrl});
@@ -151,7 +152,7 @@ OPS.combat = function* (P, op, ctx) {
 OPS.gagneVie = function* (P, op, ctx) { const n = valeur(P, op.n, ctx); joueursDe(P, op.qui, ctx).forEach(j => gagneVie(P, j, n)); };
 OPS.perdVie = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
-  joueursDe(P, op.qui, ctx).forEach(j => { if (n > 0) P.joueurs[j].vie -= n; });
+  joueursDe(P, op.qui, ctx).forEach(j => { if (n > 0) P.joueurs[j].vie -= vieReduite(P, j, n, false); });
 };
 OPS.pioche = function* (P, op, ctx) { const n = valeur(P, op.n, ctx); for (const j of joueursDe(P, op.qui, ctx)) yield* pioche(P, j, n); };
 OPS.meule = function* (P, op, ctx) {

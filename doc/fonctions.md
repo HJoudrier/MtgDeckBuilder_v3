@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1577 fonctions**, 222 modules, 1616 Ko de JavaScript.
+**1584 fonctions**, 223 modules, 1626 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -52,7 +52,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 147 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 225 |
-| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 222 |
+| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 223 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 179 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 96 |
@@ -70,7 +70,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 141 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 5 | 123 |
-| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 61 |
+| [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 2 | 62 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 113 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
@@ -115,6 +115,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
+| [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 130 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
@@ -997,7 +998,7 @@ La réserve de mana, et le paiement automatique. *12 fonctions, 225 lignes, 10 K
 
 ## js/jeuOpsA.js
 
-Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 222 lignes, 10 Ko.*
+Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 223 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1313,7 +1314,7 @@ Les étapes d'un tour. *5 fonctions, 123 lignes, 5.2 Ko.*
 
 ## js/jeuPartie.js
 
-Une partie, du mélange à la fin. *2 fonctions, 61 lignes, 2.3 Ko.*
+Une partie, du mélange à la fin. *2 fonctions, 62 lignes, 2.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1880,7 +1881,7 @@ Les statiques hors du champ. *18 fonctions, 203 lignes, 10 Ko.*
 
 ## js/forgeRemplacements.js
 
-Les remplacements de Forge (`R:`). *9 fonctions, 157 lignes, 9.5 Ko.*
+Les remplacements de Forge (`R:`). *9 fonctions, 157 lignes, 9.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2093,6 +2094,25 @@ Dégager et piocher « jusqu'à ». *2 fonctions, 79 lignes, 4.5 Ko.*
 |---|---|
 | `entreeDegageeParAutre(P, d, ctrl, o)` | Un permanent qui entrerait engagé et qu'un autre fait entrer dégagé : le dégagé l'emporte (js/jeuOpsB.js `metEnJeu()`) — le contrôleur choisit l'ordre des remplacements, simplification… |
 | `manaDeCouleurChoisie(P, cout, pour)` | Le générique payé dans la couleur choisie : des symboles de cette couleur à la place. |
+
+## js/forgeRemplacementsD.js
+
+Les remplacements, IV. *7 fonctions, 188 lignes, 10 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `infoRemp(face, nom, f)` | — |
+| `formeRemplacementD(face, r)` | — |
+| `remplacementsPour(P, forme, j)` | Les remplacements d'une forme qui valent pour ce joueur. |
+| `nombreRemplace(P, x, n)` | Un nombre refait par la chaîne `ReplaceEffect` (`ReplaceCount$…`). |
+| `sourceDeMarqueurs(P, v, s, h, env)` | « If you would put one or more counters » (`ValidSource$ You`) : le contrôleur de la source, pas la source (js/forgeRemplacements.js `quantiteRemplacee()`). |
+| `vieReduite(P, j, n, degats)` | Ce qu'un joueur perd vraiment (js/jeuOpsA.js, js/forgeEffetsB.js) : doublé pendant le tour de Bloodletter of Aclazotz, arrêté à 1 par Angel's Grace (`Result$ LT1`, « LimitMax.Difference »). |
+| `tourEnPlusSaute(P, j)` | « If an opponent would begin an extra turn, that player skips that turn instead » (js/jeuPartie.js). |
+
+| Donnée | Rôle |
+|---|---|
+| `JETONS_COURANTS` | Les jetons de la compilation en cours : une forme de remplacement qui crée un jeton en a besoin, et `formeRemplacement()` ne les reçoit pas. |
+| `INFOS_REMP` | Ce qu'une forme a lu de sa chaîne, par face et par nom. |
 
 ## js/iaValeur.js
 
