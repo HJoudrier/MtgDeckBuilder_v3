@@ -5302,9 +5302,9 @@ digraph appels {
   "candidatsRecherche" -> "blocageParRegles" [color="#6da88c99"];
   "horizonRecherche" -> "etape" [style=dashed, color="#6da88c66"];
   "reponseCherchee" -> "candidatsRecherche" [color="#6da88c99"];
+  "reponseCherchee" -> "essaieCoup" [color="#6da88c99"];
   "reponseCherchee" -> "horizonRecherche" [color="#6da88c99"];
   "reponseCherchee" -> "agentIA" [color="#6da88c99"];
-  "reponseCherchee" -> "essaieCoup" [color="#6da88c99"];
   "reponseCherchee" -> "evalue" [color="#6da88c99"];
   "loadSymbology" -> "renderAll" [color="#a86d8a99"];
   "symBg" -> "pipHTML" [color="#a86d8a99"];

@@ -25,7 +25,7 @@ function couvertureTable(cfg) {
 }
 
 /* Le nom d'un niveau de jeu, avec ce qu'il coûte en temps. */
-const LIBELLES_NIVEAUX = {rapide: 'Rapide', moyen: 'Moyen — essaie ses coups (≈ 3 × plus long)', fort: 'Fort — suit ses coups un tour (≈ 50 × plus long)'};
+const LIBELLES_NIVEAUX = {rapide: 'Rapide', moyen: 'Moyen — essaie ses coups (≈ 3 × plus long)', fort: 'Fort — suit ses coups un tour (≈ 10 à 20 × plus long)'};
 
 function optionsHTML(paires, choisi) {
   return paires.map(([v, l]) => `<option value="${esc(v)}"${v === choisi ? ' selected' : ''}>${esc(l)}</option>`).join('');

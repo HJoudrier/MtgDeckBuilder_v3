@@ -20,7 +20,7 @@
 const IA_V = 3;
 
 /* Les niveaux de jeu qu'un lot peut choisir, du plus rapide au plus fort. */
-const NIVEAUX_IA = ['rapide', 'moyen'];
+const NIVEAUX_IA = ['rapide', 'moyen', 'fort'];
 
 /* Un joueur automatique du niveau dit : le rapide calcule son combat, les
    autres essaient leurs coups sur une copie de la partie

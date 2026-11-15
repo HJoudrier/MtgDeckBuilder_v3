@@ -618,6 +618,15 @@ choisit dans la table de l'onglet Simulation (`S.simulation.niveauIA`). Au banc,
 rapide : 57,6 % à deux joueurs sur 900 parties (intervalle 54,3–60,7), mais à quatre seulement
 27,7 % pour 25 % à égalité, un gain que 560 parties ne distinguent pas du bruit ; environ trois fois
 plus lent.
+Au niveau **fort** (IA5), chaque coup est suivi jusqu'à la fin du prochain tour du joueur qui
+décide, avec deux candidats de plus en phase principale. L'horizon retient ce qu'il a vu (« le tour
+suivant a commencé ») : il est créé neuf pour chaque essai — partagé entre les essais d'une même
+décision, il arrêtait les suivants presque aussitôt, et le niveau fort ne valait pas mieux que le
+moyen. Au banc, contre le niveau moyen : 61 % à deux joueurs sur 240 parties (intervalle 55–67),
+60 % entre Rouge et Vert, 33 % à quatre sur 120 parties pour 25 % à égalité (intervalle 25–42) ;
+contre le niveau rapide, 68 % à deux joueurs (61–74). Noter à mi-chemin et à la fin, à parts égales,
+ne fait pas mieux que noter à la fin seulement. Une partie au niveau fort coûte environ 8 fois une
+partie rapide à deux joueurs, 15 à 20 fois à quatre.
 
 ## Le modèle Forge
 

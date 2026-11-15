@@ -63,10 +63,10 @@ function candidatsRecherche(P, q, base, reglage) {
   return l;
 }
 
-/* Jusqu'où suivre un essai. */
-function horizonRecherche(P, q, reglage) {
+/* Jusqu'où suivre un essai (`loin` : jusqu'au tour suivant). */
+function horizonRecherche(P, q, loin) {
   const tour = P.tour, etape = P.etape, j = q.joueur;
-  if (reglage.loin) {
+  if (loin) {
     /* La fin du prochain tour du joueur qui décide. */
     let vu = false;
     return C => { if (C.tour > tour && C.actif === j) vu = true; return vu && C.actif !== j; };
@@ -80,11 +80,12 @@ function horizonRecherche(P, q, reglage) {
 function reponseCherchee(P, q, base, reglage, graine) {
   const cands = candidatsRecherche(P, q, base, reglage);
   if (cands.length < 2) return undefined;
-  const j = q.joueur, horizon = horizonRecherche(P, q, reglage);
+  const j = q.joueur;
   let best, note = -Infinity;
   for (const r of cands) {
-    const agents = P.joueurs.map((_, k) => agentIA(graine, k));
-    const C = essaieCoup(P, q, r, horizon, agents);
+    /* Un horizon neuf par essai : celui du tour suivant retient ce qu'il a
+       vu, et un horizon partagé arrêtait les essais suivants trop tôt. */
+    const C = essaieCoup(P, q, r, horizonRecherche(P, q, reglage.loin), P.joueurs.map((_, k) => agentIA(graine, k)));
     if (!C) continue;
     const v = evalue(C, j);
     if (v > note + 1e-9) { note = v; best = r; }

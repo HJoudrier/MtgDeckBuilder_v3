@@ -134,7 +134,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`iaCombatCalcul.js`](#jsiacombatcalculjs) | Le combat calculé | 10 | 208 |
 | [`iaMulligan.js`](#jsiamulliganjs) | Garder sa main, ou non, par tirages | 5 | 95 |
 | [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 2 | 51 |
-| [`iaRecherche.js`](#jsiarecherchejs) | Essayer ses coups avant de les jouer | 4 | 94 |
+| [`iaRecherche.js`](#jsiarecherchejs) | Essayer ses coups avant de les jouer | 4 | 95 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`champsJeu.js`](#jschampsjeujs) | Ce que le moteur de jeu demande à une carte | 7 | 91 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 148 |
@@ -2398,13 +2398,13 @@ Un joueur automatique. *2 fonctions, 51 lignes, 2.3 Ko.*
 
 ## js/iaRecherche.js
 
-Essayer ses coups avant de les jouer. *4 fonctions, 94 lignes, 4.5 Ko.*
+Essayer ses coups avant de les jouer. *4 fonctions, 95 lignes, 4.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `agentRecherche(graine, siege, niveau)` | Un joueur automatique qui essaie ses coups : il enveloppe un joueur rapide, à qui il laisse tout ce qu'il ne cherche pas. |
 | `candidatsRecherche(P, q, base, reglage)` | Les coups candidats d'une question : la réponse rapide d'abord, qui l'emporte à note égale. |
-| `horizonRecherche(P, q, reglage)` | Jusqu'où suivre un essai. |
+| `horizonRecherche(P, q, loin)` | Jusqu'où suivre un essai (`loin` : jusqu'au tour suivant). |
 | `reponseCherchee(P, q, base, reglage, graine)` | La réponse cherchée, ou `undefined` s'il n'y a rien à chercher (un seul candidat, ou aucun essai n'a abouti). |
 
 | Donnée | Rôle |
