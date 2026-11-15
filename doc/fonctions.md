@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1573 fonctions**, 220 modules, 1606 Ko de JavaScript.
+**1575 fonctions**, 221 modules, 1611 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -81,7 +81,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 291 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 293 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 208 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 158 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 194 |
@@ -113,6 +113,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 284 |
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
 | [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
+| [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 128 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
@@ -1482,7 +1483,7 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, la. *13 fonctions, 291 lignes, 17 Ko.*
+Exécuter une capacité de Forge : le registre, la. *13 fonctions, 293 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2069,6 +2070,19 @@ D'un script de Forge à une définition de jeu. *13 fonctions, 301 lignes, 17 Ko
 | `CHAINES_FORGE` | L'effet d'une table et de sa chaîne : `{ops, cibles, modes}`, ou `null` si une table n'est pas jouable. |
 | `FORGE_UID` | — |
 | `FORGE_FACES` | Les modes de cartes à deux faces que le moteur sait jouer : la face arrière d'une carte modale, partagée ou à aventure se lance ; celle d'une carte transformable n'est jouée que si un… |
+
+## js/forgeDeclencheursC.js
+
+Les déclencheurs qui butaient encore. *2 fonctions, 87 lignes, 4.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `saLisible(v)` | Un `ValidSA$` de sort lancé qu'on sait lire. |
+| `saValide(P, v, e, s)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `JOUEUR_COCHE` | Les joueurs que `CheckDefinedPlayer$ You.isMonarch` sait juger. |
 
 ## js/iaValeur.js
 

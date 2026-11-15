@@ -60,8 +60,10 @@ function conditionForge(P, t, env) {
     if (!seuilForge(P, n, t.ConditionCompare, env)) return false;
   }
   if (t.IsPresent) {
-    const zone = ZONES_FORGE[t.PresentZone] || 'champ';
-    const n = objetsZone(P, zone).filter(o => forgeValideObjet(P, o, t.IsPresent, env.src, env.ctrl, env)).length;
+    /* Compté sur des objets désignés (`PresentDefined$`), ou chez un joueur (`PresentPlayer$`). */
+    const zone = ZONES_FORGE[t.PresentZone] || 'champ', qui = t.PresentPlayer ? forgeDefinis(P, t.PresentPlayer, env).map(x => joueurDe(x)) : null;
+    const n = (t.PresentDefined ? forgeDefinis(P, t.PresentDefined, env).filter(x => x && x.j == null) : objetsZone(P, zone))
+      .filter(o => (!qui || qui.includes(zone === 'champ' ? o.ctrl : o.prop)) && forgeValideObjet(P, o, t.IsPresent, env.src, env.ctrl, env)).length;
     if (!seuilForge(P, n, t.PresentCompare, env)) return false;
   }
   return true;

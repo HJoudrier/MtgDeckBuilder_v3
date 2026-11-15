@@ -98,6 +98,7 @@ js/                 modules, chargés dans cet ordre :
   forgeTraine.js    la traîne : exaltation, terreur, bushido, tempête, cascade, brouillard, comploter, explorer
   forgeDeclencheurs.js  quand un déclencheur de Forge se déclenche
   forgeDeclencheursB.js  la suite : engager, cibler, marqueurs, attaque déclarée, crime, déclencheurs d'état
+  forgeDeclencheursC.js les déclencheurs qui butaient : revolt, delirium, monarque, contrôleur désigné, une seule fois, seconde phase principale, sort lancé par permission
   forgeExprB.js     les expressions de Forge, suite : mémoire, cibles, évènement, comptes du tour
   forgeEffetsE.js   la bibliothèque et ce qu'on révèle ; lancer une carte depuis un effet ; découvrir
   forgeEffetsF.js   les paramètres de plus des effets courants, par enveloppe (`etendEffet()`)
@@ -1021,6 +1022,46 @@ lancement, ou un ajout au lancement :
 
 *Défaut trouvé en chemin* : `TriggeredPlayer` ne désignait personne pour un déclencheur d'étape
 (« at the beginning of each player's upkeep, … that player ») ; c'est le joueur actif.
+
+**Les déclencheurs qui butaient, et un bilan** (lot F40, `js/forgeDeclencheursC.js`).
+
+Les paramètres de déclencheurs que le moteur refusait encore :
+- les conditions Revolt, Delirium et « if you're the monarch » ou « if you have the initiative »
+  (`CheckDefinedPlayer`), jugées par `conditionForge()` ;
+- une présence comptée sur des objets désignés (`PresentDefined`) ou chez un joueur (`PresentPlayer`) ;
+- le joueur qui contrôle le déclencheur (`TriggerController`) ;
+- un déclencheur d'effet qui ne sert qu'une fois (`OneOff`) : l'effet finit quand il se déclenche ;
+- « your second main phase » (`PhaseCount$ 2`) ;
+- le sort lancé grâce à cette source, ou avec tant de mana dépensé (`ValidSA`).
+
+Une valeur qu'on ne sait pas lire fait refuser le déclencheur à la construction (`declencheurForge()`
+enveloppé). `ResolvedLimit` (« only once each turn », compté à la résolution) est compté au
+déclenchement — simplification annoncée.
+
+*Le bilan des lots F31 à F40.* La part des 34 234 cartes de Forge entièrement comprises passe de
+73,4 % à 79,2 %. Hors des formats à part, elle est de 81,7 %. Sont exclus de ce second chiffre :
+- les types Plane, Phenomenon, Scheme, Vanguard, Conspiracy et Dungeon ;
+- les cartes `A-` d'Alchemy ;
+- les mécaniques d'Alchemy et des Un- (perpetual, seek, spellbook, empower, conjure, stickers,
+  attractions, contraptions).
+
+Des 7 115 cartes restantes, 3 992 ne manquent que d'un élément. Les plus gros manques qui restent :
+- des statiques continues, des déclencheurs de zone, des capacités de mana et des cartes à deux faces
+  que Forge écrit d'une forme encore inconnue ;
+- les stickers et le chaos de Planechase (formats à part) ;
+- power-up ;
+- bloquer plusieurs créatures (`CanBlockAmount`).
+
+Une partie entre deux decks ordinaires prend 23,5 ms, et le match de référence reste à 106–94. Le banc
+aléatoire joue 1 200 parties, à deux et à quatre joueurs, sur des cartes de Forge tirées au hasard,
+sans erreur ni invariant rompu.
+
+*Les défauts anciens trouvés en chemin* :
+- les coûts hybrides (`GW`, `2W`) se lisaient vides (F39) ;
+- « When you cast this spell » ne se déclenchait jamais (F39) ;
+- `TriggeredPlayer` ne désignait personne pour un déclencheur d'étape (F35) ;
+- un permanent hors phase déplacé restait dans la liste du phasing (F37) ;
+- le `;` des coûts de Forge n'était pas lu comme une alternative (F38).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

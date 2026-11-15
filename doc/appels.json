@@ -103,6 +103,7 @@
   "forgeEffetsI.js",
   "forgeAuras.js",
   "forgeDefinition.js",
+  "forgeDeclencheursC.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3956,6 +3957,7 @@
     "forgeCout.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeDeclencheursC.js (chargement)",
     "forgeDefini.js (chargement)",
     "forgeDefinition.js (chargement)",
     "forgeDescripteurs.js (chargement)",
@@ -4307,6 +4309,7 @@
     "forgeAuras.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeDeclencheursC.js (chargement)",
     "forgeDefinis",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
@@ -4388,6 +4391,7 @@
     "restreintCibles",
     "restreintValeurTotale",
     "retourne",
+    "saValide",
     "sacrifie",
     "sagasFinies",
     "scoreEffet",
@@ -4945,6 +4949,7 @@
     "conditionEntree",
     "exprDesignations",
     "exprEtendue",
+    "forgeDeclencheursC.js (chargement)",
     "noteHistorique",
     "noteResolution",
     "variantesEtendues"
@@ -6163,6 +6168,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDeclencheursC.js (chargement)",
     "nettoyage",
     "stabilise"
    ]
@@ -7899,6 +7905,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "cartesPermises",
+    "forgeDeclencheursC.js (chargement)",
     "permisUtilise",
     "variantesSort"
    ]
@@ -7964,6 +7971,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDeclencheursC.js (chargement)",
     "joueTerrain",
     "lanceSort"
    ]
@@ -8803,6 +8811,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "propObjet",
+    "saValide",
     "seuilForge"
    ]
   },
@@ -9474,8 +9483,10 @@
    "appelleParHtml": [],
    "appeleePar": [
     "candidatsDuControleur",
+    "conditionForge",
     "executeForge",
     "forgeCopies.js (chargement)",
+    "forgeDeclencheursC.js (chargement)",
     "forgeDefinis",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
@@ -9537,6 +9548,7 @@
     "exprEtendue",
     "forgeAuras.js (chargement)",
     "forgeCopies.js (chargement)",
+    "forgeDeclencheursC.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -9867,6 +9879,7 @@
     "forgeDefinis",
     "forgeNombre",
     "forgeValideObjet",
+    "joueurDe",
     "objetsZone",
     "seuilForge"
    ],
@@ -9881,6 +9894,7 @@
     "degageAussi",
     "executeForge",
     "forgeDeclenche",
+    "forgeDeclencheursC.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeStatiques.js (chargement)",
     "metEnJeu",
@@ -9897,7 +9911,7 @@
   {
    "nom": "paieUnlessForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 73,
+   "ligne": 75,
    "chargement": false,
    "appelle": [
     "autresCout",
@@ -9919,7 +9933,7 @@
   {
    "nom": "memoireForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 91,
+   "ligne": 93,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9931,7 +9945,7 @@
   {
    "nom": "retiensForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 98,
+   "ligne": 100,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9954,7 +9968,7 @@
   {
    "nom": "executeForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 105,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
     "autresCout",
@@ -9987,7 +10001,7 @@
   {
    "nom": "cibleOuDefinis",
    "fichier": "forgeEffetsA.js",
-   "ligne": 161,
+   "ligne": 163,
    "chargement": false,
    "appelle": [
     "avecDefinisEnPlus",
@@ -10006,7 +10020,7 @@
   {
    "nom": "zoneForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 168,
+   "ligne": 170,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10023,7 +10037,7 @@
   {
    "nom": "deplaceForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 176,
+   "ligne": 178,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -10041,7 +10055,7 @@
   {
    "nom": "dansOrigine",
    "fichier": "forgeEffetsA.js",
-   "ligne": 189,
+   "ligne": 191,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10053,7 +10067,7 @@
   {
    "nom": "nombreIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 282,
+   "ligne": 284,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10068,7 +10082,7 @@
   {
    "nom": "quiIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 285,
+   "ligne": 287,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11636,6 +11650,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliqueRemplacementDegats",
+    "forgeDeclencheursC.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "useBouclier"
    ]
@@ -11932,6 +11947,7 @@
     "attaquantsDeclares",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeDeclencheursC.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRemplacementsB.js (chargement)"
@@ -14588,6 +14604,7 @@
     "accordeAnimation",
     "declencheurSynthetique",
     "definitionDepuisScript",
+    "forgeDeclencheursC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "niveauForge",
     "statiqueForge",
@@ -14710,6 +14727,59 @@
    "appelleParHtml": [],
    "appeleePar": [
     "definitionDepuisScript"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeDeclencheursC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "finEffet",
+    "forgeDefinis",
+    "forgeSait",
+    "histoire",
+    "joueurDe",
+    "joueurOuRien",
+    "obj",
+    "permisDeJouer",
+    "saLisible",
+    "saValide"
+   ],
+   "appelleDiffere": [
+    "collecteDeclencheurs",
+    "conditionForge",
+    "declencheurForge",
+    "permisUtilise"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "saLisible",
+   "fichier": "forgeDeclencheursC.js",
+   "ligne": 21,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDeclencheursC.js (chargement)"
+   ]
+  },
+  {
+   "nom": "saValide",
+   "fichier": "forgeDeclencheursC.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [
+    "compareForge",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDeclencheursC.js (chargement)"
    ]
   },
   {
