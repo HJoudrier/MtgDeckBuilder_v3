@@ -62,10 +62,12 @@ forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestinat
     /* Remises au dessus le temps de les déplacer : `deplaceForge()` part de
        la bibliothèque comme d'une autre zone. */
     [...reveles, ...trouves].forEach(id => B.push(id));
-    const fd = zoneForge(t.FoundDestination) || 'main', rd = zoneForge(t.RevealedDestination) || 'cimetiere';
+    /* Sans `FoundDestination$`, la carte trouvée suit les révélées, et se
+       retient avec elles (Treasure Hunt, Balustrade Spy, Sanar). */
+    const rd = zoneForge(t.RevealedDestination) || 'cimetiere', fd = zoneForge(t.FoundDestination) || rd;
     for (const id of trouves) {
       const n = fd === 'bibliotheque' ? id : yield* deplaceForge(P, obj(P, id), fd, env, {});
-      if (n != null && t.RememberFound === 'True') retiensForge(env.ctx, n);
+      if (n != null && (t.RememberFound === 'True' || (t.RememberRevealed === 'True' && !t.FoundDestination))) retiensForge(env.ctx, n);
     }
     for (const id of reveles) {
       if (rd === 'bibliotheque') { retireDe(B, id); if (t.RevealedLibraryPosition === '-1') B.unshift(id); else B.push(id); }
@@ -102,6 +104,8 @@ forgeEffet('Play', ['Valid', 'ValidZone', 'ValidSA', 'Amount', 'Controller', 'Wi
   let l = t.Valid ? [].concat(...String(t.ValidZone || 'Hand').split(',').map(z => objetsZone(P, ZONES_FORGE[z.trim()] || 'main')))
     .filter(o => forgeValideObjet(P, o, t.Valid, env.src, env.ctrl, env)) : objetsForge(P, t, env, 'Targeted');
   if (t.ValidSA && /^Spell\./.test(t.ValidSA)) l = l.filter(o => forgeValideDef(o.def, 'Card.' + t.ValidSA.slice(6), env.ctrl, j, o.id));
+  /* « You may cast that card » : un sort, jamais un terrain (Chandra, Torch of Defiance). */
+  if (t.ValidSA && /^Spell\b/.test(t.ValidSA)) l = l.filter(o => !estType(o, 'land'));
   const n = t.Amount === 'All' ? l.length : forgeNombre(P, t.Amount || 1, env);
   const ids = l.length > n ? yield* choisitCartes(P, j, l.map(o => o.id), n, 'Jouer', 'cartes', 0) : l.map(o => o.id);
   for (const id of ids) {

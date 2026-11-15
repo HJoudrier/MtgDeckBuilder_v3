@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1604 fonctions**, 228 modules, 1672 Ko de JavaScript.
+**1605 fonctions**, 229 modules, 1677 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -85,7 +85,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 211 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 158 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 194 |
-| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 133 |
+| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 137 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 164 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 105 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
@@ -121,6 +121,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMemoire.js`](#jsforgememoirejs) | La mémoire, II | 4 | 198 |
 | [`forgeModes.js`](#jsforgemodesjs) | Les modes qu'on paie, le mode qu'on retient | 3 | 87 |
 | [`forgeMotsClesF.js`](#jsforgemotsclesfjs) | Les mots-clés, III | 2 | 147 |
+| [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 132 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
@@ -1558,7 +1559,7 @@ Les effets de Forge qui durent : régénération,. *6 fonctions, 194 lignes, 12 
 
 ## js/forgeEffetsE.js
 
-Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 133 lignes, 8.3 Ko.*
+Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 137 lignes, 8.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2183,6 +2184,18 @@ Les mots-clés, III. *2 fonctions, 147 lignes, 8.9 Ko.*
 |---|---|
 | `defenseurLePlusRiche(P, e)` | « Attacks the player with the most life or tied for most life ». |
 | `paireDe(P, o)` | Le partenaire d'une créature : tant que les deux sont en jeu, chez le même contrôleur, l'une désignant l'autre. |
+
+## js/forgeDesignes.js
+
+Désigner, filtrer, choisir parmi. *1 fonctions, 74 lignes, 4.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `parmiDesignes(P, o, v, src, ctrl, env)` | L'objet est-il parmi ceux que la désignation nomme ? |
+
+| Donnée | Rôle |
+|---|---|
+| `DESIGNES_FILTRABLES` | Les désignations qu'un filtre ou une désignation pointée peut nommer. |
 
 ## js/iaValeur.js
 

@@ -111,6 +111,7 @@
   "forgeMemoire.js",
   "forgeModes.js",
   "forgeMotsClesF.js",
+  "forgeDesignes.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3980,6 +3981,7 @@
     "forgeDegagements.js (chargement)",
     "forgeDescripteurs.js (chargement)",
     "forgeDesignations.js (chargement)",
+    "forgeDesignes.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffet",
     "forgeEffetsA.js (chargement)",
@@ -4336,6 +4338,7 @@
     "forgeDeclencheursC.js (chargement)",
     "forgeDefinis",
     "forgeDegagements.js (chargement)",
+    "forgeDesignes.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -4458,6 +4461,7 @@
     "forgeMemoire.js (chargement)",
     "objetEvt",
     "oublieObjets",
+    "parmiDesignes",
     "passeOuPresent",
     "propObjet",
     "resous",
@@ -5984,6 +5988,7 @@
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeDegagements.js (chargement)",
+    "forgeDesignes.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
@@ -9001,6 +9006,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeDefinis",
     "forgeDegagements.js (chargement)",
+    "forgeDesignes.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -9222,6 +9228,7 @@
     "forgeChoix.js (chargement)",
     "forgeCopies.js (chargement)",
     "forgeDegagements.js (chargement)",
+    "forgeDesignes.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -9467,6 +9474,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)",
@@ -9658,6 +9666,7 @@
     "forgeAuras.js (chargement)",
     "forgeCopies.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
+    "forgeDesignes.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -9674,6 +9683,7 @@
     "joueursForge",
     "objetsForge",
     "paieUnlessForge",
+    "parmiDesignes",
     "propObjet",
     "sourceDegats",
     "viseForge"
@@ -9762,6 +9772,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeDefinis",
+    "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeMemoire.js (chargement)"
    ]
@@ -9824,6 +9835,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeModes.js (chargement)",
@@ -10197,6 +10209,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDesignes.js (chargement)",
     "forgeEffetsA.js (chargement)"
    ]
   },
@@ -10655,7 +10668,7 @@
   {
    "nom": "lanceDepuisEffet",
    "fichier": "forgeEffetsE.js",
-   "ligne": 86,
+   "ligne": 88,
    "chargement": false,
    "appelle": [
     "estType",
@@ -15634,6 +15647,44 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeMotsClesF.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeDesignes.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "choisitCartes",
+    "dansOrigine",
+    "forgeDefinis",
+    "forgeNombre",
+    "forgeSait",
+    "forgeValideObjet",
+    "obj",
+    "parmiDesignes"
+   ],
+   "appelleDiffere": [
+    "definisEtendus",
+    "exprEtendue",
+    "proprieteDesignee"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "parmiDesignes",
+   "fichier": "forgeDesignes.js",
+   "ligne": 22,
+   "chargement": false,
+   "appelle": [
+    "forgeDefinis",
+    "suit"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDesignes.js (chargement)"
    ]
   },
   {

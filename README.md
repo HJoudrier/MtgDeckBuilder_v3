@@ -121,6 +121,7 @@ js/                 modules, chargés dans cet ordre :
   forgeMemoire.js   la mémoire, II : nombres retenus, instantanés, partages de type, aura qui réanime, déclencheurs statiques
   forgeModes.js     les modes qu'on paie (Spree, Tiered, Escalate), le mode retenu des Sièges
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
+  forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
@@ -1156,6 +1157,22 @@ Compleated est accepté sans effet : le moteur ne paie jamais le mana phyrexian 
 planeswalker entre donc toujours avec tous ses marqueurs. Restent refusés : Necromancy (`MayFlashSac`),
 Paradigm, Alchemist's Talent (le mana d'un Trésor), Fighter Class (`MustBlock` d'un attaquant désigné),
 Scourge of the Throne (« for the first time each turn »).
+
+**Sept cartes demandées** (lot F49, `js/forgeDesignes.js`).
+- *Chandra's Ignition*, « each other creature » : `NotDefinedTargeted`, un filtre qui écarte ce qu'une
+  désignation nomme.
+- *Sanar, Innovative First-Year* : choisir parmi des objets désignés et filtrés
+  (`ChooseFromDefined$ Remembered.White`).
+- *Eshki, Temur's Roar* : la force du sort qui déclenche.
+- *Chandra, Torch of Defiance* : `ShowCardToActivator$`, un simple affichage, accepté sans effet.
+- *Smuggler's Surprise*, *Stump Stomp*, *Collective Resistance* étaient déjà comprises ; des tests en
+  partie le confirment.
+
+Deux défauts plus anciens corrigés :
+- sans `FoundDestination$`, `DigUntil` envoyait en main la carte trouvée ; chez Forge, elle suit les
+  cartes révélées (Balustrade Spy met tout au cimetière, terrain compris) ;
+- « you may cast that card » (`Play | ValidSA$ Spell`) laissait jouer un terrain : Chandra jouait le
+  terrain exilé au lieu d'infliger ses 2 blessures.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
