@@ -79,7 +79,7 @@ function* resoudre(P, item) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
     const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance;
-    const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu, escaped: item.variante === 'escape',
+    const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu, escaped: item.variante === 'escape', variante: item.variante,
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
     if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
     if (n != null && item.variante === 'dash') apresDash(P, obj(P, n));

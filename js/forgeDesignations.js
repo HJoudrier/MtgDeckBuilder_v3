@@ -75,6 +75,9 @@ function exprDesignations(P, tete, q, env) {
     /* Les sorts de commandant lancés depuis la zone de commandement : la
        taxe en compte un par lancer. */
     if (q === 'YourSpeed') return P.joueurs[j].vitesse || 0;
+    /* Multikicker et la réserve de mana (js/forgeManaB.js). */
+    if (q === 'TimesKicked') return foisKicke(env);
+    if (q === 'ManaPool:All' || q === 'ManaPool') return LETTRES_MANA.reduce((s, l) => s + P.joueurs[j].pool[l], 0);
     if ((k = /^Bargained\./.exec(q))) return siAlors(P, q, (env.ctx || {}).variante === 'bargain' || !!(src && (src.marchande || src.varianteLance === 'bargain')), env);
     if ((k = /^PromisedGift\./.exec(q))) return siAlors(P, q, (env.ctx || {}).promis != null || !!(src && src.cadeauPromis), env);
     if (q === 'TotalCommanderCastFromCommandZone') return Object.values(P.joueurs[j].taxe || {}).reduce((s, n) => s + n, 0);

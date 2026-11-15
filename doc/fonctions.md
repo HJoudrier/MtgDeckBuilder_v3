@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1584 fonctions**, 223 modules, 1626 Ko de JavaScript.
+**1588 fonctions**, 224 modules, 1636 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -51,9 +51,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 69 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 147 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 225 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 229 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 223 |
-| [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 179 |
+| [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 181 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 96 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 11 | 233 |
@@ -79,7 +79,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
-| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
+| [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 118 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 293 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 208 |
@@ -116,6 +116,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
+| [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 169 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 130 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
@@ -975,7 +976,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.8 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *12 fonctions, 225 lignes, 10 Ko.*
+La réserve de mana, et le paiement automatique. *12 fonctions, 229 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1019,7 +1020,7 @@ Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 223 lig
 
 ## js/jeuOpsB.js
 
-Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 179 lignes, 9.1 Ko.*
+Exécuter les opérations : jetons, marqueurs, pompes,. *3 fonctions, 181 lignes, 9.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1263,7 +1264,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 141 lignes, 7 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 141 lignes, 7.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1458,7 +1459,7 @@ Ce que `Defined$` désigne. *6 fonctions, 150 lignes, 9.7 Ko.*
 
 ## js/forgeDesignations.js
 
-Ce que Forge désigne encore : des joueurs. *5 fonctions, 115 lignes, 7.2 Ko.*
+Ce que Forge désigne encore : des joueurs. *5 fonctions, 118 lignes, 7.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2113,6 +2114,22 @@ Les remplacements, IV. *7 fonctions, 188 lignes, 10 Ko.*
 |---|---|
 | `JETONS_COURANTS` | Les jetons de la compilation en cours : une forme de remplacement qui crée un jeton en a besoin, et `formeRemplacement()` ne les reçoit pas. |
 | `INFOS_REMP` | Ce qu'une forme a lu de sa chaîne, par face et par nom. |
+
+## js/forgeManaB.js
+
+Le mana, II. *4 fonctions, 169 lignes, 9.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `manaDeLaMain(def, face, t)` | « Exile CARDNAME from your hand: Add {R} ». |
+| `foisKicke(env)` | — |
+| `manaGarde(P, J)` | Ce qu'un joueur garde quand les réserves se vident : la couleur que dit `UnspentMana`, ou tout son mana devenu rouge (`LoseMana`, Ozai). |
+| `produitCouleur(P, v, mana, s)` | `Produced$` : ce qu'on vient de produire contient-il cette couleur ? |
+
+| Donnée | Rôle |
+|---|---|
+| `MANA_B` | Ces règles touchent des gestes très fréquents (engager, vider les réserves) : on ne les cherche que si une carte qui les porte a été compilée. |
+| `LETTRE_TYPE` | — |
 
 ## js/iaValeur.js
 

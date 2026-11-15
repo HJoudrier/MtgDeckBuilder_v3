@@ -116,6 +116,7 @@ js/                 modules, chargés dans cet ordre :
   forgeRemplacementsB.js  la suite : ne pas perdre, sauter une étape, flashback accordé, déclencheurs de scry, dé, monstruosité
   forgeRemplacementsC.js les dégâts remplacés : prévenir N, détourner, partager ; choisir une source ; l'effet qui s'exile
   forgeRemplacementsD.js les remplacements, IV : jetons en plus ou à la place, marqueurs selon qui les pose, vie perdue, tour en plus sauté, meule, prolifération, exil avec une suite
+  forgeManaB.js     le mana, II : condition d'activation, depuis la main, incontrecarrable, multikicker, mana gardé, multiplié ou ajouté
   forgePaliers.js   les paliers : Station, niveaux de classe, portes des Rooms, vitesse
   forgeMotsClesB.js les mots-clés des permanents, suite : déclencheurs synthétiques et règles du combat
   forgeMotsClesC.js les mots-clés de lancement, suite : entwine, replicate, casualty, squad, offspring, blitz, warp, embalm, encore, transmute, ninjutsu, plot
@@ -1094,6 +1095,23 @@ EDHREC :
 
 Les définitions des jetons qu'une forme crée viennent de la compilation en cours (`JETONS_COURANTS`,
 `definitionDepuisScript()` enveloppé).
+
+**Le mana, II** (lot F42, `js/forgeManaB.js`) :
+- *Une capacité de mana sous condition* (Mox Opal) : metalcraft, threshold, hellbent, jugés par `FORGE_CONDITIONS`.
+- *Depuis la main* (Simian et Elvish Spirit Guide) : la source la plus chère, prise en dernier par le
+  planificateur. Payer l'exile.
+- *Le mana qui rend un sort incontrecarrable* (Delighted Halfling) : `paieMana()` marque le sort payé
+  avec lui.
+- *Le mana reflété* d'un montant calculé (Incubation Druid).
+- *Multikicker* (Everflowing Chalice, Comet Storm) : une variante par nombre de kicks. La variante
+  suit le permanent dès son entrée, pour « for each time it was kicked » (`Count$TimesKicked`).
+- *Le mana qu'on ne perd pas* : le rouge reste avec Electro, tout devient rouge avec Ozai.
+- *Le mana multiplié* (Nyxbloom Ancient, Mana Reflection) : il s'ajoute à l'engagement.
+- *Le mana en plus selon la couleur produite* (Forsaken Monument, Caged Sun).
+
+Ces règles touchent des gestes très fréquents (planifier un paiement, engager, vider les réserves).
+On ne les cherche que si une carte qui les porte a été compilée (`MANA_B`) : sans ce garde, une
+partie ordinaire coûtait 10 % de plus.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

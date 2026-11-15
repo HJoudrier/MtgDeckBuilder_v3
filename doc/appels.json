@@ -106,6 +106,7 @@
   "forgeDeclencheursC.js",
   "forgeDegagements.js",
   "forgeRemplacementsD.js",
+  "forgeManaB.js",
   "iaValeur.js",
   "iaChoix.js",
   "iaPriorite.js",
@@ -3833,6 +3834,7 @@
     "emplacementForge",
     "entreeSoiForge",
     "forgeDegagements.js (chargement)",
+    "forgeManaB.js (chargement)",
     "formeRemplacementC",
     "formeRemplacementD",
     "payeAvantForge",
@@ -3924,6 +3926,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "formeRemplacement",
     "formeRemplacementC",
     "formeRemplacementD",
@@ -3982,6 +3985,7 @@
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
     "forgeInterdits.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgeMode",
     "forgeMotsCles.js (chargement)",
     "forgeMotsClesB.js (chargement)",
@@ -4331,6 +4335,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
@@ -4878,6 +4883,7 @@
    "appeleePar": [
     "declareAttaquants",
     "forgeEffetsC.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "jeuOpsB.js (chargement)",
     "paieAutre",
@@ -5545,6 +5551,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeManaB.js (chargement)",
     "manaDispo",
     "planPaiement",
     "scoreTerrain"
@@ -5553,7 +5560,7 @@
   {
    "nom": "couleursParmi",
    "fichier": "jeuMana.js",
-   "ligne": 86,
+   "ligne": 87,
    "chargement": false,
    "appelle": [
     "car",
@@ -5569,7 +5576,7 @@
   {
    "nom": "compteObjets",
    "fichier": "jeuMana.js",
-   "ligne": 94,
+   "ligne": 95,
    "chargement": false,
    "appelle": [
     "correspond",
@@ -5586,7 +5593,7 @@
   {
    "nom": "planPaiement",
    "fichier": "jeuMana.js",
-   "ligne": 103,
+   "ligne": 104,
    "chargement": false,
    "appelle": [
     "sourcesMana"
@@ -5616,7 +5623,7 @@
   {
    "nom": "manaDispo",
    "fichier": "jeuMana.js",
-   "ligne": 159,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "sourcesMana"
@@ -5634,13 +5641,14 @@
   {
    "nom": "ajouteMana",
    "fichier": "jeuMana.js",
-   "ligne": 164,
+   "ligne": 165,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "forgeEffetsC.js (chargement)",
+    "forgeManaB.js (chargement)",
     "jeuOpsB.js (chargement)",
     "paieMana"
    ]
@@ -5648,7 +5656,7 @@
   {
    "nom": "debite",
    "fichier": "jeuMana.js",
-   "ligne": 172,
+   "ligne": 173,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5660,7 +5668,7 @@
   {
    "nom": "paieMana",
    "fichier": "jeuMana.js",
-   "ligne": 187,
+   "ligne": 188,
    "chargement": false,
    "appelle": [
     "ajouteMana",
@@ -5691,19 +5699,20 @@
   {
    "nom": "videReserves",
    "fichier": "jeuMana.js",
-   "ligne": 209,
+   "ligne": 213,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeManaB.js (chargement)",
     "tour"
    ]
   },
   {
    "nom": "manaReflete",
    "fichier": "jeuMana.js",
-   "ligne": 216,
+   "ligne": 220,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -6069,7 +6078,7 @@
   {
    "nom": "proposePaiement",
    "fichier": "jeuOpsB.js",
-   "ligne": 160,
+   "ligne": 162,
    "chargement": false,
    "appelle": [
     "joueursDe",
@@ -6086,7 +6095,7 @@
   {
    "nom": "executeOps",
    "fichier": "jeuOpsB.js",
-   "ligne": 168,
+   "ligne": 170,
    "chargement": false,
    "appelle": [
     "compteObjets",
@@ -6316,6 +6325,7 @@
     "coutPermis",
     "forgeAuras.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "variantesEtendues",
     "variantesExilLancement",
     "variantesFaces",
@@ -6735,6 +6745,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "eveilForge",
+    "forgeManaB.js (chargement)",
     "jeuVariantes.js (chargement)",
     "motCleAura",
     "motCleLancementB",
@@ -6781,6 +6792,7 @@
     "coutStrive",
     "defRoomOuverte",
     "epissures",
+    "forgeManaB.js (chargement)",
     "hausseDeCout",
     "jeuVariantes.js (chargement)",
     "variantesEtendues",
@@ -6900,6 +6912,7 @@
    "appeleePar": [
     "coutStrive",
     "epissures",
+    "forgeManaB.js (chargement)",
     "lanceSort",
     "variantesSort"
    ]
@@ -8951,6 +8964,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
+    "forgeManaB.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeValideDef",
@@ -8995,6 +9009,7 @@
     "forgeDeclencheursB.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "joueurCorrespond",
     "joueurOuRien",
@@ -9719,6 +9734,7 @@
    "appelle": [
     "car",
     "champDe",
+    "foisKicke",
     "histoire",
     "marqueursJoueur",
     "obj",
@@ -9733,7 +9749,7 @@
   {
    "nom": "proprieteDesignee",
    "fichier": "forgeDesignations.js",
-   "ligne": 99,
+   "ligne": 102,
    "chargement": false,
    "appelle": [
     "goadActif"
@@ -9809,6 +9825,7 @@
     "forgeChoix.js (chargement)",
     "forgeStatiquesB.js (chargement)",
     "hausseDeCout",
+    "manaDeLaMain",
     "manaSeul",
     "motCleForge",
     "motCleLancement",
@@ -10364,7 +10381,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "capaciteForge",
-    "forgeEffetsC.js (chargement)"
+    "forgeEffetsC.js (chargement)",
+    "manaDeLaMain"
    ]
   },
   {
@@ -10434,6 +10452,7 @@
     "definitionDepuisScript",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsF.js (chargement)",
+    "forgeManaB.js (chargement)",
     "niveauForge"
    ]
   },
@@ -10624,6 +10643,7 @@
     "forgeStatiques.js (chargement)",
     "forgeValideJoueur",
     "manaDeCouleurChoisie",
+    "produitCouleur",
     "propObjet",
     "sourcesMana",
     "typesCouche"
@@ -11944,6 +11964,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRemplacementsB.js (chargement)"
    ]
@@ -11977,6 +11998,7 @@
     "defenseurDeclare",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRemplacementsB.js (chargement)",
     "marqueurPose"
@@ -11998,6 +12020,7 @@
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRemplacementsB.js (chargement)"
    ]
@@ -12248,6 +12271,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeInterdits.js (chargement)",
+    "forgeManaB.js (chargement)",
     "forgeStatiques.js (chargement)",
     "forgeStatiquesB.js (chargement)"
    ]
@@ -12268,6 +12292,7 @@
     "degageAussi",
     "flashPossible",
     "forgeStatiques.js (chargement)",
+    "manaGarde",
     "reductionParCibles",
     "reductionPossible",
     "statiqueQui",
@@ -12405,6 +12430,7 @@
     "degageAussi",
     "flashPossible",
     "goadStatique",
+    "manaGarde",
     "statiqueQui",
     "statiquesAccord",
     "statiquesCouches",
@@ -12457,6 +12483,7 @@
     "cibleInterdite",
     "flashAccorde",
     "flashPossible",
+    "manaGarde",
     "sortInterdit",
     "terrainsInterdits",
     "vieBloquee"
@@ -12588,6 +12615,7 @@
     "actionsLegales",
     "forgeAuras.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeManaB.js (chargement)",
     "sourcesMana"
    ]
   },
@@ -13348,6 +13376,7 @@
     "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "etapeSautee",
+    "forgeManaB.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "incontrecarrable",
     "nePeutPerdre",
@@ -13371,6 +13400,7 @@
     "degatsApresPrevention",
     "destinationRemplacee",
     "etapeSautee",
+    "forgeManaB.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "nePeutPerdre",
     "nombreRemplace",
@@ -13444,6 +13474,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeEffetsB.js (chargement)",
+    "forgeManaB.js (chargement)",
     "jeuOpsA.js (chargement)"
    ]
   },
@@ -13700,6 +13731,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeManaB.js (chargement)",
     "motCleAura",
     "motCleForge",
     "motCleLancementB",
@@ -13936,6 +13968,7 @@
    "appeleePar": [
     "apresVariante",
     "declencheursDeVariante",
+    "foisKicke",
     "forgeMotsClesC.js (chargement)"
    ]
   },
@@ -14231,6 +14264,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeManaB.js (chargement)",
     "motCleForge"
    ]
   },
@@ -14284,6 +14318,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeAuras.js (chargement)",
+    "forgeManaB.js (chargement)",
     "variantesEtendues"
    ]
   },
@@ -14553,7 +14588,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "capaciteForge",
-    "effetForge"
+    "effetForge",
+    "manaDeLaMain"
    ]
   },
   {
@@ -14569,7 +14605,8 @@
     "declencheurForge",
     "effetForge",
     "forgeChoix.js (chargement)",
-    "forgeEffetsD.js (chargement)"
+    "forgeEffetsD.js (chargement)",
+    "manaDeLaMain"
    ]
   },
   {
@@ -14646,6 +14683,7 @@
     "activeeSynthese",
     "definitionDepuisScript",
     "forgeDegagements.js (chargement)",
+    "forgeManaB.js (chargement)",
     "statiqueForge"
    ]
   },
@@ -14964,6 +15002,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeManaB.js (chargement)",
     "forgeRemplacementsD.js (chargement)"
    ]
   },
@@ -14981,6 +15020,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeRemplacementsD.js (chargement)",
+    "manaGarde",
     "tourEnPlusSaute"
    ]
   },
@@ -15051,6 +15091,111 @@
    "appelleParHtml": [],
    "appeleePar": [
     "partie"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeManaB.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "ajouteMana",
+    "coutComplet",
+    "coutSort",
+    "envRemplacement",
+    "forgeApi",
+    "forgeMode",
+    "forgeSait",
+    "forgeSousCapacite",
+    "forgeStatique",
+    "forgeValideJoueur",
+    "forgeValideObjet",
+    "joueurOuRien",
+    "manaDeLaMain",
+    "manaGarde",
+    "manaSeul",
+    "obj",
+    "payableAvec",
+    "produitCouleur",
+    "remplacementsEnJeu",
+    "sommeMana",
+    "valideOuRien"
+   ],
+   "appelleDiffere": [
+    "activationInterdite",
+    "capaciteForge",
+    "engageObjet",
+    "formeRemplacementD",
+    "incontrecarrable",
+    "motCleLancementB",
+    "sourcesMana",
+    "statiqueForge",
+    "variantesMotsClesE",
+    "videReserves"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "manaDeLaMain",
+   "fichier": "forgeManaB.js",
+   "ligne": 41,
+   "chargement": false,
+   "appelle": [
+    "coutForge",
+    "optionsMana",
+    "tableJouable",
+    "texteForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeManaB.js (chargement)"
+   ]
+  },
+  {
+   "nom": "foisKicke",
+   "fichier": "forgeManaB.js",
+   "ligne": 92,
+   "chargement": false,
+   "appelle": [
+    "foisVariante"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "exprDesignations"
+   ]
+  },
+  {
+   "nom": "manaGarde",
+   "fichier": "forgeManaB.js",
+   "ligne": 105,
+   "chargement": false,
+   "appelle": [
+    "envStatique",
+    "joueurStatique",
+    "remplacementsPour",
+    "statiquesMode"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeManaB.js (chargement)"
+   ]
+  },
+  {
+   "nom": "produitCouleur",
+   "fichier": "forgeManaB.js",
+   "ligne": 151,
+   "chargement": false,
+   "appelle": [
+    "choixDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeManaB.js (chargement)"
    ]
   },
   {

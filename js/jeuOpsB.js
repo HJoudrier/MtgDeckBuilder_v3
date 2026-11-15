@@ -138,6 +138,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   no.x = x;
   if (opts.kicked) no.kicked = true;
   if (opts.escaped) no.escaped = true;
+  /* La variante de lancement, lue dès l'entrée (« for each time it was kicked »). */
+  if (opts.variante) no.varianteLance = opts.variante;
   if (opts.suspendu) no.mods.push({f: 0, e: 0, mots: MOT.CELERITE, fin: 'jamais'});
   if (no.def.echo) no.echoDu = true;
   if (no.def.chapitres) ajouteLore(P, no, 1);
