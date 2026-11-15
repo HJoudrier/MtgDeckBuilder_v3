@@ -1,7 +1,9 @@
 /* =====================================================================
    js/iaCombat.js — Attaquer et bloquer, pour le joueur automatique
 
-   Attaquer quand l'attaque ne se fait pas punir — aucun bloqueur adverse ne
+   Le joueur automatique calcule d'abord son combat (js/iaCombatCalcul.js).
+   Les règles qui suivent servent quand le plateau dépasse le calcul :
+   attaquer quand l'attaque ne se fait pas punir — aucun bloqueur adverse ne
    tue l'attaquant sans mourir — ou quand la course est gagnée ; garder à la
    maison de quoi survivre au tour suivant. Bloquer d'abord pour ne pas
    mourir, ensuite pour les bons échanges ; ne sacrifier une créature en
@@ -28,8 +30,11 @@ function choisitDefenseur(P, j, defenseurs) {
   return best;
 }
 
-/* Les attaquants. */
+/* Les attaquants : calculés (js/iaCombatCalcul.js), sinon par les règles
+   ci-dessous quand le plateau est trop grand pour le calcul. */
 function iaAttaquants(P, q) {
+  const calcul = attaqueCalculee(P, q);
+  if (calcul) return calcul;
   const j = q.joueur, defs = q.extra.defenseurs;
   const di = choisitDefenseur(P, j, defs), cible = defs[di];
   if (!cible || cible.j == null) return [];
@@ -53,8 +58,10 @@ function iaAttaquants(P, q) {
   return r;
 }
 
-/* Les bloqueurs. */
+/* Les bloqueurs : calculés, sinon par les règles. */
 function iaBloqueurs(P, q) {
+  const calcul = blocageCalcule(P, q);
+  if (calcul) return calcul;
   const j = q.joueur, J = P.joueurs[j];
   const blqs = q.options.map(id => obj(P, id)), atts = q.extra.attaquants.map(id => obj(P, id));
   const libres = new Set(blqs.map((_, i) => i)), r = [], bloques = new Set();

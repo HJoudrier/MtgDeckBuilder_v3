@@ -17,7 +17,7 @@
 
 /* La version du joueur automatique : un lot joué par une autre ne se
    rejoue plus à l'identique (js/simStockage.js `lotPerime()`). */
-const IA_V = 2;
+const IA_V = 3;
 
 /* Les niveaux de jeu qu'un lot peut choisir, du plus rapide au plus fort. */
 const NIVEAUX_IA = ['rapide'];

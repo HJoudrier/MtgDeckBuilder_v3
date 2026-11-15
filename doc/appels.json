@@ -120,6 +120,7 @@
   "iaPriorite.js",
   "iaCombat.js",
   "iaEvaluation.js",
+  "iaCombatCalcul.js",
   "iaMulligan.js",
   "iaAgent.js",
   "symboles.js",
@@ -4285,12 +4286,16 @@
     "appliqueSBA",
     "attaquantImpose",
     "attaquantsDeclares",
+    "attaqueCalculee",
     "auraOrpheline",
+    "blocageCalcule",
     "bloqueursImposes",
+    "bloqueursUtiles",
     "candidatsDuControleur",
     "carteVue",
     "cartesPermises",
     "champDe",
+    "chercheBlocs",
     "cibleDetournee",
     "cibleEncoreLegale",
     "ciblesDuSort",
@@ -4334,6 +4339,7 @@
     "epissures",
     "equipe",
     "estAMoi",
+    "etatApres",
     "etendEffet",
     "executeForge",
     "exertsAttaque",
@@ -4796,6 +4802,7 @@
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "iaAttaquants",
+    "preparationRiposte",
     "variantesEtendues",
     "variantesMotsClesE"
    ]
@@ -4813,7 +4820,9 @@
    "appeleePar": [
     "actionsLegales",
     "actionsPossibles",
+    "baseEval",
     "benediction",
+    "bloqueursUtiles",
     "compteDuTour",
     "convocables",
     "couleursParmi",
@@ -4849,13 +4858,13 @@
     "marqueursRetirables",
     "menace",
     "metEnJeu",
-    "noteJoueur",
     "notePrincipale",
     "paieAutre",
     "paieAutreB",
     "paieAutreX",
     "payeAvantEntree",
     "peutBloquer",
+    "preparationRiposte",
     "proprieteDefenseur",
     "utiliteEnMain",
     "variantesMotsClesE"
@@ -5137,10 +5146,14 @@
     "aMot",
     "agregeForge",
     "appliqueSBA",
+    "attaqueCalculee",
+    "baseEval",
+    "bloqueursUtiles",
     "caracForge",
     "caracsDe",
     "caracsJugees",
     "ciblable",
+    "combattant",
     "compteDuTour",
     "couleursParmi",
     "couleursProtection",
@@ -5173,6 +5186,7 @@
     "paieMana",
     "peutAttaquer",
     "peutBloquer",
+    "preparationRiposte",
     "repartition",
     "tue",
     "valeur",
@@ -5205,6 +5219,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "chercheBlocs",
     "declareAttaquants",
     "declareBloqueurs",
     "degatsCombat",
@@ -5231,6 +5246,7 @@
    "appeleePar": [
     "actionsLegales",
     "appliqueSBA",
+    "baseEval",
     "capacitesTerrain",
     "convocables",
     "declareAttaquants",
@@ -5245,7 +5261,6 @@
     "iaScrute",
     "infligeUnePart",
     "lanceDepuisEffet",
-    "noteJoueur",
     "notePrincipale",
     "peutBloquer",
     "sourcesMana",
@@ -5266,6 +5281,8 @@
    "appeleePar": [
     "actionsLegales",
     "appliqueSBA",
+    "baseEval",
+    "bloqueursUtiles",
     "compteDuTour",
     "convocables",
     "coutAutrePossibleB",
@@ -5292,6 +5309,7 @@
     "peutAttaquer",
     "peutBloquer",
     "peutEngagerSoi",
+    "preparationRiposte",
     "proprieteDefenseur",
     "scoreEffet",
     "sourcesMana",
@@ -8257,7 +8275,10 @@
    "appelleParHtml": [],
    "appeleePar": [
     "attaquantImpose",
+    "blocageCalcule",
     "bloqueursImposes",
+    "bloqueursUtiles",
+    "chercheBlocs",
     "declareBloqueurs",
     "iaAttaquants",
     "iaBloqueurs",
@@ -12844,6 +12865,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "chercheBlocs",
     "declareBloqueurs"
    ]
   },
@@ -12895,6 +12917,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "attaqueCalculee",
     "declareAttaquants",
     "iaAttaquants"
    ]
@@ -12915,6 +12938,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "attaqueCalculee",
     "declareAttaquants",
     "iaAttaquants",
     "paieTaxesAttaque"
@@ -15887,6 +15911,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "baseEval",
+    "blocageCalcule",
+    "bloqueursUtiles",
+    "combattant",
     "iaAttaquants",
     "iaBloqueurs",
     "iaCartes",
@@ -15894,7 +15922,6 @@
     "impactCapacite",
     "meilleureCibleHostile",
     "menace",
-    "noteJoueur",
     "scoreEffet"
    ]
   },
@@ -15912,9 +15939,9 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
+    "attaqueCalculee",
     "choisitDefenseur",
-    "iaAttaquants",
-    "toursPourTuer"
+    "iaAttaquants"
    ]
   },
   {
@@ -15929,6 +15956,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "attaqueCalculee",
     "choisitDefenseur"
    ]
   },
@@ -16292,7 +16320,7 @@
   {
    "nom": "tue",
    "fichier": "iaCombat.js",
-   "ligne": 12,
+   "ligne": 14,
    "chargement": false,
    "appelle": [
     "car"
@@ -16307,7 +16335,7 @@
   {
    "nom": "choisitDefenseur",
    "fichier": "iaCombat.js",
-   "ligne": 20,
+   "ligne": 22,
    "chargement": false,
    "appelle": [
     "forceDeFrappe",
@@ -16322,10 +16350,11 @@
   {
    "nom": "iaAttaquants",
    "fichier": "iaCombat.js",
-   "ligne": 32,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "adversaires",
+    "attaqueCalculee",
     "attaquePermise",
     "car",
     "champDe",
@@ -16348,10 +16377,11 @@
   {
    "nom": "iaBloqueurs",
    "fichier": "iaCombat.js",
-   "ligne": 57,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
     "aMot",
+    "blocageCalcule",
     "car",
     "obj",
     "peutBloquer",
@@ -16365,14 +16395,60 @@
    ]
   },
   {
-   "nom": "noteJoueur",
+   "nom": "baseEval",
    "fichier": "iaEvaluation.js",
-   "ligne": 19,
+   "ligne": 26,
    "chargement": false,
    "appelle": [
+    "car",
     "champDe",
+    "estCreature",
     "estType",
     "valeurObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "evalue",
+    "noteJoueur"
+   ]
+  },
+  {
+   "nom": "noteVie",
+   "fichier": "iaEvaluation.js",
+   "ligne": 45,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "noteJoueur"
+   ]
+  },
+  {
+   "nom": "etatApres",
+   "fichier": "iaEvaluation.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "evalue",
+    "noteJoueur"
+   ]
+  },
+  {
+   "nom": "noteJoueur",
+   "fichier": "iaEvaluation.js",
+   "ligne": 62,
+   "chargement": false,
+   "appelle": [
+    "baseEval",
+    "etatApres",
+    "noteVie"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -16383,11 +16459,9 @@
   {
    "nom": "toursPourTuer",
    "fichier": "iaEvaluation.js",
-   "ligne": 37,
+   "ligne": 72,
    "chargement": false,
-   "appelle": [
-    "forceDeFrappe"
-   ],
+   "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -16397,16 +16471,194 @@
   {
    "nom": "evalue",
    "fichier": "iaEvaluation.js",
-   "ligne": 46,
+   "ligne": 79,
    "chargement": false,
    "appelle": [
     "adversaires",
+    "baseEval",
+    "etatApres",
     "noteJoueur",
     "toursPourTuer"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
-   "appeleePar": []
+   "appeleePar": [
+    "blocageCalcule",
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "combattant",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [
+    "car",
+    "valeurObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocageCalcule",
+    "bloqueursUtiles",
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "issueCombat",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocageCalcule",
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "ecartCombat",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 72,
+   "chargement": false,
+   "appelle": [
+    "riposte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocageCalcule",
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "preparationRiposte",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 85,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
+    "car",
+    "champDe",
+    "estCreature"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "riposte",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 95,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ecartCombat"
+   ]
+  },
+  {
+   "nom": "chercheBlocs",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 119,
+   "chargement": false,
+   "appelle": [
+    "aMot",
+    "bornesBlocage",
+    "obj",
+    "peutBloquer"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocageCalcule",
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "bloqueursUtiles",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 149,
+   "chargement": false,
+   "appelle": [
+    "car",
+    "champDe",
+    "combattant",
+    "estCreature",
+    "obj",
+    "peutBloquer",
+    "valeurObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "meilleureAttaque"
+   ]
+  },
+  {
+   "nom": "meilleureAttaque",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 156,
+   "chargement": false,
+   "appelle": [
+    "bloqueursUtiles",
+    "chercheBlocs",
+    "combattant",
+    "ecartCombat",
+    "evalue",
+    "issueCombat",
+    "preparationRiposte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "attaqueCalculee"
+   ]
+  },
+  {
+   "nom": "attaqueCalculee",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 180,
+   "chargement": false,
+   "appelle": [
+    "attaquePermise",
+    "car",
+    "forceDeFrappe",
+    "meilleureAttaque",
+    "menace",
+    "obj",
+    "taxeAttaque"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "iaAttaquants"
+   ]
+  },
+  {
+   "nom": "blocageCalcule",
+   "fichier": "iaCombatCalcul.js",
+   "ligne": 197,
+   "chargement": false,
+   "appelle": [
+    "chercheBlocs",
+    "combattant",
+    "ecartCombat",
+    "evalue",
+    "issueCombat",
+    "obj",
+    "peutBloquer",
+    "valeurObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "iaBloqueurs"
+   ]
   },
   {
    "nom": "couleursProduites",

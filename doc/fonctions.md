@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1618 fonctions**, 234 modules, 1704 Ko de JavaScript.
+**1631 fonctions**, 235 modules, 1717 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -128,8 +128,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
-| [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 82 |
-| [`iaEvaluation.js`](#jsiaevaluationjs) | Ce que vaut une position | 3 | 58 |
+| [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 89 |
+| [`iaEvaluation.js`](#jsiaevaluationjs) | Ce que vaut une position | 6 | 92 |
+| [`iaCombatCalcul.js`](#jsiacombatcalculjs) | Le combat calculé | 10 | 208 |
 | [`iaMulligan.js`](#jsiamulliganjs) | Garder sa main, ou non, par tirages | 5 | 95 |
 | [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 2 | 49 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
@@ -2289,28 +2290,54 @@ Ce que le joueur automatique fait de sa priorité. *10 fonctions, 207 lignes, 9.
 
 ## js/iaCombat.js
 
-Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 82 lignes, 4.2 Ko.*
+Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 89 lignes, 4.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `tue(P, b, a)` | B tue-t-il A ? |
 | `choisitDefenseur(P, j, defenseurs)` | L'adversaire visé : celui qu'on peut achever, sinon le plus faible en points de vie, sinon le plus menaçant. |
-| `iaAttaquants(P, q)` | Les attaquants. |
-| `iaBloqueurs(P, q)` | Les bloqueurs. |
+| `iaAttaquants(P, q)` | Les attaquants : calculés (js/iaCombatCalcul.js), sinon par les règles ci-dessous quand le plateau est trop grand pour le calcul. |
+| `iaBloqueurs(P, q)` | Les bloqueurs : calculés, sinon par les règles. |
 
 ## js/iaEvaluation.js
 
-Ce que vaut une position. *3 fonctions, 58 lignes, 2.7 Ko.*
+Ce que vaut une position. *6 fonctions, 92 lignes, 4.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `noteJoueur(P, i)` | Ce que pèse la situation d'un joueur, prise seule. |
-| `toursPourTuer(P, a, b)` | En combien de tours la force de frappe de `a` vient à bout de `b` (au plus dix : au-delà, l'horloge ne dit plus rien). |
-| `evalue(P, j)` | La note d'une position, du point de vue du joueur j : sa situation, moins celle de ses adversaires (le plus menaçant compte pour moitié, les autres en moyenne pour l'autre moitié), plus… |
+| `baseEval(P)` | — |
+| `noteVie(v)` | Ce que pèse un total de vie. |
+| `etatApres(P, b, i, d)` | La vie, le poison et ce qui reste du plateau d'un joueur, l'écart `d` appliqué : `d.vie[i]`, `d.poison[i]` (en plus), `d.morts` (des ids). |
+| `noteJoueur(P, i, d)` | Ce que pèse la situation d'un joueur, prise seule. |
+| `toursPourTuer(force, vie)` | En combien de tours une force de frappe vient à bout d'une vie (au plus dix : au-delà, l'horloge ne dit plus rien). |
+| `evalue(P, j, d)` | La note d'une position, du point de vue du joueur j : sa situation, moins celle de ses adversaires (le plus menaçant compte pour moitié, les autres en moyenne pour l'autre moitié), plus… |
 
 | Donnée | Rôle |
 |---|---|
 | `POIDS_EVAL` | — |
+| `BASES_EVAL` | Le plateau de chaque joueur, une fois par version de l'état : la valeur et la force de chaque créature, la somme des valeurs, les terrains. |
+
+## js/iaCombatCalcul.js
+
+Le combat calculé. *10 fonctions, 208 lignes, 11 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `combattant(P, o)` | Ce que le combat lit d'une créature. |
+| `issueCombat(atts, blocs)` | L'issue d'un combat : `blocs` lie chaque attaquant à ses bloqueurs. |
+| `ecartCombat(P, j, defenseur, issue, rip)` | L'écart que `evalue()` lit : la vie et le poison du défenseur, la vie gagnée, les morts ; et, pour l'attaquant, ce que la riposte du tour suivant lui coûterait avec les bloqueurs qui lui… |
+| `preparationRiposte(P, j, engages)` | Ce que la riposte lit, préparé une fois par ensemble d'attaquants : nos créatures qui resteront dégagées, et les créatures de chaque adversaire, les plus fortes d'abord. |
+| `riposte(rip, morts)` | Ce que l'adversaire le plus fort frapperait au tour suivant : ses créatures qui restent, moins celles que nos créatures restées dégagées arrêtent (chacune la plus grosse qu'elle peut… |
+| `chercheBlocs(P, atts, blqs, note, borne, signe, compte, plafond = BUDGET_COMBAT)` | Les blocages possibles, bloqueur par bloqueur : ne pas bloquer, ou l'un des attaquants qu'il peut bloquer. |
+| `bloqueursUtiles(P, d, atts)` | Les bloqueurs que le calcul retient : ceux qui peuvent bloquer un attaquant, les plus utiles d'abord, au plus quelques-uns. |
+| `meilleureAttaque(P, j, d, cands, compte)` | La meilleure attaque contre un défenseur : l'ensemble d'attaquants dont la pire réponse vaut le plus. |
+| `attaqueCalculee(P, q)` | Les attaquants calculés, au format de la question : `null` si le calcul ne s'applique pas (trop de créatures, budget dépassé). |
+| `blocageCalcule(P, q)` | Les bloqueurs calculés, au format de la question, ou `null`. |
+
+| Donnée | Rôle |
+|---|---|
+| `BUDGET_COMBAT` | — |
+| `POIDS_COMBAT` | — |
 
 ## js/iaMulligan.js
 

@@ -137,6 +137,7 @@ js/                 modules, chargés dans cet ordre :
   iaPriorite.js     ce que le joueur automatique fait de sa priorité
   iaCombat.js       attaquer et bloquer
   iaEvaluation.js   ce que vaut une position : la note commune que le combat calculé et la recherche comparent
+  iaCombatCalcul.js le combat calculé : alpha-bêta à deux niveaux sur un modèle réduit du combat
   iaMulligan.js     garder sa main, ou non, par tirages de la bibliothèque
   iaAgent.js        un joueur automatique, ses niveaux, la version de l'IA
 
@@ -570,6 +571,23 @@ donne, IA échangées), avec l'intervalle de Wilson. L'IA contre elle-même y do
 joueurs et 25 % à quatre, ce qui valide le banc. Le mulligan par tirages fait jeu égal avec
 l'ancienne règle (deux à cinq terrains) : il est gardé parce qu'il suit la règle d'information et
 s'adapte à la courbe, aux couleurs et au commandant, pas pour un gain mesuré.
+
+**Le combat calculé** (IA2, `js/iaCombatCalcul.js`). Un petit jeu à deux : l'attaquant choisit un
+ensemble d'attaquants, le défenseur répond par ses blocages, l'issue se note avec la note commune
+(`evalue()`, qui accepte un écart imaginé — morts, vies — sans toucher à la partie). L'attaquant
+garde l'ensemble dont la pire réponse est la meilleure ; une réponse qui rend l'attaque pire que la
+meilleure déjà trouvée l'abandonne aussitôt (alpha-bêta). Le modèle lit force, endurance, blessures,
+initiative et double initiative, contact mortel, piétinement, lien de vie, indestructible,
+infection, menace et les restrictions de blocage du moteur ; l'attaquant compte aussi la riposte du
+tour suivant contre les créatures qu'il laisse dégagées. Au-delà de sept attaquants ou de quatre mille
+positions, les règles de `js/iaCombat.js` reprennent la main ; face à une nuée de jetons, chaque
+bloqueur ne considère que les attaquants les plus dangereux, pour que la recherche tienne. En
+multijoueur, seuls les deux défenseurs que la règle préfère sont calculés. Ce niveau ne lit que le
+champ : c'est aussi l'IA de la table interactive. Au banc, contre l'IA d'IA1 : 56 % à deux joueurs
+(intervalle 51–61), 43 à 46 % à quatre pour 25 % à égalité ; 1,1 à 1,2 fois plus lent à deux, 1,5 fois
+à quatre, 2 fois sur une table Commander à jetons (Krenko) — le calcul y coûte la moitié, des
+parties plus longues l'autre : on bloque mieux. Les poids, essayés au banc (riposte, horloge, plateau), changent peu : leurs écarts restent
+dans le bruit.
 
 ## Le modèle Forge
 
