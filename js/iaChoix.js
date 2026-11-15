@@ -9,14 +9,6 @@
 
 function terrainsEnMain(P, j) { return P.joueurs[j].main.filter(id => estType(obj(P, id), 'land')).length; }
 
-/* Garder une main de sept : deux à cinq terrains. Après deux mulligans, on
-   garde tout ce qui a un terrain. */
-function iaMulligan(P, q) {
-  const L = terrainsEnMain(P, q.joueur), n = q.extra.n;
-  if (n >= 2) return L >= 1 ? 0 : 1;
-  return L >= 2 && L <= 5 ? 0 : 1;
-}
-
 /* Trier des cartes de la main de la moins utile à la plus utile : les
    terrains en trop d'abord, puis les sorts qu'on ne pourra pas lancer de
    sitôt, les injouables en tête. */

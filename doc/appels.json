@@ -119,6 +119,8 @@
   "iaChoix.js",
   "iaPriorite.js",
   "iaCombat.js",
+  "iaEvaluation.js",
+  "iaMulligan.js",
   "iaAgent.js",
   "symboles.js",
   "champsJeu.js",
@@ -4200,6 +4202,7 @@
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeTraine.js (chargement)",
+    "iaMulligan",
     "jeuOpsB.js (chargement)",
     "mulligans",
     "partie",
@@ -4378,6 +4381,7 @@
     "iaBloqueurs",
     "iaCartes",
     "iaCibles",
+    "iaMulligan",
     "iaPriorite",
     "iaReponse",
     "iaScrute",
@@ -4782,6 +4786,7 @@
     "donneCadeau",
     "entreAttaquant",
     "etat.js (chargement)",
+    "evalue",
     "forgeChoix.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
     "forgeDefinis",
@@ -4844,6 +4849,7 @@
     "marqueursRetirables",
     "menace",
     "metEnJeu",
+    "noteJoueur",
     "notePrincipale",
     "paieAutre",
     "paieAutreB",
@@ -5239,6 +5245,7 @@
     "iaScrute",
     "infligeUnePart",
     "lanceDepuisEffet",
+    "noteJoueur",
     "notePrincipale",
     "peutBloquer",
     "sourcesMana",
@@ -15887,6 +15894,7 @@
     "impactCapacite",
     "meilleureCibleHostile",
     "menace",
+    "noteJoueur",
     "scoreEffet"
    ]
   },
@@ -15905,7 +15913,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "choisitDefenseur",
-    "iaAttaquants"
+    "iaAttaquants",
+    "toursPourTuer"
    ]
   },
   {
@@ -15978,29 +15987,14 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaMulligan",
     "iaScrute",
     "utiliteEnMain"
    ]
   },
   {
-   "nom": "iaMulligan",
-   "fichier": "iaChoix.js",
-   "ligne": 14,
-   "chargement": false,
-   "appelle": [
-    "terrainsEnMain"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "agentIA"
-   ]
-  },
-  {
    "nom": "utiliteEnMain",
    "fichier": "iaChoix.js",
-   "ligne": 23,
+   "ligne": 15,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -16020,7 +16014,7 @@
   {
    "nom": "iaCibles",
    "fichier": "iaChoix.js",
-   "ligne": 37,
+   "ligne": 29,
    "chargement": false,
    "appelle": [
     "car",
@@ -16042,7 +16036,7 @@
   {
    "nom": "iaCartes",
    "fichier": "iaChoix.js",
-   "ligne": 71,
+   "ligne": 63,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -16061,7 +16055,7 @@
   {
    "nom": "iaScrute",
    "fichier": "iaChoix.js",
-   "ligne": 100,
+   "ligne": 92,
    "chargement": false,
    "appelle": [
     "champDe",
@@ -16078,7 +16072,7 @@
   {
    "nom": "iaOui",
    "fichier": "iaChoix.js",
-   "ligne": 111,
+   "ligne": 103,
    "chargement": false,
    "appelle": [
     "manaDispo"
@@ -16092,7 +16086,7 @@
   {
    "nom": "iaModes",
    "fichier": "iaChoix.js",
-   "ligne": 124,
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "modesPayables",
@@ -16371,9 +16365,136 @@
    ]
   },
   {
+   "nom": "noteJoueur",
+   "fichier": "iaEvaluation.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [
+    "champDe",
+    "estType",
+    "valeurObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "evalue"
+   ]
+  },
+  {
+   "nom": "toursPourTuer",
+   "fichier": "iaEvaluation.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "forceDeFrappe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "evalue"
+   ]
+  },
+  {
+   "nom": "evalue",
+   "fichier": "iaEvaluation.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
+    "noteJoueur",
+    "toursPourTuer"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "couleursProduites",
+   "fichier": "iaMulligan.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "goldfish"
+   ]
+  },
+  {
+   "nom": "payeParTerrains",
+   "fichier": "iaMulligan.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "goldfish"
+   ]
+  },
+  {
+   "nom": "goldfish",
+   "fichier": "iaMulligan.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "couleursProduites",
+    "payeParTerrains"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "iaMulligan"
+   ]
+  },
+  {
+   "nom": "apresDessous",
+   "fichier": "iaMulligan.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "iaMulligan"
+   ]
+  },
+  {
+   "nom": "iaMulligan",
+   "fichier": "iaMulligan.js",
+   "ligne": 79,
+   "chargement": false,
+   "appelle": [
+    "apresDessous",
+    "goldfish",
+    "melangeHasard",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "agentIA"
+   ]
+  },
+  {
+   "nom": "agentNiveau",
+   "fichier": "iaAgent.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [
+    "agentIA"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "joueLot",
+    "rejouePartie"
+   ]
+  },
+  {
    "nom": "agentIA",
    "fichier": "iaAgent.js",
-   "ligne": 15,
+   "ligne": 30,
    "chargement": false,
    "appelle": [
     "brasse",
@@ -16391,9 +16512,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "agentNiveau",
     "commenceTable",
-    "joueLot",
-    "rejouePartie",
     "reprendTable"
    ]
   },
@@ -22565,7 +22685,9 @@
    "fichier": "simStockage.js",
    "ligne": 57,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "cleTableDe"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -22573,9 +22695,22 @@
    ]
   },
   {
+   "nom": "cleTableDe",
+   "fichier": "simStockage.js",
+   "ligne": 58,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cleTable",
+    "historiqueHTML"
+   ]
+  },
+  {
    "nom": "classement",
    "fichier": "simStockage.js",
-   "ligne": 61,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
     "cleTable"
@@ -22616,7 +22751,7 @@
   {
    "nom": "obstacleSimulation",
    "fichier": "simulation.js",
-   "ligne": 36,
+   "ligne": 37,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -22628,7 +22763,7 @@
   {
    "nom": "placesPartie",
    "fichier": "simulation.js",
-   "ligne": 43,
+   "ligne": 44,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -22641,7 +22776,7 @@
   {
    "nom": "graineDePartie",
    "fichier": "simulation.js",
-   "ligne": 48,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "brasse"
@@ -22656,7 +22791,7 @@
   {
    "nom": "majProgressionSim",
    "fichier": "simulation.js",
-   "ligne": 50,
+   "ligne": 51,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -22669,7 +22804,7 @@
   {
    "nom": "lanceSimulation",
    "fichier": "simulation.js",
-   "ligne": 60,
+   "ligne": 61,
    "chargement": false,
    "appelle": [
     "joueLot",
@@ -22686,10 +22821,10 @@
   {
    "nom": "joueLot",
    "fichier": "simulation.js",
-   "ligne": 70,
+   "ligne": 71,
    "chargement": false,
    "appelle": [
-    "agentIA",
+    "agentNiveau",
     "avance",
     "chargeSimCartes",
     "chercheFichesScryfall",
@@ -22719,7 +22854,7 @@
   {
    "nom": "terminerLot",
    "fichier": "simulation.js",
-   "ligne": 109,
+   "ligne": 110,
    "chargement": false,
    "appelle": [
     "agrege",
@@ -22741,7 +22876,7 @@
   {
    "nom": "arreteSimulation",
    "fichier": "simulation.js",
-   "ligne": 130,
+   "ligne": 131,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -22753,10 +22888,10 @@
   {
    "nom": "rejouePartie",
    "fichier": "simulation.js",
-   "ligne": 134,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
-    "agentIA",
+    "agentNiveau",
     "graineDePartie",
     "joueJusquauBout",
     "lotPerime",
@@ -23403,6 +23538,7 @@
    "chargement": false,
    "appelle": [
     "classement",
+    "cleTableDe",
     "esc",
     "lotPerime"
    ],

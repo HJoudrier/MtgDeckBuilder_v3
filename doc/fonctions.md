@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1609 fonctions**, 232 modules, 1696 Ko de JavaScript.
+**1618 fonctions**, 234 modules, 1704 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -126,10 +126,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 3 | 88 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
-| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 8 | 132 |
+| [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
 | [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 82 |
-| [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 1 | 34 |
+| [`iaEvaluation.js`](#jsiaevaluationjs) | Ce que vaut une position | 3 | 58 |
+| [`iaMulligan.js`](#jsiamulliganjs) | Garder sa main, ou non, par tirages | 5 | 95 |
+| [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 2 | 49 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`champsJeu.js`](#jschampsjeujs) | Ce que le moteur de jeu demande à une carte | 7 | 91 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 148 |
@@ -181,8 +183,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`decksLies.js`](#jsdecksliesjs) | Les adversaires liés à Moxfield ou à Archidekt | 11 | 196 |
 | [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 13 | 141 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
-| [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 8 | 66 |
-| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 143 |
+| [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 9 | 67 |
+| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 144 |
 | [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 156 |
 | [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 216 |
 | [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 174 |
@@ -2256,12 +2258,11 @@ Ce que vaut une carte, un permanent, un adversaire. *8 fonctions, 85 lignes, 3.9
 
 ## js/iaChoix.js
 
-Les choix du joueur automatique hors de la priorité. *8 fonctions, 132 lignes, 6 Ko.*
+Les choix du joueur automatique hors de la priorité. *7 fonctions, 124 lignes, 5.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `terrainsEnMain(P, j)` | — |
-| `iaMulligan(P, q)` | Garder une main de sept : deux à cinq terrains. |
 | `utiliteEnMain(P, j, id)` | Trier des cartes de la main de la moins utile à la plus utile : les terrains en trop d'abord, puis les sorts qu'on ne pourra pas lancer de sitôt, les injouables en tête. |
 | `iaCibles(P, q)` | Choisir les cibles d'un emplacement : un effet hostile vise ce que l'adversaire a de mieux et qu'il peut atteindre, un effet favorable ce que j'ai de mieux. |
 | `iaCartes(P, q)` | Choisir parmi des cartes ou des permanents selon ce qu'on en fait. |
@@ -2297,13 +2298,50 @@ Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 82 lignes, 4.2 Ko
 | `iaAttaquants(P, q)` | Les attaquants. |
 | `iaBloqueurs(P, q)` | Les bloqueurs. |
 
-## js/iaAgent.js
+## js/iaEvaluation.js
 
-Un joueur automatique. *1 fonctions, 34 lignes, 1.5 Ko.*
+Ce que vaut une position. *3 fonctions, 58 lignes, 2.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `noteJoueur(P, i)` | Ce que pèse la situation d'un joueur, prise seule. |
+| `toursPourTuer(P, a, b)` | En combien de tours la force de frappe de `a` vient à bout de `b` (au plus dix : au-delà, l'horloge ne dit plus rien). |
+| `evalue(P, j)` | La note d'une position, du point de vue du joueur j : sa situation, moins celle de ses adversaires (le plus menaçant compte pour moitié, les autres en moyenne pour l'autre moitié), plus… |
+
+| Donnée | Rôle |
+|---|---|
+| `POIDS_EVAL` | — |
+
+## js/iaMulligan.js
+
+Garder sa main, ou non, par tirages. *5 fonctions, 95 lignes, 4.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `couleursProduites(d)` | Les couleurs qu'un terrain produit. |
+| `payeParTerrains(d, dispo, couleurs)` | Un sort se paie-t-il avec ces terrains (son coût total, et chaque couleur exigée parmi celles produites) ? |
+| `goldfish(main, tirages, commandants, sansPioche)` | Une main jouée seule quelques tours : ce qu'elle rapporte. |
+| `apresDessous(main, k)` | Les cartes qu'on remettrait dessous : les terrains au-delà de trois, puis les sorts les plus chers. |
+| `iaMulligan(P, q, ag)` | Garder (0) ou rendre (1) sa main. |
+
+| Donnée | Rôle |
+|---|---|
+| `TIRAGES_MULLIGAN` | Ce que vaut une carte de la main de départ : une main de six part avec une ressource de moins pour toute la partie, ce que quatre tours de jeu seul ne voient pas. |
+| `VALEUR_CARTE_MULLIGAN` | — |
+
+## js/iaAgent.js
+
+Un joueur automatique. *2 fonctions, 49 lignes, 2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `agentNiveau(niveau, graine, siege)` | Un joueur automatique du niveau dit. |
 | `agentIA(graine, siege)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `IA_V` | La version du joueur automatique : un lot joué par une autre ne se rejoue plus à l'identique (js/simStockage.js `lotPerime()`). |
+| `NIVEAUX_IA` | Les niveaux de jeu qu'un lot peut choisir, du plus rapide au plus fort. |
 
 ## js/symboles.js
 
@@ -3187,7 +3225,7 @@ Ce qu'on retient d'une partie, et d'un lot. *5 fonctions, 98 lignes, 5 Ko.*
 
 ## js/simStockage.js
 
-Les résultats des lots, gardés et comparés. *8 fonctions, 66 lignes, 2.6 Ko.*
+Les résultats des lots, gardés et comparés. *9 fonctions, 67 lignes, 2.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3197,7 +3235,8 @@ Les résultats des lots, gardés et comparés. *8 fonctions, 66 lignes, 2.6 Ko.*
 | `supprimeLot(id)` | — |
 | `lotParId(id)` | — |
 | `lotPerime(lot)` | Un lot est périmé quand le deck, un adversaire, un comportement manuel ou le moteur ont changé depuis : ses chiffres restent lisibles, mais ses parties ne se rejouent plus à l'identique. |
-| `cleTable(lot)` | La table d'un lot, sans le deck testé : deux lots sur la même table se comparent. |
+| `cleTable(lot)` | La table d'un lot, sans le deck testé : deux lots sur la même table, joués au même niveau, se comparent ; deux niveaux d'IA ne se mêlent jamais. |
+| `cleTableDe(nb, niveau, adversaires)` | — |
 | `classement(table)` | Le classement des decks sur une table : le dernier lot de chaque deck, du plus fort au plus faible. |
 
 | Donnée | Rôle |
@@ -3208,7 +3247,7 @@ Les résultats des lots, gardés et comparés. *8 fonctions, 66 lignes, 2.6 Ko.*
 
 ## js/simulation.js
 
-Un lot de parties, par tranches. *11 fonctions, 143 lignes, 6.4 Ko.*
+Un lot de parties, par tranches. *11 fonctions, 144 lignes, 6.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|

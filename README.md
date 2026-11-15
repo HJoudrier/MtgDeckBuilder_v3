@@ -136,7 +136,9 @@ js/                 modules, chargés dans cet ordre :
   iaChoix.js        garder sa main, cibler, chercher, défausser
   iaPriorite.js     ce que le joueur automatique fait de sa priorité
   iaCombat.js       attaquer et bloquer
-  iaAgent.js        un joueur automatique
+  iaEvaluation.js   ce que vaut une position : la note commune que le combat calculé et la recherche comparent
+  iaMulligan.js     garder sa main, ou non, par tirages de la bibliothèque
+  iaAgent.js        un joueur automatique, ses niveaux, la version de l'IA
 
   — ce qui vient du dehors —
   champsJeu.js      ce que le moteur demande à une carte : mots-clés, loyauté, faces
@@ -554,6 +556,20 @@ multijoueur. Les joueurs automatiques comparent des valeurs sans chercher dans l
 ils avantagent les decks qui jouent leurs menaces et sous-jouent combo, contrôle et politique. Le
 classement dit donc la force d'un deck **joué par cette IA contre cette table**. La table interactive
 — jouer soi-même contre les joueurs automatiques — est le lot 2.
+
+**Des joueurs automatiques qui jugent un deck** (lots IA1 à IA5). Le classement mesure la force
+d'un deck, pas l'art de le piloter : entre joueurs automatiques, l'IA **sait tout en cours de
+partie** — mains, faces cachées, ordre des bibliothèques. Seul le mulligan reste honnête : l'IA
+connaît sa main et le contenu de sa bibliothèque, pas son ordre, et tire trente ordres pour juger sa
+main (`js/iaMulligan.js`). À la table interactive, face à un humain, elle ne lit que ce que son
+joueur voit. Le niveau de jeu se choisit à chaque lot ; deux niveaux ne se mêlent jamais dans un
+classement (`cleTable()`), et la version de l'IA (`IA_V`) entre dans celle du moteur : un lot joué
+par une autre IA est périmé. Chaque changement d'IA se juge au **banc de force** : la nouvelle contre
+l'ancienne, chargée dans sa propre portée dans le même moteur, sur des parties appariées (même
+donne, IA échangées), avec l'intervalle de Wilson. L'IA contre elle-même y donne 50 % à deux
+joueurs et 25 % à quatre, ce qui valide le banc. Le mulligan par tirages fait jeu égal avec
+l'ancienne règle (deux à cinq terrains) : il est gardé parce qu'il suit la règle d'information et
+s'adapte à la courbe, aux couleurs et au commandant, pas pour un gain mesuré.
 
 ## Le modèle Forge
 

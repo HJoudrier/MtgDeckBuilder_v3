@@ -52,9 +52,10 @@ function lotPerime(lot) {
   return '';
 }
 
-/* La table d'un lot, sans le deck testé : deux lots sur la même table se
-   comparent. */
-function cleTable(lot) { return lot.nbJoueurs + ':' + lot.adversaires.slice().sort().join(','); }
+/* La table d'un lot, sans le deck testé : deux lots sur la même table, joués
+   au même niveau, se comparent ; deux niveaux d'IA ne se mêlent jamais. */
+function cleTable(lot) { return cleTableDe(lot.nbJoueurs, lot.niveau, lot.adversaires); }
+function cleTableDe(nb, niveau, adversaires) { return nb + ':' + (niveau || NIVEAUX_IA[0]) + ':' + adversaires.slice().sort().join(','); }
 
 /* Le classement des decks sur une table : le dernier lot de chaque deck,
    du plus fort au plus faible. */

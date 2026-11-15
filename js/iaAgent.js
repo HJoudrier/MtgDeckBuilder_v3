@@ -4,20 +4,35 @@
    L'agent répond à chaque question du moteur, sur-le-champ et sans hasard
    propre : deux parties de même graine se jouent coup pour coup pareil, ce
    qui permet de revoir une partie d'un lot en la rejouant. Le flux de
-   hasard qu'il porte est semé par la graine et son siège ; il est là pour
-   les départages à venir, et ne touche jamais l'ordre des bibliothèques.
+   hasard qu'il porte est semé par la graine et son siège ; le mulligan
+   s'en sert pour ses tirages (js/iaMulligan.js), et il ne touche jamais
+   l'ordre des bibliothèques.
 
-   Convention : l'agent ne lit que ce que son joueur peut voir — sa main,
-   le champ, les cimetières, les points de vie. La vue filtrée qui
-   l'imposera est pour le lot 2.
+   Deux usages, deux règles. À la table interactive, face à un humain,
+   l'agent ne lit que ce que son joueur peut voir. Entre joueurs
+   automatiques, pour juger la force d'un deck, il peut tout savoir en
+   cours de partie — mains, faces cachées, ordre des bibliothèques — : ce
+   qu'on mesure est le deck, pas l'art de deviner (js/iaRecherche.js).
    ===================================================================== */
+
+/* La version du joueur automatique : un lot joué par une autre ne se
+   rejoue plus à l'identique (js/simStockage.js `lotPerime()`). */
+const IA_V = 2;
+
+/* Les niveaux de jeu qu'un lot peut choisir, du plus rapide au plus fort. */
+const NIVEAUX_IA = ['rapide'];
+
+/* Un joueur automatique du niveau dit. */
+function agentNiveau(niveau, graine, siege) {
+  return agentIA(graine, siege);
+}
 
 function agentIA(graine, siege) {
   const ag = {humain: false, siege, flux: etatHasard(brasse(graine, siege + 101)), activations: new Map()};
   ag.repond = (P, q) => {
     switch (q.q) {
       case 'priorite': return iaPriorite(P, q, ag);
-      case 'mulligan': return iaMulligan(P, q);
+      case 'mulligan': return iaMulligan(P, q, ag);
       case 'dessous': case 'defausse': case 'cartes': case 'sacrifice': return iaCartes(P, q);
       case 'scrute': return iaScrute(P, q);
       case 'cibles': return iaCibles(P, q);

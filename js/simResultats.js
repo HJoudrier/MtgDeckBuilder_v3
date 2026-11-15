@@ -85,7 +85,7 @@ function lotHTML(lot) {
 /* L'historique des lots et le classement des decks sur la table choisie. */
 function historiqueHTML(cfg) {
   if (!SIM_RES.lots.length) return '';
-  const table = cfg.nbJoueurs + ':' + cfg.sieges.slice().sort().join(',');
+  const table = cleTableDe(cfg.nbJoueurs, cfg.niveau, cfg.sieges);
   const cl = classement(table);
   return `<div class="sim-grille">
     <div class="sim-bloc"><h3>Classement sur cette table</h3>

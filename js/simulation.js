@@ -15,7 +15,7 @@
    affrontent les mêmes mélanges — des comparaisons appariées.
    ===================================================================== */
 
-const MOTEUR_V = 'm1-c' + COMPILO_V;
+const MOTEUR_V = 'm1-c' + COMPILO_V + '-ia' + IA_V;
 const SIM = {etat: '', fait: 0, total: 0, arret: false, debut: 0, message: ''};
 
 function rendMain() {
@@ -29,7 +29,8 @@ function configSimulation() {
   const nb = Math.max(2, Math.min(6, +c.nbJoueurs || 2));
   const sieges = Array.from({length: nb - 1}, (_, i) => S.adversaires[c.sieges[i]] ? c.sieges[i] : '');
   return {deck, nbJoueurs: nb, sieges, parties: Math.max(1, Math.min(2000, +c.parties || 100)),
-    graine: (+c.graine || 1) >>> 0, plafond: Math.max(5, Math.min(60, +c.plafond || 25))};
+    graine: (+c.graine || 1) >>> 0, plafond: Math.max(5, Math.min(60, +c.plafond || 25)),
+    niveau: NIVEAUX_IA.includes(c.niveauIA) ? c.niveauIA : NIVEAUX_IA[0]};
 }
 
 /* Ce qui empêche de lancer, en une phrase, ou rien. */
@@ -92,7 +93,7 @@ async function joueLot() {
       places = placesPartie(N, g);
       const graine = graineDePartie(cfg.graine, g);
       h = creePartie({graine, premier: 0, plafondTours: cfg.plafond, sieges: places.map(t => sieges[t])});
-      agents = places.map((_, k) => agentIA(graine, k));
+      agents = places.map((_, k) => agentNiveau(cfg.niveau, graine, k));
     }
     const r = avance(h, agents, 25, horloge);
     if (r === 'finie' || r === 'erreur') {
@@ -116,7 +117,7 @@ function terminerLot(cfg, sieges, recs) {
       deck: cfg.deck, deckNom: S.decks[cfg.deck].nom, sigDeck: signatureDeck(cfg.deck),
       adversaires: cfg.sieges.slice(), advNoms: cfg.sieges.map(k => S.adversaires[k].nom),
       sigAdv: cfg.sieges.map(k => signatureAdversaire(S.adversaires[k])), sigComp: signatureComportements(),
-      nbJoueurs: sieges.length, graine: cfg.graine, plafond: cfg.plafond, arrete,
+      nbJoueurs: sieges.length, graine: cfg.graine, plafond: cfg.plafond, niveau: cfg.niveau, arrete,
       couvertures: sieges.map(s => ({taux: s.couverture.taux, injouable: s.couverture.injouable, manquantes: s.manquantes.length})),
       fiabilite: fiabilite(sieges.map(s => s.couverture)),
       resume: agrege(recs, sieges.length, terrains),
@@ -137,6 +138,6 @@ function rejouePartie(lot, k) {
   const sieges = [siegeDeck(lot.deck), ...lot.adversaires.map(siegeAdversaire)];
   const N = sieges.length, places = placesPartie(N, g), graine = graineDePartie(lot.graine, g);
   const P = joueJusquauBout({graine, premier: 0, plafondTours: lot.plafond, journal: true,
-    sieges: places.map(t => sieges[t])}, places.map((_, s) => agentIA(graine, s)));
+    sieges: places.map(t => sieges[t])}, places.map((_, s) => agentNiveau(lot.niveau || NIVEAUX_IA[0], graine, s)));
   return {P, places, noms: sieges.map(s => s.nom)};
 }
