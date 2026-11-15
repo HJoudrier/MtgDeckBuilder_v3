@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1641 fonctions**, 236 modules, 1723 Ko de JavaScript.
+**1648 fonctions**, 237 modules, 1728 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -128,12 +128,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
-| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 10 | 207 |
-| [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 4 | 89 |
+| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 11 | 214 |
+| [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 6 | 95 |
 | [`iaEvaluation.js`](#jsiaevaluationjs) | Ce que vaut une position | 6 | 92 |
 | [`iaCombatCalcul.js`](#jsiacombatcalculjs) | Le combat calculé | 10 | 208 |
 | [`iaMulligan.js`](#jsiamulliganjs) | Garder sa main, ou non, par tirages | 5 | 95 |
-| [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 2 | 49 |
+| [`iaAgent.js`](#jsiaagentjs) | Un joueur automatique | 2 | 51 |
+| [`iaRecherche.js`](#jsiarecherchejs) | Essayer ses coups avant de les jouer | 4 | 94 |
 | [`symboles.js`](#jssymbolesjs) | Les symboles de mana | 7 | 72 |
 | [`champsJeu.js`](#jschampsjeujs) | Ce que le moteur de jeu demande à une carte | 7 | 91 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 148 |
@@ -187,7 +188,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 9 | 67 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 144 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 156 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 161 |
 | [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 216 |
 | [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 174 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
@@ -2295,7 +2296,7 @@ Les choix du joueur automatique hors de la priorité. *7 fonctions, 124 lignes, 
 
 ## js/iaPriorite.js
 
-Ce que le joueur automatique fait de sa priorité. *10 fonctions, 207 lignes, 9.7 Ko.*
+Ce que le joueur automatique fait de sa priorité. *11 fonctions, 214 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2306,20 +2307,23 @@ Ce que le joueur automatique fait de sa priorité. *10 fonctions, 207 lignes, 9.
 | `scoreTerrain(P, j, o)` | Le meilleur terrain à jouer : celui qui ouvre les couleurs que réclame la main, et qui entre dégagé. |
 | `iaReponse(P, j, actions, ag)` | Hors phase principale : faut-il agir maintenant ? |
 | `iaPriorite(P, q, ag)` | La réponse à une question de priorité. |
+| `notesPriorite(P, j, actions, ag)` | Les actions de la phase principale, notées : un terrain vaut cent et plus, pour passer avant tout ; une action qui ne vaut pas 1 ne se joue pas. |
 | `regenUtile(P, j, o)` | Une régénération sert-elle maintenant : la créature est au combat, ou un sort adverse au sommet de la pile pourrait la détruire ? |
 | `scoreLancer(P, j, a)` | Ce que vaut une façon de lancer : le kicker seulement s'il change l'effet, le rachat parce qu'il rend la carte, l'évocation faute de mieux. |
 | `noteActivation(P, a, ag, i)` | Compter les activations d'une capacité dans le tour, pour qu'une capacité gratuite ne soit pas activée sans fin. |
 
 ## js/iaCombat.js
 
-Attaquer et bloquer, pour le joueur automatique. *4 fonctions, 89 lignes, 4.6 Ko.*
+Attaquer et bloquer, pour le joueur automatique. *6 fonctions, 95 lignes, 4.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `tue(P, b, a)` | B tue-t-il A ? |
 | `choisitDefenseur(P, j, defenseurs)` | L'adversaire visé : celui qu'on peut achever, sinon le plus faible en points de vie, sinon le plus menaçant. |
 | `iaAttaquants(P, q)` | Les attaquants : calculés (js/iaCombatCalcul.js), sinon par les règles ci-dessous quand le plateau est trop grand pour le calcul. |
+| `attaqueParRegles(P, q)` | Les attaquants par les règles. |
 | `iaBloqueurs(P, q)` | Les bloqueurs : calculés, sinon par les règles. |
+| `blocageParRegles(P, q)` | Les bloqueurs par les règles. |
 
 ## js/iaEvaluation.js
 
@@ -2380,17 +2384,33 @@ Garder sa main, ou non, par tirages. *5 fonctions, 95 lignes, 4.6 Ko.*
 
 ## js/iaAgent.js
 
-Un joueur automatique. *2 fonctions, 49 lignes, 2 Ko.*
+Un joueur automatique. *2 fonctions, 51 lignes, 2.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `agentNiveau(niveau, graine, siege)` | Un joueur automatique du niveau dit. |
+| `agentNiveau(niveau, graine, siege)` | Un joueur automatique du niveau dit : le rapide calcule son combat, les autres essaient leurs coups sur une copie de la partie (js/iaRecherche.js). |
 | `agentIA(graine, siege)` | — |
 
 | Donnée | Rôle |
 |---|---|
 | `IA_V` | La version du joueur automatique : un lot joué par une autre ne se rejoue plus à l'identique (js/simStockage.js `lotPerime()`). |
 | `NIVEAUX_IA` | Les niveaux de jeu qu'un lot peut choisir, du plus rapide au plus fort. |
+
+## js/iaRecherche.js
+
+Essayer ses coups avant de les jouer. *4 fonctions, 94 lignes, 4.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `agentRecherche(graine, siege, niveau)` | Un joueur automatique qui essaie ses coups : il enveloppe un joueur rapide, à qui il laisse tout ce qu'il ne cherche pas. |
+| `candidatsRecherche(P, q, base, reglage)` | Les coups candidats d'une question : la réponse rapide d'abord, qui l'emporte à note égale. |
+| `horizonRecherche(P, q, reglage)` | Jusqu'où suivre un essai. |
+| `reponseCherchee(P, q, base, reglage, graine)` | La réponse cherchée, ou `undefined` s'il n'y a rien à chercher (un seul candidat, ou aucun essai n'a abouti). |
+
+| Donnée | Rôle |
+|---|---|
+| `RECHERCHE_IA` | — |
+| `ETAPES_APRES_COMBAT` | — |
 
 ## js/symboles.js
 
@@ -3319,7 +3339,7 @@ Un lot de parties, par tranches. *11 fonctions, 144 lignes, 6.6 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *9 fonctions, 156 lignes, 11 Ko.*
+La section « Simulation ». *9 fonctions, 161 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3336,6 +3356,7 @@ La section « Simulation ». *9 fonctions, 156 lignes, 11 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `COUV_TABLE` | — |
+| `LIBELLES_NIVEAUX` | Le nom d'un niveau de jeu, avec ce qu'il coûte en temps. |
 
 ## js/forgeDepot.js
 

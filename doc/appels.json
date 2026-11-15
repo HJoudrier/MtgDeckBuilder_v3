@@ -124,6 +124,7 @@
   "iaCombatCalcul.js",
   "iaMulligan.js",
   "iaAgent.js",
+  "iaRecherche.js",
   "symboles.js",
   "champsJeu.js",
   "scryfallApplique.js",
@@ -4288,11 +4289,14 @@
     "attaquantImpose",
     "attaquantsDeclares",
     "attaqueCalculee",
+    "attaqueParRegles",
     "auraOrpheline",
     "blocageCalcule",
+    "blocageParRegles",
     "bloqueursImposes",
     "bloqueursUtiles",
     "candidatsDuControleur",
+    "candidatsRecherche",
     "carteVue",
     "cartesPermises",
     "champDe",
@@ -4384,12 +4388,9 @@
     "gardeAutre",
     "hotePart",
     "hotePartObjets",
-    "iaAttaquants",
-    "iaBloqueurs",
     "iaCartes",
     "iaCibles",
     "iaMulligan",
-    "iaPriorite",
     "iaReponse",
     "iaScrute",
     "initiativeEnJeu",
@@ -4416,6 +4417,7 @@
     "nettoyage",
     "nomObj",
     "noteHistorique",
+    "notesPriorite",
     "objetEvt",
     "objetZone",
     "objetsZone",
@@ -4787,6 +4789,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "attaqueParRegles",
     "compteDuTour",
     "compteJoueurs",
     "declareAttaquants",
@@ -4802,7 +4805,6 @@
     "forgeExpression",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
-    "iaAttaquants",
     "preparationRiposte",
     "variantesEtendues",
     "variantesMotsClesE"
@@ -4821,6 +4823,7 @@
    "appeleePar": [
     "actionsLegales",
     "actionsPossibles",
+    "attaqueParRegles",
     "baseEval",
     "benediction",
     "bloqueursUtiles",
@@ -4848,7 +4851,6 @@
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
-    "iaAttaquants",
     "iaCartes",
     "iaReponse",
     "iaScrute",
@@ -5148,8 +5150,11 @@
     "agregeForge",
     "appliqueSBA",
     "attaqueCalculee",
+    "attaqueParRegles",
     "baseEval",
+    "blocageParRegles",
     "bloqueursUtiles",
+    "candidatsRecherche",
     "caracForge",
     "caracsDe",
     "caracsJugees",
@@ -5175,8 +5180,6 @@
     "forgeRemplacementsC.js (chargement)",
     "frappe",
     "gardeAutre",
-    "iaAttaquants",
-    "iaBloqueurs",
     "iaCibles",
     "infligeUnePart",
     "instantane",
@@ -5220,12 +5223,12 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "blocageParRegles",
     "chercheBlocs",
     "declareAttaquants",
     "declareBloqueurs",
     "degatsCombat",
     "detruitForge",
-    "iaBloqueurs",
     "initiativeEnJeu",
     "jeuOpsA.js (chargement)",
     "peutAttaquer",
@@ -5282,6 +5285,7 @@
    "appeleePar": [
     "actionsLegales",
     "appliqueSBA",
+    "attaqueParRegles",
     "baseEval",
     "bloqueursUtiles",
     "compteDuTour",
@@ -5299,7 +5303,6 @@
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
-    "iaAttaquants",
     "iaCibles",
     "impactCapacite",
     "impactSort",
@@ -5704,7 +5707,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaAttaquants",
+    "attaqueParRegles",
     "iaOui",
     "notePrincipale",
     "scoreEffet",
@@ -7612,12 +7615,12 @@
     "declencheursEtat",
     "forgeActivations.js (chargement)",
     "forgeEffetsI.js (chargement)",
-    "iaPriorite",
     "iaReponse",
     "impactCapacite",
     "instantane",
     "libelleAction",
     "manaReflete",
+    "notesPriorite",
     "sourcesMana"
    ]
   },
@@ -8278,13 +8281,13 @@
    "appelleParHtml": [],
    "appeleePar": [
     "attaquantImpose",
+    "attaqueParRegles",
     "blocageCalcule",
+    "blocageParRegles",
     "bloqueursImposes",
     "bloqueursUtiles",
     "chercheBlocs",
     "declareBloqueurs",
-    "iaAttaquants",
-    "iaBloqueurs",
     "questionPourUI"
    ]
   },
@@ -8542,6 +8545,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "horizonRecherche",
     "reprise",
     "suiteDuTour"
    ]
@@ -8813,6 +8817,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "agentRecherche",
     "essaieCoup"
    ]
   },
@@ -8861,7 +8866,9 @@
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
-   "appeleePar": []
+   "appeleePar": [
+    "reponseCherchee"
+   ]
   },
   {
    "nom": "ficheVue",
@@ -13068,8 +13075,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "attaqueCalculee",
-    "declareAttaquants",
-    "iaAttaquants"
+    "attaqueParRegles",
+    "declareAttaquants"
    ]
   },
   {
@@ -13089,8 +13096,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "attaqueCalculee",
+    "attaqueParRegles",
     "declareAttaquants",
-    "iaAttaquants",
     "paieTaxesAttaque"
    ]
   },
@@ -16038,10 +16045,10 @@
     "forgeEffetsI.js (chargement)",
     "iaCartes",
     "iaCibles",
-    "iaPriorite",
     "iaReponse",
     "impactSort",
     "meilleureCibleHostile",
+    "notesPriorite",
     "scoreEffet",
     "utiliteEnMain",
     "valeurObjet"
@@ -16061,12 +16068,12 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "attaqueParRegles",
     "baseEval",
     "blocageCalcule",
+    "blocageParRegles",
     "bloqueursUtiles",
     "combattant",
-    "iaAttaquants",
-    "iaBloqueurs",
     "iaCartes",
     "iaCibles",
     "impactCapacite",
@@ -16090,8 +16097,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "attaqueCalculee",
-    "choisitDefenseur",
-    "iaAttaquants"
+    "attaqueParRegles",
+    "choisitDefenseur"
    ]
   },
   {
@@ -16340,8 +16347,8 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaPriorite",
     "iaReponse",
+    "notesPriorite",
     "scoreLancer"
    ]
   },
@@ -16360,8 +16367,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaPriorite",
-    "iaReponse"
+    "iaReponse",
+    "notesPriorite"
    ]
   },
   {
@@ -16376,7 +16383,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaPriorite"
+    "notesPriorite"
    ]
   },
   {
@@ -16408,12 +16415,27 @@
    "ligne": 144,
    "chargement": false,
    "appelle": [
-    "capacitesDe",
     "enPhasePrincipale",
     "iaReponse",
+    "noteActivation",
+    "notesPriorite"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "agentIA",
+    "candidatsRecherche"
+   ]
+  },
+  {
+   "nom": "notesPriorite",
+   "fichier": "iaPriorite.js",
+   "ligne": 160,
+   "chargement": false,
+   "appelle": [
+    "capacitesDe",
     "impactCapacite",
     "impactSort",
-    "noteActivation",
     "obj",
     "scoreLancer",
     "scoreTerrain",
@@ -16422,13 +16444,14 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "agentIA"
+    "candidatsRecherche",
+    "iaPriorite"
    ]
   },
   {
    "nom": "regenUtile",
    "fichier": "iaPriorite.js",
-   "ligne": 173,
+   "ligne": 180,
    "chargement": false,
    "appelle": [
     "opHostile"
@@ -16442,7 +16465,7 @@
   {
    "nom": "scoreLancer",
    "fichier": "iaPriorite.js",
-   "ligne": 182,
+   "ligne": 189,
    "chargement": false,
    "appelle": [
     "defVariante",
@@ -16452,18 +16475,19 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaPriorite"
+    "notesPriorite"
    ]
   },
   {
    "nom": "noteActivation",
    "fichier": "iaPriorite.js",
-   "ligne": 200,
+   "ligne": 207,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "agentRecherche",
     "iaPriorite"
    ]
   },
@@ -16478,8 +16502,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaAttaquants",
-    "iaBloqueurs"
+    "attaqueParRegles",
+    "blocageParRegles"
    ]
   },
   {
@@ -16494,7 +16518,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "iaAttaquants"
+    "attaqueParRegles"
    ]
   },
   {
@@ -16503,8 +16527,23 @@
    "ligne": 35,
    "chargement": false,
    "appelle": [
-    "adversaires",
     "attaqueCalculee",
+    "attaqueParRegles"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "agentIA",
+    "candidatsRecherche"
+   ]
+  },
+  {
+   "nom": "attaqueParRegles",
+   "fichier": "iaCombat.js",
+   "ligne": 40,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
     "attaquePermise",
     "car",
     "champDe",
@@ -16521,17 +16560,33 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "agentIA"
+    "candidatsRecherche",
+    "iaAttaquants"
    ]
   },
   {
    "nom": "iaBloqueurs",
    "fichier": "iaCombat.js",
-   "ligne": 62,
+   "ligne": 65,
+   "chargement": false,
+   "appelle": [
+    "blocageCalcule",
+    "blocageParRegles"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "agentIA",
+    "candidatsRecherche"
+   ]
+  },
+  {
+   "nom": "blocageParRegles",
+   "fichier": "iaCombat.js",
+   "ligne": 70,
    "chargement": false,
    "appelle": [
     "aMot",
-    "blocageCalcule",
     "car",
     "obj",
     "peutBloquer",
@@ -16541,7 +16596,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "agentIA"
+    "candidatsRecherche",
+    "iaBloqueurs"
    ]
   },
   {
@@ -16634,7 +16690,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "blocageCalcule",
-    "meilleureAttaque"
+    "meilleureAttaque",
+    "reponseCherchee"
    ]
   },
   {
@@ -16881,10 +16938,11 @@
   {
    "nom": "agentNiveau",
    "fichier": "iaAgent.js",
-   "ligne": 26,
+   "ligne": 28,
    "chargement": false,
    "appelle": [
-    "agentIA"
+    "agentIA",
+    "agentRecherche"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -16896,7 +16954,7 @@
   {
    "nom": "agentIA",
    "fichier": "iaAgent.js",
-   "ligne": 30,
+   "ligne": 32,
    "chargement": false,
    "appelle": [
     "brasse",
@@ -16915,8 +16973,80 @@
    "appelleParHtml": [],
    "appeleePar": [
     "agentNiveau",
+    "agentRecherche",
     "commenceTable",
+    "reponseCherchee",
     "reprendTable"
+   ]
+  },
+  {
+   "nom": "agentRecherche",
+   "fichier": "iaRecherche.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [
+    "agentIA",
+    "noteActivation",
+    "pointDeReprise",
+    "reponseCherchee"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "agentNiveau"
+   ]
+  },
+  {
+   "nom": "candidatsRecherche",
+   "fichier": "iaRecherche.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "attaqueParRegles",
+    "blocageParRegles",
+    "car",
+    "iaAttaquants",
+    "iaBloqueurs",
+    "iaPriorite",
+    "notesPriorite",
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reponseCherchee"
+   ]
+  },
+  {
+   "nom": "horizonRecherche",
+   "fichier": "iaRecherche.js",
+   "ligne": 67,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [
+    "etape"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reponseCherchee"
+   ]
+  },
+  {
+   "nom": "reponseCherchee",
+   "fichier": "iaRecherche.js",
+   "ligne": 80,
+   "chargement": false,
+   "appelle": [
+    "agentIA",
+    "candidatsRecherche",
+    "essaieCoup",
+    "evalue",
+    "horizonRecherche"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "agentRecherche"
    ]
   },
   {
@@ -23329,7 +23459,7 @@
   {
    "nom": "optionsHTML",
    "fichier": "simSection.js",
-   "ligne": 27,
+   "ligne": 30,
    "chargement": false,
    "appelle": [
     "esc"
@@ -23346,7 +23476,7 @@
   {
    "nom": "tableHTML",
    "fichier": "simSection.js",
-   "ligne": 32,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "clesDecks",
@@ -23361,7 +23491,7 @@
   {
    "nom": "adversairesHTML",
    "fichier": "simSection.js",
-   "ligne": 64,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "esc",
@@ -23379,7 +23509,7 @@
   {
    "nom": "pastilleLien",
    "fichier": "simSection.js",
-   "ligne": 93,
+   "ligne": 98,
    "chargement": false,
    "appelle": [
     "depuisQuand",
@@ -23394,7 +23524,7 @@
   {
    "nom": "relaisHTML",
    "fichier": "simSection.js",
-   "ligne": 102,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
     "esc"
@@ -23408,7 +23538,7 @@
   {
    "nom": "badgeCouverture",
    "fichier": "simSection.js",
-   "ligne": 115,
+   "ligne": 120,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -23421,7 +23551,7 @@
   {
    "nom": "couvertureHTML",
    "fichier": "simSection.js",
-   "ligne": 121,
+   "ligne": 126,
    "chargement": false,
    "appelle": [
     "badgeCouverture",
@@ -23437,7 +23567,7 @@
   {
    "nom": "renderK",
    "fichier": "simSection.js",
-   "ligne": 142,
+   "ligne": 147,
    "chargement": false,
    "appelle": [
     "adversairesHTML",

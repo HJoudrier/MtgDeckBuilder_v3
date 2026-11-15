@@ -24,6 +24,9 @@ function couvertureTable(cfg) {
   return val;
 }
 
+/* Le nom d'un niveau de jeu, avec ce qu'il coûte en temps. */
+const LIBELLES_NIVEAUX = {rapide: 'Rapide', moyen: 'Moyen — essaie ses coups (≈ 3 × plus long)', fort: 'Fort — suit ses coups un tour (≈ 50 × plus long)'};
+
 function optionsHTML(paires, choisi) {
   return paires.map(([v, l]) => `<option value="${esc(v)}"${v === choisi ? ' selected' : ''}>${esc(l)}</option>`).join('');
 }
@@ -43,6 +46,8 @@ function tableHTML(cfg) {
       <label class="sim-champ court">Parties <input type="number" min="1" max="2000" data-sim="parties" value="${cfg.parties}"></label>
       <label class="sim-champ court" title="Même graine, mêmes decks : mêmes parties. Changer de graine, c'est tirer d'autres mélanges.">Graine <input type="number" min="1" data-sim="graine" value="${cfg.graine}"></label>
       <label class="sim-champ court" title="Au-delà, la partie est déclarée nulle.">Tours max <input type="number" min="5" max="60" data-sim="plafond" value="${cfg.plafond}"></label>
+      <label class="sim-champ" title="Les niveaux moyen et fort essaient leurs coups sur une copie de la partie, dont ils connaissent tout : plus justes, plus lents.">Jeu des IA
+        <select data-sim="niveauIA">${optionsHTML(NIVEAUX_IA.map(n => [n, LIBELLES_NIVEAUX[n]]), cfg.niveau)}</select></label>
     </div>
     <div class="row sim-lancer">
       ${enCours ? `<button type="button" class="btn danger" data-act="simArreter">Arrêter</button>`

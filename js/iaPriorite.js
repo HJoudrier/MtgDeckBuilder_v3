@@ -148,12 +148,20 @@ function iaPriorite(P, q, ag) {
     return i >= 0 ? noteActivation(P, actions[i], ag, i) : passe;
   }
   let best = -1, score = 0;
-  actions.forEach((a, i) => {
+  notesPriorite(P, j, actions, ag).forEach(([i, s]) => {
+    if (actions[i].k === 'terrain' ? s > score : s > score && s >= 1) { best = i; score = s; }
+  });
+  return best >= 0 ? noteActivation(P, actions[best], ag, best) : passe;
+}
+
+/* Les actions de la phase principale, notées : un terrain vaut cent et
+   plus, pour passer avant tout ; une action qui ne vaut pas 1 ne se joue
+   pas. La recherche (js/iaRecherche.js) y prend ses candidats. */
+function notesPriorite(P, j, actions, ag) {
+  return actions.map((a, i) => {
     if (a.k === 'terrain') {
       const t = obj(P, a.id);
-      const s = 100 + scoreTerrain(P, j, a.variante === 'dos' ? {...t, def: t.def.dos} : t) - (a.variante === 'dos' ? 0.5 : 0);
-      if (s > score) { best = i; score = s; }
-      return;
+      return [i, 100 + scoreTerrain(P, j, a.variante === 'dos' ? {...t, def: t.def.dos} : t) - (a.variante === 'dos' ? 0.5 : 0)];
     }
     let s = -1;
     if (a.k === 'lancer') s = scoreLancer(P, j, a);
@@ -163,9 +171,8 @@ function iaPriorite(P, q, ag) {
     else if (a.k === 'suspendre') s = impactSort(P, j, obj(P, a.id)) * 0.5;
     else if (a.k === 'activer') s = impactCapacite(P, j, obj(P, a.id), capacitesDe(P, obj(P, a.id))[a.i], ag);
     else if (a.k === 'equiper') s = obj(P, a.id).att == null ? 2.5 : -1;
-    if (s > score && s >= 1) { best = i; score = s; }
+    return [i, s];
   });
-  return best >= 0 ? noteActivation(P, actions[best], ag, best) : passe;
 }
 
 /* Une régénération sert-elle maintenant : la créature est au combat, ou

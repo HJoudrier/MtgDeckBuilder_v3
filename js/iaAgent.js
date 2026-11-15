@@ -20,11 +20,13 @@
 const IA_V = 3;
 
 /* Les niveaux de jeu qu'un lot peut choisir, du plus rapide au plus fort. */
-const NIVEAUX_IA = ['rapide'];
+const NIVEAUX_IA = ['rapide', 'moyen'];
 
-/* Un joueur automatique du niveau dit. */
+/* Un joueur automatique du niveau dit : le rapide calcule son combat, les
+   autres essaient leurs coups sur une copie de la partie
+   (js/iaRecherche.js). */
 function agentNiveau(niveau, graine, siege) {
-  return agentIA(graine, siege);
+  return niveau === 'rapide' || !RECHERCHE_IA[niveau] ? agentIA(graine, siege) : agentRecherche(graine, siege, niveau);
 }
 
 function agentIA(graine, siege) {

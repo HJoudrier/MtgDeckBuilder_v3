@@ -33,8 +33,11 @@ function choisitDefenseur(P, j, defenseurs) {
 /* Les attaquants : calculés (js/iaCombatCalcul.js), sinon par les règles
    ci-dessous quand le plateau est trop grand pour le calcul. */
 function iaAttaquants(P, q) {
-  const calcul = attaqueCalculee(P, q);
-  if (calcul) return calcul;
+  return attaqueCalculee(P, q) || attaqueParRegles(P, q);
+}
+
+/* Les attaquants par les règles. */
+function attaqueParRegles(P, q) {
   const j = q.joueur, defs = q.extra.defenseurs;
   const di = choisitDefenseur(P, j, defs), cible = defs[di];
   if (!cible || cible.j == null) return [];
@@ -60,8 +63,11 @@ function iaAttaquants(P, q) {
 
 /* Les bloqueurs : calculés, sinon par les règles. */
 function iaBloqueurs(P, q) {
-  const calcul = blocageCalcule(P, q);
-  if (calcul) return calcul;
+  return blocageCalcule(P, q) || blocageParRegles(P, q);
+}
+
+/* Les bloqueurs par les règles. */
+function blocageParRegles(P, q) {
   const j = q.joueur, J = P.joueurs[j];
   const blqs = q.options.map(id => obj(P, id)), atts = q.extra.attaquants.map(id => obj(P, id));
   const libres = new Set(blqs.map((_, i) => i)), r = [], bloques = new Set();

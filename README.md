@@ -141,6 +141,7 @@ js/                 modules, chargés dans cet ordre :
   iaCombatCalcul.js le combat calculé : alpha-bêta à deux niveaux sur un modèle réduit du combat
   iaMulligan.js     garder sa main, ou non, par tirages de la bibliothèque
   iaAgent.js        un joueur automatique, ses niveaux, la version de l'IA
+  iaRecherche.js    les niveaux moyen et fort : essayer ses coups sur une copie de la partie
 
   — ce qui vient du dehors —
   champsJeu.js      ce que le moteur demande à une carte : mots-clés, loyauté, faces
@@ -603,6 +604,20 @@ du premier défenseur. Elle enchaîne la suite du tour (`suiteDuTour()`) et les 
 jouer jusqu'à un horizon. Deux propriétés sont vérifiées par le banc : une partie copiée puis
 reprise avec les mêmes réponses finit à l'identique ; une partie dont l'IA essaie des coups sur des
 copies finit comme si elle n'en avait essayé aucun — rien ne fuit d'une copie vers la partie.
+
+**Essayer ses coups avant de les jouer** (IA4 et IA5, `js/iaRecherche.js`). Aux points de reprise, le
+joueur automatique des niveaux moyen et fort prend quelques candidats — la réponse rapide d'abord,
+puis les meilleures actions de `notesPriorite()` et « passer », ou les plans d'attaque et de blocage
+calculés, par les règles, aucun, tous —, essaie chacun avec `essaieCoup()`, laisse tout le monde jouer
+au niveau rapide jusqu'à un horizon, et garde le mieux noté ; la réponse rapide l'emporte à égalité.
+Au niveau **moyen**, l'horizon est le retour de la pile vide (un sort, une capacité) ou la fin du
+combat — les blocages adverses et les tours de magie y sont vus, ce que le combat calculé ignore. La
+copie est la vraie partie, ordre des bibliothèques compris : un seul essai suffit par coup, et une
+partie se rejoue à l'identique. Les cibles, les modes et X restent au niveau rapide. Le niveau se
+choisit dans la table de l'onglet Simulation (`S.simulation.niveauIA`). Au banc, contre le niveau
+rapide : 57,6 % à deux joueurs sur 900 parties (intervalle 54,3–60,7), mais à quatre seulement
+27,7 % pour 25 % à égalité, un gain que 560 parties ne distinguent pas du bruit ; environ trois fois
+plus lent.
 
 ## Le modèle Forge
 

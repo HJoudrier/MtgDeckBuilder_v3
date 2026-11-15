@@ -974,6 +974,44 @@ sequenceDiagram
 
 ---
 
+### 3.26 Une décision cherchée (niveaux moyen et fort)
+
+Entre joueurs automatiques, au niveau moyen ou fort, une question qui tombe sur un point de
+reprise — la priorité du joueur actif en phase principale pile vide, la déclaration des attaquants
+ou des bloqueurs — n'est pas tranchée par les règles : chaque coup candidat est essayé sur une
+copie de la partie, qui sait tout, et la position atteinte est notée.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant MOT as moteur (jeu*.js)
+    participant AG as iaRecherche.js
+    participant RAP as joueur rapide (ia*.js)
+    participant CP as jeuCopie.js
+    participant EV as iaEvaluation.js
+
+    MOT->>AG: question (priorité, attaquants, bloqueurs)
+    AG->>CP: pointDeReprise(P, q)
+    alt pas un point de reprise
+        AG->>RAP: repond(P, q)
+    else point de reprise
+        AG->>RAP: candidats — notesPriorite(), combat calculé, règles, passer
+        loop chaque candidat
+            AG->>CP: essaieCoup(P, q, réponse, horizon, joueurs rapides)
+            CP->>CP: copiePartie(P) — définitions partagées
+            CP->>MOT: reprise(copie) — repose la même question ?
+            CP->>RAP: les questions suivantes, jusqu'à l'horizon
+            CP-->>AG: la copie atteinte
+            AG->>EV: evalue(copie, joueur)
+        end
+        AG-->>MOT: le candidat le mieux noté (la réponse rapide à égalité)
+    end
+```
+
+L'horizon : au niveau moyen, le retour de la pile vide (un sort) ou la fin du combat ; au niveau
+fort, la fin du prochain tour du joueur qui décide. Rien ne revient de la copie vers la partie, et
+tout est semé : la partie d'un lot se rejoue à l'identique.
+
 ## 4. Ce qui périme quoi
 
 Un même clic coûte parfois rien, parfois la notation de vingt mille cartes. Trois mémos l'expliquent,
@@ -987,6 +1025,7 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | `ACHATS` (`js/achats.js`) | La liste d'achats de tous les decks | `signatureAchats()` | Les listes de chaque deck et leur drapeau « exemplaires propres », la collection, les préférences d'achat |
 | `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, script Forge et jetons, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, un script Forge téléchargé ou mis à jour, le compilateur |
 | `MANQUES` (`js/forgeVue.js`) | Ce qu'il manque au moteur pour vos cartes, et pour toute la base | les scripts, le commit, la taille de `FORGE_SAIT`, les decks et les adversaires | Un téléchargement, un deck ou un adversaire modifié, un élément ajouté au moteur |
+| `BASES_EVAL` (`js/iaEvaluation.js`) | Le plateau de chaque joueur, pour la note d'une position | la partie et `P.ver` | Tout changement de l'état ; une copie a le sien |
 | `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un adversaire, un comportement, l'archive, les fiches venues de Scryfall, les scripts Forge |
 
 Deux conséquences pratiques :
