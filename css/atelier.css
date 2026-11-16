@@ -1018,3 +1018,17 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 @media(max-width:640px){
   #onglets{position:relative!important;inset:auto!important;overflow-x:auto!important}
 }
+
+/* Definitively separate secondary tabs from the fixed four-item bottom bar. */
+#onglets, #onglets.onglets {
+  position:relative!important;
+  top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+  z-index:1!important;
+  display:flex;
+  width:100%!important;
+  margin:0!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+#onglets .onglet-icone { display:none!important; }
+#navigationPrincipale { display:grid!important; }
