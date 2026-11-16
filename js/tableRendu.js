@@ -24,6 +24,7 @@ function charpentePartie() {
   return `<div class="tr-haut"><div class="tr" data-region="etape"></div>
       <button type="button" class="tr-btn" data-act="tJournal">Journal</button>
       <button type="button" class="tr-btn" data-act="tMenu" aria-label="Menu de la table">☰</button></div>
+    <div class="tr" data-region="phases"></div>
     <div class="tr" data-region="fil"></div>
     <div class="tr" data-region="alertes"></div>
     <div class="tr-plateau" data-defile="plateau"><div class="tr" data-region="adv"></div></div>
@@ -32,6 +33,7 @@ function charpentePartie() {
     <div class="tr" data-region="main"></div>
     <div class="tr" data-region="question"></div>
     <div class="tr" data-region="fin"></div>
+    <svg class="tf" aria-hidden="true"></svg>
     <div class="tr" data-region="couche"></div>`;
 }
 
@@ -71,12 +73,6 @@ function peinsRegions(el, regions, charpente) {
 /* Les dernières lignes du journal, qui disent ce que les autres ont fait. */
 function journalTableLignes() { return TABLE.role === 'hote' ? journalTable() : (TABLE.journal || []); }
 
-function etapeHTML(v) {
-  const actif = v.joueurs[v.actif];
-  return `<span class="tr-tour">Tour ${v.tour}</span> <span class="tr-etape">${esc(NOMS_ETAPES[v.etape] || v.etape || '')}</span>
-    <span class="tr-actif">${actif.i === v.moi ? 'votre tour' : esc(actif.nom)}</span>`;
-}
-
 function filHTML() {
   const l = journalTableLignes().filter(x => !/^— Tour/.test(x.txt)).slice(-1)[0];
   return l ? `<button type="button" class="tr-fil" data-act="tJournal">${esc(l.txt)}</button>` : '';
@@ -96,6 +92,9 @@ function menuHTML() {
       <button type="button" class="btn sm" data-act="tFermeMenu" style="margin-left:auto">✕</button></div>
       ${Object.entries(DISPOSITIONS).map(([k, x]) => `<button type="button" class="tm-disp" data-act="tDisposition" data-d="${k}" aria-pressed="${k === d}">
         <b>${esc(x.nom)}</b><span class="small muted">${esc(x.desc)}</span></button>`).join('')}
+      <div class="row"><b>Vitesse des adversaires</b></div>
+      <div class="row tm-vitesse">${Object.entries(VITESSES).map(([k, x]) => `<button type="button" class="btn sm" data-act="tVitesse" data-d="${k}"
+        aria-pressed="${k === (VITESSES[S.table.vitesse] ? S.table.vitesse : 'normale')}">${esc(x.nom)}</button>`).join('')}</div>
       <div class="row"><button type="button" class="btn" data-act="tArrets">Arrêts</button>
         <button type="button" class="btn" data-act="tPasserTour">Passer jusqu'à mon tour</button>
         <button type="button" class="btn" data-act="tQuitterDemande">Quitter la table</button></div></div>`;
@@ -110,7 +109,7 @@ function finHTML(v) {
 }
 
 function regionsPartie(v) {
-  return {etape: etapeHTML(v), fil: filHTML(),
+  return {etape: etapeHTML(v), phases: phasesHTML(v), fil: filHTML(),
     alertes: (typeof alertesInvitesHTML === 'function' ? alertesInvitesHTML() : '') + (TABLE.liaisonPerdue ? perteHoteHTML() : ''),
     adv: adversairesTableHTML(v), pile: pileHTML(v), moi: moiHTML(v), main: mainHTML(v),
     question: `<div class="tq${TABLE.question ? ' a-vous' : ''}">${questionHTML(TABLE.question, v)}</div>`,
@@ -133,4 +132,5 @@ function renduTable() {
   suisActif(v);
   peinsRegions(el, regionsPartie(v), charpentePartie());
   appliquePage();
+  traceFleches();
 }

@@ -45,6 +45,31 @@ body.table-ouverte{overflow:hidden}
 .en-partie [data-region="moi"]{--tw:58px;border-top:1px solid var(--line2);background:var(--bg2);padding:2px 6px 0}
 .en-partie [data-region="main"]{--tw:66px;padding:0 6px}
 
+/* La barre des phases : la case en cours s'allume et dit son nom entier. */
+.tph{display:flex;gap:2px;margin:0;padding:3px 6px;list-style:none;background:var(--panel);border-bottom:1px solid var(--line);overflow:hidden}
+.tph li{flex:1 1 0;min-width:0;padding:3px 2px;border-radius:5px;background:var(--bg2);color:var(--dim2);font-size:10px;line-height:1.2;
+  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tph li.passee{color:var(--dim);background:var(--brass-a1)}
+.tph li.en-cours{flex:0 0 auto;max-width:48%;padding:3px 8px;background:var(--brass);color:var(--sur-brass);font-weight:700;font-size:11px}
+.tr-prio{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:99px;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);font-size:12px}
+.tr-prio.moi{border-color:var(--brass);background:var(--brass);color:var(--sur-brass);font-weight:700}
+.tj-prio{margin-left:2px;padding:1px 6px;border-radius:99px;background:var(--brass);color:var(--sur-brass);font-size:10px;font-weight:700;letter-spacing:.02em}
+.tj.prio .tj-vie,.ar-onglet.prio{animation:tb-prio 1.6s ease-in-out infinite}
+@keyframes tb-prio{50%{box-shadow:0 0 0 3px var(--brass-a3),0 0 10px var(--brass)}}
+.tj.actif .tj-nom b::before{content:'▶ ';color:var(--brass);font-size:.8em}
+.tr-fil{animation:tb-neuf 1.2s ease-out}
+@keyframes tb-neuf{from{background:var(--brass-a3);color:var(--txt-vif)}}
+
+/* Les flèches : un calque sur toute la table, qui ne prend aucun toucher. */
+.tf{position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none;overflow:visible}
+.tf path{fill:none;stroke-width:3;stroke-linecap:round}
+.tf path.tf-fond{stroke:var(--bg);stroke-width:7;opacity:.85}
+.tf path.cible{stroke:var(--brass)} .tf path.active{stroke:var(--brass);stroke-dasharray:5 5}
+.tf path.attaque{stroke:var(--bad)} .tf path.bloque{stroke:var(--U)}
+.tf marker path,.tf circle{stroke:none}
+.tf .cible path,.tf circle.cible,.tf .active path,.tf circle.active{fill:var(--brass)}
+.tf .attaque path,.tf circle.attaque{fill:var(--bad)} .tf .bloque path,.tf circle.bloque{fill:var(--U)}
+
 /* ---------- Une carte ---------- */
 .tc{--w:var(--tw,58px);--h:calc(var(--w) * 1.396);position:relative;flex:0 0 auto;width:var(--w);height:var(--h);padding:0;margin:0;border:0;
   background:none;color:var(--txt);font:inherit;cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
@@ -88,6 +113,11 @@ body.table-ouverte{overflow:hidden}
 .tc.vise .tc-corps{box-shadow:0 0 0 2px var(--bad-line);opacity:.75}
 .tc.attaque .tc-corps{box-shadow:0 0 0 2px var(--bad),0 0 10px var(--bad-a)}
 .tc.attaque.choisi .tc-corps,.tc.attaque.choix .tc-corps{box-shadow:0 0 0 3px var(--bad),0 0 12px var(--bad)}
+
+/* La carte qui s'active pulse ; celle qu'un sort vise est cernée de rouge. */
+.tc.active .tc-corps{animation:tc-active 1s ease-in-out infinite}
+@keyframes tc-active{50%{box-shadow:0 0 0 3px var(--brass),0 0 16px 4px var(--brass)}}
+.tc.ciblee .tc-corps{outline:3px dashed var(--bad);outline-offset:2px}
 
 /* Ce qui est attaché dépasse à gauche, sous la carte qui le porte. */
 .tc-groupe{display:inline-flex;align-items:flex-end;flex:0 0 auto}
@@ -231,6 +261,7 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 
 /* Un téléphone couché : peu de hauteur, des cartes plus basses. */
 @media (max-height:560px){
+  .tph{padding:2px 6px}
   .table.en-partie{--tw:42px}
   .en-partie [data-region="moi"]{--tw:46px}
   .en-partie [data-region="main"]{--tw:50px}

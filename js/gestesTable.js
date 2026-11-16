@@ -31,6 +31,7 @@ function gestesTable(act, b) {
     case 'tFermeMenu': TABLE.menu = null; renduTable(); return true;
     case 'tQuitterDemande': TABLE.menu = 'quitter'; renduTable(); return true;
     case 'tDisposition': choisitDisposition(b.dataset.d); return true;
+    case 'tVitesse': if (VITESSES[b.dataset.d]) { S.table.vitesse = b.dataset.d; scheduleSave(); renduTable(); } return true;
     case 'tPage': montrePage(i); return true;
     case 'tDeplie': TABLE.deplie = TABLE.deplie === +b.dataset.j ? null : +b.dataset.j; renduTable(); return true;
     case 'tJournal': ouvreJournalTable(); return true;

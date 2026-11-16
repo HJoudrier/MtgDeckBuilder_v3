@@ -133,6 +133,9 @@ function* priorite(P) {
     }
     if (++passes < vivants(P).length) { j = suivantVivant(P, j); continue; }
     if (!P.pile.length) return;
+    /* Quand personne ne peut répondre, un sort se résoudrait dans le même
+       souffle qu'il est lancé : à la table, on le laisse d'abord se voir. */
+    if (P.montre) yield question(P, P.pile[P.pile.length - 1].ctrl, 'voir', ['vu']);
     yield* resoudre(P, P.pile.pop());
     if (++P.actionsTour > PLAFOND_ACTIONS) { P.fin = {nulle: true, raison: 'plafond'}; return; }
     j = P.actif; passes = 0;

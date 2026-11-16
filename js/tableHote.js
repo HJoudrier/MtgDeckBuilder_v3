@@ -19,8 +19,38 @@ const TABLE = {ouverte: false, phase: '', role: '', h: null, sieges: [], agents:
   /* L'affichage : la carte en grand, la zone dépliée, le menu, la page de
      l'Arène, l'adversaire déplié du Tour de table. */
   loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '',
-  /* La pause après un geste visible d'un joueur automatique, en ms. */
-  pauseIA: 450};
+  /* Le rythme, en ms à la vitesse normale : la pause après un geste visible
+     d'un joueur automatique, et celle d'un changement d'étape. */
+  pauseIA: 1300, pauseEtape: 350};
+
+/* Les vitesses de la table, réglées au menu (`S.table.vitesse`). */
+const VITESSES = {lente: {nom: 'Lente', k: 1.8}, normale: {nom: 'Normale', k: 1}, rapide: {nom: 'Rapide', k: 0.35}};
+
+/* Combien attendre après une réponse, pour qu'un humain suive : longtemps
+   après le geste d'un automate (un sort lancé, une attaque), un peu à chaque
+   étape montrée dans la barre des phases, rien après une priorité passée. */
+function pauseApres(q, r, s, etapeChangee) {
+  const k = (VITESSES[S.table.vitesse] || VITESSES.normale).k;
+  const rien = (q.q === 'priorite' && r === q.options.length - 1) || (Array.isArray(r) && !r.length);
+  if (s.mode !== 'moi' && !rien) return k * TABLE.pauseIA * (q.q === 'attaquants' || q.q === 'bloqueurs' ? 1.3 : 1);
+  return etapeChangee && PHASE_DE[TABLE.h.P.etape] ? k * TABLE.pauseEtape : 0;
+}
+
+/* Un objet va se résoudre : on le montre, avec ses flèches, le temps qu'on
+   le lise — plus longtemps celui d'un adversaire que le sien. */
+async function montrePile(q) {
+  const k = (VITESSES[S.table.vitesse] || VITESSES.normale).k;
+  diffuseVues(true);
+  await attendre(k * (q.joueur === TABLE.moi ? TABLE.pauseEtape * 1.5 : TABLE.pauseIA));
+  if (TABLE.h && TABLE.h.attente === q) repondre(TABLE.h, TABLE.agents, 0, Infinity, null);
+}
+
+/* La vue d'un joueur, et qui la partie attend : celui qui a la priorité. */
+function vueTable(j) {
+  const q = TABLE.h.attente;
+  return {...vue(TABLE.h.P, j), prio: q && q.q === 'priorite' ? q.joueur : null, attend: q && q.q !== 'voir' ? q.joueur : null,
+    resout: !!(q && q.q === 'voir')};
+}
 
 function attendre(ms) { return new Promise(ok => setTimeout(ok, ms)); }
 
@@ -50,8 +80,8 @@ async function commenceTable() {
   const sieges = sources.map(siegeDeSource);
   if (sieges.some(x => !x || !x.cartes.length)) { toast('Un siège n\'a pas de deck jouable.'); return; }
   const graine = (Date.now() ^ (Math.random() * 4294967296)) >>> 0;
-  TABLE.config = {graine, premier: graine % sieges.length};
-  TABLE.h = creePartie({graine, premier: graine % sieges.length, plafondTours: 60, journal: true, consigne: true,
+  TABLE.config = {graine, premier: graine % sieges.length, montre: true};
+  TABLE.h = creePartie({graine, premier: graine % sieges.length, plafondTours: 60, journal: true, consigne: true, montre: true,
     sieges: sieges.map((x, i) => ({...x, nom: sources[i].nom}))});
   TABLE.agents = sieges.map(() => ({humain: true}));
   sources.forEach((s, i) => {
@@ -74,16 +104,17 @@ async function boucleTable() {
       const q = TABLE.h.attente;
       if (!q) { avance(TABLE.h, TABLE.agents, Infinity, null); continue; }
       const s = TABLE.sieges[q.joueur];
+      if (q.q === 'voir') { await montrePile(q); continue; }
       let r;
       if (s.mode === 'ia' || s.confie) r = valideReponse(q, s.ia.repond(TABLE.h.P, q));
       else if (q.q === 'priorite' && !doitDemander(TABLE.h.P, q.joueur, q, s.arrets)) r = q.options.length - 1;
       else { poseQuestion(q); return; }
-      const avant = signePublic(TABLE.h.P);
+      const avant = signePublic(TABLE.h.P), etape = TABLE.h.P.etape;
       repondre(TABLE.h, TABLE.agents, r, Infinity, null);
       if (signePublic(TABLE.h.P) !== avant) {
         diffuseVues();
-        const passe = q.q === 'priorite' && r === q.options.length - 1;
-        await (s.mode !== 'moi' && !passe ? attendre(TABLE.pauseIA) : rendMain());
+        const ms = pauseApres(q, r, s, TABLE.h.P.etape !== etape);
+        await (ms ? attendre(ms) : rendMain());
       }
     }
     if (TABLE.h && TABLE.h.fini) { TABLE.question = null; diffuseVues(true); oublieTableSauvee(); }
@@ -97,7 +128,7 @@ function poseQuestion(q) {
   TABLE.attenteNom = s.nom;
   if (s.mode === 'moi') {
     TABLE.question = questionPourUI(P, q);
-    TABLE.vue = vue(P, TABLE.moi);
+    TABLE.vue = vueTable(TABLE.moi);
     TABLE.sel = null; TABLE.erreur = '';
     renduTable();
   } else {
@@ -131,7 +162,7 @@ function diffuseVues(tout) {
     TABLE.minuterie = null;
     if (!TABLE.h) return;
     const P = TABLE.h.P;
-    TABLE.vue = vue(P, TABLE.moi);
+    TABLE.vue = vueTable(TABLE.moi);
     if (!TABLE.h.attente || TABLE.h.attente.joueur !== TABLE.moi) TABLE.question = null;
     renduTable();
     TABLE.sieges.forEach((s, i) => { if (s.mode === 'distant' && typeof envoieVue === 'function') envoieVue(s, i); });

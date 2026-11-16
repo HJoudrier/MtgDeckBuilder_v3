@@ -218,6 +218,7 @@ document.addEventListener('wheel', ev => {
    nouveau, sans rien redessiner, pour que les sections gardent la bonne marge
    de défilement. */
 window.addEventListener('resize', majHauteurEntete);
+window.addEventListener('resize', planifieFleches);
 
 // Clavier : Échap ferme la modale et l'aperçu
 document.addEventListener('keydown', ev => {

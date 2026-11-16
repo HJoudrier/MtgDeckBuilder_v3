@@ -32,9 +32,9 @@ function compteursHTML(J) {
 function cartouche(J, v, classe = '') {
   const etat = etatJoueur(J.i);
   const vie = J.vie <= 5 ? ' bas' : J.vie <= 10 ? ' moyen' : '';
-  return `<div class="tj${v.actif === J.i ? ' actif' : ''}${J.elimine ? ' elimine' : ''} ${classe}">
-    <button type="button" class="tj-nom${etat ? ' ' + etat : ''}" data-act="tJoueur" data-j="${J.i}">
-      <span class="tj-vie${vie}" title="points de vie">${J.vie}</span><b>${esc(J.nom)}</b></button>
+  return `<div class="tj${v.actif === J.i ? ' actif' : ''}${v.prio === J.i ? ' prio' : ''}${J.elimine ? ' elimine' : ''} ${classe}">
+    <button type="button" class="tj-nom${etat ? ' ' + etat : ''}" data-act="tJoueur" data-j="${J.i}" data-ancre-j="${J.i}">
+      <span class="tj-vie${vie}" title="points de vie">${J.vie}</span><b>${esc(J.nom)}</b>${v.prio === J.i ? '<span class="tj-prio">priorité</span>' : ''}</button>
     <span class="tj-compteurs">${J.elimine ? `<span class="tj-c">éliminé · ${esc(CAUSES[J.raison] || J.raison || '')}</span>` : compteursHTML(J)}</span>
   </div>`;
 }

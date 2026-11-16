@@ -59,7 +59,9 @@ function tuile(o, v, opts = {}) {
   const etat = opts.etat != null ? opts.etat : etatChoix(o.id);
   const vign = opts.mode === 'vignette';
   const img = imageCarte(o.nom, vign ? 'art_crop' : 'normal');
+  const m = v && v.pile ? marquesPile(v) : null;
   const cls = ['tc', vign ? 'vign' : '', o.engage ? 'engage' : '', o.jeton ? 'jeton' : '', o.attaque ? 'attaque' : '',
+    m && m.sources.has(o.id) ? 'active' : '', m && m.visees.has(o.id) ? 'ciblee' : '',
     o.bloque != null ? 'bloque' : '', opts.classe || '', etat].filter(Boolean).join(' ');
   return `<button type="button" class="${cls}" data-act="${opts.act || 'tCarte'}" data-id="${o.id}"${opts.i != null ? ` data-i="${opts.i}"` : ''}
     data-loupe="${o.id}" data-teinte="${teinteCarte(f)}" aria-label="${esc(o.nom)}"><span class="tc-corps">

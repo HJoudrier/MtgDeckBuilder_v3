@@ -869,8 +869,10 @@ sequenceDiagram
     participant IN as table de l'invité
 
     B->>M: avance() — s'arrête à chaque question (tous les sièges « humains »)
-    alt siège automatique ou confié
-        B->>M: repondre(réponse de l'IA), pause si un geste se voit
+    alt question « voir » (un objet va se résoudre)
+        B->>B: montrePile() — vues diffusées, pause, puis repondre(0)
+    else siège automatique ou confié
+        B->>M: repondre(réponse de l'IA), pauseApres() — geste visible ou nouvelle étape
     else priorité qu'aucun arrêt n'appelle
         B->>A: doitDemander() → non
         B->>M: repondre(passer)

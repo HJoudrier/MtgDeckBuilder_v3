@@ -21,7 +21,10 @@ function nouvellePartie(cfg) {
     cartes: [], tour: 0, actif: cfg.premier || 0, premier: cfg.premier || 0, etape: '', prochainId: 1, ver: 0,
     ts: 0, enAttente: [], evts: [], partis: [], suivi: new Map(), lkis: new Map(), journal: cfg.journal ? [] : null, fin: null,
     reponses: cfg.consigne ? [] : null, nq: 0, plafondTours: cfg.plafondTours || 25, actionsTour: 0,
-    nb: cfg.sieges.length, combat: null, sansCombat: false, finTour: false
+    nb: cfg.sieges.length, combat: null, sansCombat: false, finTour: false,
+    /* À la table interactive, un temps pour voir chaque objet de la pile
+       avant qu'il se résolve (question « voir », js/jeuPile.js). */
+    montre: !!cfg.montre
   };
   cfg.sieges.forEach((s, i) => {
     const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, poison: 0, energie: 0,

@@ -129,11 +129,11 @@ function nouvellesLignes(s) {
 }
 
 function envoieVue(s, i) {
-  if (s.k) s.k.envoie({t: 'vue', v: vue(TABLE.h.P, i), journal: nouvellesLignes(s), attente: TABLE.attenteNom});
+  if (s.k) s.k.envoie({t: 'vue', v: vueTable(i), journal: nouvellesLignes(s), attente: TABLE.attenteNom});
 }
 
 function envoieQuestion(s, q) {
-  if (s.k) s.k.envoie({t: 'question', q: questionPourUI(TABLE.h.P, q), v: vue(TABLE.h.P, q.joueur), journal: nouvellesLignes(s)});
+  if (s.k) s.k.envoie({t: 'question', q: questionPourUI(TABLE.h.P, q), v: vueTable(q.joueur), journal: nouvellesLignes(s)});
 }
 
 function envoieErreur(s, n, err) { if (s.k) s.k.envoie({t: 'erreur', n, err}); }

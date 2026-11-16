@@ -52,8 +52,8 @@ function areneAdversaires(v) {
   const page = Math.min(TABLE.page || 0, adv.length - 1);
   const onglets = adv.length > 1 ? `<div class="ar-onglets">${adv.map((J, k) => {
     const e = etatJoueur(J.i);
-    return `<button type="button" class="ar-onglet${k === page ? ' vu' : ''}${v.actif === J.i ? ' actif' : ''}${J.elimine ? ' elimine' : ''}${e ? ' ' + e : ''}"
-      data-act="tPage" data-i="${k}"><span class="tj-vie">${J.vie}</span><span class="ar-nom">${esc(J.nom)}</span>
+    return `<button type="button" class="ar-onglet${k === page ? ' vu' : ''}${v.actif === J.i ? ' actif' : ''}${v.prio === J.i ? ' prio' : ''}${J.elimine ? ' elimine' : ''}${e ? ' ' + e : ''}"
+      data-act="tPage" data-i="${k}" data-ancre-j="${J.i}"><span class="tj-vie">${J.vie}</span><span class="ar-nom">${esc(J.nom)}</span>
       <span class="tj-c"><i class="tj-dos"></i>${J.main}</span></button>`;
   }).join('')}</div>` : '';
   return onglets + `<div class="ar-pages" data-defile="ar-pages">${adv.map(J =>
@@ -138,6 +138,7 @@ function appliquePage() {
    à jour sans repeindre. */
 function defileTable(ev) {
   const el = ev.target;
+  if (TABLE.ouverte) planifieFleches();
   if (!TABLE.ouverte || !el || !el.dataset || el.dataset.defile !== 'ar-pages' || !el.clientWidth) return;
   const k = Math.round(el.scrollLeft / el.clientWidth);
   if (k !== TABLE.page) { TABLE.page = k; marqueOnglet(k); }
