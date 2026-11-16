@@ -30,15 +30,6 @@
     const cible = GROUPES[groupe].includes(pageCourante) ? pageCourante : PREMIERE_PAGE[groupe];
     activerOnglet(cible);
   };
-  document.addEventListener('keydown',ev=>{
-    if(ev.key!=='ArrowLeft'&&ev.key!=='ArrowRight'&&ev.key!=='Home'&&ev.key!=='End')return;
-    const actif=ev.target.closest&&ev.target.closest('#onglets [data-onglet]');
-    if(!actif)return;
-    const boutons=[...document.querySelectorAll('#onglets [data-onglet]:not([hidden])')];
-    const i=boutons.indexOf(actif);if(i<0)return;
-    const j=ev.key==='Home'?0:ev.key==='End'?boutons.length-1:(i+(ev.key==='ArrowRight'?1:-1)+boutons.length)%boutons.length;
-    ev.preventDefault();activerOnglet(boutons[j].dataset.onglet);boutons[j].focus();
-  });
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>window.renderOnglets(),{once:true});
   else window.renderOnglets();
 })();
