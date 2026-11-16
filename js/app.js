@@ -257,7 +257,7 @@ document.addEventListener('keydown', ev => {
   const ongletFocus = ev.target && ev.target.closest && ev.target.closest('#onglets [data-onglet]');
   if (ongletFocus && ['ArrowLeft','ArrowRight','Home','End'].includes(ev.key)) {
     ev.preventDefault();
-    const boutons = [...document.querySelectorAll('#onglets [data-onglet]')];
+    const boutons = [...document.querySelectorAll('#onglets [data-onglet]')].filter(b => !b.hidden);
     const i = boutons.indexOf(ongletFocus);
     const j = ev.key === 'Home' ? 0
       : ev.key === 'End' ? boutons.length - 1
