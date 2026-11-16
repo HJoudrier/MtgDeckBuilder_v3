@@ -1032,3 +1032,8 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 }
  /* Les icônes du menu secondaire sont conservées ; seule la barre principale est fixe. */
 #navigationPrincipale { display:grid!important; }
+
+
+/* Icônes Lucide des trois commandes d'en-tête. */
+.head-actions svg{width:16px;height:16px;flex:0 0 auto;stroke-width:1.9}
+.head-param svg{width:17px;height:17px}
