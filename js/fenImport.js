@@ -74,7 +74,8 @@ function parseMtgoList(txt) {
            .replace(/\s*\*[^*]*\*\s*$/, '')
            .replace(/\s*<[^>]*>\s*$/, '')
            .trim();
-    nm = nm.replace(/\s*(?:\/\/|\||\/)\s*/g, ' // ').replace(/\s{2,}/g, ' ').trim();
+    /* Ne pas découper les barres obliques internes aux noms (ex. « SP//dr »). Les séparateurs de faces exportés avec des espaces restent canoniques. */
+    nm = nm.replace(/\s{2,}/g, ' ').trim();
     if (!nm) return;
     // deux impressions d'une même carte restent deux lignes : leurs codes
     // d'édition et leurs numéros sont conservés l'un et l'autre. La section
