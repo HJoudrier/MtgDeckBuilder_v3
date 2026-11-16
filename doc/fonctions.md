@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1708 fonctions**, 244 modules, 1768 Ko de JavaScript.
+**1711 fonctions**, 246 modules, 1774 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -22,14 +22,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 213 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 196 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 203 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
 | [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 11 | 135 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 71 |
-| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
+| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 237 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
@@ -169,7 +169,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 252 |
 | [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
-| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 3 | 68 |
+| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 116 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 9 | 156 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
@@ -203,7 +203,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 249 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 249 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 37 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
@@ -211,7 +211,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 6 | 107 |
 | [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 207 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
-| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
+| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 188 |
 | [`fenCibles.js`](#jsfenciblesjs) | Fenêtre « Objectifs par rôle » | 5 | 82 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
@@ -220,9 +220,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
-| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
+| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 117 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
-| [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
+| [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
@@ -255,6 +255,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
 | [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 78 |
 | [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 311 |
+| [`icones.js`](#jsiconesjs) |  | 0 | 23 |
+| [`navigationUX.js`](#jsnavigationuxjs) |  | 0 | 36 |
 
 ## js/reglesEffets.js
 
@@ -439,7 +441,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 196 lignes, 11 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 203 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -455,7 +457,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 | `ONGLETS_ANCIENS` | L'onglet unique d'hier, tel qu'une sauvegarde le nomme encore : elle rouvrait sinon la collection, et l'on perdait la page qu'on regardait en quittant l'atelier. |
 | `SECTIONS_SUGGESTIONS` | Les trois sections que la notation alimente, dans l'ordre des onglets. |
 | `COLONNES` | Les nombres de colonnes offerts par les grilles, zéro valant « autant que la largeur en permet ». |
-| `LISTES_AFFICHAGE` | Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. |
+| `LISTES_AFFICHAGE` | Les six listes de cartes de l'atelier, et ce que chacune sait montrer. |
 | `CLES_AFFICHAGE` | — |
 | `RETOURNEES` | — |
 | `apercuEl` | — |
@@ -597,7 +599,7 @@ L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 71 lignes, 3.
 
 ## js/groupes.js
 
-Grouper et trier les listes de cartes. *7 fonctions, 232 lignes, 10 Ko.*
+Grouper et trier les listes de cartes. *7 fonctions, 237 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3022,12 +3024,14 @@ La section « Mes decks ». *4 fonctions, 103 lignes, 5.4 Ko.*
 
 ## js/wishlistSection.js
 
-La section « Liste d'achats ». *3 fonctions, 68 lignes, 3.7 Ko.*
+La section « Liste d'achats ». *5 fonctions, 116 lignes, 6.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `decksDemandeurs(l)` | Les decks qui réclament une carte, du plus gourmand au moins. |
 | `ligneWishlist(l)` | — |
+| `tuileWishlist(e)` | La vignette d'une ligne, pour la grille : la carte en image, ses decks demandeurs, ce qu'il en manque et ce que cela coûte. |
+| `listeWishlist(lignes)` | Les lignes, rangées comme la fenêtre « Affichage » le demande : en lignes ou en vignettes, par groupes ou à plat, dans l'ordre choisi. |
 | `renderJ()` | — |
 
 ## js/collection.js
@@ -3626,10 +3630,11 @@ Les recalculs annoncés. *8 fonctions, 200 lignes, 8.7 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *7 fonctions, 249 lignes, 14 Ko.*
+L'en-tête et la barre des onglets. *8 fonctions, 249 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `iconeEntete(nom)` | — |
 | `listeDeLOngletCourant()` | — |
 | `majBoutonAffichage()` | — |
 | `majHauteurEntete()` | La hauteur de l'entête, publiée pour le CSS : les sections s'en servent comme marge de défilement et s'arrêtent sous elle plutôt que derrière. |
@@ -3641,8 +3646,8 @@ L'en-tête et la barre des onglets. *7 fonctions, 249 lignes, 14 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `FILTRE_ICONE` | — |
-| `AFFICHAGE_ICONE` | Quatre pavés : la grille d'une liste de cartes, vue de loin. |
-| `PARAM_ICONE` | L'engrenage des paramètres : douze dents posées en couronne et un moyeu évidé, dessinés ici plutôt que chargés — l'atelier ne dépend d'aucun fichier extérieur, pas même d'une icône. |
+| `AFFICHAGE_ICONE` | — |
+| `PARAM_ICONE` | — |
 | `POS_ONGLETS` | Où l'on en était dans chaque onglet. Le défilement est celui du document, partagé par les trois pages : sans ce relevé, revenir au deck après une longue collection retomberait n'importe… |
 
 ## js/rendu.js
@@ -3755,7 +3760,7 @@ Fenêtre « Filtres ». *10 fonctions, 207 lignes, 12 Ko.*
 
 ## js/fenAffichage.js
 
-Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 187 lignes, 9.2 Ko.*
+Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 188 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3765,7 +3770,7 @@ Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 187 lignes, 9.2 Ko
 | `majFenetreAffichage()` | — |
 | `reglageAffichage(quoi, el)` | Les quatre réglages de la fenêtre, au brouillon : rien ne bouge dans la liste avant « Appliquer ». |
 | `glisseColonnes(el)` | Le curseur des colonnes décoche « Auto » du seul fait qu'on s'en serve : imposer un nombre, c'est cesser de s'en remettre à la largeur. |
-| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les cinq listes, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité n'en a pas pour une… |
+| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les six listes, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité n'en a pas pour une… |
 | `appliquerAffichage(partout)` | « Appliquer » verse le réglage d'un coup. Le groupement et le tri changent l'ordre des cartes : la pagination de la collection repart de sa première page, sinon la fin d'une liste rangée… |
 | `openAffichageModal(section)` | — |
 
@@ -3891,7 +3896,7 @@ Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
 
 ## js/gestesVue.js
 
-Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
+Les gestes qui règlent la vue. *1 fonctions, 117 lignes, 4.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3907,7 +3912,7 @@ Les fenêtres de réglage et leurs boutons. *1 fonctions, 140 lignes, 4.6 Ko.*
 
 ## js/gestesDeck.js
 
-Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 193 lignes, 7.5 Ko.*
+Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 198 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4466,4 +4471,8 @@ L'aiguillage et le démarrage. *1 fonctions, 311 lignes, 13 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `dlgEl` | Fermeture au clic sur l'arrière-plan (backdrop) |
+
+## js/icones.js
+
+## js/navigationUX.js
 

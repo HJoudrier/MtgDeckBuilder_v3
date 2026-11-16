@@ -5,12 +5,12 @@
    tenaient dans la barre de chaque section, en quatre ou cinq contrôles posés
    entre les boutons d'action. Les barres débordaient, et chaque geste
    repeignait aussitôt des centaines de vignettes. Une même fenêtre les
-   rassemble désormais, en colonne, pour les cinq listes de l'atelier
+   rassemble désormais, en colonne, pour les six listes de l'atelier
    (`LISTES_AFFICHAGE`, js/etat.js) : le bouton « Affichage » de la barre l'ouvre sur
    la liste qui le porte, et rien n'agit avant « Appliquer ».
 
-   « Appliquer partout » verse le même réglage dans les cinq listes — on range
-   tout l'atelier de la même façon d'un seul geste, au lieu d'ouvrir cinq fois
+   « Appliquer partout » verse le même réglage dans les six listes — on range
+   tout l'atelier de la même façon d'un seul geste, au lieu d'ouvrir six fois
    la même fenêtre.
    ===================================================================== */
 
@@ -90,7 +90,7 @@ function corpsAffichage() {
       <div class="small muted">L'ordre vaut à l'intérieur de chaque groupe.</div>
     </div>
     <div class="small muted">En vigueur pour ${esc(liste.libelle)} : ${esc(resumeAffichage(section))}</div>
-    <div class="small muted">« Appliquer partout » pose ce réglage sur les cinq listes de l'atelier —
+    <div class="small muted">« Appliquer partout » pose ce réglage sur les six listes de l'atelier —
       ${esc(CLES_AFFICHAGE.map(c => LISTES_AFFICHAGE[c].libelle).join(', '))} — chacune ne retenant
       que ce qu'elle sait montrer.</div>`;
   });
@@ -133,7 +133,7 @@ function glisseColonnes(el) {
   if (dit) dit.textContent = `${n} vignette(s) par ligne, quelle que soit la largeur.`;
 }
 
-/* Le réglage choisi, recopié dans les cinq listes, le tri là où la liste
+/* Le réglage choisi, recopié dans les six listes, le tri là où la liste
    l'offre — le taux d'inclusion d'EDHREC n'a pas de
    sens pour la collection, la quantité n'en a pas pour une proposition, et
    `TRIS_SECTION` (js/groupes.js) le dit déjà. Une liste qui n'offre pas ce tri garde
@@ -150,7 +150,7 @@ function verseAffichagePartout(conf) {
 /* « Appliquer » verse le réglage d'un coup. Le groupement et le tri changent
    l'ordre des cartes : la pagination de la collection repart de sa première
    page, sinon la fin d'une liste rangée autrement ne voudrait plus rien dire.
-   « Appliquer partout » le pose sur les cinq listes, et repeint tout. */
+   « Appliquer partout » le pose sur les six listes, et repeint tout. */
 function appliquerAffichage(partout) {
   const section = sectionAffichage;
   const avant = `${S.groupes.collection}|${S.tris.collection}`;
@@ -170,6 +170,7 @@ function appliquerAffichage(partout) {
      alimente —, et le deck rend ses listes annexes avec lui. */
   if (section === 'collection') renderB();
   else if (section === 'deck') renderE();
+  else if (section === 'achats') renderJ();
   else refreshSuggestions();
   scheduleSave();
 }

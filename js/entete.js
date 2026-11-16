@@ -32,9 +32,10 @@ function majBoutonAffichage() {
   const lucarne = document.getElementById('headAffichage');
   if (!lucarne) return;
   const liste = listeDeLOngletCourant();
-  /* Un onglet peut ne montrer aucune des cinq listes de cartes — la page
-     « Decks » porte des vignettes de deck et un tableau d'achats. Le bouton
-     disparaît alors, plutôt que de régler une liste qu'on ne voit pas. */
+  /* Un onglet peut ne montrer aucune des listes de cartes — la simulation.
+     Le bouton disparaît alors, plutôt que de régler une liste qu'on ne voit
+     pas. La page « Decks » règle sa liste d'achats ; ses vignettes de deck ne
+     se règlent pas. */
   if (!liste) { lucarne.innerHTML = ''; return; }
   lucarne.innerHTML = `<button type="button" class="btn sm head-filtre head-affichage" data-act="affichage" data-liste="${liste}"
     title="${esc(LISTES_AFFICHAGE[liste].titre)} : ${esc(resumeAffichage(liste))}">

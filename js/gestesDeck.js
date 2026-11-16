@@ -93,6 +93,11 @@ function gestesDeck(act, b) {
     return true;
   }
 
+  /* Un lien posé sur une vignette : le navigateur le suit de lui-même, il
+     faut seulement que le clic ne continue pas jusqu'à la vignette, dont il
+     ouvrirait la fiche en plus de la page visée. */
+  if (act === 'lienExterne') return true;
+
   if (act === 'buy') {
     if (b.closest('.sugT')) geleSuggestions();
     buyCard(b.dataset.name);
