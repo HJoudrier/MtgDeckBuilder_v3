@@ -5,7 +5,7 @@
  function mount(){
   if(!window.lucide||typeof window.lucide.createIcons!=='function')return;
   document.querySelectorAll('#onglets [data-onglet], #navigationPrincipale [data-nav-group]').forEach(b=>{
-   const name=icons[b.dataset.onglet];if(!name||b.querySelector('.onglet-icone'))return;
+   const name=icons[b.dataset.onglet || b.dataset.navGroup];if(!name||b.querySelector('.onglet-icone'))return;
    const i=document.createElement('i');i.className='onglet-icone';i.dataset.lucide=name;i.setAttribute('aria-hidden','true');b.insertBefore(i,b.firstChild);
   });
   window.lucide.createIcons({attrs:{class:'onglet-icone','aria-hidden':'true',focusable:'false'}});
