@@ -34,3 +34,13 @@ Ouvrir [prototypes/refonte-ux.html](./refonte-ux.html) depuis le dépôt ou via 
 - Phase 4 : tests tactiles, clavier, lecteurs d'écran, petits écrans et non-régression.
 
 Les écrans illustrés emploient des données fictives de démonstration ; ils ne prétendent pas représenter les données réelles du compte.
+
+
+## Navigation principale regroupée
+La navigation de l'application est maintenant organisée en quatre espaces :
+- **Collection** : Cartes et Decks (bibliothèque de decks).
+- **Deck** : construction et réglages du deck actif.
+- **Suggestions** : Graphe, EDHREC et Catalogue.
+- **Jouer** : simulation.
+
+La barre principale est fixe en bas sur ordinateur et smartphone. La sous-navigation apparaît sous l'entête uniquement lorsque l'espace comporte plusieurs vues. Les clés internes historiques (decks, collection, deck, graphe, edhrec, catalogue, simulation) sont conservées pour préserver les sauvegardes et les liens internes.
