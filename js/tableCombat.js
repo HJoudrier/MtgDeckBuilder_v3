@@ -46,8 +46,8 @@ function clicCombat(q, s, id) {
 function combatHTML(q, s, v) {
   if (q.q === 'attaquants') {
     const defs = q.defenseurs;
-    return `<div class="small"><b>Attaquer</b> — touchez les créatures qui attaquent</div>
-      ${defs.length > 1 ? `<div class="tb-actions">${defs.map((d, i) => `<button type="button" class="btn sm"
+    return `<div class="tq-titre"><b>Attaquer</b> — touchez les créatures qui attaquent</div>
+      ${defs.length > 1 ? `<div class="tq-actions">${defs.map((d, i) => `<button type="button" class="btn sm"
         aria-pressed="${s.def === i}" data-act="tDef" data-i="${i}">vers ${esc(d.label)}</button>`).join('')}</div>` : ''}
       <div class="small">${[...s.paires].map(([i, d]) => `${esc(q.options[i].label)} → ${esc(defs[d].label)}`).join(' · ') || 'aucune attaque'}</div>
       <div class="row"><button type="button" class="btn sm" data-act="tAttTous">Toutes</button>
@@ -57,11 +57,11 @@ function combatHTML(q, s, v) {
   const seules = new Map();
   [...s.paires].forEach(([, a]) => seules.set(a, (seules.get(a) || 0) + 1));
   const menaces = [...seules].filter(([a, n]) => n === 1 && q.attaquants[a].menace).map(([a]) => q.attaquants[a].label);
-  return `<div class="small"><b>Bloquer</b> — touchez un bloqueur, puis l'attaquant qu'il bloque</div>
-    <div class="tb-actions">${[...s.paires].map(([b, a]) => `<button type="button" class="btn sm" data-act="tRetirePaire" data-i="${b}"
+  return `<div class="tq-titre"><b>Bloquer</b> — touchez un bloqueur, puis l'attaquant qu'il bloque</div>
+    <div class="tq-actions">${[...s.paires].map(([b, a]) => `<button type="button" class="btn sm" data-act="tRetirePaire" data-i="${b}"
       title="Annuler ce blocage">${esc(q.options[b].label)} bloque ${esc(q.attaquants[a].label)} ✕</button>`).join('')}</div>
     ${s.courant != null ? `<div class="small">${esc(q.options[s.courant].label)} bloque… (touchez un attaquant)</div>` : ''}
-    ${menaces.length ? `<div class="small tb-erreur">Menace : ${esc(menaces.join(', '))} doit être bloqué par au moins deux créatures.</div>` : ''}
+    ${menaces.length ? `<div class="small tq-erreur">Menace : ${esc(menaces.join(', '))} doit être bloqué par au moins deux créatures.</div>` : ''}
     <div class="row"><button type="button" class="btn pri" data-act="tValider">${s.paires.size ? 'Bloquer' : 'Ne pas bloquer'}</button></div>`;
 }
 

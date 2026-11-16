@@ -57,6 +57,13 @@ function ouvreAdversaire(cle, opts = {}) {
   majApercuAdversaire();
 }
 
+/* Les cartes qui posent problème, une par ligne : l'atelier ne peut pas
+   deviner laquelle est la faute de frappe, le nom d'une autre langue ou la
+   carte trop récente — c'est à celui qui importe de la repérer. */
+function inconnuesHTML(noms) {
+  return `<ul class="sim-inconnues">${noms.map(n => `<li>${esc(n)}</li>`).join('')}</ul>`;
+}
+
 /* Ce que la liste collée donne, à mesure qu'on la colle. */
 function majApercuAdversaire() {
   const t = document.getElementById('advTexte'), z = document.getElementById('advApercu');
@@ -65,7 +72,25 @@ function majApercuAdversaire() {
   if (!adv.liste.length && !adv.commandants.length) { z.textContent = 'Collez une liste — une carte par ligne, précédée de sa quantité —, ou donnez le lien du deck.'; return; }
   const r = resolutionAdversaire(adv);
   z.innerHTML = `${nbCartesAdversaire(adv)} carte(s)${adv.commandants.length ? ` · commandant : <b>${esc(adv.commandants.join(', '))}</b>` : ''}
-    ${r.manquants.length ? ` · ${r.manquants.length} que l'atelier ne connaît pas encore et demandera à Scryfall` : ' · toutes connues'}`;
+    ${r.manquants.length ? ` · ${r.manquants.length} que l'atelier ne connaît pas encore et demandera à Scryfall` : ' · toutes connues'}
+    ${r.manquants.length ? `<details class="sim-inconnues-bloc" open><summary>Cartes inconnues (${r.manquants.length})</summary>${inconnuesHTML(r.manquants)}</details>` : ''}`;
+}
+
+/* La fenêtre des cartes que ni l'atelier ni Scryfall n'ont retrouvées, après
+   l'enregistrement : un toast tronqué à quatre noms ne dit pas lesquelles
+   corriger. Elle se rouvre depuis la ligne de l'adversaire. */
+function ouvreInconnues(cle) {
+  const a = S.adversaires[cle];
+  if (!a) return;
+  const noms = resolutionAdversaire(a).manquants;
+  if (!noms.length) { toast(`Toutes les cartes de « ${a.nom} » sont connues.`); return; }
+  openDialog(`Cartes inconnues — ${a.nom}`, `
+    <p class="small">Ces ${noms.length} carte(s) n'ont été trouvées ni dans l'atelier ni sur Scryfall : le plus souvent une faute de
+      frappe, un nom dans une autre langue ou une carte d'une édition trop récente. Elles ne seront pas jouées.</p>
+    ${inconnuesHTML(noms)}
+    <div class="small muted">Corrigez les noms dans la liste (« Modifier »), puis enregistrez : l'atelier les redemandera.</div>`,
+    `<button type="button" class="btn" data-act="closeDialog">Fermer</button>
+     <button type="button" class="btn pri" data-act="simModifAdv" data-adv="${esc(cle)}">Modifier la liste</button>`);
 }
 
 /* L'adversaire tel que la fenêtre le décrit : lu sur le site quand on a
@@ -120,8 +145,8 @@ async function enregistreAdversaireFenetre(cle) {
   const restes = await completeAdversaire(k);
   COUV_TABLE.cle = null;
   renderK();
-  toast(restes.length ? `${restes.length} carte(s) introuvable(s) : ${restes.slice(0, 4).join(', ')}${restes.length > 4 ? '…' : ''}`
-    : diff && (diff.plus || diff.moins) ? `« ${S.adversaires[k].nom} » mis à jour (+${diff.plus} −${diff.moins}).`
+  if (restes.length) { ouvreInconnues(k); return; }
+  toast(diff && (diff.plus || diff.moins) ? `« ${S.adversaires[k].nom} » mis à jour (+${diff.plus} −${diff.moins}).`
     : `Adversaire « ${S.adversaires[k].nom} » prêt.`);
 }
 

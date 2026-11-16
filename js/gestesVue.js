@@ -48,6 +48,11 @@ function gestesVue(act, b) {
 
   /* Les onglets : rien n'est recalculé, les sections étant toujours rendues.
      La page voulue paraît, et c'est tout. */
+  if (b.dataset.navGroup) {
+    activerGroupeNavigation(b.dataset.navGroup);
+    return true;
+  }
+
   if (b.dataset.onglet) {
     activerOnglet(b.dataset.onglet);
     return true;

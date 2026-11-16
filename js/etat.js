@@ -50,12 +50,16 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). Le catalogue garde
    la clé `suggestions`, comme partout où son rangement est en jeu.
 
-   L'onglet « Decks » n'en montre aucune — des vignettes de deck et un tableau
-   d'achats ne se règlent ni en colonnes ni en groupes —, d'où son `liste`
-   nul : le bouton « Affichage » s'efface alors. Il vient en tête parce qu'il
-   répond à la première des questions : sur quel deck travaille-t-on. */
+   L'onglet « Decks » montre deux choses : des vignettes de deck, qui ne se
+   règlent ni en colonnes ni en groupes, et la liste d'achats, qui est une liste
+   de cartes comme les autres. C'est elle que règle le bouton « Affichage » de
+   l'entête — la liste ou la grille, les colonnes, le groupement, le tri —,
+   et les vignettes de deck n'y sont pas soumises. Il vient en tête parce
+   qu'il répond à la première des questions : sur quel deck travaille-t-on.
+   L'onglet « Simulation », lui, n'en montre aucune : `liste` y est nul, et le
+   bouton s'efface. */
 const ONGLETS = {
-  decks:      {label:'Decks',      sections:['secI','secJ'], liste:null},
+  decks:      {label:'Decks',      sections:['secI','secJ'], liste:'achats'},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
@@ -87,11 +91,11 @@ function ongletDeSection(id) {
    sur une vignette de timbre. */
 const COLONNES = [0, 1, 2, 3, 4, 5, 6, 8];
 
-/* Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. La
+/* Les six listes de cartes de l'atelier, et ce que chacune sait montrer. La
    fenêtre « Affichage » (`js/fenAffichage.js`) s'ouvre sur celle de l'onglet
    ouvert — `ONGLETS` ci-dessus dit laquelle —,
    et les quatre réglages — vue, colonnes, groupement, tri — valent pour les
-   cinq. C'est cette table que « Appliquer partout » parcourt.
+   six. C'est cette table que « Appliquer partout » parcourt.
 
    `titre` nomme sa fenêtre, `libelle` la liste dans une phrase ; le catalogue
    garde la clé `suggestions`, comme partout où son rangement est en jeu. Les
@@ -102,7 +106,8 @@ const LISTES_AFFICHAGE = {
   deck:        {titre:'Affichage du deck',          libelle:'le deck'},
   graphe:      {titre:'Affichage des pistes du graphe', libelle:'les pistes du graphe'},
   edhrec:      {titre:'Affichage des recommandations d\'EDHREC', libelle:'les recommandations d\'EDHREC'},
-  suggestions: {titre:'Affichage du catalogue',     libelle:'le catalogue'}
+  suggestions: {titre:'Affichage du catalogue',     libelle:'le catalogue'},
+  achats:      {titre:'Affichage de la liste d\'achats', libelle:'la liste d\'achats'}
 };
 const CLES_AFFICHAGE = Object.keys(LISTES_AFFICHAGE);
 
@@ -128,27 +133,29 @@ const S = {
   colorMode: 'identity',
   custom: {deckSize:100, commander:true, maxCopies:1, colorLimits:{}},
   filtres: {nom:'', type:'', sets:'', texte:'', artiste:'', archetypes:'', roles:'', forceMin:'', forceMax:'', enduranceMin:'', enduranceMax:'', cmcMin:'', cmcMax:'', prixMin:'', prixMax:''},
-  /* Le rangement des cinq listes qui montrent des cartes : chacune garde
+  /* Le rangement des six listes qui montrent des cartes : chacune garde
      son groupe et son tri. Les valeurs de départ reproduisent ce que les
      sections faisaient avant tout réglage — la collection triée par coût sans
      groupe, le deck et le catalogue groupés par type. Les recommandations
      d'EDHREC arrivent sans groupe et par taux d'inclusion décroissant :
      c'est l'ordre dans lequel le site lui-même les présente. */
-  groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun', graphe:'aucun'},
-  tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion', graphe:'score'},
+  groupes: {collection:'aucun', deck:'type', suggestions:'type', edhrec:'aucun', graphe:'aucun', achats:'aucun'},
+  tris: {collection:'cmc', deck:'type', suggestions:'score', edhrec:'inclusion', graphe:'score', achats:'achat'},
   /* Liste ou grille, par liste et non plus pour tout l'atelier : un seul
      champ obligeait la collection et le deck à la même vue, alors qu'on lit
      volontiers l'une en vignettes et l'autre en lignes. Les trois listes de
      propositions l'ont aussi : parcourir un classement de trois cents cartes
      en lignes tient dix fois plus de monde à l'écran que leurs vignettes. */
-  vues: {collection:'grid', deck:'grid', graphe:'grid', edhrec:'grid', suggestions:'grid'},
+  /* La liste d'achats part en lignes : c'était sa seule forme, et un tableau
+     de prix et de decks demandeurs se lit mieux ainsi qu'en vignettes. */
+  vues: {collection:'grid', deck:'grid', graphe:'grid', edhrec:'grid', suggestions:'grid', achats:'list'},
   /* Le nombre de colonnes de chaque grille, chacune gardant le sien comme elle
      garde son groupement et son tri. Zéro laisse le navigateur en poser autant
      que la largeur en permet, ce qu'il a toujours fait ; une valeur choisie
      s'impose à toutes les largeurs, et c'est ainsi qu'on lit une carte par
      ligne sur un téléphone. Le catalogue est nommé « suggestions », comme
      partout où son rangement est en jeu. */
-  colonnes: {collection:0, deck:0, graphe:0, edhrec:0, suggestions:0},
+  colonnes: {collection:0, deck:0, graphe:0, edhrec:0, suggestions:0, achats:0},
   /* Le thème sombre — le dessin d'origine de l'atelier — ou le papier clair.
      `null` tant que rien n'a été choisi : le démarrage suit alors la
      préférence du système (`js/theme.js`). */
@@ -188,7 +195,7 @@ const S = {
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
      De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent. */
-  table: {nom: '', deck: '', sieges: [], adresse: ''},
+  table: {nom: '', deck: '', sieges: [], adresse: '', disposition: 'arene', vitesse: 'normale'},
   arrets: {}
 };
 

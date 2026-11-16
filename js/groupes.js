@@ -136,6 +136,10 @@ const TRIS = {
   alpha: {label:'Nom (A→Z)', cmp: (a, b) => a.card.name.localeCompare(b.card.name)},
   cmc:   {label:'Coût de mana', cmp: (a, b) => (a.card.cmc || 0) - (b.card.cmc || 0) || a.card.name.localeCompare(b.card.name)},
   price: {label:'Prix (décroissant)', cmp: (a, b) => (b.card.price || 0) - (a.card.price || 0) || a.card.name.localeCompare(b.card.name)},
+  /* Ce que la carte coûte à acheter, tous exemplaires manquants compris : le
+     tri d'origine de la liste d'achats, qui met en tête ce qui pèse le plus.
+     Il ne vaut que là, seule liste dont les entrées portent une `ligne`. */
+  achat: {label:'Coût à acheter (décroissant)', cmp: (a, b) => ((b.ligne && b.ligne.total) || 0) - ((a.ligne && a.ligne.total) || 0) || a.card.name.localeCompare(b.card.name, 'fr')},
   qty:   {label:'Quantité', cmp: (a, b) => (b.qty || 0) - (a.qty || 0) || a.card.name.localeCompare(b.card.name)},
   type:  {label:'Type', cmp: (a, b) => TYPE_ORDER.indexOf(mainType(a.card)) - TYPE_ORDER.indexOf(mainType(b.card))
            || (a.card.cmc || 0) - (b.card.cmc || 0) || a.card.name.localeCompare(b.card.name)},
@@ -155,7 +159,8 @@ const TRIS_SECTION = {
   deck:       ['type', 'cmc', 'alpha', 'price', 'qty', 'score'],
   graphe:     ['score', 'cmc', 'alpha', 'price', 'type'],
   suggestions:['score', 'cmc', 'alpha', 'price', 'type'],
-  edhrec:     ['inclusion', 'synergie', 'score', 'cmc', 'alpha', 'price', 'type']
+  edhrec:     ['inclusion', 'synergie', 'score', 'cmc', 'alpha', 'price', 'type'],
+  achats:     ['achat', 'alpha', 'price', 'cmc', 'type', 'qty']
 };
 
 /* ---------------------------------------------------------------------

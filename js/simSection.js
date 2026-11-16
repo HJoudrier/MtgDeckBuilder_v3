@@ -80,7 +80,7 @@ function adversairesHTML() {
       return `<div class="sim-ligne">
         <b>${esc(a.nom)}</b>
         <span class="small muted">${esc((FORMATS[a.format] || {}).label || a.format)} · ${nbCartesAdversaire(a)} cartes${a.commandants.length ? ' · ' + esc(a.commandants.join(', ')) : ''}</span>
-        ${r.manquants.length ? `<span class="pill" title="Demandées à Scryfall au prochain lancement : ${esc(r.manquants.slice(0, 8).join(', '))}">${r.manquants.length} inconnue(s)</span>` : ''}
+        ${r.manquants.length ? `<button type="button" class="pill sim-inconnue" data-act="simInconnues" data-adv="${esc(k)}" title="Voir les cartes que l'atelier ne connaît pas : ${esc(r.manquants.slice(0, 8).join(', '))}${r.manquants.length > 8 ? '…' : ''}">${r.manquants.length} inconnue(s)</button>` : ''}
         ${a.lien ? pastilleLien(a.lien) : ''}
         <span class="sim-gestes">
           ${a.lien ? `<button type="button" class="btn sm" data-act="simMajLien" data-adv="${esc(k)}" title="Relire le deck sur ${SITES_DECKS[a.lien.site].nom}">Mettre à jour</button>` : ''}

@@ -46,6 +46,15 @@ function libelleRef(P, c) {
   return o ? o.def.nom : '?';
 }
 
+/* Une cible ou une source qu'on peut montrer du doigt : un joueur, ou un
+   objet d'une zone publique. L'identifiant d'un objet caché ne sort pas. */
+const ZONES_PUBLIQUES = ['champ', 'pile', 'cimetiere', 'exil', 'commandement'];
+function refPublique(P, c) {
+  if (c && typeof c === 'object') return c.j != null ? {j: c.j} : null;
+  const o = c != null ? obj(P, c) : null;
+  return o && ZONES_PUBLIQUES.includes(o.zone) ? {id: c} : null;
+}
+
 /* La vue du joueur `j`. */
 function vue(P, j) {
   const cartes = {};
@@ -54,8 +63,11 @@ function vue(P, j) {
     cim: J.cimetiere.map(id => carteVue(P, id, cartes)), exil: J.exil.map(id => carteVue(P, id, cartes)),
     cmd: J.commandement.map(id => carteVue(P, id, cartes)), degatsCmd: {...J.degatsCmd},
     elimine: J.elimine, raison: J.raison, pool: {...J.pool}}));
-  const pile = P.pile.map(it => ({id: it.id, nom: it.sort ? it.def.nom : it.nom, ctrl: it.ctrl, sort: !!it.sort,
-    cibles: [].concat(...it.effets.map(ef => [].concat(...ef.cibles))).map(c => libelleRef(P, c))}));
+  const pile = P.pile.map(it => {
+    const cs = [].concat(...it.effets.map(ef => [].concat(...ef.cibles)));
+    return {id: it.id, nom: it.sort ? it.def.nom : it.nom, ctrl: it.ctrl, sort: !!it.sort, cibles: cs.map(c => libelleRef(P, c)),
+      refs: cs.map(c => refPublique(P, c)).filter(Boolean), source: it.sort ? null : (refPublique(P, it.source) || {}).id, declenche: !!it.declencheur};
+  });
   P.pile.forEach(it => { if (it.sort && !cartes[it.def.nom]) cartes[it.def.nom] = ficheVue(it.def); });
   return {moi: j, tour: P.tour, etape: P.etape, actif: P.actif, joueurs, pile,
     champ: P.champ.map(id => objetVue(P, obj(P, id), cartes)),

@@ -869,8 +869,10 @@ sequenceDiagram
     participant IN as table de l'invité
 
     B->>M: avance() — s'arrête à chaque question (tous les sièges « humains »)
-    alt siège automatique ou confié
-        B->>M: repondre(réponse de l'IA), pause si un geste se voit
+    alt question « voir » (un objet va se résoudre)
+        B->>B: montrePile() — vues diffusées, pause, puis repondre(0)
+    else siège automatique ou confié
+        B->>M: repondre(réponse de l'IA), pauseApres() — geste visible ou nouvelle étape
     else priorité qu'aucun arrêt n'appelle
         B->>A: doitDemander() → non
         B->>M: repondre(passer)
@@ -1011,6 +1013,39 @@ sequenceDiagram
 L'horizon : au niveau moyen, le retour de la pile vide (un sort) ou la fin du combat ; au niveau
 fort, la fin du prochain tour du joueur qui décide. Rien ne revient de la copie vers la partie, et
 tout est semé : la partie d'un lot se rejoue à l'identique.
+
+### 3.27 Voir une carte en grand, à la table
+
+Un toucher court joue la carte ou la choisit ; un appui long la montre. Les écouteurs du pointeur
+sont dans `app.js`, comme le clic ; la table ne repeint que la couche qui s'ouvre.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Joueur
+    participant APP as app.js
+    participant L as tableLoupe.js
+    participant R as tableRendu.js
+    participant Q as tableQuestions.js
+
+    U->>APP: pointerdown sur une carte [data-loupe]
+    APP->>L: appuiDebut() — minuterie de 380 ms
+    alt le doigt glisse (défilement d'une rangée)
+        APP->>L: appuiBouge() → appuiAnnule()
+    else le doigt reste
+        L->>L: ouvreLoupe(id) — TABLE.loupe
+        L->>R: renduTable() → peinsRegions() — seule la région « couche » change
+        U->>APP: pointerup puis click
+        APP->>L: appuiFin(), clicAvale() → le clic est avalé
+        U->>APP: « Lancer… » dans la loupe (data-act tAction)
+        APP->>Q: repondsTable(i)
+    end
+    alt toucher court
+        APP->>Q: clicCarte(id) — une seule action : jouée ; plusieurs : la loupe
+    end
+```
+
+---
 
 ## 4. Ce qui périme quoi
 

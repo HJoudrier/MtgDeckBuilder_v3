@@ -8,18 +8,11 @@
    et on démasque, chacun retrouvant son défilement.
    ===================================================================== */
 
-const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
+const iconeEntete = nom => `<i data-lucide="${nom}" aria-hidden="true" focusable="false"></i>`;
 
-/* Quatre pavés : la grille d'une liste de cartes, vue de loin. */
-const AFFICHAGE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.5 1.5h5.6v5.6H1.5zM8.9 1.5h5.6v5.6H8.9zM1.5 8.9h5.6v5.6H1.5zM8.9 8.9h5.6v5.6H8.9z" fill="currentColor"/></svg>';
-
-/* L'engrenage des paramètres : douze dents posées en couronne et un moyeu
-   évidé, dessinés ici plutôt que chargés — l'atelier ne dépend d'aucun
-   fichier extérieur, pas même d'une icône. */
-const PARAM_ICONE = `<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" focusable="false">
-  <path fill="currentColor" d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2zm0 5.9a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6z"/>
-  <path fill="currentColor" d="M20.3 13.6a8.6 8.6 0 0 0 0-3.2l1.8-1.4-1.8-3.1-2.1.8a8.4 8.4 0 0 0-2.8-1.6L15.1 2h-3.6l-.3 2.3H11a8.4 8.4 0 0 0-2.7 1.6l-2.1-.8-1.8 3.1 1.8 1.4a8.6 8.6 0 0 0 0 3.2l-1.8 1.4 1.8 3.1 2.1-.8a8.4 8.4 0 0 0 2.8 1.6l.3 2.3h3.6l.3-2.3a8.4 8.4 0 0 0 2.8-1.6l2.1.8 1.8-3.1-1.8-1.4zm-1.6-1.6c0 .5-.05 1-.15 1.5l-.12.6 1.5 1.16-.53.92-1.76-.67-.46.4c-.73.64-1.6 1.14-2.53 1.45l-.58.2-.26 1.94h-1.06l-.26-1.95-.58-.19a6.9 6.9 0 0 1-2.53-1.46l-.46-.4-1.76.67-.53-.92 1.5-1.15-.12-.6a7.2 7.2 0 0 1 0-3l.12-.6-1.5-1.16.53-.92 1.76.67.46-.4A6.9 6.9 0 0 1 11.7 6.5l.58-.2.26-1.94h1.06l.26 1.95.58.19c.93.31 1.8.81 2.53 1.46l.46.4 1.76-.67.53.92-1.5 1.15.12.6c.1.5.15 1 .15 1.5z"/>
-</svg>`;
+const FILTRE_ICONE = iconeEntete('sliders-horizontal');
+const AFFICHAGE_ICONE = iconeEntete('layout-grid');
+const PARAM_ICONE = iconeEntete('settings');
 
 /* ---------------------------------------------------------------------
    Le bouton « Affichage », au coin haut-droit avec celui des filtres.
@@ -39,9 +32,10 @@ function majBoutonAffichage() {
   const lucarne = document.getElementById('headAffichage');
   if (!lucarne) return;
   const liste = listeDeLOngletCourant();
-  /* Un onglet peut ne montrer aucune des cinq listes de cartes — la page
-     « Decks » porte des vignettes de deck et un tableau d'achats. Le bouton
-     disparaît alors, plutôt que de régler une liste qu'on ne voit pas. */
+  /* Un onglet peut ne montrer aucune des listes de cartes — la simulation.
+     Le bouton disparaît alors, plutôt que de régler une liste qu'on ne voit
+     pas. La page « Decks » règle sa liste d'achats ; ses vignettes de deck ne
+     se règlent pas. */
   if (!liste) { lucarne.innerHTML = ''; return; }
   lucarne.innerHTML = `<button type="button" class="btn sm head-filtre head-affichage" data-act="affichage" data-liste="${liste}"
     title="${esc(LISTES_AFFICHAGE[liste].titre)} : ${esc(resumeAffichage(liste))}">
@@ -170,6 +164,9 @@ function renderTop() {
   const lucarne = document.getElementById('headFiltre');
   if (lucarne) lucarne.innerHTML = filtreBtnHTML;
   majBoutonAffichage();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons({attrs:{'aria-hidden':'true',focusable:'false'}});
+  }
 
   majHauteurEntete();
 }
@@ -209,6 +206,9 @@ function renderOnglets() {
   /* Le bouton « Affichage » règle la liste de l'onglet ouvert : il change donc
      de cible en même temps que la page, sans que l'entête soit repeint. */
   majBoutonAffichage();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons({attrs:{'aria-hidden':'true',focusable:'false'}});
+  }
 }
 
 /* Passer d'un onglet à l'autre : rien n'est redessiné, les cinq sections

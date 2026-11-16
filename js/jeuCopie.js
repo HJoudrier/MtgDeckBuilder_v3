@@ -61,7 +61,10 @@ function copiePartie(P) {
     for (const k in x) r[k] = copie(x[k]);
     return r;
   };
-  return copie(P);
+  const c = copie(P);
+  /* Les essais d'une IA n'ont personne pour regarder. */
+  c.montre = false;
+  return c;
 }
 
 /* Le point de reprise d'une question, ou `null` si elle n'en est pas un. */

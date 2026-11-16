@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1650 fonctions**, 237 modules, 1731 Ko de JavaScript.
+**1715 fonctions**, 246 modules, 1778 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -22,14 +22,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 213 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 196 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 203 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
 | [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 11 | 135 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 71 |
-| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 232 |
+| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 237 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
@@ -46,7 +46,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 174 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
-| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 220 |
+| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 223 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 69 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 148 |
@@ -67,13 +67,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 141 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 144 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 130 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
-| [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 114 |
-| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 7 | 113 |
+| [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
+| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 125 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 72 |
@@ -169,7 +169,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 252 |
 | [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
-| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 3 | 68 |
+| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 116 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 9 | 156 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 222 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
@@ -203,7 +203,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 7 | 249 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 249 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 37 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
@@ -211,22 +211,22 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 6 | 107 |
 | [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 207 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
-| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 187 |
+| [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 188 |
 | [`fenCibles.js`](#jsfenciblesjs) | Fenêtre « Objectifs par rôle » | 5 | 82 |
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 179 |
-| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 8 | 143 |
+| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 10 | 168 |
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
-| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
+| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 117 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
-| [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 193 |
+| [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 44 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 45 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -237,17 +237,26 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 164 |
-| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 9 | 124 |
-| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 13 | 148 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 15 | 199 |
+| [`tableImages.js`](#jstableimagesjs) | Le visuel d'une carte, à la table | 4 | 84 |
+| [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 123 |
+| [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 57 |
+| [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 15 | 146 |
+| [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 12 | 134 |
+| [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 46 |
+| [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi, en flèches | 7 | 103 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 137 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 11 | 136 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
 | [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 11 | 130 |
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
-| [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 66 |
+| [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 67 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 3 | 60 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 299 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 78 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 311 |
+| [`icones.js`](#jsiconesjs) |  | 0 | 23 |
+| [`navigationUX.js`](#jsnavigationuxjs) |  | 0 | 36 |
 
 ## js/reglesEffets.js
 
@@ -432,7 +441,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 196 lignes, 11 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 203 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -448,7 +457,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 | `ONGLETS_ANCIENS` | L'onglet unique d'hier, tel qu'une sauvegarde le nomme encore : elle rouvrait sinon la collection, et l'on perdait la page qu'on regardait en quittant l'atelier. |
 | `SECTIONS_SUGGESTIONS` | Les trois sections que la notation alimente, dans l'ordre des onglets. |
 | `COLONNES` | Les nombres de colonnes offerts par les grilles, zéro valant « autant que la largeur en permet ». |
-| `LISTES_AFFICHAGE` | Les cinq listes de cartes de l'atelier, et ce que chacune sait montrer. |
+| `LISTES_AFFICHAGE` | Les six listes de cartes de l'atelier, et ce que chacune sait montrer. |
 | `CLES_AFFICHAGE` | — |
 | `RETOURNEES` | — |
 | `apercuEl` | — |
@@ -590,7 +599,7 @@ L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 71 lignes, 3.
 
 ## js/groupes.js
 
-Grouper et trier les listes de cartes. *7 fonctions, 232 lignes, 10 Ko.*
+Grouper et trier les listes de cartes. *7 fonctions, 237 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -900,7 +909,7 @@ Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
 
 ## js/jeuEtat.js
 
-Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 220 lignes, 10 Ko.*
+Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 223 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1279,7 +1288,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 141 lignes, 7.1 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 144 lignes, 7.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1355,7 +1364,7 @@ Dérouler une partie, question après question. *6 fonctions, 99 lignes, 4.3 Ko.
 
 ## js/jeuCopie.js
 
-Copier une partie, et la reprendre. *7 fonctions, 114 lignes, 5.1 Ko.*
+Copier une partie, et la reprendre. *7 fonctions, 117 lignes, 5.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1373,7 +1382,7 @@ Copier une partie, et la reprendre. *7 fonctions, 114 lignes, 5.1 Ko.*
 
 ## js/jeuVue.js
 
-Ce qu'un joueur voit de la partie. *7 fonctions, 113 lignes, 7.3 Ko.*
+Ce qu'un joueur voit de la partie. *8 fonctions, 125 lignes, 7.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1381,9 +1390,14 @@ Ce qu'un joueur voit de la partie. *7 fonctions, 113 lignes, 7.3 Ko.*
 | `objetVue(P, o, cartes)` | Un permanent tel qu'on le voit : ses caractéristiques du moment, son état, sa place dans le combat. |
 | `carteVue(P, id, cartes)` | Une carte d'une zone publique, ou de sa propre main. |
 | `libelleRef(P, c)` | Le libellé d'une cible ou d'un joueur. |
+| `refPublique(P, c)` | — |
 | `vue(P, j)` | La vue du joueur `j`. |
 | `libelleAction(P, a)` | Le libellé d'une action de priorité. |
 | `questionPourUI(P, q)` | Une question telle qu'un humain la reçoit : des libellés, des références, des bornes — et rien de ce que le moteur garde pour lui (définitions, opérations, descripteurs). |
+
+| Donnée | Rôle |
+|---|---|
+| `ZONES_PUBLIQUES` | Une cible ou une source qu'on peut montrer du doigt : un joueur, ou un objet d'une zone publique. |
 
 ## js/jeuArrets.js
 
@@ -3016,12 +3030,14 @@ La section « Mes decks ». *4 fonctions, 103 lignes, 5.4 Ko.*
 
 ## js/wishlistSection.js
 
-La section « Liste d'achats ». *3 fonctions, 68 lignes, 3.7 Ko.*
+La section « Liste d'achats ». *5 fonctions, 116 lignes, 6.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `decksDemandeurs(l)` | Les decks qui réclament une carte, du plus gourmand au moins. |
 | `ligneWishlist(l)` | — |
+| `tuileWishlist(e)` | La vignette d'une ligne, pour la grille : la carte en image, ses decks demandeurs, ce qu'il en manque et ce que cela coûte. |
+| `listeWishlist(lignes)` | Les lignes, rangées comme la fenêtre « Affichage » le demande : en lignes ou en vignettes, par groupes ou à plat, dans l'ordre choisi. |
 | `renderJ()` | — |
 
 ## js/collection.js
@@ -3620,10 +3636,11 @@ Les recalculs annoncés. *8 fonctions, 200 lignes, 8.7 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *7 fonctions, 249 lignes, 14 Ko.*
+L'en-tête et la barre des onglets. *8 fonctions, 249 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `iconeEntete(nom)` | — |
 | `listeDeLOngletCourant()` | — |
 | `majBoutonAffichage()` | — |
 | `majHauteurEntete()` | La hauteur de l'entête, publiée pour le CSS : les sections s'en servent comme marge de défilement et s'arrêtent sous elle plutôt que derrière. |
@@ -3635,8 +3652,8 @@ L'en-tête et la barre des onglets. *7 fonctions, 249 lignes, 14 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `FILTRE_ICONE` | — |
-| `AFFICHAGE_ICONE` | Quatre pavés : la grille d'une liste de cartes, vue de loin. |
-| `PARAM_ICONE` | L'engrenage des paramètres : douze dents posées en couronne et un moyeu évidé, dessinés ici plutôt que chargés — l'atelier ne dépend d'aucun fichier extérieur, pas même d'une icône. |
+| `AFFICHAGE_ICONE` | — |
+| `PARAM_ICONE` | — |
 | `POS_ONGLETS` | Où l'on en était dans chaque onglet. Le défilement est celui du document, partagé par les trois pages : sans ce relevé, revenir au deck après une longue collection retomberait n'importe… |
 
 ## js/rendu.js
@@ -3749,7 +3766,7 @@ Fenêtre « Filtres ». *10 fonctions, 207 lignes, 12 Ko.*
 
 ## js/fenAffichage.js
 
-Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 187 lignes, 9.2 Ko.*
+Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 188 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3759,7 +3776,7 @@ Fenêtre « Affichage » d'une liste de cartes. *9 fonctions, 187 lignes, 9.2 Ko
 | `majFenetreAffichage()` | — |
 | `reglageAffichage(quoi, el)` | Les quatre réglages de la fenêtre, au brouillon : rien ne bouge dans la liste avant « Appliquer ». |
 | `glisseColonnes(el)` | Le curseur des colonnes décoche « Auto » du seul fait qu'on s'en serve : imposer un nombre, c'est cesser de s'en remettre à la largeur. |
-| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les cinq listes, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité n'en a pas pour une… |
+| `verseAffichagePartout(conf)` | Le réglage choisi, recopié dans les six listes, le tri là où la liste l'offre — le taux d'inclusion d'EDHREC n'a pas de sens pour la collection, la quantité n'en a pas pour une… |
 | `appliquerAffichage(partout)` | « Appliquer » verse le réglage d'un coup. Le groupement et le tri changent l'ordre des cartes : la pagination de la collection repart de sa première page, sinon la fin d'une liste rangée… |
 | `openAffichageModal(section)` | — |
 
@@ -3826,14 +3843,16 @@ Fenêtres d'export et d'effacement. *3 fonctions, 179 lignes, 9.8 Ko.*
 
 ## js/fenAdversaire.js
 
-Ajouter ou modifier un adversaire. *8 fonctions, 143 lignes, 8.4 Ko.*
+Ajouter ou modifier un adversaire. *10 fonctions, 168 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `repliHTML(lien, echec)` | Le bloc du dernier recours : pourquoi la lecture a échoué, où trouver l'export. |
 | `etatLienHTML(l)` | Ce qu'on sait d'un lien : son site, sa dernière vérification, son dernier changement. |
 | `ouvreAdversaire(cle, opts = {})` | — |
+| `inconnuesHTML(noms)` | Les cartes qui posent problème, une par ligne : l'atelier ne peut pas deviner laquelle est la faute de frappe, le nom d'une autre langue ou la carte trop récente — c'est à celui qui… |
 | `majApercuAdversaire()` | Ce que la liste collée donne, à mesure qu'on la colle. |
+| `ouvreInconnues(cle)` | La fenêtre des cartes que ni l'atelier ni Scryfall n'ont retrouvées, après l'enregistrement : un toast tronqué à quatre noms ne dit pas lesquelles corriger. |
 | `adversaireDeLaFenetre(cle)` | L'adversaire tel que la fenêtre le décrit : lu sur le site quand on a donné un lien sans coller de liste, sinon tiré de la liste collée. |
 | `enregistreAdversaireFenetre(cle)` | — |
 | `supprimeAdversaire(cle)` | — |
@@ -3885,7 +3904,7 @@ Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
 
 ## js/gestesVue.js
 
-Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
+Les gestes qui règlent la vue. *1 fonctions, 117 lignes, 4.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3901,7 +3920,7 @@ Les fenêtres de réglage et leurs boutons. *1 fonctions, 140 lignes, 4.6 Ko.*
 
 ## js/gestesDeck.js
 
-Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 193 lignes, 7.5 Ko.*
+Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 198 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3934,7 +3953,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 44 lignes, 2.1 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 45 lignes, 2.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4114,10 +4133,13 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *12 fonctions, 164 lignes, 7.3 Ko.*
+La partie que ce navigateur héberge. *15 fonctions, 199 lignes, 9.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `pauseApres(q, r, s, etapeChangee)` | Combien attendre après une réponse, pour qu'un humain suive : longtemps après le geste d'un automate (un sort lancé, une attaque), un peu à chaque étape montrée dans la barre des phases,… |
+| `montrePile(q)` | Un objet va se résoudre : on le montre, avec ses flèches, le temps qu'on le lise — plus longtemps celui d'un adversaire que le sien. |
+| `vueTable(j)` | La vue d'un joueur, et qui la partie attend : celui qui a la priorité. |
 | `attendre(ms)` | — |
 | `signePublic(P)` | Ce qu'un humain verrait changer : la pile, le champ, les points de vie. |
 | `siegeDeSource(s)` | Le siège moteur d'une source choisie au salon : un deck de l'atelier, un adversaire de la bibliothèque, ou les fiches reçues d'un invité. |
@@ -4134,26 +4156,171 @@ La partie que ce navigateur héberge. *12 fonctions, 164 lignes, 7.3 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `TABLE` | — |
+| `VITESSES` | Les vitesses de la table, réglées au menu (`S.table.vitesse`). |
 
-## js/tableRendu.js
+## js/tableImages.js
 
-La table, peinte depuis une vue. *9 fonctions, 124 lignes, 7.3 Ko.*
+Le visuel d'une carte, à la table. *4 fonctions, 84 lignes, 3.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `imageCarte(nom)` | Le visuel d'une carte : celui que l'atelier connaît, sinon celui que Scryfall sert par son nom. |
-| `chipCarte(o, v)` | Une carte du champ, de la main ou d'une zone, en vignette de texte : lisible sans réseau, et dix fois plus dense qu'une image sur un téléphone. |
-| `bandeauJoueur(J, v, estMoi)` | Le bandeau d'un joueur : son nom, ses points de vie, ses zones, son champ. |
-| `pileHTML(v)` | — |
+| `imageConnue(nom)` | Le visuel que l'atelier ou l'archive connaît déjà, sans réseau. |
+| `imageCarte(nom, version = 'normal')` | L'adresse du visuel d'une carte : `normal` pour la carte entière, `art_crop` pour l'illustration seule. |
+| `demandeImage(nom)` | — |
+| `chercheImagesTable()` | Les noms en attente, par lots de soixante-quinze. |
+
+| Donnée | Rôle |
+|---|---|
+| `IMAGES_TABLE` | Nom normalisé → adresse du visuel « normal », ou '' quand personne ne le connaît. |
+| `IMAGES_ATTENTE` | — |
+| `IMAGES_DEMANDEES` | — |
+| `imagesMinuterie` | — |
+
+## js/tableCartes.js
+
+Une carte posée sur la table. *12 fonctions, 123 lignes, 6.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `teinteCarte(f)` | La couleur du cadre d'une carte : celle des symboles de son coût. |
+| `estNombre(x)` | — |
+| `forceHTML(o, f)` | Force et endurance du moment, comparées à celles imprimées : plus fortes en vert, plus faibles en rouge ; l'endurance qui reste, une fois les blessures ôtées. |
+| `marqueursHTML(o)` | Les marqueurs d'un permanent, la loyauté à part. |
+| `etatsHTML(o)` | — |
+| `tuile(o, v, opts = {})` | Une carte de la table. `o` est un objet de la vue — permanent, carte d'une zone, élément de la pile — ou une option de question ({id, nom}). `opts` : mode ('carte' ou 'vignette'), act et… |
+| `regroupe(objs)` | Un permanent est seul quand il a quelque chose à dire : un marqueur, une blessure, un rôle au combat, une question qui le désigne. |
+| `suiteTuiles(objs, v, opts = {})` | Une suite de permanents : chacun suivi de ce qui lui est attaché (aura, équipement), qui dépasse derrière lui. |
+| `estTerrain(o)` | — |
+| `estFront(o)` | — |
+| `rangsDe(J, v)` | Le champ d'un joueur, rangé comme sur une vraie table : créatures et planeswalkers devant ; terrains, artefacts et enchantements derrière. |
+| `rangee(cle, html, classe = '')` | Une rangée qui défile seule ; sa position survit aux repeints. |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMS_MARQUEURS` | — |
+
+## js/tableJoueurs.js
+
+Ce qu'on sait d'un joueur, d'un coup d'œil. *4 fonctions, 57 lignes, 3.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `reserveHTML(J)` | Le mana qu'un joueur a en réserve, en symboles. |
+| `compteursHTML(J)` | Les compteurs d'un joueur. Le cimetière et l'exil s'ouvrent d'un toucher. |
+| `cartouche(J, v, classe = '')` | Le cartouche d'un joueur. Toucher son nom le désigne, quand une question attend un joueur pour cible. |
+| `zoneHTML(v)` | Le cimetière ou l'exil d'un joueur, déplié en cartes entières. |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMS_ZONES` | — |
+
+## js/tableDispositions.js
+
+Trois façons de disposer la table. *15 fonctions, 146 lignes, 7.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `dispositionTable()` | — |
+| `adversairesDe(v)` | Les adversaires, dans l'ordre où ils jouent après soi. |
+| `champDeuxRangs(J, v, cle)` | Le champ d'un joueur sur deux rangées de cartes entières. |
+| `couloir(J, v)` | Un couloir : le cartouche, puis une seule rangée de vignettes — créatures, autres permanents, terrains. |
+| `areneAdversaires(v)` | — |
+| `cartoucheTour(J, v)` | Un adversaire replié : ses menaces en miniatures, et ce qu'une question désigne chez lui ; le reste en nombres. |
+| `adversairesTableHTML(v)` | La région des adversaires, selon la disposition. |
+| `moiHTML(v)` | Son propre champ. |
+| `pileHTML(v)` | La pile, du sommet au fond, chaque objet avec son lanceur et ses cibles. |
+| `mainHTML(v)` | — |
+| `montrePage(k)` | Un onglet de l'Arène touché : la page de cet adversaire. |
+| `marqueOnglet(k)` | — |
+| `suisActif(v)` | L'Arène suit le joueur actif : à chaque tour d'un adversaire, sa page. |
+| `appliquePage()` | Une page à montrer : celle du joueur actif, ou celle qu'on regardait quand les pages viennent d'être recréées (retour d'une autre disposition). |
+| `defileTable(ev)` | Un défilement dans la table. Celui des pages de l'Arène tient l'onglet à jour sans repeindre. |
+
+| Donnée | Rôle |
+|---|---|
+| `DISPOSITIONS` | — |
+
+## js/tableLoupe.js
+
+Voir une carte en grand. *12 fonctions, 134 lignes, 6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `appuiDebut(ev)` | Un doigt se pose : s'il reste sur la carte, elle s'ouvre en grand. |
+| `appuiBouge(ev)` | Le doigt glisse : c'est un défilement, pas un appui. |
+| `appuiAnnule()` | — |
+| `appuiFin()` | Le doigt se lève après un appui long : le clic qui suit est avalé. |
+| `clicAvale()` | — |
+| `loupeContextuelle(ev)` | Le menu contextuel sur une carte : la loupe à sa place. |
+| `ouvreLoupe(id)` | — |
+| `objetVisible(id)` | Un objet visible, où qu'il soit : champ, main, pile, zones publiques, options de la question. |
+| `etatEnMots(o, v)` | Ce que la partie a fait à un permanent, en mots. |
+| `texteOracleHTML(t)` | Les symboles d'un texte d'oracle, en pastilles. |
+| `actionsLoupe(id)` | Ce qu'on peut faire de la carte maintenant, en boutons. |
+| `loupeHTML(v)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `APPUI` | — |
+| `APPUI_MS` | — |
+
+## js/tablePhases.js
+
+Où en est le tour, et qui a la main. *2 fonctions, 46 lignes, 2.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `phasesHTML(v)` | — |
+| `etapeHTML(v)` | La ligne du haut : le tour, le joueur actif, et qui a la priorité. |
+
+| Donnée | Rôle |
+|---|---|
+| `PHASES_TOUR` | Les cases de la barre : un nom court, et le nom complet de chaque étape qu'elle couvre. |
+| `PHASE_DE` | L'étape du moteur → la case de la barre. Le dégagement et le nettoyage, où personne ne reçoit la priorité, ne retiennent pas la table. |
+
+## js/tableFleches.js
+
+Ce qui vise quoi, en flèches. *7 fonctions, 103 lignes, 5.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `liensTable(v)` | Les liens à tracer, d'après la vue seule. |
+| `marquesPile(v)` | Les ids que la pile désigne, pour allumer les cartes : celles qui s'activent, celles qui sont visées. |
+| `rectVisible(el)` | Le rectangle d'un élément, s'il se voit : ni hors de l'écran, ni caché par le bord d'une rangée qui défile. |
+| `ancreDe(ref, v)` | L'élément visible qui représente une référence : la carte, sinon le cartouche ou l'onglet de son joueur. |
+| `cheminFleche(a, b)` | Une flèche courbe d'un centre à l'autre, arrêtée au bord de la cible. |
+| `traceFleches()` | — |
+| `planifieFleches()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `MARQUES_FLECHES` | — |
+| `flechesPrevues` | Un défilement ou un changement de taille : un seul tracé par image. |
+
+## js/tableRendu.js
+
+La table, peinte depuis une vue. *10 fonctions, 137 lignes, 6.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `charpentePartie()` | La charpente de la partie : des régions vides, et les boutons qui ne changent jamais. |
+| `releveDefile(el)` | La position de chaque rangée qui défile, avant un repeint. |
+| `restaureDefile(el, m)` | — |
+| `peinsRegions(el, regions, charpente)` | Peindre les régions qui ont changé, et elles seules. |
 | `journalTableLignes()` | Les dernières lignes du journal, qui disent ce que les autres ont fait. |
-| `detailHTML(v)` | — |
-| `partieHTML()` | — |
+| `filHTML()` | — |
+| `menuHTML()` | Le menu de la table : la disposition, les arrêts, quitter. |
 | `finHTML(v)` | — |
+| `regionsPartie(v)` | — |
 | `renduTable()` | Peindre la table, si elle est ouverte. |
+
+| Donnée | Rôle |
+|---|---|
+| `REPEINT` | Ce qui a été peint : la charpente, et le HTML de chaque région. |
 
 ## js/tableQuestions.js
 
-Répondre à une question du moteur, à la main. *13 fonctions, 148 lignes, 7.1 Ko.*
+Répondre à une question du moteur, à la main. *11 fonctions, 136 lignes, 7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4161,14 +4328,12 @@ Répondre à une question du moteur, à la main. *13 fonctions, 148 lignes, 7.1 
 | `etatChoix(id)` | L'état d'une carte vis-à-vis de la question : choisissable, choisie, ou rien. |
 | `etatJoueur(j)` | — |
 | `repondsTable(r)` | Envoyer une réponse : au moteur sur l'hôte, à l'hôte depuis un invité. |
-| `nomVisible(id)` | Le nom d'une carte visible, pour la montrer en grand. |
-| `montreDetail(id)` | — |
 | `basculeChoix(q, s, i)` | — |
-| `clicCarte(id)` | Un toucher sur une carte de la table. |
+| `clicCarte(id)` | Un toucher sur une carte de la table : la jouer s'il n'y a qu'une façon de le faire, la choisir si la question l'attend ; sinon la voir en grand, avec ce qu'on peut en faire. |
 | `clicJoueur(j)` | — |
 | `valideTable()` | « Valider » : la sélection en cours, sous la forme que le moteur attend. |
 | `bornes(q)` | — |
-| `chipsChoix(q, s)` | Les choix d'une question à cases. |
+| `chipsChoix(q, s, v)` | Les choix d'une question à cases : une carte se montre par son visuel, un joueur ou un mot par un bouton. |
 | `questionHTML(q, v)` | Le bandeau de la question. |
 
 | Donnée | Rôle |
@@ -4261,7 +4426,7 @@ Rejoindre la table d'un autre. *14 fonctions, 135 lignes, 6.7 Ko.*
 
 ## js/tableReprise.js
 
-Reprendre une partie après un rechargement. *4 fonctions, 66 lignes, 2.8 Ko.*
+Reprendre une partie après un rechargement. *4 fonctions, 67 lignes, 2.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4294,17 +4459,18 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *3 fonctions, 60 lignes, 3 Ko.*
+Les gestes de la table interactive. *4 fonctions, 78 lignes, 4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `gestesTable(act, b)` | — |
+| `choisitDisposition(d)` | Une disposition choisie au menu : retenue pour les parties suivantes. |
 | `passeTour()` | « Passer jusqu'à mon tour », sur l'hôte comme depuis un invité. |
 | `ouvreJournalTable()` | Le journal de la partie en cours, en grand. |
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 299 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 311 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4313,4 +4479,8 @@ L'aiguillage et le démarrage. *1 fonctions, 299 lignes, 12 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `dlgEl` | Fermeture au clic sur l'arrière-plan (backdrop) |
+
+## js/icones.js
+
+## js/navigationUX.js
 
