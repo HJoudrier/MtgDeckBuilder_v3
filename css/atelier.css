@@ -1000,3 +1000,21 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   .navigation-principale button svg{width:21px;height:21px}
 }
 @media(prefers-reduced-motion:reduce){.navigation-principale button{transition:none!important}}
+
+
+/* Correctif : l'ancienne navigation mobile était encore positionnée en bas
+   par une règle .onglets. La sous-navigation doit rester sous l'entête ;
+   seule #navigationPrincipale occupe le bas de l'écran. */
+#onglets{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  z-index:auto!important;
+  width:100%!important;max-width:none!important;
+  margin:0!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+@media(max-width:640px){
+  #onglets{position:relative!important;inset:auto!important;overflow-x:auto!important}
+}
