@@ -30,12 +30,6 @@
     const cible = GROUPES[groupe].includes(pageCourante) ? pageCourante : PREMIERE_PAGE[groupe];
     activerOnglet(cible);
   };
-  document.addEventListener('click',ev=>{
-    const b=ev.target.closest('#navigationPrincipale [data-nav-group]');
-    if(!b)return;
-    ev.preventDefault();
-    activerGroupeNavigation(b.dataset.navGroup);
-  });
   document.addEventListener('keydown',ev=>{
     if(ev.key!=='ArrowLeft'&&ev.key!=='ArrowRight'&&ev.key!=='Home'&&ev.key!=='End')return;
     const actif=ev.target.closest&&ev.target.closest('#onglets [data-onglet]');
