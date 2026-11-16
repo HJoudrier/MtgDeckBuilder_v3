@@ -1287,6 +1287,26 @@ Deux défauts plus anciens corrigés en chemin :
 - **l'IA jugeait amical « exiler une carte ciblée d'un cimetière »**, et ne visait donc jamais le
   cimetière adverse.
 
+**Cinq cartes demandées, et une couverture plus honnête** (lot F52). Chacune manquait d'un élément :
+- *Raise the Palisade*, le filtre `IsNotChosenType` ;
+- *Run Away Together*, `TargetsWithDifferentControllers$` : une cible par joueur. Le choix des cibles
+  range les candidats en tournante d'un joueur à l'autre — la réponse par défaut respecte donc la
+  restriction —, refuse un choix que la restriction a réduit sous le minimum, et `effetCiblable()` compte
+  les joueurs, non les créatures : sans créature adverse, le sort n'est pas proposé ;
+- *Master of Barbs*, le mode `DamageAll`, jugé comme `DamageDone` et joué une fois par lot
+  (`MODES_PAR_LOT`) ;
+- *Ashcloud Phoenix*, `ChangeZone | FaceDown$` : l'objet entre par `metEnJeu()` face cachée, comme un
+  manifesté, et se retourne pour son coût de Morph ;
+- *Hands of Binding*, `KW$ HIDDEN This card doesn't untap during your next untap step.` : le drapeau
+  `o.exerce` que consomme `degagement()`, sans bonus posé.
+
+**`KW$` ne se perd plus en silence.** `motsForge()` ne connaît que dix-sept mots simples ; tout autre
+`KW$` d'une pompe était jeté, et la carte passait pour complète en perdant un morceau de son texte
+(Hands of Binding, mais aussi « can't block »). La couverture compte désormais chaque valeur
+(`kwval:…`) ; `forgeSait('kwval', …)` inscrit ce que le moteur lit. Sur un échantillon de huit cent
+soixante cartes tirées des éditions récentes, huit cartes sont repassées de complète à partielle ou
+injouable, toutes à raison.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

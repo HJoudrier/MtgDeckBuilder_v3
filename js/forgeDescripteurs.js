@@ -65,6 +65,7 @@ function emplacementForge(t, face) {
     ...(/^\d+$/.test(t.MaxTotalTargetCMC || '') ? {cmcMax: +t.MaxTotalTargetCMC} : {}), ...(t.TargetValidTargeting ? {visant: t.TargetValidTargeting} : {})};
   return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr} : {}), ...restrB,
     /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
-    ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True'
-      ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', parJoueur: t.TargetsForEachPlayer === 'True'}} : {})};
+    ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True'
+      ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True',
+        parJoueur: t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True'}} : {})};
 }

@@ -18,7 +18,7 @@
    ===================================================================== */
 
 const FORGE_SAIT = {api: new Set(), trig: new Set(), stat: new Set(), repl: new Set(), kw: new Set(),
-  param: new Set(), cout: new Set(), expr: new Set(), filtre: new Set(), defini: new Set(), construction: new Set()};
+  param: new Set(), cout: new Set(), expr: new Set(), filtre: new Set(), defini: new Set(), construction: new Set(), kwval: new Set()};
 
 /* Les paramètres dont la valeur est un filtre (js/forgeValide.js), et ceux
    qui désignent (js/forgeDefini.js) : leurs propriétés et leurs valeurs
@@ -46,7 +46,7 @@ const FORGE_COMMUNS = new Set(['Cost', 'SubAbility', 'ValidTgts', 'TargetMin', '
   'Optional', 'OptionalDecider', 'UnlessCost', 'UnlessPayer', 'UnlessSwitched', 'ConditionDefined', 'ConditionPresent',
   'ConditionCompare', 'ConditionCheckSVar', 'ConditionSVarCompare', 'ConditionZone', 'ConditionPlayerTurn', 'Condition',
   'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones', 'ActivationPhases',
-  'ForgetOtherRemembered', 'ForgetOtherTargets', 'TargetsWithSameController', 'DifferentNames', 'TargetsForEachPlayer',
+  'ForgetOtherRemembered', 'ForgetOtherTargets', 'TargetsWithSameController', 'TargetsWithDifferentControllers', 'DifferentNames', 'TargetsForEachPlayer',
   'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'PlayerTurn', 'TargetUnique', 'Mandatory',
   'ActivationZone']);
 
@@ -84,6 +84,8 @@ function elementsTable(face, t, genre, out, vus) {
     else if ((k === 'Mode' || k === 'Event') && !forgeApi(t)) { if (!genre) out.add('trig:' + t[k]); }
     else if (k === 'Cost' || k === 'UnlessCost') morceauxCout(t[k]).forEach(c => out.add(c));
     else if (!FORGE_DESCRIPTIFS.test(k)) out.add('param:' + (FORGE_COMMUNS.has(k) || !famille ? k : famille + '.' + k));
+    /* Les mots-clés d'une pompe : chacun est une valeur à reconnaître. */
+    if (k === 'KW') String(t[k]).split('&').map(x => x.trim().toLowerCase()).filter(Boolean).forEach(x => out.add('kwval:' + x));
     if (FORGE_CLES_FILTRE.test(k) && typeof famillesFiltre === 'function') famillesFiltre(t[k]).forEach(e => out.add(e));
     if (FORGE_CLES_DEFINI.test(k)) String(t[k]).split(' & ').forEach(d => out.add('defini:' + d.trim().split(' ')[0]));
     if (FORGE_RENVOIS.includes(k)) String(t[k]).split(',').forEach(nom => {

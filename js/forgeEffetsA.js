@@ -181,7 +181,7 @@ function* deplaceForge(P, o, dest, env, opts = {}) {
   if (dest === 'champ') {
     if (!o.def.types.some(x => TYPES_PERMANENTS.includes(x))) return null;
     const ctrl = opts.ctrl != null ? opts.ctrl : o.prop;
-    return yield* metEnJeu(P, o.id, ctrl, {engage: !!opts.engage, marqueurs: opts.marqueurs});
+    return yield* metEnJeu(P, o.id, ctrl, {engage: !!opts.engage, marqueurs: opts.marqueurs, faceCachee: !!opts.faceCachee});
   }
   if (dest === 'bibliotheque') return deplace(P, o.id, opts.dessous ? 'dessous' : 'dessus');
   return deplace(P, o.id, dest);
@@ -195,7 +195,7 @@ function dansOrigine(o, origine) {
 
 forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'Shuffle', 'Tapped', 'LibraryPosition',
   'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration',
-  'WithCountersType', 'WithCountersAmount', 'OriginAlternative'], function* (P, t, env) {
+  'WithCountersType', 'WithCountersAmount', 'OriginAlternative', 'FaceDown'], function* (P, t, env) {
   const dest = zoneForge(t.Destination), ctx = env.ctx;
   if (!dest) return;
   /* « Exile … until ~ leaves the battlefield » : si l'hôte est déjà parti,
@@ -203,7 +203,8 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
   const jusqua = t.Duration === 'UntilHostLeavesPlay';
   if (jusqua && (!env.src || env.src.lki || env.src.zone !== 'champ')) return;
   const opts = {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null, dessous: t.LibraryPosition === '-1',
-    marqueurs: t.WithCountersType ? {[genreMarqueur(t.WithCountersType)]: forgeNombre(P, t.WithCountersAmount || 1, env)} : null};
+    marqueurs: t.WithCountersType ? {[genreMarqueur(t.WithCountersType)]: forgeNombre(P, t.WithCountersAmount || 1, env)} : null,
+    faceCachee: t.FaceDown === 'True'};
   const cache = /Library|Hand/.test(t.Origin || '') && env.op.slot == null && !t.Defined;
   let objets;
   if (cache || (t.ChangeType && env.op.slot == null && !t.Defined)) {

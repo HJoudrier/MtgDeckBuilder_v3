@@ -3996,6 +3996,7 @@
     "forgeDurees.js (chargement)",
     "forgeEffet",
     "forgeEffetsA.js (chargement)",
+    "forgeEffetsC.js (chargement)",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeEffetsF.js (chargement)",
@@ -4085,7 +4086,7 @@
   {
    "nom": "unitesForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 112,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "elementsTable",
@@ -4101,7 +4102,7 @@
   {
    "nom": "couvertureForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 140,
+   "ligne": 142,
    "chargement": false,
    "appelle": [
     "forgeConnu",
@@ -4119,7 +4120,7 @@
   {
    "nom": "manquesForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 160,
+   "ligne": 162,
    "chargement": false,
    "appelle": [
     "couvertureForge"
@@ -4286,6 +4287,7 @@
     "actionsPrepare",
     "activeCapacite",
     "appliqueSBA",
+    "assezDeControleurs",
     "attaquantImpose",
     "attaquantsDeclares",
     "attaqueCalculee",
@@ -4339,6 +4341,7 @@
     "effetsOuverture",
     "elimine",
     "emetCibles",
+    "enTournante",
     "encodeChiffre",
     "entreesAutres",
     "epissures",
@@ -6427,6 +6430,7 @@
    "ligne": 44,
    "chargement": false,
    "appelle": [
+    "assezDeControleurs",
     "ciblesLegales"
    ],
    "appelleDiffere": [],
@@ -6437,9 +6441,37 @@
    ]
   },
   {
+   "nom": "assezDeControleurs",
+   "fichier": "jeuLancer.js",
+   "ligne": 53,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "effetCiblable"
+   ]
+  },
+  {
+   "nom": "enTournante",
+   "fichier": "jeuLancer.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "obj"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "choisitCibles"
+   ]
+  },
+  {
    "nom": "coutAutrePossible",
    "fichier": "jeuLancer.js",
-   "ligne": 51,
+   "ligne": 71,
    "chargement": false,
    "appelle": [
     "aCoutX",
@@ -6470,7 +6502,7 @@
   {
    "nom": "actionsLegales",
    "fichier": "jeuLancer.js",
-   "ligne": 73,
+   "ligne": 93,
    "chargement": false,
    "appelle": [
     "actionsComplot",
@@ -6509,7 +6541,7 @@
   {
    "nom": "actionsPossibles",
    "fichier": "jeuLancer.js",
-   "ligne": 150,
+   "ligne": 170,
    "chargement": false,
    "appelle": [
     "actionsLegales",
@@ -6534,11 +6566,12 @@
   {
    "nom": "choisitCibles",
    "fichier": "jeuLancer.js",
-   "ligne": 166,
+   "ligne": 186,
    "chargement": false,
    "appelle": [
     "candidatsDuControleur",
     "ciblesLegales",
+    "enTournante",
     "forgeNombre",
     "question",
     "restreintCibles",
@@ -6555,7 +6588,7 @@
   {
    "nom": "prepareEffets",
    "fichier": "jeuLancer.js",
-   "ligne": 184,
+   "ligne": 206,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6576,7 +6609,7 @@
   {
    "nom": "coutDeGarde",
    "fichier": "jeuLancer.js",
-   "ligne": 209,
+   "ligne": 231,
    "chargement": false,
    "appelle": [
     "car",
@@ -6591,7 +6624,7 @@
   {
    "nom": "restreintCibles",
    "fichier": "jeuLancer.js",
-   "ligne": 221,
+   "ligne": 243,
    "chargement": false,
    "appelle": [
     "obj"
@@ -9165,7 +9198,7 @@
   {
    "nom": "ciblesJoueurs",
    "fichier": "forgeValide.js",
-   "ligne": 250,
+   "ligne": 252,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9177,7 +9210,7 @@
   {
    "nom": "forgeValideObjet",
    "fichier": "forgeValide.js",
-   "ligne": 256,
+   "ligne": 258,
    "chargement": false,
    "appelle": [
     "caracsJugees",
@@ -9252,7 +9285,7 @@
   {
    "nom": "forgeValideJoueur",
    "fichier": "forgeValide.js",
-   "ligne": 264,
+   "ligne": 266,
    "chargement": false,
    "appelle": [
     "choixDe",
@@ -10435,7 +10468,7 @@
   {
    "nom": "nombreIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 285,
+   "ligne": 286,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10450,7 +10483,7 @@
   {
    "nom": "quiIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 288,
+   "ligne": 289,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10622,6 +10655,7 @@
     "forgeDefinis",
     "forgeEffet",
     "forgeNombre",
+    "forgeSait",
     "forgeSousCapacite",
     "forgeValideObjet",
     "infligeDegats",
@@ -10641,7 +10675,7 @@
   {
    "nom": "motsForge",
    "fichier": "forgeEffetsC.js",
-   "ligne": 12,
+   "ligne": 14,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10658,7 +10692,7 @@
   {
    "nom": "bonusIA",
    "fichier": "forgeEffetsC.js",
-   "ligne": 17,
+   "ligne": 26,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10670,7 +10704,7 @@
   {
    "nom": "pompeForge",
    "fichier": "forgeEffetsC.js",
-   "ligne": 20,
+   "ligne": 29,
    "chargement": false,
    "appelle": [
     "finForge",
@@ -10688,7 +10722,7 @@
   {
    "nom": "optionsMana",
    "fichier": "forgeEffetsC.js",
-   "ligne": 62,
+   "ligne": 76,
    "chargement": false,
    "appelle": [
     "combinaisons"
@@ -10704,7 +10738,7 @@
   {
    "nom": "combinaisons",
    "fichier": "forgeEffetsC.js",
-   "ligne": 73,
+   "ligne": 87,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12470,7 +12504,7 @@
   {
    "nom": "capaciteActivee",
    "fichier": "forgeDeclencheursB.js",
-   "ligne": 73,
+   "ligne": 75,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -12482,7 +12516,7 @@
   {
    "nom": "marqueurPose",
    "fichier": "forgeDeclencheursB.js",
-   "ligne": 87,
+   "ligne": 89,
    "chargement": false,
    "appelle": [
     "genreMarqueur",
@@ -12499,7 +12533,7 @@
   {
    "nom": "declencheursEtat",
    "fichier": "forgeDeclencheursB.js",
-   "ligne": 109,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "capacitesDe",

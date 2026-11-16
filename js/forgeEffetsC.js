@@ -8,10 +8,19 @@
    ===================================================================== */
 
 /* Les mots-clés d'un `KW$ Flying & Trample`, en bits. Un mot-clé que le
-   moteur ne connaît pas est laissé de côté. */
+   moteur ne connaît pas est laissé de côté — mais la couverture le compte
+   comme manquant (`kwval:`, js/forgeCouverture.js), pour qu'une carte ne
+   passe pas pour complète en perdant une partie de son texte. */
 function motsForge(kw) {
   return String(kw || '').split('&').reduce((m, k) => m | (MOTS_ANGLAIS[k.trim().toLowerCase()] || 0), 0);
 }
+
+/* « HIDDEN This card doesn't untap during your next untap step. » (Hands of
+   Binding) : un mot-clé caché que Forge pose en `KW$`. Le moteur en fait le
+   drapeau d'un permanent exercé, que l'étape de dégagement consomme
+   (js/jeuTour.js `degagement()`). */
+const KW_SANS_DEGAGER = "hidden this card doesn't untap during your next untap step.";
+forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, 'flashback');
 
 /* Un `+3` ou un `-X` de Forge, pour l'IA. */
 function bonusIA(v) { const s = String(v == null ? '0' : v); return /^[+-]?\d+$/.test(s) ? +s : /^-/.test(s) ? -2 : 2; }
@@ -19,10 +28,15 @@ function bonusIA(v) { const s = String(v == null ? '0' : v); return /^[+-]?\d+$/
 /* Poser un bonus sur des objets du champ. */
 function pompeForge(P, objets, t, env) {
   const f = forgeNombre(P, t.NumAtt || 0, env), e = forgeNombre(P, t.NumDef || 0, env), mots = motsForge(t.KW);
+  const vivants = objets.filter(o => o.zone === 'champ' && !o.lki);
+  /* Ne pas se dégager est un drapeau, pas un bonus : rien à poser en plus. */
+  const sansDegager = String(t.KW || '').split('&').some(k => k.trim().toLowerCase() === KW_SANS_DEGAGER);
+  if (sansDegager) vivants.forEach(o => { o.exerce = true; P.ver++; });
+  if (sansDegager && !mots && !f && !e) return;
   /* La durée (js/forgeDurees.js) ; une durée qu'on ne sait pas tenir finit au nettoyage. */
   const fd = finForge(t, env) || {fin: 'tour'};
   if (fd.fin === 'hote') P.hotesSuivis = true;
-  objets.filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f, e, mots, ...fd}); P.ver++; });
+  vivants.forEach(o => { o.mods.push({f, e, mots, ...fd}); P.ver++; });
 }
 
 forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) {

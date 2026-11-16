@@ -468,6 +468,8 @@ digraph appels {
     "estEphemere" [label="estEphemere", fillcolor="#96a86d33", color="#96a86d"];
     "coutSort" [label="coutSort", fillcolor="#96a86d33", color="#96a86d"];
     "effetCiblable" [label="effetCiblable", fillcolor="#96a86d33", color="#96a86d"];
+    "assezDeControleurs" [label="assezDeControleurs", fillcolor="#96a86d33", color="#96a86d"];
+    "enTournante" [label="enTournante", fillcolor="#96a86d33", color="#96a86d"];
     "coutAutrePossible" [label="coutAutrePossible", fillcolor="#96a86d33", color="#96a86d"];
     "actionsLegales" [label="actionsLegales", fillcolor="#96a86d33", color="#96a86d"];
     "actionsPossibles" [label="actionsPossibles", fillcolor="#96a86d33", color="#96a86d"];
@@ -2983,6 +2985,9 @@ digraph appels {
   "coutSort" -> "defCorrespond" [color="#96a86d99"];
   "coutSort" -> "coutsForge" [color="#96a86d99"];
   "effetCiblable" -> "ciblesLegales" [color="#96a86d99"];
+  "effetCiblable" -> "assezDeControleurs" [color="#96a86d99"];
+  "assezDeControleurs" -> "obj" [color="#96a86d99"];
+  "enTournante" -> "obj" [color="#96a86d99"];
   "coutAutrePossible" -> "aCoutX" [color="#96a86d99"];
   "coutAutrePossible" -> "coutResolu" [color="#96a86d99"];
   "coutAutrePossible" -> "peutEngagerSoi" [color="#96a86d99"];
@@ -3030,6 +3035,7 @@ digraph appels {
   "actionsPossibles" -> "champDe" [color="#96a86d99"];
   "actionsPossibles" -> "retournable" [color="#96a86d99"];
   "actionsPossibles" -> "capacitesDe" [color="#96a86d99"];
+  "choisitCibles" -> "enTournante" [color="#96a86d99"];
   "choisitCibles" -> "candidatsDuControleur" [color="#96a86d99"];
   "choisitCibles" -> "ciblesLegales" [color="#96a86d99"];
   "choisitCibles" -> "forgeNombre" [color="#96a86d99"];
@@ -3808,6 +3814,7 @@ digraph appels {
   "pompeForge" -> "motsForge" [color="#8a7fa899"];
   "pompeForge" -> "finForge" [color="#8a7fa899"];
   "optionsMana" -> "combinaisons" [color="#8a7fa899"];
+  "forgeEffetsC.js (chargement)" -> "forgeSait" [color="#8a7fa899"];
   "forgeEffetsC.js (chargement)" -> "forgeEffet" [color="#8a7fa899"];
   "forgeEffetsC.js (chargement)" -> "objetsForge" [color="#8a7fa899"];
   "forgeEffetsC.js (chargement)" -> "pompeForge" [color="#8a7fa899"];
