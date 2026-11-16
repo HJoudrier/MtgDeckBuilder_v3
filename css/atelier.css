@@ -857,3 +857,39 @@ tr.sim-maigre td{color:var(--dim2)}
 .sim-champ-large input{width:100%;min-width:0;box-sizing:border-box}
 .sim-repli{border:1px solid var(--warn);border-radius:6px;padding:8px 10px;margin:4px 0 8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .sim-relais{margin-top:8px}
+
+
+/* Refonte progressive : modernisation visuelle sans modifier les identifiants
+   des sections ni les gestionnaires métier existants. */
+:root{--r:12px;--display:ui-serif,Georgia,"Times New Roman",serif;--body:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg);line-height:1.5}
+.top-in,.onglets,.wrap{max-width:1320px}
+.top-in{padding-top:12px;padding-bottom:12px}
+.brand h1{font-family:var(--body);font-weight:750;letter-spacing:-.035em}
+.brand .sub{letter-spacing:.08em}
+.onglets{gap:6px;padding-top:5px}
+.onglet{min-height:44px;border-radius:9px 9px 0 0;padding:10px 15px 8px;font-family:var(--body);font-size:13px;font-weight:600}
+.onglet[aria-selected=true]{background:var(--brass-a1)}
+.onglet-icone{width:17px;height:17px;stroke-width:1.9;flex:0 0 auto}
+button,.btn,.mana-btn{touch-action:manipulation}
+button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.sec{border-radius:14px;box-shadow:0 2px 12px var(--ombre)}
+.sec-head{padding:14px 16px}.sec-body{padding:14px 16px}
+.btn,.pill{border-radius:9px}input,select,textarea{border-radius:9px}
+.card,.cardT,.deck-carte,.sim-bloc,.stat{border-radius:12px}
+#toast{bottom:max(24px,env(safe-area-inset-bottom))}
+@media(min-width:641px){.wrap{padding:20px 20px 64px}.onglets{overflow:visible}}
+@media(max-width:640px){
+ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+ header.top{position:sticky;top:0}
+ .top-in{padding-bottom:8px}
+ .onglets{position:fixed;z-index:80;left:0;right:0;bottom:0;top:auto;width:100%;max-width:none;margin:0;padding:7px 5px calc(7px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:stretch;gap:2px;background:var(--top2);border-top:1px solid var(--line);border-bottom:0;box-shadow:0 -5px 22px var(--ombre);backdrop-filter:blur(14px);overflow-x:auto}
+ .onglet{flex:1 1 0;min-width:0;min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:5px 2px 7px;border:0;border-radius:9px;font-family:var(--body);font-size:10px;line-height:1.15}
+ .onglet[aria-selected=true]{background:var(--brass-a1);color:var(--brass)}
+ .onglet-icone{width:20px;height:20px}
+ .onglet .onglet-pt{position:absolute;top:5px;right:calc(50% - 17px)}
+ .wrap{padding:8px 8px 18px}
+ .sec{margin-bottom:10px}.sec-head{padding:11px 12px}.sec-body{padding:11px 12px}
+ .head-actions button,.head-param{min-width:40px;min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){.onglet,.sec,button{transition:none!important;scroll-behavior:auto!important}}
