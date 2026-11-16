@@ -1,7 +1,7 @@
 /* Icônes Lucide de la navigation principale. Sans le CDN, les libellés et
    la navigation natives restent fonctionnels. */
 (() => {
- const icons={decks:'layers',collection:'library',deck:'panels-top-left',graphe:'network',edhrec:'lightbulb',catalogue:'database',simulation:'swords'};
+ const icons={decks:'layers',collection:'library',deck:'panels-top-left',graphe:'network',edhrec:'lightbulb',catalogue:'database',simulation:'swords',suggestions:'lightbulb',jouer:'swords'};
  function mount(){
   if(!window.lucide||typeof window.lucide.createIcons!=='function')return;
   document.querySelectorAll('#onglets [data-onglet], #navigationPrincipale [data-nav-group]').forEach(b=>{
