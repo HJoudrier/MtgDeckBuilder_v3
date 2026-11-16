@@ -990,6 +990,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 }
 @media(max-width:640px){
   body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+  #onglets{position:static;inset:auto;width:auto;max-width:none;margin:0;box-shadow:none;border-bottom:0;backdrop-filter:none;}
   #topHeader{position:sticky;top:0}
   #onglets{overflow-x:auto;scrollbar-width:none;padding:7px 10px;gap:5px}
   #onglets::-webkit-scrollbar{display:none}
