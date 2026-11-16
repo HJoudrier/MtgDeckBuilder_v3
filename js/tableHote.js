@@ -15,7 +15,10 @@
    ===================================================================== */
 
 const TABLE = {ouverte: false, phase: '', role: '', h: null, sieges: [], agents: [], moi: 0, boucle: false,
-  vue: null, question: null, erreur: '', sel: null, attenteNom: '', detail: null, journalVu: 0, minuterie: null,
+  vue: null, question: null, erreur: '', sel: null, attenteNom: '', journalVu: 0, minuterie: null,
+  /* L'affichage : la carte en grand, la zone dépliée, le menu, la page de
+     l'Arène, l'adversaire déplié du Tour de table. */
+  loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '',
   /* La pause après un geste visible d'un joueur automatique, en ms. */
   pauseIA: 450};
 
@@ -158,6 +161,7 @@ function passeJusquaMonTour(j) {
 function quitteTable() {
   if (TABLE.role === 'hote' && TABLE.h) oublieTableSauvee();
   if (typeof fermeLiaisons === 'function') fermeLiaisons();
-  Object.assign(TABLE, {ouverte: false, phase: '', h: null, question: null, vue: null, role: ''});
+  Object.assign(TABLE, {ouverte: false, phase: '', h: null, question: null, vue: null, role: '',
+    loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: ''});
   renduTable();
 }

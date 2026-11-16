@@ -188,7 +188,7 @@ const S = {
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
      De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent. */
-  table: {nom: '', deck: '', sieges: [], adresse: ''},
+  table: {nom: '', deck: '', sieges: [], adresse: '', disposition: 'arene'},
   arrets: {}
 };
 

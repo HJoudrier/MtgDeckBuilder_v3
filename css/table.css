@@ -1,0 +1,256 @@
+/* =====================================================================
+   La table interactive (js/table*.js).
+
+   Une feuille à part : la table est un écran à elle, plein, qui n'emprunte
+   à l'atelier que ses couleurs, ses boutons et ses pastilles de mana. Comme
+   partout, aucune couleur en dur — seulement les variables des deux thèmes.
+
+   Les tailles des cartes tiennent dans une variable, `--tw`, posée par la
+   zone qui les contient : les cartes de l'adversaire, les siennes et celles
+   de la main n'ont pas la même, et un grand écran les agrandit toutes.
+   ===================================================================== */
+
+.table{position:fixed;inset:0;z-index:900;background:var(--bg);color:var(--txt);overflow:auto;display:flex;flex-direction:column;gap:6px;padding:8px 10px 0}
+.table[hidden]{display:none}
+body.table-ouverte{overflow:hidden}
+
+/* ---------- Le salon, la liaison ---------- */
+.tb-salon{max-width:760px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:10px;padding-bottom:16px}
+.tb-attente{padding:30px;text-align:center;color:var(--dim)}
+.tb-video{position:fixed;right:10px;bottom:10px;width:180px;height:180px;object-fit:cover;border:2px solid var(--brass);border-radius:var(--r);z-index:960;display:none;background:var(--vide-img)}
+.tb-video.visible{display:block}
+.tb-qr-bloc{display:flex;gap:12px;align-items:center;flex-wrap:wrap;width:100%;margin-top:6px}
+.tb-qr-bloc svg.qr{width:min(260px,70vw);height:auto;flex:0 0 auto}
+.tb-qr-grand{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.tb-qr-grand svg.qr{width:min(420px,90vw);height:auto}
+.tb-code{width:100%;max-width:420px;box-sizing:border-box;font-family:var(--mono)}
+.tb-code-long{font-size:13px;word-spacing:4px;line-height:1.6;max-width:420px;user-select:all}
+.tb-alerte{border:1px solid var(--warn);border-radius:6px;padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 6px}
+.tb-invite{flex-wrap:wrap}
+
+/* ---------- La charpente de la partie ---------- */
+.table.en-partie{height:100vh;height:100dvh;overflow:hidden;padding:0;gap:0;--tw:52px;--tvw:62px;
+  background:radial-gradient(900px 500px at 50% 0%, var(--halo) 0%, transparent 65%), var(--bg)}
+.tr[hidden]{display:none}
+.tr-haut{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--panel);border-bottom:1px solid var(--line);flex:0 0 auto}
+.tr-haut [data-region="etape"]{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.tr-tour{font-family:var(--mono);font-weight:700}
+.tr-etape{color:var(--dim)}
+.tr-actif{color:var(--brass);font-weight:600}
+.tr-actif::before{content:'· ';color:var(--dim);font-weight:400}
+.tr-btn{min-width:38px;height:32px;border:1px solid var(--line2);border-radius:8px;background:var(--panel2);color:var(--txt);font:inherit;font-size:13px;padding:0 10px;cursor:pointer;flex:0 0 auto}
+.tr-fil{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:var(--bg2);color:var(--dim);font:inherit;font-size:12px;padding:3px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.tr-plateau{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding:4px 6px}
+.en-partie [data-region="pile"],.en-partie [data-region="moi"],.en-partie [data-region="main"],.en-partie [data-region="question"],.en-partie [data-region="fin"]{flex:0 0 auto}
+.en-partie [data-region="moi"]{--tw:58px;border-top:1px solid var(--line2);background:var(--bg2);padding:2px 6px 0}
+.en-partie [data-region="main"]{--tw:66px;padding:0 6px}
+
+/* ---------- Une carte ---------- */
+.tc{--w:var(--tw,58px);--h:calc(var(--w) * 1.396);position:relative;flex:0 0 auto;width:var(--w);height:var(--h);padding:0;margin:0;border:0;
+  background:none;color:var(--txt);font:inherit;cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:transform .15s ease}
+.tc-corps{position:absolute;left:0;top:0;width:var(--w);height:var(--h);border-radius:calc(var(--w) * .055);overflow:hidden;
+  box-shadow:0 1px 3px var(--ombre);transition:transform .18s ease, box-shadow .15s ease}
+.tc-cadre{position:absolute;inset:0;display:flex;flex-direction:column;gap:2px;box-sizing:border-box;padding:calc(var(--w) * .06);
+  background:linear-gradient(180deg,var(--panel),var(--panel2));border:max(2px,calc(var(--w) * .05)) solid var(--teinte,var(--C));
+  border-radius:inherit;text-align:left;font-size:max(8px,calc(var(--w) * .13));line-height:1.12}
+.tc-nom{font-weight:600;color:var(--txt-vif);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;word-break:break-word}
+.tc-type{margin-top:auto;font-size:.82em;color:var(--dim);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tc-img{position:absolute;inset:0;background-size:cover;background-position:center;border-radius:inherit}
+.tc[data-teinte="W"]{--teinte:var(--W)} .tc[data-teinte="U"]{--teinte:var(--U)} .tc[data-teinte="B"]{--teinte:var(--B)}
+.tc[data-teinte="R"]{--teinte:var(--R)} .tc[data-teinte="G"]{--teinte:var(--G)} .tc[data-teinte="C"]{--teinte:var(--C)}
+.tc[data-teinte="or"]{--teinte:var(--brass-d)} .tc[data-teinte="terre"]{--teinte:var(--line2)}
+.tc.jeton .tc-cadre{border-style:dashed}
+
+/* Engagée, la carte se couche : sa place devient carrée. */
+.tc.engage{width:var(--h)}
+.tc.engage .tc-corps{transform-origin:0 0;transform:translate(var(--h), calc((var(--h) - var(--w)) / 2)) rotate(90deg)}
+
+/* Les badges, droits même sur une carte couchée. */
+.tc-pt,.tc-loy{position:absolute;right:-2px;bottom:-2px;z-index:2;font:700 max(10px,calc(var(--w) * .17))/1 var(--mono);padding:2px 4px;
+  border-radius:5px;background:var(--panel);color:var(--txt-vif);border:1px solid var(--line2);box-shadow:0 1px 2px var(--ombre)}
+.tc-pt.plus{color:var(--ok-txt);border-color:var(--ok-d)}
+.tc-pt.moins,.tc-pt.blesse{color:var(--bad-txt);border-color:var(--bad-line)}
+.tc-loy{border-color:var(--brass);color:var(--brass);border-radius:5px 5px 9px 9px}
+.tc-marqs{position:absolute;left:-2px;top:14%;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.tc-marq{font:600 9px/1 var(--mono);padding:2px 3px;border-radius:4px;background:var(--panel);border:1px solid var(--line2);color:var(--txt);white-space:nowrap}
+.tc-marq.plus{color:var(--ok-txt);border-color:var(--ok-d)} .tc-marq.moins{color:var(--bad-txt);border-color:var(--bad-line)}
+.tc-etats{position:absolute;left:-2px;bottom:-2px;z-index:2;display:flex;gap:1px}
+.tc-etats i{font-style:normal;font-size:10px;line-height:1;padding:2px 3px;border-radius:4px;background:var(--panel);border:1px solid var(--line2);color:var(--txt)}
+.tc-nb{position:absolute;right:-3px;top:-3px;z-index:2;font:700 11px/1 var(--mono);padding:2px 5px;border-radius:99px;background:var(--brass);color:var(--sur-brass)}
+.tc-coche{position:absolute;left:50%;top:40%;z-index:3;transform:translate(-50%,-50%);width:24px;height:24px;line-height:24px;border-radius:50%;
+  background:var(--ok);color:var(--bg2);font-weight:700;text-align:center}
+.tc-legende{position:absolute;top:calc(100% + 3px);left:0;width:max-content;max-width:130px;font-size:10px;line-height:1.15;color:var(--txt);text-align:left}
+
+/* Ce que la question attend : la carte brille, choisie elle s'allume. */
+.tc.choix .tc-corps{box-shadow:0 0 0 2px var(--brass),0 0 12px 2px var(--brass)}
+.tc.choisi .tc-corps{box-shadow:0 0 0 3px var(--ok),0 0 10px var(--ok)}
+.tc.vise .tc-corps{box-shadow:0 0 0 2px var(--bad-line);opacity:.75}
+.tc.attaque .tc-corps{box-shadow:0 0 0 2px var(--bad),0 0 10px var(--bad-a)}
+.tc.attaque.choisi .tc-corps,.tc.attaque.choix .tc-corps{box-shadow:0 0 0 3px var(--bad),0 0 12px var(--bad)}
+
+/* Ce qui est attaché dépasse à gauche, sous la carte qui le porte. */
+.tc-groupe{display:inline-flex;align-items:flex-end;flex:0 0 auto}
+.tc.attache{order:-1;margin-right:calc(var(--w) * -.72)}
+
+/* La vignette : l'illustration seule, le nom dessous. */
+.tc.vign{--w:var(--tvw,62px);--ih:calc(var(--w) * .73);--h:calc(var(--ih) + 14px)}
+.tc.vign .tc-corps{height:var(--ih);border-radius:6px}
+.tc.vign .tc-cadre{font-size:max(8px,calc(var(--w) * .12))}
+.tc.vign .tc-cadre .tc-type{display:none}
+.tc-etiq{position:absolute;left:-2px;right:-2px;bottom:0;height:14px;font-size:10px;line-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;color:var(--txt)}
+.tc.vign .tc-pt,.tc.vign .tc-loy{bottom:12px}
+.tc.vign .tc-etats{bottom:12px}
+.tc.vign.engage{width:var(--w)}
+.tc.vign.engage .tc-corps{transform:rotate(-8deg) scale(.9);filter:saturate(.45) brightness(.75)}
+.tc.mini{--w:42px;--h:var(--ih)}
+.tc.mini .tc-etiq{display:none}
+.tc.mini .tc-pt,.tc.mini .tc-loy,.tc.mini .tc-etats{bottom:-3px;font-size:9px;padding:1px 3px}
+.tc.mini .tc-marqs{display:none}
+
+/* ---------- Les rangées ---------- */
+.tc-rang{display:flex;align-items:flex-end;gap:5px;overflow-x:auto;overflow-y:hidden;padding:4px 3px;min-height:calc(var(--tw) * 1.396 + 8px);
+  scrollbar-width:thin;overscroll-behavior-x:contain}
+.tc-rang.arriere{--tw:44px;min-height:calc(44px * 1.396 + 8px)}
+.tc-vide{flex:1;align-self:stretch;border:1px dashed var(--line);border-radius:6px;min-width:40px;opacity:.6}
+.co-couloir .tc-rang,.tt-joueur .tc-rang{min-height:0}
+.co-couloir .tc-vide{min-height:44px}
+
+/* ---------- Le cartouche d'un joueur ---------- */
+.tj{display:flex;align-items:center;gap:6px;min-width:0;padding:2px 0}
+.tj-nom{display:inline-flex;align-items:center;gap:6px;min-width:0;flex:0 1 auto;border:1px solid transparent;border-radius:99px;background:none;
+  color:var(--txt);font:inherit;padding:1px 8px 1px 1px;cursor:pointer}
+.tj-nom b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.tj-nom.choix{border-color:var(--brass);box-shadow:0 0 0 2px var(--brass-a3)}
+.tj-nom.choisi{border-color:var(--ok);background:var(--ok-bg)}
+.tj-vie{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:26px;padding:0 7px;box-sizing:border-box;border-radius:99px;
+  font:700 16px/1 var(--mono);background:var(--panel);border:1px solid var(--line2);color:var(--txt-vif)}
+.tj-vie::before{content:'♥';font-size:11px;margin-right:3px;color:var(--bad)}
+.tj-vie.moyen{border-color:var(--warn)}
+.tj-vie.bas{border-color:var(--bad);color:var(--bad-txt)}
+.tj.actif .tj-vie,.ar-onglet.actif .tj-vie{box-shadow:0 0 0 2px var(--brass)}
+.tj.elimine{opacity:.5}
+.tj-compteurs{display:flex;align-items:center;gap:8px;margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+.tj-c{display:inline-flex;align-items:center;gap:3px;font:600 12px/1 var(--mono);color:var(--dim);white-space:nowrap}
+.tj-c.poison{color:var(--bad-txt)} .tj-c.cmd{color:var(--brass)}
+.tj-dos{display:inline-block;width:8px;height:11px;border-radius:2px;background:var(--brass-d);border:1px solid var(--brass)}
+.tj-dos.pile{box-shadow:2px -2px 0 -1px var(--brass-d)}
+button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:4px 6px;cursor:pointer}
+.tj-reserve{display:inline-flex;align-items:center;gap:1px}
+.tj-reserve small{font:600 10px var(--mono);margin-right:3px}
+
+/* ---------- Arène ---------- */
+.ar-onglets{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px}
+.ar-onglet{flex:1 1 0;min-width:96px;display:flex;align-items:center;gap:5px;padding:2px 7px 2px 2px;border:1px solid var(--line);border-radius:99px;
+  background:var(--panel);color:var(--txt);font:inherit;font-size:12px;cursor:pointer}
+.ar-onglet .tj-vie{height:22px;min-width:30px;font-size:13px}
+.ar-nom{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+.ar-onglet.vu{border-color:var(--brass);background:var(--panel2);box-shadow:inset 0 -2px 0 var(--brass)}
+.ar-onglet.choix{border-color:var(--brass);box-shadow:0 0 0 2px var(--brass-a3)}
+.ar-onglet.elimine{opacity:.5}
+.ar-pages{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.ar-page{flex:0 0 100%;min-width:0;box-sizing:border-box;scroll-snap-align:start;padding:0 2px}
+.ar-moi .tc-rang.arriere{--tw:46px}
+
+/* ---------- Couloirs ---------- */
+.co-couloir{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:2px 6px 0;margin-bottom:5px}
+.co-couloir.actif{border-color:var(--brass);box-shadow:inset 3px 0 0 var(--brass)}
+.co-sep{flex:0 0 1px;align-self:stretch;background:var(--line);margin:6px 3px}
+.en-partie [data-region="moi"] .co-couloir{margin:0;border:0;border-radius:0;background:none;box-shadow:none;padding:0}
+.disp-couloirs [data-region="moi"]{--tvw:72px}
+
+/* ---------- Tour de table ---------- */
+.tt-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:6px}
+.tt-joueur{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:5px 6px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tt-joueur .tj{flex-wrap:wrap}
+.tt-joueur .tj-compteurs{margin-left:0;width:100%}
+.tt-joueur.actif{border-color:var(--brass);box-shadow:inset 0 3px 0 var(--brass)}
+.tt-joueur.ouvert{grid-column:1/-1}
+.tt-menaces{display:flex;flex-wrap:wrap;gap:4px;min-height:32px;align-items:flex-end;padding-top:3px}
+.tt-resume{border:0;background:none;color:var(--dim);font:inherit;font-size:12px;text-align:left;padding:2px 0;cursor:pointer}
+.tt-plier{align-self:flex-start}
+
+/* ---------- La pile, la main ---------- */
+.tp{display:flex;align-items:flex-start;gap:6px;padding:4px 8px 0;border-top:1px solid var(--brass-d);border-bottom:1px solid var(--brass-d);background:var(--brass-a2);--tw:48px}
+.tp-titre{writing-mode:vertical-rl;transform:rotate(180deg);align-self:center;font-size:11px;color:var(--brass);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.tp .tc-rang{flex:1;min-width:0;padding-bottom:30px;gap:12px}
+.mn{display:flex;align-items:stretch;gap:4px;border-top:1px solid var(--line2);background:var(--panel2);margin:0 -6px;padding:0 6px}
+.mn .tp-titre{color:var(--dim)}
+.mn .tc-rang{flex:1;min-width:0;gap:5px;padding-top:8px}
+.mn.serre .tc + .tc{margin-left:calc(var(--w) * -.3)}
+.mn .tc.choix{transform:translateY(-6px)}
+
+/* ---------- La question ---------- */
+.tq{background:var(--panel2);border-top:1px solid var(--line2);padding:6px 8px calc(8px + env(safe-area-inset-bottom, 0px));display:flex;flex-direction:column;gap:6px}
+.tq.a-vous{border-top:2px solid var(--brass);box-shadow:0 -4px 14px var(--brass-a2)}
+.tq-titre{font-size:13px;line-height:1.3}
+.tq-actions{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.tq-actions .btn{flex:0 0 auto;max-width:72vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tq .row{gap:6px}
+.tq .row .btn{min-height:38px}
+.tq-passer{min-width:120px}
+.tq-choix{--tw:56px;padding-top:6px;min-height:0}
+.tq-mot{flex:0 0 auto;min-height:38px;padding:4px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--panel);color:var(--txt);font:inherit;font-size:13px;cursor:pointer}
+.tq-mot.choix{border-color:var(--brass)} .tq-mot.choisi{border-color:var(--ok);background:var(--ok-bg);color:var(--ok-txt)}
+.tq-erreur{color:var(--bad-txt)}
+.tq-attente{min-height:18px}
+.tq .btn[aria-pressed="true"]{border-color:var(--brass);background:var(--brass-a3)}
+.tb-fin{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;background:var(--panel);border-top:2px solid var(--brass)}
+
+/* ---------- Ce qui s'ouvre par-dessus : loupe, zone, menu ---------- */
+.tl-voile{position:fixed;inset:0;z-index:950;background:var(--voile-modal)}
+.tl,.tz,.tm{position:fixed;z-index:951;left:50%;top:50%;transform:translate(-50%,-50%);box-sizing:border-box;max-height:92vh;max-height:92dvh;overflow:auto;
+  background:var(--panel);border:1px solid var(--brass-d);border-radius:14px;box-shadow:0 12px 40px var(--ombre);padding:12px}
+.tl{width:min(94vw,720px);display:flex;gap:14px}
+.tl-carte{--w:min(300px,40vw);cursor:default}
+.tl-carte .tc-corps{border-radius:12px}
+.tl-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;padding-right:30px}
+.tl-titre{font-size:16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tl-pt{font-family:var(--mono);color:var(--txt-vif)}
+.tl-etat{color:var(--brass)}
+.tl-oracle{line-height:1.45}
+.tl-actions{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.tl-actions .btn{white-space:normal;text-align:left;min-height:40px}
+.tl-ferme{position:absolute;right:8px;top:8px}
+.tz{width:min(94vw,760px)}
+.tz-tete{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tz-tete .btn{margin-left:auto}
+.tz-cartes{display:flex;flex-wrap:wrap;gap:8px;--tw:76px}
+.tm{width:min(94vw,440px);display:flex;flex-direction:column;gap:8px}
+.tm-disp{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel2);color:var(--txt);font:inherit;text-align:left;cursor:pointer}
+.tm-disp[aria-pressed="true"]{border-color:var(--brass);box-shadow:inset 3px 0 0 var(--brass)}
+
+/* Sur un téléphone, ce qui s'ouvre monte du bas, à portée du pouce. */
+@media (max-width:640px){
+  .tl,.tz,.tm{top:auto;bottom:0;transform:translateX(-50%);width:100vw;border-radius:16px 16px 0 0;padding:12px 12px calc(12px + env(safe-area-inset-bottom, 0px))}
+  .tl{flex-direction:column;align-items:center}
+  .tl-carte{--w:min(62vw,300px)}
+  .tl-info{padding-right:0;width:100%}
+}
+
+/* Un téléphone couché : peu de hauteur, des cartes plus basses. */
+@media (max-height:560px){
+  .table.en-partie{--tw:42px}
+  .en-partie [data-region="moi"]{--tw:46px}
+  .en-partie [data-region="main"]{--tw:50px}
+  .tc-rang.arriere{--tw:36px}
+  .tr-fil{display:none}
+}
+
+/* Un grand écran : des cartes plus grandes, et les adversaires de l'Arène côte à côte. */
+@media (min-width:900px) and (min-height:600px){
+  .table.en-partie{--tw:70px;--tvw:84px}
+  .en-partie [data-region="moi"]{--tw:82px;--tvw:96px}
+  .en-partie [data-region="main"]{--tw:96px}
+  .tc-rang.arriere{--tw:58px}
+  .ar-moi .tc-rang.arriere{--tw:62px}
+  .disp-arene.multi .ar-onglets{display:none}
+  .disp-arene.multi .ar-pages{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:8px;overflow:visible}
+  .disp-arene.multi .ar-page{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:2px 6px}
+  .disp-arene.multi .ar-pages .tc-rang{--tw:58px}
+  .disp-arene.multi .ar-pages .tc-rang.arriere{--tw:46px}
+  .tt-grille{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .tc.mini{--w:54px}
+  .tl-carte{--w:300px}
+}

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1648 fonctions**, 237 modules, 1728 Ko de JavaScript.
+**1696 fonctions**, 242 modules, 1756 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -237,17 +237,22 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 164 |
-| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 9 | 124 |
-| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 13 | 148 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 12 | 168 |
+| [`tableImages.js`](#jstableimagesjs) | Le visuel d'une carte, à la table | 4 | 84 |
+| [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 121 |
+| [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 57 |
+| [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 15 | 145 |
+| [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 12 | 134 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 11 | 137 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 11 | 136 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
 | [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 11 | 130 |
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 66 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 3 | 60 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 299 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 77 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 310 |
 
 ## js/reglesEffets.js
 
@@ -4108,7 +4113,7 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *12 fonctions, 164 lignes, 7.3 Ko.*
+La partie que ce navigateur héberge. *12 fonctions, 168 lignes, 7.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4129,25 +4134,137 @@ La partie que ce navigateur héberge. *12 fonctions, 164 lignes, 7.3 Ko.*
 |---|---|
 | `TABLE` | — |
 
-## js/tableRendu.js
+## js/tableImages.js
 
-La table, peinte depuis une vue. *9 fonctions, 124 lignes, 7.3 Ko.*
+Le visuel d'une carte, à la table. *4 fonctions, 84 lignes, 3.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `imageCarte(nom)` | Le visuel d'une carte : celui que l'atelier connaît, sinon celui que Scryfall sert par son nom. |
-| `chipCarte(o, v)` | Une carte du champ, de la main ou d'une zone, en vignette de texte : lisible sans réseau, et dix fois plus dense qu'une image sur un téléphone. |
-| `bandeauJoueur(J, v, estMoi)` | Le bandeau d'un joueur : son nom, ses points de vie, ses zones, son champ. |
-| `pileHTML(v)` | — |
+| `imageConnue(nom)` | Le visuel que l'atelier ou l'archive connaît déjà, sans réseau. |
+| `imageCarte(nom, version = 'normal')` | L'adresse du visuel d'une carte : `normal` pour la carte entière, `art_crop` pour l'illustration seule. |
+| `demandeImage(nom)` | — |
+| `chercheImagesTable()` | Les noms en attente, par lots de soixante-quinze. |
+
+| Donnée | Rôle |
+|---|---|
+| `IMAGES_TABLE` | Nom normalisé → adresse du visuel « normal », ou '' quand personne ne le connaît. |
+| `IMAGES_ATTENTE` | — |
+| `IMAGES_DEMANDEES` | — |
+| `imagesMinuterie` | — |
+
+## js/tableCartes.js
+
+Une carte posée sur la table. *12 fonctions, 121 lignes, 6.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `teinteCarte(f)` | La couleur du cadre d'une carte : celle des symboles de son coût. |
+| `estNombre(x)` | — |
+| `forceHTML(o, f)` | Force et endurance du moment, comparées à celles imprimées : plus fortes en vert, plus faibles en rouge ; l'endurance qui reste, une fois les blessures ôtées. |
+| `marqueursHTML(o)` | Les marqueurs d'un permanent, la loyauté à part. |
+| `etatsHTML(o)` | — |
+| `tuile(o, v, opts = {})` | Une carte de la table. `o` est un objet de la vue — permanent, carte d'une zone, élément de la pile — ou une option de question ({id, nom}). `opts` : mode ('carte' ou 'vignette'), act et… |
+| `regroupe(objs)` | Un permanent est seul quand il a quelque chose à dire : un marqueur, une blessure, un rôle au combat, une question qui le désigne. |
+| `suiteTuiles(objs, v, opts = {})` | Une suite de permanents : chacun suivi de ce qui lui est attaché (aura, équipement), qui dépasse derrière lui. |
+| `estTerrain(o)` | — |
+| `estFront(o)` | — |
+| `rangsDe(J, v)` | Le champ d'un joueur, rangé comme sur une vraie table : créatures et planeswalkers devant ; terrains, artefacts et enchantements derrière. |
+| `rangee(cle, html, classe = '')` | Une rangée qui défile seule ; sa position survit aux repeints. |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMS_MARQUEURS` | — |
+
+## js/tableJoueurs.js
+
+Ce qu'on sait d'un joueur, d'un coup d'œil. *4 fonctions, 57 lignes, 3.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `reserveHTML(J)` | Le mana qu'un joueur a en réserve, en symboles. |
+| `compteursHTML(J)` | Les compteurs d'un joueur. Le cimetière et l'exil s'ouvrent d'un toucher. |
+| `cartouche(J, v, classe = '')` | Le cartouche d'un joueur. Toucher son nom le désigne, quand une question attend un joueur pour cible. |
+| `zoneHTML(v)` | Le cimetière ou l'exil d'un joueur, déplié en cartes entières. |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMS_ZONES` | — |
+
+## js/tableDispositions.js
+
+Trois façons de disposer la table. *15 fonctions, 145 lignes, 7.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `dispositionTable()` | — |
+| `adversairesDe(v)` | Les adversaires, dans l'ordre où ils jouent après soi. |
+| `champDeuxRangs(J, v, cle)` | Le champ d'un joueur sur deux rangées de cartes entières. |
+| `couloir(J, v)` | Un couloir : le cartouche, puis une seule rangée de vignettes — créatures, autres permanents, terrains. |
+| `areneAdversaires(v)` | — |
+| `cartoucheTour(J, v)` | Un adversaire replié : ses menaces en miniatures, et ce qu'une question désigne chez lui ; le reste en nombres. |
+| `adversairesTableHTML(v)` | La région des adversaires, selon la disposition. |
+| `moiHTML(v)` | Son propre champ. |
+| `pileHTML(v)` | La pile, du sommet au fond, chaque objet avec son lanceur et ses cibles. |
+| `mainHTML(v)` | — |
+| `montrePage(k)` | Un onglet de l'Arène touché : la page de cet adversaire. |
+| `marqueOnglet(k)` | — |
+| `suisActif(v)` | L'Arène suit le joueur actif : à chaque tour d'un adversaire, sa page. |
+| `appliquePage()` | Une page à montrer : celle du joueur actif, ou celle qu'on regardait quand les pages viennent d'être recréées (retour d'une autre disposition). |
+| `defileTable(ev)` | Un défilement dans la table. Celui des pages de l'Arène tient l'onglet à jour sans repeindre. |
+
+| Donnée | Rôle |
+|---|---|
+| `DISPOSITIONS` | — |
+
+## js/tableLoupe.js
+
+Voir une carte en grand. *12 fonctions, 134 lignes, 6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `appuiDebut(ev)` | Un doigt se pose : s'il reste sur la carte, elle s'ouvre en grand. |
+| `appuiBouge(ev)` | Le doigt glisse : c'est un défilement, pas un appui. |
+| `appuiAnnule()` | — |
+| `appuiFin()` | Le doigt se lève après un appui long : le clic qui suit est avalé. |
+| `clicAvale()` | — |
+| `loupeContextuelle(ev)` | Le menu contextuel sur une carte : la loupe à sa place. |
+| `ouvreLoupe(id)` | — |
+| `objetVisible(id)` | Un objet visible, où qu'il soit : champ, main, pile, zones publiques, options de la question. |
+| `etatEnMots(o, v)` | Ce que la partie a fait à un permanent, en mots. |
+| `texteOracleHTML(t)` | Les symboles d'un texte d'oracle, en pastilles. |
+| `actionsLoupe(id)` | Ce qu'on peut faire de la carte maintenant, en boutons. |
+| `loupeHTML(v)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `APPUI` | — |
+| `APPUI_MS` | — |
+
+## js/tableRendu.js
+
+La table, peinte depuis une vue. *11 fonctions, 137 lignes, 6.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `charpentePartie()` | La charpente de la partie : des régions vides, et les boutons qui ne changent jamais. |
+| `releveDefile(el)` | La position de chaque rangée qui défile, avant un repeint. |
+| `restaureDefile(el, m)` | — |
+| `peinsRegions(el, regions, charpente)` | Peindre les régions qui ont changé, et elles seules. |
 | `journalTableLignes()` | Les dernières lignes du journal, qui disent ce que les autres ont fait. |
-| `detailHTML(v)` | — |
-| `partieHTML()` | — |
+| `etapeHTML(v)` | — |
+| `filHTML()` | — |
+| `menuHTML()` | Le menu de la table : la disposition, les arrêts, quitter. |
 | `finHTML(v)` | — |
+| `regionsPartie(v)` | — |
 | `renduTable()` | Peindre la table, si elle est ouverte. |
+
+| Donnée | Rôle |
+|---|---|
+| `REPEINT` | Ce qui a été peint : la charpente, et le HTML de chaque région. |
 
 ## js/tableQuestions.js
 
-Répondre à une question du moteur, à la main. *13 fonctions, 148 lignes, 7.1 Ko.*
+Répondre à une question du moteur, à la main. *11 fonctions, 136 lignes, 7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4155,14 +4272,12 @@ Répondre à une question du moteur, à la main. *13 fonctions, 148 lignes, 7.1 
 | `etatChoix(id)` | L'état d'une carte vis-à-vis de la question : choisissable, choisie, ou rien. |
 | `etatJoueur(j)` | — |
 | `repondsTable(r)` | Envoyer une réponse : au moteur sur l'hôte, à l'hôte depuis un invité. |
-| `nomVisible(id)` | Le nom d'une carte visible, pour la montrer en grand. |
-| `montreDetail(id)` | — |
 | `basculeChoix(q, s, i)` | — |
-| `clicCarte(id)` | Un toucher sur une carte de la table. |
+| `clicCarte(id)` | Un toucher sur une carte de la table : la jouer s'il n'y a qu'une façon de le faire, la choisir si la question l'attend ; sinon la voir en grand, avec ce qu'on peut en faire. |
 | `clicJoueur(j)` | — |
 | `valideTable()` | « Valider » : la sélection en cours, sous la forme que le moteur attend. |
 | `bornes(q)` | — |
-| `chipsChoix(q, s)` | Les choix d'une question à cases. |
+| `chipsChoix(q, s, v)` | Les choix d'une question à cases : une carte se montre par son visuel, un joueur ou un mot par un bouton. |
 | `questionHTML(q, v)` | Le bandeau de la question. |
 
 | Donnée | Rôle |
@@ -4288,17 +4403,18 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *3 fonctions, 60 lignes, 3 Ko.*
+Les gestes de la table interactive. *4 fonctions, 77 lignes, 3.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `gestesTable(act, b)` | — |
+| `choisitDisposition(d)` | Une disposition choisie au menu : retenue pour les parties suivantes. |
 | `passeTour()` | « Passer jusqu'à mon tour », sur l'hôte comme depuis un invité. |
 | `ouvreJournalTable()` | Le journal de la partie en cours, en grand. |
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 299 lignes, 12 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 310 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|

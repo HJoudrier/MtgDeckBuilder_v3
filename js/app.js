@@ -8,6 +8,7 @@
    ===================================================================== */
 
 document.addEventListener('click', ev => {
+  if (clicAvale()) return;
   const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-gsrc], [data-cmode], [data-color], [data-col], [data-restrcoul], [data-restrrole]');
   if (!b) return;
 
@@ -15,6 +16,16 @@ document.addEventListener('click', ev => {
   [gestesDeckConfig, gestesDecks, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
     gestesSimulation, gestesTable, gestesForge, gestesGraphe].some(g => g(act, b));
 });
+
+/* L'appui long sur une carte de la table l'ouvre en grand, et le clic qui
+   le termine est avalé (js/tableLoupe.js). Le défilement ne remonte pas :
+   il s'écoute à la capture. */
+document.addEventListener('pointerdown', appuiDebut);
+document.addEventListener('pointermove', appuiBouge, {passive: true});
+document.addEventListener('pointerup', appuiFin);
+document.addEventListener('pointercancel', appuiAnnule);
+document.addEventListener('contextmenu', ev => { if (loupeContextuelle(ev)) ev.preventDefault(); });
+document.addEventListener('scroll', defileTable, {capture: true, passive: true});
 
 /* Aperçu flottant : suit la souris sur les noms de cartes. */
 document.addEventListener('mouseover', ev => {

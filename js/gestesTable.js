@@ -13,21 +13,28 @@ function gestesTable(act, b) {
     case 'tSupprSiege': retireSiege(i); return true;
     case 'tCommencer': commenceDepuisSalon(); return true;
     case 'tQuitter': quitteTable(); return true;
-    case 'tCarte': clicCarte(+b.dataset.id); return true;
+    case 'tCarte': TABLE.loupe = null; clicCarte(+b.dataset.id); return true;
     case 'tJoueur': clicJoueur(+b.dataset.j); return true;
-    case 'tAction': repondsTable(i); return true;
+    case 'tAction': TABLE.loupe = null; repondsTable(i); return true;
     case 'tUn': repondsTable(i); return true;
     case 'tChoix': { const q = TABLE.question; if (q) basculeChoix(q, selDe(q), i); return true; }
     case 'tValider': valideTable(); return true;
-    case 'tMenuFerme': if (TABLE.sel) TABLE.sel.menu = null; renduTable(); return true;
     case 'tPasserTour': passeTour(); return true;
     case 'tDef': if (TABLE.question) { selDe(TABLE.question).def = i; renduTable(); } return true;
     case 'tAttTous': attaqueTous(); return true;
     case 'tAttAucun': if (TABLE.question) { selDe(TABLE.question).paires.clear(); renduTable(); } return true;
     case 'tRetirePaire': if (TABLE.question) { selDe(TABLE.question).paires.delete(i); renduTable(); } return true;
-    case 'tFermeDetail': TABLE.detail = null; renduTable(); return true;
+    case 'tFermeLoupe': TABLE.loupe = null; renduTable(); return true;
+    case 'tZone': TABLE.zone = {j: +b.dataset.j, z: b.dataset.z}; renduTable(); return true;
+    case 'tFermeZone': TABLE.zone = null; renduTable(); return true;
+    case 'tMenu': TABLE.menu = true; renduTable(); return true;
+    case 'tFermeMenu': TABLE.menu = null; renduTable(); return true;
+    case 'tQuitterDemande': TABLE.menu = 'quitter'; renduTable(); return true;
+    case 'tDisposition': choisitDisposition(b.dataset.d); return true;
+    case 'tPage': montrePage(i); return true;
+    case 'tDeplie': TABLE.deplie = TABLE.deplie === +b.dataset.j ? null : +b.dataset.j; renduTable(); return true;
     case 'tJournal': ouvreJournalTable(); return true;
-    case 'tArrets': ouvreArrets(); return true;
+    case 'tArrets': TABLE.menu = null; renduTable(); ouvreArrets(); return true;
     case 'tArretsDefaut': arretsDefaut(); return true;
     case 'tAppliquerArrets': appliqueArrets(); return true;
     case 'tAjoutInvite': ajouteInvite(); return true;
@@ -42,8 +49,18 @@ function gestesTable(act, b) {
   return false;
 }
 
+/* Une disposition choisie au menu : retenue pour les parties suivantes. */
+function choisitDisposition(d) {
+  if (!DISPOSITIONS[d]) return;
+  S.table.disposition = d;
+  TABLE.menu = null;
+  scheduleSave();
+  renduTable();
+}
+
 /* « Passer jusqu'à mon tour », sur l'hôte comme depuis un invité. */
 function passeTour() {
+  if (TABLE.menu) { TABLE.menu = null; renduTable(); }
   if (TABLE.role === 'hote') passeJusquaMonTour(TABLE.moi);
   else if (typeof envoiePasseTour === 'function') envoiePasseTour();
 }

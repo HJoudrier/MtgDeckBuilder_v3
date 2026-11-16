@@ -12,6 +12,7 @@ présent document dit ce que fait chaque fonction ; celui-là, l'ordre où elles
 ```
 index.html          page et structure des sept sections
 css/atelier.css     styles
+css/table.css       styles de la table interactive
 outils/genDoc.js    écrit doc/fonctions.md à partir des sources
 js/                 modules, chargés dans cet ordre :
 
@@ -257,7 +258,12 @@ js/                 modules, chargés dans cet ordre :
   liaisonSdp.js     lire une description WebRTC, en rebâtir une
   liaison.js        deux navigateurs reliés sans serveur
   tableHote.js      la partie que ce navigateur héberge
-  tableRendu.js     la table, peinte depuis une vue
+  tableImages.js    le visuel d'une carte à la table, cherché par lots
+  tableCartes.js    une carte posée sur la table : visuel, force, marqueurs, engagement
+  tableJoueurs.js   le cartouche d'un joueur : vie, main, bibliothèque, cimetière
+  tableDispositions.js  Arène, Couloirs, Tour de table : trois façons de disposer la table
+  tableLoupe.js     voir une carte en grand, d'un appui long
+  tableRendu.js     la table, peinte depuis une vue, région par région
   tableQuestions.js répondre à une question du moteur, à la main
   tableCombat.js    attaquer et bloquer, au doigt
   tableSalon.js     le salon : qui s'assoit, avec quel deck
@@ -467,7 +473,18 @@ partie se jouerait sans qu'on la voie. Un joueur ne reçoit qu'une **vue** (`vue
 `js/jeuVue.js`) : rien d'un objet caché d'autrui, pas même son identifiant — ceux d'une
 bibliothèque suivent l'ordre de la liste. La table se peint depuis cette vue (`renduTable()`) :
 exception assumée à « `renderAll()` unique porte », puisqu'elle se repeint à chaque message de la
-partie. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
+partie. Elle ne réécrit donc que les **régions** qui ont changé (`peinsRegions()`) : une charpente
+fixe porte les boutons qui ne changent jamais, et une région repeinte garde la position de ses
+rangées qui défilent — un toucher pendant qu'un automate joue n'est plus perdu, la rangée qu'on
+parcourait n'est plus renvoyée au début. Les cartes s'y montrent par leur **visuel**, cherché à
+l'atelier, à l'archive, puis chez Scryfall par lots de soixante-quinze noms (`js/tableImages.js`) ;
+sous lui, un cadre de texte aux couleurs du coût reste lisible sans réseau. Par-dessus, la force du
+moment, les blessures, les marqueurs, l'engagement (la carte se couche) et le combat. Un **appui
+long** ouvre la carte en grand, avec ce qu'on peut en faire (`js/tableLoupe.js`) ; le clic qui le
+termine est avalé. Trois **dispositions** se choisissent au menu de la table, retenues dans
+`S.table.disposition` : l'Arène, un adversaire à la fois en cartes entières, qu'on fait défiler
+d'un glissé ; les Couloirs, un par joueur, chacun défilant seul ; le Tour de table, les adversaires
+en cartouches qu'on déplie. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
 étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
 après un rechargement.
 
