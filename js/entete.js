@@ -8,18 +8,11 @@
    et on démasque, chacun retrouvant son défilement.
    ===================================================================== */
 
-const FILTRE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.2 2.2h13.6L9.4 8.6v5.2L6.6 12.3V8.6z" fill="currentColor"/></svg>';
+const iconeEntete = (nom, contenu) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icone-entete icone-${nom}">${contenu}</svg>`;
 
-/* Quatre pavés : la grille d'une liste de cartes, vue de loin. */
-const AFFICHAGE_ICONE = '<svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true" style="vertical-align:-1px"><path d="M1.5 1.5h5.6v5.6H1.5zM8.9 1.5h5.6v5.6H8.9zM1.5 8.9h5.6v5.6H1.5zM8.9 8.9h5.6v5.6H8.9z" fill="currentColor"/></svg>';
-
-/* L'engrenage des paramètres : douze dents posées en couronne et un moyeu
-   évidé, dessinés ici plutôt que chargés — l'atelier ne dépend d'aucun
-   fichier extérieur, pas même d'une icône. */
-const PARAM_ICONE = `<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" focusable="false">
-  <path fill="currentColor" d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2zm0 5.9a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6z"/>
-  <path fill="currentColor" d="M20.3 13.6a8.6 8.6 0 0 0 0-3.2l1.8-1.4-1.8-3.1-2.1.8a8.4 8.4 0 0 0-2.8-1.6L15.1 2h-3.6l-.3 2.3H11a8.4 8.4 0 0 0-2.7 1.6l-2.1-.8-1.8 3.1 1.8 1.4a8.6 8.6 0 0 0 0 3.2l-1.8 1.4 1.8 3.1 2.1-.8a8.4 8.4 0 0 0 2.8 1.6l.3 2.3h3.6l.3-2.3a8.4 8.4 0 0 0 2.8-1.6l2.1.8 1.8-3.1-1.8-1.4zm-1.6-1.6c0 .5-.05 1-.15 1.5l-.12.6 1.5 1.16-.53.92-1.76-.67-.46.4c-.73.64-1.6 1.14-2.53 1.45l-.58.2-.26 1.94h-1.06l-.26-1.95-.58-.19a6.9 6.9 0 0 1-2.53-1.46l-.46-.4-1.76.67-.53-.92 1.5-1.15-.12-.6a7.2 7.2 0 0 1 0-3l.12-.6-1.5-1.16.53-.92 1.76.67.46-.4A6.9 6.9 0 0 1 11.7 6.5l.58-.2.26-1.94h1.06l.26 1.95.58.19c.93.31 1.8.81 2.53 1.46l.46.4 1.76-.67.53.92-1.5 1.15.12.6c.1.5.15 1 .15 1.5z"/>
-</svg>`;
+const FILTRE_ICONE = iconeEntete('filtre', '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>');
+const AFFICHAGE_ICONE = iconeEntete('affichage', '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>');
+const PARAM_ICONE = iconeEntete('parametres', '<circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.6-1.4-2.4 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.6 1.4 2.4-1.4 1.1a8 8 0 0 1 0 2Z"/>');
 
 /* ---------------------------------------------------------------------
    Le bouton « Affichage », au coin haut-droit avec celui des filtres.
