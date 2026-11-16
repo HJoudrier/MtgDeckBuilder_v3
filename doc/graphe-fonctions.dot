@@ -3671,6 +3671,7 @@ digraph appels {
   "agregeForge" -> "caracForge" [color="#a8846d99"];
   "agregeForge" -> "car" [color="#a8846d99"];
   "forgeExpression" -> "mathForge" [color="#a8846d99"];
+  "forgeExpression" -> "forgeNombre" [color="#a8846d99"];
   "forgeExpression" -> "exprEtendue" [color="#a8846d99"];
   "forgeExpression" -> "caracForge" [color="#a8846d99"];
   "forgeExpression" -> "objetEvt" [color="#a8846d99"];
@@ -3682,7 +3683,6 @@ digraph appels {
   "forgeExpression" -> "agregeForge" [color="#a8846d99"];
   "forgeExpression" -> "genreMarqueur" [color="#a8846d99"];
   "forgeExpression" -> "forgeValideDef" [color="#a8846d99"];
-  "forgeExpression" -> "forgeNombre" [color="#a8846d99"];
   "forgeExpression" -> "seuilForge" [color="#a8846d99"];
   "forgeExpression" -> "choixDe" [color="#a8846d99"];
   "forgeExpression" -> "champDe" [color="#a8846d99"];
@@ -4145,6 +4145,7 @@ digraph appels {
   "forgeEffetsG.js (chargement)" -> "joueurDe" [color="#8a7fa899"];
   "forgeEffetsG.js (chargement)" -> "objetsZone" [color="#8a7fa899"];
   "forgeEffetsG.js (chargement)" -> "forgeValideObjet" [color="#8a7fa899"];
+  "forgeEffetsG.js (chargement)" -> "question" [color="#8a7fa899"];
   "forgeEffetsG.js (chargement)" -> "empreinteDe" [color="#8a7fa899"];
   "forgeEffetsG.js (chargement)" -> "joueSous" [color="#8a7fa899"];
   "forgeEffetsG.js (chargement)" -> "sousEffets" [color="#8a7fa899"];

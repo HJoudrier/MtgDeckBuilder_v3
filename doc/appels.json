@@ -4941,6 +4941,7 @@
     "entreesAutres",
     "executeForge",
     "exertsAttaque",
+    "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -9555,7 +9556,7 @@
   {
    "nom": "mathForge",
    "fichier": "forgeExpr.js",
-   "ligne": 31,
+   "ligne": 35,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -9567,7 +9568,7 @@
   {
    "nom": "objetsZone",
    "fichier": "forgeExpr.js",
-   "ligne": 41,
+   "ligne": 45,
    "chargement": false,
    "appelle": [
     "obj"
@@ -9600,7 +9601,7 @@
   {
    "nom": "caracForge",
    "fichier": "forgeExpr.js",
-   "ligne": 50,
+   "ligne": 54,
    "chargement": false,
    "appelle": [
     "car",
@@ -9621,7 +9622,7 @@
   {
    "nom": "cibleForge",
    "fichier": "forgeExpr.js",
-   "ligne": 64,
+   "ligne": 68,
    "chargement": false,
    "appelle": [
     "passeOuPresent"
@@ -9635,7 +9636,7 @@
   {
    "nom": "objetEvt",
    "fichier": "forgeExpr.js",
-   "ligne": 73,
+   "ligne": 77,
    "chargement": false,
    "appelle": [
     "obj",
@@ -9656,7 +9657,7 @@
   {
    "nom": "agregeForge",
    "fichier": "forgeExpr.js",
-   "ligne": 82,
+   "ligne": 86,
    "chargement": false,
    "appelle": [
     "car",
@@ -9674,7 +9675,7 @@
   {
    "nom": "forgeExpression",
    "fichier": "forgeExpr.js",
-   "ligne": 97,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "adversaires",
@@ -11478,6 +11479,7 @@
     "objetsZone",
     "pioche",
     "poseMarqueurs",
+    "question",
     "retiensForge",
     "retireDe",
     "seuilForge",
@@ -11539,7 +11541,7 @@
   {
    "nom": "tranchesDe",
    "fichier": "forgeEffetsG.js",
-   "ligne": 91,
+   "ligne": 96,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11551,7 +11553,7 @@
   {
    "nom": "monarqueFin",
    "fichier": "forgeEffetsG.js",
-   "ligne": 120,
+   "ligne": 125,
    "chargement": false,
    "appelle": [
     "pioche"
@@ -11565,7 +11567,7 @@
   {
    "nom": "gainsProtection",
    "fichier": "forgeEffetsG.js",
-   "ligne": 151,
+   "ligne": 156,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11578,7 +11580,7 @@
   {
    "nom": "goadActif",
    "fichier": "forgeEffetsG.js",
-   "ligne": 152,
+   "ligne": 157,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11591,7 +11593,7 @@
   {
    "nom": "couleursProtection",
    "fichier": "forgeEffetsG.js",
-   "ligne": 156,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "car",
@@ -11609,7 +11611,7 @@
   {
    "nom": "phasesEntrent",
    "fichier": "forgeEffetsG.js",
-   "ligne": 194,
+   "ligne": 199,
    "chargement": false,
    "appelle": [
     "obj"
@@ -11623,7 +11625,7 @@
   {
    "nom": "manifeste",
    "fichier": "forgeEffetsG.js",
-   "ligne": 240,
+   "ligne": 245,
    "chargement": false,
    "appelle": [
     "metEnJeu"

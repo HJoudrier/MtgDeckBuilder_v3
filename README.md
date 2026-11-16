@@ -1387,6 +1387,14 @@ X à zéro : X se choisit désormais au moment de payer (question `x`, par défa
 (`paieUnlessForge()`, la mémoire de la carte, les paramètres qui retiennent) sont passés dans
 `js/forgeExecute.js`.
 
+**Une offre tentante** (lot F56). *Tempt with Vengeance* — et toute la famille « Tempt with… » — tient
+dans `RepeatEach | RepeatOptionalForEachPlayer$` : chaque joueur de la boucle répond pour lui seul
+(question `oui`, posée à l'adversaire, pas au lanceur ; l'IA accepte), et celui qui refuse ne passe pas
+par la sous-capacité. Le compte des accepteurs se fait par `StoreSVar`, dont la valeur doit passer
+**avant** la SVar écrite (`Y: Number$0`) : `forgeNombre()` lisait l'écrite d'abord, si bien que le
+compte restait à zéro ; il suit désormais l'ordre de `forgeExpression()`. Autre manque : l'opérande
+d'une opération (`/Times.Y`) peut être le nom d'une SVar, non seulement un nombre.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

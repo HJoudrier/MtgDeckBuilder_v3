@@ -19,13 +19,17 @@ function forgeNombre(P, v, env) {
   if (/^[+-]?\d+$/.test(s)) return +s;
   let signe = 1;
   if (s[0] === '-' || s[0] === '+') { if (s[0] === '-') signe = -1; s = s.slice(1); }
+  /* Une variable posée en route par `StoreSVar` passe avant la SVar écrite
+     (même ordre que dans `forgeExpression()`) : le Y d'une offre tentante. */
+  if (env && env.ctx && env.ctx.vars && env.ctx.vars[s] != null) return signe * env.ctx.vars[s];
   const sv = env && env.face ? env.face.svars[s] : null;
   if (sv != null) return signe * forgeExpression(P, sv, env, 0);
   if (s === 'X') return signe * ((env && env.ctx && env.ctx.x) || 0);
   return signe * forgeExpression(P, s, env, 0);
 }
 
-const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double)(?:\.(\d+))?$/;
+/* L'opérande est un nombre, ou le nom d'une SVar (`SVar$X/Times.Y`). */
+const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double)(?:\.(\w+))?$/;
 
 /* Appliquer l'opération qui suit une expression. */
 function mathForge(n, op, k) {
@@ -97,7 +101,7 @@ function agregeForge(P, l, agg) {
 function forgeExpression(P, expr, env, prof) {
   let s = String(expr).trim();
   const m = FORGE_MATHS.exec(s);
-  if (m) return mathForge(forgeExpression(P, s.slice(0, m.index), env, prof), m[1], m[2] ? +m[2] : 0);
+  if (m) return mathForge(forgeExpression(P, s.slice(0, m.index), env, prof), m[1], !m[2] ? 0 : /^\d+$/.test(m[2]) ? +m[2] : forgeNombre(P, m[2], env));
   if (/^[+-]?\d+$/.test(s)) return +s;
   const i = s.indexOf('$');
   /* Une variable que la capacité a posée en cours de route (`StoreSVar`,

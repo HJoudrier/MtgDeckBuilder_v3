@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1719 fonctions**, 248 modules, 1786 Ko de JavaScript.
+**1719 fonctions**, 248 modules, 1787 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -77,7 +77,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 72 |
-| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 167 |
+| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 171 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 153 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
@@ -92,7 +92,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 118 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
-| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 292 |
+| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 297 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 7 | 276 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
@@ -1457,7 +1457,7 @@ Ce que les filtres de Forge deviennent pour. *4 fonctions, 72 lignes, 4.8 Ko.*
 
 ## js/forgeExpr.js
 
-Les quantités de Forge. *8 fonctions, 167 lignes, 9.8 Ko.*
+Les quantités de Forge. *8 fonctions, 171 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1472,7 +1472,7 @@ Les quantités de Forge. *8 fonctions, 167 lignes, 9.8 Ko.*
 
 | Donnée | Rôle |
 |---|---|
-| `FORGE_MATHS` | — |
+| `FORGE_MATHS` | L'opérande est un nombre, ou le nom d'une SVar (`SVar$X/Times.Y`). |
 
 ## js/forgeExprB.js
 
@@ -1679,7 +1679,7 @@ Les paramètres de plus des effets courants. *4 fonctions, 219 lignes, 12 Ko.*
 
 ## js/forgeEffetsG.js
 
-Les mécaniques de partie de Forge. *10 fonctions, 292 lignes, 19 Ko.*
+Les mécaniques de partie de Forge. *10 fonctions, 297 lignes, 19 Ko.*
 
 | Fonction | Rôle |
 |---|---|

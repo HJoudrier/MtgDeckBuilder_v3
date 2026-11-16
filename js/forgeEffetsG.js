@@ -41,12 +41,17 @@ function varsDe(ctx) { return ctx.vars || (ctx.vars = {}); }
    `UseImprinted$`) le temps d'un tour de boucle. Ce que la boucle retient
    d'autre reste retenu après elle (Patriarch's Bidding), et ce qu'on
    retenait avant reste lisible dedans (Braids, Arisen Nightmare). */
-forgeEffet('RepeatEach', ['RepeatSubAbility', 'RepeatPlayers', 'RepeatCards', 'Zone', 'UseImprinted', 'ChangeZoneTable', 'DamageMap', 'ClearRemembered'],
+forgeEffet('RepeatEach', ['RepeatSubAbility', 'RepeatPlayers', 'RepeatCards', 'Zone', 'UseImprinted', 'ChangeZoneTable', 'DamageMap', 'ClearRemembered',
+  'RepeatOptionalForEachPlayer', 'RepeatOptionalMessage'],
   function* (P, t, env) {
     const ctx = env.ctx;
     const items = t.RepeatPlayers ? forgeDefinis(P, t.RepeatPlayers, env).map(x => ({j: joueurDe(x)})).filter(x => x.j != null)
       : objetsZone(P, ZONES_FORGE[t.Zone || 'Battlefield'] || 'champ').filter(o => forgeValideObjet(P, o, t.RepeatCards, env.src, env.ctrl, env)).map(o => ({id: o.id}));
     for (const x of items) {
+      /* Une offre tentante : chaque joueur de la boucle décide pour lui seul s'il
+         en profite ; ceux qui refusent ne passent pas par la suite. */
+      if (t.RepeatOptionalForEachPlayer === 'True' && x.j != null &&
+        (yield question(P, x.j, 'oui', ['non', 'oui'], {texte: t.RepeatOptionalMessage || 'Le faire ?', source: ctx.source})) !== 1) continue;
       const l = x.j != null ? ctx.memoJ : t.UseImprinted === 'True' ? empreinteDe(P, ctx, env.src) : ctx.memo, v = x.j != null ? x.j : x.id;
       const ajoute = !l.includes(v);
       if (ajoute) l.push(v);
