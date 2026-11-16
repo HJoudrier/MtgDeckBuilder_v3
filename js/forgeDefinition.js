@@ -4,7 +4,7 @@
    La définition a la forme que le moteur connaît déjà (js/definitions.js) :
    coût, types, force, mots-clés, sort, capacités, statiques, entrée. Seuls
    ses effets changent de nature : chaque table d'une chaîne de Forge
-   (`SubAbility$`) devient une opération `forge`, que js/forgeEffetsA.js
+   (`SubAbility$`) devient une opération `forge`, que js/forgeExecute.js
    exécute ; ses emplacements de cible viennent des `ValidTgts$`. Le
    lancement, la pile, l'IA et les tests la traitent comme les autres.
 

@@ -91,7 +91,8 @@ js/                 modules, chargés dans cet ordre :
   forgeDefini.js    ce que `Defined$` désigne (`Targeted`, `Remembered`, `TriggeredCard`…)
   forgeDesignations.js  ce que Forge désigne encore : joueurs retenus, dessus de la bibliothèque, monarque, marqueurs d'un joueur, monstrueux
   forgeCout.js      lire un coût de Forge (`2 R T Sac<1/CARDNAME>`)
-  forgeEffetsA.js   le registre des effets, la porte `executeForge()`, zones et cartes
+  forgeEffetsA.js   le registre des effets, zones et cartes
+  forgeExecute.js   la porte `executeForge()` : conditions, coût payé en route, « may », « unless pays », mémoire de la carte
   forgeEffetsB.js   bibliothèque, dégâts et vie, retraits, jetons et marqueurs
   forgeEffetsC.js   pompes, engagements, mana, combats, contrôle, mémoire, réflexes
   forgeEffetsD.js   régénération, effets temporaires, déclencheurs retardés, capacités accordées
@@ -123,6 +124,7 @@ js/                 modules, chargés dans cet ordre :
   forgeMemoire.js   la mémoire, II : nombres retenus, instantanés, partages de type, aura qui réanime, déclencheurs statiques
   forgeModes.js     les modes qu'on paie (Spree, Tiered, Escalate), le mode retenu des Sièges
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
+  forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
   forgeActivations.js  la mise sous tension (PowerUp), lancer une copie pour un autre coût, le mana venu de créatures, Count$YourTurns
@@ -1368,6 +1370,22 @@ engagé et attaquant, puis part à l'étape de fin :
 Un coût payé au milieu d'une chaîne (`AB$ Token | Cost$ X R` dans un déclencheur, `coutInterne`) payait
 X à zéro : X se choisit désormais au moment de payer (question `x`, par défaut le maximum), alimente
 `Count$xPaid` et se paie par `paieMana()`.
+
+**Exiler le dessus, lancer gratuitement, et Paradigm** (lot F55, `js/forgeParadigme.js`) :
+- *Muse Vortex*, `ChangeZoneAll | ForgetChanged$` : ce qui vient de bouger n'est plus retenu, si bien que
+  la table suivante ne vise que le reste ; `RandomOrder$` tire l'ordre du dessous de la bibliothèque ;
+- *Improvisation Capstone*, `DigUntil | MinTotalCMC$` : on s'arrête quand la valeur de mana de ce
+  qu'on a trouvé atteint le seuil, non quand on en a trouvé un nombre ; avec ce seuil,
+  `RememberRevealed$` retient aussi les cartes trouvées. Les artefacts et les créatures exilés sont des
+  sorts : `Play` les lance gratuitement comme les autres ;
+- **Paradigm**, un rebound qui ne s'épuise pas : la première résolution exile la carte et la marque
+  (`o.paradigme`, posé par `resoudre()`, voulu par `exileApresResolution()`), et le début de la première
+  principale de son propriétaire propose une copie gratuite (`paradigmesDebutPrincipale()`, appelée par
+  `etape()`). La copie est un jeton de sort, comme celle de Cipher : elle disparaît, la carte reste.
+
+`js/forgeEffetsA.js` dépassait trois cents lignes : la porte `executeForge()` et ce qui la sert
+(`paieUnlessForge()`, la mémoire de la carte, les paramètres qui retiennent) sont passés dans
+`js/forgeExecute.js`.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

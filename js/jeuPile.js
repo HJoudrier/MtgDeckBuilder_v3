@@ -105,6 +105,7 @@ function* resoudre(P, item) {
     if (item.variante === 'omen') { const n = deplace(P, item.id, 'dessus'); if (n != null) melangeHasard(P.rng, P.joueurs[obj(P, n).prop].bibliotheque); return; }
     const n = deplace(P, item.id, flashback || item.variante === 'aventure' ? 'exil' : item.rachat ? 'main' : 'cimetiere');
     if (item.depuis === 'main' && item.def.rebond && obj(P, n) && obj(P, n).zone === 'exil') obj(P, n).rebond = {tour: P.tour};
+    if (item.def.paradigme && obj(P, n) && obj(P, n).zone === 'exil') obj(P, n).paradigme = true;
     if (item.variante === 'aventure' && obj(P, n)) obj(P, n).aventure = true;
   }
 }

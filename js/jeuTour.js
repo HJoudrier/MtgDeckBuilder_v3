@@ -67,6 +67,7 @@ function* etape(P, e) {
       notePrincipale(P);
       loreDebutPrincipale(P);
       emet(P, {t: 'etape', etape: 'principale1', actif: P.actif});
+      yield* paradigmesDebutPrincipale(P);
       break;
     case 'debutCombat': P.combatsTour = (P.combatsTour || 0) + 1; emet(P, {t: 'etape', etape: 'debutCombat', actif: P.actif}); break;
     case 'attaquants':

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1718 fonctions**, 246 modules, 1783 Ko de JavaScript.
+**1719 fonctions**, 248 modules, 1786 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -59,7 +59,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 255 |
 | [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 239 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 300 |
-| [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 72 |
+| [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
 | [`jeuCoutsX.js`](#jsjeucoutsxjs) | Les coûts dont la quantité est X, et ceux qui | 10 | 127 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 158 |
@@ -67,9 +67,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 144 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 145 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
-| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 130 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 131 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
@@ -82,11 +82,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 307 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 202 |
+| [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 234 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 172 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 196 |
-| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 137 |
+| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 141 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 164 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 118 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
@@ -122,6 +123,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMemoire.js`](#jsforgememoirejs) | La mémoire, II | 4 | 199 |
 | [`forgeModes.js`](#jsforgemodesjs) | Les modes qu'on paie, le mode qu'on retient | 3 | 87 |
 | [`forgeMotsClesF.js`](#jsforgemotsclesfjs) | Les mots-clés, III | 2 | 147 |
+| [`forgeParadigme.js`](#jsforgeparadigmejs) | Paradigm | 1 | 39 |
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 3 | 88 |
@@ -1156,7 +1158,7 @@ Les autres façons de lancer et de payer. *18 fonctions, 300 lignes, 14 Ko.*
 
 ## js/jeuVariantesB.js
 
-Les façons de lancer, suite. *6 fonctions, 72 lignes, 4 Ko.*
+Les façons de lancer, suite. *6 fonctions, 74 lignes, 4.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1288,7 +1290,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 144 lignes, 7.3 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 145 lignes, 7.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1323,7 +1325,7 @@ Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 208 lignes, 11 Ko.*
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *6 fonctions, 130 lignes, 5.4 Ko.*
+Les étapes d'un tour. *6 fonctions, 131 lignes, 5.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1536,18 +1538,13 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, la. *13 fonctions, 307 lignes, 19 Ko.*
+Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 202 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `forgeEffet(api, params, gen, ia, opts = {})` | — |
 | `seuilForge(P, v, cmp, env)` | Un seuil de Forge : `GE1`, `EQ0`, `LTX`. |
 | `conditionForge(P, t, env)` | Les conditions d'une table : `Condition*`, `CheckSVar`, `IsPresent`, `PlayerTurn`. |
-| `paieUnlessForge(P, t, env)` | « Unless … pays » : rend vrai si le payeur a payé. |
-| `memoireForge(P, ctx, src)` | La mémoire de la carte source : les objets et les joueurs retenus. |
-| `retiensForge(ctx, x)` | — |
-| `executeForge(P, op, ctx)` | La porte : une table de Forge, résolue. |
-| `cibleOuDefinis(P, t, env)` | Les objets qu'un effet touche : ses cibles, ou ce que `Defined$` désigne, ou — pour un effet de masse — ce qui répond à `ValidCards$`. |
 | `zoneForge(z)` | Une zone de destination de Forge, dans le vocabulaire du moteur. |
 | `deplaceForge(P, o, dest, env, opts = {})` | Déplacer un objet où Forge le dit. Rend le nouvel identifiant. |
 | `dansOrigine(o, origine)` | Les objets d'une zone d'origine (`Battlefield,Graveyard`, `Any`). |
@@ -1558,6 +1555,21 @@ Exécuter une capacité de Forge : le registre, la. *13 fonctions, 307 lignes, 1
 |---|---|
 | `FORGE_API` | — |
 | `FORGE_CONDITIONS` | — |
+
+## js/forgeExecute.js
+
+La porte des effets de Forge : `executeForge()`. *5 fonctions, 118 lignes, 7.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `paieUnlessForge(P, t, env)` | « Unless … pays » : rend vrai si le payeur a payé. |
+| `memoireForge(P, ctx, src)` | La mémoire de la carte source : les objets et les joueurs retenus. |
+| `retiensForge(ctx, x)` | — |
+| `executeForge(P, op, ctx)` | La porte : une table de Forge, résolue. |
+| `cibleOuDefinis(P, t, env)` | Les objets qu'un effet touche : ses cibles, ou ce que `Defined$` désigne, ou — pour un effet de masse — ce qui répond à `ValidCards$`. |
+
+| Donnée | Rôle |
+|---|---|
 | `RETENIR_APRES` | Les paramètres qui retiennent ce que l'effet a fait, jugés après lui. |
 
 ## js/forgeEffetsB.js
@@ -1610,7 +1622,7 @@ Les effets de Forge qui durent : régénération,. *6 fonctions, 196 lignes, 12 
 
 ## js/forgeEffetsE.js
 
-Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 137 lignes, 8.7 Ko.*
+Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 141 lignes, 9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2236,6 +2248,14 @@ Les mots-clés, III. *2 fonctions, 147 lignes, 8.9 Ko.*
 |---|---|
 | `defenseurLePlusRiche(P, e)` | « Attacks the player with the most life or tied for most life ». |
 | `paireDe(P, o)` | Le partenaire d'une créature : tant que les deux sont en jeu, chez le même contrôleur, l'une désignant l'autre. |
+
+## js/forgeParadigme.js
+
+Paradigm. *1 fonctions, 39 lignes, 2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `paradigmesDebutPrincipale(P)` | Au début de la première phase principale de son propriétaire : une copie gratuite de chaque carte au paradigme qu'il a en exil, s'il le veut. |
 
 ## js/forgeDesignes.js
 
