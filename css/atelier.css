@@ -884,7 +884,7 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
  header.top{position:sticky;top:0}
  .top-in{padding-bottom:8px}
  .onglets{position:fixed;z-index:80;left:0;right:0;bottom:0;top:auto;width:100%;max-width:none;margin:0;padding:7px 5px calc(7px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:stretch;gap:2px;background:var(--top2);border-top:1px solid var(--line);border-bottom:0;box-shadow:0 -5px 22px var(--ombre);backdrop-filter:blur(14px);overflow-x:auto}
- .onglet{flex:1 1 0;min-width:0;min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:5px 2px 7px;border:0;border-radius:9px;font-family:var(--body);font-size:10px;line-height:1.15}
+ .onglet{flex:0 0 64px;min-width:64px;min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:5px 2px 7px;border:0;border-radius:9px;font-family:var(--body);font-size:10px;line-height:1.15}
  .onglet[aria-selected=true]{background:var(--brass-a1);color:var(--brass)}
  .onglet-icone{width:20px;height:20px}
  .onglet .onglet-pt{position:absolute;top:5px;right:calc(50% - 17px)}
