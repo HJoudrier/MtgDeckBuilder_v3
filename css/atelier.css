@@ -893,3 +893,51 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
  .head-actions button,.head-param{min-width:40px;min-height:40px}
 }
 @media(prefers-reduced-motion:reduce){.onglet,.sec,button{transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Passe 2 — confort de consultation et de manipulation sur téléphone.
+   La barre conserve les sept destinations métier : elle devient défilante
+   uniquement sur les très petits écrans, plutôt que de masquer des onglets. */
+@media(max-width:640px){
+  .onglets{
+    justify-content:flex-start;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .onglet{
+    flex:1 0 48px;
+    min-width:48px;
+    max-width:76px;
+    scroll-snap-align:center;
+    font-size:9.5px;
+    gap:3px;
+  }
+  .onglet-icone{width:19px;height:19px}
+  .onglet:focus-visible{outline-offset:-3px}
+  .top-stats{overflow-x:auto;max-width:100%;scrollbar-width:thin}
+  .sec-head{gap:8px;align-items:center}
+  .sec-head h2{font-size:15px;line-height:1.25}
+  .sec-body{min-width:0;overflow-wrap:anywhere}
+  .btn,button.btn,.head-actions button{
+    min-height:40px;
+  }
+  input,select,textarea{font-size:16px}
+  .dlg-f{
+    position:sticky;bottom:0;z-index:2;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:var(--panel);
+    flex-wrap:wrap;
+  }
+  .dlg-f .btn{flex:1 1 auto}
+}
+@media(max-width:360px){
+  .onglet{flex-basis:46px;min-width:46px;font-size:9px}
+  .top-in{gap:5px}
+  .brand{padding-right:190px}
+  .head-actions{gap:2px}
+}
+@media(hover:none){
+  .onglet:hover,.btn:hover{filter:none}
+  .onglet,.btn,button{ -webkit-tap-highlight-color:transparent }
+}
