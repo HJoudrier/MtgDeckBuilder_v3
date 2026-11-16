@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1711 fonctions**, 246 modules, 1774 Ko de JavaScript.
+**1713 fonctions**, 246 modules, 1775 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -216,7 +216,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 179 |
-| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 8 | 143 |
+| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 10 | 168 |
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
@@ -226,7 +226,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 44 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 45 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -3837,14 +3837,16 @@ Fenêtres d'export et d'effacement. *3 fonctions, 179 lignes, 9.8 Ko.*
 
 ## js/fenAdversaire.js
 
-Ajouter ou modifier un adversaire. *8 fonctions, 143 lignes, 8.4 Ko.*
+Ajouter ou modifier un adversaire. *10 fonctions, 168 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `repliHTML(lien, echec)` | Le bloc du dernier recours : pourquoi la lecture a échoué, où trouver l'export. |
 | `etatLienHTML(l)` | Ce qu'on sait d'un lien : son site, sa dernière vérification, son dernier changement. |
 | `ouvreAdversaire(cle, opts = {})` | — |
+| `inconnuesHTML(noms)` | Les cartes qui posent problème, une par ligne : l'atelier ne peut pas deviner laquelle est la faute de frappe, le nom d'une autre langue ou la carte trop récente — c'est à celui qui… |
 | `majApercuAdversaire()` | Ce que la liste collée donne, à mesure qu'on la colle. |
+| `ouvreInconnues(cle)` | La fenêtre des cartes que ni l'atelier ni Scryfall n'ont retrouvées, après l'enregistrement : un toast tronqué à quatre noms ne dit pas lesquelles corriger. |
 | `adversaireDeLaFenetre(cle)` | L'adversaire tel que la fenêtre le décrit : lu sur le site quand on a donné un lien sans coller de liste, sinon tiré de la liste collée. |
 | `enregistreAdversaireFenetre(cle)` | — |
 | `supprimeAdversaire(cle)` | — |
@@ -3945,7 +3947,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 44 lignes, 2.1 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 45 lignes, 2.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
