@@ -823,6 +823,7 @@ digraph appels {
     "forgeEffetsF.js (chargement)" [label="chargement du module", fillcolor="#a89b6d33", color="#a89b6d", shape=note];
     "etendEffet" [label="etendEffet", fillcolor="#a89b6d33", color="#a89b6d"];
     "finEtapeForge" [label="finEtapeForge", fillcolor="#a89b6d33", color="#a89b6d"];
+    "conditionFinEtape" [label="conditionFinEtape", fillcolor="#a89b6d33", color="#a89b6d"];
     "entreAttaquant" [label="entreAttaquant", fillcolor="#a89b6d33", color="#a89b6d"];
   }
   subgraph "cluster_80" {
@@ -3708,6 +3709,7 @@ digraph appels {
   "compteDuTour" -> "objetEvt" [color="#6da88c99"];
   "compteDuTour" -> "obj" [color="#6da88c99"];
   "compteDuTour" -> "adversaires" [color="#6da88c99"];
+  "compteDuTour" -> "benediction" [color="#6da88c99"];
   "compteDuTour" -> "forgeValideObjet" [color="#6da88c99"];
   "compteDuTour" -> "objetsZone" [color="#6da88c99"];
   "compteJoueurs" -> "adversaires" [color="#6da88c99"];
@@ -3787,10 +3789,12 @@ digraph appels {
   "executeForge" -> "conditionForge" [color="#a89b6d99"];
   "executeForge" -> "coutUnless" [color="#a89b6d99"];
   "executeForge" -> "autresCout" [color="#a89b6d99"];
+  "executeForge" -> "coutForge" [color="#a89b6d99"];
   "executeForge" -> "objetEvt" [color="#a89b6d99"];
   "executeForge" -> "planPaiement" [color="#a89b6d99"];
   "executeForge" -> "coutAutrePossible" [color="#a89b6d99"];
   "executeForge" -> "question" [color="#a89b6d99"];
+  "executeForge" -> "maxX" [color="#a89b6d99"];
   "executeForge" -> "paieMana" [color="#a89b6d99"];
   "executeForge" -> "paieAutre" [color="#a89b6d99"];
   "executeForge" -> "deplace" [color="#a89b6d99"];
@@ -4049,6 +4053,7 @@ digraph appels {
   "copieSort" -> "instantane" [color="#96a86d99"];
   "copieSort" -> "jn" [color="#96a86d99"];
   "copiesFin" -> "obj" [color="#96a86d99"];
+  "copiesFin" -> "forgeNombre" [color="#96a86d99"];
   "copiesFin" -> "deplace" [color="#96a86d99"];
   "copiesFin" -> "sacrifie" [color="#96a86d99"];
   "forgeCopies.js (chargement)" -> "forgeEffet" [color="#96a86d99"];
@@ -4062,6 +4067,7 @@ digraph appels {
   "forgeCopies.js (chargement)" -> "emet" [color="#96a86d99"];
   "forgeCopies.js (chargement)" -> "noteEntree" [color="#96a86d99"];
   "forgeCopies.js (chargement)" -> "retiensForge" [color="#96a86d99"];
+  "forgeCopies.js (chargement)" -> "entreAttaquant" [color="#96a86d99"];
   "forgeCopies.js (chargement)" -> "jn" [color="#96a86d99"];
   "forgeCopies.js (chargement)" -> "objetsForge" [color="#96a86d99"];
   "forgeCopies.js (chargement)" -> "copieSort" [color="#96a86d99"];
@@ -4093,6 +4099,7 @@ digraph appels {
   "forgeEffetsF.js (chargement)" -> "choisitUn" [color="#a89b6d99"];
   "forgeEffetsF.js (chargement)" -> "forgeSait" [color="#a89b6d99"];
   "forgeEffetsF.js (chargement)" -> "entreAttaquant" [color="#a89b6d99"];
+  "forgeEffetsF.js (chargement)" -> "conditionFinEtape" [color="#a89b6d99"];
   "forgeEffetsF.js (chargement)" -> "forgeDefinis" [color="#a89b6d99"];
   "forgeEffetsF.js (chargement)" -> "objetsZone" [color="#a89b6d99"];
   "forgeEffetsF.js (chargement)" -> "forgeValideObjet" [color="#a89b6d99"];

@@ -87,7 +87,7 @@ digraph modules {
     "forgeChoix.js" [label="js/forgeChoix.js\n6 fonctions", fillcolor="#a86d8a33", color="#a86d8a"];
     "forgeCopies.js" [label="js/forgeCopies.js\n4 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "forgeTraine.js" [label="js/forgeTraine.js\n2 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
-    "forgeEffetsF.js" [label="js/forgeEffetsF.js\n3 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
+    "forgeEffetsF.js" [label="js/forgeEffetsF.js\n4 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];
     "forgeEffetsG.js" [label="js/forgeEffetsG.js\n10 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "forgeEffetsH.js" [label="js/forgeEffetsH.js\n6 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "forgeEntrees.js" [label="js/forgeEntrees.js\n9 fonctions", fillcolor="#a8846d33", color="#a8846d"];
@@ -573,6 +573,7 @@ digraph modules {
   "forgeExprB.js" -> "jeuCaracteristiques.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
   "forgeDesignations.js" -> "jeuEtat.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
   "forgeCout.js" -> "oracleCouts.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
+  "forgeEffetsA.js" -> "jeuActions.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
   "forgeEffetsB.js" -> "forgeExpr.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
   "forgeEffetsB.js" -> "forgeValide.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];
   "forgeEffetsC.js" -> "forgeExpr.js" [penwidth=2.08, color="#8a7fa8aa", tooltip="3 appel(s)"];
@@ -581,6 +582,7 @@ digraph modules {
   "forgeEffetsE.js" -> "jeuCaracteristiques.js" [penwidth=2.08, color="#6da88caa", tooltip="3 appel(s)"];
   "forgeChoix.js" -> "forgeDefinition.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
   "forgeChoix.js" -> "forgeValide.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
+  "forgeCopies.js" -> "forgeExpr.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
   "forgeTraine.js" -> "jeuEtat.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
   "forgeEffetsF.js" -> "forgeDefini.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];
   "forgeEffetsG.js" -> "forgeChoix.js" [penwidth=2.08, color="#6d8ca8aa", tooltip="3 appel(s)"];

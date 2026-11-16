@@ -28,8 +28,8 @@ function* aCopier(P, t, env) {
   return (yield* choisitCartes(P, env.ctrl, ids, 1, 'Copier', 'cartes', 1)).map(id => obj(P, id));
 }
 
-forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywords', 'SetPower', 'SetToughness', 'AtEOT', 'Choices',
-  'Populate', 'Controller', 'RememberCopied'], function* (P, t, env) {
+forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywords', 'SetPower', 'SetToughness', 'AtEOT', 'AtEOTTrig', 'Choices',
+  'Populate', 'Controller', 'RememberCopied', 'TokenTapped', 'TokenAttacking'], function* (P, t, env) {
   const modeles = (yield* aCopier(P, t.Populate === 'True' && !t.Choices ? {...t, Choices: 'Creature.token+YouCtrl'} : t, env))
     .filter(o => o && o.j == null);
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
@@ -42,17 +42,23 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
     for (let k = 0; k < n; k++) {
       if (P.champ.length >= PLAFOND_CHAMP) { P.fin = P.fin || {nulle: true, raison: 'plafond'}; return; }
       const o = creeObjet(P, nouvelleCarte(P, def, j, false, true), j, 'champ');
-      if (t.AtEOT) o.finEtape = t.AtEOT === 'Exile' ? 'exil' : 'sacrifice';
+      /* `AtEOTTrig$` : le jeton porte lui-même « at the beginning of the end step,
+         sacrifice this token » — même départ, à la même étape. */
+      const fin = t.AtEOT || t.AtEOTTrig;
+      if (fin) o.finEtape = fin === 'Exile' ? 'exil' : 'sacrifice';
+      if (t.TokenTapped === 'True') o.engage = true;
       P.champ.push(o.id);
       P.ver++;
       emet(P, {t: 'entre', id: o.id, ctrl: j, jeton: true});
       noteEntree(P, null, 'champ', o);
       if (t.RememberCopied === 'True' || t.RememberTokens === 'True') retiensForge(env.ctx, o.id);
+      /* « Tapped and attacking » : dans le combat en cours, sans être déclaré. */
+      if (t.TokenAttacking === 'True') entreAttaquant(P, o, env);
     }
     jn(P, `${n} copie(s) de ${m.def.nom}`);
   }
 }, (t, op) => { op.op = 'jetons'; op.n = 1; op.hostile = false; op._def = {types: ['creature'], force: 2, endurance: 2, mots: 0, capacites: [], statiques: [], mv: 2}; },
-{prepare: t => !t.AtEOT || t.AtEOT === 'Sacrifice' || t.AtEOT === 'Exile'});
+{prepare: t => (!t.AtEOT || t.AtEOT === 'Sacrifice' || t.AtEOT === 'Exile') && (!t.AtEOTTrig || t.AtEOTTrig === 'Sacrifice' || t.AtEOTTrig === 'Exile')});
 
 /* Devenir la copie d'un objet (« Clone ») : l'objet désigné — souvent
    la carte qui entre — prend la définition copiée. */
@@ -95,6 +101,13 @@ function* copieSort(P, j, o, it, nouvelles) {
 function copiesFin(P) {
   P.champ.filter(id => obj(P, id).finEtape).forEach(id => {
     const o = obj(P, id);
+    /* Un départ conditionnel (`AtEOTCondition$`) : la condition se juge maintenant ;
+       fausse, le jeton reste, et le départ est oublié. */
+    if (o.finEtapeSi) {
+      const c = o.finEtapeSi, env = {face: c.face, ctx: {cibles: [], memo: [], memoJ: []}, src: c.srcId != null ? obj(P, c.srcId) || null : null, ctrl: c.ctrl, op: {}};
+      o.finEtapeSi = null;
+      if (!(forgeNombre(P, c.expr, env) > 0)) { o.finEtape = null; return; }
+    }
     if (o.finEtape === 'exil' || o.finEtape === 'main') {
       const n = deplace(P, id, o.finEtape);
       /* Warp : relançable de l'exil à partir du tour suivant. */

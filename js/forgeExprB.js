@@ -102,6 +102,8 @@ function compteDuTour(P, q, env) {
   if (q === 'LifeOppsLostThisTurn') return adversaires(P, j).reduce((s, i) => s + (h.perdu[i] || 0), 0);
   if (q === 'ResolvedThisTurn') return h.resolus[src ? src.id : -1] || 0;
   if (q === 'CountersAddedThisTurn') return h.marqueurs;
+  /* `Count$Blessing.0.1` : 0 avec la bénédiction de la cité, 1 sans. */
+  if ((k = /^Blessing\.(.+)$/.exec(q))) return siAlors(P, q, benediction(P, j, src), env);
   if ((k = /^Delirium\.(.+)$/.exec(q))) return siAlors(P, q, new Set([].concat(...J.cimetiere.map(id => obj(P, id).def.types))).size >= 4, env);
   if ((k = /^Threshold\.(.+)$/.exec(q))) return siAlors(P, q, J.cimetiere.length >= 7, env);
   if ((k = /^Void\.(.+)$/.exec(q))) return siAlors(P, q, h.vide, env);

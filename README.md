@@ -1354,6 +1354,21 @@ le résultat de l'effet précédent :
   fallait pour tuer, endurance moins blessures marquées, ou loyauté — se range dans `ctx.vars`, que lit
   `ConditionCheckSVar$`. Un joueur n'a pas de seuil. Le Lander est un jeton comme les autres.
 
+**Les copies qui attaquent, et le départ conditionnel** (lot F54). Trois cartes autour du jeton qui entre
+engagé et attaquant, puis part à l'étape de fin :
+- *Redoubled Stormsinger*, `CopyPermanent | TokenTapped$ | TokenAttacking$` : la copie réutilise
+  `entreAttaquant()`, celle de `Token | TokenAttacking$` — dans le combat en cours, contre le défenseur de la
+  source, sans être déclarée, donc sans déclencheur d'attaque ;
+- *Electroduplicate*, `AtEOTTrig$ Sacrifice` : le même départ que `AtEOT$`, que le jeton porte comme
+  capacité chez Forge ;
+- *Tilonalli's Summoner*, `Token | AtEOTCondition$ Y` : le départ garde la face, le contrôleur et la
+  source (`o.finEtapeSi`), et `copiesFin()` juge la SVar à l'étape de fin ; fausse, le jeton reste et le
+  départ est oublié. `Count$Blessing.0.1` se lit comme les autres formes `a.b`.
+
+Un coût payé au milieu d'une chaîne (`AB$ Token | Cost$ X R` dans un déclencheur, `coutInterne`) payait
+X à zéro : X se choisit désormais au moment de payer (question `x`, par défaut le maximum), alimente
+`Count$xPaid` et se paie par `paieMana()`.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

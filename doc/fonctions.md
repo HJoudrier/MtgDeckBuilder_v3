@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1717 fonctions**, 246 modules, 1781 Ko de JavaScript.
+**1718 fonctions**, 246 modules, 1783 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -78,19 +78,19 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 72 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 167 |
-| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
+| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 153 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 298 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 307 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 234 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 172 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 196 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 137 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 164 |
-| [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 105 |
+| [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 118 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
-| [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 3 | 207 |
+| [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
 | [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 292 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 7 | 276 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
@@ -1474,7 +1474,7 @@ Les quantités de Forge. *8 fonctions, 167 lignes, 9.8 Ko.*
 
 ## js/forgeExprB.js
 
-Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 151 lignes, 9.5 Ko.*
+Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 153 lignes, 9.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1536,7 +1536,7 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, la. *13 fonctions, 298 lignes, 18 Ko.*
+Exécuter une capacité de Forge : le registre, la. *13 fonctions, 307 lignes, 19 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1636,7 +1636,7 @@ Les choix de Forge : une couleur, un type, une. *7 fonctions, 164 lignes, 9 Ko.*
 
 ## js/forgeCopies.js
 
-Les copies de Forge : un jeton copie d'un. *4 fonctions, 105 lignes, 5.7 Ko.*
+Les copies de Forge : un jeton copie d'un. *4 fonctions, 118 lignes, 6.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1656,12 +1656,13 @@ La traîne : des mots-clés et des effets moins. *2 fonctions, 103 lignes, 5.2 K
 
 ## js/forgeEffetsF.js
 
-Les paramètres de plus des effets courants. *3 fonctions, 207 lignes, 11 Ko.*
+Les paramètres de plus des effets courants. *4 fonctions, 219 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `etendEffet(api, params, avant, apres)` | Envelopper un effet : `avant(P, t, env)` peut rendre une table changée, `apres(P, t, env, touches, nouveaux)` reçoit les objets visés avant l'effet et les objets entrés pendant. |
-| `finEtapeForge(objets, v)` | « At the beginning of the next end step, sacrifice / exile it » : le départ que js/forgeCopies.js `copiesFin()` joue à l'étape de fin. |
+| `finEtapeForge(objets, v, cond)` | « At the beginning of the next end step, sacrifice / exile it » : le départ que js/forgeCopies.js `copiesFin()` joue à l'étape de fin. |
+| `conditionFinEtape(P, t, env)` | « … unless you have the city's blessing » (`AtEOTCondition$ Y`) : la SVar se juge à l'étape de fin, avec la face, le contrôleur et la source de l'effet qui a posé le départ. |
 | `entreAttaquant(P, o, env)` | Entrer « tapped and attacking » : dans le combat en cours, contre le défenseur de la source si elle attaque, sinon le premier adversaire. |
 
 ## js/forgeEffetsG.js

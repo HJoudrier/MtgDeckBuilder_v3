@@ -115,13 +115,22 @@ function* executeForge(P, op, ctx) {
      là, sous-capacités comprises. */
   if (op.coutInterne) {
     const c = coutUnless(P, op.coutInterne, env), autre = autresCout(c.cout), porteur = src && !src.lki ? src : {id: -1, zone: '', marq: {}};
+    /* « You may pay {X}{R} » : X se choisit au moment de payer, et nourrit
+       `Count$xPaid` pour le reste de la chaîne. Le coût se juge d'abord avec
+       X à zéro, le plus petit qu'on puisse payer. */
+    const brut = coutForge(op.coutInterne), payeX = !!brut && !!brut.cout.mana && brut.cout.mana.x > 0 && /Count\$xPaid/.test((op.face.svars.X || ''));
     const decl = c.cout.exileDeclencheur ? objetEvt(P, ctx) : null;
     const ok = planPaiement(P, ctx.ctrl, c.cout.mana, 0) && (!autre || coutAutrePossible(P, ctx.ctrl, porteur, autre)) &&
       (!c.cout.exileDeclencheur || (!!decl && decl.zone === 'cimetiere'));
     /* `Mandatory` : le coût se paie sans qu'on le demande, s'il le peut. */
     const r = !ok ? 0 : /\bMandatory\b/.test(op.coutInterne) ? 1
       : yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${op.coutInterne} ?`, source: ctx.source, extra: {ops: [op]}});
-    if (r !== 1 || !paieMana(P, ctx.ctrl, c.cout.mana, 0)) { ctx.coupe = op.chaine; return; }
+    if (r === 1 && payeX) {
+      const max = maxX(P, ctx.ctrl, brut.cout.mana), opts = Array.from({length: max + 1}, (_, i) => i);
+      ctx.x = opts[(yield question(P, ctx.ctrl, 'x', opts, {defaut: max, source: ctx.source}))] || 0;
+    }
+    /* Le X du mana se paie par `paieMana()` lui-même : le coût garde son X. */
+    if (r !== 1 || !paieMana(P, ctx.ctrl, c.cout.mana, payeX ? ctx.x : 0)) { ctx.coupe = op.chaine; return; }
     if (autre) yield* paieAutre(P, ctx.ctrl, porteur, autre);
     if (decl) deplace(P, decl.id, 'exil');
   }
