@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1719 fonctions**, 248 modules, 1787 Ko de JavaScript.
+**1722 fonctions**, 249 modules, 1793 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -46,12 +46,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 174 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
-| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 223 |
+| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 225 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 69 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 148 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 235 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 238 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 223 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 181 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
@@ -67,7 +67,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 145 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 150 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 131 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
@@ -98,13 +98,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
 | [`forgeRemplacementsC.js`](#jsforgeremplacementscjs) | Les dégâts remplacés | 12 | 206 |
 | [`jeuPioche.js`](#jsjeupiochejs) | La pioche remplacée, Dredge, Miracle | 7 | 126 |
-| [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 144 |
+| [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 147 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 127 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 224 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 282 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
-| [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 9 | 158 |
+| [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 10 | 170 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
 | [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 154 |
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 217 |
@@ -119,6 +119,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
 | [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 169 |
+| [`forgeManaC.js`](#jsforgemanacjs) | Le mana qui porte quelque chose | 2 | 61 |
 | [`forgeEmpreinte.js`](#jsforgeempreintejs) | L'empreinte | 6 | 150 |
 | [`forgeMemoire.js`](#jsforgememoirejs) | La mémoire, II | 4 | 199 |
 | [`forgeModes.js`](#jsforgemodesjs) | Les modes qu'on paie, le mode qu'on retient | 3 | 87 |
@@ -911,7 +912,7 @@ Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
 
 ## js/jeuEtat.js
 
-Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 223 lignes, 10 Ko.*
+Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 225 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1000,7 +1001,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.8 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *12 fonctions, 235 lignes, 11 Ko.*
+La réserve de mana, et le paiement automatique. *12 fonctions, 238 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1290,7 +1291,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 145 lignes, 7.4 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 150 lignes, 7.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1797,7 +1798,7 @@ La pioche remplacée, Dredge, Miracle. *7 fonctions, 126 lignes, 6.4 Ko.*
 
 ## js/forgeDeclencheurs.js
 
-Quand une capacité déclenchée de Forge se. *10 fonctions, 144 lignes, 9 Ko.*
+Quand une capacité déclenchée de Forge se. *10 fonctions, 147 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1952,7 +1953,7 @@ Les statiques hors du champ. *18 fonctions, 203 lignes, 10 Ko.*
 
 ## js/forgeRemplacements.js
 
-Les remplacements de Forge (`R:`). *9 fonctions, 158 lignes, 9.7 Ko.*
+Les remplacements de Forge (`R:`). *10 fonctions, 170 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1960,6 +1961,7 @@ Les remplacements de Forge (`R:`). *9 fonctions, 158 lignes, 9.7 Ko.*
 | `remplacementsEnJeu(P)` | Les remplacements en jeu, relevés une fois par version de l'état : ceux des permanents du champ. |
 | `envRemplacement(src, x)` | — |
 | `destinationRemplacee(P, o, depuis, vers)` | « If ~ would be put into a graveyard, exile it instead » : la zone où l'objet va vraiment. |
+| `exilsApplicables(P, o, depuis)` | Les remplacements « au lieu du cimetière » qui valent pour cet objet, d'où il part. |
 | `entreeEngageeParAutre(P, d, ctrl, o)` | Un permanent qui entre sous le coup d'un « enters tapped » d'un autre permanent : jugé sur sa définition et sur qui le contrôlera. |
 | `degagementEmpeche(P, o)` | « ~ doesn't untap during your untap step ». |
 | `incontrecarrable(P, o)` | « ~ can't be countered », ou « creature spells you control can't be countered ». |
@@ -2200,6 +2202,15 @@ Le mana, II. *4 fonctions, 169 lignes, 9.2 Ko.*
 |---|---|
 | `MANA_B` | Ces règles touchent des gestes très fréquents (engager, vider les réserves) : on ne les cherche que si une carte qui les porte a été compilée. |
 | `LETTRE_TYPE` | — |
+
+## js/forgeManaC.js
+
+Le mana qui porte quelque chose. *2 fonctions, 61 lignes, 3.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `manaPorte(P, j, s, option, pour)` | À chaque mana que le paiement tire d'une source : le sort retient d'où il vient, et reçoit ce que ce mana-là accorde s'il lui convient. |
+| `remplacementsOptionnels(P, o)` | « You may exile that spell instead » : un remplacement optionnel se demande à la résolution, avant que le sort ne parte ; refusé, il ne vaut plus (`o.refuseRemp`, js/forgeRemplacements.js). |
 
 ## js/forgeEmpreinte.js
 

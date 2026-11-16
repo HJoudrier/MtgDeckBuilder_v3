@@ -109,6 +109,7 @@
   "forgeDegagements.js",
   "forgeRemplacementsD.js",
   "forgeManaB.js",
+  "forgeManaC.js",
   "forgeEmpreinte.js",
   "forgeMemoire.js",
   "forgeModes.js",
@@ -3842,6 +3843,7 @@
     "elementsTable",
     "forgeEffetsD.js (chargement)",
     "forgeEffetsF.js (chargement)",
+    "forgeManaC.js (chargement)",
     "forgeSousCapacite",
     "lisScriptForge",
     "motCleForge",
@@ -3869,6 +3871,7 @@
     "forgeDegagements.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeManaB.js (chargement)",
+    "forgeManaC.js (chargement)",
     "formeRemplacementC",
     "formeRemplacementD",
     "payeAvantForge",
@@ -3949,12 +3952,12 @@
     "chaineDegats",
     "chainePioche",
     "declencheurForge",
-    "destinationRemplacee",
     "effetForge",
     "entreeForge",
     "entreeForgeMotCle",
     "entreeSoiForge",
     "eveilForge",
+    "exilsApplicables",
     "forgeChoix.js (chargement)",
     "forgeDegagements.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -4028,6 +4031,7 @@
     "forgeExprB.js (chargement)",
     "forgeInterdits.js (chargement)",
     "forgeManaB.js (chargement)",
+    "forgeManaC.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeMode",
     "forgeModes.js (chargement)",
@@ -4383,6 +4387,7 @@
     "forgeActivations.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
+    "forgeDeclenche",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
@@ -4637,7 +4642,7 @@
   {
    "nom": "noteEntree",
    "fichier": "jeuEtat.js",
-   "ligne": 154,
+   "ligne": 156,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4652,7 +4657,7 @@
   {
    "nom": "emet",
    "fichier": "jeuEtat.js",
-   "ligne": 159,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "noteHistorique"
@@ -4693,7 +4698,7 @@
   {
    "nom": "jn",
    "fichier": "jeuEtat.js",
-   "ligne": 163,
+   "ligne": 165,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4746,7 +4751,7 @@
   {
    "nom": "nomObj",
    "fichier": "jeuEtat.js",
-   "ligne": 165,
+   "ligne": 167,
    "chargement": false,
    "appelle": [
     "obj"
@@ -4761,7 +4766,7 @@
   {
    "nom": "vivants",
    "fichier": "jeuEtat.js",
-   "ligne": 170,
+   "ligne": 172,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4782,7 +4787,7 @@
   {
    "nom": "suivantVivant",
    "fichier": "jeuEtat.js",
-   "ligne": 173,
+   "ligne": 175,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4796,7 +4801,7 @@
   {
    "nom": "ordreApnap",
    "fichier": "jeuEtat.js",
-   "ligne": 182,
+   "ligne": 184,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4811,7 +4816,7 @@
   {
    "nom": "adversaires",
    "fichier": "jeuEtat.js",
-   "ligne": 191,
+   "ligne": 193,
    "chargement": false,
    "appelle": [
     "vivants"
@@ -4843,7 +4848,7 @@
   {
    "nom": "champDe",
    "fichier": "jeuEtat.js",
-   "ligne": 194,
+   "ligne": 196,
    "chargement": false,
    "appelle": [
     "obj"
@@ -4906,7 +4911,7 @@
   {
    "nom": "piocheN",
    "fichier": "jeuEtat.js",
-   "ligne": 198,
+   "ligne": 200,
    "chargement": false,
    "appelle": [
     "emet",
@@ -4922,7 +4927,7 @@
   {
    "nom": "question",
    "fichier": "jeuEtat.js",
-   "ligne": 217,
+   "ligne": 219,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4956,7 +4961,8 @@
     "piocheRemplacee",
     "prepareEffets",
     "priorite",
-    "proposePaiement"
+    "proposePaiement",
+    "remplacementsOptionnels"
    ]
   },
   {
@@ -5636,6 +5642,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "manaPorte",
     "sourcesMana"
    ]
   },
@@ -5672,7 +5679,7 @@
   {
    "nom": "couleursParmi",
    "fichier": "jeuMana.js",
-   "ligne": 87,
+   "ligne": 88,
    "chargement": false,
    "appelle": [
     "car",
@@ -5688,7 +5695,7 @@
   {
    "nom": "compteObjets",
    "fichier": "jeuMana.js",
-   "ligne": 95,
+   "ligne": 96,
    "chargement": false,
    "appelle": [
     "correspond",
@@ -5705,7 +5712,7 @@
   {
    "nom": "planPaiement",
    "fichier": "jeuMana.js",
-   "ligne": 104,
+   "ligne": 105,
    "chargement": false,
    "appelle": [
     "sourcesMana"
@@ -5735,7 +5742,7 @@
   {
    "nom": "manaDispo",
    "fichier": "jeuMana.js",
-   "ligne": 160,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "sourcesMana"
@@ -5753,7 +5760,7 @@
   {
    "nom": "ajouteMana",
    "fichier": "jeuMana.js",
-   "ligne": 165,
+   "ligne": 166,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5768,7 +5775,7 @@
   {
    "nom": "debite",
    "fichier": "jeuMana.js",
-   "ligne": 173,
+   "ligne": 174,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5780,7 +5787,7 @@
   {
    "nom": "paieMana",
    "fichier": "jeuMana.js",
-   "ligne": 188,
+   "ligne": 189,
    "chargement": false,
    "appelle": [
     "ajouteMana",
@@ -5788,6 +5795,7 @@
     "debite",
     "deplace",
     "engageObjet",
+    "manaPorte",
     "obj",
     "planPaiement"
    ],
@@ -5812,7 +5820,7 @@
   {
    "nom": "videReserves",
    "fichier": "jeuMana.js",
-   "ligne": 219,
+   "ligne": 222,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5826,7 +5834,7 @@
   {
    "nom": "manaReflete",
    "fichier": "jeuMana.js",
-   "ligne": 226,
+   "ligne": 229,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -8280,7 +8288,8 @@
     "melangeHasard",
     "metEnJeu",
     "noteResolution",
-    "obj"
+    "obj",
+    "remplacementsOptionnels"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -8291,7 +8300,7 @@
   {
    "nom": "priorite",
    "fichier": "jeuPile.js",
-   "ligne": 114,
+   "ligne": 119,
    "chargement": false,
    "appelle": [
     "actionsPossibles",
@@ -9284,9 +9293,9 @@
     "defenseurVise",
     "degagementEmpeche",
     "degatsApresPrevention",
-    "destinationRemplacee",
     "effetsEntree",
     "entreesAutres",
+    "exilsApplicables",
     "exprEtendue",
     "forgeAlias.js (chargement)",
     "forgeAuras.js (chargement)",
@@ -10361,7 +10370,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "destinationRemplacee",
+    "exilsApplicables",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
@@ -12541,7 +12550,8 @@
    "ligne": 122,
    "chargement": false,
    "appelle": [
-    "conditionForge"
+    "conditionForge",
+    "obj"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -13857,10 +13867,10 @@
     "degagementEmpeche",
     "degatsApresPrevention",
     "degatsRemplaces",
-    "destinationRemplacee",
     "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "etapeSautee",
+    "exilsApplicables",
     "forgeManaB.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "incontrecarrable",
@@ -13883,8 +13893,8 @@
     "appliqueRemplacementDegats",
     "degagementEmpeche",
     "degatsApresPrevention",
-    "destinationRemplacee",
     "etapeSautee",
+    "exilsApplicables",
     "forgeManaB.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "nePeutPerdre",
@@ -13902,11 +13912,7 @@
    "ligne": 75,
    "chargement": false,
    "appelle": [
-    "envRemplacement",
-    "forgeSousCapacite",
-    "forgeValideObjet",
-    "remplacementsEnJeu",
-    "zoneForge"
+    "exilsApplicables"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -13916,9 +13922,28 @@
    ]
   },
   {
+   "nom": "exilsApplicables",
+   "fichier": "forgeRemplacements.js",
+   "ligne": 88,
+   "chargement": false,
+   "appelle": [
+    "envRemplacement",
+    "forgeSousCapacite",
+    "forgeValideObjet",
+    "remplacementsEnJeu",
+    "zoneForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "destinationRemplacee",
+    "remplacementsOptionnels"
+   ]
+  },
+  {
    "nom": "entreeEngageeParAutre",
    "fichier": "forgeRemplacements.js",
-   "ligne": 95,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
     "forgeValideDef",
@@ -13933,7 +13958,7 @@
   {
    "nom": "degagementEmpeche",
    "fichier": "forgeRemplacements.js",
-   "ligne": 100,
+   "ligne": 112,
    "chargement": false,
    "appelle": [
     "envRemplacement",
@@ -13949,7 +13974,7 @@
   {
    "nom": "incontrecarrable",
    "fichier": "forgeRemplacements.js",
-   "ligne": 107,
+   "ligne": 119,
    "chargement": false,
    "appelle": [
     "forgeValideDef",
@@ -13966,7 +13991,7 @@
   {
    "nom": "degatsApresPrevention",
    "fichier": "forgeRemplacements.js",
-   "ligne": 119,
+   "ligne": 131,
    "chargement": false,
    "appelle": [
     "envRemplacement",
@@ -13984,7 +14009,7 @@
   {
    "nom": "quantiteRemplacee",
    "fichier": "forgeRemplacements.js",
-   "ligne": 139,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "envRemplacement",
@@ -15187,6 +15212,7 @@
     "forgeDegagements.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeManaB.js (chargement)",
+    "forgeManaC.js (chargement)",
     "statiqueForge"
    ]
   },
@@ -15209,6 +15235,7 @@
     "definitionDepuisScript",
     "forgeDeclencheursC.js (chargement)",
     "forgeEffetsD.js (chargement)",
+    "forgeManaC.js (chargement)",
     "forgeMemoire.js (chargement)",
     "niveauForge",
     "statiqueForge",
@@ -15703,6 +15730,52 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeManaB.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeManaC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "declencheurForge",
+    "forgeApi",
+    "forgeSait",
+    "forgeTable"
+   ],
+   "appelleDiffere": [
+    "capaciteForge"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "manaPorte",
+   "fichier": "forgeManaC.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [
+    "manaPermis"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "paieMana"
+   ]
+  },
+  {
+   "nom": "remplacementsOptionnels",
+   "fichier": "forgeManaC.js",
+   "ligne": 54,
+   "chargement": false,
+   "appelle": [
+    "exilsApplicables",
+    "question"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "resoudre"
    ]
   },
   {

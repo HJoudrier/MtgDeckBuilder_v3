@@ -42,7 +42,7 @@ function sourcesMana(P, j, pour) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
-    let options = null, rang = 0, sac = false, vie = 0, reste = false, nonContre = [];
+    let options = null, rang = 0, sac = false, vie = 0, reste = false, nonContre = [], portes = [];
     for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
@@ -68,6 +68,7 @@ function sourcesMana(P, j, pour) {
       }
       options = (options || []).concat(opts);
       if (k.sansContre) nonContre.push(...opts);
+      if (k.porte) portes.push({opts, porte: k.porte});
       if (c.sacSoi) sac = true;
       if (c.vie) vie = c.vie;
       if (k.resteEngage) reste = true;
@@ -76,7 +77,7 @@ function sourcesMana(P, j, pour) {
     /* Une source qui ne se dégagera pas passe après les autres. */
     rang = (estType(o, 'land') ? 0 : sac ? 3 : estCreature(o) ? 2 : 1) + (reste ? 2 : 0);
     const couleurs = [...new Set(options.join('').split(''))];
-    r.push({id, options, rang, sac, vie, reste, couleurs, cap: Math.max(...options.map(s => s.length)), ...(nonContre.length ? {nonContre} : {})});
+    r.push({id, options, rang, sac, vie, reste, couleurs, cap: Math.max(...options.map(s => s.length)), ...(nonContre.length ? {nonContre} : {}), ...(portes.length ? {portes} : {})});
   }
   r.sort((a, b) => a.rang - b.rang || a.couleurs.length - b.couleurs.length);
   return r;
@@ -200,6 +201,8 @@ function paieMana(P, j, cout, x, pour) {
     if ((c.sousTypes || []).includes('treasure')) de.treasure += n;
     /* Une source de la main s'exile (js/forgeManaB.js). */
     if (s.main) { deplace(P, s.id, 'exil'); ajouteMana(P, j, option); continue; }
+    /* Ce que ce mana donne au sort (js/forgeManaC.js) : d'où il vient, et ce qu'il accorde. */
+    if (pour && pour.sort) { manaPorte(P, j, s, option, pour); }
     engageObjet(P, o, option || true);
     if (s.nonContre && s.nonContre.includes(option) && pour && pour.sort) pour.sort.nonContrable = true;
     if (s.reste) o.exerce = true;

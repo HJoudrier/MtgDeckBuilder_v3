@@ -124,6 +124,7 @@ js/                 modules, chargés dans cet ordre :
   forgeMemoire.js   la mémoire, II : nombres retenus, instantanés, partages de type, aura qui réanime, déclencheurs statiques
   forgeModes.js     les modes qu'on paie (Spree, Tiered, Escalate), le mode retenu des Sièges
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
+  forgeManaC.js     le mana qui porte quelque chose : un mot-clé au sort qu'il paie, « when you spend this mana », le remplacement optionnel
   forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
@@ -1394,6 +1395,22 @@ par la sous-capacité. Le compte des accepteurs se fait par `StoreSVar`, dont la
 **avant** la SVar écrite (`Y: Number$0`) : `forgeNombre()` lisait l'écrite d'abord, si bien que le
 compte restait à zéro ; il suit désormais l'ordre de `forgeExpression()`. Autre manque : l'opérande
 d'une opération (`/Times.Y`) peut être le nom d'une SVar, non seulement un nombre.
+
+**Le mana qui porte quelque chose** (lot F57, `js/forgeManaC.js`). Un mana peut donner au sort qu'il
+paie. Comme `AddsNoCounter$` (le mana de Cavern of Souls), la source le sait à la construction de sa
+capacité, et `paieMana()` le transmet au sort (`manaPorte()`) : le sort retient les sources qui l'ont
+payé (`manaDeSources`) et le mot-clé reçu (`motsPortes`). Le mana flottant déjà en réserve ne porte rien.
+- *Carnelian Orb of Dragonkind*, `AddsKeywords$` + `AddsKeywordsValid$` : si le sort répond au filtre
+  (jugé comme une restriction de mana, `manaPermis()`), le permanent entre avec le mot-clé jusqu'à la
+  fin du tour (`resoudre()`). Un mot-clé hors de `MOTS_ANGLAIS` ou une durée autre que `UntilEOT`
+  laisse la capacité non construite ;
+- *Forger's Foundry*, `TriggersWhenSpent$` : un déclencheur ordinaire de la source (`ec.viaMana`) que seul
+  un sort payé de son mana déclenche. Son effet pose un remplacement optionnel, « exile le sort au lieu
+  du cimetière » : les remplacements « exil » sont désormais regroupés (`exilsApplicables()`), un
+  `Fizzle$ False` ne vaut qu'à la résolution (`o.resolu`, un sort contrecarré va au cimetière), un
+  `Optional$ True` se demande à la résolution (`remplacementsOptionnels()`), et `ExiledWithEffectSource$`
+  range la carte exilée parmi celles de la source (`o.exileAvec`, lu par `deplace()`), que le second
+  pouvoir retrouve par `ExiledWith`.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

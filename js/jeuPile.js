@@ -78,10 +78,12 @@ function* resoudre(P, item) {
   if (item.sort && item.def.types.some(t => TYPES_PERMANENTS.includes(t))) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
-    const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance;
+    const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance, motsPortes = obj(P, item.id) && obj(P, item.id).motsPortes;
     const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu, escaped: item.variante === 'escape', variante: item.variante,
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
     if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
+    /* Le mot-clé que le mana a donné au sort (Carnelian Orb) : jusqu'à la fin du tour. */
+    if (n != null && obj(P, n) && motsPortes) { obj(P, n).mods.push({f: 0, e: 0, mots: motsPortes, fin: 'tour'}); P.ver++; }
     if (n != null && item.variante === 'dash') apresDash(P, obj(P, n));
     else if (n != null && item.variante) apresVariante(P, obj(P, n), item.variante);
     return;
@@ -103,6 +105,9 @@ function* resoudre(P, item) {
     const flashback = exileApresResolution(item) || !!(obj(P, item.id) && obj(P, item.id).exilApres);
     /* Omen : la carte se mélange dans la bibliothèque de son propriétaire. */
     if (item.variante === 'omen') { const n = deplace(P, item.id, 'dessus'); if (n != null) melangeHasard(P.rng, P.joueurs[obj(P, n).prop].bibliotheque); return; }
+    /* Résolu : les remplacements « à la résolution » valent, et l'optionnel se demande (js/forgeManaC.js). */
+    obj(P, item.id).resolu = true;
+    yield* remplacementsOptionnels(P, obj(P, item.id));
     const n = deplace(P, item.id, flashback || item.variante === 'aventure' ? 'exil' : item.rachat ? 'main' : 'cimetiere');
     if (item.depuis === 'main' && item.def.rebond && obj(P, n) && obj(P, n).zone === 'exil') obj(P, n).rebond = {tour: P.tour};
     if (item.def.paradigme && obj(P, n) && obj(P, n).zone === 'exil') obj(P, n).paradigme = true;
