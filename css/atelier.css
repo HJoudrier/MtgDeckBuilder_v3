@@ -1030,5 +1030,5 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   box-shadow:none!important;
   transform:none!important;
 }
-#onglets .onglet-icone { display:none!important; }
+ /* Les icônes du menu secondaire sont conservées ; seule la barre principale est fixe. */
 #navigationPrincipale { display:grid!important; }
