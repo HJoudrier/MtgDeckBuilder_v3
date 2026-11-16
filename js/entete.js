@@ -8,11 +8,11 @@
    et on démasque, chacun retrouvant son défilement.
    ===================================================================== */
 
-const iconeEntete = (nom, contenu) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icone-entete icone-${nom}">${contenu}</svg>`;
+const iconeEntete = nom => `<i data-lucide="${nom}" aria-hidden="true" focusable="false"></i>`;
 
-const FILTRE_ICONE = iconeEntete('filtre', '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>');
-const AFFICHAGE_ICONE = iconeEntete('affichage', '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>');
-const PARAM_ICONE = iconeEntete('parametres', '<circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.6-1.4-2.4 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.6 1.4 2.4-1.4 1.1a8 8 0 0 1 0 2Z"/>');
+const FILTRE_ICONE = iconeEntete('sliders-horizontal');
+const AFFICHAGE_ICONE = iconeEntete('layout-grid');
+const PARAM_ICONE = iconeEntete('settings');
 
 /* ---------------------------------------------------------------------
    Le bouton « Affichage », au coin haut-droit avec celui des filtres.
@@ -163,6 +163,9 @@ function renderTop() {
   const lucarne = document.getElementById('headFiltre');
   if (lucarne) lucarne.innerHTML = filtreBtnHTML;
   majBoutonAffichage();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons({attrs:{'aria-hidden':'true',focusable:'false'}});
+  }
 
   majHauteurEntete();
 }
@@ -202,6 +205,9 @@ function renderOnglets() {
   /* Le bouton « Affichage » règle la liste de l'onglet ouvert : il change donc
      de cible en même temps que la page, sans que l'entête soit repeint. */
   majBoutonAffichage();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons({attrs:{'aria-hidden':'true',focusable:'false'}});
+  }
 }
 
 /* Passer d'un onglet à l'autre : rien n'est redessiné, les cinq sections
