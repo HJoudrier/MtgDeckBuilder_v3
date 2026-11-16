@@ -1341,6 +1341,19 @@ Deux défauts plus anciens corrigés en chemin :
 soixante cartes tirées des éditions récentes, huit cartes sont repassées de complète à partielle ou
 injouable, toutes à raison.
 
+**Les suites qui dépendent de ce qui vient de se passer** (lot F53). Trois cartes, trois façons de lire
+le résultat de l'effet précédent :
+- *Divert Disaster*, `UnlessResolveSubs$ WhenPaid` : la suite d'un « unless pays » ne se joue que si le
+  coût a été payé (`WhenNotPaid` pour l'inverse). `executeForge()` coupe la chaîne par `ctx.coupe`, comme
+  pour un coût refusé ;
+- *Unravel*, `Targeted$CastTotalManaSpent` : le sort contrecarré change d'objet en quittant la pile, et son
+  mana dépensé ne le suit pas. `Counter` en garde donc un instantané dans `P.lkis`, que `caracForge()`
+  lit ; sur la pile, la valeur de mana compte X pour ce qu'on a payé. Un sort lancé sans payer a dépensé
+  zéro ;
+- *Orbital Plunge*, `DealDamage | ExcessSVar$` : l'excès — les dégâts réellement infligés moins ce qu'il
+  fallait pour tuer, endurance moins blessures marquées, ou loyauté — se range dans `ctx.vars`, que lit
+  `ConditionCheckSVar$`. Un joueur n'a pas de seuil. Le Lander est un jeton comme les autres.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

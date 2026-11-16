@@ -61,8 +61,26 @@ function sourceDegats(P, t, env) {
   return (t.DamageSource ? forgeDefinis(P, t.DamageSource, env).find(x => x.j == null) : null) || env.src;
 }
 
-forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose'], function* (P, t, env) {
+/* Ce qu'il faut pour tuer la cible : l'endurance moins les blessures déjà
+   marquées, ou la loyauté. Un joueur n'a pas de seuil (règle 120.4a). */
+function letalPour(P, c) {
+  if (c.j != null || c.zone !== 'champ') return Infinity;
+  if (estType(c, 'planeswalker') && !estCreature(c)) return Math.max(0, c.marq.loyaute || 0);
+  return Math.max(0, car(P, c).endurance - c.bless);
+}
+
+/* Infliger, et noter ce qui dépasse le létal : `ExcessSVar$ Excess` pose
+   la somme dans la variable que lira `ConditionCheckSVar$ Excess`
+   (« if excess damage was dealt this way »). */
+function infligeAvecExces(P, t, env, src, c, n) {
+  const letal = letalPour(P, c), fait = infligeDegats(P, src, c, n, false);
+  if (t.ExcessSVar) { const v = varsDe(env.ctx); v[t.ExcessSVar] = (v[t.ExcessSVar] || 0) + Math.max(0, fait - letal); }
+  return fait;
+}
+
+forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose', 'ExcessSVar'], function* (P, t, env) {
   const n = forgeNombre(P, t.NumDmg || 0, env), src = sourceDegats(P, t, env);
+  if (t.ExcessSVar) varsDe(env.ctx)[t.ExcessSVar] = 0;
   const cibles = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Targeted', env);
   if (t.DividedAsYouChoose && cibles.length > 1) {
     /* Réparti : de quoi tuer chaque créature dans l'ordre des cibles, le
@@ -77,10 +95,10 @@ forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose'], funct
       parts[i] += plus; reste -= plus;
     });
     if (reste > 0) parts[parts.length - 1] += reste;
-    cibles.forEach((c, i) => infligeDegats(P, src, c, parts[i], false));
+    cibles.forEach((c, i) => infligeAvecExces(P, t, env, src, c, parts[i]));
     return;
   }
-  for (const c of cibles) infligeDegats(P, src, c, n, false);
+  for (const c of cibles) infligeAvecExces(P, t, env, src, c, n);
 }, (t, op) => { op.op = 'degats'; op.n = nombreIA(t.NumDmg || 0); op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null || /Opponent/.test(t.Defined || ''); });
 
 forgeEffet('DamageAll', ['NumDmg', 'ValidCards', 'ValidPlayers', 'DamageSource'], function* (P, t, env) {
@@ -143,6 +161,11 @@ forgeEffet('SacrificeAll', ['ValidCards'], function* (P, t, env) {
 forgeEffet('Counter', ['Destination'], function* (P, t, env) {
   const dest = zoneForge(t.Destination) || 'cimetiere';
   for (const o of objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'pile' && !incontrecarrable(P, o))) {
+    /* Le sort contrecarré change d'objet en quittant la pile : « if the mana
+       spent was less than its mana value » le lit sur cet instantané. */
+    P.lkis.set(o.id, {id: o.id, cid: o.cid, def: o.def, ctrl: o.ctrl, prop: o.prop, force: o.def.force, endurance: o.def.endurance, mots: o.def.mots,
+      types: o.def.types, sousTypes: o.def.sousTypes, couleurs: o.def.couleurs, marq: {}, jeton: o.jeton, cmd: o.cmd, att: null, zone: 'pile', lki: true,
+      caps: null, manaSort: o.manaSort, manaDe: o.manaDe, lance: o.lance, x: o.x || 0});
     retireDeLaPile(P, o.id);
     deplace(P, o.id, dest === 'bibliotheque' ? 'dessus' : dest);
     jn(P, `${o.def.nom} est contrecarré`);

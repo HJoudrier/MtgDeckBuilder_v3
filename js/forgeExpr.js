@@ -52,7 +52,10 @@ function caracForge(P, o, quoi) {
   const c = o.lki ? o : o.zone === 'champ' ? car(P, o) : o.def;
   if (quoi === 'CardPower') return c.force || 0;
   if (quoi === 'CardToughness') return c.endurance || 0;
-  if (quoi === 'CardManaCost') return mvDe(o);
+  /* Sur la pile, la valeur de mana compte X pour ce qu'on a payé. */
+  if (quoi === 'CardManaCost') return mvDe(o) + (o.zone === 'pile' ? (o.x || 0) * ((o.def.cout || {}).x || 0) : 0);
+  /* Le mana dépensé pour lancer ce sort, toutes couleurs (js/jeuMana.js `paieMana()`). */
+  if (quoi === 'CastTotalManaSpent') return Object.values(manaDepenseDe(o) || {}).reduce((s, n) => s + n, 0);
   return 0;
 }
 
@@ -156,7 +159,7 @@ forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$V
   'Count$ValidLibrary', 'Count$CardCounters', 'Count$CardPower', 'Count$CardToughness', 'Count$CardManaCost',
   'Count$YourLifeTotal', 'Count$CardsInYourHand', 'Count$InYourHand', 'Count$InYourGraveyard', 'TriggerCount$DamageAmount',
   'TriggerCount$Amount', 'TriggeredCard$CardPower', 'TriggeredCard$CardToughness', 'TriggeredCard$CardManaCost',
-  'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'ParentTargeted$CardPower',
+  'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'Targeted$CastTotalManaSpent', 'ParentTargeted$CastTotalManaSpent', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',
   'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ChosenNumber', 'Count$Domain', 'Count$Morbid', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',

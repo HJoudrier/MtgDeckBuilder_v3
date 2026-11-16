@@ -5112,6 +5112,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "caracForge",
     "compteDuTour",
     "conditionEntree",
     "exprEtendue"
@@ -5206,6 +5207,7 @@
     "infligeUnePart",
     "instantane",
     "jeuOpsA.js (chargement)",
+    "letalPour",
     "meilleureCibleHostile",
     "objetVue",
     "paieEquipage",
@@ -5287,6 +5289,7 @@
     "iaScrute",
     "infligeUnePart",
     "lanceDepuisEffet",
+    "letalPour",
     "notePrincipale",
     "peutBloquer",
     "sourcesMana",
@@ -5329,6 +5332,7 @@
     "impactCapacite",
     "impactSort",
     "infligeUnePart",
+    "letalPour",
     "meilleureCibleHostile",
     "objetVue",
     "paieAutreB",
@@ -6009,6 +6013,7 @@
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeEffetsH.js (chargement)",
+    "infligeAvecExces",
     "jeuOpsA.js (chargement)"
    ]
   },
@@ -9587,6 +9592,7 @@
    "chargement": false,
    "appelle": [
     "car",
+    "manaDepenseDe",
     "mvDe"
    ],
    "appelleDiffere": [],
@@ -9603,7 +9609,7 @@
   {
    "nom": "cibleForge",
    "fichier": "forgeExpr.js",
-   "ligne": 61,
+   "ligne": 64,
    "chargement": false,
    "appelle": [
     "passeOuPresent"
@@ -9617,7 +9623,7 @@
   {
    "nom": "objetEvt",
    "fichier": "forgeExpr.js",
-   "ligne": 70,
+   "ligne": 73,
    "chargement": false,
    "appelle": [
     "obj",
@@ -9638,7 +9644,7 @@
   {
    "nom": "agregeForge",
    "fichier": "forgeExpr.js",
-   "ligne": 79,
+   "ligne": 82,
    "chargement": false,
    "appelle": [
     "car",
@@ -9656,7 +9662,7 @@
   {
    "nom": "forgeExpression",
    "fichier": "forgeExpr.js",
-   "ligne": 94,
+   "ligne": 97,
    "chargement": false,
    "appelle": [
     "adversaires",
@@ -10432,7 +10438,7 @@
   {
    "nom": "cibleOuDefinis",
    "fichier": "forgeEffetsA.js",
-   "ligne": 163,
+   "ligne": 166,
    "chargement": false,
    "appelle": [
     "avecDefinisEnPlus",
@@ -10451,7 +10457,7 @@
   {
    "nom": "zoneForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 170,
+   "ligne": 173,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10469,7 +10475,7 @@
   {
    "nom": "deplaceForge",
    "fichier": "forgeEffetsA.js",
-   "ligne": 178,
+   "ligne": 181,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -10488,7 +10494,7 @@
   {
    "nom": "dansOrigine",
    "fichier": "forgeEffetsA.js",
-   "ligne": 191,
+   "ligne": 194,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10501,7 +10507,7 @@
   {
    "nom": "nombreIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 286,
+   "ligne": 289,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10516,7 +10522,7 @@
   {
    "nom": "quiIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 289,
+   "ligne": 292,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10550,6 +10556,7 @@
     "gagneVie",
     "genreMarqueur",
     "incontrecarrable",
+    "infligeAvecExces",
     "infligeDegats",
     "instantane",
     "jn",
@@ -10566,6 +10573,7 @@
     "retireDeLaPile",
     "sacrifie",
     "sourceDegats",
+    "varsDe",
     "vieReduite",
     "vivants",
     "zoneForge"
@@ -10629,9 +10637,41 @@
    ]
   },
   {
+   "nom": "letalPour",
+   "fichier": "forgeEffetsB.js",
+   "ligne": 66,
+   "chargement": false,
+   "appelle": [
+    "car",
+    "estCreature",
+    "estType"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "infligeAvecExces"
+   ]
+  },
+  {
+   "nom": "infligeAvecExces",
+   "fichier": "forgeEffetsB.js",
+   "ligne": 75,
+   "chargement": false,
+   "appelle": [
+    "infligeDegats",
+    "letalPour",
+    "varsDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsB.js (chargement)"
+   ]
+  },
+  {
    "nom": "detruitForge",
    "fichier": "forgeEffetsB.js",
-   "ligne": 104,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -10647,7 +10687,7 @@
   {
    "nom": "creeJetonsForge",
    "fichier": "forgeEffetsB.js",
-   "ligne": 153,
+   "ligne": 176,
    "chargement": false,
    "appelle": [
     "creeObjet",
@@ -11446,7 +11486,9 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsG.js (chargement)"
+    "forgeEffetsB.js (chargement)",
+    "forgeEffetsG.js (chargement)",
+    "infligeAvecExces"
    ]
   },
   {

@@ -43,7 +43,7 @@ const FORGE_DESCRIPTIFS = /Desc(ription)?$|^TgtPrompt$|^AI|^Stack|^Secondary$|^I
    la même chose d'un effet à l'autre, et qu'un effet ne doit être dit
    compris que pour les paramètres qu'il lit vraiment. */
 const FORGE_COMMUNS = new Set(['Cost', 'SubAbility', 'ValidTgts', 'TargetMin', 'TargetMax', 'TgtZone', 'TargetType', 'Defined',
-  'Optional', 'OptionalDecider', 'UnlessCost', 'UnlessPayer', 'UnlessSwitched', 'ConditionDefined', 'ConditionPresent',
+  'Optional', 'OptionalDecider', 'UnlessCost', 'UnlessPayer', 'UnlessSwitched', 'UnlessResolveSubs', 'ConditionDefined', 'ConditionPresent',
   'ConditionCompare', 'ConditionCheckSVar', 'ConditionSVarCompare', 'ConditionZone', 'ConditionPlayerTurn', 'Condition',
   'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones', 'ActivationPhases',
   'ForgetOtherRemembered', 'ForgetOtherTargets', 'TargetsWithSameController', 'TargetsWithDifferentControllers', 'DifferentNames', 'TargetsForEachPlayer',

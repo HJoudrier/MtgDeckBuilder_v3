@@ -134,6 +134,9 @@ function* executeForge(P, op, ctx) {
   }
   if (t.UnlessCost) {
     const paye = yield* paieUnlessForge(P, t, env);
+    /* « If they do, you create a Lander » : la suite ne se joue que si le coût
+       a été payé (`WhenPaid`), ou que s'il ne l'a pas été (`WhenNotPaid`). */
+    if ((t.UnlessResolveSubs === 'WhenPaid' && !paye) || (t.UnlessResolveSubs === 'WhenNotPaid' && paye)) ctx.coupe = op.chaine;
     if (paye === (t.UnlessSwitched !== 'True')) return;
   }
   /* Oublier avant de retenir : « forget all other remembered ». */

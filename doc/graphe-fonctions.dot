@@ -765,6 +765,8 @@ digraph appels {
     "fouilleForge" [label="fouilleForge", fillcolor="#6d8ca833", color="#6d8ca8"];
     "regardeForge" [label="regardeForge", fillcolor="#6d8ca833", color="#6d8ca8"];
     "sourceDegats" [label="sourceDegats", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "letalPour" [label="letalPour", fillcolor="#6d8ca833", color="#6d8ca8"];
+    "infligeAvecExces" [label="infligeAvecExces", fillcolor="#6d8ca833", color="#6d8ca8"];
     "detruitForge" [label="detruitForge", fillcolor="#6d8ca833", color="#6d8ca8"];
     "creeJetonsForge" [label="creeJetonsForge", fillcolor="#6d8ca833", color="#6d8ca8"];
   }
@@ -3651,6 +3653,7 @@ digraph appels {
   "objetsZone" -> "obj" [color="#a8846d99"];
   "caracForge" -> "car" [color="#a8846d99"];
   "caracForge" -> "mvDe" [color="#a8846d99"];
+  "caracForge" -> "manaDepenseDe" [color="#a8846d99"];
   "cibleForge" -> "passeOuPresent" [color="#a8846d99"];
   "objetEvt" -> "obj" [color="#a8846d99"];
   "objetEvt" -> "suit" [color="#a8846d99"];
@@ -3849,6 +3852,12 @@ digraph appels {
   "regardeForge" -> "deplace" [color="#6d8ca899"];
   "regardeForge" -> "retireDe" [color="#6d8ca899"];
   "sourceDegats" -> "forgeDefinis" [color="#6d8ca899"];
+  "letalPour" -> "estType" [color="#6d8ca899"];
+  "letalPour" -> "estCreature" [color="#6d8ca899"];
+  "letalPour" -> "car" [color="#6d8ca899"];
+  "infligeAvecExces" -> "letalPour" [color="#6d8ca899"];
+  "infligeAvecExces" -> "infligeDegats" [color="#6d8ca899"];
+  "infligeAvecExces" -> "varsDe" [color="#6d8ca899"];
   "detruitForge" -> "aMot" [color="#6d8ca899"];
   "detruitForge" -> "jn" [color="#6d8ca899"];
   "detruitForge" -> "detruitObjet" [color="#6d8ca899"];
@@ -3869,13 +3878,15 @@ digraph appels {
   "forgeEffetsB.js (chargement)" -> "emet" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "nombreIA" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "sourceDegats" [color="#6d8ca899"];
+  "forgeEffetsB.js (chargement)" -> "varsDe" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "ciblesForge" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "car" [color="#6d8ca899"];
-  "forgeEffetsB.js (chargement)" -> "infligeDegats" [color="#6d8ca899"];
+  "forgeEffetsB.js (chargement)" -> "infligeAvecExces" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "objetsZone" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "forgeValideObjet" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "vivants" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "forgeValideJoueur" [color="#6d8ca899"];
+  "forgeEffetsB.js (chargement)" -> "infligeDegats" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "descForge" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "gagneVie" [color="#6d8ca899"];
   "forgeEffetsB.js (chargement)" -> "quiIA" [color="#6d8ca899"];

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1715 fonctions**, 246 modules, 1778 Ko de JavaScript.
+**1717 fonctions**, 246 modules, 1781 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -77,13 +77,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 72 |
-| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 164 |
+| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 167 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 151 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 295 |
-| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 5 | 211 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, la | 13 | 298 |
+| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 234 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 172 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 196 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 137 |
@@ -1455,7 +1455,7 @@ Ce que les filtres de Forge deviennent pour. *4 fonctions, 72 lignes, 4.8 Ko.*
 
 ## js/forgeExpr.js
 
-Les quantités de Forge. *8 fonctions, 164 lignes, 9.4 Ko.*
+Les quantités de Forge. *8 fonctions, 167 lignes, 9.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1536,7 +1536,7 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, la. *13 fonctions, 295 lignes, 18 Ko.*
+Exécuter une capacité de Forge : le registre, la. *13 fonctions, 298 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1562,13 +1562,15 @@ Exécuter une capacité de Forge : le registre, la. *13 fonctions, 295 lignes, 1
 
 ## js/forgeEffetsB.js
 
-Les effets de Forge : regarder la bibliothèque,. *5 fonctions, 211 lignes, 13 Ko.*
+Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 234 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `fouilleForge(P, t, env, j)` | Fouiller le dessus d'une bibliothèque : en prendre, renvoyer le reste. |
 | `regardeForge(P, j, n, cimetiere)` | Regarder le dessus et en envoyer une part dessous (regard) ou au cimetière (surveillance). |
 | `sourceDegats(P, t, env)` | La source des dégâts : `DamageSource$`, sinon la source de la capacité. |
+| `letalPour(P, c)` | Ce qu'il faut pour tuer la cible : l'endurance moins les blessures déjà marquées, ou la loyauté. |
+| `infligeAvecExces(P, t, env, src, c, n)` | Infliger, et noter ce qui dépasse le létal : `ExcessSVar$ Excess` pose la somme dans la variable que lira `ConditionCheckSVar$ Excess` (« if excess damage was dealt this way »). |
 | `detruitForge(P, objets, sansRegeneration)` | Détruire : l'indestructible reste. |
 | `creeJetonsForge(P, defs, n0, qui, engage, env, retenir)` | Créer des jetons, d'après leurs scripts (`TokenScript$ b_2_2_zombie`). |
 
