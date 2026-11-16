@@ -60,6 +60,7 @@ js/                 modules, chargés dans cet ordre :
   jeuCaracteristiques.js  force, endurance, mots-clés du moment
   jeuCibles.js      juger un objet contre un descripteur
   jeuMana.js        la réserve, et le paiement automatique
+  jeuManaFiltres.js le mana qui coûte du mana : terrains-filtres, Cabal Coffers, Grinning Ignus — un complément du solveur de paiement
   jeuOpsA.js        exécuter les opérations : références, dégâts, vie, cartes, retraits
   jeuOpsB.js        jetons, marqueurs, pompes, recherches ; l'enchaînement
   jeuDeclencheurs.js  des évènements aux capacités déclenchées
@@ -1411,6 +1412,28 @@ payé (`manaDeSources`) et le mot-clé reçu (`motsPortes`). Le mana flottant d�
   `Optional$ True` se demande à la résolution (`remplacementsOptionnels()`), et `ExiledWithEffectSource$`
   range la carte exilée parmi celles de la source (`o.exileAvec`, lu par `deplace()`), que le second
   pouvoir retrouve par `ExiledWith`.
+
+**Le mana qui coûte du mana** (lot F58, `js/jeuManaFiltres.js`). *Grinning Ignus* (« {R}, renvoyez-le en
+main : ajoutez {C}{C}{R}, comme un rituel »), les terrains-filtres (Mystic Gate, Twilight Mire…),
+Cabal Coffers, Pili-Pala : une capacité de mana dont le coût demande du mana. Le solveur de
+`js/jeuMana.js` n'apparie que des sources sans coût de mana, et il est resté tel quel — c'est ce qui
+garantit qu'un paiement qui réussissait réussit à l'identique : un test différentiel, quatre cents
+plateaux et coûts tirés au hasard contre le moteur d'avant, rend les mêmes plans, les mêmes réserves
+et les mêmes terrains engagés. Le filtre n'entre en jeu que si le solveur échoue :
+- **le plan** : on essaie un filtre, puis deux, avec chacune de leurs options. Ce que le filtre produit
+  réduit le besoin (`coutMoins()`), ce qu'il coûte s'y ajoute, et le solveur paie le tout avec les
+  sources simples, hors le permanent du filtre (`EXCLUS_MANA`). Le coût du filtre n'est donc jamais payé
+  avant l'assurance du paiement ;
+- **l'exécution** (`paieMana()`) : les sources simples versent leur mana, puis chaque filtre s'active —
+  engagé, renvoyé en main (`Return<1/CARDNAME>`) — et verse le sien ; le coût des filtres est retiré avec
+  celui du sort d'un seul tenant, pour que le générique d'un filtre ne mange pas une couleur dont le sort
+  a besoin. Le mana dépensé pour un sort (`manaSort`, Unravel, la convergence) ne compte pas ce que les
+  filtres ont dépensé pour s'activer ;
+- **le rythme d'un rituel** (`SorcerySpeed$` d'une capacité de mana) : le filtre ne sert qu'en phase
+  principale, pile vide.
+Profondeur bornée à deux : un filtre qui en nourrit un autre au-delà n'est pas cherché. Deux défauts
+plus anciens, vus en chemin : `Combo B G | Amount$ 2` ne donnait que `BB` ou `GG`, jamais `BG`
+(`multiensembles()`), et un `Return<1/CARDNAME>` dans un coût de mana faisait refuser la capacité.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

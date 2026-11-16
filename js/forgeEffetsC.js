@@ -79,9 +79,16 @@ function optionsMana(produit, montant) {
   /* « Two mana of different colors » : chaque combinaison de n couleurs. */
   if (p === 'Combo AnyDifferent') return combinaisons(['W', 'U', 'B', 'R', 'G'], Math.min(n, 5)).map(l => l.join(''));
   const m = /^Combo (.+)$/.exec(p);
-  if (m) return m[1].split(/\s+/).filter(k => /^[WUBRGC]$/.test(k)).map(k => k.repeat(n));
+  /* « Add {B}{B}, {B}{G} or {G}{G} » (un terrain-filtre) : chaque mana se choisit, le mélange en est un. */
+  if (m) { const ls = m[1].split(/\s+/).filter(k => /^[WUBRGC]$/.test(k)); return ls.length > 1 && n > 1 ? multiensembles(ls, n).map(l => l.join('')) : ls.map(k => k.repeat(n)); }
   const lettres = p.split(/\s+/).filter(k => /^[WUBRGC]$/.test(k));
   return lettres.length ? [lettres.join('').repeat(n)] : [];
+}
+
+/* Les façons de tirer k éléments de l, répétitions permises, sans compter l'ordre. */
+function multiensembles(l, k) {
+  if (!k) return [[]];
+  return l.flatMap((x, i) => multiensembles(l.slice(i), k - 1).map(r => [x, ...r]));
 }
 
 function combinaisons(l, k) {

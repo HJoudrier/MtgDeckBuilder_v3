@@ -52,6 +52,7 @@
   "jeuVariantesB.js",
   "jeuCoutsB.js",
   "jeuCoutsX.js",
+  "jeuManaFiltres.js",
   "jeuDurees.js",
   "jeuFaces.js",
   "jeuFacesB.js",
@@ -3115,6 +3116,7 @@
     "defFaceCachee",
     "defJetonCreature",
     "definitionDepuisScript",
+    "filtresMana",
     "forgeEffetsG.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "jetonSimple",
@@ -4314,6 +4316,7 @@
     "actionsPossibles",
     "actionsPrepare",
     "activeCapacite",
+    "activeFiltre",
     "appliqueSBA",
     "assezDeControleurs",
     "attaquantImpose",
@@ -4381,6 +4384,7 @@
     "exertsAttaque",
     "exhumeesFin",
     "exprDesignations",
+    "filtresMana",
     "finCombat",
     "finDuTour",
     "flashPossible",
@@ -4428,6 +4432,7 @@
     "initiativeEnJeu",
     "initiativeVolee",
     "jeuFacesB.js (chargement)",
+    "jeuManaFiltres.js (chargement)",
     "jeuOpsB.js (chargement)",
     "jeuVariantes.js (chargement)",
     "joueTerrain",
@@ -4600,6 +4605,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activeFiltre",
     "appliqueSBA",
     "complote",
     "copiesFin",
@@ -4976,6 +4982,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activeFiltre",
     "declareAttaquants",
     "forgeEffetsC.js (chargement)",
     "forgeManaB.js (chargement)",
@@ -5376,6 +5383,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "coutAutrePossible",
+    "filtresMana",
     "sourcesMana"
    ]
   },
@@ -5620,7 +5628,7 @@
   {
    "nom": "identiteJoueur",
    "fichier": "jeuMana.js",
-   "ligne": 19,
+   "ligne": 20,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5632,7 +5640,7 @@
   {
    "nom": "manaPermis",
    "fichier": "jeuMana.js",
-   "ligne": 30,
+   "ligne": 31,
    "chargement": false,
    "appelle": [
     "forgeFiltre",
@@ -5642,6 +5650,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "filtresMana",
     "manaPorte",
     "sourcesMana"
    ]
@@ -5649,7 +5658,7 @@
   {
    "nom": "sourcesMana",
    "fichier": "jeuMana.js",
-   "ligne": 40,
+   "ligne": 41,
    "chargement": false,
    "appelle": [
     "activationInterdite",
@@ -5671,6 +5680,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeManaB.js (chargement)",
+    "jeuManaFiltres.js (chargement)",
     "manaDispo",
     "planPaiement",
     "scoreTerrain"
@@ -5679,7 +5689,7 @@
   {
    "nom": "couleursParmi",
    "fichier": "jeuMana.js",
-   "ligne": 88,
+   "ligne": 89,
    "chargement": false,
    "appelle": [
     "car",
@@ -5695,7 +5705,7 @@
   {
    "nom": "compteObjets",
    "fichier": "jeuMana.js",
-   "ligne": 96,
+   "ligne": 97,
    "chargement": false,
    "appelle": [
     "correspond",
@@ -5705,6 +5715,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "executeOps",
+    "filtresMana",
     "sourcesMana",
     "valeur"
    ]
@@ -5712,7 +5723,7 @@
   {
    "nom": "planPaiement",
    "fichier": "jeuMana.js",
-   "ligne": 105,
+   "ligne": 106,
    "chargement": false,
    "appelle": [
     "sourcesMana"
@@ -5727,6 +5738,7 @@
     "executeForge",
     "forgeChoix.js (chargement)",
     "forgeDegagements.js (chargement)",
+    "jeuManaFiltres.js (chargement)",
     "jeuVariantes.js (chargement)",
     "maxX",
     "paieMana",
@@ -5742,7 +5754,7 @@
   {
    "nom": "manaDispo",
    "fichier": "jeuMana.js",
-   "ligne": 161,
+   "ligne": 162,
    "chargement": false,
    "appelle": [
     "sourcesMana"
@@ -5760,12 +5772,13 @@
   {
    "nom": "ajouteMana",
    "fichier": "jeuMana.js",
-   "ligne": 166,
+   "ligne": 167,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activeFiltre",
     "forgeEffetsC.js (chargement)",
     "forgeManaB.js (chargement)",
     "jeuOpsB.js (chargement)",
@@ -5775,7 +5788,7 @@
   {
    "nom": "debite",
    "fichier": "jeuMana.js",
-   "ligne": 174,
+   "ligne": 175,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5787,17 +5800,20 @@
   {
    "nom": "paieMana",
    "fichier": "jeuMana.js",
-   "ligne": 189,
+   "ligne": 190,
    "chargement": false,
    "appelle": [
+    "activeFiltre",
     "ajouteMana",
     "car",
     "debite",
     "deplace",
     "engageObjet",
     "manaPorte",
+    "manaSortSansFiltres",
     "obj",
-    "planPaiement"
+    "planPaiement",
+    "sommeMana"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5820,7 +5836,7 @@
   {
    "nom": "videReserves",
    "fichier": "jeuMana.js",
-   "ligne": 222,
+   "ligne": 227,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5834,7 +5850,7 @@
   {
    "nom": "manaReflete",
    "fichier": "jeuMana.js",
-   "ligne": 229,
+   "ligne": 234,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -6416,6 +6432,7 @@
    "appeleePar": [
     "actionsLegales",
     "actionsPossibles",
+    "filtresMana",
     "iaPriorite",
     "sortInterdit"
    ]
@@ -6955,6 +6972,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "activeFiltre",
     "coutDesModes",
     "coutPermis",
     "coutSort",
@@ -6965,6 +6983,8 @@
     "hausseDeCout",
     "jeuVariantes.js (chargement)",
     "modesPayables",
+    "paieMana",
+    "planAvecFiltres",
     "variantesEtendues",
     "variantesLancement",
     "variantesOptionnelles",
@@ -7556,6 +7576,117 @@
    ]
   },
   {
+   "nom": "chargement du module",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "aUnFiltre",
+    "obj",
+    "planAvecFiltres"
+   ],
+   "appelleDiffere": [
+    "planPaiement",
+    "sourcesMana"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "aUnFiltre",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": 28,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "filtresMana",
+    "jeuManaFiltres.js (chargement)"
+   ]
+  },
+  {
+   "nom": "filtresMana",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "aUnFiltre",
+    "activationInterdite",
+    "capacitesDe",
+    "compteObjets",
+    "coutManaVide",
+    "enPhasePrincipale",
+    "forgeNombre",
+    "manaPermis",
+    "obj",
+    "peutEngagerSoi"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "planAvecFiltres"
+   ]
+  },
+  {
+   "nom": "coutMoins",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": 77,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "planAvecFiltres"
+   ]
+  },
+  {
+   "nom": "planAvecFiltres",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": 91,
+   "chargement": false,
+   "appelle": [
+    "coutMoins",
+    "filtresMana",
+    "sommeMana"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "jeuManaFiltres.js (chargement)"
+   ]
+  },
+  {
+   "nom": "activeFiltre",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": 118,
+   "chargement": false,
+   "appelle": [
+    "ajouteMana",
+    "deplace",
+    "engageObjet",
+    "obj",
+    "sommeMana"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "paieMana"
+   ]
+  },
+  {
+   "nom": "manaSortSansFiltres",
+   "fichier": "jeuManaFiltres.js",
+   "ligne": 129,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "paieMana"
+   ]
+  },
+  {
    "nom": "durees",
    "fichier": "jeuDurees.js",
    "ligne": 23,
@@ -7689,6 +7820,7 @@
     "activeCapacite",
     "collecteDeclencheurs",
     "declencheursEtat",
+    "filtresMana",
     "forgeActivations.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "iaReponse",
@@ -9526,6 +9658,7 @@
     "coutEquipement",
     "coutUnless",
     "coutsForge",
+    "filtresMana",
     "forgeChoix.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
     "forgeCopies.js (chargement)",
@@ -10836,7 +10969,8 @@
    "ligne": 76,
    "chargement": false,
    "appelle": [
-    "combinaisons"
+    "combinaisons",
+    "multiensembles"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -10847,9 +10981,21 @@
    ]
   },
   {
+   "nom": "multiensembles",
+   "fichier": "forgeEffetsC.js",
+   "ligne": 89,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "optionsMana"
+   ]
+  },
+  {
    "nom": "combinaisons",
    "fichier": "forgeEffetsC.js",
-   "ligne": 87,
+   "ligne": 94,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -13104,6 +13250,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "actionsLegales",
+    "filtresMana",
     "forgeActivations.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeEffetsI.js (chargement)",
@@ -15219,7 +15366,7 @@
   {
    "nom": "declencheurForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 153,
+   "ligne": 154,
    "chargement": false,
    "appelle": [
     "effetForge",
@@ -15245,7 +15392,7 @@
   {
    "nom": "remplacementForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 174,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "entreeForge",
@@ -15262,7 +15409,7 @@
   {
    "nom": "entreeForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 183,
+   "ligne": 184,
    "chargement": false,
    "appelle": [
     "descForge",
@@ -15278,7 +15425,7 @@
   {
    "nom": "couleursForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 215,
+   "ligne": 216,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -15290,7 +15437,7 @@
   {
    "nom": "definitionDepuisScript",
    "fichier": "forgeDefinition.js",
-   "ligne": 223,
+   "ligne": 224,
    "chargement": false,
    "appelle": [
     "capaciteForge",
@@ -15322,7 +15469,7 @@
   {
    "nom": "definitionForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 265,
+   "ligne": 266,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",
@@ -15338,7 +15485,7 @@
   {
    "nom": "nomsJetonsForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 272,
+   "ligne": 273,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -15350,7 +15497,7 @@
   {
    "nom": "definitionAFaces",
    "fichier": "forgeDefinition.js",
-   "ligne": 287,
+   "ligne": 288,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",

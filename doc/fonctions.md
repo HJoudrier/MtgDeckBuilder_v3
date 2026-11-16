@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1722 fonctions**, 249 modules, 1793 Ko de JavaScript.
+**1729 fonctions**, 250 modules, 1800 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -51,7 +51,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 69 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 148 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 238 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 243 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 223 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 181 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
@@ -62,6 +62,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
 | [`jeuCoutsX.js`](#jsjeucoutsxjs) | Les coûts dont la quantité est X, et ceux qui | 10 | 127 |
+| [`jeuManaFiltres.js`](#jsjeumanafiltresjs) | Le mana qui coûte du mana : les filtres | 6 | 139 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 158 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 139 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
@@ -85,7 +86,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 202 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 234 |
-| [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 5 | 172 |
+| [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 179 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 196 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 141 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 164 |
@@ -114,7 +115,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 276 |
 | [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 287 |
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
-| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 301 |
+| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 302 |
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
@@ -1001,7 +1002,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.8 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *12 fonctions, 238 lignes, 12 Ko.*
+La réserve de mana, et le paiement automatique. *12 fonctions, 243 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1205,6 +1206,23 @@ Les coûts dont la quantité est X, et ceux qui. *10 fonctions, 127 lignes, 6.2 
 | Donnée | Rôle |
 |---|---|
 | `CHAMPS_X` | Les champs d'un coût qui peuvent valoir X : direct, ou `.n`. |
+
+## js/jeuManaFiltres.js
+
+Le mana qui coûte du mana : les filtres. *6 fonctions, 139 lignes, 6.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `aUnFiltre(d)` | Les permanents qu'on contrôle et qui portent un filtre, relevés une fois par définition. |
+| `filtresMana(P, j, pour)` | Les filtres utilisables maintenant : `{id, cout, options, engage, renvoie}`. |
+| `coutMoins(cout, produit, x)` | Le coût, X plié dans le générique, moins ce que produit un filtre : une lettre paie sa couleur, sinon un hybride qui la contient, sinon le générique ; le reste est perdu. |
+| `planAvecFiltres(P, j, cout, x, pour, base)` | Le plan d'un paiement qui passe par un ou deux filtres, ou `null`. |
+| `activeFiltre(P, j, s, option, sup)` | Activer un filtre : son coût hors mana, puis son mana dans la réserve. |
+| `manaSortSansFiltres(depense, sup)` | Le mana qu'un sort a coûté, hors ce que ses filtres ont dépensé pour s'activer : le coût d'un filtre n'est pas du mana dépensé pour le sort. |
+
+| Donnée | Rôle |
+|---|---|
+| `EXCLUS_MANA` | Ce que le solveur doit ignorer le temps d'un essai : le permanent dont le filtre est déjà pris pour payer. |
 
 ## js/jeuDurees.js
 
@@ -1589,7 +1607,7 @@ Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 234 lignes, 15 K
 
 ## js/forgeEffetsC.js
 
-Les effets de Forge : pompes, engagements, mana,. *5 fonctions, 172 lignes, 11 Ko.*
+Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 179 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1597,6 +1615,7 @@ Les effets de Forge : pompes, engagements, mana,. *5 fonctions, 172 lignes, 11 K
 | `bonusIA(v)` | Un `+3` ou un `-X` de Forge, pour l'IA. |
 | `pompeForge(P, objets, t, env)` | Poser un bonus sur des objets du champ. |
 | `optionsMana(produit, montant)` | Les options d'un `Produced$` : `G`, `C`, `Combo W U`, `Any`, `W W`. |
+| `multiensembles(l, k)` | Les façons de tirer k éléments de l, répétitions permises, sans compter l'ordre. |
 | `combinaisons(l, k)` | — |
 
 | Donnée | Rôle |
@@ -2122,7 +2141,7 @@ Les auras de joueur, Bestow, Reconfigure. *3 fonctions, 103 lignes, 5.6 Ko.*
 
 ## js/forgeDefinition.js
 
-D'un script de Forge à une définition de jeu. *13 fonctions, 301 lignes, 17 Ko.*
+D'un script de Forge à une définition de jeu. *13 fonctions, 302 lignes, 17 Ko.*
 
 | Fonction | Rôle |
 |---|---|
