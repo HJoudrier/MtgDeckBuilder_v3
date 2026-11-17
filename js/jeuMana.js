@@ -9,7 +9,8 @@
    les accélérateurs, un Trésor qu'il faut sacrifier en dernier.
 
    Les capacités de mana qui coûtent elles-mêmes du mana (filtres, Signets)
-   ne servent pas au solveur : simplification annoncée.
+   ne servent pas à ce solveur : js/jeuManaFiltres.js le complète quand il
+   échoue.
    ===================================================================== */
 
 const LETTRES_MANA = ['W', 'U', 'B', 'R', 'G', 'C'];
@@ -42,7 +43,7 @@ function sourcesMana(P, j, pour) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
-    let options = null, rang = 0, sac = false, vie = 0, reste = false, nonContre = [];
+    let options = null, rang = 0, sac = false, vie = 0, reste = false, nonContre = [], portes = [];
     for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
@@ -50,7 +51,7 @@ function sourcesMana(P, j, pour) {
       const c = k.cout;
       if (c.mana && c.mana.total > 0) continue;
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
-        c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || coutSpecial(c)) continue;
+        c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || c.renvoieSoi || coutSpecial(c)) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.vie && P.joueurs[j].vie <= c.vie) continue;
       let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.reflete ? manaReflete(P, j, o, k)
@@ -68,6 +69,7 @@ function sourcesMana(P, j, pour) {
       }
       options = (options || []).concat(opts);
       if (k.sansContre) nonContre.push(...opts);
+      if (k.porte) portes.push({opts, porte: k.porte});
       if (c.sacSoi) sac = true;
       if (c.vie) vie = c.vie;
       if (k.resteEngage) reste = true;
@@ -76,7 +78,7 @@ function sourcesMana(P, j, pour) {
     /* Une source qui ne se dégagera pas passe après les autres. */
     rang = (estType(o, 'land') ? 0 : sac ? 3 : estCreature(o) ? 2 : 1) + (reste ? 2 : 0);
     const couleurs = [...new Set(options.join('').split(''))];
-    r.push({id, options, rang, sac, vie, reste, couleurs, cap: Math.max(...options.map(s => s.length)), ...(nonContre.length ? {nonContre} : {})});
+    r.push({id, options, rang, sac, vie, reste, couleurs, cap: Math.max(...options.map(s => s.length)), ...(nonContre.length ? {nonContre} : {}), ...(portes.length ? {portes} : {})});
   }
   r.sort((a, b) => a.rang - b.rang || a.couleurs.length - b.couleurs.length);
   return r;
@@ -193,6 +195,8 @@ function paieMana(P, j, cout, x, pour) {
      l'engagement ou le sacrifice (« three or more mana from creatures »). */
   const de = {creature: 0, artifact: 0, treasure: 0};
   for (const {s, option} of plan) {
+    /* Les filtres s'activent après les sources simples (js/jeuManaFiltres.js). */
+    if (s.filtre) continue;
     const o = obj(P, s.id);
     if (!o) continue;
     const n = typeof option === 'string' ? option.length : 1, c = o.zone === 'champ' ? car(P, o) : o.def;
@@ -200,6 +204,8 @@ function paieMana(P, j, cout, x, pour) {
     if ((c.sousTypes || []).includes('treasure')) de.treasure += n;
     /* Une source de la main s'exile (js/forgeManaB.js). */
     if (s.main) { deplace(P, s.id, 'exil'); ajouteMana(P, j, option); continue; }
+    /* Ce que ce mana donne au sort (js/forgeManaC.js) : d'où il vient, et ce qu'il accorde. */
+    if (pour && pour.sort) { manaPorte(P, j, s, option, pour); }
     engageObjet(P, o, option || true);
     if (s.nonContre && s.nonContre.includes(option) && pour && pour.sort) pour.sort.nonContrable = true;
     if (s.reste) o.exerce = true;
@@ -207,11 +213,13 @@ function paieMana(P, j, cout, x, pour) {
     if (s.sac) deplace(P, s.id, 'cimetiere');
     ajouteMana(P, j, option);
   }
+  let sup = null;
+  for (const {s, option} of plan) if (s.filtre) sup = activeFiltre(P, j, s, option, sup);
   const avant = LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0), reserve = {...J.pool};
-  if (!debite(J.pool, cout, x)) return false;
+  if (!debite(J.pool, sup ? sommeMana(cout, sup) : cout, x)) return false;
   J.stats.manaDepense += avant - LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
   /* Le mana dépensé pour un sort, couleur par couleur (convergence). */
-  if (pour && pour.sort) { pour.sort.manaSort = Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]])); pour.sort.manaDe = de; }
+  if (pour && pour.sort) { pour.sort.manaSort = manaSortSansFiltres(Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]])), sup); pour.sort.manaDe = de; }
   return true;
 }
 

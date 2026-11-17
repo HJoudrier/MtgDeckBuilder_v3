@@ -46,6 +46,8 @@ function secondeFendue(P) { return P.pile.some(it => it.sort && it.def && it.def
 /* Où va un sort résolu : l'exil pour le flashback et le jump-start, et
    pour le rebound s'il vient de la main. */
 function exileApresResolution(item) {
+  /* Paradigm : la première résolution l'exile, d'où elle offre une copie chaque tour. */
+  if (item.def.paradigme) return true;
   if (item.depuis === 'cimetiere') return !['permis', 'escape', 'retrace', 'mayhem'].includes(item.variante);
   return item.depuis === 'main' && !!item.def.rebond;
 }

@@ -14,6 +14,7 @@ function gestesSimulation(act, b) {
     case 'simAjoutAdv': ouvreAdversaire(null); return true;
     case 'simModifAdv': ouvreAdversaire(b.dataset.adv); return true;
     case 'simEnregistrerAdv': enregistreAdversaireFenetre(b.dataset.adv || null); return true;
+    case 'simInconnues': ouvreInconnues(b.dataset.adv); return true;
     case 'simSupprAdv': supprimeAdversaire(b.dataset.adv); return true;
     case 'simSupprAdvOui': supprimeAdversaireOui(b.dataset.adv); return true;
     case 'simMajLien': verifieUnDeckLie(b.dataset.adv); return true;

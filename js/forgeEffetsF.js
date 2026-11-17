@@ -26,8 +26,20 @@ function etendEffet(api, params, avant, apres) {
 
 /* « At the beginning of the next end step, sacrifice / exile it » : le
    départ que js/forgeCopies.js `copiesFin()` joue à l'étape de fin. */
-function finEtapeForge(objets, v) {
-  objets.filter(o => o && o.zone === 'champ' && !o.lki).forEach(o => { o.finEtape = v === 'Exile' ? 'exil' : 'sacrifice'; });
+function finEtapeForge(objets, v, cond) {
+  objets.filter(o => o && o.zone === 'champ' && !o.lki).forEach(o => {
+    o.finEtape = v === 'Exile' ? 'exil' : 'sacrifice';
+    o.finEtapeSi = cond || null;
+  });
+}
+
+/* « … unless you have the city's blessing » (`AtEOTCondition$ Y`) : la SVar
+   se juge à l'étape de fin, avec la face, le contrôleur et la source de
+   l'effet qui a posé le départ. Le départ n'a lieu que si elle vaut plus
+   de zéro. */
+function conditionFinEtape(P, t, env) {
+  if (!t.AtEOTCondition) return null;
+  return {expr: (env.face && env.face.svars[t.AtEOTCondition]) || t.AtEOTCondition, face: env.face, ctrl: env.ctrl, srcId: env.src ? env.src.id : null};
 }
 
 /* Entrer « tapped and attacking » : dans le combat en cours, contre le
@@ -51,9 +63,9 @@ FORGE_API.Pump.gen = (g => function* (P, t, env) {
 FORGE_API.PumpAll.prepare = t => !t.PumpZone || t.PumpZone === 'Battlefield';
 forgeSait('param', 'PumpAll.PumpZone');
 
-etendEffet('Token', ['TokenAttacking', 'AtEOT'], null, function* (P, t, env, touches, nouveaux) {
+etendEffet('Token', ['TokenAttacking', 'AtEOT', 'AtEOTCondition'], null, function* (P, t, env, touches, nouveaux) {
   if (t.TokenAttacking === 'True') nouveaux.forEach(o => entreAttaquant(P, o, env));
-  if (t.AtEOT) finEtapeForge(nouveaux, t.AtEOT);
+  if (t.AtEOT) finEtapeForge(nouveaux, t.AtEOT, conditionFinEtape(P, t, env));
 });
 
 etendEffet('ChangeZone', ['Attacking', 'AtRandom', 'AttachedTo', 'AtEOT'], null, function* (P, t, env, touches, nouveaux) {

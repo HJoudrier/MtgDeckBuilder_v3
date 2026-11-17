@@ -60,6 +60,7 @@ js/                 modules, chargés dans cet ordre :
   jeuCaracteristiques.js  force, endurance, mots-clés du moment
   jeuCibles.js      juger un objet contre un descripteur
   jeuMana.js        la réserve, et le paiement automatique
+  jeuManaFiltres.js le mana qui coûte du mana : terrains-filtres, Cabal Coffers, Grinning Ignus — un complément du solveur de paiement
   jeuOpsA.js        exécuter les opérations : références, dégâts, vie, cartes, retraits
   jeuOpsB.js        jetons, marqueurs, pompes, recherches ; l'enchaînement
   jeuDeclencheurs.js  des évènements aux capacités déclenchées
@@ -91,7 +92,8 @@ js/                 modules, chargés dans cet ordre :
   forgeDefini.js    ce que `Defined$` désigne (`Targeted`, `Remembered`, `TriggeredCard`…)
   forgeDesignations.js  ce que Forge désigne encore : joueurs retenus, dessus de la bibliothèque, monarque, marqueurs d'un joueur, monstrueux
   forgeCout.js      lire un coût de Forge (`2 R T Sac<1/CARDNAME>`)
-  forgeEffetsA.js   le registre des effets, la porte `executeForge()`, zones et cartes
+  forgeEffetsA.js   le registre des effets, zones et cartes
+  forgeExecute.js   la porte `executeForge()` : conditions, coût payé en route, « may », « unless pays », mémoire de la carte
   forgeEffetsB.js   bibliothèque, dégâts et vie, retraits, jetons et marqueurs
   forgeEffetsC.js   pompes, engagements, mana, combats, contrôle, mémoire, réflexes
   forgeEffetsD.js   régénération, effets temporaires, déclencheurs retardés, capacités accordées
@@ -123,6 +125,8 @@ js/                 modules, chargés dans cet ordre :
   forgeMemoire.js   la mémoire, II : nombres retenus, instantanés, partages de type, aura qui réanime, déclencheurs statiques
   forgeModes.js     les modes qu'on paie (Spree, Tiered, Escalate), le mode retenu des Sièges
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
+  forgeManaC.js     le mana qui porte quelque chose : un mot-clé au sort qu'il paie, « when you spend this mana », le remplacement optionnel
+  forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
   forgeActivations.js  la mise sous tension (PowerUp), lancer une copie pour un autre coût, le mana venu de créatures, Count$YourTurns
@@ -1320,6 +1324,116 @@ Deux défauts plus anciens corrigés en chemin :
   scripts l'écrivent ainsi ;
 - **l'IA jugeait amical « exiler une carte ciblée d'un cimetière »**, et ne visait donc jamais le
   cimetière adverse.
+
+**Cinq cartes demandées, et une couverture plus honnête** (lot F52). Chacune manquait d'un élément :
+- *Raise the Palisade*, le filtre `IsNotChosenType` ;
+- *Run Away Together*, `TargetsWithDifferentControllers$` : une cible par joueur. Le choix des cibles
+  range les candidats en tournante d'un joueur à l'autre — la réponse par défaut respecte donc la
+  restriction —, refuse un choix que la restriction a réduit sous le minimum, et `effetCiblable()` compte
+  les joueurs, non les créatures : sans créature adverse, le sort n'est pas proposé ;
+- *Master of Barbs*, le mode `DamageAll`, jugé comme `DamageDone` et joué une fois par lot
+  (`MODES_PAR_LOT`) ;
+- *Ashcloud Phoenix*, `ChangeZone | FaceDown$` : l'objet entre par `metEnJeu()` face cachée, comme un
+  manifesté, et se retourne pour son coût de Morph ;
+- *Hands of Binding*, `KW$ HIDDEN This card doesn't untap during your next untap step.` : le drapeau
+  `o.exerce` que consomme `degagement()`, sans bonus posé.
+
+**`KW$` ne se perd plus en silence.** `motsForge()` ne connaît que dix-sept mots simples ; tout autre
+`KW$` d'une pompe était jeté, et la carte passait pour complète en perdant un morceau de son texte
+(Hands of Binding, mais aussi « can't block »). La couverture compte désormais chaque valeur
+(`kwval:…`) ; `forgeSait('kwval', …)` inscrit ce que le moteur lit. Sur un échantillon de huit cent
+soixante cartes tirées des éditions récentes, huit cartes sont repassées de complète à partielle ou
+injouable, toutes à raison.
+
+**Les suites qui dépendent de ce qui vient de se passer** (lot F53). Trois cartes, trois façons de lire
+le résultat de l'effet précédent :
+- *Divert Disaster*, `UnlessResolveSubs$ WhenPaid` : la suite d'un « unless pays » ne se joue que si le
+  coût a été payé (`WhenNotPaid` pour l'inverse). `executeForge()` coupe la chaîne par `ctx.coupe`, comme
+  pour un coût refusé ;
+- *Unravel*, `Targeted$CastTotalManaSpent` : le sort contrecarré change d'objet en quittant la pile, et son
+  mana dépensé ne le suit pas. `Counter` en garde donc un instantané dans `P.lkis`, que `caracForge()`
+  lit ; sur la pile, la valeur de mana compte X pour ce qu'on a payé. Un sort lancé sans payer a dépensé
+  zéro ;
+- *Orbital Plunge*, `DealDamage | ExcessSVar$` : l'excès — les dégâts réellement infligés moins ce qu'il
+  fallait pour tuer, endurance moins blessures marquées, ou loyauté — se range dans `ctx.vars`, que lit
+  `ConditionCheckSVar$`. Un joueur n'a pas de seuil. Le Lander est un jeton comme les autres.
+
+**Les copies qui attaquent, et le départ conditionnel** (lot F54). Trois cartes autour du jeton qui entre
+engagé et attaquant, puis part à l'étape de fin :
+- *Redoubled Stormsinger*, `CopyPermanent | TokenTapped$ | TokenAttacking$` : la copie réutilise
+  `entreAttaquant()`, celle de `Token | TokenAttacking$` — dans le combat en cours, contre le défenseur de la
+  source, sans être déclarée, donc sans déclencheur d'attaque ;
+- *Electroduplicate*, `AtEOTTrig$ Sacrifice` : le même départ que `AtEOT$`, que le jeton porte comme
+  capacité chez Forge ;
+- *Tilonalli's Summoner*, `Token | AtEOTCondition$ Y` : le départ garde la face, le contrôleur et la
+  source (`o.finEtapeSi`), et `copiesFin()` juge la SVar à l'étape de fin ; fausse, le jeton reste et le
+  départ est oublié. `Count$Blessing.0.1` se lit comme les autres formes `a.b`.
+
+Un coût payé au milieu d'une chaîne (`AB$ Token | Cost$ X R` dans un déclencheur, `coutInterne`) payait
+X à zéro : X se choisit désormais au moment de payer (question `x`, par défaut le maximum), alimente
+`Count$xPaid` et se paie par `paieMana()`.
+
+**Exiler le dessus, lancer gratuitement, et Paradigm** (lot F55, `js/forgeParadigme.js`) :
+- *Muse Vortex*, `ChangeZoneAll | ForgetChanged$` : ce qui vient de bouger n'est plus retenu, si bien que
+  la table suivante ne vise que le reste ; `RandomOrder$` tire l'ordre du dessous de la bibliothèque ;
+- *Improvisation Capstone*, `DigUntil | MinTotalCMC$` : on s'arrête quand la valeur de mana de ce
+  qu'on a trouvé atteint le seuil, non quand on en a trouvé un nombre ; avec ce seuil,
+  `RememberRevealed$` retient aussi les cartes trouvées. Les artefacts et les créatures exilés sont des
+  sorts : `Play` les lance gratuitement comme les autres ;
+- **Paradigm**, un rebound qui ne s'épuise pas : la première résolution exile la carte et la marque
+  (`o.paradigme`, posé par `resoudre()`, voulu par `exileApresResolution()`), et le début de la première
+  principale de son propriétaire propose une copie gratuite (`paradigmesDebutPrincipale()`, appelée par
+  `etape()`). La copie est un jeton de sort, comme celle de Cipher : elle disparaît, la carte reste.
+
+`js/forgeEffetsA.js` dépassait trois cents lignes : la porte `executeForge()` et ce qui la sert
+(`paieUnlessForge()`, la mémoire de la carte, les paramètres qui retiennent) sont passés dans
+`js/forgeExecute.js`.
+
+**Une offre tentante** (lot F56). *Tempt with Vengeance* — et toute la famille « Tempt with… » — tient
+dans `RepeatEach | RepeatOptionalForEachPlayer$` : chaque joueur de la boucle répond pour lui seul
+(question `oui`, posée à l'adversaire, pas au lanceur ; l'IA accepte), et celui qui refuse ne passe pas
+par la sous-capacité. Le compte des accepteurs se fait par `StoreSVar`, dont la valeur doit passer
+**avant** la SVar écrite (`Y: Number$0`) : `forgeNombre()` lisait l'écrite d'abord, si bien que le
+compte restait à zéro ; il suit désormais l'ordre de `forgeExpression()`. Autre manque : l'opérande
+d'une opération (`/Times.Y`) peut être le nom d'une SVar, non seulement un nombre.
+
+**Le mana qui porte quelque chose** (lot F57, `js/forgeManaC.js`). Un mana peut donner au sort qu'il
+paie. Comme `AddsNoCounter$` (le mana de Cavern of Souls), la source le sait à la construction de sa
+capacité, et `paieMana()` le transmet au sort (`manaPorte()`) : le sort retient les sources qui l'ont
+payé (`manaDeSources`) et le mot-clé reçu (`motsPortes`). Le mana flottant déjà en réserve ne porte rien.
+- *Carnelian Orb of Dragonkind*, `AddsKeywords$` + `AddsKeywordsValid$` : si le sort répond au filtre
+  (jugé comme une restriction de mana, `manaPermis()`), le permanent entre avec le mot-clé jusqu'à la
+  fin du tour (`resoudre()`). Un mot-clé hors de `MOTS_ANGLAIS` ou une durée autre que `UntilEOT`
+  laisse la capacité non construite ;
+- *Forger's Foundry*, `TriggersWhenSpent$` : un déclencheur ordinaire de la source (`ec.viaMana`) que seul
+  un sort payé de son mana déclenche. Son effet pose un remplacement optionnel, « exile le sort au lieu
+  du cimetière » : les remplacements « exil » sont désormais regroupés (`exilsApplicables()`), un
+  `Fizzle$ False` ne vaut qu'à la résolution (`o.resolu`, un sort contrecarré va au cimetière), un
+  `Optional$ True` se demande à la résolution (`remplacementsOptionnels()`), et `ExiledWithEffectSource$`
+  range la carte exilée parmi celles de la source (`o.exileAvec`, lu par `deplace()`), que le second
+  pouvoir retrouve par `ExiledWith`.
+
+**Le mana qui coûte du mana** (lot F58, `js/jeuManaFiltres.js`). *Grinning Ignus* (« {R}, renvoyez-le en
+main : ajoutez {C}{C}{R}, comme un rituel »), les terrains-filtres (Mystic Gate, Twilight Mire…),
+Cabal Coffers, Pili-Pala : une capacité de mana dont le coût demande du mana. Le solveur de
+`js/jeuMana.js` n'apparie que des sources sans coût de mana, et il est resté tel quel — c'est ce qui
+garantit qu'un paiement qui réussissait réussit à l'identique : un test différentiel, quatre cents
+plateaux et coûts tirés au hasard contre le moteur d'avant, rend les mêmes plans, les mêmes réserves
+et les mêmes terrains engagés. Le filtre n'entre en jeu que si le solveur échoue :
+- **le plan** : on essaie un filtre, puis deux, avec chacune de leurs options. Ce que le filtre produit
+  réduit le besoin (`coutMoins()`), ce qu'il coûte s'y ajoute, et le solveur paie le tout avec les
+  sources simples, hors le permanent du filtre (`EXCLUS_MANA`). Le coût du filtre n'est donc jamais payé
+  avant l'assurance du paiement ;
+- **l'exécution** (`paieMana()`) : les sources simples versent leur mana, puis chaque filtre s'active —
+  engagé, renvoyé en main (`Return<1/CARDNAME>`) — et verse le sien ; le coût des filtres est retiré avec
+  celui du sort d'un seul tenant, pour que le générique d'un filtre ne mange pas une couleur dont le sort
+  a besoin. Le mana dépensé pour un sort (`manaSort`, Unravel, la convergence) ne compte pas ce que les
+  filtres ont dépensé pour s'activer ;
+- **le rythme d'un rituel** (`SorcerySpeed$` d'une capacité de mana) : le filtre ne sert qu'en phase
+  principale, pile vide.
+Profondeur bornée à deux : un filtre qui en nourrit un autre au-delà n'est pas cherché. Deux défauts
+plus anciens, vus en chemin : `Combo B G | Amount$ 2` ne donnait que `BB` ou `GG`, jamais `BG`
+(`multiensembles()`), et un `Return<1/CARDNAME>` dans un coût de mana faisait refuser la capacité.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

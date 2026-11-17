@@ -53,7 +53,7 @@ forgeSait('expr', 'ReplaceCount$CounterNum', 'ReplaceCount$TokenNum', 'ReplaceCo
 forgeSait('param', 'Untap.ValidCard', 'Untap.ValidStepTurnToController', 'Untap.Layer', 'Untap.ActiveZones',
   'Counter.ValidCard', 'Counter.ValidSA', 'Counter.Layer', 'Counter.ActiveZones',
   'DamageDone.Prevent', 'DamageDone.ValidSource', 'DamageDone.ValidTarget', 'DamageDone.IsCombat', 'DamageDone.ActiveZones',
-  'Moved.ValidLKI', 'Moved.Origin', 'Moved.ActiveZones', 'ChangeZone.Hidden');
+  'Moved.ValidLKI', 'Moved.Origin', 'Moved.ActiveZones', 'Moved.Fizzle', 'ChangeZone.Hidden', 'ChangeZone.ExiledWithEffectSource');
 
 /* Les remplacements en jeu, relevés une fois par version de l'état : ceux
    des permanents du champ. */
@@ -75,19 +75,31 @@ function envRemplacement(src, x) { return {face: x.face, ctx: {cibles: [], memo:
 function destinationRemplacee(P, o, depuis, vers) {
   if (vers !== 'cimetiere') return vers;
   if (depuis === 'champ' && o.exilSiMeurt === P.tour) return 'exil';
+  const x = exilsApplicables(P, o, depuis).find(y => !(y.r.t.Optional === 'True' && o.refuseRemp));
+  if (!x) return vers;
+  /* Ce que la source a exilé (`ExiledWithEffectSource$`) : `deplace()` en note le nouvel identifiant. */
+  if (x.w && x.w.ExiledWithEffectSource === 'True' && x.src.cid != null) o.exileAvec = x.src.cid;
+  /* L'exil, la main, ou le dessus de la bibliothèque (Gravebane Zombie). */
+  return x.z === 'bibliotheque' ? (x.w.LibraryPosition === '-1' ? 'dessous' : 'dessus') : x.z || 'exil';
+}
+
+/* Les remplacements « au lieu du cimetière » qui valent pour cet objet, d'où il part. Un
+   `Fizzle$ False` ne vaut qu'à la résolution (`o.resolu`), non quand le sort est contrecarré. */
+function exilsApplicables(P, o, depuis) {
   const tous = [...(o.def.remplacements || []).map(r => ({src: o, r})), ...remplacementsEnJeu(P).filter(x => x.src.id !== o.id)];
+  const res = [];
   for (const {src, r} of tous) {
     if (r.forme !== 'exil') continue;
     const t = r.t;
     if (t.Origin && ZONES_FORGE[t.Origin] !== depuis) continue;
+    if (t.Fizzle === 'False' && depuis === 'pile' && !o.resolu) continue;
     const env = envRemplacement(src, r);
     const v = t.ValidCard || t.ValidLKI;
     if (!forgeValideObjet(P, o, v, src, src.ctrl, env, true)) continue;
-    /* L'exil, la main, ou le dessus de la bibliothèque (Gravebane Zombie). */
-    const w = forgeSousCapacite(r.face, t.ReplaceWith), z = zoneForge(w && w.Destination);
-    return z === 'bibliotheque' ? (w.LibraryPosition === '-1' ? 'dessous' : 'dessus') : z || 'exil';
+    const w = forgeSousCapacite(r.face, t.ReplaceWith);
+    res.push({src, r, w, z: zoneForge(w && w.Destination)});
   }
-  return vers;
+  return res;
 }
 
 /* Un permanent qui entre sous le coup d'un « enters tapped » d'un autre

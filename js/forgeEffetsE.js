@@ -51,13 +51,17 @@ forgeEffet('PeekAndReveal', ['PeekAmount', 'RevealValid', 'RevealOptional', 'Rem
 /* Révéler jusqu'à trouver : les trouvées vont où `FoundDestination$` le
    dit, les autres où `RevealedDestination$` le dit. */
 forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestination', 'RevealedLibraryPosition', 'FoundLibraryPosition',
-  'RememberFound', 'RememberRevealed', 'Shuffle', 'RevealRandomOrder'], function* (P, t, env) {
+  'RememberFound', 'RememberRevealed', 'Shuffle', 'RevealRandomOrder', 'MinTotalCMC'], function* (P, t, env) {
   for (const j of joueursForge(P, t, env)) {
     const B = P.joueurs[j].bibliotheque, voulu = forgeNombre(P, t.Amount || 1, env), trouves = [], reveles = [];
-    while (B.length && trouves.length < voulu) {
+    /* « Until you exile cards with total mana value N or greater » : on s'arrête
+       quand ce qu'on a trouvé atteint N, non quand on a trouvé N cartes. */
+    const seuil = t.MinTotalCMC != null ? forgeNombre(P, t.MinTotalCMC, env) : null;
+    let total = 0;
+    while (B.length && (seuil != null ? total < seuil : trouves.length < voulu)) {
       const id = B[B.length - 1], o = obj(P, id);
       retireDe(B, id);
-      (forgeValideObjet(P, o, t.Valid || 'Card', env.src, env.ctrl, env) ? trouves : reveles).push(id);
+      if (forgeValideObjet(P, o, t.Valid || 'Card', env.src, env.ctrl, env)) { trouves.push(id); total += mvDe(o); } else reveles.push(id);
     }
     /* Remises au dessus le temps de les déplacer : `deplaceForge()` part de
        la bibliothèque comme d'une autre zone. */
@@ -67,7 +71,7 @@ forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestinat
     const rd = zoneForge(t.RevealedDestination) || 'cimetiere', fd = zoneForge(t.FoundDestination) || rd;
     for (const id of trouves) {
       const n = fd === 'bibliotheque' ? id : yield* deplaceForge(P, obj(P, id), fd, env, {});
-      if (n != null && (t.RememberFound === 'True' || (t.RememberRevealed === 'True' && !t.FoundDestination))) retiensForge(env.ctx, n);
+      if (n != null && (t.RememberFound === 'True' || (t.RememberRevealed === 'True' && (!t.FoundDestination || seuil != null)))) retiensForge(env.ctx, n);
     }
     for (const id of reveles) {
       if (rd === 'bibliotheque') { retireDe(B, id); if (t.RevealedLibraryPosition === '-1') B.unshift(id); else B.push(id); }

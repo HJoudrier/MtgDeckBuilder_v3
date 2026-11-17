@@ -4,7 +4,7 @@
    La définition a la forme que le moteur connaît déjà (js/definitions.js) :
    coût, types, force, mots-clés, sort, capacités, statiques, entrée. Seuls
    ses effets changent de nature : chaque table d'une chaîne de Forge
-   (`SubAbility$`) devient une opération `forge`, que js/forgeEffetsA.js
+   (`SubAbility$`) devient une opération `forge`, que js/forgeExecute.js
    exécute ; ses emplacements de cible viennent des `ValidTgts$`. Le
    lancement, la pile, l'IA et les tests la traitent comme les autres.
 
@@ -118,7 +118,7 @@ function capaciteForge(def, face, t, jetons) {
      drapeau de la source, que le paiement pose (js/jeuMana.js). */
   const resteEngage = api === 'Mana' && t.SubAbility && /^DB\$ Effect \| ReplacementEffects\$ DontUntap \| RememberObjects\$ Self\b/.test(face.svars[t.SubAbility] || '');
   /* Le planificateur de paiement ne sait ni choisir X ni payer ces morceaux. */
-  if (api === 'Mana' && (aCoutX(c.cout) || c.cout.renvoieSoi || c.cout.ajoute || c.cout.exileChamp)) return false;
+  if (api === 'Mana' && (aCoutX(c.cout) || c.cout.ajoute || c.cout.exileChamp)) return false;
   if (api === 'Mana' && (!t.SubAbility || resteEngage)) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */
@@ -135,6 +135,7 @@ function capaciteForge(def, face, t, jetons) {
     const options = choisie || parmi ? [] : optionsMana(t.Produced, n);
     if ((!options.length && !choisie && !parmi) || !tableJouable(t)) return false;
     def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {}),
+      ...(t.SorcerySpeed === 'True' ? {vitesse: 'rituel'} : {}),
       ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face}),
       ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {})});
     return true;

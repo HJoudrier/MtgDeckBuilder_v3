@@ -44,7 +44,27 @@ function coutSort(P, j, o, depuis, imprime) {
 function effetCiblable(P, j, src, effet, couleurs) {
   if (!effet) return true;
   if (effet.modes) return effet.modes.options.filter(op => op.cibles.every(sl => ciblesLegales(P, sl, src, j, couleurs).length >= sl.min)).length >= effet.modes.min;
-  return effet.cibles.every(sl => ciblesLegales(P, sl, src, j, couleurs).length >= sl.min);
+  return effet.cibles.every(sl => assezDeControleurs(P, sl, ciblesLegales(P, sl, src, j, couleurs)).length >= sl.min);
+}
+
+/* « Chacune d'un joueur différent » : le nombre de cibles possibles se
+   compte en joueurs, pas en créatures. Sans cela, le sort se proposerait
+   avec des créatures chez un seul joueur et se résoudrait à moitié. */
+function assezDeControleurs(P, sl, l) {
+  if (!sl.restr || !sl.restr.parJoueur) return l;
+  const vus = new Set();
+  return l.filter(c => { const q = typeof c === 'object' ? c.j : (obj(P, c) || {}).ctrl; if (vus.has(q)) return false; vus.add(q); return true; });
+}
+
+/* Les candidats en tournante d'un joueur à l'autre : la réponse par défaut
+   (les premiers) respecte alors la restriction. */
+function enTournante(P, sl, l) {
+  if (!sl.restr || !sl.restr.parJoueur) return l;
+  const par = new Map();
+  l.forEach(c => { const q = typeof c === 'object' ? c.j : (obj(P, c) || {}).ctrl; if (!par.has(q)) par.set(q, []); par.get(q).push(c); });
+  const r = [], files = [...par.values()];
+  for (let k = 0; r.length < l.length; k++) files.forEach(f => { if (k < f.length) r.push(f[k]); });
+  return r;
 }
 
 /* Le coût d'activation, hors mana, peut-il être payé ? */
@@ -168,13 +188,15 @@ function* choisitCibles(P, j, src, slots, couleurs, extra) {
   for (let si = 0; si < slots.length; si++) {
     const sl = slots[si];
     /* Un contrôleur imposé par le déclencheur (js/forgeEntrees.js). */
-    const cands = candidatsDuControleur(P, sl, ciblesLegales(P, sl, src, j, couleurs), src, j, extra, choix);
+    const cands = enTournante(P, sl, candidatsDuControleur(P, sl, ciblesLegales(P, sl, src, j, couleurs), src, j, extra, choix));
     if (cands.length < sl.min) return null;
     if (!cands.length) { choix.push([]); continue; }
     const plafond = sl.maxExpr ? Math.max(sl.min, forgeNombre(P, sl.maxExpr, {ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: j, op: {}})) : sl.max;
     const max = Math.min(plafond, cands.length);
     const r = yield question(P, j, 'cibles', cands, {min: sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
     const pris = restreintCibles(P, sl, (Array.isArray(r) ? r : [r]).map(i => cands[i]).filter(x => x != null));
+    /* Un choix que la restriction a réduit sous le minimum n'est pas un choix. */
+    if (pris.length < sl.min) return null;
     choix.push(sl.cmcMax != null ? restreintValeurTotale(P, sl.cmcMax, pris) : pris);
   }
   return choix;

@@ -19,13 +19,17 @@ function forgeNombre(P, v, env) {
   if (/^[+-]?\d+$/.test(s)) return +s;
   let signe = 1;
   if (s[0] === '-' || s[0] === '+') { if (s[0] === '-') signe = -1; s = s.slice(1); }
+  /* Une variable posée en route par `StoreSVar` passe avant la SVar écrite
+     (même ordre que dans `forgeExpression()`) : le Y d'une offre tentante. */
+  if (env && env.ctx && env.ctx.vars && env.ctx.vars[s] != null) return signe * env.ctx.vars[s];
   const sv = env && env.face ? env.face.svars[s] : null;
   if (sv != null) return signe * forgeExpression(P, sv, env, 0);
   if (s === 'X') return signe * ((env && env.ctx && env.ctx.x) || 0);
   return signe * forgeExpression(P, s, env, 0);
 }
 
-const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double)(?:\.(\d+))?$/;
+/* L'opérande est un nombre, ou le nom d'une SVar (`SVar$X/Times.Y`). */
+const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double)(?:\.(\w+))?$/;
 
 /* Appliquer l'opération qui suit une expression. */
 function mathForge(n, op, k) {
@@ -52,7 +56,10 @@ function caracForge(P, o, quoi) {
   const c = o.lki ? o : o.zone === 'champ' ? car(P, o) : o.def;
   if (quoi === 'CardPower') return c.force || 0;
   if (quoi === 'CardToughness') return c.endurance || 0;
-  if (quoi === 'CardManaCost') return mvDe(o);
+  /* Sur la pile, la valeur de mana compte X pour ce qu'on a payé. */
+  if (quoi === 'CardManaCost') return mvDe(o) + (o.zone === 'pile' ? (o.x || 0) * ((o.def.cout || {}).x || 0) : 0);
+  /* Le mana dépensé pour lancer ce sort, toutes couleurs (js/jeuMana.js `paieMana()`). */
+  if (quoi === 'CastTotalManaSpent') return Object.values(manaDepenseDe(o) || {}).reduce((s, n) => s + n, 0);
   return 0;
 }
 
@@ -94,7 +101,7 @@ function agregeForge(P, l, agg) {
 function forgeExpression(P, expr, env, prof) {
   let s = String(expr).trim();
   const m = FORGE_MATHS.exec(s);
-  if (m) return mathForge(forgeExpression(P, s.slice(0, m.index), env, prof), m[1], m[2] ? +m[2] : 0);
+  if (m) return mathForge(forgeExpression(P, s.slice(0, m.index), env, prof), m[1], !m[2] ? 0 : /^\d+$/.test(m[2]) ? +m[2] : forgeNombre(P, m[2], env));
   if (/^[+-]?\d+$/.test(s)) return +s;
   const i = s.indexOf('$');
   /* Une variable que la capacité a posée en cours de route (`StoreSVar`,
@@ -156,7 +163,7 @@ forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$V
   'Count$ValidLibrary', 'Count$CardCounters', 'Count$CardPower', 'Count$CardToughness', 'Count$CardManaCost',
   'Count$YourLifeTotal', 'Count$CardsInYourHand', 'Count$InYourHand', 'Count$InYourGraveyard', 'TriggerCount$DamageAmount',
   'TriggerCount$Amount', 'TriggeredCard$CardPower', 'TriggeredCard$CardToughness', 'TriggeredCard$CardManaCost',
-  'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'ParentTargeted$CardPower',
+  'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'Targeted$CastTotalManaSpent', 'ParentTargeted$CastTotalManaSpent', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',
   'Sacrificed$CardManaCost', 'PlayerCountOpponents$Amount', 'SVar$X', 'Count$YourCountersEnergy', 'Count$ChosenNumber', 'Count$Domain', 'Count$Morbid', 'Count$ThisTurnEntered', 'Count$ThisTurnCast',

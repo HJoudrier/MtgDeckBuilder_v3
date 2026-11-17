@@ -130,6 +130,8 @@ function deplace(P, id, vers, opts = {}) {
   }
   const n = creeObjet(P, o.cid, o.prop, zone, zone === 'champ' ? (opts.ctrl != null ? opts.ctrl : o.prop) : o.prop);
   P.suivi.set(id, n.id);
+  /* Exilée « avec » une source (Forger's Foundry) : la source la retrouve par `ExiledWith`. */
+  if (o.exileAvec != null && zone === 'exil' && P.cartes[o.exileAvec]) (P.cartes[o.exileAvec].exilees = P.cartes[o.exileAvec].exilees || []).push(n.id);
   if (zone === 'champ') {
     n.engage = !!opts.engage;
     P.champ.push(n.id);

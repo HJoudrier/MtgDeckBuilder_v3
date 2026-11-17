@@ -11,7 +11,7 @@
 
 /* Les modes « one or more » : une seule fois pour un lot d'évènements,
    c'est-à-dire par collecte (js/jeuDeclencheurs.js). */
-const MODES_PAR_LOT = new Set(['ChangesZoneAll', 'DamageDealtOnce', 'DamageDoneOnce', 'CounterAddedOnce', 'DiscardedAll', 'CommitCrime',
+const MODES_PAR_LOT = new Set(['ChangesZoneAll', 'DamageDealtOnce', 'DamageDoneOnce', 'DamageAll', 'CounterAddedOnce', 'DiscardedAll', 'CommitCrime',
   'AttackersDeclared', 'AttackersDeclaredOneTarget']);
 
 /* Le défenseur d'une attaque répond-il à `AttackedTarget$` ? */
@@ -67,6 +67,8 @@ forgeMode('BecomesTarget', ['ValidTarget', 'ValidSource', 'Valiant'], (P, t, e, 
 forgeMode('CommitCrime', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'crime' && joueurOuRien(P, e.joueur, t.ValidPlayer || 'You', s, env));
 
 forgeMode('DamageDealtOnce', ['ValidSource', 'ValidTarget', 'CombatDamage'], (P, t, e, s, env) => FORGE_MODES.DamageDone(P, t, e, s, env));
+/* « One or more … are dealt damage » : même jugement qu'un dégât, une seule fois par lot (MODES_PAR_LOT). */
+forgeMode('DamageAll', ['ValidSource', 'ValidTarget', 'CombatDamage'], (P, t, e, s, env) => FORGE_MODES.DamageDone(P, t, e, s, env));
 
 /* « Whenever you activate an ability that isn't a mana ability » : le
    moteur n'émet pas l'activation d'une capacité de mana. */

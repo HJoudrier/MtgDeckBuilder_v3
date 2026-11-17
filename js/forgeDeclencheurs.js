@@ -130,6 +130,9 @@ function forgeDeclenche(P, ec, e, s) {
   if (t.WerewolfUntransformCondition === 'True' && (!d || d.max < 2)) return false;
   /* « One or more » : une fois par collecte ; « only once each turn » :
      un compte par tour, par source et par déclencheur. */
+  /* « When you spend this mana to cast … » : le sort doit avoir été payé, en partie,
+     du mana de cette source (js/forgeManaC.js). */
+  if (ec.viaMana && e.t === 'lance' && !(((obj(P, e.id) || {}).manaDeSources || []).includes(s.id))) return false;
   const cle = s.id + '|' + (ec.uid || t.Mode);
   if (MODES_PAR_LOT.has(t.Mode) && P._lot && P._lot.has(cle)) return false;
   const limite = t.ActivationLimit ? +t.ActivationLimit : t.FirstTime === 'True' || t.Valiant === 'True' ? 1 : 0;

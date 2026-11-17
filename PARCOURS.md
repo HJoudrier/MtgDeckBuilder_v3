@@ -951,7 +951,7 @@ sequenceDiagram
     autonumber
     participant PILE as jeuPile.js
     participant OPS as jeuOpsB.js
-    participant FA as forgeEffetsA.js
+    participant FA as forgeExecute.js
     participant DEF as forgeDefini.js
     participant EX as forgeExpr.js
     participant API as FORGE_API[api]
