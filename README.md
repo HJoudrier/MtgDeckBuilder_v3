@@ -284,7 +284,10 @@ js/                 modules, chargés dans cet ordre :
 
 Les dix sections de la page se répartissent en sept onglets, rangés dans une barre fixe au bas de la
 fenêtre — l'en-tête, seul en haut, reste collant, et rien d'autre ne se superpose au contenu. Sa
-hauteur est une constante CSS (`--h-barre`), dont le bas de la page et le toast tiennent compte. **Decks** porte la liste des decks puis la liste d'achats commune,
+hauteur est une constante CSS (`--h-barre`), dont le bas de la page et le toast tiennent compte.
+Sur un téléphone les sept onglets ne tiennent pas : la barre défile latéralement, alignée au début
+(`justify-content:center` sur un contenu qui déborde coupe la gauche, hors de portée du défilement) et
+`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks puis la liste d'achats commune,
 **Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés

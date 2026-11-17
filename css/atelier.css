@@ -246,13 +246,19 @@ header.top{
 .onglets{
   position:fixed;z-index:80;left:0;right:0;bottom:0;
   height:calc(var(--h-barre) + env(safe-area-inset-bottom));
-  display:flex;justify-content:center;align-items:stretch;gap:4px;
+  display:flex;justify-content:flex-start;align-items:stretch;gap:4px;
   padding:6px clamp(6px,2vw,24px) calc(6px + env(safe-area-inset-bottom));
   background:var(--top2);border-top:1px solid var(--line);box-shadow:0 -5px 22px var(--ombre);
   backdrop-filter:blur(14px);
   overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;scroll-snap-type:x proximity
 }
 .onglets::-webkit-scrollbar{display:none}
+/* Centrés quand ils tiennent, alignés au début quand ils débordent : avec
+   `justify-content:center`, un contenu trop large est coupé des deux côtés, et
+   la gauche — « Cartes » — n'est plus atteignable par le défilement. Les marges
+   automatiques des extrémités centrent sans rien couper. */
+.onglet:first-child{margin-left:auto}
+.onglet:last-child{margin-right:auto}
 .onglet{
   position:relative;flex:1 0 auto;min-width:64px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;

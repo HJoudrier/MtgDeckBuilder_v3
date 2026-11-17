@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1729 fonctions**, 249 modules, 1798 Ko de JavaScript.
+**1729 fonctions**, 249 modules, 1799 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -207,7 +207,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 249 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 255 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 37 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
@@ -3688,7 +3688,7 @@ Les recalculs annoncés. *8 fonctions, 200 lignes, 8.7 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *8 fonctions, 249 lignes, 13 Ko.*
+L'en-tête et la barre des onglets. *8 fonctions, 255 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|

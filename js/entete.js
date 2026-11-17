@@ -203,6 +203,12 @@ function renderOnglets() {
   document.querySelectorAll('.page[data-page]').forEach(p => {
     p.hidden = p.dataset.page !== S.onglet;
   });
+  /* Quand la barre déborde (téléphone), l'onglet ouvert est ramené au milieu :
+     on ne choisit pas une page que la barre cache. */
+  const barre = document.getElementById('onglets'), ouvert = barre && barre.querySelector('[aria-selected="true"]');
+  if (ouvert && barre.scrollWidth > barre.clientWidth) {
+    barre.scrollTo({left: Math.max(0, ouvert.offsetLeft - (barre.clientWidth - ouvert.offsetWidth) / 2), behavior: 'auto'});
+  }
   /* Le bouton « Affichage » règle la liste de l'onglet ouvert : il change donc
      de cible en même temps que la page, sans que l'entête soit repeint. */
   majBoutonAffichage();
