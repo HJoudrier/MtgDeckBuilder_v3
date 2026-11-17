@@ -2505,10 +2505,6 @@ digraph appels {
     "app.js (chargement)" [label="chargement du module", fillcolor="#a89b6d33", color="#a89b6d", shape=note];
     "demarrer" [label="demarrer", fillcolor="#a89b6d33", color="#a89b6d"];
   }
-  subgraph "cluster_249" {
-    label="js/navigationUX.js"; fontsize=13; style="rounded,filled"; color="#8a7fa8"; fillcolor="#8a7fa81a"; penwidth=1.4;
-    "navigationUX.js (chargement)" [label="chargement du module", fillcolor="#8a7fa833", color="#8a7fa8", shape=note];
-  }
 
   "qualifieDeclencheur" -> "sousTypesDeSort" [color="#8a7fa899"];
   "compat" -> "memeSousType" [color="#8a7fa899"];
@@ -7853,5 +7849,4 @@ digraph appels {
   "app.js (chargement)" -> "defileTable" [style=dashed, color="#a89b6d66"];
   "app.js (chargement)" -> "majHauteurEntete" [style=dashed, color="#a89b6d66"];
   "app.js (chargement)" -> "planifieFleches" [style=dashed, color="#a89b6d66"];
-  "navigationUX.js (chargement)" -> "majHauteurEntete" [color="#8a7fa899"];
 }

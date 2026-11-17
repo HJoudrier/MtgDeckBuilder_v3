@@ -249,8 +249,7 @@
   "fenArrets.js",
   "gestesTable.js",
   "app.js",
-  "icones.js",
-  "navigationUX.js"
+  "icones.js"
  ],
  "fonctions": [
   {
@@ -26102,7 +26101,6 @@
    "appeleePar": [
     "app.js (chargement)",
     "entete.js (chargement)",
-    "navigationUX.js (chargement)",
     "renderTop"
    ]
   },
@@ -31646,18 +31644,6 @@
    "appeleePar": [
     "app.js (chargement)"
    ]
-  },
-  {
-   "nom": "chargement du module",
-   "fichier": "navigationUX.js",
-   "ligne": null,
-   "chargement": true,
-   "appelle": [
-    "majHauteurEntete"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": []
   }
  ]
 }

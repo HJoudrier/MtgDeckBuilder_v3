@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1695 fonctions** dans 250 modules, **5344 appels** relevés.
+**1695 fonctions** dans 249 modules, **5343 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -8864,7 +8864,7 @@ Appelée par : `entete.js (chargement)`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `app.js (chargement)`, `entete.js (chargement)`, `navigationUX.js (chargement)`, `renderTop`
+Appelée par : `app.js (chargement)`, `entete.js (chargement)`, `renderTop`
 
 ### `renderTop()` — ligne 56
 
@@ -10955,10 +10955,4 @@ Appelle : `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltre
 Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `chercheTableSauvee()` *(tableReprise.js)*, `demarreForge()` *(forgeDepot.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `nuageDemarrer()` *(nuage.js)*, `rejoindreDepuisAdresse()` *(tableInvite.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*, `verifieDecksLies()` *(decksLies.js)*
 
 Appelée par : `app.js (chargement)`
-
-## js/navigationUX.js
-
-### `chargement du module`
-
-Appelle : `majHauteurEntete()` *(entete.js)*
 

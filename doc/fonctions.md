@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1729 fonctions**, 250 modules, 1800 Ko de JavaScript.
+**1729 fonctions**, 249 modules, 1798 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -224,7 +224,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
-| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 117 |
+| [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
@@ -259,8 +259,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
 | [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 78 |
 | [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 311 |
-| [`icones.js`](#jsiconesjs) |  | 0 | 23 |
-| [`navigationUX.js`](#jsnavigationuxjs) |  | 0 | 36 |
+| [`icones.js`](#jsiconesjs) |  | 0 | 21 |
 
 ## js/reglesEffets.js
 
@@ -3957,7 +3956,7 @@ Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
 
 ## js/gestesVue.js
 
-Les gestes qui règlent la vue. *1 fonctions, 117 lignes, 4.4 Ko.*
+Les gestes qui règlent la vue. *1 fonctions, 112 lignes, 4.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4534,6 +4533,4 @@ L'aiguillage et le démarrage. *1 fonctions, 311 lignes, 13 Ko.*
 | `dlgEl` | Fermeture au clic sur l'arrière-plan (backdrop) |
 
 ## js/icones.js
-
-## js/navigationUX.js
 

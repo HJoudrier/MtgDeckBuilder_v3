@@ -237,24 +237,42 @@ header.top{
 }
 
 /* ---------- onglets ---------- */
-/* La barre vit dans l'entête collante : elle ne quitte jamais l'écran, et
-   passer d'un pan de l'atelier à l'autre ne demande pas de remonter. */
+/* La barre des sept onglets est fixe, en bas de la fenêtre : elle ne quitte
+   jamais l'écran, et passer d'un pan de l'atelier à l'autre ne demande pas
+   de remonter. L'entête, seule en haut, reste collante aussi. Sa hauteur est
+   une constante (`--h-barre`), dont le bas de la page tient compte : rien ne
+   se mesure, rien ne bouge au chargement. */
+:root{--h-barre:64px}
 .onglets{
-  max-width:1180px;margin:0 auto;padding:0 12px;
-  display:flex;gap:4px;align-items:stretch;border-top:1px solid var(--line);
-  overflow-x:auto;scrollbar-width:none
+  position:fixed;z-index:80;left:0;right:0;bottom:0;
+  height:calc(var(--h-barre) + env(safe-area-inset-bottom));
+  display:flex;justify-content:center;align-items:stretch;gap:4px;
+  padding:6px clamp(6px,2vw,24px) calc(6px + env(safe-area-inset-bottom));
+  background:var(--top2);border-top:1px solid var(--line);box-shadow:0 -5px 22px var(--ombre);
+  backdrop-filter:blur(14px);
+  overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;scroll-snap-type:x proximity
 }
 .onglets::-webkit-scrollbar{display:none}
 .onglet{
-  position:relative;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
-  background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;
-  padding:9px 14px 7px;font-family:var(--display);font-size:14.5px;color:var(--dim);
+  position:relative;flex:1 0 auto;min-width:64px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:4px 8px 5px;white-space:nowrap;scroll-snap-align:center;
+  background:transparent;border:0;border-radius:9px;
+  font-family:var(--body);font-size:11px;font-weight:600;line-height:1.15;color:var(--dim);
   transition:color .15s ease, background .15s ease
 }
 .onglet:hover{color:var(--txt)}
-.onglet[aria-selected=true]{color:var(--brass);border-bottom-color:var(--brass);background:var(--brass-a1)}
-/* Le point d'attente : un travail de fond dans une page qu'on ne regarde
-   pas — le liseré de la section, lui, y resterait invisible. */
+.onglet[aria-selected=true]{color:var(--brass);background:var(--brass-a1)}
+.onglet:focus-visible{outline-offset:-3px}
+.onglet-icone{width:20px;height:20px;stroke-width:1.9;flex:0 0 auto}
+body{padding-bottom:calc(var(--h-barre) + env(safe-area-inset-bottom))}
+@media(min-width:641px){
+  :root{--h-barre:60px}
+  .onglet{flex:1 1 0;flex-direction:row;gap:8px;max-width:190px;font-size:13.5px;padding:6px 14px}
+}
+/* Le point d'attente se pose au coin de l'onglet. */
+.onglet .onglet-pt{position:absolute;top:6px;right:calc(50% - 24px)}
+@media(min-width:641px){.onglet .onglet-pt{right:8px;top:8px}}
 .onglet .onglet-pt{width:6px;height:6px;border-radius:99px;background:var(--brass);opacity:0;transition:opacity .2s ease}
 .onglet.travaille .onglet-pt{opacity:1;animation:battement 1.2s ease-in-out infinite}
 @keyframes battement{0%,100%{opacity:1}50%{opacity:.25}}
@@ -692,11 +710,6 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:7px}
   .brand h1{font-size:16px} .brand .sub{display:none}
   .sec-head{padding:11px 10px} .sec-body{padding:10px}
-  .onglets{padding:0 6px;gap:0;border-top-color:var(--line2)}
-  /* Cinq onglets sur un écran de téléphone : ils se partagent la largeur tant
-     qu'ils y tiennent, et la barre glisse latéralement quand ils n'y tiennent
-     plus — sans jamais couper un nom. */
-  .onglet{flex:1 0 auto;justify-content:center;padding:8px 6px 6px;font-size:12.5px}
   .bars{height:120px}
   /* Ici les pastilles passent à la ligne (`width:100%` plus bas), si bien que
      la première ligne ne porte que le titre : c'est à lui de réserver le coin,
@@ -715,7 +728,8 @@ textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px}
   .filtre-chip{font-size:10px;max-width:170px}
   .filtre-chip .chip-txt{max-width:135px;padding-left:8px}
 }
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:var(--txt);border:1px solid var(--brass);padding:9px 18px;border-radius:99px;font-size:13px;box-shadow:0 8px 24px var(--ombre);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+/* Au-dessus de la barre des onglets, non derrière elle. */
+#toast{position:fixed;bottom:calc(var(--h-barre) + env(safe-area-inset-bottom) + 14px);left:50%;transform:translateX(-50%);background:var(--toast-bg);color:var(--txt);border:1px solid var(--brass);padding:9px 18px;border-radius:99px;font-size:13px;box-shadow:0 8px 24px var(--ombre);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
 #cardPreview{position:fixed;z-index:1000;pointer-events:none;display:none;border-radius:10px;box-shadow:0 10px 30px var(--ombre);background:var(--panel);border:1px solid var(--brass-d);max-width:250px;overflow:hidden}
 #cardPreview img{display:block;width:240px;height:auto;border-radius:8px}
@@ -867,31 +881,20 @@ tr.sim-maigre td{color:var(--dim2)}
    des sections ni les gestionnaires métier existants. */
 :root{--r:12px;--display:ui-serif,Georgia,"Times New Roman",serif;--body:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 body{background:var(--bg);line-height:1.5}
-.top-in,.onglets,.wrap{max-width:1320px}
+.top-in,.wrap{max-width:1320px}
 .top-in{padding-top:12px;padding-bottom:12px}
 .brand h1{font-family:var(--body);font-weight:750;letter-spacing:-.035em}
 .brand .sub{letter-spacing:.08em}
-.onglets{gap:6px;padding-top:5px}
-.onglet{min-height:44px;border-radius:9px 9px 0 0;padding:10px 15px 8px;font-family:var(--body);font-size:13px;font-weight:600}
-.onglet[aria-selected=true]{background:var(--brass-a1)}
-.onglet-icone{width:17px;height:17px;stroke-width:1.9;flex:0 0 auto}
 button,.btn,.mana-btn{touch-action:manipulation}
 button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .sec{border-radius:14px;box-shadow:0 2px 12px var(--ombre)}
 .sec-head{padding:14px 16px}.sec-body{padding:14px 16px}
 .btn,.pill{border-radius:9px}input,select,textarea{border-radius:9px}
 .card,.cardT,.deck-carte,.sim-bloc,.stat{border-radius:12px}
-#toast{bottom:max(24px,env(safe-area-inset-bottom))}
-@media(min-width:641px){.wrap{padding:20px 20px 64px}.onglets{overflow:visible}}
+@media(min-width:641px){.wrap{padding:20px 20px 64px}}
 @media(max-width:640px){
- body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
  header.top{position:sticky;top:0}
  .top-in{padding-bottom:8px}
- .onglets{position:fixed;z-index:80;left:0;right:0;bottom:0;top:auto;width:100%;max-width:none;margin:0;padding:7px 5px calc(7px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:stretch;gap:2px;background:var(--top2);border-top:1px solid var(--line);border-bottom:0;box-shadow:0 -5px 22px var(--ombre);backdrop-filter:blur(14px);overflow-x:auto}
- .onglet{flex:0 0 64px;min-width:64px;min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:5px 2px 7px;border:0;border-radius:9px;font-family:var(--body);font-size:10px;line-height:1.15}
- .onglet[aria-selected=true]{background:var(--brass-a1);color:var(--brass)}
- .onglet-icone{width:20px;height:20px}
- .onglet .onglet-pt{position:absolute;top:5px;right:calc(50% - 17px)}
  .wrap{padding:8px 8px 18px}
  .sec{margin-bottom:10px}.sec-head{padding:11px 12px}.sec-body{padding:11px 12px}
  .head-actions button,.head-param{min-width:40px;min-height:40px}
@@ -899,26 +902,8 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 @media(prefers-reduced-motion:reduce){.onglet,.sec,button{transition:none!important;scroll-behavior:auto!important}}
 
 
-/* Passe 2 — confort de consultation et de manipulation sur téléphone.
-   La barre conserve les sept destinations métier : elle devient défilante
-   uniquement sur les très petits écrans, plutôt que de masquer des onglets. */
+/* Passe 2 — confort de consultation et de manipulation sur téléphone. */
 @media(max-width:640px){
-  .onglets{
-    justify-content:flex-start;
-    scroll-snap-type:x mandatory;
-    overscroll-behavior-x:contain;
-    -webkit-overflow-scrolling:touch;
-  }
-  .onglet{
-    flex:1 0 48px;
-    min-width:48px;
-    max-width:76px;
-    scroll-snap-align:center;
-    font-size:9.5px;
-    gap:3px;
-  }
-  .onglet-icone{width:19px;height:19px}
-  .onglet:focus-visible{outline-offset:-3px}
   .top-stats{overflow-x:auto;max-width:100%;scrollbar-width:thin}
   .sec-head{gap:8px;align-items:center}
   .sec-head h2{font-size:15px;line-height:1.25}
@@ -936,7 +921,6 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
   .dlg-f .btn{flex:1 1 auto}
 }
 @media(max-width:360px){
-  .onglet{flex-basis:46px;min-width:46px;font-size:9px}
   .top-in{gap:5px}
   .brand{padding-right:190px}
   .head-actions{gap:2px}
@@ -945,97 +929,6 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
   .onglet:hover,.btn:hover{filter:none}
   .onglet,.btn,button{ -webkit-tap-highlight-color:transparent }
 }
-
-
-/* Navigation principale en bas, sous-navigation contextuelle sous l'entête. */
-body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
-#topHeader{z-index:70}
-#onglets{
-  display:flex;align-items:center;gap:7px;
-  padding:9px clamp(12px,3vw,34px);
-  border-top:1px solid var(--line);
-  background:var(--top2);
-}
-#onglets[hidden]{display:none!important}
-#onglets .onglet{
-  border:1px solid transparent;border-radius:9px;
-  min-height:38px;padding:8px 14px;
-  font-size:13px;font-weight:600;color:var(--dim);
-}
-#onglets .onglet[aria-selected=true]{
-  color:var(--brass);background:var(--brass-a1);border-color:var(--brass-a2);
-}
-.navigation-principale{
-  position:fixed;z-index:100;left:50%;bottom:0;transform:translateX(-50%);
-  width:min(100%,760px);min-height:70px;
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;
-  padding:8px 16px calc(8px + env(safe-area-inset-bottom));
-  background:var(--top2);border:1px solid var(--line);border-bottom:0;
-  border-radius:18px 18px 0 0;box-shadow:0 -8px 28px var(--ombre);
-  backdrop-filter:blur(16px);
-}
-.navigation-principale button{
-  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:4px;min-width:0;min-height:52px;border:0;border-radius:11px;
-  background:transparent;color:var(--dim);font:600 12px/1.15 var(--body);
-  cursor:pointer;touch-action:manipulation;
-}
-.navigation-principale button svg{width:21px;height:21px;stroke-width:1.9}
-.navigation-principale button[aria-current="page"]{
-  color:var(--brass);background:var(--brass-a1);
-}
-.navigation-principale button:focus-visible,#onglets .onglet:focus-visible{
-  outline:2px solid var(--brass);outline-offset:2px;
-}
-@media(min-width:641px){
-  .navigation-principale{width:min(100%,620px);min-height:66px;padding:7px 20px}
-  .navigation-principale button{flex-direction:row;gap:9px;font-size:13px}
-  #onglets{padding-left:max(20px,calc((100vw - 1280px)/2));}
-}
-@media(max-width:640px){
-  body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
-  #onglets{position:static;inset:auto;width:auto;max-width:none;margin:0;box-shadow:none;border-bottom:0;backdrop-filter:none;}
-  #topHeader{position:sticky;top:0}
-  #onglets{overflow-x:auto;scrollbar-width:none;padding:7px 10px;gap:5px}
-  #onglets::-webkit-scrollbar{display:none}
-  #onglets .onglet{flex:0 0 auto;min-height:36px;padding:7px 12px;font-size:12px}
-  .navigation-principale{width:100%;min-height:72px;border-radius:16px 16px 0 0;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
-  .navigation-principale button{font-size:10px;min-height:52px}
-  .navigation-principale button svg{width:21px;height:21px}
-}
-@media(prefers-reduced-motion:reduce){.navigation-principale button{transition:none!important}}
-
-
-/* Correctif : l'ancienne navigation mobile était encore positionnée en bas
-   par une règle .onglets. La sous-navigation doit rester sous l'entête ;
-   seule #navigationPrincipale occupe le bas de l'écran. */
-#onglets{
-  position:relative!important;
-  inset:auto!important;
-  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
-  z-index:auto!important;
-  width:100%!important;max-width:none!important;
-  margin:0!important;
-  box-shadow:none!important;
-  transform:none!important;
-}
-@media(max-width:640px){
-  #onglets{position:relative!important;inset:auto!important;overflow-x:auto!important}
-}
-
-/* Definitively separate secondary tabs from the fixed four-item bottom bar. */
-#onglets, #onglets.onglets {
-  position:relative!important;
-  top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
-  z-index:1!important;
-  display:flex;
-  width:100%!important;
-  margin:0!important;
-  box-shadow:none!important;
-  transform:none!important;
-}
- /* Les icônes du menu secondaire sont conservées ; seule la barre principale est fixe. */
-#navigationPrincipale { display:grid!important; }
 
 
 /* Icônes Lucide des trois commandes d'en-tête. */

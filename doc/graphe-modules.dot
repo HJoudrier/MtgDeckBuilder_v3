@@ -276,7 +276,6 @@ digraph modules {
     "app.js" [label="js/app.js\n1 fonction", fillcolor="#a89b6d33", color="#a89b6d"];
   }
     "icones.js" [label="js/icones.js\n0 fonction", fillcolor="#6d8ca833", color="#6d8ca8"];
-    "navigationUX.js" [label="js/navigationUX.js\n0 fonction", fillcolor="#8a7fa833", color="#8a7fa8"];
 
   "jeuCombat.js" -> "jeuEtat.js" [penwidth=4.00, color="#a8846daa", tooltip="20 appel(s)"];
   "jeuOpsA.js" -> "jeuEtat.js" [penwidth=4.00, color="#8a7fa8aa", tooltip="18 appel(s)"];

@@ -1,6 +1,5 @@
-/* Icônes Lucide des navigations principale et secondaire.
-   Les icônes principales existent déjà dans index.html : on les réutilise
-   au lieu d'en insérer une seconde. Les sous-onglets reçoivent leur icône ici. */
+/* Icônes Lucide de la barre des onglets, en bas de la page : chaque onglet
+   reçoit la sienne ici, que `createIcons()` remplace par un SVG. */
 (() => {
  const icons={collection:'library',decks:'layers',deck:'panels-top-left',graphe:'network',edhrec:'lightbulb',catalogue:'database',simulation:'swords'};
  function mount(){
@@ -14,7 +13,6 @@
    i.setAttribute('aria-hidden','true');
    b.insertBefore(i,b.firstChild);
   });
-  // Les quatre icônes du menu principal sont déclarées dans le HTML.
   // createIcons remplace les <i> par des SVG et ne crée pas de doublon.
   window.lucide.createIcons({attrs:{class:'onglet-icone','aria-hidden':'true',focusable:'false'}});
  }
