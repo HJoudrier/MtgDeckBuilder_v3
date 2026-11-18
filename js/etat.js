@@ -59,7 +59,7 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    « Simulation » n'en montre aucune : `liste` y est nul aussi. */
 const ONGLETS = {
   decks:      {label:'Decks',      sections:['secI'],        liste:null},
-  wishlist:   {label:'Wishlist',   sections:['secJ'],        liste:'achats'},
+  wishlist:   {label:'Wishlist',   sections:['secL','secJ'], liste:'achats'},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
@@ -117,6 +117,9 @@ let apercuCardName = null;
 
 const S = {
   collection: new Map(),
+  /* Les acquisitions en cours : nom de carte -> exemplaires commandés, pas
+     encore reçus. Un entre-deux de la collection et de la liste d'achats. */
+  enCours: new Map(),
   /* Les decks, par clé, et celui sur lequel on travaille. Les trois listes
      d'un deck, son commandant, son format, son budget, ses restrictions et
      ses objectifs vivent dans son dossier ; `js/decks.js` pose sur `S` les

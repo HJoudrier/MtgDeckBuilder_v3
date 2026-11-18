@@ -74,6 +74,7 @@ function snapshot() {
     v: 1,
     date: Date.now(),
     collection: [...S.collection],
+    enCours: [...S.enCours],
     decks: clesDecks().map(deckSnap),
     deckActif: S.deckActif,
     achats: S.achats,
@@ -206,6 +207,9 @@ function restore(d) {
   });
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));
+  /* Une sauvegarde d'hier n'en porte pas, et un paquet de synchronisation non
+     plus : l'absence du champ laisse les commandes de cet appareil intactes. */
+  if (Array.isArray(d.enCours)) S.enCours = new Map(d.enCours.filter(([n, q]) => find(n) && q > 0));
   /* Les dossiers avant tout le reste : `S.deck`, `S.commander`, `S.format` et
      `S.budget` sont des vues sur le deck ouvert, et une écriture faite avant
      qu'il y en ait un irait dans un dossier créé pour rien. */

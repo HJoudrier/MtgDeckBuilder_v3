@@ -19,7 +19,7 @@ function coutDeck(cle) {
   let total = 0, inconnues = 0;
   d.deck.forEach((q, nom) => {
     const c = find(nom); if (!c) return;
-    const manque = Math.max(0, q - quantiteCollection(nom));
+    const manque = Math.max(0, q - quantiteCollection(nom) - quantiteEnCours(nom));
     if (!manque) return;
     if (c.price > 0) total += Math.round(c.price * multiplicateurAchat() * 100) / 100 * manque;
     else inconnues += manque;

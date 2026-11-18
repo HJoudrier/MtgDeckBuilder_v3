@@ -186,7 +186,7 @@ function bilanDeck(cle) {
     cartes += q;
     const p = Math.min(q, quantiteCollection(nom));
     possede += p;
-    manque += q - p;
+    manque += q - p - Math.min(q - p, quantiteEnCours(nom));
   });
   return {
     cle, deck:d, format:f, cartes, possede, manque,
