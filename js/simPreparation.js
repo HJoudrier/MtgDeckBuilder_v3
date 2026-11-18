@@ -119,10 +119,7 @@ function nomsManquants(cfg) {
   const noms = [];
   const d = S.decks[cfg.deck];
   if (d) [...d.deck.keys(), d.commander].filter(Boolean).forEach(n => { if (!ficheParNom(n)) noms.push(n); });
-  cfg.sieges.forEach(k => {
-    const a = S.adversaires[k];
-    if (a) [...a.liste.map(([n]) => n), ...a.commandants].forEach(n => { if (!ficheParNom(n)) noms.push(n); });
-  });
+  cfg.sieges.forEach(k => nomsDeSource(k).forEach(n => { if (!ficheParNom(n)) noms.push(n); }));
   return [...new Set(noms)];
 }
 

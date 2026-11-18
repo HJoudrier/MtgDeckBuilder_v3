@@ -87,7 +87,8 @@ function spent(cle) {
 /* La demande de chaque carte, deck par deck. */
 function demandesTousDecks() {
   const par = new Map();   // nom canonique -> {propres, partage, decks:[{cle, qty}]}
-  clesDecks().forEach(cle => {
+  /* Un deck externe ne demande rien : on ne l'a pas monté, on ne compte pas l'acheter. */
+  clesDecks().filter(cle => !S.decks[cle].externe).forEach(cle => {
     const d = S.decks[cle];
     d.deck.forEach((q, nom) => {
       if (!find(nom) || q <= 0) return;
@@ -114,7 +115,7 @@ function signatureAchats() {
   return [
     clesDecks().map(c => {
       const d = S.decks[c];
-      return c + ':' + (d.exemplairesPropres !== false ? 'p' : 's') + ':'
+      return c + ':' + (d.externe ? 'x' : '') + (d.exemplairesPropres !== false ? 'p' : 's') + ':'
            + [...d.deck].map(([n, q]) => `${n}×${q}`).sort().join(',');
     }).join('|'),
     [...S.collection].map(([n, q]) => `${n}×${q}`).sort().join(','),
@@ -158,7 +159,7 @@ function bilanWishlist() {
     exemplaires: l.reduce((n, x) => n + x.manque, 0),
     total: l.reduce((t, x) => t + x.total, 0),
     inconnus: l.filter(x => x.inconnu).length,
-    plafonds: clesDecks().reduce((t, c) => t + (S.decks[c].budget.total || 0), 0)
+    plafonds: clesDecks().filter(c => !S.decks[c].externe).reduce((t, c) => t + (S.decks[c].budget.total || 0), 0)
   };
 }
 

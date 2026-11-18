@@ -14,12 +14,12 @@ let COUV_TABLE = {cle: null, val: null};
 /* La couverture des decks de la table, recalculée seulement quand un deck,
    un adversaire, un comportement ou les sources de cartes ont changé. */
 function couvertureTable(cfg) {
-  const cle = [cfg.deck, signatureDeck(cfg.deck), ...cfg.sieges.map(k => k + (S.adversaires[k] ? signatureAdversaire(S.adversaires[k]) : '')),
+  const cle = [cfg.deck, signatureDeck(cfg.deck), ...cfg.sieges.map(k => k + signatureSource(k)),
     signatureComportements(), CAT.date, CAT.cartes.length, SIM_CARTES.size, typeof FORGE !== 'undefined' ? FORGE.textes.size : 0].join('|');
   if (COUV_TABLE.cle === cle) return COUV_TABLE.val;
   const val = [];
   if (S.decks[cfg.deck]) val.push({nom: S.decks[cfg.deck].nom, teste: true, c: siegeDeck(cfg.deck).couverture});
-  cfg.sieges.filter(Boolean).forEach(k => val.push({nom: S.adversaires[k].nom, c: siegeAdversaire(k).couverture}));
+  cfg.sieges.filter(Boolean).forEach(k => val.push({nom: nomDeSiege(k), c: siegeSource(k).couverture}));
   COUV_TABLE = {cle, val};
   return val;
 }
@@ -34,13 +34,13 @@ function optionsHTML(paires, choisi) {
 /* La table : les réglages d'un lot. */
 function tableHTML(cfg) {
   const decks = clesDecks().map(k => [k, S.decks[k].nom + ' · ' + (FORMATS[S.decks[k].format] || {}).label]);
-  const advs = [['', '— choisir —'], ...Object.keys(S.adversaires).map(k => [k, S.adversaires[k].nom])];
+  const advs = optionsSiege();
   const enCours = SIM.etat === 'encours' || SIM.etat === 'prepare';
   return `<div class="sim-bloc">
     <h3>La table</h3>
     <label class="sim-champ">Deck testé <select data-sim="deck">${optionsHTML(decks, cfg.deck)}</select></label>
     <label class="sim-champ">Joueurs <select data-sim="nbJoueurs">${optionsHTML([2, 3, 4, 5, 6].map(n => [String(n), String(n)]), String(cfg.nbJoueurs))}</select></label>
-    ${cfg.sieges.map((k, i) => `<label class="sim-champ">Adversaire ${i + 1}
+    ${cfg.sieges.map((k, i) => `<label class="sim-champ">Siège ${i + 2}
       <select data-sim="siege" data-i="${i}">${optionsHTML(advs, k)}</select></label>`).join('')}
     <div class="row">
       <label class="sim-champ court">Parties <input type="number" min="1" max="2000" data-sim="parties" value="${cfg.parties}"></label>

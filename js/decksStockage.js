@@ -13,7 +13,7 @@
 function deckSnap(cle) {
   const d = S.decks[cle];
   return {
-    cle, nom:d.nom, format:d.format, statut:d.statut,
+    cle, nom:d.nom, format:d.format, statut:d.statut, externe:d.externe === true,
     deck:[...d.deck], sideboard:[...d.sideboard], considering:[...d.considering],
     commander:d.commander, secondairesOff:[...d.secondairesOff],
     budget:{...d.budget}, exemplairesPropres:d.exemplairesPropres,

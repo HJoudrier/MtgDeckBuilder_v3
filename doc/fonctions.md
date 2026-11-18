@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1807 fonctions**, 276 modules, 1953 Ko de JavaScript.
+**1819 fonctions**, 277 modules, 1960 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -24,7 +24,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
 | [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 208 |
 | [`collectionDates.js`](#jscollectiondatesjs) | Les dates d'ajout des cartes de la collection | 15 | 153 |
-| [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
+| [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 200 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
 | [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
@@ -33,7 +33,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 241 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
-| [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 12 | 176 |
+| [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 12 | 177 |
 | [`oracleTexte.js`](#jsoracletextejs) | Préparer le texte oracle pour le compilateur | 7 | 122 |
 | [`oracleMotsCles.js`](#jsoraclemotsclesjs) | Les mots-clés que le moteur sait jouer | 3 | 75 |
 | [`oracleCouts.js`](#jsoraclecoutsjs) | Lire un coût : celui d'un sort, celui d'une capacité | 4 | 82 |
@@ -196,7 +196,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugEdhrec.js`](#jssugedhrecjs) | La section EDHREC : ce que les decks recensés recommandent | 1 | 52 |
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 252 |
-| [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
+| [`decksSection.js`](#jsdeckssectionjs) | Les sections « Mes decks » et « Decks externes » | 5 | 130 |
 | [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 122 |
 | [`acquisitionSection.js`](#jsacquisitionsectionjs) | La section « Acquisition en cours » | 2 | 48 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 12 | 194 |
@@ -212,11 +212,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 10 | 132 |
 | [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
+| [`simSources.js`](#jssimsourcesjs) | Ce qui peut s'asseoir à un siège de la simulation | 9 | 54 |
 | [`decksLies.js`](#jsdecksliesjs) | Les adversaires liés à Moxfield ou à Archidekt | 11 | 196 |
-| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 13 | 141 |
+| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 13 | 138 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 9 | 67 |
-| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 144 |
+| [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 145 |
 | [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 162 |
 | [`simCollection.js`](#jssimcollectionjs) | Ce que le moteur comprend de la collection | 8 | 130 |
 | [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 216 |
@@ -239,7 +240,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 133 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 6 | 107 |
-| [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 207 |
+| [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 215 |
 | [`fenFiltres.js`](#jsfenfiltresjs) | Fenêtre « Filtres » | 10 | 207 |
 | [`fenAffichage.js`](#jsfenaffichagejs) | Fenêtre « Affichage » d'une liste de cartes | 9 | 188 |
 | [`fenCibles.js`](#jsfenciblesjs) | Fenêtre « Objectifs par rôle » | 5 | 82 |
@@ -249,7 +250,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 10 | 168 |
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
-| [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
+| [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 160 |
 | [`gestesAcquisition.js`](#jsgestesacquisitionjs) | Les gestes de l'acquisition en cours | 2 | 59 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
@@ -279,7 +280,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 137 |
 | [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 11 | 136 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
-| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 11 | 130 |
+| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 13 | 145 |
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 67 |
@@ -522,7 +523,7 @@ Les dates d'ajout des cartes de la collection. *15 fonctions, 153 lignes, 6 Ko.*
 
 ## js/decks.js
 
-Les decks, et celui sur lequel on travaille. *12 fonctions, 196 lignes, 8.2 Ko.*
+Les decks, et celui sur lequel on travaille. *12 fonctions, 200 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -721,7 +722,7 @@ Marché Cardmarket, estimations & panier d'achat. *5 fonctions, 69 lignes, 2.8 K
 
 ## js/achats.js
 
-Ce qu'il reste à acheter. *12 fonctions, 176 lignes, 7.3 Ko.*
+Ce qu'il reste à acheter. *12 fonctions, 177 lignes, 7.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2835,7 +2836,7 @@ Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
 
 ## js/decksStockage.js
 
-Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
+Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3338,7 +3339,7 @@ Les trois sections des propositions. *13 fonctions, 252 lignes, 13 Ko.*
 
 ## js/decksSection.js
 
-La section « Mes decks ». *4 fonctions, 103 lignes, 5.4 Ko.*
+Les sections « Mes decks » et « Decks externes ». *5 fonctions, 130 lignes, 7.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3346,6 +3347,7 @@ La section « Mes decks ». *4 fonctions, 103 lignes, 5.4 Ko.*
 | `puceStatut(d)` | — |
 | `vignetteDeck(cle)` | — |
 | `renderI()` | — |
+| `renderM(externes)` | La section « Decks externes » : les decks qu'on étudie sans les avoir montés. |
 
 ## js/wishlistSection.js
 
@@ -3590,6 +3592,22 @@ La bibliothèque d'adversaires. *8 fonctions, 78 lignes, 3.4 Ko.*
 | `signatureAdversaire(adv)` | L'empreinte d'un adversaire : un résultat calculé contre une liste qui a changé depuis est périmé. |
 | `signatureDeck(cle)` | L'empreinte d'un deck de l'atelier, ouvert ou non. |
 
+## js/simSources.js
+
+Ce qui peut s'asseoir à un siège de la simulation. *9 fonctions, 54 lignes, 2.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `estSourceDeck(k)` | — |
+| `cleDeSource(k)` | — |
+| `sourceExiste(k)` | — |
+| `nomDeSiege(k)` | — |
+| `signatureSource(k)` | Ce qu'est devenue la liste : la signature change dès qu'une carte, le commandant ou le format changent. |
+| `siegeSource(k)` | — |
+| `nomsDeSource(k)` | Les noms de cartes d'une source, commandant compris. |
+| `sourceVide(k)` | Une source vide ne se joue pas. |
+| `optionsSiege()` | Les choix d'un siège : les decks de l'atelier d'abord, externes compris, puis la bibliothèque. |
+
 ## js/decksLies.js
 
 Les adversaires liés à Moxfield ou à Archidekt. *11 fonctions, 196 lignes, 8.7 Ko.*
@@ -3615,7 +3633,7 @@ Les adversaires liés à Moxfield ou à Archidekt. *11 fonctions, 196 lignes, 8.
 
 ## js/simPreparation.js
 
-D'un deck ou d'un adversaire à un siège de table. *13 fonctions, 141 lignes, 6.7 Ko.*
+D'un deck ou d'un adversaire à un siège de table. *13 fonctions, 138 lignes, 6.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3669,7 +3687,7 @@ Les résultats des lots, gardés et comparés. *9 fonctions, 67 lignes, 2.8 Ko.*
 
 ## js/simulation.js
 
-Un lot de parties, par tranches. *11 fonctions, 144 lignes, 6.6 Ko.*
+Un lot de parties, par tranches. *11 fonctions, 145 lignes, 6.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4081,7 +4099,7 @@ Fenêtre « Budget ». *6 fonctions, 107 lignes, 6.1 Ko.*
 
 ## js/fenDeck.js
 
-Fenêtre « Configuration du deck ». *9 fonctions, 207 lignes, 12 Ko.*
+Fenêtre « Configuration du deck ». *9 fonctions, 215 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4246,7 +4264,7 @@ Revoir une partie d'un lot. *1 fonctions, 38 lignes, 2.2 Ko.*
 
 ## js/gestesDecks.js
 
-Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
+Les gestes des decks. *3 fonctions, 160 lignes, 6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4714,12 +4732,14 @@ Attaquer et bloquer, au doigt. *4 fonctions, 73 lignes, 3.8 Ko.*
 
 ## js/tableSalon.js
 
-Le salon : qui s'assoit à la table, avec quel deck. *11 fonctions, 130 lignes, 7.5 Ko.*
+Le salon : qui s'assoit à la table, avec quel deck. *13 fonctions, 145 lignes, 8.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `sourcesDeDecks()` | — |
 | `nomDeSource(src)` | — |
+| `sourceDeMoi()` | Le deck de l'hôte, en source (`d:clé` ou `a:clé`) : n'importe quel deck de l'atelier, le sien ou un externe, ou un adversaire de la bibliothèque. |
+| `cleDeckDeMoi()` | La clé de deck que l'invité envoie : toujours un deck de l'atelier. |
 | `siegesDuSalon()` | Les sièges du salon, tels que `commenceTable()` les attend. |
 | `salonHTML()` | — |
 | `siegeDistantHTML(e, i)` | Le siège d'un invité au salon : son QR tant qu'il n'a pas répondu, puis son nom et son deck. |

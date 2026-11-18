@@ -96,7 +96,7 @@ function renderJ() {
     return;
   }
 
-  const partages = clesDecks().filter(c => S.decks[c].exemplairesPropres === false);
+  const partages = clesDecks().filter(c => !S.decks[c].externe && S.decks[c].exemplairesPropres === false);
   corps.innerHTML = `
     <div class="row" style="margin-bottom:8px">
       <span class="pill">${b.lignes} carte(s) différente(s)</span>

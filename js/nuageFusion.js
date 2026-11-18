@@ -115,7 +115,7 @@ function fusionneCache(local, distant) {
    suppression n'est donc nécessaire — c'est précisément ce pour quoi cette
    base existe, et sans elle un deck créé là-bas serait indiscernable d'un
    deck supprimé ici. */
-const DECK_CHAMPS_SIMPLES = ['nom', 'format', 'statut', 'commander', 'budget',
+const DECK_CHAMPS_SIMPLES = ['nom', 'format', 'statut', 'externe', 'commander', 'budget',
                              'exemplairesPropres', 'restrictions', 'ciblesRoles'];
 
 function indexDecks(liste) {

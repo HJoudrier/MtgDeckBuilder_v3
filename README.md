@@ -178,6 +178,7 @@ js/                 modules, chargés dans cet ordre :
   scryfall.js       la file d'attente vers Scryfall
   recherches.js     les recherches nommées chez Scryfall
   decksStockage.js  les dossiers de deck, rangés et relus
+  simSources.js     ce qui s'assoit à un siège de la simulation : un deck de l'atelier, externe ou non, ou un adversaire
   stockage.js       la sauvegarde locale
   fenSauvegarde.js  les sections « Sauvegarde » et « Catalogue »
   idb.js            le magasin IndexedDB
@@ -429,6 +430,25 @@ objectifs. `ciblesReglees()` (`js/legalite.js`) n'a pas changé d'une lettre.
 propre au deck et vivent dans son dossier (`S.budget`) ; l'état, la langue, le type de vendeur et le
 pays disent *comment* on achète, valent pour tous les decks, et vivent dans `S.achats`. La même
 fenêtre règle les deux, sous deux titres.
+
+**Un deck est à soi, ou externe** (`d.externe`, `js/decks.js`). Un deck de tournoi, celui d'un ami, une liste
+trouvée en ligne : on veut l'étudier, y ajouter des cartes, le jouer, sans que ce soit un deck qu'on construit.
+La page « Decks » le range dans sa propre section, « Decks externes » (`renderM()`, `js/decksSection.js`), et
+chaque vignette porte la bascule — « Marquer externe » / « C'est le mien » —, que la fenêtre de configuration
+répète en case à cocher. C'est un **drapeau du dossier**, pas un type : un deck externe s'ouvre, se complète,
+s'exporte, se duplique et se configure exactement comme un autre ; il voyage avec la synchronisation
+(`DECK_CHAMPS_SIMPLES`, `js/nuageFusion.js`) et se range avec lui. **Une seule chose change : la liste
+d'achats.** Un deck externe ne demande rien (`demandesTousDecks()`, `js/achats.js`) — on ne l'a pas monté, on ne
+compte pas l'acheter —, son budget n'entre pas dans les plafonds, et sa vignette dit combien de ses cartes sont
+hors de la collection, non combien il y a à acheter. Le basculer d'un côté à l'autre rend ou retire sa demande à
+la liste, sans autre geste.
+
+**N'importe quel deck à n'importe quel siège** (`js/simSources.js`). Les sièges adverses de la simulation ne
+connaissaient que la bibliothèque d'adversaires ; ils se remplissent maintenant d'un deck de l'atelier — le sien
+comme un externe — ou d'un adversaire, par une source `d:<clé>` ou `<clé>` (les lots d'hier gardaient la clé nue
+d'un adversaire, et la lisent encore). Le deck testé reste un deck, du tout premier au dernier. Au salon de jeu,
+l'hôte s'assoit lui aussi avec n'importe quelle source (`sourceDeMoi()`, `js/tableSalon.js`) ; l'invité, dont le
+deck part chez l'hôte, choisit parmi les decks de l'atelier.
 
 **Une restriction est un filtre que le deck porte lui-même.** Elle a la forme de `FILTRES_VIDE`,
 plus les couleurs — qu'elle peut déduire du commandant, ce qui évite de reposer la barre de mana à

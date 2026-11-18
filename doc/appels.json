@@ -202,6 +202,7 @@
   "ficheParcours.js",
   "simCartes.js",
   "simAdversaires.js",
+  "simSources.js",
   "decksLies.js",
   "simPreparation.js",
   "simStats.js",
@@ -1659,7 +1660,7 @@
   {
    "nom": "clesDecks",
    "fichier": "decks.js",
-   "ligne": 75,
+   "ligne": 79,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1668,11 +1669,12 @@
     "bilanWishlist",
     "deckCourant",
     "demandesTousDecks",
+    "optionsSiege",
     "rejoindreHTML",
     "renderI",
+    "renderM",
     "renderTop",
     "restaureDecks",
-    "salonHTML",
     "signatureAchats",
     "snapshot",
     "sourcesDeDecks",
@@ -1685,7 +1687,7 @@
   {
    "nom": "deckCourant",
    "fichier": "decks.js",
-   "ligne": 82,
+   "ligne": 86,
    "chargement": false,
    "appelle": [
     "cleDeckNeuve",
@@ -1712,7 +1714,7 @@
   {
    "nom": "nomDeckLibre",
    "fichier": "decks.js",
-   "ligne": 107,
+   "ligne": 111,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1725,7 +1727,7 @@
   {
    "nom": "creerDeck",
    "fichier": "decks.js",
-   "ligne": 117,
+   "ligne": 121,
    "chargement": false,
    "appelle": [
     "cleDeckNeuve",
@@ -1742,7 +1744,7 @@
   {
    "nom": "activerDeck",
    "fichier": "decks.js",
-   "ligne": 126,
+   "ligne": 130,
    "chargement": false,
    "appelle": [
     "degeleSuggestions",
@@ -1760,7 +1762,7 @@
   {
    "nom": "renommerDeck",
    "fichier": "decks.js",
-   "ligne": 137,
+   "ligne": 141,
    "chargement": false,
    "appelle": [
     "nomDeckLibre"
@@ -1774,7 +1776,7 @@
   {
    "nom": "dupliquerDeck",
    "fichier": "decks.js",
-   "ligne": 148,
+   "ligne": 152,
    "chargement": false,
    "appelle": [
     "creerDeck"
@@ -1788,7 +1790,7 @@
   {
    "nom": "supprimerDeck",
    "fichier": "decks.js",
-   "ligne": 158,
+   "ligne": 162,
    "chargement": false,
    "appelle": [
     "clesDecks",
@@ -1805,7 +1807,7 @@
   {
    "nom": "carteDansUnDeck",
    "fichier": "decks.js",
-   "ligne": 172,
+   "ligne": 176,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1817,7 +1819,7 @@
   {
    "nom": "bilanDeck",
    "fichier": "decks.js",
-   "ligne": 180,
+   "ligne": 184,
    "chargement": false,
    "appelle": [
     "quantiteCollection",
@@ -3147,7 +3149,7 @@
   {
    "nom": "invaliderAchats",
    "fichier": "achats.js",
-   "ligne": 106,
+   "ligne": 107,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -3155,6 +3157,7 @@
    "appeleePar": [
     "activerDeck",
     "appliquerDeck",
+    "gestesDecks",
     "saisieBudget",
     "supprimerDeck"
    ]
@@ -3162,7 +3165,7 @@
   {
    "nom": "signatureAchats",
    "fichier": "achats.js",
-   "ligne": 113,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "clesDecks"
@@ -3176,7 +3179,7 @@
   {
    "nom": "wishlist",
    "fichier": "achats.js",
-   "ligne": 127,
+   "ligne": 128,
    "chargement": false,
    "appelle": [
     "demandesTousDecks",
@@ -3198,7 +3201,7 @@
   {
    "nom": "bilanWishlist",
    "fichier": "achats.js",
-   "ligne": 154,
+   "ligne": 155,
    "chargement": false,
    "appelle": [
     "clesDecks",
@@ -3213,7 +3216,7 @@
   {
    "nom": "acquisitionsEnCours",
    "fichier": "achats.js",
-   "ligne": 167,
+   "ligne": 168,
    "chargement": false,
    "appelle": [
     "find",
@@ -23011,7 +23014,7 @@
   {
    "nom": "coutDeck",
    "fichier": "decksSection.js",
-   "ligne": 17,
+   "ligne": 22,
    "chargement": false,
    "appelle": [
     "find",
@@ -23029,7 +23032,7 @@
   {
    "nom": "puceStatut",
    "fichier": "decksSection.js",
-   "ligne": 30,
+   "ligne": 35,
    "chargement": false,
    "appelle": [
     "esc"
@@ -23043,7 +23046,7 @@
   {
    "nom": "vignetteDeck",
    "fichier": "decksSection.js",
-   "ligne": 35,
+   "ligne": 40,
    "chargement": false,
    "appelle": [
     "bilanDeck",
@@ -23059,13 +23062,32 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "renderI"
+    "renderI",
+    "renderM"
    ]
   },
   {
    "nom": "renderI",
    "fichier": "decksSection.js",
-   "ligne": 86,
+   "ligne": 94,
+   "chargement": false,
+   "appelle": [
+    "clesDecks",
+    "renderM"
+   ],
+   "appelleDiffere": [
+    "vignetteDeck"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDecks",
+    "renderAll"
+   ]
+  },
+  {
+   "nom": "renderM",
+   "fichier": "decksSection.js",
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "clesDecks"
@@ -23075,8 +23097,7 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
-    "gestesDecks",
-    "renderAll"
+    "renderI"
    ]
   },
   {
@@ -24891,7 +24912,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "adversairesHTML",
-    "majApercuAdversaire"
+    "majApercuAdversaire",
+    "sourceVide"
    ]
   },
   {
@@ -24939,10 +24961,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "couvertureTable",
-    "lotPerime",
     "manquesDecks",
-    "terminerLot"
+    "signatureSource"
    ]
   },
   {
@@ -24959,7 +24979,108 @@
     "couvertureTable",
     "lotPerime",
     "manquesDecks",
+    "signatureSource",
     "terminerLot"
+   ]
+  },
+  {
+   "nom": "sourceExiste",
+   "fichier": "simSources.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "configSimulation",
+    "lotPerime"
+   ]
+  },
+  {
+   "nom": "nomDeSiege",
+   "fichier": "simSources.js",
+   "ligne": 18,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureTable",
+    "terminerLot"
+   ]
+  },
+  {
+   "nom": "signatureSource",
+   "fichier": "simSources.js",
+   "ligne": 24,
+   "chargement": false,
+   "appelle": [
+    "signatureAdversaire",
+    "signatureDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureTable",
+    "lotPerime",
+    "terminerLot"
+   ]
+  },
+  {
+   "nom": "siegeSource",
+   "fichier": "simSources.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "siegeAdversaire",
+    "siegeDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureTable",
+    "joueLot",
+    "rejouePartie"
+   ]
+  },
+  {
+   "nom": "nomsDeSource",
+   "fichier": "simSources.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "nomsManquants"
+   ]
+  },
+  {
+   "nom": "sourceVide",
+   "fichier": "simSources.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "nbCartesAdversaire"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "obstacleSimulation"
+   ]
+  },
+  {
+   "nom": "optionsSiege",
+   "fichier": "simSources.js",
+   "ligne": 49,
+   "chargement": false,
+   "appelle": [
+    "clesDecks"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "tableHTML"
    ]
   },
   {
@@ -25254,7 +25375,8 @@
     "couvertureTable",
     "joueLot",
     "rejouePartie",
-    "siegeDeSource"
+    "siegeDeSource",
+    "siegeSource"
    ]
   },
   {
@@ -25268,10 +25390,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "couvertureTable",
-    "joueLot",
-    "rejouePartie",
-    "siegeDeSource"
+    "siegeDeSource",
+    "siegeSource"
    ]
   },
   {
@@ -25280,7 +25400,8 @@
    "ligne": 118,
    "chargement": false,
    "appelle": [
-    "ficheParNom"
+    "ficheParNom",
+    "nomsDeSource"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -25291,7 +25412,7 @@
   {
    "nom": "fiabilite",
    "fichier": "simPreparation.js",
-   "ligne": 131,
+   "ligne": 128,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -25303,7 +25424,7 @@
   {
    "nom": "signatureComportements",
    "fichier": "simPreparation.js",
-   "ligne": 138,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
     "empreinte"
@@ -25444,9 +25565,10 @@
    "ligne": 47,
    "chargement": false,
    "appelle": [
-    "signatureAdversaire",
     "signatureComportements",
-    "signatureDeck"
+    "signatureDeck",
+    "signatureSource",
+    "sourceExiste"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -25515,7 +25637,9 @@
    "fichier": "simulation.js",
    "ligne": 26,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "sourceExiste"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -25530,7 +25654,9 @@
    "ligne": 37,
    "chargement": false,
    "appelle": [],
-   "appelleDiffere": [],
+   "appelleDiffere": [
+    "sourceVide"
+   ],
    "appelleParHtml": [],
    "appeleePar": [
     "joueLot"
@@ -25539,7 +25665,7 @@
   {
    "nom": "placesPartie",
    "fichier": "simulation.js",
-   "ligne": 44,
+   "ligne": 45,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -25552,7 +25678,7 @@
   {
    "nom": "graineDePartie",
    "fichier": "simulation.js",
-   "ligne": 49,
+   "ligne": 50,
    "chargement": false,
    "appelle": [
     "brasse"
@@ -25567,7 +25693,7 @@
   {
    "nom": "majProgressionSim",
    "fichier": "simulation.js",
-   "ligne": 51,
+   "ligne": 52,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -25580,7 +25706,7 @@
   {
    "nom": "lanceSimulation",
    "fichier": "simulation.js",
-   "ligne": 61,
+   "ligne": 62,
    "chargement": false,
    "appelle": [
     "joueLot",
@@ -25597,7 +25723,7 @@
   {
    "nom": "joueLot",
    "fichier": "simulation.js",
-   "ligne": 71,
+   "ligne": 72,
    "chargement": false,
    "appelle": [
     "agentNiveau",
@@ -25620,7 +25746,7 @@
     "toast"
    ],
    "appelleDiffere": [
-    "siegeAdversaire"
+    "siegeSource"
    ],
    "appelleParHtml": [],
    "appeleePar": [
@@ -25630,7 +25756,7 @@
   {
    "nom": "terminerLot",
    "fichier": "simulation.js",
-   "ligne": 110,
+   "ligne": 111,
    "chargement": false,
    "appelle": [
     "agrege",
@@ -25638,12 +25764,14 @@
     "fiabilite",
     "renderK",
     "signalerTravail",
-    "signatureAdversaire",
     "signatureComportements",
     "signatureDeck",
     "toast"
    ],
-   "appelleDiffere": [],
+   "appelleDiffere": [
+    "nomDeSiege",
+    "signatureSource"
+   ],
    "appelleParHtml": [],
    "appeleePar": [
     "joueLot"
@@ -25652,7 +25780,7 @@
   {
    "nom": "arreteSimulation",
    "fichier": "simulation.js",
-   "ligne": 131,
+   "ligne": 132,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -25664,7 +25792,7 @@
   {
    "nom": "rejouePartie",
    "fichier": "simulation.js",
-   "ligne": 135,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
     "agentNiveau",
@@ -25675,7 +25803,7 @@
     "siegeDeck"
    ],
    "appelleDiffere": [
-    "siegeAdversaire"
+    "siegeSource"
    ],
    "appelleParHtml": [],
    "appeleePar": [
@@ -25688,11 +25816,12 @@
    "ligne": 16,
    "chargement": false,
    "appelle": [
-    "siegeAdversaire",
+    "nomDeSiege",
     "siegeDeck",
-    "signatureAdversaire",
+    "siegeSource",
     "signatureComportements",
-    "signatureDeck"
+    "signatureDeck",
+    "signatureSource"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -25724,7 +25853,8 @@
    "chargement": false,
    "appelle": [
     "clesDecks",
-    "optionsHTML"
+    "optionsHTML",
+    "optionsSiege"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -28664,7 +28794,7 @@
   {
    "nom": "resumeDeckConfig",
    "fichier": "fenDeck.js",
-   "ligne": 155,
+   "ligne": 163,
    "chargement": false,
    "appelle": [
     "avecBrouillon",
@@ -28684,7 +28814,7 @@
   {
    "nom": "majResumeDeck",
    "fichier": "fenDeck.js",
-   "ligne": 166,
+   "ligne": 174,
    "chargement": false,
    "appelle": [
     "resumeDeckConfig"
@@ -28699,7 +28829,7 @@
   {
    "nom": "majFenetreDeck",
    "fichier": "fenDeck.js",
-   "ligne": 173,
+   "ligne": 181,
    "chargement": false,
    "appelle": [
     "corpsDeck"
@@ -28715,7 +28845,7 @@
   {
    "nom": "appliquerDeck",
    "fichier": "fenDeck.js",
-   "ligne": 183,
+   "ligne": 191,
    "chargement": false,
    "appelle": [
     "closeDialog",
@@ -28733,7 +28863,7 @@
   {
    "nom": "openDeckModal",
    "fichier": "fenDeck.js",
-   "ligne": 195,
+   "ligne": 203,
    "chargement": false,
    "appelle": [
     "corpsDeck",
@@ -29738,6 +29868,7 @@
     "deckCourant",
     "dupliquerDeck",
     "esc",
+    "invaliderAchats",
     "majResumeDeck",
     "modifieBrouillon",
     "openDeckModal",
@@ -29760,7 +29891,7 @@
   {
    "nom": "saisieDeck",
    "fichier": "gestesDecks.js",
-   "ligne": 87,
+   "ligne": 109,
    "chargement": false,
    "appelle": [
     "dossierEnConfig",
@@ -29778,7 +29909,7 @@
   {
    "nom": "gestesDeckConfig",
    "fichier": "gestesDecks.js",
-   "ligne": 113,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
     "majFenetreDeck",
@@ -32531,12 +32662,42 @@
    ]
   },
   {
-   "nom": "siegesDuSalon",
+   "nom": "sourceDeMoi",
    "fichier": "tableSalon.js",
-   "ligne": 22,
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cleDeckDeMoi",
+    "salonHTML",
+    "siegesDuSalon"
+   ]
+  },
+  {
+   "nom": "cleDeckDeMoi",
+   "fichier": "tableSalon.js",
+   "ligne": 31,
    "chargement": false,
    "appelle": [
-    "nomDeSource"
+    "sourceDeMoi"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pret",
+    "rejoindreHTML"
+   ]
+  },
+  {
+   "nom": "siegesDuSalon",
+   "fichier": "tableSalon.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [
+    "nomDeSource",
+    "sourceDeMoi"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -32547,14 +32708,14 @@
   {
    "nom": "salonHTML",
    "fichier": "tableSalon.js",
-   "ligne": 30,
+   "ligne": 45,
    "chargement": false,
    "appelle": [
     "adressePublique",
-    "clesDecks",
     "esc",
     "optionsHTML",
     "siegeDistantHTML",
+    "sourceDeMoi",
     "sourcesDeDecks"
    ],
    "appelleDiffere": [],
@@ -32566,7 +32727,7 @@
   {
    "nom": "siegeDistantHTML",
    "fichier": "tableSalon.js",
-   "ligne": 67,
+   "ligne": 82,
    "chargement": false,
    "appelle": [
     "esc",
@@ -32583,7 +32744,7 @@
   {
    "nom": "alertesInvitesHTML",
    "fichier": "tableSalon.js",
-   "ligne": 84,
+   "ligne": 99,
    "chargement": false,
    "appelle": [
     "esc",
@@ -32600,7 +32761,7 @@
   {
    "nom": "ouvreSalon",
    "fichier": "tableSalon.js",
-   "ligne": 93,
+   "ligne": 108,
    "chargement": false,
    "appelle": [
     "renduTable",
@@ -32615,7 +32776,7 @@
   {
    "nom": "reglageSalon",
    "fichier": "tableSalon.js",
-   "ligne": 99,
+   "ligne": 114,
    "chargement": false,
    "appelle": [
     "reglageInvite",
@@ -32631,7 +32792,7 @@
   {
    "nom": "ajouteSiegeIA",
    "fichier": "tableSalon.js",
-   "ligne": 111,
+   "ligne": 126,
    "chargement": false,
    "appelle": [
     "renduTable",
@@ -32647,7 +32808,7 @@
   {
    "nom": "retireSiege",
    "fichier": "tableSalon.js",
-   "ligne": 118,
+   "ligne": 133,
    "chargement": false,
    "appelle": [
     "oublieDistant",
@@ -32663,7 +32824,7 @@
   {
    "nom": "commenceDepuisSalon",
    "fichier": "tableSalon.js",
-   "ligne": 126,
+   "ligne": 141,
    "chargement": false,
    "appelle": [
     "commenceTable",
@@ -33161,6 +33322,7 @@
     "canal",
     "chargeSimCartes",
     "chercheFichesScryfall",
+    "cleDeckDeMoi",
     "fichesDeDeck",
     "gardeEveil",
     "renduTable",
@@ -33259,6 +33421,7 @@
    "chargement": false,
    "appelle": [
     "base45",
+    "cleDeckDeMoi",
     "clesDecks",
     "codeATaper",
     "esc",

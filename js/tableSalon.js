@@ -9,7 +9,7 @@
    ===================================================================== */
 
 function sourcesDeDecks() {
-  return [...clesDecks().map(k => ['d:' + k, S.decks[k].nom]),
+  return [...clesDecks().map(k => ['d:' + k, S.decks[k].nom + (S.decks[k].externe ? ' (deck externe)' : '')]),
     ...Object.keys(S.adversaires).map(k => ['a:' + k, S.adversaires[k].nom + ' (adversaire)'])];
 }
 
@@ -18,10 +18,25 @@ function nomDeSource(src) {
   return g === 'a' ? (S.adversaires[k] || {}).nom : (S.decks[k] || {}).nom;
 }
 
+/* Le deck de l'hôte, en source (`d:clé` ou `a:clé`) : n'importe quel deck de l'atelier, le sien ou
+   un externe, ou un adversaire de la bibliothèque. Une clé nue — celle d'hier — est un deck. */
+function sourceDeMoi() {
+  const t = String(S.table.deck || '');
+  if (/^a:/.test(t) && S.adversaires[t.slice(2)]) return t;
+  const cle = t.replace(/^d:/, '');
+  return 'd:' + (S.decks[cle] ? cle : S.deckActif);
+}
+
+/* La clé de deck que l'invité envoie : toujours un deck de l'atelier. */
+function cleDeckDeMoi() {
+  const s = sourceDeMoi();
+  return /^d:/.test(s) ? s.slice(2) : S.deckActif;
+}
+
 /* Les sièges du salon, tels que `commenceTable()` les attend. */
 function siegesDuSalon() {
   const t = S.table;
-  const moi = {mode: 'moi', nom: t.nom || 'Moi', deck: 'd:' + (S.decks[t.deck] ? t.deck : S.deckActif)};
+  const moi = {mode: 'moi', nom: t.nom || 'Moi', deck: sourceDeMoi()};
   const autres = t.sieges.map(s => s.mode === 'distant' ? (TABLE.distants && TABLE.distants[s.cle]) || {mode: 'distant', nom: 'Invité', attendu: true}
     : {mode: 'ia', nom: nomDeSource(s.deck) || 'Automate', deck: s.deck});
   return [moi, ...autres];
@@ -41,7 +56,7 @@ function salonHTML() {
       <button type="button" class="btn sm" data-act="tQuitter" style="margin-left:auto">Fermer</button></div>
     <div class="sim-bloc">
       <label class="sim-champ">Votre nom <input type="text" data-tsalon="nom" value="${esc(t.nom || '')}" placeholder="Moi"></label>
-      <label class="sim-champ">Votre deck <select data-tsalon="monDeck">${optionsHTML(clesDecks().map(k => [k, S.decks[k].nom]), S.decks[t.deck] ? t.deck : S.deckActif)}</select></label>
+      <label class="sim-champ">Votre deck <select data-tsalon="monDeck">${optionsHTML(sources, sourceDeMoi())}</select></label>
     </div>
     <div class="sim-bloc"><h3>Les autres sièges</h3>
       <div class="sim-liste">${t.sieges.map(siegeHTML).join('') || '<div class="small muted">Personne encore.</div>'}</div>

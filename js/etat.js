@@ -58,7 +58,7 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    — la liste ou la grille, les colonnes, le groupement, le tri. L'onglet
    « Simulation » n'en montre aucune : `liste` y est nul aussi. */
 const ONGLETS = {
-  decks:      {label:'Decks',      sections:['secI'],        liste:null},
+  decks:      {label:'Decks',      sections:['secI', 'secM'], liste:null},
   wishlist:   {label:'Wishlist',   sections:['secL','secJ'], liste:'achats'},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
