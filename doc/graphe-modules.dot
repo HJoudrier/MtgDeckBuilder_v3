@@ -124,7 +124,7 @@ digraph modules {
     "forgeMotsClesF.js" [label="js/forgeMotsClesF.js\n2 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "forgeParadigme.js" [label="js/forgeParadigme.js\n1 fonction", fillcolor="#a8846d33", color="#a8846d"];
     "forgeDesignes.js" [label="js/forgeDesignes.js\n1 fonction", fillcolor="#6da88c33", color="#6da88c"];
-    "forgeDeclencheursD.js" [label="js/forgeDeclencheursD.js\n2 fonctions", fillcolor="#a86d8a33", color="#a86d8a"];
+    "forgeDeclencheursD.js" [label="js/forgeDeclencheursD.js\n1 fonction", fillcolor="#a86d8a33", color="#a86d8a"];
     "forgeRadiation.js" [label="js/forgeRadiation.js\n0 fonction", fillcolor="#96a86d33", color="#96a86d"];
     "forgeAnneau.js" [label="js/forgeAnneau.js\n2 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
     "forgeProtections.js" [label="js/forgeProtections.js\n4 fonctions", fillcolor="#a89b6d33", color="#a89b6d"];

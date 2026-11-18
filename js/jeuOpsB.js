@@ -41,6 +41,7 @@ OPS.prolifere = function* (P, op, ctx) {
   });
   P.joueurs.forEach(J => { if (J.i !== ctx.ctrl && J.poison > 0) J.poison++; });
   P.ver++;
+  emet(P, {t: 'prolifere', joueur: ctx.ctrl});
 };
 OPS.pompe = function* (P, op, ctx) {
   const f = valeur(P, op.f, ctx), e = valeur(P, op.e, ctx);

@@ -166,7 +166,7 @@ function doitEtreBloque(P, id, fg) {
 function bloqueursImposes(P, atts, blqs, pose) {
   const cb = P.combat, fg = new Map(atts.map(a => [a, statiquesForgeSur(P, obj(P, a))]));
   /* L'attirance (Lure) : toute créature qui peut le bloquer le bloque. */
-  atts.filter(a => obj(P, a).def.params.leurre || fg.get(a).leurre).forEach(a => {
+  atts.filter(a => obj(P, a).def.params.leurre || fg.get(a).leurre || obj(P, a).mods.some(m => m.leurre)).forEach(a => {
     blqs.forEach(b => { if (!cb.bloqueurs.has(b) && peutBloquer(P, obj(P, b), obj(P, a))) pose(b, a); });
   });
   atts.filter(a => doitEtreBloque(P, a, fg) && !(cb.bloquesPar.get(a) || []).length).forEach(a => {

@@ -1554,6 +1554,24 @@ ainsi) n'était pas jugée, et le jeton partait toujours. `expressionsDe()` rel�
 partielles ou injouables, toutes à raison ; Coat of Arms, Mana Echoes et Alpha Status l'ont aussitôt été de nouveau
 en jouant.
 
+**Lot F64 : les interdictions de combat du tour, l'eminence, Aurelia, Thriving** (`js/forgeEffetsC.js`,
+`js/forgeDeclencheursD.js`). La liste qui reste est dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md).
+- **`KW$ HIDDEN CARDNAME can't block.`** (cent seize scripts) **, `can't attack`, `can't attack or block`, `All
+  creatures able to block CARDNAME do so`** : la pompe pose le drapeau dans le bonus du tour (`CACHES_DU_TOUR`), que
+  `car()` lit pour `nePeutAttaquer` et `nePeutBloquer`, et `bloqueursImposes()` pour l'attirance ;
+- **`Activation$` sur une capacité de mana** (Mox Opal, Metalcraft) : `sourcesMana()` demandait déjà
+  `activationInterdite()` à chaque capacité de mana, et le drapeau `activation` y répond maintenant ; seule la
+  condition inconnue écarte la capacité ;
+- **`Attacks | FirstAttack$`** : chaque attaque porte son rang pour le permanent, ce tour (`o.attaquesTour`) ;
+  Aurelia déclenche une fois, la phase de combat de plus (F59) ne la déclenche pas deux fois.
+  **`CheckDefinedPlayer$ TriggeredDefender.withMostLife`** (Scourge of the Throne) se juge sur le défenseur de l'attaque ;
+- **`TriggerObjectsAttackers$Amount`** (The Ur-Dragon) : le nombre d'attaquants qui répondent au filtre du
+  déclencheur, gardé sur l'évènement à la décision ;
+- **l'eminence** : les statiques `EffectZone$ Battlefield,Command` d'un commandant agissent depuis sa zone
+  (`statiquesEnJeu()`), pour les réductions et hausses de coût ;
+- **`Exclude$`** de `ChooseColor` (les dix terrains Thriving) ; **`Proliferate | Amount$`** et le déclencheur
+  `Proliferate` (Ezuri).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

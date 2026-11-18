@@ -69,7 +69,7 @@ function statiqueTenable(t) {
   const cimetiere = t.EffectZone === 'Graveyard' && t.Mode === 'Continuous' && t.Affected && t.Affected !== 'Card.Self';
   /* Une caractéristique qui se définit dans toutes les zones : seul le champ compte ici. */
   if (t.EffectZone === 'All' && t.CharacteristicDefining === 'True' && t.Mode === 'Continuous') return true;
-  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !cimetiere && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
+  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(t.EffectZone === 'Battlefield,Command' && /^(ReduceCost|RaiseCost)$/.test(t.Mode)) && !cimetiere && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
   if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/^(Colorless|All|ChosenColor)$/.test(t.SetColor || t.AddColor)) return false;
   return true;
 }

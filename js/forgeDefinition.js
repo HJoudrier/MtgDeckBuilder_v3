@@ -107,13 +107,14 @@ function capaciteForge(def, face, t, jetons) {
   const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
   if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
   if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage)) return false;
-  /* Une capacité de mana soumise à une condition (Metalcraft) n'est pas jouée : le planificateur de paiement ne la sait pas juger. */
-  if (t.Activation && /^Mana/.test(api)) return false;
+  /* Une condition d'activation inconnue écarte la capacité (js/forgeActivations.js). */
+  if (t.Activation && !FORGE_CONDITIONS[t.Activation]) return false;
+  const cond = t.Activation ? {activation: t.Activation} : {};
   /* « Add one mana of any color a land you control could produce »
      (Reflecting Pool, Exotic Orchard) : les couleurs se lisent au moment
      de payer (js/jeuMana.js `manaReflete()`). */
   if (api === 'ManaReflected' && !t.SubAbility && t.Valid && !/^Defined/.test(t.Valid)) {
-    def.capacites.push({genre: 'mana', cout: c.cout, options: [], reflete: {valid: t.Valid, type: t.ColorOrType === 'Type'}, texte: texteForge(face, t)});
+    def.capacites.push({genre: 'mana', cout: c.cout, options: [], reflete: {valid: t.Valid, type: t.ColorOrType === 'Type'}, texte: texteForge(face, t), ...cond});
     return true;
   }
   /* « It doesn't untap during your next untap step » (Cinder Marsh) : un
@@ -125,7 +126,7 @@ function capaciteForge(def, face, t, jetons) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */
     if (/^Combo ColorIdentity$/.test(t.Produced || '') && (t.Amount || '1') === '1' && tableJouable(t)) {
-      def.capacites.push({genre: 'mana', cout: c.cout, options: [], identite: true, texte: texteForge(face, t)});
+      def.capacites.push({genre: 'mana', cout: c.cout, options: [], identite: true, texte: texteForge(face, t), ...cond});
       return true;
     }
     /* La couleur choisie (« add one mana of the chosen color »), une
@@ -139,7 +140,7 @@ function capaciteForge(def, face, t, jetons) {
     def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {}),
       ...(t.SorcerySpeed === 'True' ? {vitesse: 'rituel'} : {}),
       ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face}),
-      ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {})});
+      ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {}), ...cond});
     return true;
   }
   /* `Activation$ Delirium` : « activate only if… », jugé par FORGE_CONDITIONS ; une

@@ -229,5 +229,7 @@ forgeEffet('RemoveCounter', ['CounterType', 'CounterNum'], function* (P, t, env)
   });
 }, (t, op) => { op.op = 'forge'; op.hostile = op.slot != null; });
 
-forgeEffet('Proliferate', [], function* (P, t, env) { yield* OPS.prolifere(P, {}, env.ctx); },
+forgeEffet('Proliferate', ['Amount'], function* (P, t, env) {
+  for (let k = forgeNombre(P, t.Amount || 1, env); k > 0; k--) yield* OPS.prolifere(P, {}, env.ctx);
+},
   (t, op) => { op.op = 'prolifere'; op.hostile = false; });

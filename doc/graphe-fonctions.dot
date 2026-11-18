@@ -1217,7 +1217,6 @@ digraph appels {
     label="js/forgeDeclencheursD.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
     "forgeDeclencheursD.js (chargement)" [label="chargement du module", fillcolor="#a86d8a33", color="#a86d8a", shape=note];
     "unSeulParLot" [label="unSeulParLot", fillcolor="#a86d8a33", color="#a86d8a"];
-    "sousLimiteDuTour" [label="sousLimiteDuTour", fillcolor="#a86d8a33", color="#a86d8a"];
   }
   subgraph "cluster_117" {
     label="js/forgeRadiation.js"; fontsize=13; style="rounded,filled"; color="#96a86d"; fillcolor="#96a86d1a"; penwidth=1.4;
@@ -5315,7 +5314,9 @@ digraph appels {
   "forgeDeclencheursD.js (chargement)" -> "obj" [color="#a86d8a99"];
   "forgeDeclencheursD.js (chargement)" -> "forgeSait" [color="#a86d8a99"];
   "forgeDeclencheursD.js (chargement)" -> "unSeulParLot" [color="#a86d8a99"];
-  "forgeDeclencheursD.js (chargement)" -> "sousLimiteDuTour" [color="#a86d8a99"];
+  "forgeDeclencheursD.js (chargement)" -> "vivants" [color="#a86d8a99"];
+  "forgeDeclencheursD.js (chargement)" -> "forgeValideObjet" [color="#a86d8a99"];
+  "forgeDeclencheursD.js (chargement)" -> "exprEtendue" [style=dashed, color="#a86d8a66"];
   "forgeRadiation.js (chargement)" -> "forgeEffet" [color="#96a86d99"];
   "forgeRadiation.js (chargement)" -> "forgeNombre" [color="#96a86d99"];
   "forgeRadiation.js (chargement)" -> "joueursForge" [color="#96a86d99"];
