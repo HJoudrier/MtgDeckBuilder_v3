@@ -657,6 +657,8 @@ digraph modules {
   "forgeManaB.js" -> "forgeRemplacements.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
   "forgeManaB.js" -> "jeuMana.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
   "forgeManaB.js" -> "forgeDeclencheurs.js" [penwidth=2.08, color="#a86d8aaa", tooltip="3 appel(s)"];
+  "forgeManaC.js" -> "forgeRemplacements.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
+  "forgeManaC.js" -> "forgeScript.js" [penwidth=2.08, color="#96a86daa", tooltip="3 appel(s)"];
   "forgeEmpreinte.js" -> "jeuEtat.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
   "forgeEmpreinte.js" -> "forgeDefinition.js" [penwidth=2.08, color="#6da8a4aa", tooltip="3 appel(s)"];
   "forgeMemoire.js" -> "jeuCaracteristiques.js" [penwidth=2.08, color="#a89b6daa", tooltip="3 appel(s)"];

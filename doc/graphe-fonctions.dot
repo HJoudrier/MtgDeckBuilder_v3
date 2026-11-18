@@ -3610,6 +3610,7 @@ digraph appels {
   "resoudre" -> "jn" [color="#8a7fa899"];
   "resoudre" -> "deplace" [color="#8a7fa899"];
   "resoudre" -> "metEnJeu" [color="#8a7fa899"];
+  "resoudre" -> "poseMarqueurs" [color="#8a7fa899"];
   "resoudre" -> "apresDash" [color="#8a7fa899"];
   "resoudre" -> "apresVariante" [color="#8a7fa899"];
   "resoudre" -> "donneCadeau" [color="#8a7fa899"];
@@ -5251,10 +5252,15 @@ digraph appels {
   "remplacementsOptionnels" -> "exilsApplicables" [color="#96a86d99"];
   "remplacementsOptionnels" -> "question" [color="#96a86d99"];
   "forgeManaC.js (chargement)" -> "forgeApi" [color="#96a86d99"];
+  "forgeManaC.js (chargement)" -> "genreMarqueur" [color="#96a86d99"];
   "forgeManaC.js (chargement)" -> "declencheurForge" [color="#96a86d99"];
   "forgeManaC.js (chargement)" -> "forgeTable" [color="#96a86d99"];
   "forgeManaC.js (chargement)" -> "forgeSait" [color="#96a86d99"];
+  "forgeManaC.js (chargement)" -> "forgeSousCapacite" [color="#96a86d99"];
+  "forgeManaC.js (chargement)" -> "remplacementsEnJeu" [color="#96a86d99"];
   "forgeManaC.js (chargement)" -> "capaciteForge" [style=dashed, color="#96a86d66"];
+  "forgeManaC.js (chargement)" -> "formeRemplacement" [style=dashed, color="#96a86d66"];
+  "forgeManaC.js (chargement)" -> "videReserves" [style=dashed, color="#96a86d66"];
   "oublieObjets" -> "suit" [color="#6da8a499"];
   "empreinteAuLieu" -> "retiensEmpreinte" [color="#6da8a499"];
   "empreinteAuLieu" -> "empreinteDe" [color="#6da8a499"];

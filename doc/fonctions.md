@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1778 fonctions**, 268 modules, 1915 Ko de JavaScript.
+**1778 fonctions**, 268 modules, 1917 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -68,7 +68,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
-| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 150 |
+| [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 152 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 210 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 132 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
@@ -120,7 +120,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
 | [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 169 |
-| [`forgeManaC.js`](#jsforgemanacjs) | Le mana qui porte quelque chose | 2 | 61 |
+| [`forgeManaC.js`](#jsforgemanacjs) | Le mana qui porte quelque chose | 2 | 86 |
 | [`forgeEmpreinte.js`](#jsforgeempreintejs) | L'empreinte | 6 | 150 |
 | [`forgeMemoire.js`](#jsforgememoirejs) | La mémoire, II | 4 | 199 |
 | [`forgeModes.js`](#jsforgemodesjs) | Les modes qu'on paie, le mode qu'on retient | 3 | 87 |
@@ -1330,7 +1330,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 150 lignes, 7.9 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 152 lignes, 8.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2250,7 +2250,7 @@ Le mana, II. *4 fonctions, 169 lignes, 9.2 Ko.*
 
 ## js/forgeManaC.js
 
-Le mana qui porte quelque chose. *2 fonctions, 61 lignes, 3.5 Ko.*
+Le mana qui porte quelque chose. *2 fonctions, 86 lignes, 5.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|

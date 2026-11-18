@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1736 fonctions** dans 268 modules, **5644 appels** relevés.
+**1736 fonctions** dans 268 modules, **5650 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1467,7 +1467,7 @@ Appelée par : `capacitesAnneau`, `definitionForge`, `jetonsForge`, `manquesDeck
 
 Appelle : `forgeTable()` *(forgeScript.js)*
 
-Appelée par : `accordeAnimation`, `chaineDegats`, `chainePioche`, `declencheurForge`, `effetForge`, `entreeForge`, `entreeForgeMotCle`, `entreeSoiForge`, `eveilForge`, `exilsApplicables`, `forgeChoix.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeManaB.js (chargement)`, `formeRemplacement`, `formeRemplacementC`, `formeRemplacementD`, `motCleForge`, `motCleLancementB`, `motClePermanent`, `nombreRemplace`, `payeAvantForge`, `quantiteRemplacee`, `sousEffets`, `statiqueForge`, `surchargeForge`, `vieReduite`
+Appelée par : `accordeAnimation`, `chaineDegats`, `chainePioche`, `declencheurForge`, `effetForge`, `entreeForge`, `entreeForgeMotCle`, `entreeSoiForge`, `eveilForge`, `exilsApplicables`, `forgeChoix.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `formeRemplacement`, `formeRemplacementC`, `formeRemplacementD`, `motCleForge`, `motCleLancementB`, `motClePermanent`, `nombreRemplace`, `payeAvantForge`, `quantiteRemplacee`, `sousEffets`, `statiqueForge`, `surchargeForge`, `vieReduite`
 
 ### `ficheDeScriptForge()` — ligne 115
 
@@ -1695,7 +1695,7 @@ Appelée par : `degageAussi`, `degagement`, `forgeDegagements.js (chargement)`, 
 
 Appelle : `emet()` *(jeuEtat.js)*, `quantiteRemplacee()` *(forgeRemplacements.js)*
 
-Appelée par : `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgePaliers.js (chargement)`, `forgeTraine.js (chargement)`, `infligeUnePart`, `jeuOpsB.js (chargement)`, `metEnJeu`, `paieAutreB`, `paieAutreX`, `retourneFace`
+Appelée par : `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgePaliers.js (chargement)`, `forgeTraine.js (chargement)`, `infligeUnePart`, `jeuOpsB.js (chargement)`, `metEnJeu`, `paieAutreB`, `paieAutreX`, `resoudre`, `retourneFace`
 
 ### `emetCibles()` — ligne 40
 
@@ -1931,7 +1931,7 @@ Appelée par : `activeCapacite`, `complote`, `equipe`, `executeForge`, `forgeDeg
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `forgeManaB.js (chargement)`, `reprise`, `suiteDuTour`
+Appelée par : `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `reprise`, `suiteDuTour`
 
 ### `manaReflete()` — ligne 234
 
@@ -2771,11 +2771,11 @@ Appelée par : `priorite`
 
 ### `resoudre()` — ligne 58
 
-Appelle : `apresDash()` *(jeuVariantesB.js)*, `apresVariante()` *(forgeMotsClesC.js)*, `cibleEncoreLegale()` *(jeuCibles.js)*, `deplace()` *(jeuEtat.js)*, `donneCadeau()` *(forgeMotsClesE.js)*, `encodeChiffre()` *(forgeMotsClesE.js)*, `executeOps()` *(jeuOpsB.js)*, `exileApresResolution()` *(jeuVariantesB.js)*, `jn()` *(jeuEtat.js)*, `melangeHasard()` *(jeuHasard.js)*, `metEnJeu()` *(jeuOpsB.js)*, `noteResolution()` *(jeuHistorique.js)*, `obj()` *(jeuEtat.js)*, `remplacementsOptionnels()` *(forgeManaC.js)*
+Appelle : `apresDash()` *(jeuVariantesB.js)*, `apresVariante()` *(forgeMotsClesC.js)*, `cibleEncoreLegale()` *(jeuCibles.js)*, `deplace()` *(jeuEtat.js)*, `donneCadeau()` *(forgeMotsClesE.js)*, `encodeChiffre()` *(forgeMotsClesE.js)*, `executeOps()` *(jeuOpsB.js)*, `exileApresResolution()` *(jeuVariantesB.js)*, `jn()` *(jeuEtat.js)*, `melangeHasard()` *(jeuHasard.js)*, `metEnJeu()` *(jeuOpsB.js)*, `noteResolution()` *(jeuHistorique.js)*, `obj()` *(jeuEtat.js)*, `poseMarqueurs()` *(jeuGestes.js)*, `remplacementsOptionnels()` *(forgeManaC.js)*
 
 Appelée par : `priorite`
 
-### `priorite()` — ligne 119
+### `priorite()` — ligne 121
 
 Appelle : `actionsPossibles()` *(jeuLancer.js)*, `executeAction()` *(jeuActions.js)*, `joueSuitesRemplacement()` *(forgeRemplacementsC.js)*, `question()` *(jeuEtat.js)*, `resoudre()` *(jeuPile.js)*, `stabilise()` *(jeuPile.js)*, `suivantVivant()` *(jeuEtat.js)*, `vivants()` *(jeuEtat.js)*
 
@@ -3161,7 +3161,7 @@ Appelée par : `coutsForge`, `defCorrespond`, `entreeDegageeParAutre`, `entreeEn
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `caracEtendue`, `coutForge`, `entreeForge`, `forgeChoixMultiples.js (chargement)`, `forgeCout.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExpression`, `forgeMotsClesF.js (chargement)`, `genresMarqueurs`, `marqueurPose`, `motCleForge`, `motCleTraineB`, `propObjet`, `quantiteRemplacee`
+Appelée par : `caracEtendue`, `coutForge`, `entreeForge`, `forgeChoixMultiples.js (chargement)`, `forgeCout.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExpression`, `forgeManaC.js (chargement)`, `forgeMotsClesF.js (chargement)`, `genresMarqueurs`, `marqueurPose`, `motCleForge`, `motCleTraineB`, `propObjet`, `quantiteRemplacee`
 
 ### `descForge()` — ligne 30
 
@@ -4585,13 +4585,13 @@ Appelle : `forgeSait()` *(forgeCouverture.js)*
 
 Appelle : `forgeSousCapacite()` *(forgeScript.js)*, `formePioche()` *(jeuPioche.js)*, `formeRemplacementB()` *(forgeRemplacementsB.js)*, `formeRemplacementC()` *(forgeRemplacementsC.js)*, `zoneForge()` *(forgeEffetsA.js)*
 
-Appelée par : `forgeEffetsD.js (chargement)`, `remplacementForge`
+Appelée par : `forgeEffetsD.js (chargement)`, `forgeManaC.js (chargement)`, `remplacementForge`
 
 ### `remplacementsEnJeu()` — ligne 60
 
 Appelle : `obj()` *(jeuEtat.js)*, `sansCapacites()` *(jeuCouches.js)*
 
-Appelée par : `degagementEmpeche`, `degatsApresPrevention`, `degatsRemplaces`, `entreeDegageeParAutre`, `entreeEngageeParAutre`, `etapeSautee`, `exilsApplicables`, `forgeManaB.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `incontrecarrable`, `nePeutPerdre`, `piocheRemplacee`, `quantiteRemplacee`, `remplacementsPour`, `vieReduite`
+Appelée par : `degagementEmpeche`, `degatsApresPrevention`, `degatsRemplaces`, `entreeDegageeParAutre`, `entreeEngageeParAutre`, `etapeSautee`, `exilsApplicables`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `incontrecarrable`, `nePeutPerdre`, `piocheRemplacee`, `quantiteRemplacee`, `remplacementsPour`, `vieReduite`
 
 ### `envRemplacement()` — ligne 70
 
@@ -5197,15 +5197,15 @@ Appelée par : `forgeManaB.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `declencheurForge()` *(forgeDefinition.js)*, `forgeApi()` *(forgeScript.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeTable()` *(forgeScript.js)*, → `capaciteForge()` *(forgeDefinition.js)*
+Appelle : `declencheurForge()` *(forgeDefinition.js)*, `forgeApi()` *(forgeScript.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `genreMarqueur()` *(forgeDescripteurs.js)*, `remplacementsEnJeu()` *(forgeRemplacements.js)*, → `capaciteForge()` *(forgeDefinition.js)*, → `formeRemplacement()` *(forgeRemplacements.js)*, → `videReserves()` *(jeuMana.js)*
 
-### `manaPorte()` — ligne 44
+### `manaPorte()` — ligne 48
 
 Appelle : `manaPermis()` *(jeuMana.js)*
 
 Appelée par : `paieMana`
 
-### `remplacementsOptionnels()` — ligne 54
+### `remplacementsOptionnels()` — ligne 58
 
 Appelle : `exilsApplicables()` *(forgeRemplacements.js)*, `question()` *(jeuEtat.js)*
 

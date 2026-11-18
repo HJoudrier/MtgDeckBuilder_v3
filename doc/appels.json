@@ -4041,6 +4041,7 @@
     "forgeEffetsD.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeManaB.js (chargement)",
+    "forgeManaC.js (chargement)",
     "formeRemplacement",
     "formeRemplacementC",
     "formeRemplacementD",
@@ -5177,6 +5178,7 @@
     "metEnJeu",
     "paieAutreB",
     "paieAutreX",
+    "resoudre",
     "retourneFace"
    ]
   },
@@ -6007,6 +6009,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeManaB.js (chargement)",
+    "forgeManaC.js (chargement)",
     "reprise",
     "suiteDuTour"
    ]
@@ -8607,6 +8610,7 @@
     "metEnJeu",
     "noteResolution",
     "obj",
+    "poseMarqueurs",
     "remplacementsOptionnels"
    ],
    "appelleDiffere": [],
@@ -8618,7 +8622,7 @@
   {
    "nom": "priorite",
    "fichier": "jeuPile.js",
-   "ligne": 119,
+   "ligne": 121,
    "chargement": false,
    "appelle": [
     "actionsPossibles",
@@ -9795,6 +9799,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
+    "forgeManaC.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "genresMarqueurs",
     "marqueurPose",
@@ -14330,6 +14335,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeEffetsD.js (chargement)",
+    "forgeManaC.js (chargement)",
     "remplacementForge"
    ]
   },
@@ -14353,6 +14359,7 @@
     "etapeSautee",
     "exilsApplicables",
     "forgeManaB.js (chargement)",
+    "forgeManaC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "incontrecarrable",
     "nePeutPerdre",
@@ -16251,10 +16258,15 @@
     "declencheurForge",
     "forgeApi",
     "forgeSait",
-    "forgeTable"
+    "forgeSousCapacite",
+    "forgeTable",
+    "genreMarqueur",
+    "remplacementsEnJeu"
    ],
    "appelleDiffere": [
-    "capaciteForge"
+    "capaciteForge",
+    "formeRemplacement",
+    "videReserves"
    ],
    "appelleParHtml": [],
    "appeleePar": []
@@ -16262,7 +16274,7 @@
   {
    "nom": "manaPorte",
    "fichier": "forgeManaC.js",
-   "ligne": 44,
+   "ligne": 48,
    "chargement": false,
    "appelle": [
     "manaPermis"
@@ -16276,7 +16288,7 @@
   {
    "nom": "remplacementsOptionnels",
    "fichier": "forgeManaC.js",
-   "ligne": 54,
+   "ligne": 58,
    "chargement": false,
    "appelle": [
     "exilsApplicables",

@@ -1760,6 +1760,18 @@ propres déclencheurs (`Effect | Triggers$`, Osteomancer Adept).
   passer une carte pour partielle.
 Restent : Suspend accordé, Read ahead, Champion, les mots-clés d'un autre jeu (Firebending, Beam me up), Mutate.
 
+**Lot F76 : le mana** (`js/forgeManaC.js`). Quatre cartes de plus, et deux qui n'étaient complètes qu'en apparence :
+- **`LoseMana | ReplaceWith$ ConvertMana`** (Kruphix, Horizon Stone, Omnath) : une forme de remplacement `manaIncolore` ;
+  `videReserves()` garde alors tout le mana du joueur, devenu incolore, au lieu de le perdre ;
+- **`AddsCounters$ Card.Creature_P1P1_1`** (Biophagus) : le mana porte, comme les mots-clés de Carnelian Orb, des
+  marqueurs que le sort payé reçoit en entrant (`o.marqPortes`, appliqués par `js/jeuPile.js`) ; une quantité en SVar
+  (Opal Palace) reste refusée ;
+- **une capacité de mana qui défausse** (Lion's Eye Diamond, Diamond Lion : « discard your hand ») était lue mais ne
+  pouvait jamais payer : le planificateur de `sourcesMana()` écarte tout coût de défausse. Elle est désormais refusée
+  à la construction, et la carte passe de complète à partielle — la couverture était fausse.
+Restent : les coûts à X ou en marqueurs (Hazel of the Rootbloom, Crucible of the Spirit Dragon, Wall of Roots), le mana
+d'un permanent sacrifié (Squandered Resources), le mana réservé au combat (Avatar Roku).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.
