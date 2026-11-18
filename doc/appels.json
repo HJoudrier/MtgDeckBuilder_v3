@@ -4148,9 +4148,11 @@
   {
    "nom": "expressionsDe",
    "fichier": "forgeCouverture.js",
-   "ligne": 68,
+   "ligne": 70,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "famillesFiltre"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
@@ -4161,7 +4163,7 @@
   {
    "nom": "elementsTable",
    "fichier": "forgeCouverture.js",
-   "ligne": 79,
+   "ligne": 88,
    "chargement": false,
    "appelle": [
     "expressionsDe",
@@ -4179,7 +4181,7 @@
   {
    "nom": "unitesForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 114,
+   "ligne": 123,
    "chargement": false,
    "appelle": [
     "elementsTable",
@@ -4195,7 +4197,7 @@
   {
    "nom": "couvertureForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 142,
+   "ligne": 151,
    "chargement": false,
    "appelle": [
     "forgeConnu",
@@ -4213,7 +4215,7 @@
   {
    "nom": "manquesForge",
    "fichier": "forgeCouverture.js",
-   "ligne": 162,
+   "ligne": 171,
    "chargement": false,
    "appelle": [
     "couvertureForge"
@@ -9354,7 +9356,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "elementsTable"
+    "elementsTable",
+    "expressionsDe"
    ]
   },
   {
@@ -11447,6 +11450,7 @@
    "chargement": true,
    "appelle": [
     "aCopier",
+    "conditionFinEtape",
     "copieSort",
     "creeObjet",
     "defCopie",
@@ -11469,9 +11473,10 @@
   {
    "nom": "defCopie",
    "fichier": "forgeCopies.js",
-   "ligne": 12,
+   "ligne": 16,
    "chargement": false,
    "appelle": [
+    "couleursMots",
     "motsForge",
     "typesForge"
    ],
@@ -11485,7 +11490,7 @@
   {
    "nom": "aCopier",
    "fichier": "forgeCopies.js",
-   "ligne": 24,
+   "ligne": 34,
    "chargement": false,
    "appelle": [
     "choisitCartes",
@@ -11503,7 +11508,7 @@
   {
    "nom": "copieSort",
    "fichier": "forgeCopies.js",
-   "ligne": 88,
+   "ligne": 100,
    "chargement": false,
    "appelle": [
     "instantane",
@@ -11522,7 +11527,7 @@
   {
    "nom": "copiesFin",
    "fichier": "forgeCopies.js",
-   "ligne": 101,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "deplace",
@@ -11669,6 +11674,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeCopies.js (chargement)",
     "forgeEffetsF.js (chargement)"
    ]
   },
@@ -12990,6 +12996,7 @@
     "animationTenable",
     "animeForge",
     "couleursStatique",
+    "defCopie",
     "statiqueTenable"
    ]
   },
@@ -14984,6 +14991,7 @@
    "appeleePar": [
     "compteDuTour",
     "exprEtendue",
+    "forgeActivations.js (chargement)",
     "forgeMotsClesD.js (chargement)"
    ]
   },
@@ -15505,7 +15513,7 @@
   {
    "nom": "declencheurForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 155,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "effetForge",
@@ -15531,7 +15539,7 @@
   {
    "nom": "remplacementForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 176,
+   "ligne": 181,
    "chargement": false,
    "appelle": [
     "entreeForge",
@@ -15548,7 +15556,7 @@
   {
    "nom": "entreeForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 185,
+   "ligne": 190,
    "chargement": false,
    "appelle": [
     "descForge",
@@ -15564,7 +15572,7 @@
   {
    "nom": "couleursForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 217,
+   "ligne": 222,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -15576,7 +15584,7 @@
   {
    "nom": "definitionDepuisScript",
    "fichier": "forgeDefinition.js",
-   "ligne": 225,
+   "ligne": 230,
    "chargement": false,
    "appelle": [
     "capaciteForge",
@@ -15609,7 +15617,7 @@
   {
    "nom": "definitionForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 267,
+   "ligne": 272,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",
@@ -15625,7 +15633,7 @@
   {
    "nom": "nomsJetonsForge",
    "fichier": "forgeDefinition.js",
-   "ligne": 274,
+   "ligne": 279,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -15637,7 +15645,7 @@
   {
    "nom": "definitionAFaces",
    "fichier": "forgeDefinition.js",
-   "ligne": 289,
+   "ligne": 294,
    "chargement": false,
    "appelle": [
     "definitionDepuisScript",
@@ -16671,7 +16679,7 @@
   {
    "nom": "defsCommandants",
    "fichier": "forgeFiltresC.js",
-   "ligne": 22,
+   "ligne": 24,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -16725,6 +16733,7 @@
    "ligne": null,
    "chargement": true,
    "appelle": [
+    "benediction",
     "capacitesDe",
     "coutDeJeu",
     "forgeSait",

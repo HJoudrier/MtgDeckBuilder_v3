@@ -1533,6 +1533,27 @@ parties de decks tirés au hasard parmi les cartes complètes, sans une seule er
   adversaire sur un dégât de combat). `IsRingBearer` désigne le porteur. `RingTemptsYou` est aussi un déclencheur
   (Call of the Ring).
 
+**Lot F63 : copies, clones, « activate only if »** (`js/forgeCopies.js`, `js/forgeActivations.js`).
+- **`Clone`** devient une capacité à cible : Thespian's Stage copie un terrain, Shifting Woodland une carte de son
+  cimetière. `NewName$` (Sarkhan, Soul Aflame), `AddTypes$ Legendary` (un supertype, non un sous-type),
+  `SetColor$`, `SetCreatureTypes$` (qui remplacent la couleur et les types de créature, et gardent les sous-types de
+  terrain ou d'artefact) et `GainThisAbility$` (la copie garde la capacité qui vient de s'activer : retrouvée dans la
+  définition par l'identité de son opération). `CopyPermanent` lit les mêmes `SetColor$` et `SetCreatureTypes$`,
+  plus `AtEOTCondition$` (Sauron, the Necromancer : le jeton ne part pas si Sauron porte l'Anneau) ;
+- **`Activation$`** (une quarantaine de cartes : Delirium, Threshold, Metalcraft, Hellbent, la bénédiction) : « activate only
+  if… », jugé par la table de `Condition$`. Une condition qu'on ne connaît pas écarte la capacité, et une capacité de mana
+  soumise à `Activation$` n'est pas jouée du tout — le planificateur de paiement ne sait pas la juger, et la jouer
+  donnerait du mana qu'on n'a pas le droit de produire ;
+- **`sharesCreatureTypeWith` seul** (Coat of Arms, Mana Echoes, Alpha Status, Locket of Yesterdays) : le type partagé
+  avec la source du filtre, c'est-à-dire la créature à laquelle le bonus s'applique.
+
+**La couverture lit désormais les filtres des comptes.** Un `SVar:X:Count$Valid Card.Self+IsRingbearer` n'était
+pas examiné : Sauron, the Necromancer passait pour complet alors que la propriété (`IsRingbearer` — Forge l'écrit
+ainsi) n'était pas jugée, et le jeton partait toujours. `expressionsDe()` relève les propriétés du filtre d'un
+`Count$Valid` et suit `Count$Compare X …` jusqu'à la SVar `X`. Quatorze cartes sont repassées de complètes à
+partielles ou injouables, toutes à raison ; Coat of Arms, Mana Echoes et Alpha Status l'ont aussitôt été de nouveau
+en jouant.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

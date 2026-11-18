@@ -15,15 +15,15 @@
 
 const NIVEAUX_ANNEAU = {
   2: `Name:Anneau 2
-T:Mode$ Attacks | ValidCard$ Card.IsRingBearer+YouCtrl | Execute$ TrigBoucle | TriggerDescription$ Whenever your Ring-bearer attacks, draw a card, then discard a card.
+T:Mode$ Attacks | ValidCard$ Card.IsRingbearer+YouCtrl | Execute$ TrigBoucle | TriggerDescription$ Whenever your Ring-bearer attacks, draw a card, then discard a card.
 SVar:TrigBoucle:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBDefausse
 SVar:DBDefausse:DB$ Discard | Defined$ You | NumCards$ 1 | Mode$ TgtChoose`,
   3: `Name:Anneau 3
-T:Mode$ AttackerBlockedByCreature | ValidCard$ Card.IsRingBearer+YouCtrl | ValidBlocker$ Creature | Execute$ TrigSacrifice | TriggerDescription$ Whenever your Ring-bearer becomes blocked by a creature, that creature's controller sacrifices it at end of combat.
+T:Mode$ AttackerBlockedByCreature | ValidCard$ Card.IsRingbearer+YouCtrl | ValidBlocker$ Creature | Execute$ TrigSacrifice | TriggerDescription$ Whenever your Ring-bearer becomes blocked by a creature, that creature's controller sacrifices it at end of combat.
 SVar:TrigSacrifice:DB$ DelayedTrigger | Mode$ Phase | Phase$ EndCombat | Execute$ DBSacrifie | RememberObjects$ TriggeredBlocker
 SVar:DBSacrifie:DB$ SacrificeAll | ValidCards$ Card.IsRemembered`,
   4: `Name:Anneau 4
-T:Mode$ DamageDone | ValidSource$ Card.IsRingBearer+YouCtrl | ValidTarget$ Player | CombatDamage$ True | Execute$ TrigPerd | TriggerDescription$ Whenever your Ring-bearer deals combat damage to a player, each opponent loses 3 life.
+T:Mode$ DamageDone | ValidSource$ Card.IsRingbearer+YouCtrl | ValidTarget$ Player | CombatDamage$ True | Execute$ TrigPerd | TriggerDescription$ Whenever your Ring-bearer deals combat damage to a player, each opponent loses 3 life.
 SVar:TrigPerd:DB$ LoseLife | Defined$ Player.Opponent | LifeAmount$ 3`};
 
 const ANNEAU_DEFS = {};

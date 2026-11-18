@@ -107,6 +107,8 @@ function capaciteForge(def, face, t, jetons) {
   const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
   if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
   if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage)) return false;
+  /* Une capacité de mana soumise à une condition (Metalcraft) n'est pas jouée : le planificateur de paiement ne la sait pas juger. */
+  if (t.Activation && /^Mana/.test(api)) return false;
   /* « Add one mana of any color a land you control could produce »
      (Reflecting Pool, Exotic Orchard) : les couleurs se lisent au moment
      de payer (js/jeuMana.js `manaReflete()`). */
@@ -140,6 +142,9 @@ function capaciteForge(def, face, t, jetons) {
       ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {})});
     return true;
   }
+  /* `Activation$ Delirium` : « activate only if… », jugé par FORGE_CONDITIONS ; une
+     condition inconnue laisse la capacité écartée (js/forgeActivations.js). */
+  if (t.Activation && !FORGE_CONDITIONS[t.Activation]) return false;
   const effet = effetForge(face, t, jetons, true);
   if (!effet) return false;
   if (t.Planeswalker === 'True') {
@@ -147,7 +152,7 @@ function capaciteForge(def, face, t, jetons) {
     def.capacites.push({genre: 'loyaute', delta: c.loyaute, effet, texte: texteForge(face, t)});
   } else def.capacites.push({genre: 'activee', cout: c.cout, effet, vitesse: t.SorcerySpeed === 'True' ? 'rituel' : null,
     unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {}),
-    ...(t.ReduceCost ? {reduit: t.ReduceCost, face} : {})});
+    ...(t.ReduceCost ? {reduit: t.ReduceCost, face} : {}), ...(t.Activation ? {activation: t.Activation} : {})});
   return true;
 }
 

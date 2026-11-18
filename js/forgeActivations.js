@@ -99,7 +99,19 @@ function capaciteReduite(P, j, o, k) {
   return n ? {...k, cout: {...k.cout, mana: moinsMana(k.cout.mana, {generique: n, couleurs: {}})}} : k;
 }
 
+/* —— N'activer que si… ———————————————————————————————————————————————— */
+
+/* « Activate only if there are four or more card types among cards in your
+   graveyard » (`Activation$ Delirium`, Threshold, Metalcraft, Hellbent) : la
+   même table de conditions que `Condition$`. */
+FORGE_CONDITIONS.Blessing = (P, env) => benediction(P, env.ctrl, env.src);
+activationInterdite = (g => function (P, j, o, k) {
+  if (k.activation && !FORGE_CONDITIONS[k.activation](P, {ctrl: j, src: o, ctx: {}})) return true;
+  return g(P, j, o, k);
+})(activationInterdite);
+
+FORGE_COMMUNS.add('Activation');
 FORGE_COMMUNS.add('ReduceCost');
 FORGE_COMMUNS.add('PowerUp');
-forgeSait('param', 'PowerUp', 'ReduceCost', 'Play.PlayCost');
+forgeSait('param', 'PowerUp', 'ReduceCost', 'Activation', 'Play.PlayCost');
 forgeSait('expr', 'Count$YourTurns');

@@ -2877,6 +2877,7 @@ digraph appels {
   "lisScriptForge" -> "forgeTable" [color="#6d8ca899"];
   "forgeSousCapacite" -> "forgeTable" [color="#6d8ca899"];
   "ficheDeScriptForge" -> "forgeLigneType" [color="#6d8ca899"];
+  "expressionsDe" -> "famillesFiltre" [color="#8a7fa899"];
   "elementsTable" -> "forgeApi" [color="#8a7fa899"];
   "elementsTable" -> "morceauxCout" [color="#8a7fa899"];
   "elementsTable" -> "famillesFiltre" [color="#8a7fa899"];
@@ -4156,6 +4157,7 @@ digraph appels {
   "forgeChoix.js (chargement)" -> "texteForge" [color="#6da8a499"];
   "defCopie" -> "typesForge" [color="#a89b6d99"];
   "defCopie" -> "motsForge" [color="#a89b6d99"];
+  "defCopie" -> "couleursMots" [color="#a89b6d99"];
   "aCopier" -> "objetsForge" [color="#a89b6d99"];
   "aCopier" -> "objetsZone" [color="#a89b6d99"];
   "aCopier" -> "forgeValideObjet" [color="#a89b6d99"];
@@ -4176,6 +4178,7 @@ digraph appels {
   "forgeCopies.js (chargement)" -> "defCopie" [color="#a89b6d99"];
   "forgeCopies.js (chargement)" -> "creeObjet" [color="#a89b6d99"];
   "forgeCopies.js (chargement)" -> "nouvelleCarte" [color="#a89b6d99"];
+  "forgeCopies.js (chargement)" -> "conditionFinEtape" [color="#a89b6d99"];
   "forgeCopies.js (chargement)" -> "emet" [color="#a89b6d99"];
   "forgeCopies.js (chargement)" -> "noteEntree" [color="#a89b6d99"];
   "forgeCopies.js (chargement)" -> "retiensForge" [color="#a89b6d99"];
@@ -5378,6 +5381,7 @@ digraph appels {
   "forgeActivations.js (chargement)" -> "obj" [color="#6da88c99"];
   "forgeActivations.js (chargement)" -> "capacitesDe" [color="#6da88c99"];
   "forgeActivations.js (chargement)" -> "coutDeJeu" [color="#6da88c99"];
+  "forgeActivations.js (chargement)" -> "benediction" [color="#6da88c99"];
   "forgeActivations.js (chargement)" -> "forgeSait" [color="#6da88c99"];
   "forgeActivations.js (chargement)" -> "activationInterdite" [style=dashed, color="#6da88c66"];
   "forgeActivations.js (chargement)" -> "activeCapacite" [style=dashed, color="#6da88c66"];
