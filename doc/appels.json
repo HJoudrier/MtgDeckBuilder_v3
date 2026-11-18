@@ -133,6 +133,7 @@
   "forgeExprD.js",
   "forgeDefiniC.js",
   "forgeStatiquesC.js",
+  "forgeMotsClesG.js",
   "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
@@ -4127,6 +4128,7 @@
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
+    "forgeMotsClesG.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeParadigme.js (chargement)",
     "forgeProtections.js (chargement)",
@@ -4521,6 +4523,7 @@
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
+    "forgeMotsClesG.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRadiation.js (chargement)",
     "forgeRemplacementsB.js (chargement)",
@@ -4971,6 +4974,7 @@
     "forgeExpression",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
+    "forgeMotsClesG.js (chargement)",
     "groupeJoueurs",
     "preparationRiposte",
     "variantesEtendues",
@@ -5390,7 +5394,7 @@
   {
    "nom": "animation",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 110,
+   "ligne": 114,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5405,7 +5409,7 @@
   {
    "nom": "aMot",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 139,
+   "ligne": 143,
    "chargement": false,
    "appelle": [
     "car"
@@ -5430,7 +5434,7 @@
   {
    "nom": "estType",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 140,
+   "ligne": 144,
    "chargement": false,
    "appelle": [
     "animation"
@@ -5471,7 +5475,7 @@
   {
    "nom": "estCreature",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 144,
+   "ligne": 148,
    "chargement": false,
    "appelle": [
     "estType"
@@ -5524,7 +5528,7 @@
   {
    "nom": "peutEngagerSoi",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 149,
+   "ligne": 153,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -5541,7 +5545,7 @@
   {
    "nom": "mvDe",
    "fichier": "jeuCaracteristiques.js",
-   "ligne": 156,
+   "ligne": 160,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11207,7 +11211,7 @@
   {
    "nom": "bonusIA",
    "fichier": "forgeEffetsC.js",
-   "ligne": 44,
+   "ligne": 49,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11219,7 +11223,7 @@
   {
    "nom": "pompeForge",
    "fichier": "forgeEffetsC.js",
-   "ligne": 47,
+   "ligne": 52,
    "chargement": false,
    "appelle": [
     "finForge",
@@ -11238,7 +11242,7 @@
   {
    "nom": "optionsMana",
    "fichier": "forgeEffetsC.js",
-   "ligne": 97,
+   "ligne": 102,
    "chargement": false,
    "appelle": [
     "combinaisons",
@@ -11255,7 +11259,7 @@
   {
    "nom": "multiensembles",
    "fichier": "forgeEffetsC.js",
-   "ligne": 110,
+   "ligne": 115,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11267,7 +11271,7 @@
   {
    "nom": "combinaisons",
    "fichier": "forgeEffetsC.js",
-   "ligne": 115,
+   "ligne": 120,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -11699,6 +11703,7 @@
     "forgeCopies.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesE.js (chargement)",
+    "forgeMotsClesG.js (chargement)",
     "forgeTraine.js (chargement)"
    ]
   },
@@ -13307,7 +13312,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "coutSort"
+    "coutSort",
+    "forgeMotsClesG.js (chargement)"
    ]
   },
   {
@@ -14478,6 +14484,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeMotsClesG.js (chargement)",
     "forgeProtections.js (chargement)",
     "infligeUnePart"
    ]
@@ -14810,6 +14817,7 @@
    "appeleePar": [
     "forgeHideaway.js (chargement)",
     "forgeMotsClesF.js (chargement)",
+    "forgeMotsClesG.js (chargement)",
     "motClePermanent",
     "motCleTraineB"
    ]
@@ -15281,6 +15289,7 @@
     "forgeManaB.js (chargement)",
     "forgeModes.js (chargement)",
     "forgeMotsClesF.js (chargement)",
+    "forgeMotsClesG.js (chargement)",
     "forgeParadigme.js (chargement)",
     "forgeStatiquesC.js (chargement)",
     "motCleForge"
@@ -17435,6 +17444,26 @@
    "appeleePar": [
     "piocheN"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeMotsClesG.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "adversaires",
+    "copieSort",
+    "forgeSait",
+    "obj",
+    "synthese"
+   ],
+   "appelleDiffere": [
+    "coutsForge",
+    "degatsApresPrevention",
+    "motCleLancementB"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "chargement du module",

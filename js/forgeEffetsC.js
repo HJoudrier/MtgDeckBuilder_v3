@@ -36,7 +36,12 @@ const CACHES_DU_TOUR = {
   "hidden cardname can't block.": {nePeutBloquer: true},
   "hidden cardname can't attack.": {nePeutAttaquer: true},
   "hidden cardname can't attack or block.": {nePeutAttaquer: true, nePeutBloquer: true},
-  'hidden all creatures able to block cardname do so.': {leurre: true}
+  'hidden all creatures able to block cardname do so.': {leurre: true},
+  /* Les évasions et la prévention posées pour le tour (js/forgeMotsClesG.js). */
+  'fear': {peur: true}, 'intimidate': {intimidation: true}, 'skulk': {furtif: true},
+  "hidden cardname's power and toughness are switched": {echange: true},
+  'prevent all damage that would be dealt by cardname.': {prevPar: true},
+  'prevent all damage that would be dealt to and dealt by cardname.': {prevPar: true, prevVers: true}
 };
 forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, ...Object.keys(CACHES_DU_TOUR), 'flashback');
 

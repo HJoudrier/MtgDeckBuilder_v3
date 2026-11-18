@@ -89,6 +89,10 @@ function car(P, o) {
       if (m.nePeutAttaquer) nePeutAttaquer = true;
       if (m.nePeutBloquer) nePeutBloquer = true;
     }
+    /* « Power and toughness are switched » : après tous les bonus (couche 7e). */
+    if (o.mods.some(m => m.echange)) [force, endurance] = [endurance, force];
+    if (d.params && d.params.interditAttaque) nePeutAttaquer = true;
+    if (d.params && d.params.interditBlocage) nePeutBloquer = true;
     /* Ce qu'un effet retire (« loses flying until end of turn »), après ce
        qu'on ajoute ; la protection gagnée compte comme un mot-clé. */
     for (const m of o.mods) if (m.retire) mots &= ~m.retire;

@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeMotsClesG.js les mots-clés, IV : évasions du tour, prévention, Training, Undaunted, Gravestorm, règles de deck sans effet en jeu
   forgeStatiquesC.js  des statiques refusées : hexproof contre un genre de sources, jouer d'en haut sous condition, ne plus piocher
   forgeDefiniC.js   ce que Defined$ désigne encore : défenseur adversaire, sacrifié, joueurs par propriétés, bibliothèque, pile
   forgeExprD.js     des quantités sur les joueurs : vie perdue ce tour, groupes de joueurs, combien en ont la propriété
@@ -1744,6 +1745,20 @@ Ce qui reste dans ce lot, et pourquoi : l'équipement payé en vie (`Equip:2 Pay
 marqueurs de saignée (`Ward:Blight<2>`), les attaques interdites sur un joueur déjà attaqué (Bloodthirster), les
 déclencheurs accordés à tout un camp (`AddTrigger`, Tyvar, Danny Pink), les effets dont les statiques portent leurs
 propres déclencheurs (`Effect | Triggers$`, Osteomancer Adept).
+
+**Lot F75 : les mots-clés, IV** (`js/forgeMotsClesG.js`). Vingt-sept cartes de plus :
+- **posés pour le tour** : `KW$ Fear`, `Intimidate`, `Skulk` (Shizo, Aphotic Wisps), « power and toughness are
+  switched » (Twisted Image, Inversion Behemoth, Myr Quadropod), `Prevent all damage that would be dealt by CARDNAME`
+  — des drapeaux du bonus (`CACHES_DU_TOUR`) que `peutBloquer()`, `car()` (l'échange se fait après tous les bonus) et
+  `degatsApresPrevention()` lisent ;
+- **imprimés** : « prevent all combat damage that would be dealt to [and dealt by] CARDNAME » (Guard Gomazoa, Fog Bank),
+  « can't attack or block » (Grakk), **Training** (un déclencheur synthétique, « greater power » jugé par `powerGTX`),
+  **Undaunted** (`coutsForge()` : un de moins par adversaire), **Gravestorm** (une copie par permanent mis au cimetière
+  ce tour) ;
+- **sans effet en jeu** : Companion (la simulation n'a pas de réserve), `DeckLimit`, « a deck can have any number of
+  cards named… », « can be your commander » : des règles de construction, acceptées pour qu'elles ne fassent pas
+  passer une carte pour partielle.
+Restent : Suspend accordé, Read ahead, Champion, les mots-clés d'un autre jeu (Firebending, Beam me up), Mutate.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

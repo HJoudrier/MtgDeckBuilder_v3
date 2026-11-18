@@ -22,8 +22,8 @@ function peutBloquer(P, b, a) {
   if (ca.mots & MOT.IMBLOCABLE) return false;
   /* Terreur, intimidation (js/forgeTraine.js) : seuls un artefact ou une
      créature noire — ou partageant une couleur — bloquent. */
-  if (a.def.params.peur && !estType(b, 'artifact') && !cb.couleurs.includes('B')) return false;
-  if (a.def.params.intimidation && !estType(b, 'artifact') && !cb.couleurs.some(k => ca.couleurs.includes(k))) return false;
+  if ((a.def.params.peur || a.mods.some(m => m.peur)) && !estType(b, 'artifact') && !cb.couleurs.includes('B')) return false;
+  if ((a.def.params.intimidation || a.mods.some(m => m.intimidation)) && !estType(b, 'artifact') && !cb.couleurs.some(k => ca.couleurs.includes(k))) return false;
   const passe = a.def.params.passage;
   if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
@@ -31,7 +31,7 @@ function peutBloquer(P, b, a) {
   /* Ombre, cavalerie, furtivité (js/forgeMotsClesB.js). */
   if (!!a.def.params.ombre !== !!b.def.params.ombre) return false;
   if (a.def.params.cavalerie && !b.def.params.cavalerie) return false;
-  if (a.def.params.furtif && cb.force > ca.force) return false;
+  if ((a.def.params.furtif || a.mods.some(m => m.furtif)) && cb.force > ca.force) return false;
   if ((ca.mots & MOT.PROTECTION) && protectionsDe(a).some(k => cb.couleurs.includes(k))) return false;
   if (protegeFiltre(P, a, b)) return false;
   /* Le porteur de l'Anneau (js/forgeEffetsG.js). */
