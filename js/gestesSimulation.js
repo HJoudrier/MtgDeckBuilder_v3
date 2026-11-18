@@ -18,6 +18,7 @@ function gestesSimulation(act, b) {
     case 'simSupprAdv': supprimeAdversaire(b.dataset.adv); return true;
     case 'simSupprAdvOui': supprimeAdversaireOui(b.dataset.adv); return true;
     case 'simMajLien': verifieUnDeckLie(b.dataset.adv); return true;
+    case 'simCollListe': COUV_COLL_OUVERTE[b.dataset.etat] = !COUV_COLL_OUVERTE[b.dataset.etat]; renderK(); return true;
     case 'simComportement': ouvreComportement(b.dataset.carte); return true;
     case 'simCompAppliquer': appliqueComportement(b.dataset.carte); return true;
     case 'simCompEfface': effaceComportement(b.dataset.carte); return true;

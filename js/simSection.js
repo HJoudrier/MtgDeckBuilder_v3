@@ -117,9 +117,9 @@ function relaisHTML() {
 }
 
 /* Le badge d'un taux de couverture. */
-function badgeCouverture(t) {
+function badgeCouverture(t, titre) {
   const niveau = t >= 0.85 ? 'bonne' : t >= 0.65 ? 'moyenne' : 'faible';
-  return `<span class="sim-badge ${niveau}" title="Part des sorts que le moteur comprend entièrement (une carte partielle compte pour moitié)">${Math.round(t * 100)} %</span>`;
+  return `<span class="sim-badge ${niveau}" title="${esc(titre || 'Part des sorts que le moteur comprend entièrement (une carte partielle compte pour moitié)')}">${Math.round(t * 100)} %</span>`;
 }
 
 /* Ce que le moteur comprend des decks de la table. */
@@ -153,6 +153,7 @@ function renderK() {
   if (!SIM_RES.charge) { chargeResultats().then(() => { if (S.onglet === 'simulation') renderK(); }); }
   if (!simCartesChargees) { chargeSimCartes().then(() => { if (S.onglet === 'simulation') renderK(); }); }
   corps.innerHTML = `<div class="sim-grille">${tableHTML(cfg)}${adversairesHTML()}</div>
+    ${couvertureCollectionHTML()}
     ${couvertureHTML(cfg)}
     <div id="simManques">${manquesHTML()}</div>
     <div id="simResultats">${resultatsHTML(cfg)}</div>`;

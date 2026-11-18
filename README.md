@@ -178,6 +178,7 @@ js/                 modules, chargés dans cet ordre :
   — les sections —
   decksSection.js   la section « Mes decks »
   wishlistSection.js la section « Liste d'achats »
+  simCollection.js  la couverture de la collection : part entièrement comprise, listes des partielles et injouables
   acquisitionSection.js la section « Acquisition en cours » : commandé, pas encore reçu
   graphe.js         graphe des capacités
   stats.js          statistiques
@@ -559,7 +560,11 @@ silencieuse. Une seule grammaire désigne les objets (`lisDescripteur()`), un se
 **injouable** : quand une part ignorée ressemble à une contrepartie (« you lose », « sacrifice »,
 « unless », « can't »…), l'IA ne la lance jamais. Ne pas comprendre une carte ne doit **jamais**
 rendre un deck plus fort qu'il n'est. La section affiche le taux de chaque deck de la table, et
-chaque résultat porte un badge de fiabilité. Une carte se décrit à la main dans la fenêtre des
+chaque résultat porte un badge de fiabilité. Un bloc distinct (`js/simCollection.js`) donne la part
+de la **collection** entièrement couverte — en cartes différentes, terrains écartés comme pour un deck — et déplie
+les listes des partielles et des injouables. Compiler tout une collection prend de l'ordre de la seconde :
+le calcul se fait par tranches de 15 ms sous une signature, et n'avance que sous les yeux ; le texte
+d'attente se met à jour en place, car repeindre la section à chaque tranche emporterait la saisie en cours. Une carte se décrit à la main dans la fenêtre des
 comportements (`S.comportements`), **avec le même compilateur** : on la réécrit en formules qu'il
 comprend, il dit ligne par ligne ce qu'il en lit, et deux directives s'y ajoutent — `#vanille`,
 `#injouable`. Aucune syntaxe à apprendre, aucun second interprète à tenir.

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1746 fonctions**, 254 modules, 1822 Ko de JavaScript.
+**1754 fonctions**, 255 modules, 1829 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -196,7 +196,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 9 | 67 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 144 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 161 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 162 |
+| [`simCollection.js`](#jssimcollectionjs) | Ce que le moteur comprend de la collection | 8 | 130 |
 | [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 216 |
 | [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 174 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
@@ -235,7 +236,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 45 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 46 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -3469,7 +3470,7 @@ Un lot de parties, par tranches. *11 fonctions, 144 lignes, 6.6 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *9 fonctions, 161 lignes, 11 Ko.*
+La section « Simulation ». *9 fonctions, 162 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3479,7 +3480,7 @@ La section « Simulation ». *9 fonctions, 161 lignes, 11 Ko.*
 | `adversairesHTML()` | La bibliothèque d'adversaires. |
 | `pastilleLien(l)` | La pastille d'un adversaire lié : son site, sa dernière vérification, et ce qui a changé la dernière fois. |
 | `relaisHTML()` | Le relais, pour les sites qui refusent d'être lus depuis une autre page. |
-| `badgeCouverture(t)` | Le badge d'un taux de couverture. |
+| `badgeCouverture(t, titre)` | Le badge d'un taux de couverture. |
 | `couvertureHTML(cfg)` | Ce que le moteur comprend des decks de la table. |
 | `renderK()` | — |
 
@@ -3487,6 +3488,27 @@ La section « Simulation ». *9 fonctions, 161 lignes, 11 Ko.*
 |---|---|
 | `COUV_TABLE` | — |
 | `LIBELLES_NIVEAUX` | Le nom d'un niveau de jeu, avec ce qu'il coûte en temps. |
+
+## js/simCollection.js
+
+Ce que le moteur comprend de la collection. *8 fonctions, 130 lignes, 6.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `cleCouvertureCollection()` | — |
+| `classeCarteCollection(nom, n)` | Le classement d'une carte de la collection : son état, ou `null` pour ce qui ne compte pas (terrain, jeton). |
+| `bilanVierge()` | — |
+| `trancheCouvertureCollection(cle, entrees, i, acc)` | Une tranche, d'une quinzaine de millisecondes. |
+| `couvertureCollection()` | Le bilan, ou `null` tant que le calcul court (`COUV_COLL.fait` dit où il en est). |
+| `ligneCouvertureCollection(c)` | — |
+| `listeCouvertureCollection(v, etat, libelle)` | — |
+| `couvertureCollectionHTML()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `COUV_COLL` | — |
+| `COUV_COLL_OUVERTE` | Les listes dépliées : un réglage de lecture, non de l'état — rien n'en va dans `snapshot()`. |
+| `COUV_COLL_MAX` | Au-delà, une liste est tronquée : mille lignes d'un coup noient la page. |
 
 ## js/forgeDepot.js
 
@@ -4070,7 +4092,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 45 lignes, 2.1 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 46 lignes, 2.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
