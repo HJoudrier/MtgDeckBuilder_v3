@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1777 fonctions**, 266 modules, 1907 Ko de JavaScript.
+**1778 fonctions**, 267 modules, 1910 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -46,7 +46,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 183 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
-| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 230 |
+| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 232 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 73 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 157 |
@@ -142,6 +142,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExprC.js`](#jsforgeexprcjs) | Des quantités de plus | 1 | 102 |
 | [`forgeExprD.js`](#jsforgeexprdjs) | Des quantités sur les joueurs | 3 | 141 |
 | [`forgeDefiniC.js`](#jsforgedefinicjs) | Ce que `Defined$` désigne encore | 0 | 63 |
+| [`forgeStatiquesC.js`](#jsforgestatiquescjs) | Des statiques que la construction refusait | 1 | 55 |
 | [`forgeZonesC.js`](#jsforgezonescjs) | Chercher, creuser, déplacer : des paramètres de plus | 0 | 82 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
@@ -932,7 +933,7 @@ Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
 
 ## js/jeuEtat.js
 
-Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 230 lignes, 11 Ko.*
+Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 232 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2475,6 +2476,14 @@ Des quantités sur les joueurs. *3 fonctions, 141 lignes, 9.2 Ko.*
 ## js/forgeDefiniC.js
 
 Ce que `Defined$` désigne encore. *0 fonctions, 63 lignes, 4.3 Ko.*
+
+## js/forgeStatiquesC.js
+
+Des statiques que la construction refusait. *1 fonctions, 55 lignes, 2.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `piocheInterdite(P, j)` | Le joueur `j` ne peut-il pas piocher une carte de plus ? |
 
 ## js/forgeZonesC.js
 

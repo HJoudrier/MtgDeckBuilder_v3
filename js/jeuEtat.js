@@ -202,6 +202,8 @@ function champDe(P, j) { return P.champ.map(id => obj(P, id)).filter(o => o.ctrl
 function piocheN(P, j, n) {
   const J = P.joueurs[j];
   for (let k = 0; k < n; k++) {
+    /* « Your opponents can't draw more than one card each turn » (js/forgeStatiquesC.js). */
+    if (typeof piocheInterdite === 'function' && piocheInterdite(P, j)) return;
     if (!J.bibliotheque.length) { J.piocheVide = true; return; }
     const id = J.bibliotheque.pop();
     const o = obj(P, id);

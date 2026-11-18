@@ -132,6 +132,7 @@
   "forgeExprC.js",
   "forgeExprD.js",
   "forgeDefiniC.js",
+  "forgeStatiquesC.js",
   "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
@@ -4137,6 +4138,7 @@
     "forgeStatique",
     "forgeStatiques.js (chargement)",
     "forgeStatiquesB.js (chargement)",
+    "forgeStatiquesC.js (chargement)",
     "forgeTraine.js (chargement)",
     "forgeZonesC.js (chargement)",
     "jeuPioche.js (chargement)"
@@ -5051,7 +5053,8 @@
    "chargement": false,
    "appelle": [
     "emet",
-    "obj"
+    "obj",
+    "piocheInterdite"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -5063,7 +5066,7 @@
   {
    "nom": "question",
    "fichier": "jeuEtat.js",
-   "ligne": 224,
+   "ligne": 226,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5451,6 +5454,7 @@
     "forgeExpression",
     "forgeFiltresD.js (chargement)",
     "forgeRadiation.js (chargement)",
+    "forgeStatiquesC.js (chargement)",
     "forgeTraine.js (chargement)",
     "iaCartes",
     "iaScrute",
@@ -5705,7 +5709,8 @@
    "appeleePar": [
     "cibleEncoreLegale",
     "ciblesLegales",
-    "forgeProtections.js (chargement)"
+    "forgeProtections.js (chargement)",
+    "forgeStatiquesC.js (chargement)"
    ]
   },
   {
@@ -8421,6 +8426,7 @@
    "appeleePar": [
     "cartesPermises",
     "forgeDeclencheursC.js (chargement)",
+    "forgeStatiquesC.js (chargement)",
     "permisUtilise",
     "variantesSort"
    ]
@@ -9645,6 +9651,7 @@
     "forgeMemoire.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
+    "forgeStatiquesC.js (chargement)",
     "forgeValideDef",
     "forgeZonesC.js (chargement)",
     "fouilleForge",
@@ -9900,6 +9907,7 @@
     "fouilleForge",
     "metEnJeu",
     "nombreRemplace",
+    "piocheInterdite",
     "pompeForge",
     "prepareEffets",
     "propObjet",
@@ -13213,7 +13221,8 @@
     "forgeManaB.js (chargement)",
     "forgeProtections.js (chargement)",
     "forgeStatiques.js (chargement)",
-    "forgeStatiquesB.js (chargement)"
+    "forgeStatiquesB.js (chargement)",
+    "forgeStatiquesC.js (chargement)"
    ]
   },
   {
@@ -13406,6 +13415,7 @@
     "forgeCoutsC.js (chargement)",
     "joueurProtegeTout",
     "loyauteEclair",
+    "piocheInterdite",
     "preventionInterdite",
     "sansDegatsDeCombat",
     "sansRegenerationStat",
@@ -13434,6 +13444,7 @@
     "joueurProtegeTout",
     "loyauteEclair",
     "manaGarde",
+    "piocheInterdite",
     "sortInterdit",
     "terrainsInterdits",
     "vieBloquee",
@@ -15271,6 +15282,7 @@
     "forgeModes.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgeParadigme.js (chargement)",
+    "forgeStatiquesC.js (chargement)",
     "motCleForge"
    ]
   },
@@ -17388,6 +17400,41 @@
    ],
    "appelleParHtml": [],
    "appeleePar": []
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeStatiquesC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "estType",
+    "forgeSait",
+    "forgeStatique",
+    "forgeValideObjet"
+   ],
+   "appelleDiffere": [
+    "ciblable",
+    "motCleLancementB",
+    "permisDeJouer"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "piocheInterdite",
+   "fichier": "forgeStatiquesC.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [
+    "forgeNombre",
+    "joueurStatique",
+    "statiqueQui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "piocheN"
+   ]
   },
   {
    "nom": "chargement du module",

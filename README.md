@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeStatiquesC.js  des statiques refusées : hexproof contre un genre de sources, jouer d'en haut sous condition, ne plus piocher
   forgeDefiniC.js   ce que Defined$ désigne encore : défenseur adversaire, sacrifié, joueurs par propriétés, bibliothèque, pile
   forgeExprD.js     des quantités sur les joueurs : vie perdue ce tour, groupes de joueurs, combien en ont la propriété
   forgeFiltresD.js  des propriétés de filtre, II : choisi, retenu, visé, cmc pair, force égale à l'endurance, plus de terrains que vous
@@ -1728,6 +1729,21 @@ dégâts reçus « la dernière fois », `lifeGTX`.
 - `ValidLibrary`, `ValidStack`, `ExiledWithSource`, `NextPlayerToYourRight`, un filtre d'objet écrit seul (`Creature.YouCtrl`).
 Restent : `Convoked`, `TriggeredCards` et les listes d'un déplacement groupé (`ExiledCards`, `DiscardedCards`), `.Chosen,You`
 (une liste de joueurs à la place d'un seul), `Caster`.
+
+**Lot F74 : des statiques refusées** (`js/forgeStatiquesC.js`). Treize cartes de plus ; ici la couverture ne dit pas ce qui
+manquait — `construction:Continuous` cache n'importe quelle propriété —, il a fallu lire la ligne qui échouait pour chaque
+carte :
+- **`K:Hexproof:<filtre>`** (Breaker of Creation : de chaque couleur ; General Ferrous Rokiric : des monocolores ; Elenda :
+  des éphémères) : `def.params.hexproofDe`, que `ciblable()` juge contre la source adverse ;
+- **`ValidAfterStack$ Spell.cmcGE4`** (Glarb, Thundermane Dragon, Nahiri) : on joue d'en haut de la bibliothèque, mais les
+  sorts seulement s'ils répondent au filtre — les terrains passent toujours ;
+- **`Mode$ CantDraw`** (Narset, Parter of Veils : « your opponents can't draw more than one card each turn » ; Mornsong
+  Aria) : `piocheInterdite()`, que `piocheN()` demande avant chaque carte, compte les cartes déjà piochées ce tour ;
+- **`MayPlay` avec `EffectZone$ Exile,Graveyard`** (Squee, the Immortal).
+Ce qui reste dans ce lot, et pourquoi : l'équipement payé en vie (`Equip:2 PayLife<2>`), les gardes qui coûtent des
+marqueurs de saignée (`Ward:Blight<2>`), les attaques interdites sur un joueur déjà attaqué (Bloodthirster), les
+déclencheurs accordés à tout un camp (`AddTrigger`, Tyvar, Danny Pink), les effets dont les statiques portent leurs
+propres déclencheurs (`Effect | Triggers$`, Osteomancer Adept).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
