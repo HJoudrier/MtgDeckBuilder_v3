@@ -285,12 +285,12 @@ js/                 modules, chargés dans cet ordre :
   app.js            l'aiguillage et le démarrage
 ```
 
-Les dix sections de la page se répartissent en sept onglets, rangés dans une barre fixe au bas de la
+Les dix sections de la page se répartissent en huit onglets, rangés dans une barre fixe au bas de la
 fenêtre — l'en-tête, seul en haut, reste collant, et rien d'autre ne se superpose au contenu. Sa
 hauteur est une constante CSS (`--h-barre`), dont le bas de la page et le toast tiennent compte.
-Sur un téléphone les sept onglets ne tiennent pas : la barre défile latéralement, alignée au début
+Sur un téléphone les huit onglets ne tiennent pas : la barre défile latéralement, alignée au début
 (`justify-content:center` sur un contenu qui déborde coupe la gauche, hors de portée du défilement) et
-`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks puis la liste d'achats commune,
+`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks, **Wishlist** la liste d'achats commune,
 **Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
@@ -1715,9 +1715,9 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
 - La page **Decks** répond à la question qui précède toutes les autres : sur quoi travaille-t-on.
   « Mes decks » montre une vignette par deck — avancement, taille visée, part possédée, reste à
   acheter, budget, restrictions — et porte les gestes : *Nouveau*, *Travailler dessus*, *Configurer*,
-  *Dupliquer*, *Supprimer*. « Liste d'achats » montre le total consolidé. La pastille de l'en-tête y
-  mène et dit le deck ouvert. Cet onglet ne montre aucune des cinq listes de cartes — des vignettes
-  de deck et un tableau d'achats ne se règlent ni en colonnes ni en groupes —, d'où son `liste` nul
+  *Dupliquer*, *Supprimer*. La liste d'achats, qui montre le total consolidé, a sa propre page **Wishlist**. La pastille de
+  l'en-tête mène à Decks et dit le deck ouvert. Cet onglet ne montre aucune des cinq listes de cartes — des vignettes
+  de deck ne se règlent ni en colonnes ni en groupes —, d'où son `liste` nul
   dans `ONGLETS` : le bouton « Affichage » s'efface alors, plutôt que de régler une liste
   qu'on ne voit pas.
 - Le dernier deck ne se supprime pas : l'atelier n'a pas d'état sans deck ouvert, et « supprimer »

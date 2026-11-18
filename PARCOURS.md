@@ -66,7 +66,7 @@ repeint l'en-tête et les neuf sections — `renderTop`, `renderB` (collection),
 (statistiques), `renderD` (graphe), `renderE` (deck), puis `renderSuggestions`, qui peint d'un
 coup les trois sections nées d'une même notation : `renderG` (les pistes du graphe), `renderH`
 (EDHREC), `renderF` (le catalogue) — et programme la sauvegarde. `renderI` (les decks) et `renderJ`
-(la liste d'achats) viennent juste après l'en-tête, la page « Decks » étant la première. Chaque section réécrit
+(la liste d'achats, page « Wishlist ») viennent juste après l'en-tête, la page « Decks » étant la première. Chaque section réécrit
 l'`innerHTML` de ses conteneurs nommés, jamais celui de son corps entier : c'est ce qui garde sa
 place au lecteur. Les sections des onglets qu'on ne regarde pas sont rendues elles aussi : leur
 page est masquée, donc jamais mise en page, et changer d'onglet ne demande alors aucun rendu.
