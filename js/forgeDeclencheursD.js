@@ -76,6 +76,7 @@ FORGE_MODES.AttackersDeclared = (juge => function (P, t, e, s, env) {
   if (ok) {
     const n = e.ids.filter(id => obj(P, id) && (!t.ValidAttackers || forgeValideObjet(P, obj(P, id), t.ValidAttackers, s, s.ctrl, env))).length;
     (e.nValides = e.nValides || {})[s.id] = n;
+    (e.idsValides = e.idsValides || {})[s.id] = e.ids.filter(id => obj(P, id) && (!t.ValidAttackers || forgeValideObjet(P, obj(P, id), t.ValidAttackers, s, s.ctrl, env)));
   }
   return ok;
 })(FORGE_MODES.AttackersDeclared);

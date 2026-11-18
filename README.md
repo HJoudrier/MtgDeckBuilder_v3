@@ -130,6 +130,7 @@ js/                 modules, chargés dans cet ordre :
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
   forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
   forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeExprC.js     des quantités de plus : lancée depuis l'exil, phase principale, métalcraft, nombre de couleurs, marqueurs par genre
   forgeChoixC.js    choisir, défausser, répéter, sacrifier : listes de types, « unless you discard », chacun son tour, force totale
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
@@ -1632,6 +1633,24 @@ en jouant.
   paie, on perd la vie), **`Sacrifice | StrictAmount$`** (tout ou rien : Scorched Ruins), `ChangeNum$` (Glacial
   Chasm) et `ConditionNotPresent$` (Uro, Kroxa : « sacrifice it unless it escaped »), `DestroyAll | Zone$`.
 Restent : les modes qu'on annonce ou tire au hasard (`Charm | Announce$`, `Random$`), `SetState | Choices$`, le vote.
+
+**Lot F68 : des quantités de plus** (`js/forgeExprC.js`). Trente-cinq cartes de plus, toutes par `exprEtendue()`,
+`caracForge()` et `agregeForge()` :
+- **sur le sort lui-même**, en forme `a.b` (« `a` si c'est vrai, `b` sinon ») : `Count$wasCastFromExile` (la zone
+  d'où il a été lancé), `Count$AltCost` (une variante `alt…`), `Count$IfCastInOwnMainPhase` (`jeuActions.js` garde
+  quand : `lanceeEn`), `Count$Metalcraft` ;
+- **le tour et les joueurs** : `Count$TotalOppPoisonCounters`, `Count$CreaturesAttackedThisTurn <filtre>` (le rang
+  d'attaque posé par F64, `o.attaquesTour`), `Count$Landfall`, `Count$YourCountersRAD` ;
+- **des ensembles** : `Count$MostCardName <filtre>` (le plus de cartes de même nom : Mechanized Production),
+  `Count$Valid … $CardCounters.P1P1` (Toph : les marqueurs d'un genre sur des terres), et les agrégats
+  `$CardNumColors`, `$CardSumPT`, `$CardTypesPermanent`, `$PlaneswalkerType` ;
+- **des objets désignés** : `Sacrificed$Valid` (combien de ce qu'on vient de sacrifier répond au filtre),
+  `ExiledWith$Amount` et `$CardManaCost`, `ChosenCard$CardManaCost`, `Equipped$CardPower`, `TriggeredSource$…`,
+  `TriggeredAttacker$Valid`, `TriggeredActivator$SpellsCastThisTurn`, `TriggerCount$ScryNum`,
+  `TriggerObjectsAttackers$CardPower` (la liste des attaquants qui répondent au filtre du déclencheur, gardée sur
+  l'évènement à la décision).
+Restent : les coûts optionnels payés (`OptionalGenericCostPaid`), le foretell, les activations du tour
+(`ThisTurnActivated`), les listes de cartes d'un déplacement groupé (`TriggerObjectsCards`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

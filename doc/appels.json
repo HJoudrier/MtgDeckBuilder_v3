@@ -128,6 +128,7 @@
   "forgeActivations.js",
   "forgeCoutsC.js",
   "forgeChoixC.js",
+  "forgeExprC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
   "iaChoix.js",
@@ -4103,6 +4104,7 @@
     "forgeExecute.js (chargement)",
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeFiltresC.js (chargement)",
     "forgeHideaway.js (chargement)",
     "forgeInterdits.js (chargement)",
@@ -4495,6 +4497,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeEmpreinte.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeFiltresC.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeMemoire.js (chargement)",
@@ -4942,6 +4945,7 @@
     "forgeDefinis",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
@@ -4988,6 +4992,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
@@ -5321,6 +5326,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsG.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
@@ -5408,6 +5414,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeRadiation.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -5506,6 +5513,7 @@
     "coutAutrePossibleB",
     "forgeEffetsE.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeTraine.js (chargement)",
     "paieAutreB",
@@ -6055,6 +6063,7 @@
     "exprEtendue",
     "forgeDeclencheurs.js (chargement)",
     "forgeDefinis",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)",
     "resous"
@@ -6919,7 +6928,7 @@
   {
    "nom": "activeCapacite",
    "fichier": "jeuActions.js",
-   "ligne": 155,
+   "ligne": 157,
    "chargement": false,
    "appelle": [
     "aCoutX",
@@ -6951,7 +6960,7 @@
   {
    "nom": "equipe",
    "fichier": "jeuActions.js",
-   "ligne": 199,
+   "ligne": 201,
    "chargement": false,
    "appelle": [
     "choisitCibles",
@@ -6968,7 +6977,7 @@
   {
    "nom": "joueTerrain",
    "fichier": "jeuActions.js",
-   "ligne": 217,
+   "ligne": 219,
    "chargement": false,
    "appelle": [
     "emet",
@@ -6988,7 +6997,7 @@
   {
    "nom": "executeAction",
    "fichier": "jeuActions.js",
-   "ligne": 227,
+   "ligne": 229,
    "chargement": false,
    "appelle": [
     "activeCapacite",
@@ -9578,6 +9587,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeEmpreinte.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeManaB.js (chargement)",
     "forgeMemoire.js (chargement)",
@@ -9705,6 +9715,7 @@
     "forgeEffetsB.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsH.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMotsClesF.js (chargement)",
     "genresMarqueurs",
@@ -9829,6 +9840,7 @@
     "reductionPossible",
     "seuilForge",
     "siAlors",
+    "siSinon",
     "sortInterdit",
     "sourcesMana",
     "tailleMainMax",
@@ -9878,6 +9890,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)"
    ]
@@ -9899,6 +9912,7 @@
     "caracEtendue",
     "exprEtendue",
     "forgeEmpreinte.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)"
    ]
@@ -9914,6 +9928,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeExprC.js (chargement)",
     "forgeExpression"
    ]
   },
@@ -9934,6 +9949,7 @@
     "executeForge",
     "exprEtendue",
     "forgeDefinis",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMotsClesF.js (chargement)"
    ]
@@ -9952,6 +9968,7 @@
    "appeleePar": [
     "exprEtendue",
     "forgeEmpreinte.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)"
    ]
@@ -10057,6 +10074,7 @@
     "forgeDeclencheursD.js (chargement)",
     "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)",
     "forgeMotsClesF.js (chargement)"
@@ -11412,6 +11430,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeEmpreinte.js (chargement)",
+    "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeModes.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
@@ -17085,6 +17104,50 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeChoixC.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeExprC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "adversaires",
+    "car",
+    "caracForge",
+    "champDe",
+    "choixDe",
+    "cibleForge",
+    "estType",
+    "forgeSait",
+    "forgeValideObjet",
+    "genreMarqueur",
+    "mvDe",
+    "obj",
+    "objetEvt",
+    "objetsZone",
+    "passeOuPresent",
+    "siSinon"
+   ],
+   "appelleDiffere": [
+    "agregeForge",
+    "exprEtendue"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "siSinon",
+   "fichier": "forgeExprC.js",
+   "ligne": 43,
+   "chargement": false,
+   "appelle": [
+    "forgeNombre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeExprC.js (chargement)"
    ]
   },
   {

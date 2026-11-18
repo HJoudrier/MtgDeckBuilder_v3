@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1770 fonctions**, 261 modules, 1872 Ko de JavaScript.
+**1771 fonctions**, 262 modules, 1880 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -57,7 +57,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 96 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 257 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 239 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 241 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 300 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -127,7 +127,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesF.js`](#jsforgemotsclesfjs) | Les mots-clés, III | 2 | 147 |
 | [`forgeParadigme.js`](#jsforgeparadigmejs) | Paradigm | 1 | 39 |
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
-| [`forgeDeclencheursD.js`](#jsforgedeclencheursdjs) | Des déclencheurs de plus | 2 | 94 |
+| [`forgeDeclencheursD.js`](#jsforgedeclencheursdjs) | Des déclencheurs de plus | 2 | 95 |
 | [`forgeDeclencheursE.js`](#jsforgedeclencheursejs) | Des paramètres de déclencheurs de plus | 3 | 96 |
 | [`forgeRadiation.js`](#jsforgeradiationjs) | Les marqueurs de radiation | 0 | 44 |
 | [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
@@ -138,6 +138,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 118 |
 | [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeChoixC.js`](#jsforgechoixcjs) | Choisir, défausser, répéter, sacrifier : ce que les | 3 | 216 |
+| [`forgeExprC.js`](#jsforgeexprcjs) | Des quantités de plus | 1 | 102 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
@@ -1126,7 +1127,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 257 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 239 lignes, 12 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 241 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2319,7 +2320,7 @@ Désigner, filtrer, choisir parmi. *1 fonctions, 74 lignes, 4.7 Ko.*
 
 ## js/forgeDeclencheursD.js
 
-Des déclencheurs de plus. *2 fonctions, 94 lignes, 5 Ko.*
+Des déclencheurs de plus. *2 fonctions, 95 lignes, 5.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2434,6 +2435,14 @@ Choisir, défausser, répéter, sacrifier : ce que les. *3 fonctions, 216 lignes
 | `joueursAPartirDe(P, liste, debut)` | Les joueurs dans l'ordre du tour, en commençant par `debut`. |
 | `premierJoueur(P, t, env)` | — |
 | `defausseSpecifique(t)` | —— Défausser ————————————————————————————————————————————————————— |
+
+## js/forgeExprC.js
+
+Des quantités de plus. *1 fonctions, 102 lignes, 7.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `siSinon(P, q, vrai, env)` | La forme `a.b` : `a` si `vrai`, `b` sinon. |
 
 ## js/forgeChoixMultiples.js
 
