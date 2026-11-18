@@ -84,6 +84,7 @@
   "forgeCopies.js",
   "forgeTraine.js",
   "forgeEffetsF.js",
+  "forgeCopiesB.js",
   "forgeEffetsG.js",
   "forgeEffetsH.js",
   "forgeEntrees.js",
@@ -4092,6 +4093,7 @@
     "forgeAuras.js (chargement)",
     "forgeChoixC.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
+    "forgeCopiesB.js (chargement)",
     "forgeCout.js (chargement)",
     "forgeCoutsC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
@@ -10421,6 +10423,7 @@
     "forgeChoixC.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
     "forgeCopies.js (chargement)",
+    "forgeCopiesB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
     "forgeDefiniC.js (chargement)",
     "forgeDesignes.js (chargement)",
@@ -11266,6 +11269,7 @@
    "appeleePar": [
     "animeForge",
     "defCopie",
+    "forgeCopiesB.js (chargement)",
     "forgeEffetsC.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeStatiques.js (chargement)",
@@ -11816,6 +11820,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeCopies.js (chargement)",
+    "forgeCopiesB.js (chargement)",
     "forgeEntrees.js (chargement)"
    ]
   },
@@ -11980,6 +11985,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeCopiesB.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsH.js (chargement)",
@@ -12031,6 +12037,25 @@
     "forgeMotsClesE.js (chargement)",
     "forgeZonesC.js (chargement)"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeCopiesB.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "couleursMots",
+    "etendEffet",
+    "forgeDefinis",
+    "forgeSait",
+    "motsForge",
+    "typesForge"
+   ],
+   "appelleDiffere": [
+    "defCopie"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "chargement du module",
@@ -13322,6 +13347,7 @@
     "animeForge",
     "couchesStatiques",
     "defCopie",
+    "forgeCopiesB.js (chargement)",
     "forgeStatiques.js (chargement)",
     "statiqueTenable",
     "typesCouche"
@@ -13340,6 +13366,7 @@
     "animeForge",
     "couleursStatique",
     "defCopie",
+    "forgeCopiesB.js (chargement)",
     "statiqueTenable"
    ]
   },

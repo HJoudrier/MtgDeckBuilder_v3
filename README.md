@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeCopiesB.js   ce que la copie reçoit de plus : couleurs, types ôtés, mot-clé du tour, entrée engagée
   forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
   forgeBatailles.js   les batailles : défense, protecteur, vaincre, lancer la face arrière
@@ -1845,6 +1846,19 @@ Restent : les effets qui animent « pour chaque adversaire » ou boucle à chaqu
 Delina), `RemoveCounter` sur « n'importe quels permanents » (Eventide's Shadow), les dés à sous-capacités par résultat
 (Comet), `Manifest` (Orochi Soul-Reaver), les effets « ne se dégagent pas » à durée (Kill Switch, Bontu's Last Reckoning),
 les chapitres et classes à effet retardé.
+
+**Lot F81 : copier et devenir** (`js/forgeCopiesB.js`). Onze cartes de plus. Ce que l'effet de copie ajoute à la copie :
+- `AddColors$` (Ratadrabik of Urborg, The Jolly Balloon Man) ; `RemoveCardTypes$ True` : la copie ne garde que les
+  types ajoutés (Espers to Magicite) ;
+- `PumpKeywords$` avec `PumpDuration$ EOT` : le mot-clé est un bonus du tour (`mods`), il n'entre pas dans la
+  définition de la copie (Ashling, the Limitless, God-Pharaoh's Gift) ;
+- `Clone | IntoPlayTapped$ True` (Vesuva) ; `AddSVars$` (Kimahri, Court of Vantress, Lazav, Irma) n'ajoute rien :
+  la capacité copiée emporte déjà ses SVars ; `CopySpellAbility | UnlessAI$` est un indice pour l'IA de Forge
+  (Chain of Vapor).
+Restent : la copie d'un **sort de permanent** (Storm of Saruman, Double Major : elle devient un jeton sur la pile, que
+le moteur ne sait pas poser sans le lancer), les copies **d'une carte nommée** (`DefinedName$` : le moteur ne
+cherche pas une carte par son nom hors du deck), les statiques ajoutées à une copie (`AddStaticAbilities$`), les
+échanges de contrôle conditionnels (Gilded Drake).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1787 fonctions**, 273 modules, 1933 Ko de JavaScript.
+**1787 fonctions**, 274 modules, 1936 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -94,6 +94,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 130 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
+| [`forgeCopiesB.js`](#jsforgecopiesbjs) | Des copies de plus (lot F81) | 0 | 43 |
 | [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 300 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 8 | 283 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
@@ -1743,6 +1744,10 @@ Les paramètres de plus des effets courants. *4 fonctions, 219 lignes, 12 Ko.*
 | `finEtapeForge(objets, v, cond)` | « At the beginning of the next end step, sacrifice / exile it » : le départ que js/forgeCopies.js `copiesFin()` joue à l'étape de fin. |
 | `conditionFinEtape(P, t, env)` | « … unless you have the city's blessing » (`AtEOTCondition$ Y`) : la SVar se juge à l'étape de fin, avec la face, le contrôleur et la source de l'effet qui a posé le départ. |
 | `entreAttaquant(P, o, env)` | Entrer « tapped and attacking » : dans le combat en cours, contre le défenseur de la source si elle attaque, sinon le premier adversaire. |
+
+## js/forgeCopiesB.js
+
+Des copies de plus (lot F81). *0 fonctions, 43 lignes, 2.2 Ko.*
 
 ## js/forgeEffetsG.js
 
