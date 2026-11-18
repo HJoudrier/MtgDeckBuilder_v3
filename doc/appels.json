@@ -129,6 +129,7 @@
   "forgeCoutsC.js",
   "forgeChoixC.js",
   "forgeExprC.js",
+  "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
   "iaChoix.js",
@@ -4131,6 +4132,7 @@
     "forgeStatiques.js (chargement)",
     "forgeStatiquesB.js (chargement)",
     "forgeTraine.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "jeuPioche.js (chargement)"
    ]
   },
@@ -4317,6 +4319,7 @@
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeTraine.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "iaMulligan",
     "jeuOpsB.js (chargement)",
     "mulligans",
@@ -4512,6 +4515,7 @@
     "forgeRemplacementsC.js (chargement)",
     "forgeTraine.js (chargement)",
     "forgeValideJoueur",
+    "forgeZonesC.js (chargement)",
     "fouilleForge",
     "gardeAutre",
     "hotePart",
@@ -5062,6 +5066,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeTraine.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "jeuOpsA.js (chargement)",
     "jeuVariantes.js (chargement)",
     "lanceSort",
@@ -5516,6 +5521,7 @@
     "forgeExprC.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeTraine.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "paieAutreB",
     "propObjet",
     "restreintValeurTotale",
@@ -9594,6 +9600,7 @@
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeValideDef",
+    "forgeZonesC.js (chargement)",
     "fouilleForge",
     "loyauteEclair",
     "manaPermis",
@@ -9829,6 +9836,7 @@
     "forgeRemplacementsD.js (chargement)",
     "forgeStatiques.js (chargement)",
     "forgeTraine.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "fouilleForge",
     "metEnJeu",
     "nombreRemplace",
@@ -10215,6 +10223,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "joueursForge",
     "paieUnlessForge",
     "propObjet"
@@ -10285,6 +10294,7 @@
     "forgeEmpreinte.js (chargement)",
     "forgeEntrees.js (chargement)",
     "forgeMemoire.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "joueursForge",
     "joueursPompe",
     "objetsForge",
@@ -10685,6 +10695,7 @@
     "forgeEffetsB.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "formeRemplacement",
     "fouilleForge"
    ]
@@ -10705,6 +10716,7 @@
     "forgeChoixMultiples.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsE.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "fouilleForge"
    ]
   },
@@ -10823,6 +10835,7 @@
     "forgeMemoire.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
+    "forgeZonesC.js (chargement)",
     "fouilleForge",
     "retiensPartis"
    ]
@@ -11734,7 +11747,8 @@
     "forgeDurees.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsH.js (chargement)",
-    "forgeMotsClesF.js (chargement)"
+    "forgeMotsClesF.js (chargement)",
+    "forgeZonesC.js (chargement)"
    ]
   },
   {
@@ -11746,7 +11760,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsF.js (chargement)"
+    "forgeEffetsF.js (chargement)",
+    "forgeZonesC.js (chargement)"
    ]
   },
   {
@@ -11777,7 +11792,8 @@
     "forgeEffetsF.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
-    "forgeMotsClesE.js (chargement)"
+    "forgeMotsClesE.js (chargement)",
+    "forgeZonesC.js (chargement)"
    ]
   },
   {
@@ -11976,7 +11992,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "forgeEffetsG.js (chargement)"
+    "forgeEffetsG.js (chargement)",
+    "forgeZonesC.js (chargement)"
    ]
   },
   {
@@ -17149,6 +17166,33 @@
    "appeleePar": [
     "forgeExprC.js (chargement)"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeZonesC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "deplaceForge",
+    "entreAttaquant",
+    "etendEffet",
+    "finEtapeForge",
+    "forgeDefinis",
+    "forgeNombre",
+    "forgeSait",
+    "forgeValideObjet",
+    "joueurDe",
+    "manifeste",
+    "melangeHasard",
+    "mvDe",
+    "obj",
+    "question",
+    "retiensForge",
+    "zoneForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "chargement du module",

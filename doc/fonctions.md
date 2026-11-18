@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1771 fonctions**, 262 modules, 1880 Ko de JavaScript.
+**1771 fonctions**, 263 modules, 1885 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -139,6 +139,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeChoixC.js`](#jsforgechoixcjs) | Choisir, défausser, répéter, sacrifier : ce que les | 3 | 216 |
 | [`forgeExprC.js`](#jsforgeexprcjs) | Des quantités de plus | 1 | 102 |
+| [`forgeZonesC.js`](#jsforgezonescjs) | Chercher, creuser, déplacer : des paramètres de plus | 0 | 82 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
@@ -1659,7 +1660,7 @@ Les effets de Forge qui durent : régénération,. *6 fonctions, 196 lignes, 12 
 
 ## js/forgeEffetsE.js
 
-Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 141 lignes, 9 Ko.*
+Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 141 lignes, 9.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2443,6 +2444,10 @@ Des quantités de plus. *1 fonctions, 102 lignes, 7.4 Ko.*
 | Fonction | Rôle |
 |---|---|
 | `siSinon(P, q, vrai, env)` | La forme `a.b` : `a` si `vrai`, `b` sinon. |
+
+## js/forgeZonesC.js
+
+Chercher, creuser, déplacer : des paramètres de plus. *0 fonctions, 82 lignes, 5.1 Ko.*
 
 ## js/forgeChoixMultiples.js
 

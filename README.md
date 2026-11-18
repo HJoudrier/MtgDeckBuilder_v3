@@ -130,6 +130,7 @@ js/                 modules, chargés dans cet ordre :
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
   forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
   forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeZonesC.js    chercher, creuser, déplacer : valeur de mana totale, engagé, attaquant, manifester chez qui l'on dit
   forgeExprC.js     des quantités de plus : lancée depuis l'exil, phase principale, métalcraft, nombre de couleurs, marqueurs par genre
   forgeChoixC.js    choisir, défausser, répéter, sacrifier : listes de types, « unless you discard », chacun son tour, force totale
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
@@ -1651,6 +1652,22 @@ Restent : les modes qu'on annonce ou tire au hasard (`Charm | Announce$`, `Rando
   l'évènement à la décision).
 Restent : les coûts optionnels payés (`OptionalGenericCostPaid`), le foretell, les activations du tour
 (`ThisTurnActivated`), les listes de cartes d'un déplacement groupé (`TriggerObjectsCards`).
+
+**Lot F69 : chercher, creuser, déplacer** (`js/forgeZonesC.js`). Vingt et une cartes de plus :
+- **`DigUntil | Tapped$`** (The Ring Goes South, Clifftop Lookout) : la carte trouvée entre engagée ; **`GainControl$`**
+  (Sméagol, Atla Palani) : sous le contrôle de celui qui creuse ; **`Dig | Attacking$`** (Owlbear Cub, Winota) :
+  elle entre attaquante ; `SkipReorder$` est connu, le moteur ne demandant jamais l'ordre du reste ;
+- **`ChangeZone | WithTotalCMC$`** (Protean Hulk, Lively Dirge) : autant de cartes qu'on veut, de valeur de mana
+  totale bornée — la réponse par défaut prend les plus chères qui tiennent ; **`RememberSearcher$`** (Tempt with
+  Discovery) retient celui qui cherche ;
+- **`Manifest | DefinedPlayer$`** (Reality Shift) : le joueur désigné manifeste le dessus de sa bibliothèque ;
+- **`ConditionNotPresent$`** passe dans les paramètres communs : tout effet peut le porter (`conditionForge()`, F67).
+`ChangeZoneAll | AtEOT$` ne se lit que pour `Sacrifice` et `Exile` : « exile at your next upkeep » (Rally the
+Ancestors) reste refusé, plutôt que lu comme un sacrifice.
+
+**Un défaut ancien trouvé par le banc.** Le plafond d'un choix de cibles (`TargetMax$ OneEach`, The Horus Heresy) se
+calculait sans la face du script : `Cannot read properties of undefined (reading 'svars')`, deux parties sur cinq
+cents. Le descripteur de cible garde maintenant sa face (`maxFace`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
