@@ -150,7 +150,7 @@ forgeEffet('ProtectionAll', ['Gains', 'ValidCards', 'Choices'], function* (P, t,
 
 /* « Target creature blocks CARDNAME this turn if able » : l'attaquant
    imposé est la source, ou ce que `DefinedAttacker$` désigne. */
-forgeEffet('MustBlock', ['DefinedAttacker', 'Duration'], function* (P, t, env) {
+forgeEffet('MustBlock', ['DefinedAttacker', 'Duration', 'BlockAllDefined'], function* (P, t, env) {
   const a = t.DefinedAttacker ? forgeDefinis(P, t.DefinedAttacker, env).find(x => x && x.j == null) : env.src;
   objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki)
     .forEach(o => { o.bloqueForce = {tour: P.tour, attaquant: a && !a.lki ? a.id : null}; });

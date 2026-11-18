@@ -128,7 +128,7 @@ function actionsLegales(P, j) {
   if (P.actif === j) J.main.forEach(id => { if (obj(P, id).def.presage && planPaiement(P, j, MANA_DEUX, 0)) r.push({k: 'presager', id}); });
   J.main.forEach(id => { if (suspendable(P, j, obj(P, id), rituel)) r.push({k: 'suspendre', id}); });
   /* Les capacités qui s'activent depuis la main (cycle) ou le cimetière. */
-  [['main', J.main], ['cimetiere', J.cimetiere]].forEach(([zone, ids]) => ids.forEach(id => {
+  [['main', J.main], ['cimetiere', J.cimetiere], ['commandement', J.commandement]].forEach(([zone, ids]) => ids.forEach(id => {
     const o = obj(P, id);
     o.def.capacites.forEach((k, i) => {
       if (k.zone !== zone || k.genre !== 'activee') return;
@@ -174,7 +174,7 @@ function actionsPossibles(P, j) {
   const J = P.joueurs[j];
   const horsChamp = (ids, zone) => ids.some(id => obj(P, id).def.capacites.some(k => k.zone === zone && k.vitesse !== 'rituel'));
   const peut = J.main.some(id => estEphemere(obj(P, id).def)) ||
-    J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') ||
+    J.commandement.some(id => estEphemere(obj(P, id).def)) || horsChamp(J.main, 'main') || horsChamp(J.cimetiere, 'cimetiere') || horsChamp(J.commandement, 'commandement') ||
     J.cimetiere.some(id => { const d = obj(P, id).def; return lancableDuCimetiere(d, obj(P, id), P) && estEphemere(d); }) ||
     J.exil.some(id => { const o = obj(P, id); return ((o.presageTour != null && o.presageTour < P.tour) || o.aventure || exilLancable(P, o, false)) && estEphemere(o.def); }) ||
     cartesPermises(P, j).some(x => estEphemere(x.o.def)) || flashPossible(P, j) || actionsPrepare(P, j, false).length || sneakPossible(P, j) ||
@@ -214,9 +214,11 @@ function* prepareEffets(P, j, src, effet, couleurs, extra) {
     const k = m0 => src && P.cartes[src.cid] && (P.cartes[src.cid].modesPris || {})[m0.texte];
     const pris = op => effet.modes.restr && k(op) != null && (effet.modes.restr === 'ThisGame' || k(op) === P.tour);
     const m = effet.modes, ok = m.options.filter(op => !pris(op) && op.cibles.every(sl => ciblesLegales(P, sl, src, j, couleurs).length >= sl.min));
-    if (ok.length < m.min) return null;
-    const plafond = m.maxForge ? Math.max(m.min, forgeNombre(P, m.maxForge.v, {face: m.maxForge.face, ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: j, op: {}})) : m.max;
-    const r = yield question(P, j, 'modes', ok.map(o => o.texte), {min: m.min, max: Math.min(plafond, ok.length), multi: true, source: src && src.id, extra: {options: ok}});
+    const envM = f => ({face: f.face, ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: j, op: {}});
+    const plancher = m.minForge ? Math.max(0, forgeNombre(P, m.minForge.v, envM(m.minForge))) : m.min;
+    if (ok.length < plancher) return null;
+    const plafond = m.maxForge ? Math.max(plancher, forgeNombre(P, m.maxForge.v, envM(m.maxForge))) : m.max;
+    const r = yield question(P, j, 'modes', ok.map(o => o.texte), {min: plancher, max: Math.min(plafond, ok.length), multi: true, source: src && src.id, extra: {options: ok}});
     options = (Array.isArray(r) ? r : [r]).map(i => ok[i]).filter(Boolean);
     if (m.restr && src && P.cartes[src.cid]) { const k2 = P.cartes[src.cid]; k2.modesPris = k2.modesPris || {}; options.forEach(o => { k2.modesPris[o.texte] = P.tour; }); }
   }

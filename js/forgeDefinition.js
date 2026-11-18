@@ -47,9 +47,11 @@ function effetForge(face, t0, jetons, racine) {
     /* « Choose one. If you control a commander, choose both » : un plafond calculé au lancement. */
     const maxV = t0.CharmNum && !/^\d+$/.test(t0.CharmNum) ? String(face.svars[t0.CharmNum] || t0.CharmNum) : null;
     const max = maxV ? (/xPaid/.test(maxV) || t0.MinCharmNum == null ? null : opts.length) : +(t0.CharmNum || 1);
-    const min = t0.MinCharmNum != null ? (/^\d+$/.test(t0.MinCharmNum) ? +t0.MinCharmNum : null) : max;
+    /* Un minimum qui se calcule aussi (« choose any number if kicked » : X vaut 0 ou 3). */
+    const minV = t0.MinCharmNum != null && !/^\d+$/.test(t0.MinCharmNum) ? String(face.svars[t0.MinCharmNum] || t0.MinCharmNum) : null;
+    const min = t0.MinCharmNum != null ? (minV ? 0 : +t0.MinCharmNum) : max;
     if (max == null || min == null) return null;
-    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null, ...(maxV ? {maxForge: {v: maxV, face}} : {})}};
+    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null, ...(maxV ? {maxForge: {v: maxV, face}} : {}), ...(minV ? {minForge: {v: minV, face}} : {})}};
   }
   const ops = [], cibles = [], chaine = ++CHAINES_FORGE;
   let t = t0, parent = null, garde = 0;
@@ -236,7 +238,7 @@ function definitionDepuisScript(s, fiche, jetons) {
   const pt = /^(-?\d+)\/(-?\d+)$/.exec(face.pt || '');
   const def = {nom: fiche.nom || face.nom, cout, mv: cout.total, types: ti.types, sousTypes: ti.sousTypes, supers: ti.supers,
     couleurs: face.couleurs ? couleursForge(face.couleurs) : couleursDe(cout, {}), force: pt ? +pt[1] : null,
-    endurance: pt ? +pt[2] : null, loyaute: /^\d+$/.test(face.loyaute || '') ? +face.loyaute : null, mots: 0, params: {},
+    endurance: pt ? +pt[2] : null, loyaute: /^\d+$/.test(face.loyaute || '') ? +face.loyaute : null, defense: /^\d+$/.test(face.defense || '') ? +face.defense : null, mots: 0, params: {},
     sort: null, capacites: [], statiques: [], entree: null, aura: null, equipe: null, kicker: null, flashback: null, cycling: null,
     jeton: !!fiche.jeton, couverture: null, coutTexte: face.cout, typeLigne, texteOracle: face.oracle.replace(/\n/g, ' // '), source: 'forge'};
   if (def.types.includes('creature') && (def.force == null || def.endurance == null)) {
@@ -299,7 +301,7 @@ function definitionAFaces(s, fiche, jetons) {
   const brut = JSON.stringify(s.faces.map(f => [f.a, f.t, f.svars, f.k]));
   /* Une carte transformable est jouée si quelque chose la transforme : un
      effet, le jour et la nuit, disturb, craft, ou un retour « transformed ». */
-  const tenu = FORGE_FACES.includes(s.mode) && (!/^(DoubleFaced|Flip)$/.test(s.mode) || /SetState|Daybound|Nightbound|Disturb|Craft|Transformed\$ True/.test(brut));
+  const tenu = FORGE_FACES.includes(s.mode) && (!/^(DoubleFaced|Flip)$/.test(s.mode) || /SetState|Daybound|Nightbound|Disturb|Craft|Transformed\$ True|"Transformed":"True"/.test(brut) || s.faces[0].defense != null);
   if (tenu) { def.dos = ar.def; def.modeFaces = s.mode; portesRoom(def); }
   const manque = tenu ? ar.def.couverture.manque.filter(e => !c.manque.includes(e)) : ['construction:' + (s.mode || 'faces')];
   if (c.etat === 'complete' && (manque.length || ar.def.couverture.etat !== 'complete')) c.etat = 'partielle';

@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeBatailles.js   les batailles : défense, protecteur, vaincre, lancer la face arrière
   forgeEffetsJ.js   des effets durables : un nombre retenu par l'effet (SetChosenNumber)
   forgeMarqueursC.js  marqueurs et dés : retenir l'armée, N fois, par objet désigné, au plus N, pairs et impairs
   forgeMotsClesG.js les mots-clés, IV : évasions du tour, prévention, Training, Undaunted, Gravestorm, règles de deck sans effet en jeu
@@ -1796,6 +1797,30 @@ posé à un joueur (Winding Constrictor).
 Restent : les remplacements et SVars qu'une animation accorde (`Replacements$`, `sVars$` : The Book of Exalted Deeds,
 Vorpal Sword), `CantHaveKeyword$`, et les effets qui posent un remplacement d'entrée avec marqueurs (Communal Brewing,
 Torgal : leur chaîne `Effect | ReplacementEffects$ … ExileOnMoved$ Stack` n'est pas encore lue).
+
+**Lot F79 : batailles, classes, chapitres, mots-clés de lancement** (`js/forgeBatailles.js`, et des retouches). Dix-huit
+cartes de plus :
+- **Les batailles** (Invasion of Ikoria, Tarkir, Theros, Fiora…). Une carte à deux faces dont l'avant porte `Defense:N`
+  n'était jamais « tenue » : la détection des faces transformables ne lisait que `Transformed$ True` dans un texte brut,
+  jamais la forme des tables lues (`"Transformed":"True"`) — les deux se reconnaissent maintenant, et `Defense` suffit.
+  La bataille entre avec N marqueurs défense et un protecteur — l'adversaire qui suit son contrôleur dans l'ordre du tour,
+  sans choix ; son contrôleur l'attaque comme un planeswalker (`defenseurDe()` rend le protecteur, qui bloque), les
+  dégâts ôtent de la défense, et à zéro elle part en exil, d'où sa face arrière se lance sans payer
+  (`lanceEffet.dos`). Simplification : pas de détour par le cimetière, pas de choix du protecteur.
+- **`Devour:N:Type`** (Famished Worldsire) et **`Firebending:X`** — X est la force de la créature ou le nombre de
+  créatures contrôlées. Les marqueurs d'expérience ne se comptent pas.
+- **Les classes** dont un déclencheur porte déjà son `IsPresent` (Hunter's Talent) : le niveau se garde à part
+  (`ClassLevelAtLeast`, jugé par `conditionForge()`). `MustBlock | BlockAllDefined$` (Fighter Class).
+- **`Animate`/`AnimateAll` jusqu'au prochain tour** ou tant que l'hôte reste (Song of Freyalise), qui permettent à un
+  chapitre de saga de les poser.
+- **L'entretien cumulatif en effet** : « un adversaire gagne N vie » (Wall of Shards) ou « ajoutez {R} » (Braid of
+  Fire) — le mana ajouté se dépense pendant l'entretien.
+- **`Charm` à minimum calculé** (Inscription of Abundance : « tout nombre si kické ») ; `PumpAll | PumpZone$ Graveyard |
+  KW$ Flashback` (Will of the Jeskai) ; `Count$Kicked` se lit dès le choix des modes.
+- **Commander ninjutsu** (Yuriko, the Tiger's Shadow) : la capacité s'active depuis la zone de commandement.
+Restent : les coûts de flashback, de squad, de replicate et d'escalate qui ne sont pas du mana (engager des créatures,
+exiler des cartes du cimetière), `Mobilize:X`, `Reinforce:X`, le deuxième coût de `Kicker`, les chapitres qui posent un
+effet à retardement ou animent « pour chaque adversaire », Monk Class (une carte exilée qui se lance sous condition).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

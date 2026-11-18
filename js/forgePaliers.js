@@ -51,7 +51,8 @@ OPS.station = function* (P, op, ctx) {
 function niveauForge(def, reste, face, jetons) {
   const n = +reste[0], c = reste.length >= 3 ? manaSeul(reste[1]) : null;
   if (!(n >= 2) || !c) return false;
-  const garde = t => t.IsPresent ? null : {...t, IsPresent: 'Card.Self+ClassLevelGE' + n};
+  /* Un déclencheur qui porte déjà son IsPresent garde son niveau à part (`ClassLevelAtLeast`, jugé par conditionForge). */
+  const garde = t => t.IsPresent ? {...t, ClassLevelAtLeast: String(n)} : {...t, IsPresent: 'Card.Self+ClassLevelGE' + n};
   for (const part of reste.slice(2).join(':').split('|').map(x => x.trim()).filter(Boolean)) {
     const m = /^(AddTrigger|AddStaticAbility|AddReplacementEffect)\$ (.+)$/.exec(part);
     if (!m) return false;
@@ -73,6 +74,11 @@ function niveauForge(def, reste, face, jetons) {
     effet: {ops: [{op: 'niveau', n, hostile: false}], cibles: [], modes: null}});
   return true;
 }
+
+conditionForge = (g => function (P, t, env) {
+  if (t.ClassLevelAtLeast && (!env.src || (env.src.niveau || 1) < +t.ClassLevelAtLeast)) return false;
+  return g(P, t, env);
+})(conditionForge);
 
 /* Une capacité de palier ne s'active qu'au niveau d'avant (js/forgeInterdits.js
    `activationInterdite()`). */

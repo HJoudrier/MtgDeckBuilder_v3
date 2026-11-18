@@ -54,7 +54,12 @@ function motClePermanent(def, k, face, jetons, tete, reste) {
         effet: {ops: [{op: 'marqueurs', genre: '+1/+1', n, a: {cible: 0}, hostile: false}], cibles: [{desc: descForge('Creature'), min: 1, max: 1}], modes: null}});
     }
     case 'Sunburst': return !reste.length && entree({op: 'sunburst'});
-    case 'Devour': return n != null && reste.length === 1 && entree({op: 'devore', n});
+    /* Devour N:Type — sacrifier des artefacts, des terrains ou des Nourritures à la place des créatures. */
+    case 'Devour': {
+      const typ = reste[1] ? reste[1].trim().toLowerCase() : null;
+      if (n == null || reste.length < 1 || reste.length > 2 || (typ && !/^[a-z]+$/.test(typ))) return false;
+      return entree({op: 'devore', n, ...(typ ? {type: typ} : {})});
+    }
     case 'Ascend': def.params.ascend = true; return !reste.length;
     case 'Saddle': return motCleSelle(def, reste);
     case 'Strive': { const c = reste.length === 1 ? coutForge(reste[0]) : null; if (!c || autresCout(c.cout)) return false; def.strive = c.cout.mana; return true; }
@@ -189,7 +194,7 @@ OPS.sunburst = function* (P, op, ctx) {
 OPS.devore = function* (P, op, ctx) {
   const s = sourceCtx(P, ctx);
   if (!s || s.lki) return;
-  const ids = champDe(P, ctx.ctrl).filter(o => o.id !== s.id && estCreature(o)).map(o => o.id);
+  const ids = champDe(P, ctx.ctrl).filter(o => o.id !== s.id && (op.type ? estType(o, op.type) || o.def.sousTypes.includes(op.type) : estCreature(o))).map(o => o.id);
   const pris = yield* choisitCartes(P, ctx.ctrl, ids, ids.length, 'Dévorer', 'cartes', 0);
   pris.forEach(id => sacrifie(P, id));
   if (pris.length) poseMarqueurs(P, s, '+1/+1', op.n * pris.length, s);

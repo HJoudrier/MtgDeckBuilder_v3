@@ -47,6 +47,7 @@ function* declareAttaquants(P) {
   if (!cands.length) return 0;
   const defenseurs = adversaires(P, j).map(i => ({j: i}));
   P.champ.forEach(id => { const o = obj(P, id); if (o.ctrl !== j && estType(o, 'planeswalker')) defenseurs.push({pw: id}); });
+  bataillesAttaquables(P, j).forEach(id => defenseurs.push({pw: id}));
   const r = yield question(P, j, 'attaquants', cands, {min: 0, max: cands.length, multi: true, defaut: [], extra: {defenseurs}});
   const choisis = new Map();
   for (const paire of Array.isArray(r) ? r : []) {

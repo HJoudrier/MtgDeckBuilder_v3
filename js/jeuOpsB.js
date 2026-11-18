@@ -133,6 +133,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (opts.face) no.def = opts.face;
   if (opts.faceCachee) { no.vraieDef = P.cartes[no.cid].def; no.faceCachee = true; no.def = defFaceCachee(no.vraieDef); }
   if (no.def.loyaute != null) no.marq.loyaute = no.def.loyaute;
+  if (no.def.defense != null) poseDefense(P, no);
   if (ent.marqueurs && (!ent.siKicke || opts.kicked)) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
   /* Une aura de joueur (js/forgeAuras.js) tient au joueur, pas à un objet. */
   if (opts.attache != null) { if (typeof opts.attache === 'object') no.attJoueur = opts.attache.j; else no.att = opts.attache; }

@@ -134,9 +134,13 @@ forgeEffet('DelayedTrigger', ['Mode', 'Phase', 'ValidPlayer', 'Execute', 'ThisTu
 /* Animer : la couche propre à l'objet (js/jeuCaracteristiques.js
    `animation()`) — un terrain qui devient une créature 3/3 jusqu'à la fin
    du tour, un artefact qui devient une créature pour toujours. */
+/* La fin d'une animation : jamais, au prochain tour de son auteur, avec son hôte, sinon au nettoyage. */
+function finAnimation(t) {
+  return {Permanent: 'jamais', UntilYourNextTurn: 'prochainTour', AsLongAsControl: 'hote', UntilHostLeavesPlay: 'hote'}[t.Duration] || 'tour';
+}
 function animeForge(P, objets, t, env) {
   const ty = typesForge(t.Types);
-  const a = {types: ty.types, sousTypes: ty.sousTypes, mots: motsForge(t.Keywords), fin: t.Duration === 'Permanent' ? 'jamais' : 'tour',
+  const a = {types: ty.types, sousTypes: ty.sousTypes, mots: motsForge(t.Keywords), fin: finAnimation(t), par: env.ctrl, hote: env.src ? env.src.id : null,
     force: t.Power != null ? forgeNombre(P, t.Power, env) : null, endurance: t.Toughness != null ? forgeNombre(P, t.Toughness, env) : null,
     couleurs: t.Colors ? couleursMots(t.Colors) : null, ecrase: t.OverwriteColors === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True',
     /* Ce que l'animation ôte, et ce qu'elle accorde : capacités, déclencheurs
@@ -166,7 +170,7 @@ function accordeAnimation(t, op) {
 
 /* Ce qu'une animation sait tenir : une durée connue, des couleurs nommées. */
 function animationTenable(t, op) {
-  if (t.Duration && t.Duration !== 'Permanent') return false;
+  if (t.Duration && !/^(Permanent|UntilYourNextTurn|AsLongAsControl|UntilHostLeavesPlay)$/.test(t.Duration)) return false;
   if ((t.Abilities || t.Triggers || t.staticAbilities) && !(op && accordeAnimation(t, op))) return false;
   if (t.AtEOT && !/^(Sacrifice|Exile|Hand)$/.test(t.AtEOT)) return false;
   if (t.Colors && !couleursMots(t.Colors).length) return false;

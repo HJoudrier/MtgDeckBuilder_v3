@@ -80,6 +80,7 @@ function* lanceSort(P, j, a) {
   if (d !== s.def) s.def = d;
   /* La variante se lit dès le choix des cibles (« if this spell was bargained »). */
   s.varianteLance = a.variante || null;
+  s.kicked = a.variante === 'kicker';
   /* Quand elle a été lancée : « if you cast it during your main phase » (Return to Dust). */
   s.lanceeEn = {etape: P.etape, actif: P.actif};
   const annule = () => {
