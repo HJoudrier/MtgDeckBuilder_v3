@@ -1683,6 +1683,20 @@ cents. Le descripteur de cible garde maintenant sa face (`maxFace`).
   `proprieteJoueurEtendue()` que `forgeValideJoueur()` appelle pour ce qu'il ne connaît pas.
 Restent : le décomposé (`withDecayed`), les enquêtes résolues (`IsSolved`), `EACH Forest & Plains`.
 
+**Lot F71 : les filtres du tour** (`js/forgeFiltresD.js`). Vingt-six cartes de plus, toutes sur ce que le moteur note
+déjà ou note désormais :
+- **d'où une carte est entrée** : `ThisTurnEnteredFrom_Graveyard`, `_Battlefield`, `_Library` (Celes, Samwise, Captain
+  N'ghathrod), jugés sur `P.entresTour` ; **`milledThisTurn`** (The Master, Transcendent) : `deplace()` marque la carte
+  meulée (`o.meuleTour`) ;
+- **comment un sort a été lancé** : `wasCastFromTheirHand` (Ghostly Pilferer, Drannith Magistrate : le sort venait de la
+  main de qui le lance), `CastSa Spell.MayPlaySource`, `Spell.ManaFromTreasure`, `Spell.ManaSpent EQ0` ;
+- **le combat** : `attackingYou` (le défenseur est vous, ou un planeswalker qui vous appartient), `attackedThisCombat`,
+  `dealtCombatDamageThisTurn You` (l'historique du tour garde qui a blessé quel joueur au combat) ;
+- **le déclencheur** : `TriggeredAttacker`, `TriggeredNewCard`, et la tête de joueur `OppNonTriggeredTarget` (Parapet
+  Thrasher : « each other opponent » — ni vous, ni le joueur que le déclencheur vise).
+Restent : `TriggeredCards` (un lot de cartes), `hadToAttackThisCombat`, `blockedBySourceLKI`, les dégâts cumulés
+d'une source (`wasDealtDamageThisTurnBySource GE10`).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -46,8 +46,26 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
       return false;
     }
     case 'ControllerControlsMoreLand': return !!P && comptesTerrains(P, o.ctrl) > comptesTerrains(P, joueur);
+    case 'wasCastFromTheirHand': return !!o.lance && o.lance.depuis === 'main';
+    case 'milledThisTurn': return !!P && o.meuleTour === P.tour;
+    case 'attackingYou': {
+      const d = P && P.combat && P.combat.attaquants.get(o.id);
+      return !!d && (d.j != null ? d.j === joueur : !!obj(P, d.pw) && obj(P, d.pw).ctrl === joueur);
+    }
+    case 'attackedThisCombat': return !!P && !!P.combat && P.combat.attaquants.has(o.id);
     case 'bargained': return !!o.marchande || o.varianteLance === 'bargain';
   }
+  /* Le tour : d'où une carte est entrée, comment un sort a été lancé, le combat en cours. */
+  if ((m = /^ThisTurnEnteredFrom_(\w+)$/.exec(p))) return !!P && (P.entresTour || []).some(x => x.vers === 'champ' && x.de === ZONES_FORGE[m[1]] && x.o && x.o.id === o.id);
+  if ((m = /^CastSa (.+)$/.exec(p))) {
+    const depense = Object.values(manaDepenseDe(o) || {}).reduce((a, b) => a + b, 0);
+    if (m[1] === 'Spell.MayPlaySource') return o.varianteLance === 'permis';
+    if (m[1] === 'Spell.ManaFromTreasure') return ((o.manaDe || {}).treasure || 0) > 0;
+    const k = /^Spell\.ManaSpent (EQ|GE|LE|GT|LT)(\d+)$/.exec(m[1]);
+    return !!k && !!o.lance && compareForge(depense, k[1], +k[2]);
+  }
+  if (p === 'dealtCombatDamageThisTurn You') return !!P && ((histoire(P).degatsCombatPar || {})[joueur] || []).includes(o.id);
+  if (p === 'TriggeredAttacker' || p === 'TriggeredNewCard') { const e = env && env.ctx && env.ctx.evt; const id = e && (e.id != null ? e.id : e.ancien); return id != null && (id === o.id || (!!P && suit(P, id) === o.id)); }
   /* `EnchantedBy Aura.YouCtrl` : une aura qui répond au filtre est attachée à l'objet. */
   if ((m = /^EnchantedBy (.+)$/.exec(p))) return !!P && P.champ.some(id => { const a = obj(P, id); return a.att === o.id && forgeValideObjet(P, a, m[1], src, joueur, env); });
   if ((m = /^base(Power|Toughness)(GE|LE|GT|LT|EQ|NE)(-?\d+)$/.exec(p))) return compareForge(m[1] === 'Power' ? o.def.force || 0 : o.def.endurance || 0, m[2], +m[3]);
@@ -64,5 +82,6 @@ function proprieteJoueurEtendue(P, j, p, ctrl) {
 
 forgeSait('filtre', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
   'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith',
-  'TopGraveyardCreature', 'ControllerControlsMoreLand', 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',
+  'TopGraveyardCreature', 'ControllerControlsMoreLand', 'wasCastFromTheirHand', 'milledThisTurn', 'attackingYou', 'attackedThisCombat', 'dealtCombatDamageThisTurn You', 'TriggeredAttacker', 'TriggeredNewCard', 'OppNonTriggeredTarget',
+  'CastSa Spell.MayPlaySource', 'CastSa Spell.ManaFromTreasure', 'CastSa Spell.ManaSpent EQ0', ...['Graveyard', 'Battlefield', 'Library', 'Hand', 'Exile'].map(z => 'ThisTurnEnteredFrom_' + z), 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',
   'EnchantedBy Aura.YouCtrl', 'basePowerXX', 'baseToughnessXX', 'totalPT_XX');

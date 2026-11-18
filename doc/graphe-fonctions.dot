@@ -5434,8 +5434,10 @@ digraph appels {
   "forgeFiltresD.js (chargement)" -> "obj" [color="#a8846d99"];
   "forgeFiltresD.js (chargement)" -> "car" [color="#a8846d99"];
   "forgeFiltresD.js (chargement)" -> "estCreature" [color="#a8846d99"];
-  "forgeFiltresD.js (chargement)" -> "forgeValideObjet" [color="#a8846d99"];
+  "forgeFiltresD.js (chargement)" -> "manaDepenseDe" [color="#a8846d99"];
   "forgeFiltresD.js (chargement)" -> "compareForge" [color="#a8846d99"];
+  "forgeFiltresD.js (chargement)" -> "histoire" [color="#a8846d99"];
+  "forgeFiltresD.js (chargement)" -> "forgeValideObjet" [color="#a8846d99"];
   "forgeFiltresD.js (chargement)" -> "forgeSait" [color="#a8846d99"];
   "forgeFiltresD.js (chargement)" -> "proprieteDesignee" [style=dashed, color="#a8846d66"];
   "forgeHideaway.js (chargement)" -> "forgeEffet" [color="#6da88c99"];

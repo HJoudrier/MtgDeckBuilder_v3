@@ -4752,7 +4752,7 @@
   {
    "nom": "noteEntree",
    "fichier": "jeuEtat.js",
-   "ligne": 156,
+   "ligne": 158,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4767,7 +4767,7 @@
   {
    "nom": "emet",
    "fichier": "jeuEtat.js",
-   "ligne": 161,
+   "ligne": 163,
    "chargement": false,
    "appelle": [
     "noteHistorique"
@@ -4809,7 +4809,7 @@
   {
    "nom": "jn",
    "fichier": "jeuEtat.js",
-   "ligne": 165,
+   "ligne": 167,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4865,7 +4865,7 @@
   {
    "nom": "nomObj",
    "fichier": "jeuEtat.js",
-   "ligne": 167,
+   "ligne": 169,
    "chargement": false,
    "appelle": [
     "obj"
@@ -4880,7 +4880,7 @@
   {
    "nom": "vivants",
    "fichier": "jeuEtat.js",
-   "ligne": 172,
+   "ligne": 174,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4904,7 +4904,7 @@
   {
    "nom": "suivantVivant",
    "fichier": "jeuEtat.js",
-   "ligne": 175,
+   "ligne": 177,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4918,7 +4918,7 @@
   {
    "nom": "ordreApnap",
    "fichier": "jeuEtat.js",
-   "ligne": 184,
+   "ligne": 186,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -4933,7 +4933,7 @@
   {
    "nom": "adversaires",
    "fichier": "jeuEtat.js",
-   "ligne": 193,
+   "ligne": 195,
    "chargement": false,
    "appelle": [
     "vivants"
@@ -4966,7 +4966,7 @@
   {
    "nom": "champDe",
    "fichier": "jeuEtat.js",
-   "ligne": 196,
+   "ligne": 198,
    "chargement": false,
    "appelle": [
     "obj"
@@ -5033,7 +5033,7 @@
   {
    "nom": "piocheN",
    "fichier": "jeuEtat.js",
-   "ligne": 200,
+   "ligne": 202,
    "chargement": false,
    "appelle": [
     "emet",
@@ -5049,7 +5049,7 @@
   {
    "nom": "question",
    "fichier": "jeuEtat.js",
-   "ligne": 222,
+   "ligne": 224,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5190,6 +5190,7 @@
     "exprDesignations",
     "exprEtendue",
     "forgeDeclencheursC.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "noteHistorique",
     "noteResolution",
@@ -5232,7 +5233,7 @@
   {
    "nom": "noteResolution",
    "fichier": "jeuHistorique.js",
-   "ligne": 65,
+   "ligne": 67,
    "chargement": false,
    "appelle": [
     "histoire",
@@ -5247,7 +5248,7 @@
   {
    "nom": "manaDepenseDe",
    "fichier": "jeuHistorique.js",
-   "ligne": 68,
+   "ligne": 70,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5256,7 +5257,8 @@
     "caracForge",
     "compteDuTour",
     "conditionEntree",
-    "exprEtendue"
+    "exprEtendue",
+    "forgeFiltresD.js (chargement)"
    ]
   },
   {
@@ -16896,6 +16898,8 @@
     "estType",
     "forgeSait",
     "forgeValideObjet",
+    "histoire",
+    "manaDepenseDe",
     "mvDe",
     "obj",
     "propObjet",
@@ -16910,7 +16914,7 @@
   {
    "nom": "proprieteJoueurEtendue",
    "fichier": "forgeFiltresD.js",
-   "ligne": 59,
+   "ligne": 77,
    "chargement": false,
    "appelle": [
     "champDe"

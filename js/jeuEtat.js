@@ -129,6 +129,8 @@ function deplace(P, id, vers, opts = {}) {
     return null;
   }
   const n = creeObjet(P, o.cid, o.prop, zone, zone === 'champ' ? (opts.ctrl != null ? opts.ctrl : o.prop) : o.prop);
+  /* Meulée ce tour : « target creature in a graveyard that was milled this turn ». */
+  if (opts.meule) n.meuleTour = P.tour;
   P.suivi.set(id, n.id);
   /* Exilée « avec » une source (Forger's Foundry) : la source la retrouve par `ExiledWith`. */
   if (o.exileAvec != null && zone === 'exil' && P.cartes[o.exileAvec]) (P.cartes[o.exileAvec].exilees = P.cartes[o.exileAvec].exilees || []).push(n.id);

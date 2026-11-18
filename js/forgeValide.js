@@ -17,7 +17,7 @@ const FORGE_TYPES_CARTE = {Creature: 'creature', Artifact: 'artifact', Enchantme
   Planeswalker: 'planeswalker', Instant: 'instant', Sorcery: 'sorcery', Battle: 'battle', Kindred: 'kindred', Tribal: 'kindred'};
 const FORGE_COULEURS = {White: 'W', Blue: 'U', Black: 'B', Red: 'R', Green: 'G'};
 const FORGE_SUPERS = {Legendary: 'legendary', Basic: 'basic', Snow: 'snow'};
-const FORGE_TETES_JOUEUR = new Set(['Player', 'Opponent', 'You']);
+const FORGE_TETES_JOUEUR = new Set(['Player', 'Opponent', 'You', 'OppNonTriggeredTarget']);
 const FORGE_FILTRES = new Map();
 
 /* Les sous-types qui ne sont pas des types de créature : un changelin ne
@@ -278,6 +278,8 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
     if (!a.joueur && a.tete !== 'Any') return false;
     if (a.tete === 'Opponent' && j === ctrl) return false;
     if (a.tete === 'You' && j !== ctrl) return false;
+    /* « Each other opponent » : ni vous, ni le joueur que le déclencheur vise. */
+    if (a.tete === 'OppNonTriggeredTarget' && (j === ctrl || (env && env.ctx && env.ctx.evt && env.ctx.evt.joueur === j))) return false;
     return a.props.every(p => {
       switch (p) {
         case 'Opponent': return j !== ctrl;
