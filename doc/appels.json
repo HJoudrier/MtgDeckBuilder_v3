@@ -134,6 +134,7 @@
   "forgeDefiniC.js",
   "forgeStatiquesC.js",
   "forgeMotsClesG.js",
+  "forgeMarqueursC.js",
   "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
@@ -4120,6 +4121,7 @@
     "forgeInterdits.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeManaC.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeMode",
     "forgeModes.js (chargement)",
@@ -4307,6 +4309,7 @@
    "appeleePar": [
     "forgeChoixC.js (chargement)",
     "forgeEffetsG.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "melangeHasard"
    ]
   },
@@ -4805,6 +4808,7 @@
     "forgeEffetsF.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRadiation.js (chargement)",
     "gagneVie",
@@ -4853,6 +4857,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeEntrees.js (chargement)",
     "forgeHideaway.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRadiation.js (chargement)",
@@ -5025,6 +5030,7 @@
     "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeFiltresD.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -5369,6 +5375,7 @@
     "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeFiltresD.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgePaliers.js (chargement)",
@@ -9908,6 +9915,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
     "forgeHideaway.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeRadiation.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeStatiques.js (chargement)",
@@ -10921,6 +10929,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
@@ -11569,6 +11578,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "genresMarqueurs",
     "miracle"
@@ -11985,6 +11995,7 @@
    "appeleePar": [
     "forgeEffetsB.js (chargement)",
     "forgeEffetsG.js (chargement)",
+    "forgeMarqueursC.js (chargement)",
     "infligeAvecExces"
    ]
   },
@@ -17474,6 +17485,27 @@
     "degatsApresPrevention",
     "motCleLancementB"
    ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeMarqueursC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "car",
+    "champDe",
+    "choisitUn",
+    "emet",
+    "entierHasard",
+    "forgeNombre",
+    "forgeSait",
+    "jn",
+    "retiensForge",
+    "varsDe"
+   ],
+   "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": []
   },

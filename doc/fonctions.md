@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1778 fonctions**, 268 modules, 1917 Ko de JavaScript.
+**1778 fonctions**, 269 modules, 1920 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -144,6 +144,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDefiniC.js`](#jsforgedefinicjs) | Ce que `Defined$` désigne encore | 0 | 63 |
 | [`forgeStatiquesC.js`](#jsforgestatiquescjs) | Des statiques que la construction refusait | 1 | 55 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
+| [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
 | [`forgeZonesC.js`](#jsforgezonescjs) | Chercher, creuser, déplacer : des paramètres de plus | 0 | 82 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
@@ -2493,6 +2494,10 @@ Les mots-clés, IV. *0 fonctions, 73 lignes, 4.6 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `MOTS_SANS_EFFET_EN_JEU` | — |
+
+## js/forgeMarqueursC.js
+
+Marqueurs et dés : des paramètres de plus. *0 fonctions, 56 lignes, 2.9 Ko.*
 
 ## js/forgeZonesC.js
 

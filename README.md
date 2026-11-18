@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeMarqueursC.js  marqueurs et dés : retenir l'armée, N fois, par objet désigné, au plus N, pairs et impairs
   forgeMotsClesG.js les mots-clés, IV : évasions du tour, prévention, Training, Undaunted, Gravestorm, règles de deck sans effet en jeu
   forgeStatiquesC.js  des statiques refusées : hexproof contre un genre de sources, jouer d'en haut sous condition, ne plus piocher
   forgeDefiniC.js   ce que Defined$ désigne encore : défenseur adversaire, sacrifié, joueurs par propriétés, bibliothèque, pile
@@ -1771,6 +1772,19 @@ Restent : Suspend accordé, Read ahead, Champion, les mots-clés d'un autre jeu 
   à la construction, et la carte passe de complète à partielle — la couverture était fausse.
 Restent : les coûts à X ou en marqueurs (Hazel of the Rootbloom, Crucible of the Spirit Dragon, Wall of Roots), le mana
 d'un permanent sacrifié (Squandered Resources), le mana réservé au combat (Avatar Roku).
+
+**Lot F77 : marqueurs et dés** (`js/forgeMarqueursC.js`). Treize cartes de plus :
+- **`Amass | RememberAmass$`** (Foray of Orcs, Grishnákh, Widespread Brutality) : l'armée qui reçoit les marqueurs se retient,
+  pour le déclencheur réflexe « deals X damage, where X is the amassed Army's power » ;
+- **`Connive | ConniveNum$`** (Spymaster's Vault, Raffine), **`Explore | Num$`** (Jadelight Spelunker, Over the Edge) :
+  N fois ;
+- **`PutCounter | CounterNumPerDefined$`** (Canopy Gargantuan, Sovereign Okinec Ahau) : le même nombre sur chaque objet
+  désigné ; **`UpTo$`** : de zéro à N, au choix ;
+- **`RollDice | EvenOddResults$`** (Clown Car) : chaque dé se lit à part ; `EvenResults` et `OddResults` valent combien
+  sont pairs et impairs, pour les sous-capacités qui les lisent.
+Restent : les marqueurs de mot-clé (`CounterTypes$ Flying,Deathtouch`, Qarsi Revenant), `MoveCounter | ValidDefined$`, les
+dés qu'on garde (`IgnoreLower$`, `DifferentResults$`), le résultat naturel (`Natural$`), le remplacement d'un marqueur
+posé à un joueur (Winding Constrictor).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
