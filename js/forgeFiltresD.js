@@ -1,0 +1,68 @@
+/* =====================================================================
+   js/forgeFiltresD.js — Des propriétés de filtre de plus, II
+
+   Lots F70 et F71 :
+   - ce qu'un effet a choisi, retenu ou visé : `nonChosenCard` (Mount Doom),
+     `TargetedPlayerOwn`, `RememberedPlayerOwn` (Search Warrant,
+     Singularity Rupture), `ExiledWithEffectSource` ;
+   - la carte elle-même : `withToxic`, `withFlashback`, `cmcEven` / `cmcOdd`,
+     `equalPT`, `hasManaAbility`, `hasAbility Activated.hasTapCost`,
+     `basePowerEQ0`, `totalPT_LE5`, `powerNOTbasePower`, `greatestCMC_Artifact`,
+     `sharesPermanentTypeWith`, `TopGraveyardCreature` (Shallow Grave),
+     `EnchantedBy Aura.YouCtrl` ;
+   - le plateau : `ControllerControlsMoreLand`, `Player.withMoreLandsThanYou`.
+   Une propriété qu'on ne sait pas juger ne laisse rien passer.
+   ===================================================================== */
+
+const COMPARAISONS = '(GE|LE|GT|LT|EQ|NE)';
+const comptesTerrains = (P, j) => champDe(P, j).filter(o => estType(o, 'land')).length;
+
+proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
+  const joueur = ctrl != null ? ctrl : o.ctrl;
+  let m;
+  switch (p) {
+    case 'nonChosenCard': {
+      if (!P || !src) return false;
+      return !(choixDe(P, src).cartes || []).some(id => id === o.id || suit(P, id) === o.id);
+    }
+    case 'ExiledWithEffectSource': return !!P && propObjet(P, o, c, 'ExiledWithSource', src, ctrl, env);
+    case 'TargetedPlayerOwn': return !!env && !!env.ctx && ciblesJoueurs(env).includes(o.prop);
+    case 'RememberedPlayerOwn': return !!env && !!env.ctx && (env.ctx.memoJ || []).includes(o.prop);
+    case 'withToxic': return !!(o.def.params && o.def.params.toxique);
+    case 'withFlashback': return !!(o.def.flashback || o.def.harmonie || o.flashbackTemp != null);
+    case 'cmcEven': return mvDe(o) % 2 === 0;
+    case 'cmcOdd': return mvDe(o) % 2 === 1;
+    case 'equalPT': return c.force === c.endurance;
+    case 'hasManaAbility': return (o.zone === 'champ' ? capacitesDe(P, o) : o.def.capacites).some(k => k.genre === 'mana');
+    case 'hasAbility Activated.hasTapCost': return (o.zone === 'champ' ? capacitesDe(P, o) : o.def.capacites).some(k => k.genre === 'activee' && !!(k.cout && k.cout.engage));
+    case 'powerNOTbasePower': return c.force !== (o.def.force || 0);
+    case 'greatestCMC_Artifact': return !!P && !P.champ.some(id => { const x = obj(P, id); return x.ctrl === joueur && estType(x, 'artifact') && mvDe(x) > mvDe(o); });
+    case 'sharesPermanentTypeWith':
+      return !!src && !!src.def && TYPES_PERMANENTS.some(t => (c.types || []).includes(t) && (src.lki ? src.types : car(P, src).types).includes(t));
+    case 'TopGraveyardCreature': {
+      if (!P || o.zone !== 'cimetiere') return false;
+      const G = P.joueurs[o.prop].cimetiere;
+      for (let i = G.length - 1; i >= 0; i--) if (estCreature(obj(P, G[i]))) return G[i] === o.id;
+      return false;
+    }
+    case 'ControllerControlsMoreLand': return !!P && comptesTerrains(P, o.ctrl) > comptesTerrains(P, joueur);
+    case 'bargained': return !!o.marchande || o.varianteLance === 'bargain';
+  }
+  /* `EnchantedBy Aura.YouCtrl` : une aura qui répond au filtre est attachée à l'objet. */
+  if ((m = /^EnchantedBy (.+)$/.exec(p))) return !!P && P.champ.some(id => { const a = obj(P, id); return a.att === o.id && forgeValideObjet(P, a, m[1], src, joueur, env); });
+  if ((m = /^base(Power|Toughness)(GE|LE|GT|LT|EQ|NE)(-?\d+)$/.exec(p))) return compareForge(m[1] === 'Power' ? o.def.force || 0 : o.def.endurance || 0, m[2], +m[3]);
+  if ((m = /^totalPT_(GE|LE|GT|LT|EQ|NE)(\d+)$/.exec(p))) return compareForge((c.force || 0) + (c.endurance || 0), m[1], +m[2]);
+  return g(P, o, p, c, src, ctrl, env);
+})(proprieteDesignee);
+
+/* Un joueur qui a plus de terrains que celui qui juge (Cartographer's Hawk). */
+function proprieteJoueurEtendue(P, j, p, ctrl) {
+  if (p === 'withMoreLandsThanYou') return comptesTerrains(P, j) > comptesTerrains(P, ctrl);
+  if (p === 'withMoreCreaturesThanYou') return champDe(P, j).filter(estCreature).length > champDe(P, ctrl).filter(estCreature).length;
+  return false;
+}
+
+forgeSait('filtre', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
+  'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith',
+  'TopGraveyardCreature', 'ControllerControlsMoreLand', 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',
+  'EnchantedBy Aura.YouCtrl', 'basePowerXX', 'baseToughnessXX', 'totalPT_XX');

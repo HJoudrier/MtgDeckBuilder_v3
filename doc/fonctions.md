@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1771 fonctions**, 263 modules, 1885 Ko de JavaScript.
+**1774 fonctions**, 264 modules, 1891 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -76,7 +76,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 125 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
-| [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
+| [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 298 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 75 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 171 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 158 |
@@ -133,6 +133,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
 | [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 58 |
+| [`forgeFiltresD.js`](#jsforgefiltresdjs) | Des propriétés de filtre de plus, II | 2 | 69 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 118 |
@@ -1447,7 +1448,7 @@ Quand demander à un joueur humain. *2 fonctions, 33 lignes, 1.6 Ko.*
 
 ## js/forgeValide.js
 
-Le langage de filtres de Forge. *12 fonctions, 288 lignes, 17 Ko.*
+Le langage de filtres de Forge. *13 fonctions, 298 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1462,6 +1463,7 @@ Le langage de filtres de Forge. *12 fonctions, 288 lignes, 17 Ko.*
 | `propObjet(P, o, c, p, src, ctrl, env)` | Une propriété d'objet. `env` porte la face et le contexte de la résolution en cours, pour `IsRemembered`, `TargetedPlayerCtrl` et les seuils écrits en SVar (`cmcLEX`). |
 | `ciblesJoueurs(env)` | Les joueurs ciblés par la capacité en cours, ou par celle qu'elle suit. |
 | `forgeValideObjet(P, o, valid, src, ctrl, env, base)` | Un objet répond-il à un filtre Forge ? |
+| `ciblesObjets(P, env)` | Les objets que la capacité en cours a ciblés (`TargetedCard.Self`, Maelstrom Pulse). |
 | `forgeValideJoueur(P, j, valid, ctrl, env)` | Un joueur répond-il à un filtre Forge ? |
 
 | Donnée | Rôle |
@@ -2386,6 +2388,19 @@ Des propriétés de filtre de plus. *1 fonctions, 58 lignes, 3.5 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `TERRAINS_DE_BASE` | — |
+
+## js/forgeFiltresD.js
+
+Des propriétés de filtre de plus, II. *2 fonctions, 69 lignes, 4.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `comptesTerrains(P, j)` | — |
+| `proprieteJoueurEtendue(P, j, p, ctrl)` | Un joueur qui a plus de terrains que celui qui juge (Cartographer's Hawk). |
+
+| Donnée | Rôle |
+|---|---|
+| `COMPARAISONS` | — |
 
 ## js/forgeHideaway.js
 

@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeFiltresD.js  des propriétés de filtre, II : choisi, retenu, visé, cmc pair, force égale à l'endurance, plus de terrains que vous
   forgeCoutsC.js    ce que les statiques font au coût de jouer : vie pour mana, autre coût accordé, capacités moins chères, flash
   forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
@@ -1668,6 +1669,19 @@ Ancestors) reste refusé, plutôt que lu comme un sacrifice.
 **Un défaut ancien trouvé par le banc.** Le plafond d'un choix de cibles (`TargetMax$ OneEach`, The Horus Heresy) se
 calculait sans la face du script : `Cannot read properties of undefined (reading 'svars')`, deux parties sur cinq
 cents. Le descripteur de cible garde maintenant sa face (`maxFace`).
+
+**Lot F70 : les autres filtres** (`js/forgeFiltresD.js`). Quarante et une cartes de plus :
+- **ce qu'un effet a choisi, retenu ou visé** : `nonChosenCard` (Mount Doom, Planetary Annihilation : « destroy the
+  creatures not chosen »), `TargetedPlayerOwn` et `RememberedPlayerOwn` (Search Warrant, Singularity Rupture),
+  `ExiledWithEffectSource`, et la **tête `TargetedCard`** (Maelstrom Pulse, Legions to Ashes : la carte visée
+  elle-même — `Self` y désigne cette carte, non la source du sort) ;
+- **la carte** : `withToxic`, `withFlashback`, `cmcEven`, `equalPT`, `hasManaAbility`, `hasAbility
+  Activated.hasTapCost`, `basePowerEQ0` et `baseToughness…`, `totalPT_LE5` (Cut Down), `powerNOTbasePower`,
+  `greatestCMC_Artifact`, `sharesPermanentTypeWith`, `TopGraveyardCreature` (Shallow Grave : la dernière créature du
+  cimetière), `EnchantedBy Aura.YouCtrl`, `bargained`, et le sous-type `Urza's` (une apostrophe dans un sous-type) ;
+- **le plateau** : `ControllerControlsMoreLand`, et `Player.withMoreLandsThanYou` par le crochet
+  `proprieteJoueurEtendue()` que `forgeValideJoueur()` appelle pour ce qu'il ne connaît pas.
+Restent : le décomposé (`withDecayed`), les enquêtes résolues (`IsSolved`), `EACH Forest & Plains`.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -123,6 +123,7 @@
   "forgeAnneau.js",
   "forgeProtections.js",
   "forgeFiltresC.js",
+  "forgeFiltresD.js",
   "forgeHideaway.js",
   "forgeAlias.js",
   "forgeActivations.js",
@@ -4107,6 +4108,7 @@
     "forgeExprB.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeFiltresC.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeHideaway.js (chargement)",
     "forgeInterdits.js (chargement)",
     "forgeManaB.js (chargement)",
@@ -4502,6 +4504,7 @@
     "forgeEmpreinte.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeFiltresC.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeMotsClesB.js (chargement)",
@@ -4615,7 +4618,9 @@
     "forgeDefinis",
     "forgeEffetsI.js (chargement)",
     "forgeEmpreinte.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeMemoire.js (chargement)",
+    "forgeValideObjet",
     "objetEvt",
     "oublieObjets",
     "parmiDesignes",
@@ -4998,6 +5003,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
+    "forgeFiltresD.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -5019,6 +5025,7 @@
     "peutBloquer",
     "preparationRiposte",
     "proprieteDefenseur",
+    "proprieteJoueurEtendue",
     "utiliteEnMain",
     "variantesMotsClesE"
    ]
@@ -5333,6 +5340,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
+    "forgeFiltresD.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "forgePaliers.js (chargement)",
@@ -5421,6 +5429,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
+    "forgeFiltresD.js (chargement)",
     "forgeRadiation.js (chargement)",
     "forgeTraine.js (chargement)",
     "iaCartes",
@@ -5461,6 +5470,7 @@
     "forgeEffetsC.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsG.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
@@ -5479,6 +5489,7 @@
     "peutEngagerSoi",
     "preparationRiposte",
     "proprieteDefenseur",
+    "proprieteJoueurEtendue",
     "scoreEffet",
     "sourcesMana",
     "valeurObjet",
@@ -5519,6 +5530,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeExprC.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeTraine.js (chargement)",
     "forgeZonesC.js (chargement)",
@@ -7961,6 +7973,7 @@
     "filtresMana",
     "forgeActivations.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "iaReponse",
     "impactCapacite",
     "instantane",
@@ -9445,7 +9458,7 @@
   {
    "nom": "teteConnue",
    "fichier": "forgeValide.js",
-   "ligne": 98,
+   "ligne": 101,
    "chargement": false,
    "appelle": [
     "sousTypeProbable"
@@ -9459,12 +9472,13 @@
   {
    "nom": "compareForge",
    "fichier": "forgeValide.js",
-   "ligne": 103,
+   "ligne": 106,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeFiltresD.js (chargement)",
     "propObjet",
     "saValide",
     "seuilForge"
@@ -9473,7 +9487,7 @@
   {
    "nom": "aQualite",
    "fichier": "forgeValide.js",
-   "ligne": 113,
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "sousTypeProbable"
@@ -9488,7 +9502,7 @@
   {
    "nom": "teteObjet",
    "fichier": "forgeValide.js",
-   "ligne": 122,
+   "ligne": 125,
    "chargement": false,
    "appelle": [
     "aQualite"
@@ -9502,7 +9516,7 @@
   {
    "nom": "propObjet",
    "fichier": "forgeValide.js",
-   "ligne": 132,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
     "aQualite",
@@ -9524,6 +9538,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeFiltresD.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeValideObjet"
    ]
@@ -9531,24 +9546,27 @@
   {
    "nom": "ciblesJoueurs",
    "fichier": "forgeValide.js",
-   "ligne": 252,
+   "ligne": 255,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeFiltresD.js (chargement)",
     "propObjet"
    ]
   },
   {
    "nom": "forgeValideObjet",
    "fichier": "forgeValide.js",
-   "ligne": 258,
+   "ligne": 261,
    "chargement": false,
    "appelle": [
     "caracsJugees",
+    "ciblesObjets",
     "forgeFiltre",
     "propObjet",
+    "suit",
     "teteObjet"
    ],
    "appelleDiffere": [],
@@ -9595,6 +9613,7 @@
     "forgeEmpreinte.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
+    "forgeFiltresD.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
@@ -9624,14 +9643,27 @@
    ]
   },
   {
+   "nom": "ciblesObjets",
+   "fichier": "forgeValide.js",
+   "ligne": 270,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeValideObjet"
+   ]
+  },
+  {
    "nom": "forgeValideJoueur",
    "fichier": "forgeValide.js",
-   "ligne": 266,
+   "ligne": 275,
    "chargement": false,
    "appelle": [
     "choixDe",
     "forgeFiltre",
-    "obj"
+    "obj",
+    "proprieteJoueurEtendue"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -10457,6 +10489,7 @@
     "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeFiltresC.js (chargement)",
+    "forgeFiltresD.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeModes.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -11445,6 +11478,7 @@
     "forgeEmpreinte.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
+    "forgeFiltresD.js (chargement)",
     "forgeModes.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeStatiques.js (chargement)",
@@ -16844,6 +16878,49 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeFiltresC.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeFiltresD.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "capacitesDe",
+    "car",
+    "champDe",
+    "choixDe",
+    "ciblesJoueurs",
+    "compareForge",
+    "estCreature",
+    "estType",
+    "forgeSait",
+    "forgeValideObjet",
+    "mvDe",
+    "obj",
+    "propObjet",
+    "suit"
+   ],
+   "appelleDiffere": [
+    "proprieteDesignee"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "proprieteJoueurEtendue",
+   "fichier": "forgeFiltresD.js",
+   "ligne": 59,
+   "chargement": false,
+   "appelle": [
+    "champDe"
+   ],
+   "appelleDiffere": [
+    "estCreature"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeValideJoueur"
    ]
   },
   {
