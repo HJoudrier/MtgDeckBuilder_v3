@@ -155,7 +155,7 @@ function* lanceSort(P, j, a) {
 function* activeCapacite(P, j, a) {
   const o = obj(P, a.id);
   if (!o) return false;
-  const k = capacitesDe(P, o)[a.i];
+  const k = capaciteReduite(P, j, o, capacitesDe(P, o)[a.i]);
   const effets = yield* prepareEffets(P, j, o, k.effet, o.def.couleurs);
   if (!effets) return false;
   let x = 0, lki = null, retires = 0;

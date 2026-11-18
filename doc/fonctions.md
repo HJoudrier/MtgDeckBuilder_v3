@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1731 fonctions**, 249 modules, 1801 Ko de JavaScript.
+**1739 fonctions**, 251 modules, 1812 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -56,7 +56,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 181 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 96 |
-| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 255 |
+| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 257 |
 | [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 239 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 300 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
@@ -70,14 +70,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 150 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 208 |
-| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 131 |
+| [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 132 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 125 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
-| [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 72 |
+| [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 75 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 171 |
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 153 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
@@ -115,7 +115,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 276 |
 | [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 287 |
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
-| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 302 |
+| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 303 |
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 87 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
@@ -127,8 +127,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesF.js`](#jsforgemotsclesfjs) | Les mots-clés, III | 2 | 147 |
 | [`forgeParadigme.js`](#jsforgeparadigmejs) | Paradigm | 1 | 39 |
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
+| [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
+| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 49 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
-| [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 3 | 88 |
+| [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 106 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
@@ -1087,7 +1089,7 @@ Les actions d'état, et un joueur qui perd. *2 fonctions, 96 lignes, 4.2 Ko.*
 
 ## js/jeuLancer.js
 
-Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 255 lignes, 15 Ko.*
+Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 257 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1111,7 +1113,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 255 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 239 lignes, 11 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 239 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1343,7 +1345,7 @@ Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 208 lignes, 11 Ko.*
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *6 fonctions, 131 lignes, 5.4 Ko.*
+Les étapes d'un tour. *6 fonctions, 132 lignes, 5.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1460,11 +1462,11 @@ Le langage de filtres de Forge. *12 fonctions, 288 lignes, 17 Ko.*
 
 ## js/forgeDescripteurs.js
 
-Ce que les filtres de Forge deviennent pour. *4 fonctions, 72 lignes, 4.8 Ko.*
+Ce que les filtres de Forge deviennent pour. *4 fonctions, 75 lignes, 5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `forgeValideDef(def, valid, ctrl, lanceur, id)` | Une définition — un sort lancé, une carte qu'on réduit — répond-elle ? |
+| `forgeValideDef(def, valid, ctrl, lanceur, id, P = null)` | Une définition — un sort lancé, une carte qu'on réduit — répond-elle ? La partie (`P`) n'est donnée que par qui en a besoin : un filtre qui regarde les commandants (« shares a creature… |
 | `genreMarqueur(t)` | Le genre de marqueur de Forge (`P1P1`) dans le vocabulaire du moteur. |
 | `descForge(valid, zone, sort)` | Un descripteur d'emplacement de cible, lu dans `ValidTgts$` et `TgtZone$`. |
 | `emplacementForge(t, face)` | Un emplacement de cible d'une table de Forge : son descripteur, son nombre de cibles, et les restrictions entre elles. |
@@ -2143,7 +2145,7 @@ Les auras de joueur, Bestow, Reconfigure. *3 fonctions, 103 lignes, 5.6 Ko.*
 
 ## js/forgeDefinition.js
 
-D'un script de Forge à une définition de jeu. *13 fonctions, 302 lignes, 17 Ko.*
+D'un script de Forge à une définition de jeu. *13 fonctions, 303 lignes, 17 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2301,6 +2303,37 @@ Désigner, filtrer, choisir parmi. *1 fonctions, 74 lignes, 4.7 Ko.*
 |---|---|
 | `DESIGNES_FILTRABLES` | Les désignations qu'un filtre ou une désignation pointée peut nommer. |
 
+## js/forgeProtections.js
+
+Se protéger : de tout, de chaque couleur, d'une. *6 fonctions, 110 lignes, 5.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `motsCaches(t)` | — |
+| `linceulsDe(t)` | — |
+| `joueurProtegeTout(P, j)` | Un joueur est-il protégé de tout en ce moment ? « Until your next turn » tient jusqu'au début du prochain tour de celui qui l'a posé. |
+| `joueurLinceulDe(P, j, ctrl, couleurs)` | Un joueur est-il à l'abri de cette source (de ses couleurs) ? |
+| `joueursPompe(P, t, env)` | Les joueurs qu'une pompe désigne : ses cibles, ou ce que `Defined$` nomme. |
+| `vieFigee(P, j)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `KW_PROTEGE_TOUT` | — |
+| `KW_PROTEGE_COULEURS` | — |
+| `KW_LINCEUL_COULEUR` | — |
+
+## js/forgeFiltresC.js
+
+Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `defsCommandants(P, j)` | Les cartes que `j` a choisies pour commandants, en définitions. |
+
+| Donnée | Rôle |
+|---|---|
+| `TERRAINS_DE_BASE` | — |
+
 ## js/forgeAlias.js
 
 Ce que Forge a tiré de « Pump ». *0 fonctions, 53 lignes, 3.1 Ko.*
@@ -2311,13 +2344,14 @@ Ce que Forge a tiré de « Pump ». *0 fonctions, 53 lignes, 3.1 Ko.*
 
 ## js/forgeActivations.js
 
-Lancer et activer autrement. *3 fonctions, 88 lignes, 4.9 Ko.*
+Lancer et activer autrement. *4 fonctions, 106 lignes, 6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `sousTension(k)` | —— La mise sous tension ——————————————————————————————————————————————— |
 | `moinsMana(c, m)` | Un coût de mana moins un autre : chaque couleur ôtée de la même couleur, le reste et le générique ôtés du générique. |
 | `coutDeJeu(t)` | « You may cast the copy by paying {3} rather than paying its mana cost » : js/forgeEffetsI.js le passe à `lanceDepuisEffet()`, que la variante « permis » lit (js/jeuVariantes.js). |
+| `capaciteReduite(P, j, o, k)` | Le coût de mana d'une capacité vue par le joueur qui l'active : le générique en moins, jamais en dessous de zéro, et jamais une couleur. |
 
 | Donnée | Rôle |
 |---|---|

@@ -40,12 +40,13 @@ function* nettoyage(P) {
     choix.forEach(id => defausseCarte(P, id, P.actif));
   }
   finDuTour(P);
-  P.joueurs.forEach(x => { x.prevention = 0; });
+  P.joueurs.forEach(x => { x.prevention = 0; x.hexTemp = null; });
   for (const id of P.champ) {
     const o = obj(P, id);
     o.bless = 0; o.toucheMortel = false; o.regen = 0;
     if (o.mods.length) { o.mods = o.mods.filter(m => m.fin !== 'tour'); P.ver++; }
     if (o.protTemp) { o.protTemp = null; P.ver++; }
+    if (o.hexTemp) { o.hexTemp = null; P.ver++; }
     if (o.anime && o.anime.length) { o.anime = o.anime.filter(m => m.fin !== 'tour'); P.ver++; }
     o.prevention = 0;
   }
