@@ -23,6 +23,26 @@ function quantiteCollection(nom) {
   return (c && c.name !== nom && S.collection.get(c.name)) || 0;
 }
 
+/* Ce qui est commandé et pas encore reçu : ni dans la collection, ni à
+   acheter. L'exemplaire est payé ou promis, le colis est en route — il ne
+   pèse donc plus sur les paniers ni sur le budget, et ne compte pas encore
+   comme possédé (suggestions, légalité, jeu). Même détour par `find()` que
+   la collection, pour la même raison. */
+function quantiteEnCours(nom) {
+  const direct = S.enCours.get(nom) || 0;
+  if (direct) return direct;
+  const c = find(nom);
+  return (c && c.name !== nom && S.enCours.get(c.name)) || 0;
+}
+
+/* Le prix unitaire dont se chiffre un achat hors de tout deck : le prix de
+   tendance ajusté par les préférences d'achat, jamais en dessous de deux
+   centimes. Zéro quand Scryfall n'en publie pas. */
+function prixAchat(c) {
+  if (!(c.price > 0)) return 0;
+  return Math.max(0.02, Math.round(c.price * multiplicateurAchat() * 100) / 100);
+}
+
 /* Le nom sous lequel une carte se compte, quel que soit celui par lequel on
    y arrive : sans quoi deux decks qui l'orthographient différemment
    demanderaient deux lignes d'achat pour une seule carte. */
@@ -39,7 +59,7 @@ function aAcheter(cle) {
   const lignes = [];
   d.deck.forEach((q, nom) => {
     const c = find(nom); if (!c) return;
-    const manque = Math.max(0, q - quantiteCollection(nom));
+    const manque = Math.max(0, q - quantiteCollection(nom) - quantiteEnCours(nom));
     if (!manque) return;
     const o = bestOffer(c);
     /* Le repli sur le prix de tendance chiffre même ce que le plafond par
@@ -98,6 +118,7 @@ function signatureAchats() {
            + [...d.deck].map(([n, q]) => `${n}×${q}`).sort().join(',');
     }).join('|'),
     [...S.collection].map(([n, q]) => `${n}×${q}`).sort().join(','),
+    [...S.enCours].map(([n, q]) => `${n}×${q}`).sort().join(','),
     JSON.stringify(S.achats),
     S.prixMaj || 0
   ].join('#');
@@ -111,14 +132,14 @@ function wishlist() {
     const c = find(nom); if (!c) return;
     const besoin = e.propres + e.partage;
     const possede = quantiteCollection(nom);
-    const manque = Math.max(0, besoin - possede);
+    const commande = quantiteEnCours(nom);
+    const manque = Math.max(0, besoin - possede - commande);
     if (!manque) return;
     /* L'offre se chiffre avec les préférences d'achat, mais le plafond par
        carte dépend du deck : ici, aucun deck n'est « le » deck, et c'est le
        prix de tendance ajusté qui fait foi. */
-    const pu = Math.max(0.02, Math.round((c.price || 0) * multiplicateurAchat() * 100) / 100);
-    const prix = c.price > 0 ? pu : 0;
-    lignes.push({card:c, nom, besoin, possede, manque, unit:prix,
+    const prix = prixAchat(c);
+    lignes.push({card:c, nom, besoin, possede, commande, manque, unit:prix,
                  total:prix * manque, inconnu:!prix,
                  decks:e.decks.sort((a, b) => b.qty - a.qty)});
   });
@@ -139,4 +160,16 @@ function bilanWishlist() {
     inconnus: l.filter(x => x.inconnu).length,
     plafonds: clesDecks().reduce((t, c) => t + (S.decks[c].budget.total || 0), 0)
   };
+}
+
+/* Les acquisitions en cours, rangées par nom : c'est une liste d'attente, que
+   l'on parcourt pour cocher ce qui est arrivé, non un classement par prix. */
+function acquisitionsEnCours() {
+  const lignes = [];
+  S.enCours.forEach((qty, nom) => {
+    const c = find(nom); if (!c || qty <= 0) return;
+    const unit = prixAchat(c);
+    lignes.push({card:c, nom, qty, unit, total:unit * qty, inconnu:!unit});
+  });
+  return lignes.sort((a, b) => a.card.name.localeCompare(b.card.name, 'fr'));
 }

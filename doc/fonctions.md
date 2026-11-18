@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1744 fonctions**, 255 modules, 1823 Ko de JavaScript.
+**1751 fonctions**, 257 modules, 1830 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -22,7 +22,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 213 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 203 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 206 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
@@ -32,7 +32,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 237 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
-| [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
+| [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 12 | 176 |
 | [`oracleTexte.js`](#jsoracletextejs) | Préparer le texte oracle pour le compilateur | 7 | 122 |
 | [`oracleMotsCles.js`](#jsoraclemotsclesjs) | Les mots-clés que le moteur sait jouer | 3 | 75 |
 | [`oracleCouts.js`](#jsoraclecoutsjs) | Lire un coût : celui d'un sort, celui d'une capacité | 4 | 82 |
@@ -127,12 +127,12 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesF.js`](#jsforgemotsclesfjs) | Les mots-clés, III | 2 | 147 |
 | [`forgeParadigme.js`](#jsforgeparadigmejs) | Paradigm | 1 | 39 |
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
-| [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
-| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 51 |
-| [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeDeclencheursD.js`](#jsforgedeclencheursdjs) | Des déclencheurs de plus | 3 | 63 |
 | [`forgeRadiation.js`](#jsforgeradiationjs) | Les marqueurs de radiation | 0 | 44 |
 | [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
+| [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
+| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 51 |
+| [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 106 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
@@ -151,7 +151,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 289 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 293 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 123 |
@@ -179,7 +179,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`sugCatalogue.js`](#jssugcataloguejs) | La section du catalogue : tout le classement | 1 | 34 |
 | [`suggestions.js`](#jssuggestionsjs) | Les trois sections des propositions | 13 | 252 |
 | [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
-| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 116 |
+| [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 122 |
+| [`acquisitionSection.js`](#jsacquisitionsectionjs) | La section « Acquisition en cours » | 2 | 48 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 9 | 156 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 223 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
@@ -214,7 +215,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 255 |
-| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 37 |
+| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 38 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 133 |
@@ -230,6 +231,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 138 |
+| [`gestesAcquisition.js`](#jsgestesacquisitionjs) | Les gestes de l'acquisition en cours | 2 | 59 |
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
@@ -450,7 +452,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 203 lignes, 12 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 206 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -475,7 +477,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/decks.js
 
-Les decks, et celui sur lequel on travaille. *12 fonctions, 196 lignes, 8.1 Ko.*
+Les decks, et celui sur lequel on travaille. *12 fonctions, 196 lignes, 8.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -674,11 +676,13 @@ Marché Cardmarket, estimations & panier d'achat. *5 fonctions, 69 lignes, 2.8 K
 
 ## js/achats.js
 
-Ce qu'il reste à acheter. *9 fonctions, 143 lignes, 5.9 Ko.*
+Ce qu'il reste à acheter. *12 fonctions, 176 lignes, 7.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `quantiteCollection(nom)` | Ce que la collection porte d'une carte. Le nom du deck et celui de la collection peuvent différer — un import a pu nommer la carte autrement — et `find()` les ramène au même objet : sans… |
+| `quantiteEnCours(nom)` | Ce qui est commandé et pas encore reçu : ni dans la collection, ni à acheter. |
+| `prixAchat(c)` | Le prix unitaire dont se chiffre un achat hors de tout deck : le prix de tendance ajusté par les préférences d'achat, jamais en dessous de deux centimes. |
 | `nomCanonique(nom)` | Le nom sous lequel une carte se compte, quel que soit celui par lequel on y arrive : sans quoi deux decks qui l'orthographient différemment demanderaient deux lignes d'achat pour une… |
 | `aAcheter(cle)` | Le panier d'un deck : ce qui lui manque, à lui seul. |
 | `spent(cle)` | — |
@@ -687,6 +691,7 @@ Ce qu'il reste à acheter. *9 fonctions, 143 lignes, 5.9 Ko.*
 | `signatureAchats()` | `spent()` fait déjà une estimation d'offre par carte manquante, et l'en-tête l'appelle à chaque rendu. |
 | `wishlist()` | — |
 | `bilanWishlist()` | Le pied de la liste : ce qu'elle coûte, combien d'exemplaires elle porte, et ce que les decks se sont fixé comme plafonds — à titre d'information, rien ne le contraint. |
+| `acquisitionsEnCours()` | Les acquisitions en cours, rangées par nom : c'est une liste d'attente, que l'on parcourt pour cocher ce qui est arrivé, non un classement par prix. |
 
 | Donnée | Rôle |
 |---|---|
@@ -2307,6 +2312,34 @@ Désigner, filtrer, choisir parmi. *1 fonctions, 74 lignes, 4.7 Ko.*
 |---|---|
 | `DESIGNES_FILTRABLES` | Les désignations qu'un filtre ou une désignation pointée peut nommer. |
 
+## js/forgeDeclencheursD.js
+
+Des déclencheurs de plus. *3 fonctions, 63 lignes, 3.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `unSeulParLot(P, s, t, cle)` | « One or more » : le premier évènement du lot déclenche, les autres non. |
+| `sousLimiteDuTour(P, s, t)` | « Do this only once each turn » : au plus N déclenchements par tour. |
+| `meulee(P, t, e, s, env)` | — |
+
+## js/forgeRadiation.js
+
+Les marqueurs de radiation. *0 fonctions, 44 lignes, 1.8 Ko.*
+
+## js/forgeAnneau.js
+
+L'Anneau vous tente, aux quatre niveaux. *2 fonctions, 51 lignes, 2.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `capacitesAnneau(niveau)` | Les capacités d'un niveau, compilées une fois. |
+| `poseNiveauAnneau(P, j, niveau)` | Le niveau atteint par la tentation : pose, une fois par joueur et par niveau, l'effet qui porte ses déclencheurs. |
+
+| Donnée | Rôle |
+|---|---|
+| `NIVEAUX_ANNEAU` | — |
+| `ANNEAU_DEFS` | — |
+
 ## js/forgeProtections.js
 
 Se protéger : de tout, de chaque couleur, d'une. *6 fonctions, 110 lignes, 5.8 Ko.*
@@ -2341,34 +2374,6 @@ Des propriétés de filtre de plus. *1 fonctions, 51 lignes, 2.8 Ko.*
 ## js/forgeHideaway.js
 
 Hideaway : cacher une carte, la jouer plus tard. *0 fonctions, 35 lignes, 1.9 Ko.*
-
-## js/forgeDeclencheursD.js
-
-Des déclencheurs de plus. *3 fonctions, 63 lignes, 3.3 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `unSeulParLot(P, s, t, cle)` | « One or more » : le premier évènement du lot déclenche, les autres non. |
-| `sousLimiteDuTour(P, s, t)` | « Do this only once each turn » : au plus N déclenchements par tour. |
-| `meulee(P, t, e, s, env)` | — |
-
-## js/forgeRadiation.js
-
-Les marqueurs de radiation. *0 fonctions, 44 lignes, 1.8 Ko.*
-
-## js/forgeAnneau.js
-
-L'Anneau vous tente, aux quatre niveaux. *2 fonctions, 51 lignes, 2.8 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `capacitesAnneau(niveau)` | Les capacités d'un niveau, compilées une fois. |
-| `poseNiveauAnneau(P, j, niveau)` | Le niveau atteint par la tentation : pose, une fois par joueur et par niveau, l'effet qui porte ses déclencheurs. |
-
-| Donnée | Rôle |
-|---|---|
-| `NIVEAUX_ANNEAU` | — |
-| `ANNEAU_DEFS` | — |
 
 ## js/forgeAlias.js
 
@@ -2651,7 +2656,7 @@ Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 289 lignes, 12 Ko.*
+La sauvegarde locale. *9 fonctions, 293 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3155,7 +3160,7 @@ La section « Mes decks ». *4 fonctions, 103 lignes, 5.4 Ko.*
 
 ## js/wishlistSection.js
 
-La section « Liste d'achats ». *5 fonctions, 116 lignes, 6.4 Ko.*
+La section « Liste d'achats ». *5 fonctions, 122 lignes, 6.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3164,6 +3169,15 @@ La section « Liste d'achats ». *5 fonctions, 116 lignes, 6.4 Ko.*
 | `tuileWishlist(e)` | La vignette d'une ligne, pour la grille : la carte en image, ses decks demandeurs, ce qu'il en manque et ce que cela coûte. |
 | `listeWishlist(lignes)` | Les lignes, rangées comme la fenêtre « Affichage » le demande : en lignes ou en vignettes, par groupes ou à plat, dans l'ordre choisi. |
 | `renderJ()` | — |
+
+## js/acquisitionSection.js
+
+La section « Acquisition en cours ». *2 fonctions, 48 lignes, 2.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `ligneAcquisition(l)` | — |
+| `renderL()` | — |
 
 ## js/collection.js
 
@@ -3783,7 +3797,7 @@ L'en-tête et la barre des onglets. *8 fonctions, 255 lignes, 14 Ko.*
 
 ## js/rendu.js
 
-Le rendu d'ensemble. *2 fonctions, 37 lignes, 1.2 Ko.*
+Le rendu d'ensemble. *2 fonctions, 38 lignes, 1.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4026,6 +4040,15 @@ Les gestes des decks. *3 fonctions, 138 lignes, 5.2 Ko.*
 | `gestesDecks(act, b)` | — |
 | `saisieDeck(t)` | La frappe et les cases de la fenêtre de configuration. |
 | `gestesDeckConfig(act, b)` | Les deux bascules de la fenêtre : une couleur, un rôle. |
+
+## js/gestesAcquisition.js
+
+Les gestes de l'acquisition en cours. *2 fonctions, 59 lignes, 2.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `mettreEnCommande(l)` | Mettre une ligne de la liste d'achats en commande : tous les exemplaires qui lui manquent, une commande se passant rarement carte à moitié. |
+| `gestesAcquisition(act, b)` | — |
 
 ## js/gestesVue.js
 

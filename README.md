@@ -181,6 +181,7 @@ js/                 modules, chargés dans cet ordre :
   — les sections —
   decksSection.js   la section « Mes decks »
   wishlistSection.js la section « Liste d'achats »
+  acquisitionSection.js la section « Acquisition en cours » : commandé, pas encore reçu
   graphe.js         graphe des capacités
   stats.js          statistiques
   notation.js       la note d'une carte candidate
@@ -248,6 +249,7 @@ js/                 modules, chargés dans cet ordre :
 
   — les gestes —
   gestesDecks.js    créer, ouvrir, configurer, dupliquer, supprimer un deck
+  gestesAcquisition.js commander, recevoir, annuler une acquisition
   gestesVue.js      fermer, cocher une couleur, changer d'onglet
   gestesReglages.js « Appliquer » des fenêtres de réglage, jauges, pagination
   gestesDeck.js     monter, démonter, garer, ouvrir une fiche
@@ -293,7 +295,7 @@ fenêtre — l'en-tête, seul en haut, reste collant, et rien d'autre ne se supe
 hauteur est une constante CSS (`--h-barre`), dont le bas de la page et le toast tiennent compte.
 Sur un téléphone les huit onglets ne tiennent pas : la barre défile latéralement, alignée au début
 (`justify-content:center` sur un contenu qui déborde coupe la gauche, hors de portée du défilement) et
-`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks, **Wishlist** la liste d'achats commune,
+`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks, **Wishlist** l'acquisition en cours puis la liste d'achats commune,
 **Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
@@ -1743,6 +1745,15 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   de deck ne se règlent ni en colonnes ni en groupes —, d'où son `liste` nul
   dans `ONGLETS` : le bouton « Affichage » s'efface alors, plutôt que de régler une liste
   qu'on ne voit pas.
+- **L'acquisition en cours** est l'entre-deux de la collection et de la liste d'achats : ce qui est
+  commandé et pas encore reçu. `S.enCours` (nom -> exemplaires) est sauvegardé par `snapshot()` ;
+  `restore()` ne le touche que si le champ est présent, si bien qu'une sauvegarde d'hier ou un paquet
+  de synchronisation laisse les commandes de l'appareil intactes — elles ne voyagent pas : une fusion
+  par le maximum ressusciterait une commande reçue sur l'autre poste. Une carte en route compte comme
+  **couverte** pour les paniers (`aAcheter()`, `wishlist()`, `coutDeck()`, `bilanDeck()`) et donc pour le
+  budget, mais **pas comme possédée** — suggestions, légalité et jeu lisent toujours la collection. C'est une
+  décision : le budget dit ce qu'il reste à acheter, non ce qu'on a engagé. « Reçue » verse tout à la
+  collection ; « Annuler » rend la carte à la liste d'achats.
 - Le dernier deck ne se supprime pas : l'atelier n'a pas d'état sans deck ouvert, et « supprimer »
   vaudrait « vider », qui a son propre bouton. Deux decks ne peuvent pas porter le même nom — un
   doublon reçoit un numéro —, sans quoi ils seraient indiscernables dans la pastille comme dans

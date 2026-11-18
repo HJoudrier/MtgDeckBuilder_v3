@@ -24,6 +24,7 @@ function renderAll() {
   renderTop();
   renderI();
   renderJ();
+  renderL();
   renderB();
   renderC();
   renderD();

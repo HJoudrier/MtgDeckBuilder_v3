@@ -117,12 +117,12 @@
   "forgeMotsClesF.js",
   "forgeParadigme.js",
   "forgeDesignes.js",
-  "forgeProtections.js",
-  "forgeFiltresC.js",
-  "forgeHideaway.js",
   "forgeDeclencheursD.js",
   "forgeRadiation.js",
   "forgeAnneau.js",
+  "forgeProtections.js",
+  "forgeFiltresC.js",
+  "forgeHideaway.js",
   "forgeAlias.js",
   "forgeActivations.js",
   "forgeChoixMultiples.js",
@@ -170,6 +170,7 @@
   "suggestions.js",
   "decksSection.js",
   "wishlistSection.js",
+  "acquisitionSection.js",
   "collection.js",
   "fenImport.js",
   "fenAjout.js",
@@ -220,6 +221,7 @@
   "fenComportement.js",
   "fenJournal.js",
   "gestesDecks.js",
+  "gestesAcquisition.js",
   "gestesVue.js",
   "gestesReglages.js",
   "gestesDeck.js",
@@ -1047,6 +1049,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "aAcheter",
+    "acquisitionsEnCours",
     "addToDeck",
     "ajoutCollection",
     "annexeEntries",
@@ -1085,6 +1088,7 @@
     "poseCouleursCommandant",
     "propositionsHTML",
     "quantiteCollection",
+    "quantiteEnCours",
     "requeteCatalogue",
     "restaureDecks",
     "restore",
@@ -1444,7 +1448,6 @@
     "demandesTousDecks",
     "rejoindreHTML",
     "renderI",
-    "renderJ",
     "renderTop",
     "restaureDecks",
     "salonHTML",
@@ -1453,7 +1456,8 @@
     "sourcesDeDecks",
     "supprimerDeck",
     "tableHTML",
-    "vignetteDeck"
+    "vignetteDeck",
+    "wishlistSection.js (chargement)"
    ]
   },
   {
@@ -1594,7 +1598,8 @@
    "ligne": 180,
    "chargement": false,
    "appelle": [
-    "quantiteCollection"
+    "quantiteCollection",
+    "quantiteEnCours"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -2691,7 +2696,6 @@
    "appeleePar": [
     "blocAnnexe",
     "corpsSug",
-    "listeWishlist",
     "renderB",
     "renderE"
    ]
@@ -2712,8 +2716,8 @@
     "listeWishlist",
     "renderB",
     "renderE",
-    "renderJ",
-    "resumeAffichage"
+    "resumeAffichage",
+    "wishlistSection.js (chargement)"
    ]
   },
   {
@@ -2743,8 +2747,8 @@
    "appeleePar": [
     "cmEstimate",
     "coutDeck",
-    "prixBrutMax",
-    "wishlist"
+    "prixAchat",
+    "prixBrutMax"
    ]
   },
   {
@@ -2813,9 +2817,41 @@
    ]
   },
   {
+   "nom": "quantiteEnCours",
+   "fichier": "achats.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "aAcheter",
+    "bilanDeck",
+    "coutDeck",
+    "wishlist"
+   ]
+  },
+  {
+   "nom": "prixAchat",
+   "fichier": "achats.js",
+   "ligne": 41,
+   "chargement": false,
+   "appelle": [
+    "multiplicateurAchat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "acquisitionsEnCours",
+    "wishlist"
+   ]
+  },
+  {
    "nom": "nomCanonique",
    "fichier": "achats.js",
-   "ligne": 29,
+   "ligne": 49,
    "chargement": false,
    "appelle": [
     "find"
@@ -2829,13 +2865,14 @@
   {
    "nom": "aAcheter",
    "fichier": "achats.js",
-   "ligne": 37,
+   "ligne": 57,
    "chargement": false,
    "appelle": [
     "bestOffer",
     "deckCourant",
     "find",
-    "quantiteCollection"
+    "quantiteCollection",
+    "quantiteEnCours"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -2850,7 +2887,7 @@
   {
    "nom": "spent",
    "fichier": "achats.js",
-   "ligne": 54,
+   "ligne": 74,
    "chargement": false,
    "appelle": [
     "aAcheter"
@@ -2871,7 +2908,7 @@
   {
    "nom": "demandesTousDecks",
    "fichier": "achats.js",
-   "ligne": 68,
+   "ligne": 88,
    "chargement": false,
    "appelle": [
     "clesDecks",
@@ -2887,7 +2924,7 @@
   {
    "nom": "invaliderAchats",
    "fichier": "achats.js",
-   "ligne": 86,
+   "ligne": 106,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2902,7 +2939,7 @@
   {
    "nom": "signatureAchats",
    "fichier": "achats.js",
-   "ligne": 93,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "clesDecks"
@@ -2916,19 +2953,21 @@
   {
    "nom": "wishlist",
    "fichier": "achats.js",
-   "ligne": 106,
+   "ligne": 127,
    "chargement": false,
    "appelle": [
     "demandesTousDecks",
     "find",
-    "multiplicateurAchat",
+    "prixAchat",
     "quantiteCollection",
+    "quantiteEnCours",
     "signatureAchats"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "bilanWishlist",
+    "gestesAcquisition",
     "openWantsModal",
     "renderJ"
    ]
@@ -2936,7 +2975,7 @@
   {
    "nom": "bilanWishlist",
    "fichier": "achats.js",
-   "ligne": 133,
+   "ligne": 154,
    "chargement": false,
    "appelle": [
     "clesDecks",
@@ -2946,6 +2985,21 @@
    "appelleParHtml": [],
    "appeleePar": [
     "renderJ"
+   ]
+  },
+  {
+   "nom": "acquisitionsEnCours",
+   "fichier": "achats.js",
+   "ligne": 167,
+   "chargement": false,
+   "appelle": [
+    "find",
+    "prixAchat"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderL"
    ]
   },
   {
@@ -16421,6 +16475,101 @@
   },
   {
    "nom": "chargement du module",
+   "fichier": "forgeDeclencheursD.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "forgeMode",
+    "forgeSait",
+    "joueurOuRien",
+    "obj",
+    "sousLimiteDuTour",
+    "unSeulParLot",
+    "valideOuRien"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "unSeulParLot",
+   "fichier": "forgeDeclencheursD.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDeclencheursD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "sousLimiteDuTour",
+   "fichier": "forgeDeclencheursD.js",
+   "ligne": 40,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDeclencheursD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeRadiation.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "deplace",
+    "emet",
+    "estType",
+    "forgeEffet",
+    "forgeNombre",
+    "forgeSait",
+    "jn",
+    "joueursForge",
+    "obj",
+    "vieReduite"
+   ],
+   "appelleDiffere": [
+    "paradigmesDebutPrincipale"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "capacitesAnneau",
+   "fichier": "forgeAnneau.js",
+   "ligne": 32,
+   "chargement": false,
+   "appelle": [
+    "definitionDepuisScript",
+    "lisScriptForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "poseNiveauAnneau"
+   ]
+  },
+  {
+   "nom": "poseNiveauAnneau",
+   "fichier": "forgeAnneau.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "capacitesAnneau",
+    "poseEffet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsG.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
    "fichier": "forgeProtections.js",
    "ligne": null,
    "chargement": true,
@@ -16552,101 +16701,6 @@
    ],
    "appelleParHtml": [],
    "appeleePar": []
-  },
-  {
-   "nom": "chargement du module",
-   "fichier": "forgeDeclencheursD.js",
-   "ligne": null,
-   "chargement": true,
-   "appelle": [
-    "forgeMode",
-    "forgeSait",
-    "joueurOuRien",
-    "obj",
-    "sousLimiteDuTour",
-    "unSeulParLot",
-    "valideOuRien"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": []
-  },
-  {
-   "nom": "unSeulParLot",
-   "fichier": "forgeDeclencheursD.js",
-   "ligne": 30,
-   "chargement": false,
-   "appelle": [],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "forgeDeclencheursD.js (chargement)"
-   ]
-  },
-  {
-   "nom": "sousLimiteDuTour",
-   "fichier": "forgeDeclencheursD.js",
-   "ligne": 40,
-   "chargement": false,
-   "appelle": [],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "forgeDeclencheursD.js (chargement)"
-   ]
-  },
-  {
-   "nom": "chargement du module",
-   "fichier": "forgeRadiation.js",
-   "ligne": null,
-   "chargement": true,
-   "appelle": [
-    "deplace",
-    "emet",
-    "estType",
-    "forgeEffet",
-    "forgeNombre",
-    "forgeSait",
-    "jn",
-    "joueursForge",
-    "obj",
-    "vieReduite"
-   ],
-   "appelleDiffere": [
-    "paradigmesDebutPrincipale"
-   ],
-   "appelleParHtml": [],
-   "appeleePar": []
-  },
-  {
-   "nom": "capacitesAnneau",
-   "fichier": "forgeAnneau.js",
-   "ligne": 32,
-   "chargement": false,
-   "appelle": [
-    "definitionDepuisScript",
-    "lisScriptForge"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "poseNiveauAnneau"
-   ]
-  },
-  {
-   "nom": "poseNiveauAnneau",
-   "fichier": "forgeAnneau.js",
-   "ligne": 42,
-   "chargement": false,
-   "appelle": [
-    "capacitesAnneau",
-    "poseEffet"
-   ],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "forgeEffetsG.js (chargement)"
-   ]
   },
   {
    "nom": "chargement du module",
@@ -17903,6 +17957,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "blocAchats",
+    "ligneAcquisition",
     "ligneWishlist"
    ]
   },
@@ -18128,8 +18183,8 @@
     "montrerApercu",
     "renderB",
     "renderE",
-    "renderJ",
-    "visuelsSuggestions"
+    "visuelsSuggestions",
+    "wishlistSection.js (chargement)"
    ]
   },
   {
@@ -18427,7 +18482,7 @@
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 124,
+   "ligne": 125,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -18439,7 +18494,7 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 128,
+   "ligne": 129,
    "chargement": false,
    "appelle": [
     "ecrire",
@@ -18461,7 +18516,7 @@
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 159,
+   "ligne": 160,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -18501,7 +18556,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 165,
+   "ligne": 166,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -18524,7 +18579,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 278,
+   "ligne": 282,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -21669,7 +21724,8 @@
    "appelle": [
     "find",
     "multiplicateurAchat",
-    "quantiteCollection"
+    "quantiteCollection",
+    "quantiteEnCours"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -21732,6 +21788,24 @@
    ]
   },
   {
+   "nom": "chargement du module",
+   "fichier": "wishlistSection.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "clesDecks",
+    "esc",
+    "ligneWishlist",
+    "queueScryfall",
+    "vueDe"
+   ],
+   "appelleDiffere": [
+    "tuileWishlist"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
    "nom": "decksDemandeurs",
    "fichier": "wishlistSection.js",
    "ligne": 18,
@@ -21761,13 +21835,13 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "listeWishlist"
+    "wishlistSection.js (chargement)"
    ]
   },
   {
    "nom": "tuileWishlist",
    "fichier": "wishlistSection.js",
-   "ligne": 45,
+   "ligne": 47,
    "chargement": false,
    "appelle": [
     "cmLink",
@@ -21779,48 +21853,69 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "listeWishlist"
+    "wishlistSection.js (chargement)"
    ]
   },
   {
    "nom": "listeWishlist",
    "fichier": "wishlistSection.js",
-   "ligne": 69,
+   "ligne": 73,
    "chargement": false,
    "appelle": [
     "groupeCartes",
-    "ligneWishlist",
-    "ouvreGrille",
     "rendGroupes",
     "vueDe"
    ],
-   "appelleDiffere": [
-    "tuileWishlist"
-   ],
+   "appelleDiffere": [],
    "appelleParHtml": [],
-   "appeleePar": [
-    "renderJ"
-   ]
+   "appeleePar": []
   },
   {
    "nom": "renderJ",
    "fichier": "wishlistSection.js",
-   "ligne": 80,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "bilanWishlist",
-    "clesDecks",
-    "esc",
-    "eur",
-    "listeWishlist",
-    "queueScryfall",
-    "vueDe",
     "wishlist"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "appliquerAffichage",
+    "renderAll"
+   ]
+  },
+  {
+   "nom": "ligneAcquisition",
+   "fichier": "acquisitionSection.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [
+    "esc",
+    "eur",
+    "stripeColor"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderL"
+   ]
+  },
+  {
+   "nom": "renderL",
+   "fichier": "acquisitionSection.js",
+   "ligne": 27,
+   "chargement": false,
+   "appelle": [
+    "acquisitionsEnCours",
+    "eur"
+   ],
+   "appelleDiffere": [
+    "ligneAcquisition"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
     "renderAll"
    ]
   },
@@ -24955,6 +25050,7 @@
     "libelleElement",
     "lienDecksEdhrec",
     "ligneAchats",
+    "ligneAcquisition",
     "ligneCatalogue",
     "ligneCausesCollection",
     "ligneCible",
@@ -25009,7 +25105,6 @@
     "relaisHTML",
     "renderD",
     "renderE",
-    "renderJ",
     "renderTop",
     "repliHTML",
     "resultatsAjoutHTML",
@@ -25032,6 +25127,7 @@
     "tuile",
     "tuileWishlist",
     "vignetteDeck",
+    "wishlistSection.js (chargement)",
     "zoneCommandant",
     "zoneHTML"
    ]
@@ -25058,6 +25154,7 @@
     "ficheHTML",
     "legality",
     "ligneAchats",
+    "ligneAcquisition",
     "ligneBudget",
     "ligneCatalogue",
     "ligneWishlist",
@@ -25066,7 +25163,7 @@
     "openWantsModal",
     "renderC",
     "renderE",
-    "renderJ",
+    "renderL",
     "resumeDeckConfig",
     "sugLigne",
     "sugRow",
@@ -25161,6 +25258,7 @@
     "enregistreAdversaireFenetre",
     "enrichAllUnknown",
     "exportModal",
+    "gestesAcquisition",
     "gestesDeck",
     "gestesDecks",
     "gestesDonnees",
@@ -26365,6 +26463,7 @@
     "buyCard",
     "chargerCatalogueComplet",
     "filetSuggestions",
+    "gestesAcquisition",
     "gestesDeck",
     "gestesDecks",
     "gestesDonnees",
@@ -26500,6 +26599,7 @@
     "renderI",
     "renderJ",
     "renderK",
+    "renderL",
     "renderSuggestions",
     "renderTop",
     "renduTable",
@@ -28194,6 +28294,35 @@
     "modifieBrouillon",
     "restrictionsDuDeck",
     "rolesFiltre"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "mettreEnCommande",
+   "fichier": "gestesAcquisition.js",
+   "ligne": 15,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesAcquisition"
+   ]
+  },
+  {
+   "nom": "gestesAcquisition",
+   "fichier": "gestesAcquisition.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [
+    "mettreEnCommande",
+    "recalculerAvecProgression",
+    "toast",
+    "wishlist"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -31933,6 +32062,7 @@
     "appuiDebut",
     "appuiFin",
     "defileTable",
+    "gestesAcquisition",
     "gestesDeck",
     "gestesDeckConfig",
     "gestesDecks",

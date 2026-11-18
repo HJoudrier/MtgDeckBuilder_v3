@@ -13,7 +13,7 @@ document.addEventListener('click', ev => {
   if (!b) return;
 
   const act = b.dataset.act;
-  [gestesDeckConfig, gestesDecks, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
+  [gestesDeckConfig, gestesDecks, gestesAcquisition, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
     gestesSimulation, gestesTable, gestesForge, gestesGraphe].some(g => g(act, b));
 });
 
