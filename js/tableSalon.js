@@ -2,28 +2,24 @@
    js/tableSalon.js — Le salon : qui s'assoit à la table, avec quel deck
 
    Avant la partie, l'hôte choisit son nom et son deck, puis les autres
-   sièges : un joueur automatique avec un deck de « Mes decks » ou de la
-   bibliothèque d'adversaires, ou un invité qui rejoindra par QR code avec un
+   sièges : un joueur automatique avec n'importe quel deck de l'atelier, le sien ou
+   un deck externe, ou un invité qui rejoindra par QR code avec un
    deck de sa propre application (js/tableLiaison.js). Le salon se souvient
    de la dernière table (`S.table`), qu'on rejoue souvent telle quelle.
    ===================================================================== */
 
 function sourcesDeDecks() {
-  return [...clesDecks().map(k => ['d:' + k, S.decks[k].nom + (S.decks[k].externe ? ' (deck externe)' : '')]),
-    ...Object.keys(S.adversaires).map(k => ['a:' + k, S.adversaires[k].nom + ' (adversaire)'])];
+  return clesDecks().map(k => ['d:' + k, S.decks[k].nom + (S.decks[k].externe ? ' (deck externe)' : '')]);
 }
 
 function nomDeSource(src) {
-  const [g, k] = String(src || '').split(':');
-  return g === 'a' ? (S.adversaires[k] || {}).nom : (S.decks[k] || {}).nom;
+  return (S.decks[cleDeSource(src)] || {}).nom;
 }
 
-/* Le deck de l'hôte, en source (`d:clé` ou `a:clé`) : n'importe quel deck de l'atelier, le sien ou
-   un externe, ou un adversaire de la bibliothèque. Une clé nue — celle d'hier — est un deck. */
+/* Le deck de l'hôte, en source (`d:clé`) : n'importe quel deck de l'atelier, le sien ou un externe.
+   Une clé nue — celle d'hier — est un deck. */
 function sourceDeMoi() {
-  const t = String(S.table.deck || '');
-  if (/^a:/.test(t) && S.adversaires[t.slice(2)]) return t;
-  const cle = t.replace(/^d:/, '');
+  const cle = cleDeSource(S.table.deck);
   return 'd:' + (S.decks[cle] ? cle : S.deckActif);
 }
 
@@ -106,7 +102,7 @@ function alertesInvitesHTML() {
 }
 
 function ouvreSalon() {
-  if (!S.table.sieges.length) S.table.sieges = [{mode: 'ia', deck: sourcesDeDecks().map(x => x[0]).find(k => k.startsWith('a:')) || 'd:' + S.deckActif}];
+  if (!S.table.sieges.length) S.table.sieges = [{mode: 'ia', deck: (sourcesDeDecks().map(x => x[0]).find(k => k !== sourceDeMoi()) || sourceDeMoi())}];
   Object.assign(TABLE, {ouverte: true, phase: 'salon', role: 'hote'});
   renduTable();
 }

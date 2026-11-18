@@ -178,7 +178,7 @@ js/                 modules, chargés dans cet ordre :
   scryfall.js       la file d'attente vers Scryfall
   recherches.js     les recherches nommées chez Scryfall
   decksStockage.js  les dossiers de deck, rangés et relus
-  simSources.js     ce qui s'assoit à un siège de la simulation : un deck de l'atelier, externe ou non, ou un adversaire
+  simSources.js     ce qui s'assoit à un siège de la simulation : un deck de l'atelier, externe ou non
   stockage.js       la sauvegarde locale
   fenSauvegarde.js  les sections « Sauvegarde » et « Catalogue »
   idb.js            le magasin IndexedDB
@@ -224,10 +224,8 @@ js/                 modules, chargés dans cet ordre :
   ficheVisuel.js    le visuel de la fiche, et ses éditions
   fiche.js          la fiche détaillée d'une carte
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
-  simCartes.js      d'un nom de carte à sa fiche de jeu, adversaires compris
-  simAdversaires.js la bibliothèque d'adversaires
-  decksLies.js      les adversaires qui suivent un deck Moxfield ou Archidekt
-  simPreparation.js d'un deck ou d'un adversaire à un siège de table
+  simCartes.js      d'un nom de carte à sa fiche de jeu, cartes des decks externes comprises
+  simPreparation.js d'un deck à un siège de table
   simStats.js       ce qu'on retient d'une partie, et d'un lot
   simStockage.js    les résultats des lots, gardés et comparés
   simulation.js     un lot de parties, par tranches
@@ -263,7 +261,6 @@ js/                 modules, chargés dans cet ordre :
   fenListes.js      listes déroulantes des archétypes et des éditions
   boiteCatalogue.js progression du chargement de l'archive Scryfall
   fenExport.js      export du deck, liste d'achats, effacement
-  fenAdversaire.js  ajouter ou modifier un adversaire
   fenComportement.js  décrire à la main ce que fait une carte
   fenJournal.js     revoir une partie d'un lot
 
@@ -276,7 +273,7 @@ js/                 modules, chargés dans cet ordre :
   gestesDonnees.js  sauvegarde, archive, EDHREC, import
   gestesNuage.js    connecter, synchroniser, déconnecter
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
-  gestesSimulation.js  lancer un lot, gérer les adversaires, revoir une partie
+  gestesSimulation.js  lancer un lot, décrire une carte, revoir une partie
 
   — la table interactive et sa liaison —
   qrCorps.js        le corps fini du QR code, et Reed–Solomon
@@ -321,7 +318,7 @@ deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur l
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
 recommandent — groupées et triées à part, avec deux tris qui n'existent que là : le taux
 d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé,
-**Simulation** fait jouer le deck contre des adversaires automatiques (plus bas). La table
+**Simulation** fait jouer le deck contre d'autres decks de l'atelier, menés par des joueurs automatiques (plus bas). La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
 `ONGLETS_ANCIENS`. Les sections sont rendues à chaque fois, celles qu'on ne
@@ -443,12 +440,11 @@ compte pas l'acheter —, son budget n'entre pas dans les plafonds, et sa vignet
 hors de la collection, non combien il y a à acheter. Le basculer d'un côté à l'autre rend ou retire sa demande à
 la liste, sans autre geste.
 
-**N'importe quel deck à n'importe quel siège** (`js/simSources.js`). Les sièges adverses de la simulation ne
-connaissaient que la bibliothèque d'adversaires ; ils se remplissent maintenant d'un deck de l'atelier — le sien
-comme un externe — ou d'un adversaire, par une source `d:<clé>` ou `<clé>` (les lots d'hier gardaient la clé nue
-d'un adversaire, et la lisent encore). Le deck testé reste un deck, du tout premier au dernier. Au salon de jeu,
-l'hôte s'assoit lui aussi avec n'importe quelle source (`sourceDeMoi()`, `js/tableSalon.js`) ; l'invité, dont le
-deck part chez l'hôte, choisit parmi les decks de l'atelier.
+**N'importe quel deck à n'importe quel siège** (`js/simSources.js`). Les sièges de la simulation se remplissent
+d'un deck de l'atelier, le sien comme un externe, par une source `d:<clé>`. Le deck testé reste un deck, du tout
+premier au dernier. Au salon de jeu, l'hôte s'assoit lui aussi avec n'importe quel deck (`sourceDeMoi()`,
+`js/tableSalon.js`), de même que chaque siège automatique ; l'invité, dont le deck part chez l'hôte, choisit parmi
+les decks de l'atelier. Il n'y a plus de bibliothèque d'adversaires à part : voir « Le mode de jeu ».
 
 **Une restriction est un filtre que le deck porte lui-même.** Elle a la forme de `FILTRES_VIDE`,
 plus les couleurs — qu'elle peut déduire du commandant, ce qui évite de reposer la barre de mana à
@@ -474,49 +470,25 @@ demande, si bien que l'en-tête ne paie rien de plus qu'avant.
 ## Le mode de jeu
 
 L'onglet **Simulation** fait jouer le deck ouvert — ou n'importe lequel de « Mes decks » — par un
-joueur automatique, contre un à cinq adversaires automatiques, des centaines de fois, et en tire de
+joueur automatique, contre un à cinq decks menés par des joueurs automatiques, des centaines de fois, et en tire de
 quoi classer sa force. Chaque siège garde le format de son deck : un deck Commander joue à 40 points
 de vie avec sa zone de commandement, sa taxe et ses dégâts de commandant, un deck de soixante à 20.
-Les adversaires viennent d'une **bibliothèque à part** (`S.adversaires`) : des listes collées, au
-format MTGO ou Arena, lues par l'analyseur de l'import (`parseMtgoList()`), qui n'encombrent ni
-« Mes decks » ni la liste d'achats. Leurs cartes n'ont pas à être possédées : `ficheParNom()`
+Chaque siège est un **deck de l'atelier** — le sien comme un deck externe, sans distinction
+(`js/simSources.js`) : il n'y a plus de bibliothèque d'adversaires à part, un deck qu'on veut affronter
+se range dans « Decks externes ». Les cartes de ces decks n'ont pas à être possédées : `ficheParNom()`
 (`js/simCartes.js`) les cherche dans l'atelier, puis dans l'archive indexée par nom, puis chez
-Scryfall, et les garde dans IndexedDB (`sim-cartes`) — **jamais dans `DB`**, que la sauvegarde
-locale emporterait.
+Scryfall, et garde ce qui vient de là dans IndexedDB (`sim-cartes`) — **jamais dans `DB`**, que la
+sauvegarde locale emporterait.
 
-**Les adversaires liés.** Un adversaire peut suivre un deck publié sur Moxfield ou Archidekt
-(`js/decksLies.js`) : le lien se donne dans sa fenêtre, et à l'ouverture de l'atelier, une fois
-par jour au plus, la liste est relue ; un changement met l'adversaire à jour, le dit d'un toast
-(« +3 −2 »), et rend périmés les lots joués contre l'ancienne version — sans code à part, le lien
-n'étant qu'un champ de plus sur l'adversaire (`lien`), sauvegardé et synchronisé avec lui. Chaque
-site est un petit adaptateur (`SITES_DECKS`) : où est son API, comment lire sa réponse ; la réserve
-et les « maybe » ne jouent pas. La lecture suit une **chaîne de repli**, parce que Moxfield n'a pas
-d'API publique et refuse probablement d'être lu depuis une autre page (CORS) : la lecture directe
-d'abord ; puis, s'il est réglé, un **relais** à soi (`S.simulation.relais`, propre à l'appareil) ;
-en dernier recours, la fenêtre de l'adversaire s'ouvre sur un lien vers le deck et l'on colle son
-export — le lien est gardé, la vérification du lendemain réessaiera. Ce dernier chemin marche
-toujours ; rien ne garantit les deux premiers, qu'un site peut fermer du jour au lendemain. La
-pastille de l'adversaire dit où il en est, et son bouton « Mettre à jour » relit à la demande.
-
-Le relais est un Cloudflare Worker gratuit : sur le tableau de bord Cloudflare, *Workers* → *Créer*,
-coller le script ci-dessous, *Déployer*, puis copier son adresse dans le réglage « Relais » de la
-section des adversaires. Il ne lit que les API des deux sites, ne voit que l'identifiant d'un deck
-public, et ajoute l'en-tête qui autorise la page à lire la réponse. Si un site refuse aussi les
-requêtes du relais, il reste le collage.
-
-```js
-export default {
-  async fetch(requete) {
-    const cible = new URL(requete.url).searchParams.get('url') || '';
-    const cors = {'Access-Control-Allow-Origin': '*'};
-    if (!/^https:\/\/(api2\.moxfield\.com|archidekt\.com\/api)\//.test(cible))
-      return new Response('adresse refusée', {status: 400, headers: cors});
-    const r = await fetch(cible, {headers: {'Accept': 'application/json', 'User-Agent': 'atelier-mtg (relais personnel)'}});
-    return new Response(r.body, {status: r.status, headers: {...cors,
-      'Content-Type': r.headers.get('Content-Type') || 'application/json', 'Cache-Control': 'max-age=600'}});
-  }
-};
-```
+**D'où viennent les anciens adversaires.** Une sauvegarde d'hier porte une bibliothèque d'adversaires
+(`adversaires`) : à la lecture, `migreAdversaires()` (`js/decksStockage.js`) en fait des **decks externes**
+sous la même clé, si bien que les sièges et les lots d'hier qui les nommaient les retrouvent. Un
+adversaire dont le nom est déjà celui d'un deck n'est pas recréé — le deck existant prend sa place aux
+sièges —, et ses cartes que l'atelier ne connaît pas entrent comme à l'import, « inconnues », à compléter.
+**Le lien Moxfield ou Archidekt et son relais ont disparu avec la bibliothèque** (lecture automatique
+quotidienne, adaptateurs de sites, relais Cloudflare) : un deck externe s'importe par collage, comme
+tous les autres, et ne se relit pas seul. Les lots joués contre un ancien adversaire sont donnés pour
+périmés — la signature d'un deck n'est pas celle d'une liste d'adversaire —, leurs chiffres restent lisibles.
 
 **La table interactive.** « Jouer une partie » ouvre un salon en plein écran : son deck, puis
 des sièges automatiques ou des **invités**, qui jouent chacun sur leur appareil — téléphone ou
@@ -732,7 +704,7 @@ NumDmg$ 3`. L'atelier s'en sert, sans rien en embarquer.
 GitHub, sur l'appareil seulement, et gardés par paquets dans IndexedDB (clés `forge-*`, qu'`idbVider()`
 épargne). La liste vient de l'API (quatre requêtes, avec l'empreinte `sha` de chaque fichier), les
 fichiers de `raw.githubusercontent.com` épinglé au commit, dix à la fois. Vos cartes et celles de
-vos adversaires passent d'abord ; un téléchargement interrompu reprend ; une fois par semaine, seuls
+vos decks passent d'abord ; un téléchargement interrompu reprend ; une fois par semaine, seuls
 les fichiers dont l'empreinte a changé sont relus. Le premier téléchargement attend qu'on le demande
 (paramètres, « Cartes Forge »).
 

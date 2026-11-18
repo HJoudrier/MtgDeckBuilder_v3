@@ -113,7 +113,6 @@ function snapshot() {
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
     majIgnoree: S.majIgnoree,
-    adversaires: S.adversaires,
     comportements: S.comportements,
     simulation: S.simulation,
     table: S.table,
@@ -274,12 +273,13 @@ function restore(d) {
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
   /* Le mode de jeu, venu après tout le reste : une sauvegarde d'hier n'en
-     porte rien, et l'atelier part d'une bibliothèque d'adversaires vide. */
-  if (d.adversaires && typeof d.adversaires === 'object') S.adversaires = d.adversaires;
+     porte rien. */
   if (d.comportements && typeof d.comportements === 'object') S.comportements = d.comportements;
   if (d.simulation && typeof d.simulation === 'object') S.simulation = {...S.simulation, ...d.simulation};
   if (d.table && typeof d.table === 'object') S.table = {...S.table, ...d.table, sieges: (d.table.sieges || []).filter(s => s.mode === 'ia')};
   if (d.arrets && typeof d.arrets === 'object') S.arrets = d.arrets;
+  /* La bibliothèque d'adversaires d'hier devient des decks externes (js/decksStockage.js). */
+  if (d.adversaires && typeof d.adversaires === 'object') migreAdversaires(d.adversaires);
   return true;
 }
 

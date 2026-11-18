@@ -747,7 +747,7 @@ clavier et `allerVersSection()`, qui mène à une section d'où qu'on parte.
 
 ### 3.19 Lancer un lot de simulations
 
-Le deck testé et les adversaires de la table deviennent des sièges ; le moteur déroule chaque
+Le deck testé et les decks de la table deviennent des sièges ; le moteur déroule chaque
 partie question après question, les joueurs automatiques répondent, et le pilote rend la main à
 la page toutes les vingt-cinq millisecondes.
 
@@ -771,7 +771,7 @@ sequenceDiagram
     opt des cartes que personne ne connaît
         CAR->>CAR: chercheFichesScryfall() — par 75, rangées dans IndexedDB
     end
-    SIM->>PREP: siegeDeck(), siegeAdversaire()
+    SIM->>PREP: siegeDeck() — pour chaque siège
     Note over PREP: ficheParNom() joint le script Forge s'il est là<br/>definitionDe() : Forge ou oracle, la mieux comprise, gardée sous mémo
     loop chaque partie g
         SIM->>MOT: creePartie({graine de g, places tournées})
@@ -791,46 +791,7 @@ sequenceDiagram
 
 Rien n'est journalisé pendant un lot : une partie se revoit en la rejouant.
 
-### 3.20 Mettre à jour un adversaire lié
-
-Au démarrage pour les liens vérifiés il y a plus d'un jour (`verifieDecksLies()`), ou au bouton
-« Mettre à jour » (`verifieUnDeckLie()`).
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant APP as app.js
-    participant LIE as decksLies.js
-    participant SITE as Moxfield / Archidekt
-    participant REL as relais (facultatif)
-    participant ADV as simAdversaires.js
-    participant FEN as fenAdversaire.js
-    participant UI as simSection.js
-
-    APP->>LIE: verifieDecksLies()
-    loop chaque adversaire lié vérifié il y a plus d'un jour
-        LIE->>SITE: fetch(api) — lecture directe
-        alt refus (CORS) et relais réglé
-            LIE->>REL: fetch(relais?url=api)
-            REL->>SITE: lecture
-        end
-        alt réponse lue
-            LIE->>LIE: lit(json), diffListes(), appliqueDeckLie()
-            LIE->>ADV: completeAdversaire() — cartes inconnues via Scryfall
-            Note over LIE: toast « +3 −2 » ; les lots d'avant deviennent périmés
-        else échec
-            LIE->>LIE: lien.etat = refuse | introuvable | reseau
-        end
-        LIE->>LIE: scheduleSave()
-    end
-    LIE->>UI: renderK() — la pastille dit où en est chaque lien
-    opt « Mettre à jour » a échoué
-        LIE->>FEN: ouvreAdversaire(cle, {collage: true})
-        Note over FEN: lien vers le deck sur le site ;<br/>l'export collé remplace la liste, le lien est gardé
-    end
-```
-
-### 3.21 Rejoindre une table
+### 3.20 Rejoindre une table
 
 ```mermaid
 sequenceDiagram
@@ -857,7 +818,7 @@ sequenceDiagram
     H->>HS: « Commencer » — commenceTable()
 ```
 
-### 3.22 Une question à un joueur distant
+### 3.21 Une question à un joueur distant
 
 ```mermaid
 sequenceDiagram
@@ -885,7 +846,7 @@ sequenceDiagram
     end
 ```
 
-### 3.23 Revoir une partie
+### 3.22 Revoir une partie
 
 ```mermaid
 sequenceDiagram
@@ -901,7 +862,7 @@ sequenceDiagram
     APP->>J: ouvreJournal(lot, k)
     J->>SIM: rejouePartie(lot, k)
     SIM->>RES: lotPerime(lot)
-    alt le deck, un adversaire, un comportement ou le moteur ont changé
+    alt un deck de la table, un comportement ou le moteur ont changé
         RES-->>J: périmé — « rejeu indisponible »
     else
         SIM->>MOT: joueJusquauBout({même graine, mêmes places, journal: true})
@@ -910,7 +871,7 @@ sequenceDiagram
     end
 ```
 
-### 3.24 Télécharger les cartes Forge
+### 3.23 Télécharger les cartes Forge
 
 Le premier téléchargement se demande dans les paramètres ; ensuite, le démarrage reprend un
 téléchargement inachevé et vérifie les mises à jour une fois par semaine.
@@ -941,7 +902,7 @@ sequenceDiagram
     DEP->>VUE: forgeChange() — couverture et manques périmés
 ```
 
-### 3.25 Résoudre une capacité Forge
+### 3.24 Résoudre une capacité Forge
 
 Une capacité lue dans Forge est une liste d'opérations `forge`, une par table de sa chaîne ;
 la pile la résout comme une autre.
@@ -976,7 +937,7 @@ sequenceDiagram
 
 ---
 
-### 3.26 Une décision cherchée (niveaux moyen et fort)
+### 3.25 Une décision cherchée (niveaux moyen et fort)
 
 Entre joueurs automatiques, au niveau moyen ou fort, une question qui tombe sur un point de
 reprise — la priorité du joueur actif en phase principale pile vide, la déclaration des attaquants
@@ -1014,7 +975,7 @@ L'horizon : au niveau moyen, le retour de la pile vide (un sort) ou la fin du co
 fort, la fin du prochain tour du joueur qui décide. Rien ne revient de la copie vers la partie, et
 tout est semé : la partie d'un lot se rejoue à l'identique.
 
-### 3.27 Voir une carte en grand, à la table
+### 3.26 Voir une carte en grand, à la table
 
 Un toucher court joue la carte ou la choisit ; un appui long la montre. Les écouteurs du pointeur
 sont dans `app.js`, comme le clic ; la table ne repeint que la couche qui s'ouvre.
@@ -1061,7 +1022,7 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, script Forge et jetons, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, un script Forge téléchargé ou mis à jour, le compilateur |
 | `MANQUES` (`js/forgeVue.js`) | Ce qu'il manque au moteur pour vos cartes, et pour toute la base | les scripts, le commit, la taille de `FORGE_SAIT`, les decks et les adversaires | Un téléchargement, un deck ou un adversaire modifié, un élément ajouté au moteur |
 | `BASES_EVAL` (`js/iaEvaluation.js`) | Le plateau de chaque joueur, pour la note d'une position | la partie et `P.ver` | Tout changement de l'état ; une copie a le sien |
-| `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un adversaire, un comportement, l'archive, les fiches venues de Scryfall, les scripts Forge |
+| `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un autre deck de la table, un comportement, l'archive, les fiches venues de Scryfall, les scripts Forge |
 
 Deux conséquences pratiques :
 

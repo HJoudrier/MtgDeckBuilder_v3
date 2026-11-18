@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1774 fonctions** dans 277 modules, **5791 appels** relevés.
+**1743 fonctions** dans 274 modules, **5706 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -301,7 +301,7 @@ Appelée par : `applyScryfall`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, 
 
 Appelle : `parseCost()` *(analyse.js)*, `reanalyser()` *(categories.js)*
 
-Appelée par : `applyScryfall`, `carteDepuisScryfall`, `carteDuCatalogue`, `carteLivree`, `gestesGraphe`, `getCardOrAnalyzedRec`, `openImport`, `restore`
+Appelée par : `applyScryfall`, `carteDepuisScryfall`, `carteDuCatalogue`, `carteLivree`, `gestesGraphe`, `getCardOrAnalyzedRec`, `migreAdversaires`, `openImport`, `restore`
 
 ### `majTexteOracle()` — ligne 46
 
@@ -325,13 +325,13 @@ Appelée par : `mergeInto`, `renameCard`
 
 Appelle : `indexCard()` *(cartes.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `applyScryfall`, `carteDuCatalogue`, `carteLivree`, `gestesGraphe`, `openImport`, `restore`
+Appelée par : `applyScryfall`, `carteDuCatalogue`, `carteLivree`, `gestesGraphe`, `migreAdversaires`, `openImport`, `restore`
 
 ### `find()` — ligne 90
 
 Appelle : `loose()` *(cartes.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `aAcheter`, `acquisitionsEnCours`, `addToDeck`, `ajoutCollection`, `annexeEntries`, `appliqueCatalogueAuxCartes`, `applyScryfall`, `basculerSourceVersions`, `buyCard`, `carteDuCatalogue`, `chargerCatalogue`, `choisirVersion`, `collectionCards`, `commandantsPrincipaux`, `completeUnknown`, `contexteEvaluation`, `couleursRestriction`, `coutDeck`, `deckEntries`, `demandesTousDecks`, `deplacerCarte`, `faireDefilerVersion`, `ficheImageKO`, `ficheSansForge`, `gestesDeck`, `gestesGraphe`, `getCardOrAnalyzedRec`, `imageConnue`, `legality`, `loadEdhrec`, `majApercu`, `majPrix`, `montrerApercu`, `nomCanonique`, `openCardModal`, `openImport`, `panneauEdhrec`, `poseCouleursCommandant`, `propositionsHTML`, `quantiteCollection`, `quantiteEnCours`, `requeteCatalogue`, `restaureDecks`, `restore`, `resultatsAjoutHTML`, `selectionCandidats`, `signatureCommandants`, `versAnnexe`, `vivierSuggestions`, `wishlist`, `zoneCommandant`
+Appelée par : `aAcheter`, `acquisitionsEnCours`, `addToDeck`, `ajoutCollection`, `annexeEntries`, `appliqueCatalogueAuxCartes`, `applyScryfall`, `basculerSourceVersions`, `buyCard`, `carteDuCatalogue`, `chargerCatalogue`, `choisirVersion`, `collectionCards`, `commandantsPrincipaux`, `completeUnknown`, `contexteEvaluation`, `couleursRestriction`, `coutDeck`, `deckEntries`, `demandesTousDecks`, `deplacerCarte`, `faireDefilerVersion`, `ficheImageKO`, `ficheSansForge`, `gestesDeck`, `gestesGraphe`, `getCardOrAnalyzedRec`, `imageConnue`, `legality`, `loadEdhrec`, `majApercu`, `majPrix`, `migreAdversaires`, `montrerApercu`, `nomCanonique`, `openCardModal`, `openImport`, `panneauEdhrec`, `poseCouleursCommandant`, `propositionsHTML`, `quantiteCollection`, `quantiteEnCours`, `requeteCatalogue`, `restaureDecks`, `restore`, `resultatsAjoutHTML`, `selectionCandidats`, `signatureCommandants`, `versAnnexe`, `vivierSuggestions`, `wishlist`, `zoneCommandant`
 
 ### `peutCommander()` — ligne 98
 
@@ -438,10 +438,6 @@ N'appelle aucune fonction du projet.
 Appelée par : `noteCarte`
 
 ## js/etat.js
-
-### `chargement du module`
-
-Appelle : → `adversaires()` *(jeuEtat.js)*
 
 ### `ongletDeSection()` — ligne 85
 
@@ -553,7 +549,7 @@ Appelée par : `creerDeck`, `deckCourant`, `restaureDecks`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `creerDeck`, `deckCourant`, `restaureDecks`
+Appelée par : `creerDeck`, `deckCourant`, `migreAdversaires`, `restaureDecks`
 
 ### `clesDecks()` — ligne 79
 
@@ -1447,7 +1443,7 @@ Appelée par : `compileDefinition`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `cleCouvertureCollection`, `definitionDe`, `signatureAdversaire`, `signatureComportements`, `signatureDeck`
+Appelée par : `cleCouvertureCollection`, `definitionDe`, `signatureComportements`, `signatureDeck`
 
 ### `nombreFiche()` — ligne 39
 
@@ -1747,7 +1743,7 @@ Appelée par : `declareBloqueurs`, `effetsOuverture`, `mulligans`, `stabilise`
 
 Appelle : `vivants()` *(jeuEtat.js)*
 
-Appelée par : `attaqueParRegles`, `compteDuTour`, `compteJoueurs`, `cumulEffet`, `declareAttaquants`, `donneCadeau`, `entreAttaquant`, `etat.js (chargement)`, `evalue`, `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDefinis`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExprD.js (chargement)`, `forgeExpression`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesG.js (chargement)`, `groupeJoueurs`, `preparationRiposte`, `variantesEtendues`, `variantesMotsClesE`
+Appelée par : `attaqueParRegles`, `compteDuTour`, `compteJoueurs`, `cumulEffet`, `declareAttaquants`, `donneCadeau`, `entreAttaquant`, `evalue`, `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDefinis`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExprD.js (chargement)`, `forgeExpression`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesG.js (chargement)`, `groupeJoueurs`, `preparationRiposte`, `variantesEtendues`, `variantesMotsClesE`
 
 ### `champDe()` — ligne 198
 
@@ -6389,6 +6385,12 @@ Appelle : `ciblesPropres()` *(decksStockage.js)*, `cleDeckNeuve()` *(decks.js)*,
 
 Appelée par : `restore`
 
+### `migreAdversaires()` — ligne 97
+
+Appelle : `buildCard()` *(cartes.js)*, `deckNeuf()` *(decks.js)*, `find()` *(cartes.js)*, `registerCard()` *(cartes.js)*
+
+Appelée par : `restore`
+
 ## js/stockage.js
 
 ### `impressionSnap()` — ligne 33
@@ -6409,27 +6411,27 @@ Appelle : `carteDansUnDeck()` *(decks.js)*, `clesDecks()` *(decks.js)*, `impress
 
 Appelée par : `gestesDonnees`, `nuagePaquet`, `save`
 
-### `ecrire()` — ligne 126
+### `ecrire()` — ligne 125
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `save`
 
-### `save()` — ligne 130
+### `save()` — ligne 129
 
 Appelle : `ecrire()` *(stockage.js)*, `nuagePousseeDifferee()` *(nuage.js)*, `snapshot()` *(stockage.js)*, `toast()` *(outils.js)*
 
 Appelée par : `brancherRestauration`, `brancherSauvegarde`, `gestesDonnees`, `gestesNuage`, `nuageTour`, `scheduleSave`
 
-### `scheduleSave()` — ligne 161
+### `scheduleSave()` — ligne 160
 
 Appelle : → `save()` *(stockage.js)*
 
-Appelée par : `ajouteSiegeIA`, `appliqueArrets`, `appliqueCatalogueAuxCartes`, `appliqueComportement`, `appliquerAffichage`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `choisitDisposition`, `effaceComportement`, `enregistreAdversaireFenetre`, `entete.js (chargement)`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesTable`, `reglageInvite`, `reglageSalon`, `reglageSimulation`, `renderAll`, `retireSiege`, `runScryQueue`, `supprimeAdversaireOui`, `verifieDecksLies`, `verifieUnDeckLie`
+Appelée par : `ajouteSiegeIA`, `appliqueArrets`, `appliqueCatalogueAuxCartes`, `appliqueComportement`, `appliquerAffichage`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `choisitDisposition`, `effaceComportement`, `entete.js (chargement)`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesTable`, `reglageInvite`, `reglageSalon`, `reglageSimulation`, `renderAll`, `retireSiege`, `runScryQueue`
 
-### `restore()` — ligne 167
+### `restore()` — ligne 166
 
-Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*, `impressionRestore()` *(stockage.js)*, `jeuRestore()` *(champsJeu.js)*, `majTexteOracle()` *(cartes.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*, `restaureDates()` *(collectionDates.js)*, `restaureDecks()` *(decksStockage.js)*
+Appelle : `buildCard()` *(cartes.js)*, `find()` *(cartes.js)*, `impressionRestore()` *(stockage.js)*, `jeuRestore()` *(champsJeu.js)*, `majTexteOracle()` *(cartes.js)*, `migreAdversaires()` *(decksStockage.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*, `restaureDates()` *(collectionDates.js)*, `restaureDecks()` *(decksStockage.js)*
 
 Appelée par : `brancherRestauration`, `demarrer`, `nuageVerse`
 
@@ -7813,7 +7815,7 @@ Appelée par : `parseMtgoList`
 
 Appelle : `extraitEdition()` *(fenImport.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `adversaireDepuisTexte`, `openImport`
+Appelée par : `openImport`
 
 ### `openImport()` — ligne 93
 
@@ -8247,7 +8249,7 @@ Appelée par : `ficheSansForge`, `imageConnue`
 
 Appelle : `avecForge()` *(simCartes.js)*, `ficheSansForge()` *(simCartes.js)*
 
-Appelée par : `classeCarteCollection`, `fichesDeListe`, `nomsManquants`, `ouvreComportement`, `resolutionAdversaire`
+Appelée par : `classeCarteCollection`, `fichesDeListe`, `nomsManquants`, `ouvreComportement`
 
 ### `avecForge()` — ligne 75
 
@@ -8265,7 +8267,7 @@ Appelée par : `ficheParNom`
 
 Appelle : `idbLire()` *(idb.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `commenceTable`, `completeAdversaire`, `joueLot`, `pret`, `renderK`, `verifieDecksLies`
+Appelée par : `commenceTable`, `joueLot`, `pret`, `renderK`
 
 ### `rangeSimCartes()` — ligne 105
 
@@ -8277,57 +8279,7 @@ Appelée par : `chercheFichesScryfall`
 
 Appelle : `ficheDeScryfall()` *(simCartes.js)*, `norm()` *(cartes.js)*, `rangeSimCartes()` *(simCartes.js)*
 
-Appelée par : `commenceTable`, `completeAdversaire`, `joueLot`, `pret`
-
-## js/simAdversaires.js
-
-### `cleAdversaireNeuve()` — ligne 12
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `enregistreAdversaire`
-
-### `adversaireDepuisTexte()` — ligne 18
-
-Appelle : `parseMtgoList()` *(fenImport.js)*
-
-Appelée par : `adversaireDeLaFenetre`, `majApercuAdversaire`
-
-### `enregistreAdversaire()` — ligne 34
-
-Appelle : `cleAdversaireNeuve()` *(simAdversaires.js)*
-
-Appelée par : `enregistreAdversaireFenetre`
-
-### `nbCartesAdversaire()` — ligne 43
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `adversairesHTML`, `majApercuAdversaire`, `sourceVide`
-
-### `resolutionAdversaire()` — ligne 48
-
-Appelle : `ficheParNom()` *(simCartes.js)*
-
-Appelée par : `adversairesHTML`, `completeAdversaire`, `majApercuAdversaire`, `ouvreInconnues`
-
-### `completeAdversaire()` — ligne 56
-
-Appelle : `chargeSimCartes()` *(simCartes.js)*, `chercheFichesScryfall()` *(simCartes.js)*, `resolutionAdversaire()` *(simAdversaires.js)*
-
-Appelée par : `enregistreAdversaireFenetre`, `relisAdversaireLie`
-
-### `signatureAdversaire()` — ligne 67
-
-Appelle : `empreinte()` *(definitions.js)*
-
-Appelée par : `manquesDecks`, `signatureSource`
-
-### `signatureDeck()` — ligne 73
-
-Appelle : `empreinte()` *(definitions.js)*
-
-Appelée par : `couvertureTable`, `lotPerime`, `manquesDecks`, `signatureSource`, `terminerLot`
+Appelée par : `commenceTable`, `joueLot`, `pret`
 
 ## js/simSources.js
 
@@ -8337,109 +8289,47 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `configSimulation`, `lotPerime`
 
-### `nomDeSiege()` — ligne 18
+### `nomDeSiege()` — ligne 16
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `couvertureTable`, `terminerLot`
 
-### `signatureSource()` — ligne 24
+### `signatureDeck()` — ligne 21
 
-Appelle : `signatureAdversaire()` *(simAdversaires.js)*, `signatureDeck()` *(simAdversaires.js)*
+Appelle : `empreinte()` *(definitions.js)*
+
+Appelée par : `couvertureTable`, `lotPerime`, `manquesDecks`, `signatureSource`, `terminerLot`
+
+### `signatureSource()` — ligne 27
+
+Appelle : `signatureDeck()` *(simSources.js)*
 
 Appelée par : `couvertureTable`, `lotPerime`, `terminerLot`
 
-### `siegeSource()` — ligne 30
+### `siegeSource()` — ligne 29
 
-Appelle : `siegeAdversaire()` *(simPreparation.js)*, `siegeDeck()` *(simPreparation.js)*
+Appelle : `siegeDeck()` *(simPreparation.js)*
 
 Appelée par : `couvertureTable`, `joueLot`, `rejouePartie`
 
-### `nomsDeSource()` — ligne 35
+### `nomsDeSource()` — ligne 32
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `nomsManquants`
 
-### `sourceVide()` — ligne 42
+### `sourceVide()` — ligne 38
 
-Appelle : `nbCartesAdversaire()` *(simAdversaires.js)*
+N'appelle aucune fonction du projet.
 
 Appelée par : `obstacleSimulation`
 
-### `optionsSiege()` — ligne 49
+### `optionsSiege()` — ligne 44
 
 Appelle : `clesDecks()` *(decks.js)*
 
 Appelée par : `tableHTML`
-
-## js/decksLies.js
-
-### `lisLienDeck()` — ligne 58
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `adversaireDeLaFenetre`
-
-### `lisJsonDeck()` — ligne 71
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `recupereDeckLie`
-
-### `recupereDeckLie()` — ligne 84
-
-Appelle : `lisJsonDeck()` *(decksLies.js)*
-
-Appelée par : `adversaireDeLaFenetre`, `relisAdversaireLie`
-
-### `texteDeListe()` — ligne 100
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `adversaireDeLaFenetre`, `appliqueDeckLie`
-
-### `diffListes()` — ligne 106
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `appliqueDeckLie`, `enregistreAdversaireFenetre`
-
-### `appliqueDeckLie()` — ligne 121
-
-Appelle : `diffListes()` *(decksLies.js)*, `texteDeListe()` *(decksLies.js)*
-
-Appelée par : `relisAdversaireLie`
-
-### `relisAdversaireLie()` — ligne 136
-
-Appelle : `appliqueDeckLie()` *(decksLies.js)*, `completeAdversaire()` *(simAdversaires.js)*, `recupereDeckLie()` *(decksLies.js)*
-
-Appelée par : `verifieDecksLies`, `verifieUnDeckLie`
-
-### `annonceChangement()` — ligne 149
-
-Appelle : `toast()` *(outils.js)*
-
-Appelée par : `verifieDecksLies`, `verifieUnDeckLie`
-
-### `verifieDecksLies()` — ligne 155
-
-Appelle : `annonceChangement()` *(decksLies.js)*, `chargeSimCartes()` *(simCartes.js)*, `relisAdversaireLie()` *(decksLies.js)*, `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*
-
-Appelée par : `demarrer`
-
-### `verifieUnDeckLie()` — ligne 177
-
-Appelle : `annonceChangement()` *(decksLies.js)*, `ouvreAdversaire()` *(fenAdversaire.js)*, `relisAdversaireLie()` *(decksLies.js)*, `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*, `toast()` *(outils.js)*
-
-Appelée par : `gestesSimulation`
-
-### `depuisQuand()` — ligne 191
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `etatLienHTML`, `pastilleLien`
 
 ## js/simPreparation.js
 
@@ -8465,7 +8355,7 @@ Appelée par : `siegeDepuisListe`
 
 Appelle : `bilanCouverture()` *(simPreparation.js)*, `definitionDe()` *(definitions.js)*, `vieDuFormat()` *(simPreparation.js)*
 
-Appelée par : `siegeAdversaire`, `siegeDeck`, `siegeDepuisFiches`
+Appelée par : `siegeDeck`, `siegeDepuisFiches`
 
 ### `siegeDepuisFiches()` — ligne 63
 
@@ -8483,39 +8373,33 @@ Appelée par : `fichesDeSource`, `pret`
 
 Appelle : `comportementDe()` *(simPreparation.js)*, `ficheParNom()` *(simCartes.js)*
 
-Appelée par : `fichesDeDeck`, `fichesDeSource`
+Appelée par : `fichesDeDeck`
 
-### `fichesDeSource()` — ligne 93
+### `fichesDeSource()` — ligne 92
 
-Appelle : `fichesDeDeck()` *(simPreparation.js)*, `fichesDeListe()` *(simPreparation.js)*
+Appelle : `fichesDeDeck()` *(simPreparation.js)*
 
 Appelée par : `commenceTable`
 
-### `siegeDeck()` — ligne 103
+### `siegeDeck()` — ligne 99
 
 Appelle : `siegeDepuisListe()` *(simPreparation.js)*
 
 Appelée par : `couvertureTable`, `joueLot`, `rejouePartie`, `siegeDeSource`, `siegeSource`
 
-### `siegeAdversaire()` — ligne 112
-
-Appelle : `siegeDepuisListe()` *(simPreparation.js)*
-
-Appelée par : `siegeDeSource`, `siegeSource`
-
-### `nomsManquants()` — ligne 118
+### `nomsManquants()` — ligne 109
 
 Appelle : `ficheParNom()` *(simCartes.js)*, `nomsDeSource()` *(simSources.js)*
 
 Appelée par : `joueLot`
 
-### `fiabilite()` — ligne 128
+### `fiabilite()` — ligne 119
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `terminerLot`
 
-### `signatureComportements()` — ligne 135
+### `signatureComportements()` — ligne 126
 
 Appelle : `empreinte()` *(definitions.js)*
 
@@ -8581,7 +8465,7 @@ Appelée par : `ouvreJournal`, `resultatsHTML`
 
 ### `lotPerime()` — ligne 47
 
-Appelle : `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simAdversaires.js)*, `signatureSource()` *(simSources.js)*, `sourceExiste()` *(simSources.js)*
+Appelle : `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simSources.js)*, `signatureSource()` *(simSources.js)*, `sourceExiste()` *(simSources.js)*
 
 Appelée par : `historiqueHTML`, `lotHTML`, `rejouePartie`
 
@@ -8615,7 +8499,7 @@ Appelée par : `boucleTable`, `joueLot`
 
 Appelle : `sourceExiste()` *(simSources.js)*
 
-Appelée par : `enregistreAdversaireFenetre`, `joueLot`, `renderK`
+Appelée par : `joueLot`, `renderK`
 
 ### `obstacleSimulation()` — ligne 37
 
@@ -8655,7 +8539,7 @@ Appelée par : `lanceSimulation`
 
 ### `terminerLot()` — ligne 111
 
-Appelle : `agrege()` *(simStats.js)*, `ajouteLot()` *(simStockage.js)*, `fiabilite()` *(simPreparation.js)*, `renderK()` *(simSection.js)*, `signalerTravail()` *(rendu.js)*, `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simAdversaires.js)*, `toast()` *(outils.js)*, → `nomDeSiege()` *(simSources.js)*, → `signatureSource()` *(simSources.js)*
+Appelle : `agrege()` *(simStats.js)*, `ajouteLot()` *(simStockage.js)*, `fiabilite()` *(simPreparation.js)*, `renderK()` *(simSection.js)*, `signalerTravail()` *(rendu.js)*, `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simSources.js)*, `toast()` *(outils.js)*, → `nomDeSiege()` *(simSources.js)*, → `signatureSource()` *(simSources.js)*
 
 Appelée par : `joueLot`
 
@@ -8673,59 +8557,41 @@ Appelée par : `ouvreJournal`
 
 ## js/simSection.js
 
-### `couvertureTable()` — ligne 16
+### `couvertureTable()` — ligne 15
 
-Appelle : `nomDeSiege()` *(simSources.js)*, `siegeDeck()` *(simPreparation.js)*, `siegeSource()` *(simSources.js)*, `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simAdversaires.js)*, `signatureSource()` *(simSources.js)*
+Appelle : `nomDeSiege()` *(simSources.js)*, `siegeDeck()` *(simPreparation.js)*, `siegeSource()` *(simSources.js)*, `signatureComportements()` *(simPreparation.js)*, `signatureDeck()` *(simSources.js)*, `signatureSource()` *(simSources.js)*
 
 Appelée par : `couvertureHTML`
 
-### `optionsHTML()` — ligne 30
+### `optionsHTML()` — ligne 29
 
 Appelle : `esc()` *(outils.js)*
 
-Appelée par : `ouvreAdversaire`, `rejoindreHTML`, `salonHTML`, `tableHTML`
+Appelée par : `rejoindreHTML`, `salonHTML`, `tableHTML`
 
-### `tableHTML()` — ligne 35
+### `tableHTML()` — ligne 34
 
 Appelle : `clesDecks()` *(decks.js)*, `optionsHTML()` *(simSection.js)*, `optionsSiege()` *(simSources.js)*
 
 Appelée par : `renderK`
 
-### `adversairesHTML()` — ligne 69
-
-Appelle : `esc()` *(outils.js)*, `nbCartesAdversaire()` *(simAdversaires.js)*, `pastilleLien()` *(simSection.js)*, `relaisHTML()` *(simSection.js)*, `resolutionAdversaire()` *(simAdversaires.js)*
-
-Appelée par : `renderK`
-
-### `pastilleLien()` — ligne 98
-
-Appelle : `depuisQuand()` *(decksLies.js)*, `esc()` *(outils.js)*
-
-Appelée par : `adversairesHTML`
-
-### `relaisHTML()` — ligne 107
-
-Appelle : `esc()` *(outils.js)*
-
-Appelée par : `adversairesHTML`
-
-### `badgeCouverture()` — ligne 120
+### `badgeCouverture()` — ligne 68
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `couvertureCollectionHTML`, `couvertureHTML`, `lectureHTML`
 
-### `couvertureHTML()` — ligne 126
+### `couvertureHTML()` — ligne 74
 
 Appelle : `badgeCouverture()` *(simSection.js)*, `couvertureTable()` *(simSection.js)*, `esc()` *(outils.js)*
 
 Appelée par : `renderK`
 
-### `renderK()` — ligne 147
+### `renderK()` — ligne 95
 
-Appelle : `adversairesHTML()` *(simSection.js)*, `chargeResultats()` *(simStockage.js)*, `chargeSimCartes()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `couvertureCollectionHTML()` *(simCollection.js)*, `couvertureHTML()` *(simSection.js)*, `majProgressionSim()` *(simulation.js)*, `manquesHTML()` *(forgeVue.js)*, `resultatsHTML()` *(simResultats.js)*, `tableHTML()` *(simSection.js)*
+Appelle : `chargeResultats()` *(simStockage.js)*, `chargeSimCartes()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `couvertureCollectionHTML()` *(simCollection.js)*, `couvertureHTML()` *(simSection.js)*, `majProgressionSim()` *(simulation.js)*, `manquesHTML()` *(forgeVue.js)*, `resultatsHTML()` *(simResultats.js)*, `tableHTML()` *(simSection.js)*
 
-Appelée par : `appliqueComportement`, `chercheTableSauvee`, `effaceComportement`, `enregistreAdversaireFenetre`, `entete.js (chargement)`, `gestesSimulation`, `joueLot`, `lanceSimulation`, `reglageSimulation`, `renderAll`, `supprimeAdversaireOui`, `terminerLot`, `trancheCouvertureCollection`, `verifieDecksLies`, `verifieUnDeckLie`
+Appelée par : `appliqueComportement`, `chercheTableSauvee`, `effaceComportement`, `entete.js (chargement)`, `gestesSimulation`, `joueLot`, `lanceSimulation`, `reglageSimulation`, `renderAll`, `terminerLot`, `trancheCouvertureCollection`
 
 ## js/simCollection.js
 
@@ -8827,43 +8693,43 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `telechargeForge`
 
-### `cheminsDeNoms()` — ligne 107
+### `cheminsDeNoms()` — ligne 106
 
 Appelle : `baseForge()` *(forgeDepot.js)*
 
 Appelée par : `telechargeForge`
 
-### `rangeForge()` — ligne 120
+### `rangeForge()` — ligne 119
 
 Appelle : `idbEcrire()` *(idb.js)*, `paquetForge()` *(forgeDepot.js)*
 
 Appelée par : `telechargeForge`
 
-### `telechargeUn()` — ligne 132
+### `telechargeUn()` — ligne 131
 
 Appelle : `indexeForge()` *(forgeDepot.js)*, `paquetForge()` *(forgeDepot.js)*
 
 Appelée par : `telechargeForge`
 
-### `telechargeForge()` — ligne 148
+### `telechargeForge()` — ligne 147
 
 Appelle : `chargeForge()` *(forgeDepot.js)*, `cheminsDeNoms()` *(forgeDepot.js)*, `forgeChange()` *(forgeVue.js)*, `listeForge()` *(forgeDepot.js)*, `majForgeUI()` *(forgeVue.js)*, `nomsPrioritaires()` *(forgeDepot.js)*, `paquetForge()` *(forgeDepot.js)*, `rangeForge()` *(forgeDepot.js)*, `telechargeUn()` *(forgeDepot.js)*
 
 Appelée par : `demarreForge`, `gestesForge`
 
-### `demarreForge()` — ligne 192
+### `demarreForge()` — ligne 191
 
 Appelle : `chargeForge()` *(forgeDepot.js)*, `forgeChange()` *(forgeVue.js)*, `forgeIncomplet()` *(forgeDepot.js)*, `telechargeForge()` *(forgeDepot.js)*
 
 Appelée par : `demarrer`
 
-### `oublieForge()` — ligne 202
+### `oublieForge()` — ligne 201
 
 Appelle : `forgeChange()` *(forgeVue.js)*, `idbOublier()` *(idb.js)*, → `paquetForge()` *(forgeDepot.js)*
 
 Appelée par : `gestesForge`
 
-### `scriptForgeDe()` — ligne 212
+### `scriptForgeDe()` — ligne 211
 
 Appelle : `norm()` *(cartes.js)*
 
@@ -8901,37 +8767,37 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `manquesDecks`
 
-### `manquesDecks()` — ligne 87
+### `manquesDecks()` — ligne 86
 
-Appelle : `couvertureForge()` *(forgeCouverture.js)*, `lisScriptForge()` *(forgeScript.js)*, `manquesForge()` *(forgeCouverture.js)*, `poidsPrioritaires()` *(forgeVue.js)*, `scriptForgeDe()` *(forgeDepot.js)*, → `signatureAdversaire()` *(simAdversaires.js)*, → `signatureDeck()` *(simAdversaires.js)*
+Appelle : `couvertureForge()` *(forgeCouverture.js)*, `lisScriptForge()` *(forgeScript.js)*, `manquesForge()` *(forgeCouverture.js)*, `poidsPrioritaires()` *(forgeVue.js)*, `scriptForgeDe()` *(forgeDepot.js)*, → `signatureDeck()` *(simSources.js)*
 
 Appelée par : `manquesHTML`
 
-### `mesureBaseForge()` — ligne 109
+### `mesureBaseForge()` — ligne 107
 
 Appelle : `attendre()` *(tableHote.js)*, `couvertureForge()` *(forgeCouverture.js)*, `lisScriptForge()` *(forgeScript.js)*, `majForgeUI()` *(forgeVue.js)*, `manquesForge()` *(forgeCouverture.js)*
 
 Appelée par : `gestesForge`
 
-### `libelleElement()` — ligne 128
+### `libelleElement()` — ligne 126
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `listeManques`
 
-### `listeManques()` — ligne 133
+### `listeManques()` — ligne 131
 
 Appelle : `esc()` *(outils.js)*, `libelleElement()` *(forgeVue.js)*
 
 Appelée par : `manquesHTML`
 
-### `manquesHTML()` — ligne 141
+### `manquesHTML()` — ligne 139
 
 Appelle : `esc()` *(outils.js)*, `etatForgeTexte()` *(forgeVue.js)*, `listeManques()` *(forgeVue.js)*, `manquesDecks()` *(forgeVue.js)*
 
 Appelée par : `majForgeUI`, `renderK`
 
-### `gestesForge()` — ligne 165
+### `gestesForge()` — ligne 163
 
 Appelle : `mesureBaseForge()` *(forgeVue.js)*, `oublieForge()` *(forgeDepot.js)*, `telechargeForge()` *(forgeDepot.js)*
 
@@ -8981,7 +8847,7 @@ Appelée par : `renderK`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `acteSuggestion`, `actesAnnexe`, `actionsLoupe`, `adversairesHTML`, `aideFormules`, `alertesInvitesHTML`, `areneAdversaires`, `badgeCouverture`, `barreCatalogue`, `barresHTML`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `boutonSupprCollection`, `cardRow`, `cardTile`, `cartesHTML`, `cartouche`, `champBudget`, `champDeck`, `champRecherche`, `chipsChoix`, `combatHTML`, `corpsAffichage`, `corpsArrets`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsForge`, `corpsFormat`, `corpsSauvegarde`, `couvertureHTML`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etapeHTML`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `filHTML`, `finHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `historiqueHTML`, `inconnuesHTML`, `lectureHTML`, `libelleElement`, `lienDecksEdhrec`, `ligneAchats`, `ligneAcquisition`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneCouvertureCollection`, `ligneDatesAjout`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeManques`, `listeSetsHTML`, `lotHTML`, `loupeHTML`, `majApercu`, `majApercuAdversaire`, `majBoutonAffichage`, `manquesHTML`, `marqueursHTML`, `menuHTML`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openSupprCarteModal`, `openWantsModal`, `optionsHTML`, `ouvreAdversaire`, `ouvreComportement`, `ouvreInconnues`, `ouvreJournal`, `ouvreJournalTable`, `paginationListe`, `panneauEdhrec`, `partiesHTML`, `pastilleLien`, `phasesHTML`, `pileHTML`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `questionHTML`, `refCarte`, `rejoindreHTML`, `relaisHTML`, `renderD`, `renderE`, `renderTop`, `repliHTML`, `resultatsAjoutHTML`, `resumeDeckConfig`, `resumeFiltres`, `salonHTML`, `sectionParametres`, `siegeDistantHTML`, `sugLigne`, `sugRow`, `supprimeAdversaire`, `svgGraph`, `symBg`, `symIcon`, `tableLoupe.js (chargement)`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `tuile`, `tuileWishlist`, `vignetteDeck`, `wishlistSection.js (chargement)`, `zoneCommandant`, `zoneHTML`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `actionsLoupe`, `aideFormules`, `alertesInvitesHTML`, `areneAdversaires`, `badgeCouverture`, `barreCatalogue`, `barresHTML`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `boutonSupprCollection`, `cardRow`, `cardTile`, `cartesHTML`, `cartouche`, `champBudget`, `champDeck`, `champRecherche`, `chipsChoix`, `combatHTML`, `corpsAffichage`, `corpsArrets`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsForge`, `corpsFormat`, `corpsSauvegarde`, `couvertureHTML`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etapeHTML`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `filHTML`, `finHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `historiqueHTML`, `lectureHTML`, `libelleElement`, `lienDecksEdhrec`, `ligneAchats`, `ligneAcquisition`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneCouvertureCollection`, `ligneDatesAjout`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeManques`, `listeSetsHTML`, `lotHTML`, `loupeHTML`, `majApercu`, `majBoutonAffichage`, `manquesHTML`, `marqueursHTML`, `menuHTML`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openSupprCarteModal`, `openWantsModal`, `optionsHTML`, `ouvreComportement`, `ouvreJournal`, `ouvreJournalTable`, `paginationListe`, `panneauEdhrec`, `partiesHTML`, `phasesHTML`, `pileHTML`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `questionHTML`, `refCarte`, `rejoindreHTML`, `renderD`, `renderE`, `renderTop`, `resultatsAjoutHTML`, `resumeDeckConfig`, `resumeFiltres`, `salonHTML`, `sectionParametres`, `siegeDistantHTML`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tableLoupe.js (chargement)`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `tuile`, `tuileWishlist`, `vignetteDeck`, `wishlistSection.js (chargement)`, `zoneCommandant`, `zoneHTML`
 
 ### `eur()` — ligne 14
 
@@ -9005,7 +8871,7 @@ Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `blocEdhrec`,
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `addToDeck`, `adversaireDeLaFenetre`, `ajouterCarte`, `annonceChangement`, `app.js (chargement)`, `appliqueComportement`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `commenceTable`, `completeUnknown`, `deplacerCarte`, `effaceComportement`, `enregistreAdversaireFenetre`, `enrichAllUnknown`, `exportModal`, `gestesAcquisition`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesNuage`, `gestesReglages`, `joueLot`, `lanceSimulation`, `lienOffreColle`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `nuageDemarrer`, `nuageDiagnostic`, `nuageSynchro`, `openImport`, `openSupprCarteModal`, `openWantsModal`, `openWipeModal`, `ouvreComportement`, `ouvreInconnues`, `ouvreJournal`, `relie`, `relieCode`, `runScryQueue`, `save`, `telechargerCatalogue`, `terminerLot`, `verifieUnDeckLie`, `versAnnexe`, `viderAnnexe`
+Appelée par : `addToDeck`, `ajouterCarte`, `app.js (chargement)`, `appliqueComportement`, `brancherCatalogue`, `brancherRestauration`, `brancherSauvegarde`, `buyCard`, `chargerArchetypesEdhrec`, `choisirVersion`, `commenceTable`, `completeUnknown`, `deplacerCarte`, `effaceComportement`, `enrichAllUnknown`, `exportModal`, `gestesAcquisition`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesNuage`, `gestesReglages`, `joueLot`, `lanceSimulation`, `lienOffreColle`, `lireCatalogueFichier`, `loadEdhrec`, `majCatalogue`, `majPrix`, `nuageDemarrer`, `nuageDiagnostic`, `nuageSynchro`, `openImport`, `openSupprCarteModal`, `openWantsModal`, `openWipeModal`, `ouvreComportement`, `ouvreJournal`, `relie`, `relieCode`, `runScryQueue`, `save`, `telechargerCatalogue`, `terminerLot`, `versAnnexe`, `viderAnnexe`
 
 ## js/theme.js
 
@@ -9039,13 +8905,13 @@ Appelée par : `app.js (chargement)`
 
 Appelle : `esc()` *(outils.js)*
 
-Appelée par : `annonceRecalcul`, `exportModal`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesNuage`, `openAdd`, `openAffichageModal`, `openBudgetModal`, `openCardModal`, `openCiblesModal`, `openDeckModal`, `openFiltresModal`, `openFormatModal`, `openImport`, `openParametresModal`, `openSupprCarteModal`, `openWantsModal`, `openWipeModal`, `ouvreAdversaire`, `ouvreArrets`, `ouvreComportement`, `ouvreInconnues`, `ouvreJournal`, `ouvreJournalTable`, `ouvrirBoiteCatalogue`, `proposerMajCatalogue`, `supprimeAdversaire`
+Appelée par : `annonceRecalcul`, `exportModal`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesNuage`, `openAdd`, `openAffichageModal`, `openBudgetModal`, `openCardModal`, `openCiblesModal`, `openDeckModal`, `openFiltresModal`, `openFormatModal`, `openImport`, `openParametresModal`, `openSupprCarteModal`, `openWantsModal`, `openWipeModal`, `ouvreArrets`, `ouvreComportement`, `ouvreJournal`, `ouvreJournalTable`, `ouvrirBoiteCatalogue`, `proposerMajCatalogue`
 
 ### `closeDialog()` — ligne 37
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `app.js (chargement)`, `appliqueArrets`, `appliqueComportement`, `appliquerAffichage`, `appliquerBudget`, `appliquerCibles`, `appliquerDeck`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`, `effaceComportement`, `enregistreAdversaireFenetre`, `fermerBoiteCatalogue`, `finRecalcul`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesGraphe`, `gestesNuage`, `gestesVue`, `openImport`, `openSupprCarteModal`, `openWipeModal`, `supprimeAdversaireOui`
+Appelée par : `app.js (chargement)`, `appliqueArrets`, `appliqueComportement`, `appliquerAffichage`, `appliquerBudget`, `appliquerCibles`, `appliquerDeck`, `appliquerFiltres`, `appliquerFormat`, `appliquerParametres`, `effaceComportement`, `fermerBoiteCatalogue`, `finRecalcul`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesGraphe`, `gestesNuage`, `gestesVue`, `openImport`, `openSupprCarteModal`, `openWipeModal`
 
 ## js/brouillon.js
 
@@ -9963,68 +9829,6 @@ Appelle : `closeDialog()` *(dialogue.js)*, `collectionCards()` *(collection.js)*
 
 Appelée par : `gestesDonnees`
 
-## js/fenAdversaire.js
-
-### `repliHTML()` — ligne 20
-
-Appelle : `esc()` *(outils.js)*
-
-Appelée par : `adversaireDeLaFenetre`, `ouvreAdversaire`
-
-### `etatLienHTML()` — ligne 33
-
-Appelle : `depuisQuand()` *(decksLies.js)*
-
-Appelée par : `ouvreAdversaire`
-
-### `ouvreAdversaire()` — ligne 39
-
-Appelle : `esc()` *(outils.js)*, `etatLienHTML()` *(fenAdversaire.js)*, `majApercuAdversaire()` *(fenAdversaire.js)*, `openDialog()` *(dialogue.js)*, `optionsHTML()` *(simSection.js)*, `repliHTML()` *(fenAdversaire.js)*
-
-Appelée par : `gestesSimulation`, `verifieUnDeckLie`
-
-### `inconnuesHTML()` — ligne 63
-
-Appelle : `esc()` *(outils.js)*
-
-Appelée par : `majApercuAdversaire`, `ouvreInconnues`
-
-### `majApercuAdversaire()` — ligne 68
-
-Appelle : `adversaireDepuisTexte()` *(simAdversaires.js)*, `esc()` *(outils.js)*, `inconnuesHTML()` *(fenAdversaire.js)*, `nbCartesAdversaire()` *(simAdversaires.js)*, `resolutionAdversaire()` *(simAdversaires.js)*
-
-Appelée par : `adversaireDeLaFenetre`, `app.js (chargement)`, `ouvreAdversaire`
-
-### `ouvreInconnues()` — ligne 82
-
-Appelle : `esc()` *(outils.js)*, `inconnuesHTML()` *(fenAdversaire.js)*, `openDialog()` *(dialogue.js)*, `resolutionAdversaire()` *(simAdversaires.js)*, `toast()` *(outils.js)*
-
-Appelée par : `enregistreAdversaireFenetre`, `gestesSimulation`
-
-### `adversaireDeLaFenetre()` — ligne 99
-
-Appelle : `adversaireDepuisTexte()` *(simAdversaires.js)*, `lisLienDeck()` *(decksLies.js)*, `majApercuAdversaire()` *(fenAdversaire.js)*, `recupereDeckLie()` *(decksLies.js)*, `repliHTML()` *(fenAdversaire.js)*, `texteDeListe()` *(decksLies.js)*, `toast()` *(outils.js)*
-
-Appelée par : `enregistreAdversaireFenetre`
-
-### `enregistreAdversaireFenetre()` — ligne 130
-
-Appelle : `adversaireDeLaFenetre()` *(fenAdversaire.js)*, `closeDialog()` *(dialogue.js)*, `completeAdversaire()` *(simAdversaires.js)*, `configSimulation()` *(simulation.js)*, `diffListes()` *(decksLies.js)*, `enregistreAdversaire()` *(simAdversaires.js)*, `ouvreInconnues()` *(fenAdversaire.js)*, `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*, `toast()` *(outils.js)*
-
-Appelée par : `gestesSimulation`
-
-### `supprimeAdversaire()` — ligne 153
-
-Appelle : `esc()` *(outils.js)*, `openDialog()` *(dialogue.js)*
-
-Appelée par : `gestesSimulation`
-
-### `supprimeAdversaireOui()` — ligne 161
-
-Appelle : `closeDialog()` *(dialogue.js)*, `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*
-
-Appelée par : `gestesSimulation`
-
 ## js/fenComportement.js
 
 ### `aideFormules()` — ligne 16
@@ -10161,13 +9965,13 @@ Appelée par : `app.js (chargement)`
 
 ## js/gestesSimulation.js
 
-### `gestesSimulation()` — ligne 10
+### `gestesSimulation()` — ligne 9
 
-Appelle : `appliqueComportement()` *(fenComportement.js)*, `arreteSimulation()` *(simulation.js)*, `effaceComportement()` *(fenComportement.js)*, `enregistreAdversaireFenetre()` *(fenAdversaire.js)*, `lanceSimulation()` *(simulation.js)*, `ouvreAdversaire()` *(fenAdversaire.js)*, `ouvreComportement()` *(fenComportement.js)*, `ouvreInconnues()` *(fenAdversaire.js)*, `ouvreJournal()` *(fenJournal.js)*, `renderK()` *(simSection.js)*, `supprimeAdversaire()` *(fenAdversaire.js)*, `supprimeAdversaireOui()` *(fenAdversaire.js)*, `supprimeLot()` *(simStockage.js)*, `verifieUnDeckLie()` *(decksLies.js)*
+Appelle : `appliqueComportement()` *(fenComportement.js)*, `arreteSimulation()` *(simulation.js)*, `effaceComportement()` *(fenComportement.js)*, `lanceSimulation()` *(simulation.js)*, `ouvreComportement()` *(fenComportement.js)*, `ouvreJournal()` *(fenJournal.js)*, `renderK()` *(simSection.js)*, `supprimeLot()` *(simStockage.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `reglageSimulation()` — ligne 34
+### `reglageSimulation()` — ligne 26
 
 Appelle : `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*
 
@@ -10633,61 +10437,61 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `boucleTable`
 
-### `siegeDeSource()` — ligne 64
+### `siegeDeSource()` — ligne 63
 
-Appelle : `siegeAdversaire()` *(simPreparation.js)*, `siegeDeck()` *(simPreparation.js)*, `siegeDepuisFiches()` *(simPreparation.js)*
+Appelle : `siegeDeck()` *(simPreparation.js)*, `siegeDepuisFiches()` *(simPreparation.js)*
 
 Appelée par : `commenceTable`
 
-### `commenceTable()` — ligne 74
+### `commenceTable()` — ligne 72
 
 Appelle : `agentIA()` *(iaAgent.js)*, `arretsParDefaut()` *(jeuArrets.js)*, `boucleTable()` *(tableHote.js)*, `chargeSimCartes()` *(simCartes.js)*, `chercheFichesScryfall()` *(simCartes.js)*, `creePartie()` *(jeuPilote.js)*, `envoieDebut()` *(tableLiaison.js)*, `fichesDeSource()` *(simPreparation.js)*, `toast()` *(outils.js)*, → `siegeDeSource()` *(tableHote.js)*
 
 Appelée par : `commenceDepuisSalon`
 
-### `boucleTable()` — ligne 99
+### `boucleTable()` — ligne 97
 
 Appelle : `attendre()` *(tableHote.js)*, `avance()` *(jeuPilote.js)*, `diffuseVues()` *(tableHote.js)*, `doitDemander()` *(jeuArrets.js)*, `montrePile()` *(tableHote.js)*, `oublieTableSauvee()` *(tableReprise.js)*, `pauseApres()` *(tableHote.js)*, `poseQuestion()` *(tableHote.js)*, `rendMain()` *(simulation.js)*, `repondre()` *(jeuPilote.js)*, `sauveTable()` *(tableReprise.js)*, `signePublic()` *(tableHote.js)*, `valideReponse()` *(jeuPilote.js)*, → `etape()` *(jeuTour.js)*
 
 Appelée par : `commenceTable`, `confieInvite`, `recoitReponse`, `reprendTable`
 
-### `poseQuestion()` — ligne 126
+### `poseQuestion()` — ligne 124
 
 Appelle : `diffuseVues()` *(tableHote.js)*, `envoieQuestion()` *(tableLiaison.js)*, `questionPourUI()` *(jeuVue.js)*, `renduTable()` *(tableRendu.js)*, `vueTable()` *(tableHote.js)*
 
 Appelée par : `boucleTable`
 
-### `recoitReponse()` — ligne 142
+### `recoitReponse()` — ligne 140
 
 Appelle : `boucleTable()` *(tableHote.js)*, `diffuseVues()` *(tableHote.js)*, `envoieErreur()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `repondre()` *(jeuPilote.js)*, `reponseRecevable()` *(jeuPilote.js)*
 
 Appelée par : `passeJusquaMonTour`, `recoitDistant`, `repondsTable`
 
-### `diffuseVues()` — ligne 159
+### `diffuseVues()` — ligne 157
 
 Appelle : `envoieVue()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `vueTable()` *(tableHote.js)*
 
 Appelée par : `boucleTable`, `montrePile`, `poseQuestion`, `recoitReponse`, `reprendTable`
 
-### `journalTable()` — ligne 174
+### `journalTable()` — ligne 172
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `journalTableLignes`, `nouvellesLignes`
 
-### `majArretsTable()` — ligne 177
+### `majArretsTable()` — ligne 175
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `appliqueArrets`
 
-### `passeJusquaMonTour()` — ligne 184
+### `passeJusquaMonTour()` — ligne 182
 
 Appelle : `recoitReponse()` *(tableHote.js)*
 
 Appelée par : `passeTour`, `recoitDistant`
 
-### `quitteTable()` — ligne 192
+### `quitteTable()` — ligne 190
 
 Appelle : `fermeLiaisons()` *(tableLiaison.js)*, `oublieTableSauvee()` *(tableReprise.js)*, `renduTable()` *(tableRendu.js)*
 
@@ -11181,73 +10985,73 @@ Appelle : `clesDecks()` *(decks.js)*
 
 Appelée par : `ajouteSiegeIA`, `ouvreSalon`, `salonHTML`
 
-### `nomDeSource()` — ligne 16
+### `nomDeSource()` — ligne 15
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `siegesDuSalon`
 
-### `sourceDeMoi()` — ligne 23
+### `sourceDeMoi()` — ligne 21
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `cleDeckDeMoi`, `salonHTML`, `siegesDuSalon`
+Appelée par : `cleDeckDeMoi`, `ouvreSalon`, `salonHTML`, `siegesDuSalon`
 
-### `cleDeckDeMoi()` — ligne 31
+### `cleDeckDeMoi()` — ligne 27
 
 Appelle : `sourceDeMoi()` *(tableSalon.js)*
 
 Appelée par : `pret`, `rejoindreHTML`
 
-### `siegesDuSalon()` — ligne 37
+### `siegesDuSalon()` — ligne 33
 
 Appelle : `nomDeSource()` *(tableSalon.js)*, `sourceDeMoi()` *(tableSalon.js)*
 
 Appelée par : `commenceDepuisSalon`
 
-### `salonHTML()` — ligne 45
+### `salonHTML()` — ligne 41
 
 Appelle : `adressePublique()` *(tableLiaison.js)*, `esc()` *(outils.js)*, `optionsHTML()` *(simSection.js)*, `siegeDistantHTML()` *(tableSalon.js)*, `sourceDeMoi()` *(tableSalon.js)*, `sourcesDeDecks()` *(tableSalon.js)*
 
 Appelée par : `renduTable`
 
-### `siegeDistantHTML()` — ligne 82
+### `siegeDistantHTML()` — ligne 78
 
 Appelle : `esc()` *(outils.js)*, `qrEcrit()` *(qrEcrit.js)*, `qrSVG()` *(qrEcrit.js)*, `texteOffre()` *(tableLiaison.js)*
 
 Appelée par : `salonHTML`
 
-### `alertesInvitesHTML()` — ligne 99
+### `alertesInvitesHTML()` — ligne 95
 
 Appelle : `esc()` *(outils.js)*, `qrEcrit()` *(qrEcrit.js)*, `qrSVG()` *(qrEcrit.js)*, `texteOffre()` *(tableLiaison.js)*
 
 Appelée par : `regionsPartie`
 
-### `ouvreSalon()` — ligne 108
+### `ouvreSalon()` — ligne 104
 
-Appelle : `renduTable()` *(tableRendu.js)*, `sourcesDeDecks()` *(tableSalon.js)*
+Appelle : `renduTable()` *(tableRendu.js)*, `sourceDeMoi()` *(tableSalon.js)*, `sourcesDeDecks()` *(tableSalon.js)*
 
 Appelée par : `gestesTable`
 
-### `reglageSalon()` — ligne 114
+### `reglageSalon()` — ligne 110
 
 Appelle : `reglageInvite()` *(tableInvite.js)*, `renduTable()` *(tableRendu.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `ajouteSiegeIA()` — ligne 126
+### `ajouteSiegeIA()` — ligne 122
 
 Appelle : `renduTable()` *(tableRendu.js)*, `scheduleSave()` *(stockage.js)*, `sourcesDeDecks()` *(tableSalon.js)*
 
 Appelée par : `gestesTable`
 
-### `retireSiege()` — ligne 133
+### `retireSiege()` — ligne 129
 
 Appelle : `oublieDistant()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `gestesTable`
 
-### `commenceDepuisSalon()` — ligne 141
+### `commenceDepuisSalon()` — ligne 137
 
 Appelle : `commenceTable()` *(tableHote.js)*, `siegesDuSalon()` *(tableSalon.js)*
 
@@ -11567,11 +11371,11 @@ Appelée par : `gestesTable`
 
 ### `chargement du module`
 
-Appelle : `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `caseArret()` *(fenArrets.js)*, `clicAvale()` *(tableLoupe.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesNuageChange()` *(gestesNuage.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `loupeContextuelle()` *(tableLoupe.js)*, `majApercuAdversaire()` *(fenAdversaire.js)*, `majApercuComportement()` *(fenComportement.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `reglageSalon()` *(tableSalon.js)*, `reglageSimulation()` *(gestesSimulation.js)*, `reglerCible()` *(legalite.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieBudget()` *(fenBudget.js)*, `saisieDeck()` *(gestesDecks.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `appuiAnnule()` *(tableLoupe.js)*, → `appuiBouge()` *(tableLoupe.js)*, → `appuiDebut()` *(tableLoupe.js)*, → `appuiFin()` *(tableLoupe.js)*, → `defileTable()` *(tableDispositions.js)*, → `gestesAcquisition()` *(gestesAcquisition.js)*, → `gestesDeck()` *(gestesDeck.js)*, → `gestesDeckConfig()` *(gestesDecks.js)*, → `gestesDecks()` *(gestesDecks.js)*, → `gestesDonnees()` *(gestesDonnees.js)*, → `gestesForge()` *(forgeVue.js)*, → `gestesGraphe()` *(gestesGraphe.js)*, → `gestesNuage()` *(gestesNuage.js)*, → `gestesReglages()` *(gestesReglages.js)*, → `gestesSimulation()` *(gestesSimulation.js)*, → `gestesTable()` *(gestesTable.js)*, → `gestesVue()` *(gestesVue.js)*, → `majHauteurEntete()` *(entete.js)*, → `planifieFleches()` *(tableFleches.js)*
+Appelle : `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `cacherApercu()` *(apercu.js)*, `caseArret()` *(fenArrets.js)*, `clicAvale()` *(tableLoupe.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesNuageChange()` *(gestesNuage.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `loupeContextuelle()` *(tableLoupe.js)*, `majApercuComportement()` *(fenComportement.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `reglageSalon()` *(tableSalon.js)*, `reglageSimulation()` *(gestesSimulation.js)*, `reglerCible()` *(legalite.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieBudget()` *(fenBudget.js)*, `saisieDeck()` *(gestesDecks.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `appuiAnnule()` *(tableLoupe.js)*, → `appuiBouge()` *(tableLoupe.js)*, → `appuiDebut()` *(tableLoupe.js)*, → `appuiFin()` *(tableLoupe.js)*, → `defileTable()` *(tableDispositions.js)*, → `gestesAcquisition()` *(gestesAcquisition.js)*, → `gestesDeck()` *(gestesDeck.js)*, → `gestesDeckConfig()` *(gestesDecks.js)*, → `gestesDecks()` *(gestesDecks.js)*, → `gestesDonnees()` *(gestesDonnees.js)*, → `gestesForge()` *(forgeVue.js)*, → `gestesGraphe()` *(gestesGraphe.js)*, → `gestesNuage()` *(gestesNuage.js)*, → `gestesReglages()` *(gestesReglages.js)*, → `gestesSimulation()` *(gestesSimulation.js)*, → `gestesTable()` *(gestesTable.js)*, → `gestesVue()` *(gestesVue.js)*, → `majHauteurEntete()` *(entete.js)*, → `planifieFleches()` *(tableFleches.js)*
 
-### `demarrer()` — ligne 273
+### `demarrer()` — ligne 271
 
-Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `chercheTableSauvee()` *(tableReprise.js)*, `demarreForge()` *(forgeDepot.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `nuageDemarrer()` *(nuage.js)*, `rejoindreDepuisAdresse()` *(tableInvite.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*, `verifieDecksLies()` *(decksLies.js)*
+Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `chercheTableSauvee()` *(tableReprise.js)*, `demarreForge()` *(forgeDepot.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `nuageDemarrer()` *(nuage.js)*, `rejoindreDepuisAdresse()` *(tableInvite.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*
 
 Appelée par : `app.js (chargement)`
 

@@ -190,13 +190,12 @@ const S = {
   enriching: false,
   scryHS: false,
   edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
-  /* Le mode de jeu. La bibliothèque d'adversaires et les comportements écrits
+  /* Le mode de jeu. Les comportements écrits
      à la main sont l'intention du joueur : ils se sauvegardent et voyagent.
      La configuration d'un lot — quel deck, contre qui, combien de parties —
      est de la vue : elle se sauvegarde, mais reste sur l'appareil. */
-  adversaires: {},
   comportements: {},
-  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, relais: '', forgeAuto: true, niveauIA: 'rapide'},
+  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, forgeAuto: true, niveauIA: 'rapide'},
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
      De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent. */

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1819 fonctions**, 277 modules, 1960 Ko de JavaScript.
+**1787 fonctions**, 274 modules, 1934 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -22,7 +22,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 214 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 208 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 207 |
 | [`collectionDates.js`](#jscollectiondatesjs) | Les dates d'ajout des cartes de la collection | 15 | 153 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 200 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
@@ -168,7 +168,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 148 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
-| [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
+| [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 4 | 125 |
 | [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 297 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
@@ -211,17 +211,15 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 169 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 10 | 132 |
-| [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
-| [`simSources.js`](#jssimsourcesjs) | Ce qui peut s'asseoir à un siège de la simulation | 9 | 54 |
-| [`decksLies.js`](#jsdecksliesjs) | Les adversaires liés à Moxfield ou à Archidekt | 11 | 196 |
-| [`simPreparation.js`](#jssimpreparationjs) | D'un deck ou d'un adversaire à un siège de table | 13 | 138 |
+| [`simSources.js`](#jssimsourcesjs) | Ce qui peut s'asseoir à un siège de la simulation | 9 | 48 |
+| [`simPreparation.js`](#jssimpreparationjs) | D'un deck à un siège de table | 12 | 129 |
 | [`simStats.js`](#jssimstatsjs) | Ce qu'on retient d'une partie, et d'un lot | 5 | 98 |
 | [`simStockage.js`](#jssimstockagejs) | Les résultats des lots, gardés et comparés | 9 | 67 |
 | [`simulation.js`](#jssimulationjs) | Un lot de parties, par tranches | 11 | 145 |
-| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 9 | 162 |
+| [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 6 | 110 |
 | [`simCollection.js`](#jssimcollectionjs) | Ce que le moteur comprend de la collection | 8 | 130 |
-| [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 216 |
-| [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 174 |
+| [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 215 |
+| [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 172 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
@@ -247,7 +245,6 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenListes.js`](#jsfenlistesjs) | Les deux listes déroulantes des filtres | 6 | 125 |
 | [`boiteCatalogue.js`](#jsboitecataloguejs) | Boîte de chargement de l'archive Scryfall | 6 | 75 |
 | [`fenExport.js`](#jsfenexportjs) | Fenêtres d'export et d'effacement | 3 | 179 |
-| [`fenAdversaire.js`](#jsfenadversairejs) | Ajouter ou modifier un adversaire | 10 | 168 |
 | [`fenComportement.js`](#jsfencomportementjs) | Décrire à la main ce que fait une carte | 6 | 84 |
 | [`fenJournal.js`](#jsfenjournaljs) | Revoir une partie d'un lot | 1 | 38 |
 | [`gestesDecks.js`](#jsgestesdecksjs) | Les gestes des decks | 3 | 160 |
@@ -258,7 +255,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 151 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 46 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 38 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -269,7 +266,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 15 | 199 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 15 | 197 |
 | [`tableImages.js`](#jstableimagesjs) | Le visuel d'une carte, à la table | 4 | 84 |
 | [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 123 |
 | [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 57 |
@@ -280,13 +277,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 137 |
 | [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 11 | 136 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
-| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 13 | 145 |
+| [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 13 | 141 |
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 67 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
 | [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 78 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 311 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 309 |
 | [`icones.js`](#jsiconesjs) |  | 0 | 21 |
 
 ## js/reglesEffets.js
@@ -472,7 +469,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 208 lignes, 12 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 207 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2836,13 +2833,14 @@ Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
 
 ## js/decksStockage.js
 
-Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4.1 Ko.*
+Les dossiers de deck, rangés et relus. *4 fonctions, 125 lignes, 6.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `deckSnap(cle)` | Un dossier de deck tel qu'il se range : les Map en paires, les Set en tableaux, comme le reste de la sauvegarde. |
 | `ciblesPropres(src)` | Les objectifs par rôle, format par format : une valeur qui n'est pas un nombre positif est écartée, et le rôle reprend la cible que le format lui donne. |
 | `restaureDecks(d)` | Les decks, et la sauvegarde d'hier qui n'en connaissait qu'un. |
+| `migreAdversaires(brut)` | La bibliothèque d'adversaires d'hier : chaque adversaire devient un deck externe, sous la même clé — les sièges et les lots qui la nommaient la retrouvent. |
 
 ## js/stockage.js
 
@@ -3577,63 +3575,25 @@ D'un nom de carte à sa fiche de jeu. *10 fonctions, 132 lignes, 5.8 Ko.*
 | `simCartesChargees` | — |
 | `INDEX_ARCHIVE` | — |
 
-## js/simAdversaires.js
-
-La bibliothèque d'adversaires. *8 fonctions, 78 lignes, 3.4 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `cleAdversaireNeuve()` | — |
-| `adversaireDepuisTexte(nom, texte, format)` | Lire une liste collée en adversaire : les cartes du deck, et son commandant s'il en a un. |
-| `enregistreAdversaire(adv, cle)` | Ranger un adversaire ; rend sa clé. Un nom déjà pris reçoit un numéro, comme un deck : deux adversaires indiscernables dans un menu ne servent à rien. |
-| `nbCartesAdversaire(adv)` | — |
-| `resolutionAdversaire(adv)` | Ce qu'on sait déjà jouer d'un adversaire, et ce qui manque. |
-| `completeAdversaire(cle)` | Compléter un adversaire auprès de Scryfall. |
-| `signatureAdversaire(adv)` | L'empreinte d'un adversaire : un résultat calculé contre une liste qui a changé depuis est périmé. |
-| `signatureDeck(cle)` | L'empreinte d'un deck de l'atelier, ouvert ou non. |
-
 ## js/simSources.js
 
-Ce qui peut s'asseoir à un siège de la simulation. *9 fonctions, 54 lignes, 2.3 Ko.*
+Ce qui peut s'asseoir à un siège de la simulation. *9 fonctions, 48 lignes, 1.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `estSourceDeck(k)` | — |
 | `cleDeSource(k)` | — |
 | `sourceExiste(k)` | — |
 | `nomDeSiege(k)` | — |
-| `signatureSource(k)` | Ce qu'est devenue la liste : la signature change dès qu'une carte, le commandant ou le format changent. |
+| `signatureDeck(cle)` | L'empreinte d'un deck de l'atelier, ouvert ou non : un résultat calculé contre une liste qui a changé depuis est périmé. |
+| `signatureSource(k)` | — |
 | `siegeSource(k)` | — |
 | `nomsDeSource(k)` | Les noms de cartes d'une source, commandant compris. |
-| `sourceVide(k)` | Une source vide ne se joue pas. |
-| `optionsSiege()` | Les choix d'un siège : les decks de l'atelier d'abord, externes compris, puis la bibliothèque. |
-
-## js/decksLies.js
-
-Les adversaires liés à Moxfield ou à Archidekt. *11 fonctions, 196 lignes, 8.7 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `lisLienDeck(url)` | Reconnaître l'adresse d'un deck publié. |
-| `lisJsonDeck(adresse)` | Lire une adresse, directement ou par le relais. |
-| `recupereDeckLie(lien)` | Récupérer un deck lié : la lecture directe, puis le relais s'il y en a un. |
-| `texteDeListe(liste, commandants)` | La liste en texte MTGO, pour que « Modifier » montre la liste en vigueur et que `parseMtgoList()` la relise telle quelle. |
-| `diffListes(avant, apres)` | Ce qui a changé entre deux listes, commandants compris. |
-| `appliqueDeckLie(cle, d)` | Verser dans un adversaire ce que le site a rendu. |
-| `relisAdversaireLie(cle)` | Relire un adversaire lié. Rend le différentiel, ou `null` en cas d'échec — l'échec est noté sur le lien, pour la pastille et pour ne pas réessayer en boucle. |
-| `annonceChangement(a, diff)` | — |
-| `verifieDecksLies(opts = {})` | Au démarrage : relire, un par un, les adversaires liés qu'on n'a pas vérifiés depuis un jour. |
-| `verifieUnDeckLie(cle)` | « Mettre à jour » sur un adversaire lié : la relecture, et si elle échoue, la fenêtre de l'adversaire en mode collage. |
-| `depuisQuand(t)` | Depuis quand un lien a été vérifié, en mots. |
-
-| Donnée | Rôle |
-|---|---|
-| `DELAI_VERIF_LIEN` | — |
-| `SITES_DECKS` | Les sites qu'on sait lire. Chacun dit où est son API, où est la page du deck, et comment lire sa réponse en `{nom, liste, commandants, maj}`. |
+| `sourceVide(k)` | Un deck vide ne se joue pas. |
+| `optionsSiege()` | Les choix d'un siège : tous les decks de l'atelier. |
 
 ## js/simPreparation.js
 
-D'un deck ou d'un adversaire à un siège de table. *13 fonctions, 138 lignes, 6.6 Ko.*
+D'un deck à un siège de table. *12 fonctions, 129 lignes, 6.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3644,9 +3604,8 @@ D'un deck ou d'un adversaire à un siège de table. *13 fonctions, 138 lignes, 6
 | `siegeDepuisFiches(nom, format, cartes, commandants, comportements)` | Un siège bâti sur les fiches qu'un invité a envoyées : l'hôte ne lit ni son `S` ni son archive, il joue les cartes telles que l'invité les connaît, avec les comportements que l'invité a… |
 | `fichesDeDeck(cle)` | Les fiches d'un deck de l'atelier, telles qu'un invité les envoie à l'hôte : la liste, le commandant, et les comportements écrits à la main pour ces cartes-là seulement. |
 | `fichesDeListe(nom, format, liste, commandants)` | Les fiches d'une liste `[[nom, quantité]]` et de ses commandants. |
-| `fichesDeSource(s)` | Les fiches d'une source du salon : un deck, un adversaire, ou ce qu'un invité a envoyé. |
+| `fichesDeSource(s)` | Les fiches d'une source du salon : un deck, ou ce qu'un invité a envoyé. |
 | `siegeDeck(cle)` | Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si le format en a un. |
-| `siegeAdversaire(cle)` | — |
 | `nomsManquants(cfg)` | Les noms qu'aucune source ne connaît encore, pour toute une table. |
 | `fiabilite(couvertures)` | La fiabilité d'un résultat, d'après la couverture des decks de la table : le deck testé compte double, puisque c'est lui qu'on juge. |
 | `signatureComportements()` | L'empreinte des comportements manuels qui touchent une table. |
@@ -3674,7 +3633,7 @@ Les résultats des lots, gardés et comparés. *9 fonctions, 67 lignes, 2.8 Ko.*
 | `ajouteLot(lot)` | — |
 | `supprimeLot(id)` | — |
 | `lotParId(id)` | — |
-| `lotPerime(lot)` | Un lot est périmé quand le deck, un adversaire, un comportement manuel ou le moteur ont changé depuis : ses chiffres restent lisibles, mais ses parties ne se rejouent plus à l'identique. |
+| `lotPerime(lot)` | Un lot est périmé quand un deck de la table, un comportement manuel ou le moteur ont changé depuis : ses chiffres restent lisibles, mais ses parties ne se rejouent plus à l'identique. |
 | `cleTable(lot)` | La table d'un lot, sans le deck testé : deux lots sur la même table, joués au même niveau, se comparent ; deux niveaux d'IA ne se mêlent jamais. |
 | `cleTableDe(nb, niveau, adversaires)` | — |
 | `classement(table)` | Le classement des decks sur une table : le dernier lot de chaque deck, du plus fort au plus faible. |
@@ -3710,16 +3669,13 @@ Un lot de parties, par tranches. *11 fonctions, 145 lignes, 6.6 Ko.*
 
 ## js/simSection.js
 
-La section « Simulation ». *9 fonctions, 162 lignes, 11 Ko.*
+La section « Simulation ». *6 fonctions, 110 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `couvertureTable(cfg)` | La couverture des decks de la table, recalculée seulement quand un deck, un adversaire, un comportement ou les sources de cartes ont changé. |
+| `couvertureTable(cfg)` | La couverture des decks de la table, recalculée seulement quand un deck, un autre deck de la table, un comportement ou les sources de cartes ont changé. |
 | `optionsHTML(paires, choisi)` | — |
 | `tableHTML(cfg)` | La table : les réglages d'un lot. |
-| `adversairesHTML()` | La bibliothèque d'adversaires. |
-| `pastilleLien(l)` | La pastille d'un adversaire lié : son site, sa dernière vérification, et ce qui a changé la dernière fois. |
-| `relaisHTML()` | Le relais, pour les sites qui refusent d'être lus depuis une autre page. |
 | `badgeCouverture(t, titre)` | Le badge d'un taux de couverture. |
 | `couvertureHTML(cfg)` | Ce que le moteur comprend des decks de la table. |
 | `renderK()` | — |
@@ -3752,7 +3708,7 @@ Ce que le moteur comprend de la collection. *8 fonctions, 130 lignes, 6.9 Ko.*
 
 ## js/forgeDepot.js
 
-Les scripts de cartes de Forge, téléchargés et gardés. *15 fonctions, 216 lignes, 9.8 Ko.*
+Les scripts de cartes de Forge, téléchargés et gardés. *15 fonctions, 215 lignes, 9.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3763,7 +3719,7 @@ Les scripts de cartes de Forge, téléchargés et gardés. *15 fonctions, 216 li
 | `forgeIncomplet()` | Reste-t-il des fichiers à télécharger ? |
 | `jsonGH(url)` | — |
 | `listeForge()` | La liste des fichiers, empreintes comprises, au dernier commit. |
-| `nomsPrioritaires()` | Les noms des cartes de vos decks et de vos adversaires. |
+| `nomsPrioritaires()` | Les noms des cartes de vos decks. |
 | `cheminsDeNoms(noms, liste)` | Les chemins de la liste qui portent ces noms : le nom de base exact, ou le début du nom d'un fichier à deux faces. |
 | `rangeForge()` | Ranger les paquets modifiés et l'index. |
 | `telechargeUn(ch, sha, chemin, essai = 0)` | — |
@@ -3781,7 +3737,7 @@ Les scripts de cartes de Forge, téléchargés et gardés. *15 fonctions, 216 li
 
 ## js/forgeVue.js
 
-Les cartes Forge sous les yeux. *11 fonctions, 174 lignes, 8.9 Ko.*
+Les cartes Forge sous les yeux. *11 fonctions, 172 lignes, 8.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3789,8 +3745,8 @@ Les cartes Forge sous les yeux. *11 fonctions, 174 lignes, 8.9 Ko.*
 | `etatForgeTexte()` | — |
 | `corpsForge()` | La section de la fenêtre des paramètres. |
 | `majForgeUI(change)` | Repeindre sur place ce qui montre Forge. `change` : les scripts ont changé, le tableau des manques aussi. |
-| `poidsPrioritaires()` | Les noms de vos decks et adversaires, chacun avec le nombre de listes où il figure : un élément qui manque à trois decks pèse trois fois. |
-| `manquesDecks()` | Ce qui manque pour vos cartes, recalculé quand un deck, un adversaire, les scripts ou le savoir du moteur ont changé. |
+| `poidsPrioritaires()` | Les noms de vos decks, chacun avec le nombre de listes où il figure : un élément qui manque à trois decks pèse trois fois. |
+| `manquesDecks()` | Ce qui manque pour vos cartes, recalculé quand un deck, les scripts ou le savoir du moteur ont changé. |
 | `mesureBaseForge()` | Toute la base, par tranches : trente-quatre mille scripts prennent deux ou trois secondes, qu'on rend au navigateur toutes les mille cartes. |
 | `libelleElement(e)` | — |
 | `listeManques(manques, unite)` | — |
@@ -4211,27 +4167,6 @@ Fenêtres d'export et d'effacement. *3 fonctions, 179 lignes, 9.8 Ko.*
 | `openWantsModal(tout)` | La fenêtre des wants sert deux comptes : celui du deck ouvert, depuis sa section, et celui de tous les decks, depuis la page « Decks ». |
 | `openWipeModal()` | Vider la collection, et elle seule. Ce bouton emportait aussi le deck, la réserve et l'étude : « Vider » d'une section ne doit vider que ce que cette section montre, comme celui du deck… |
 
-## js/fenAdversaire.js
-
-Ajouter ou modifier un adversaire. *10 fonctions, 168 lignes, 9.9 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `repliHTML(lien, echec)` | Le bloc du dernier recours : pourquoi la lecture a échoué, où trouver l'export. |
-| `etatLienHTML(l)` | Ce qu'on sait d'un lien : son site, sa dernière vérification, son dernier changement. |
-| `ouvreAdversaire(cle, opts = {})` | — |
-| `inconnuesHTML(noms)` | Les cartes qui posent problème, une par ligne : l'atelier ne peut pas deviner laquelle est la faute de frappe, le nom d'une autre langue ou la carte trop récente — c'est à celui qui… |
-| `majApercuAdversaire()` | Ce que la liste collée donne, à mesure qu'on la colle. |
-| `ouvreInconnues(cle)` | La fenêtre des cartes que ni l'atelier ni Scryfall n'ont retrouvées, après l'enregistrement : un toast tronqué à quatre noms ne dit pas lesquelles corriger. |
-| `adversaireDeLaFenetre(cle)` | L'adversaire tel que la fenêtre le décrit : lu sur le site quand on a donné un lien sans coller de liste, sinon tiré de la liste collée. |
-| `enregistreAdversaireFenetre(cle)` | — |
-| `supprimeAdversaire(cle)` | — |
-| `supprimeAdversaireOui(cle)` | — |
-
-| Donnée | Rôle |
-|---|---|
-| `FEN_ADV` | Ce que la fenêtre ouverte sait : la liste qu'elle montrait en s'ouvrant (pour savoir si l'on en a collé une autre), et l'échec d'une lecture. |
-
 ## js/fenComportement.js
 
 Décrire à la main ce que fait une carte. *6 fonctions, 84 lignes, 4.4 Ko.*
@@ -4332,7 +4267,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 46 lignes, 2.3 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 38 lignes, 1.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4512,7 +4447,7 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *15 fonctions, 199 lignes, 9.3 Ko.*
+La partie que ce navigateur héberge. *15 fonctions, 197 lignes, 9.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4521,7 +4456,7 @@ La partie que ce navigateur héberge. *15 fonctions, 199 lignes, 9.3 Ko.*
 | `vueTable(j)` | La vue d'un joueur, et qui la partie attend : celui qui a la priorité. |
 | `attendre(ms)` | — |
 | `signePublic(P)` | Ce qu'un humain verrait changer : la pile, le champ, les points de vie. |
-| `siegeDeSource(s)` | Le siège moteur d'une source choisie au salon : un deck de l'atelier, un adversaire de la bibliothèque, ou les fiches reçues d'un invité. |
+| `siegeDeSource(s)` | Le siège moteur d'une source choisie au salon : un deck de l'atelier, ou les fiches reçues d'un invité. |
 | `commenceTable()` | Commencer la partie que le salon décrit. Les cartes que personne ne connaît encore sont demandées à Scryfall avant. |
 | `boucleTable()` | La boucle d'aiguillage. Elle s'arrête quand un humain doit répondre, et reprend à sa réponse (`recoitReponse()`). |
 | `poseQuestion(q)` | Porter une question à son siège : l'interface de cet appareil, ou l'appareil de l'invité. |
@@ -4732,13 +4667,13 @@ Attaquer et bloquer, au doigt. *4 fonctions, 73 lignes, 3.8 Ko.*
 
 ## js/tableSalon.js
 
-Le salon : qui s'assoit à la table, avec quel deck. *13 fonctions, 145 lignes, 8.1 Ko.*
+Le salon : qui s'assoit à la table, avec quel deck. *13 fonctions, 141 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `sourcesDeDecks()` | — |
 | `nomDeSource(src)` | — |
-| `sourceDeMoi()` | Le deck de l'hôte, en source (`d:clé` ou `a:clé`) : n'importe quel deck de l'atelier, le sien ou un externe, ou un adversaire de la bibliothèque. |
+| `sourceDeMoi()` | Le deck de l'hôte, en source (`d:clé`) : n'importe quel deck de l'atelier, le sien ou un externe. |
 | `cleDeckDeMoi()` | La clé de deck que l'invité envoie : toujours un deck de l'atelier. |
 | `siegesDuSalon()` | Les sièges du salon, tels que `commenceTable()` les attend. |
 | `salonHTML()` | — |
@@ -4851,7 +4786,7 @@ Les gestes de la table interactive. *4 fonctions, 78 lignes, 4 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 311 lignes, 13 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 309 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|

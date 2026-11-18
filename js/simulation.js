@@ -36,7 +36,7 @@ function configSimulation() {
 /* Ce qui empêche de lancer, en une phrase, ou rien. */
 function obstacleSimulation(cfg) {
   if (!S.decks[cfg.deck] || !S.decks[cfg.deck].deck.size) return 'Le deck testé est vide.';
-  if (cfg.sieges.some(k => !k)) return 'Choisissez un deck ou un adversaire pour chaque siège.';
+  if (cfg.sieges.some(k => !k)) return 'Choisissez un deck pour chaque siège.';
   if (cfg.sieges.some(sourceVide)) return 'Un siège est occupé par un deck vide.';
   return '';
 }

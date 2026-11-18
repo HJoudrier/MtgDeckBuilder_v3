@@ -59,12 +59,10 @@ function signePublic(P) {
   return P.ver + '|' + P.pile.length + '|' + P.etape + '|' + P.joueurs.map(J => J.vie + ',' + J.main.length).join(';');
 }
 
-/* Le siège moteur d'une source choisie au salon : un deck de l'atelier, un
-   adversaire de la bibliothèque, ou les fiches reçues d'un invité. */
+/* Le siège moteur d'une source choisie au salon : un deck de l'atelier, ou les fiches reçues d'un invité. */
 function siegeDeSource(s) {
   if (s.fiches) return siegeDepuisFiches(s.nom, s.fiches.format, s.fiches.cartes, s.fiches.commandants, s.fiches.comportements);
-  const [genre, cle] = String(s.deck || '').split(':');
-  const siege = genre === 'a' ? siegeAdversaire(cle) : siegeDeck(cle);
+  const siege = siegeDeck(cleDeSource(s.deck));
   if (siege) siege.nom = s.nom || siege.nom;
   return siege;
 }

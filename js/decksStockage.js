@@ -88,3 +88,37 @@ function restaureDecks(d) {
     if (!deck.commander || !find(deck.commander)) deck.commander = null;
   });
 }
+
+/* La bibliothèque d'adversaires d'hier : chaque adversaire devient un deck externe, sous la même clé — les
+   sièges et les lots qui la nommaient la retrouvent. Un adversaire dont le nom est déjà celui d'un deck
+   n'est pas recréé : le deck existant prend sa place aux sièges. Les cartes que l'atelier ne connaît pas
+   entrent comme à l'import, « inconnues », à compléter. Le lien Moxfield ou Archidekt n'est pas repris :
+   la relecture automatique a disparu avec la bibliothèque. Rend le nombre de decks créés. */
+function migreAdversaires(brut) {
+  if (!brut || typeof brut !== 'object') return 0;
+  const parNom = new Map(Object.keys(S.decks).map(k => [S.decks[k].nom.trim().toLowerCase(), k]));
+  const renvoi = {};
+  let crees = 0;
+  Object.keys(brut).forEach(cle => {
+    const a = brut[cle];
+    if (!a || typeof a !== 'object' || !Array.isArray(a.liste)) return;
+    const nom = String(a.nom || 'Adversaire').trim();
+    const existant = parNom.get(nom.toLowerCase());
+    if (existant) { renvoi[cle] = existant; return; }
+    const carte = n => (find(n) || (() => { const c = registerCard(buildCard(n, '—', 'Inconnu', 0, '')); c.unknown = true; return c; })()).name;
+    const cmds = (Array.isArray(a.commandants) ? a.commandants : []).map(carte);
+    const deck = new Map();
+    [...a.liste.map(([n, q]) => [carte(n), q]), ...cmds.map(n => [n, 1])].forEach(([n, q]) => deck.set(n, (deck.get(n) || 0) + (q > 0 ? q : 1)));
+    S.decks[cle] = deckNeuf(nom, {format: a.format, deck: [...deck], commander: cmds[0] || null, externe: true, statut: 'archive'});
+    S.decks[cle].cree = typeof a.cree === 'number' ? a.cree : Date.now();
+    parNom.set(nom.toLowerCase(), cle);
+    renvoi[cle] = cle;
+    crees++;
+  });
+  /* Les sièges qui nommaient un adversaire nomment maintenant le deck. */
+  const siege = k => { const c = String(k || '').replace(/^a:/, ''); return renvoi[c] ? 'd:' + renvoi[c] : k; };
+  if (Array.isArray(S.simulation.sieges)) S.simulation.sieges = S.simulation.sieges.map(siege);
+  if (S.table && Array.isArray(S.table.sieges)) S.table.sieges.forEach(s => { if (/^a:/.test(s.deck || '')) s.deck = siege(s.deck); });
+  if (/^a:/.test(S.table.deck || '')) S.table.deck = siege(S.table.deck);
+  return crees;
+}

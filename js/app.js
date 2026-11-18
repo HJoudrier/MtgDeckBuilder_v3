@@ -68,7 +68,6 @@ document.addEventListener('input', ev => {
     return;
   }
   /* Les fenêtres du mode de jeu lisent la frappe sans rien ranger avant le bouton. */
-  if (t.dataset.advtexte !== undefined) return majApercuAdversaire();
   if (t.dataset.comportement !== undefined) return majApercuComportement();
   /* Un objectif de rôle, dans sa fenêtre : la frappe va au brouillon, et rien
      n'est appliqué avant le bouton. La fenêtre n'est pas réécrite — elle
@@ -125,7 +124,6 @@ document.addEventListener('input', ev => {
   if (t.dataset.sim) return reglageSimulation(t);
   if (t.dataset.tsalon) return reglageSalon(t);
   if (t.dataset.arret) return caseArret(t);
-  if (t.dataset.advformat !== undefined) return majApercuAdversaire();
 });
 
 document.addEventListener('change', ev => {
@@ -299,7 +297,7 @@ function demarrer() {
   demarrerCatalogue();
   /* Le retour de connexion que l'adresse peut porter, puis un tirage de fond. */
   nuageDemarrer();
-  verifieDecksLies(); demarreForge();
+  demarreForge();
   if (!rejoindreDepuisAdresse()) chercheTableSauvee();
 }
 
