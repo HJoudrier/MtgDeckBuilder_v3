@@ -38,7 +38,7 @@ function statiqueTenable(t) {
      dessus de la bibliothèque (js/jeuPermis.js). */
   if (t.MayPlay) {
     if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand)(,(Exile|Graveyard|Library|Hand))*$/.test(t.AffectedZone || '')) return false;
-    if (t.MayPlayAltManaCost || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
+    if ((t.MayPlayAltManaCost && !/^(0|PayLife<ConvertedManaCost>)$/.test(t.MayPlayAltManaCost)) || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
     /* Depuis la main, la permission ne sert que si elle rend le sort gratuit. */
     if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True') return false;
     if (t.RaiseCost && !coutForge(t.RaiseCost)) return false;
@@ -53,7 +53,7 @@ function statiqueTenable(t) {
   if (t.Mode === 'OptionalCost') return optionnelTenable(t);
   if (t.Mode === 'OptionalAttackCost') return exertTenable(t);
   if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t);
-  if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip')) return false;
+  if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip') && !capacitesLisibles(t)) return false;
   if (t.Mode === 'MustAttack' && t.MustAttack && !/^(Player\.Other|Player|Opponent)$/.test(t.MustAttack)) return false;
   if (t.RemoveType && !typesForge(t.RemoveType).types.length) return false;
   if (t.AddType && /ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType') return false;
@@ -62,9 +62,9 @@ function statiqueTenable(t) {
   if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl)$/.test(x.trim()))) return false;
   if (t.UnlessDefender && !DEFENSEUR_PROPRIETE.test(t.UnlessDefender)) return false;
   if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z])$/.test(t.Cost || '')) return false;
-  if (t.Mode === 'CastWithFlash' && t.ValidSA && t.ValidSA !== 'Spell') return false;
+  if (t.Mode === 'CastWithFlash' && t.ValidSA && !flashLisible(t.ValidSA)) return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
-  if (t.Mode === 'AlternativeCost') return /^(All|Hand)$/.test(t.EffectZone || 'All') && (t.ValidSA === 'Spell.Self' || (t.ValidSA === 'Spell' && t.ValidCard === 'Card.Self')) && !!coutForge(t.Cost);
+  if (t.Mode === 'AlternativeCost') return alternativeLisible(t);
   /* Les Incarnations : « as long as this card is in your graveyard… ». */
   const cimetiere = t.EffectZone === 'Graveyard' && t.Mode === 'Continuous' && t.Affected && t.Affected !== 'Card.Self';
   /* Une caractéristique qui se définit dans toutes les zones : seul le champ compte ici. */
@@ -179,6 +179,8 @@ function coutsForge(P, j, o) {
     if (t.Activator === 'You' && j !== src.ctrl) continue;
     if (t.Activator === 'Opponent' && j === src.ctrl) continue;
     if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id)) continue;
+    /* « The first creature spell you cast each turn » : aucun sort pareil lancé avant. */
+    if (t.OnlyFirstSpell === 'True' && P.joueurs[j].sortsTour.some(d => !t.ValidCard || forgeValideDef(d, t.ValidCard, src.ctrl, j))) continue;
     const env = envStatique(src, s);
     if (!conditionForge(P, t, env)) continue;
     const n = forgeNombre(P, t.Amount || 1, env);

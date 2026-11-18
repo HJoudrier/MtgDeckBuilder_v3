@@ -152,7 +152,7 @@ function actionsLegales(P, j) {
         if (!effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
         r.push({k: 'activer', id, i});
       } else if (k.genre === 'loyaute') {
-        if (!rituel || P.unefois.has(id + '|loyaute')) return;
+        if (!(rituel || loyauteEclair(P, j, o)) || P.unefois.has(id + '|loyaute')) return;
         if (typeof k.delta === 'number' && k.delta < 0 && (o.marq.loyaute || 0) < -k.delta) return;
         if (!effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
         r.push({k: 'activer', id, i});

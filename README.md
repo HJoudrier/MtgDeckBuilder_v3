@@ -132,6 +132,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeCoutsC.js    ce que les statiques font au coût de jouer : vie pour mana, autre coût accordé, capacités moins chères, flash
   forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
@@ -1571,6 +1572,23 @@ en jouant.
   (`statiquesEnJeu()`), pour les réductions et hausses de coût ;
 - **`Exclude$`** de `ChooseColor` (les dix terrains Thriving) ; **`Proliferate | Amount$`** et le déclencheur
   `Proliferate` (Ezuri).
+
+**Lot F65 : permissions de jeu et coûts alternatifs** (`js/forgeCoutsC.js`). Seize cartes de plus :
+- **`MayPlayAltManaCost$ PayLife<ConvertedManaCost>`** (Bolas's Citadel, Valgavoth, Nashi, Gwenom, Inside Information) :
+  `coutPermis()` rend un coût de mana vide et `autrePermis()` y ajoute la vie égale à la valeur de mana ; `$ 0`
+  rend le sort gratuit. Les autres valeurs (`PayEnergy`, `Waterbend`, un mana précis) restent refusées ;
+- **`OnlyFirstSpell$`** (Conduit of Ruin, Serah Farron) : la réduction ne vaut que si aucun sort de même genre n'a
+  été lancé ce tour ;
+- **`AlternativeCost` accordé par un permanent** (Fist of Suns, Rooftop Storm, Leyline of Mutation) : une variante
+  `alt1xx` de plus par statique qui convient (`variantesEtendues()`), avec `CheckSecondSVar$` (Submerge, Mogg
+  Salvage : deux conditions) ;
+- **`ReduceCost` / `RaiseCost` des capacités** (Silver-Fur Master, Fluctuator, Blossoming Tortoise, Tithe Taker,
+  Power Artifact) : `capaciteReduite()` ajoute ce que disent les statiques du coût de mana de l'activation, avec
+  `MinMana$` ; le cycle et le ninjutsu se reconnaissent à leur capacité ;
+- **flash** : les capacités de loyauté de Teferi, Master of Time et de The Wandering Emperor s'activent quand on
+  pourrait lancer un éphémère (`loyauteEclair()`) ; `Spell.IsTargeting Valid …` (Timely Ward, Flash Photography)
+  donne le flash dès qu'une cible de ce genre existe, **sans vérifier que la cible choisie en est une** —
+  simplification annoncée. `flashAccorde()` ne prend plus une statique de loyauté pour un flash de sort.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

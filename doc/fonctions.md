@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1750 fonctions**, 257 modules, 1838 Ko de JavaScript.
+**1756 fonctions**, 258 modules, 1846 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -101,7 +101,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPioche.js`](#jsjeupiochejs) | La pioche remplacée, Dredge, Miracle | 7 | 126 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 147 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 127 |
-| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 224 |
+| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 226 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 282 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
@@ -130,6 +130,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursD.js`](#jsforgedeclencheursdjs) | Des déclencheurs de plus | 2 | 94 |
 | [`forgeRadiation.js`](#jsforgeradiationjs) | Les marqueurs de radiation | 0 | 44 |
 | [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
+| [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
 | [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 56 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
@@ -1871,7 +1872,7 @@ Les déclencheurs de Forge, suite : engager,. *6 fonctions, 127 lignes, 8.1 Ko.*
 
 ## js/forgeStatiques.js
 
-Les capacités statiques de Forge. *10 fonctions, 224 lignes, 13 Ko.*
+Les capacités statiques de Forge. *10 fonctions, 226 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2339,6 +2340,19 @@ L'Anneau vous tente, aux quatre niveaux. *2 fonctions, 51 lignes, 2.8 Ko.*
 |---|---|
 | `NIVEAUX_ANNEAU` | — |
 | `ANNEAU_DEFS` | — |
+
+## js/forgeCoutsC.js
+
+Ce que les statiques font au coût de jouer et au. *6 fonctions, 142 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `vieEgaleMV(x)` | —— Jouer depuis une autre zone, pour de la vie ou pour rien ——————— |
+| `alternativeLisible(t)` | Le coût alternatif d'une statique est-il de ceux qu'on sait jouer ? La carte qui se le donne à elle-même, ou un permanent qui l'offre aux sorts de son contrôleur (`ValidSA$ Spell`,… |
+| `capacitesLisibles(t)` | La statique de coût vise-t-elle des capacités que `viseCapacite()` sait reconnaître ? |
+| `viseCapacite(P, t, src, j, o, k)` | Ce que la statique dit d'une capacité : `Type$ Ability` pour celles du permanent qu'elle vise, `ValidSpell$ Activated.Cycling` pour une famille. |
+| `flashLisible(v)` | Les formes de `ValidSA$` d'un `CastWithFlash` qu'on sait lire. |
+| `loyauteEclair(P, j, o)` | Teferi, Master of Time : ses capacités de loyauté, quand on pourrait lancer un éphémère. |
 
 ## js/forgeProtections.js
 

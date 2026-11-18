@@ -120,6 +120,7 @@
   "forgeDeclencheursD.js",
   "forgeRadiation.js",
   "forgeAnneau.js",
+  "forgeCoutsC.js",
   "forgeProtections.js",
   "forgeFiltresC.js",
   "forgeHideaway.js",
@@ -3176,6 +3177,7 @@
     "defJetonCreature",
     "definitionDepuisScript",
     "filtresMana",
+    "forgeCoutsC.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "jetonSimple",
@@ -4069,6 +4071,7 @@
     "forgeAuras.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
     "forgeCout.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
@@ -4460,6 +4463,7 @@
     "forgeActivations.js (chargement)",
     "forgeAuras.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeDeclenche",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
@@ -6556,6 +6560,7 @@
    "appeleePar": [
     "coutPermis",
     "forgeAuras.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -6668,6 +6673,7 @@
     "exilLancable",
     "flashAccorde",
     "lancableDuCimetiere",
+    "loyauteEclair",
     "obj",
     "planPaiement",
     "retournable",
@@ -7014,6 +7020,7 @@
    "appeleePar": [
     "coutDeJeu",
     "eveilForge",
+    "forgeCoutsC.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeModes.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -7038,6 +7045,7 @@
     "autrePermis",
     "executeForge",
     "forgeChoix.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "hausseDeCout",
     "motCleForge",
     "motCleLancement",
@@ -7066,6 +7074,7 @@
     "coutStrive",
     "defRoomOuverte",
     "epissures",
+    "forgeCoutsC.js (chargement)",
     "forgeManaB.js (chargement)",
     "hausseDeCout",
     "jeuVariantes.js (chargement)",
@@ -7088,6 +7097,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "autrePermis",
+    "forgeCoutsC.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "hausseDeCout",
     "sortPermanentForge",
@@ -7366,6 +7376,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeCoutsC.js (chargement)",
     "variantesSort"
    ]
   },
@@ -8370,6 +8381,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeCoutsC.js (chargement)",
     "variantesSort"
    ]
   },
@@ -8386,6 +8398,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeCoutsC.js (chargement)",
     "variantesSort"
    ]
   },
@@ -9522,6 +9535,7 @@
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursD.js (chargement)",
     "forgeDefinis",
@@ -9544,6 +9558,7 @@
     "forgeRemplacementsD.js (chargement)",
     "forgeValideDef",
     "fouilleForge",
+    "loyauteEclair",
     "manaPermis",
     "manaReflete",
     "metEnJeu",
@@ -9560,6 +9575,7 @@
     "sourceCiblante",
     "sourceDeMarqueurs",
     "valideOuRien",
+    "viseCapacite",
     "viseForge"
    ]
   },
@@ -9629,6 +9645,7 @@
     "entreeDegageeParAutre",
     "entreeEngageeParAutre",
     "flashAccorde",
+    "forgeCoutsC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeExpression",
@@ -9753,6 +9770,7 @@
     "forgeChoix.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
     "forgeCopies.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeDegagements.js (chargement)",
     "forgeDesignes.js (chargement)",
     "forgeEffetsA.js (chargement)",
@@ -10439,6 +10457,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "alternativeLisible",
     "autrePermis",
     "capaciteForge",
     "coutDuMode",
@@ -10448,6 +10467,7 @@
     "effetForge",
     "executeForge",
     "forgeChoix.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeStatiquesB.js (chargement)",
     "hausseDeCout",
@@ -10546,6 +10566,7 @@
     "attaquantsDeclares",
     "conditionForge",
     "forgeChoixMultiples.js (chargement)",
+    "forgeCoutsC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeExpression",
@@ -10578,6 +10599,7 @@
     "declencheursEtat",
     "degageAussi",
     "executeForge",
+    "forgeCoutsC.js (chargement)",
     "forgeDeclenche",
     "forgeDeclencheursC.js (chargement)",
     "forgeEffetsG.js (chargement)",
@@ -13009,8 +13031,11 @@
    "ligne": 36,
    "chargement": false,
    "appelle": [
+    "alternativeLisible",
+    "capacitesLisibles",
     "couleursMots",
     "coutForge",
+    "flashLisible",
     "horsChampTenable",
     "typesForge",
     "zoneChamp"
@@ -13054,6 +13079,7 @@
     "declenchementsEnPlus",
     "degageAussi",
     "flashPossible",
+    "forgeCoutsC.js (chargement)",
     "forgeStatiques.js (chargement)",
     "manaGarde",
     "reductionParCibles",
@@ -13063,6 +13089,7 @@
     "tailleMainMax",
     "taxeAttaque",
     "terrainsParTour",
+    "viseCapacite",
     "viseForge"
    ]
   },
@@ -13125,7 +13152,7 @@
   {
    "nom": "reductionParCibles",
    "fichier": "forgeStatiques.js",
-   "ligne": 193,
+   "ligne": 195,
    "chargement": false,
    "appelle": [
     "conditionForge",
@@ -13146,7 +13173,7 @@
   {
    "nom": "reductionPossible",
    "fichier": "forgeStatiques.js",
-   "ligne": 212,
+   "ligne": 214,
    "chargement": false,
    "appelle": [
     "envStatique",
@@ -13192,6 +13219,7 @@
     "declenchementsEnPlus",
     "degageAussi",
     "flashPossible",
+    "forgeCoutsC.js (chargement)",
     "goadStatique",
     "manaGarde",
     "statiqueQui",
@@ -13223,7 +13251,9 @@
     "doitAttaquer",
     "doitBloquer",
     "flashAccorde",
+    "forgeCoutsC.js (chargement)",
     "joueurProtegeTout",
+    "loyauteEclair",
     "preventionInterdite",
     "sansDegatsDeCombat",
     "sansRegenerationStat",
@@ -13248,7 +13278,9 @@
     "cibleInterdite",
     "flashAccorde",
     "flashPossible",
+    "forgeCoutsC.js (chargement)",
     "joueurProtegeTout",
+    "loyauteEclair",
     "manaGarde",
     "sortInterdit",
     "terrainsInterdits",
@@ -13330,7 +13362,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "actionsLegales"
+    "actionsLegales",
+    "forgeCoutsC.js (chargement)"
    ]
   },
   {
@@ -14522,6 +14555,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "coutDeJeu",
+    "forgeCoutsC.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeModes.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -16572,6 +16606,113 @@
   },
   {
    "nom": "chargement du module",
+   "fichier": "forgeCoutsC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "autresCout",
+    "conditionForge",
+    "coutComplet",
+    "coutForge",
+    "coutManaVide",
+    "coutSort",
+    "envStatique",
+    "forgeNombre",
+    "forgeSait",
+    "forgeValideDef",
+    "forgeValideObjet",
+    "fusionAutres",
+    "joueurStatique",
+    "manaSeul",
+    "moinsMana",
+    "obj",
+    "seuilForge",
+    "sommeMana",
+    "statiqueQui",
+    "statiquesMode",
+    "viseCapacite"
+   ],
+   "appelleDiffere": [
+    "autrePermis",
+    "capaciteReduite",
+    "coutPermis",
+    "flashAccorde",
+    "variantesEtendues"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "alternativeLisible",
+   "fichier": "forgeCoutsC.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [
+    "coutForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "statiqueTenable"
+   ]
+  },
+  {
+   "nom": "capacitesLisibles",
+   "fichier": "forgeCoutsC.js",
+   "ligne": 77,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "statiqueTenable"
+   ]
+  },
+  {
+   "nom": "viseCapacite",
+   "fichier": "forgeCoutsC.js",
+   "ligne": 84,
+   "chargement": false,
+   "appelle": [
+    "envStatique",
+    "forgeValideObjet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeCoutsC.js (chargement)"
+   ]
+  },
+  {
+   "nom": "flashLisible",
+   "fichier": "forgeCoutsC.js",
+   "ligne": 122,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "statiqueTenable"
+   ]
+  },
+  {
+   "nom": "loyauteEclair",
+   "fichier": "forgeCoutsC.js",
+   "ligne": 136,
+   "chargement": false,
+   "appelle": [
+    "forgeValideObjet",
+    "joueurStatique",
+    "statiqueQui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "actionsLegales"
+   ]
+  },
+  {
+   "nom": "chargement du module",
    "fichier": "forgeProtections.js",
    "ligne": null,
    "chargement": true,
@@ -16757,7 +16898,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "capaciteReduite",
-    "forgeActivations.js (chargement)"
+    "forgeActivations.js (chargement)",
+    "forgeCoutsC.js (chargement)"
    ]
   },
   {
@@ -16789,7 +16931,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "actionsLegales",
-    "activeCapacite"
+    "activeCapacite",
+    "forgeCoutsC.js (chargement)"
    ]
   },
   {
