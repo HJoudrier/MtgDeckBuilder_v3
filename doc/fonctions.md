@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1730 fonctions**, 249 modules, 1800 Ko de JavaScript.
+**1731 fonctions**, 249 modules, 1801 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -35,13 +35,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 9 | 143 |
 | [`oracleTexte.js`](#jsoracletextejs) | Préparer le texte oracle pour le compilateur | 7 | 122 |
 | [`oracleMotsCles.js`](#jsoraclemotsclesjs) | Les mots-clés que le moteur sait jouer | 3 | 75 |
-| [`oracleCouts.js`](#jsoraclecoutsjs) | Lire un coût : celui d'un sort, celui d'une capacité | 4 | 81 |
+| [`oracleCouts.js`](#jsoraclecoutsjs) | Lire un coût : celui d'un sort, celui d'une capacité | 4 | 82 |
 | [`oracleCibles.js`](#jsoracleciblesjs) | Une seule grammaire pour désigner des objets | 6 | 172 |
 | [`oracleEffetsA.js`](#jsoracleeffetsajs) | Les motifs d'effet : dégâts, vie, cartes, retraits | 3 | 140 |
-| [`oracleEffetsB.js`](#jsoracleeffetsbjs) | Les motifs d'effet : jetons, marqueurs, pompes, | 4 | 198 |
+| [`oracleEffetsB.js`](#jsoracleeffetsbjs) | Les motifs d'effet : jetons, marqueurs, pompes, | 4 | 206 |
 | [`oracleDeclencheurs.js`](#jsoracledeclencheursjs) | Lire ce qui déclenche une capacité | 4 | 88 |
 | [`oracleStatiques.js`](#jsoraclestatiquesjs) | Lire une capacité statique, et la façon d'entrer | 4 | 85 |
-| [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 143 |
+| [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 149 |
 | [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 12 | 191 |
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 174 |
@@ -94,7 +94,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
 | [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 297 |
-| [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 7 | 276 |
+| [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 8 | 283 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
 | [`forgeRemplacementsC.js`](#jsforgeremplacementscjs) | Les dégâts remplacés | 12 | 206 |
@@ -725,7 +725,7 @@ Les mots-clés que le moteur sait jouer. *3 fonctions, 75 lignes, 3.4 Ko.*
 
 ## js/oracleCouts.js
 
-Lire un coût : celui d'un sort, celui d'une capacité. *4 fonctions, 81 lignes, 3.8 Ko.*
+Lire un coût : celui d'un sort, celui d'une capacité. *4 fonctions, 82 lignes, 3.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -770,7 +770,7 @@ Les motifs d'effet : dégâts, vie, cartes, retraits. *3 fonctions, 140 lignes, 
 
 ## js/oracleEffetsB.js
 
-Les motifs d'effet : jetons, marqueurs, pompes,. *4 fonctions, 198 lignes, 11 Ko.*
+Les motifs d'effet : jetons, marqueurs, pompes,. *4 fonctions, 206 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -816,7 +816,7 @@ Lire une capacité statique, et la façon d'entrer. *4 fonctions, 85 lignes, 4.2
 
 ## js/oracleLignes.js
 
-Ranger chaque ligne d'une carte. *7 fonctions, 143 lignes, 6.5 Ko.*
+Ranger chaque ligne d'une carte. *7 fonctions, 149 lignes, 6.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1720,7 +1720,7 @@ Les mécaniques de partie de Forge. *10 fonctions, 297 lignes, 19 Ko.*
 
 ## js/forgeEffetsH.js
 
-Les marqueurs qu'on double ou déplace, le nom. *7 fonctions, 276 lignes, 18 Ko.*
+Les marqueurs qu'on double ou déplace, le nom. *8 fonctions, 283 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1731,6 +1731,7 @@ Les marqueurs qu'on double ou déplace, le nom. *7 fonctions, 276 lignes, 18 Ko.
 | `attaquantImpose(P, b, atts)` | L'attaquant qu'une créature doit bloquer si elle le peut : celui qu'un effet lui a imposé, sinon — « blocks each combat if able » — le premier qu'elle peut bloquer. |
 | `defJetonCreature(nom, sousType, f, e, couleurs)` | Un jeton créature simple, fait par le moteur plutôt que lu d'un script. |
 | `memeCible(a, b)` | —— Détourner un sort ——————————————————————————————————————————— |
+| `ajoutePhase(P, t, n)` | « After this main phase, there is an additional combat phase followed by an additional main phase » : les étapes s'insèrent dans la file du tour (js/jeuTour.js `tour()`), après la phase… |
 
 | Donnée | Rôle |
 |---|---|

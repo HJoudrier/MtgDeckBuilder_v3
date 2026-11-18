@@ -3148,7 +3148,7 @@
   {
    "nom": "coutActivation",
    "fichier": "oracleCouts.js",
-   "ligne": 71,
+   "ligne": 72,
    "chargement": false,
    "appelle": [
     "coutManaVide",
@@ -3363,7 +3363,7 @@
   {
    "nom": "compileProposition",
    "fichier": "oracleEffetsB.js",
-   "ligne": 129,
+   "ligne": 137,
    "chargement": false,
    "appelle": [
     "compileEffet",
@@ -3381,7 +3381,7 @@
   {
    "nom": "remplaceX",
    "fichier": "oracleEffetsB.js",
-   "ligne": 170,
+   "ligne": 178,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -3393,7 +3393,7 @@
   {
    "nom": "compileEffet",
    "fichier": "oracleEffetsB.js",
-   "ligne": 180,
+   "ligne": 188,
    "chargement": false,
    "appelle": [
     "compileProposition",
@@ -3620,7 +3620,7 @@
   {
    "nom": "compileLigne",
    "fichier": "oracleLignes.js",
-   "ligne": 101,
+   "ligne": 107,
    "chargement": false,
    "appelle": [
     "compileActivee",
@@ -3641,7 +3641,7 @@
   {
    "nom": "compileLignes",
    "fichier": "oracleLignes.js",
-   "ligne": 131,
+   "ligne": 137,
    "chargement": false,
    "appelle": [
     "compileLigne",
@@ -4711,6 +4711,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "activeCapacite",
+    "ajoutePhase",
     "auraOrpheline",
     "cloturePartie",
     "complote",
@@ -11797,6 +11798,7 @@
    "ligne": null,
    "chargement": true,
    "appelle": [
+    "ajoutePhase",
     "champDe",
     "choisitCartes",
     "choisitUn",
@@ -11917,6 +11919,20 @@
    "appeleePar": [
     "forgeEffetsH.js (chargement)",
     "forgeMotsClesD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "ajoutePhase",
+   "fichier": "forgeEffetsH.js",
+   "ligne": 263,
+   "chargement": false,
+   "appelle": [
+    "jn"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsH.js (chargement)"
    ]
   },
   {

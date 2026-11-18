@@ -864,6 +864,7 @@ digraph appels {
     "detenu" [label="detenu", fillcolor="#6da88c33", color="#6da88c"];
     "attaquantImpose" [label="attaquantImpose", fillcolor="#6da88c33", color="#6da88c"];
     "defJetonCreature" [label="defJetonCreature", fillcolor="#6da88c33", color="#6da88c"];
+    "ajoutePhase" [label="ajoutePhase", fillcolor="#6da88c33", color="#6da88c"];
   }
   subgraph "cluster_84" {
     label="js/forgeEntrees.js"; fontsize=13; style="rounded,filled"; color="#a86d8a"; fillcolor="#a86d8a1a"; penwidth=1.4;
@@ -4233,6 +4234,7 @@ digraph appels {
   "attaquantImpose" -> "obj" [color="#6da88c99"];
   "attaquantImpose" -> "doitBloquer" [color="#6da88c99"];
   "defJetonCreature" -> "coutManaVide" [color="#6da88c99"];
+  "ajoutePhase" -> "jn" [color="#6da88c99"];
   "forgeEffetsH.js (chargement)" -> "forgeEffet" [color="#6da88c99"];
   "forgeEffetsH.js (chargement)" -> "forgeNombre" [color="#6da88c99"];
   "forgeEffetsH.js (chargement)" -> "ciblesForge" [color="#6da88c99"];
@@ -4264,6 +4266,7 @@ digraph appels {
   "forgeEffetsH.js (chargement)" -> "pioche" [color="#6da88c99"];
   "forgeEffetsH.js (chargement)" -> "ciblesLegales" [color="#6da88c99"];
   "forgeEffetsH.js (chargement)" -> "question" [color="#6da88c99"];
+  "forgeEffetsH.js (chargement)" -> "ajoutePhase" [color="#6da88c99"];
   "entreesAutres" -> "obj" [color="#a86d8a99"];
   "entreesAutres" -> "forgeValideObjet" [color="#a86d8a99"];
   "entreesAutres" -> "question" [color="#a86d8a99"];

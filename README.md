@@ -1451,6 +1451,20 @@ blocked if able.`, était jetée sans bruit et la carte restait partielle.
 - **l'IA** n'activait jamais une pompe hors combat. Une pompe qui impose le blocage vaut maintenant 3 en
   première principale ou au début du combat, pour une créature dégagée qui peut attaquer.
 
+**Les mêmes deux cartes, lues dans l'oracle** (suite du lot F59). Une fiche sans script Forge — l'archive
+n'est pas téléchargée, ou la carte n'y est pas — passe par le compilateur d'oracle, et *Reinforced Ronin* y
+était **injouable** : la ligne « Channel — {1}{R}, Discard ~ : Draw a card » n'était pas lue, et le mot
+« discard » la faisait classer comme contrepartie. Le script Forge ne suffit donc pas à juger une carte :
+le banc doit essayer les deux lectures (`definitionDe()` garde la mieux comprise).
+- **Channel** : `compileActivee()` ôte l'étiquette et lit le reste comme un coût d'activation ; `discard ~`
+  (`defausseSoi`) est un morceau de coût, et la capacité s'active depuis la main (`zone: 'main'`), comme un
+  cycle. Un `discard ~` sans « Channel » reste une capacité du champ, que `coutAutrePossible()` ne laisse jamais
+  payer ;
+- **Anzrag** : « must be blocked this turn if able » est une pompe sans bonus qui pose `doitEtreBloque`
+  (`op.impose`, lu par `OPS.pompe`), et « after this combat phase, there is an additional combat phase » une
+  opération `phaseSupp` qui partage `ajoutePhase()` avec le `AddPhase` de Forge. Les deux lectures — Forge et
+  oracle — jouent la carte à l'identique ; les 127 cartes de la base livrée gardent la même couverture.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1696 fonctions** dans 249 modules, **5345 appels** relevés.
+**1697 fonctions** dans 249 modules, **5347 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1126,7 +1126,7 @@ Appelle : `coutMana()` *(oracleCouts.js)*, `lisDescripteur()` *(oracleCibles.js)
 
 Appelée par : `coutActivation`
 
-### `coutActivation()` — ligne 71
+### `coutActivation()` — ligne 72
 
 Appelle : `coutManaVide()` *(oracleCouts.js)*, `morceauCout()` *(oracleCouts.js)*
 
@@ -1210,19 +1210,19 @@ Appelle : `lisQuantite()` *(oracleEffetsA.js)*
 
 Appelée par : `oracleEffetsB.js (chargement)`
 
-### `compileProposition()` — ligne 129
+### `compileProposition()` — ligne 137
 
 Appelle : `compileEffet()` *(oracleEffetsB.js)*, `coutMana()` *(oracleCouts.js)*, `lisDescripteur()` *(oracleCibles.js)*, `lisReference()` *(oracleCibles.js)*
 
 Appelée par : `compileEffet`, `oracleEffetsB.js (chargement)`
 
-### `remplaceX()` — ligne 170
+### `remplaceX()` — ligne 178
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `compileEffet`
 
-### `compileEffet()` — ligne 180
+### `compileEffet()` — ligne 188
 
 Appelle : `compileProposition()` *(oracleEffetsB.js)*, `lisQuantite()` *(oracleEffetsA.js)*, `phrasesOracle()` *(oracleTexte.js)*, `propositionsOracle()` *(oracleTexte.js)*, `remplaceX()` *(oracleEffetsB.js)*
 
@@ -1320,13 +1320,13 @@ Appelle : `compileEffetModal()` *(oracleLignes.js)*, `contexteOracle()` *(oracle
 
 Appelée par : `compileLigne`
 
-### `compileLigne()` — ligne 101
+### `compileLigne()` — ligne 107
 
 Appelle : `compileActivee()` *(oracleLignes.js)*, `compileDeclenchee()` *(oracleLignes.js)*, `compileEffetModal()` *(oracleLignes.js)*, `coutActivation()` *(oracleCouts.js)*, `ligneMotsCles()` *(oracleMotsCles.js)*, `lisDescripteur()` *(oracleCibles.js)*, `lisEntree()` *(oracleStatiques.js)*, `lisStatique()` *(oracleStatiques.js)*
 
 Appelée par : `compileLignes`
 
-### `compileLignes()` — ligne 131
+### `compileLignes()` — ligne 137
 
 Appelle : `compileLigne()` *(oracleLignes.js)*, `contexteOracle()` *(oracleCibles.js)*
 
@@ -1608,7 +1608,7 @@ Appelée par : `activeCapacite`, `creeJetonsForge`, `declareAttaquants`, `declar
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `activeCapacite`, `auraOrpheline`, `cloturePartie`, `complote`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeCopies.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `miracle`, `mulligans`, `piocheRemplacee`, `prendInitiative`, `presage`, `resoudre`, `retourneFace`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vitesseMonte`
+Appelée par : `activeCapacite`, `ajoutePhase`, `auraOrpheline`, `cloturePartie`, `complote`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeCopies.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `miracle`, `mulligans`, `piocheRemplacee`, `prendInitiative`, `presage`, `resoudre`, `retourneFace`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vitesseMonte`
 
 ### `nomObj()` — ligne 167
 
@@ -3778,7 +3778,7 @@ Appelée par : `forgeEffetsG.js (chargement)`
 
 ### `chargement du module`
 
-Appelle : `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `choisitUn()` *(forgeChoix.js)*, `choixDe()` *(forgeChoix.js)*, `ciblesForge()` *(forgeDefini.js)*, `ciblesLegales()` *(jeuCibles.js)*, `couleursProtection()` *(forgeEffetsG.js)*, `creeJetonsForge()` *(forgeEffetsB.js)*, `defJetonCreature()` *(forgeEffetsH.js)*, `defausseCarte()` *(jeuDurees.js)*, `estType()` *(jeuCaracteristiques.js)*, `etendEffet()` *(forgeEffetsF.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideObjet()` *(forgeValide.js)*, `gainsProtection()` *(forgeEffetsG.js)*, `genreMarqueur()` *(forgeDescripteurs.js)*, `genresMarqueurs()` *(forgeEffetsH.js)*, `infligeDegats()` *(jeuOpsA.js)*, `jn()` *(jeuEtat.js)*, `joueursForge()` *(forgeDefini.js)*, `nombreIA()` *(forgeEffetsA.js)*, `nomsDesignables()` *(forgeEffetsH.js)*, `obj()` *(jeuEtat.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `pioche()` *(jeuPioche.js)*, `poseMarqueurs()` *(jeuGestes.js)*, `question()` *(jeuEtat.js)*, `surChampForge()` *(forgeEffetsH.js)*
+Appelle : `ajoutePhase()` *(forgeEffetsH.js)*, `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `choisitUn()` *(forgeChoix.js)*, `choixDe()` *(forgeChoix.js)*, `ciblesForge()` *(forgeDefini.js)*, `ciblesLegales()` *(jeuCibles.js)*, `couleursProtection()` *(forgeEffetsG.js)*, `creeJetonsForge()` *(forgeEffetsB.js)*, `defJetonCreature()` *(forgeEffetsH.js)*, `defausseCarte()` *(jeuDurees.js)*, `estType()` *(jeuCaracteristiques.js)*, `etendEffet()` *(forgeEffetsF.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideObjet()` *(forgeValide.js)*, `gainsProtection()` *(forgeEffetsG.js)*, `genreMarqueur()` *(forgeDescripteurs.js)*, `genresMarqueurs()` *(forgeEffetsH.js)*, `infligeDegats()` *(jeuOpsA.js)*, `jn()` *(jeuEtat.js)*, `joueursForge()` *(forgeDefini.js)*, `nombreIA()` *(forgeEffetsA.js)*, `nomsDesignables()` *(forgeEffetsH.js)*, `obj()` *(jeuEtat.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `pioche()` *(jeuPioche.js)*, `poseMarqueurs()` *(jeuGestes.js)*, `question()` *(jeuEtat.js)*, `surChampForge()` *(forgeEffetsH.js)*
 
 ### `surChampForge()` — ligne 14
 
@@ -3815,6 +3815,12 @@ Appelée par : `declareBloqueurs`
 Appelle : `coutManaVide()` *(oracleCouts.js)*
 
 Appelée par : `forgeEffetsH.js (chargement)`, `forgeMotsClesD.js (chargement)`
+
+### `ajoutePhase()` — ligne 263
+
+Appelle : `jn()` *(jeuEtat.js)*
+
+Appelée par : `forgeEffetsH.js (chargement)`
 
 ## js/forgeEntrees.js
 

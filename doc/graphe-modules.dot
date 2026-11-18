@@ -91,7 +91,7 @@ digraph modules {
     "forgeTraine.js" [label="js/forgeTraine.js\n2 fonctions", fillcolor="#6d8ca833", color="#6d8ca8"];
     "forgeEffetsF.js" [label="js/forgeEffetsF.js\n4 fonctions", fillcolor="#8a7fa833", color="#8a7fa8"];
     "forgeEffetsG.js" [label="js/forgeEffetsG.js\n10 fonctions", fillcolor="#a8846d33", color="#a8846d"];
-    "forgeEffetsH.js" [label="js/forgeEffetsH.js\n6 fonctions", fillcolor="#6da88c33", color="#6da88c"];
+    "forgeEffetsH.js" [label="js/forgeEffetsH.js\n7 fonctions", fillcolor="#6da88c33", color="#6da88c"];
     "forgeEntrees.js" [label="js/forgeEntrees.js\n9 fonctions", fillcolor="#a86d8a33", color="#a86d8a"];
     "forgeDurees.js" [label="js/forgeDurees.js\n6 fonctions", fillcolor="#96a86d33", color="#96a86d"];
     "forgeRemplacementsC.js" [label="js/forgeRemplacementsC.js\n12 fonctions", fillcolor="#6da8a433", color="#6da8a4"];
@@ -359,6 +359,7 @@ digraph modules {
   "forgeEffetsB.js" -> "forgeEffetsA.js" [penwidth=3.08, color="#a8846daa", tooltip="6 appel(s)"];
   "forgeEffetsB.js" -> "forgeDefini.js" [penwidth=3.08, color="#a8846daa", tooltip="6 appel(s)"];
   "forgeEffetsD.js" -> "forgeScript.js" [penwidth=3.08, color="#a86d8aaa", tooltip="6 appel(s)"];
+  "forgeEffetsH.js" -> "jeuEtat.js" [penwidth=3.08, color="#6da88caa", tooltip="6 appel(s)"];
   "forgeDeclencheursB.js" -> "jeuEtat.js" [penwidth=3.08, color="#8a7fa8aa", tooltip="6 appel(s)"];
   "forgeInterdits.js" -> "forgeEffetsA.js" [penwidth=3.08, color="#6da88caa", tooltip="6 appel(s)"];
   "forgeRemplacements.js" -> "forgeValide.js" [penwidth=3.08, color="#6da8a4aa", tooltip="6 appel(s)"];
@@ -394,7 +395,6 @@ digraph modules {
   "forgeEffetsD.js" -> "forgeStatiques.js" [penwidth=2.82, color="#a86d8aaa", tooltip="5 appel(s)"];
   "forgeEffetsE.js" -> "jeuEtat.js" [penwidth=2.82, color="#96a86daa", tooltip="5 appel(s)"];
   "forgeEffetsF.js" -> "jeuEtat.js" [penwidth=2.82, color="#8a7fa8aa", tooltip="5 appel(s)"];
-  "forgeEffetsH.js" -> "jeuEtat.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];
   "forgeDurees.js" -> "jeuEtat.js" [penwidth=2.82, color="#96a86daa", tooltip="5 appel(s)"];
   "forgeStatiques.js" -> "forgeValide.js" [penwidth=2.82, color="#a8846daa", tooltip="5 appel(s)"];
   "forgeInterdits.js" -> "forgeValide.js" [penwidth=2.82, color="#6da88caa", tooltip="5 appel(s)"];

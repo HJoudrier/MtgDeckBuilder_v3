@@ -73,6 +73,14 @@ motif('donneMots', 'Pompes', /^(.+?) gains? ([a-z ,]+?)(?: and gets? ([+-]\w+)\/
     return a && mots && f != null && e != null ? {op: 'pompe', a, f, e, mots} : null;
   }, 'creatures you control gain trample until end of turn.');
 
+/* Se faire bloquer à coup sûr, pour le tour (Anzrag), et une phase de combat de plus. */
+motif('doitEtreBloque', 'Pompes', /^(.+?) must be blocked (?:each combat )?this turn if able$/,
+  (m, c) => { const a = lisReference(m[1], c, {groupe: true}); return a ? {op: 'pompe', a, f: 0, e: 0, mots: 0, impose: true} : null; },
+  '~ must be blocked each combat this turn if able.');
+motif('phaseSupp', 'Phases', /^after this (combat|main) phase, there is an additional combat phase( followed by an additional main phase)?$/,
+  m => ({op: 'phaseSupp', t: {ExtraPhase: 'Combat', ...(m[1] === 'combat' ? {AfterPhase: 'EndCombat'} : {}), ...(m[2] ? {FollowedBy: 'Main2'} : {})}}),
+  'after this combat phase, there is an additional combat phase.');
+
 /* ---------- Mana ---------- */
 motif('mana', 'Mana', /^add ((?:\{[wubrgc]\})+)$/,
   m => ({op: 'mana', options: [m[1].replace(/[{}]/g, '').toUpperCase()]}), 'add {g}.');
