@@ -37,7 +37,8 @@ declencheurForge = (g => function (def, face, t, jetons) {
     u = {...u, Phase: 'Main2'}; delete u.PhaseCount;
   }
   if (t.ResolvedLimit) { if (!/^\d+$/.test(t.ResolvedLimit)) return false; u = {...u, ActivationLimit: t.ResolvedLimit}; delete u.ResolvedLimit; }
-  if (t.CheckDefinedPlayer && !/^You\.(isMonarch|hasInitiative)$/.test(t.CheckDefinedPlayer)) return false;
+  /* Le défenseur qui a le plus de vie : jugé par l'écoute d'attaque (js/forgeDeclencheursD.js). */
+  if (t.CheckDefinedPlayer && !/^(You\.(isMonarch|hasInitiative)|TriggeredDefender\.withMostLife)$/.test(t.CheckDefinedPlayer)) return false;
   if (t.ValidSA && t.Mode === 'SpellCast' && !saLisible(t.ValidSA)) return false;
   return g(def, face, u, jetons);
 })(declencheurForge);
@@ -46,7 +47,7 @@ declencheurForge = (g => function (def, face, t, jetons) {
 conditionForge = (g => function (P, t, env) {
   if (t.Revolt && (t.Revolt === 'True') !== !!(histoire(P).revolte || {})[env.ctrl]) return false;
   if (t.Delirium === 'True' && new Set([].concat(...P.joueurs[env.ctrl].cimetiere.map(id => obj(P, id).def.types))).size < 4) return false;
-  if (t.CheckDefinedPlayer) { const k = t.CheckDefinedPlayer.split('.')[1]; if (!JOUEUR_COCHE[k] || !JOUEUR_COCHE[k](P, env.ctrl)) return false; }
+  if (t.CheckDefinedPlayer && !/^TriggeredDefender\./.test(t.CheckDefinedPlayer)) { const k = t.CheckDefinedPlayer.split('.')[1]; if (!JOUEUR_COCHE[k] || !JOUEUR_COCHE[k](P, env.ctrl)) return false; }
   return g(P, t, env);
 })(conditionForge);
 

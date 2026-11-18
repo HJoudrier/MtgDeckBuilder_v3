@@ -129,6 +129,9 @@ js/                 modules, chargés dans cet ordre :
   forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
   forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
+  forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
+  forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
   forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
@@ -1514,6 +1517,65 @@ parties de decks tirés au hasard parmi les cartes complètes, sans une seule er
   comptent ensemble, joueur par joueur — chacun pioche autant que la plus grosse main défaussée ;
 - **`ShareLandType$`** (Myriad Landscape) : la première terre se choisit librement, la seconde parmi celles du même
   type de base.
+
+**Lot F62 : des déclencheurs, la radiation, l'Anneau** (`js/forgeDeclencheursD.js`, `js/forgeRadiation.js`,
+`js/forgeAnneau.js`).
+- **`TokenCreated`** (Mirkwood Bats, Rosie Cotton) : l'évènement d'entrée d'un jeton, jugé sur son joueur et son
+  filtre ;
+- **`Drawn | FirstCardInDrawStep$`** (Orcish Bowmasters, Xyris, douze cartes) : `piocheN()` note le rang de la carte
+  dans l'étape (`J.piocheEtape`) ; la première de l'étape de pioche ne déclenche pas, toute autre si. Une pioche du
+  début de partie n'est pas une pioche d'étape ;
+- **« one or more »** (`SacrificedOnce`, `LifeLostAll`, `MilledAll`) : un seul déclenchement par lot d'évènements,
+  par `P._lot` ; `ResolvedLimit$` limite par tour (`P.limitesTour`) ;
+- **meuler** : `deplace()` marque une carte meulée (`opts.meule`), que `Milled` et `MilledAll` reconnaissent ; une
+  carte mise au cimetière d'une autre façon n'est pas « meulée » ;
+- **la radiation** : `Radiation | Num$` donne des marqueurs ; au début de sa première principale, un joueur meule
+  autant de cartes, perd 1 vie et retire un marqueur par carte qui n'est pas un terrain (règle 727). Dix-huit
+  cartes (The Wise Mothman, Nuclear Fallout, Glowing One…) ;
+- **l'Anneau, niveaux 2 à 4** : jusqu'ici seul le premier niveau était joué. Les trois autres sont écrits comme un
+  script de Forge (`NIVEAUX_ANNEAU`), compilés une fois et posés, au passage du niveau, en effet permanent du joueur
+  (piocher puis défausser en attaquant ; le bloqueur sacrifié à la fin du combat ; 3 vie perdus par chaque
+  adversaire sur un dégât de combat). `IsRingBearer` désigne le porteur. `RingTemptsYou` est aussi un déclencheur
+  (Call of the Ring).
+
+**Lot F63 : copies, clones, « activate only if »** (`js/forgeCopies.js`, `js/forgeActivations.js`).
+- **`Clone`** devient une capacité à cible : Thespian's Stage copie un terrain, Shifting Woodland une carte de son
+  cimetière. `NewName$` (Sarkhan, Soul Aflame), `AddTypes$ Legendary` (un supertype, non un sous-type),
+  `SetColor$`, `SetCreatureTypes$` (qui remplacent la couleur et les types de créature, et gardent les sous-types de
+  terrain ou d'artefact) et `GainThisAbility$` (la copie garde la capacité qui vient de s'activer : retrouvée dans la
+  définition par l'identité de son opération). `CopyPermanent` lit les mêmes `SetColor$` et `SetCreatureTypes$`,
+  plus `AtEOTCondition$` (Sauron, the Necromancer : le jeton ne part pas si Sauron porte l'Anneau) ;
+- **`Activation$`** (une quarantaine de cartes : Delirium, Threshold, Metalcraft, Hellbent, la bénédiction) : « activate only
+  if… », jugé par la table de `Condition$`. Une condition qu'on ne connaît pas écarte la capacité, et une capacité de mana
+  soumise à `Activation$` n'est pas jouée du tout — le planificateur de paiement ne sait pas la juger, et la jouer
+  donnerait du mana qu'on n'a pas le droit de produire ;
+- **`sharesCreatureTypeWith` seul** (Coat of Arms, Mana Echoes, Alpha Status, Locket of Yesterdays) : le type partagé
+  avec la source du filtre, c'est-à-dire la créature à laquelle le bonus s'applique.
+
+**La couverture lit désormais les filtres des comptes.** Un `SVar:X:Count$Valid Card.Self+IsRingbearer` n'était
+pas examiné : Sauron, the Necromancer passait pour complet alors que la propriété (`IsRingbearer` — Forge l'écrit
+ainsi) n'était pas jugée, et le jeton partait toujours. `expressionsDe()` relève les propriétés du filtre d'un
+`Count$Valid` et suit `Count$Compare X …` jusqu'à la SVar `X`. Quatorze cartes sont repassées de complètes à
+partielles ou injouables, toutes à raison ; Coat of Arms, Mana Echoes et Alpha Status l'ont aussitôt été de nouveau
+en jouant.
+
+**Lot F64 : les interdictions de combat du tour, l'eminence, Aurelia, Thriving** (`js/forgeEffetsC.js`,
+`js/forgeDeclencheursD.js`). La liste qui reste est dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md).
+- **`KW$ HIDDEN CARDNAME can't block.`** (cent seize scripts) **, `can't attack`, `can't attack or block`, `All
+  creatures able to block CARDNAME do so`** : la pompe pose le drapeau dans le bonus du tour (`CACHES_DU_TOUR`), que
+  `car()` lit pour `nePeutAttaquer` et `nePeutBloquer`, et `bloqueursImposes()` pour l'attirance ;
+- **`Activation$` sur une capacité de mana** (Mox Opal, Metalcraft) : `sourcesMana()` demandait déjà
+  `activationInterdite()` à chaque capacité de mana, et le drapeau `activation` y répond maintenant ; seule la
+  condition inconnue écarte la capacité ;
+- **`Attacks | FirstAttack$`** : chaque attaque porte son rang pour le permanent, ce tour (`o.attaquesTour`) ;
+  Aurelia déclenche une fois, la phase de combat de plus (F59) ne la déclenche pas deux fois.
+  **`CheckDefinedPlayer$ TriggeredDefender.withMostLife`** (Scourge of the Throne) se juge sur le défenseur de l'attaque ;
+- **`TriggerObjectsAttackers$Amount`** (The Ur-Dragon) : le nombre d'attaquants qui répondent au filtre du
+  déclencheur, gardé sur l'évènement à la décision ;
+- **l'eminence** : les statiques `EffectZone$ Battlefield,Command` d'un commandant agissent depuis sa zone
+  (`statiquesEnJeu()`), pour les réductions et hausses de coût ;
+- **`Exclude$`** de `ChooseColor` (les dix terrains Thriving) ; **`Proliferate | Amount$`** et le déclencheur
+  `Proliferate` (Ezuri).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

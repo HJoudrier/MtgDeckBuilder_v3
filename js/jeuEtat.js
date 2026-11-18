@@ -140,7 +140,7 @@ function deplace(P, id, vers, opts = {}) {
        l'appelant (js/jeuLancer.js). */
   } else if (vers === 'dessous') P.joueurs[o.prop].bibliotheque.unshift(n.id);
   else P.joueurs[o.prop][zone].push(n.id);
-  emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, id: n.id, lki});
+  emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, id: n.id, lki, ...(opts.meule ? {meule: true} : {})});
   noteEntree(P, depuis, zone, depuis === 'champ' ? lki : n);
   if (zone === 'champ') emet(P, {t: 'entre', id: n.id, ctrl: n.ctrl});
   if (depuis === 'champ' && P.effets) hotePart(P, id);
@@ -208,7 +208,10 @@ function piocheN(P, j, n) {
     const st = P.cartes[o.cid].st;
     if (!st.piochee) st.piochee = Math.max(1, J.tours);
     J.piochesTour = (J.piochesTour || 0) + 1;
-    emet(P, {t: 'pioche', joueur: j, n: J.piochesTour});
+    /* Le rang de la carte dans l'étape en cours : « except the first one they draw in each of their draw steps ». */
+    const pe = J.piocheEtape && J.piocheEtape.tour === P.tour && J.piocheEtape.etape === P.etape ? J.piocheEtape : (J.piocheEtape = {tour: P.tour, etape: P.etape, n: 0});
+    pe.n++;
+    emet(P, {t: 'pioche', joueur: j, n: J.piochesTour, etape: P.etape, rangEtape: pe.n});
   }
 }
 

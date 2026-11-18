@@ -195,7 +195,7 @@ forgeEffet('Mill', ['NumCards', 'Destination', 'RememberMilled'], function* (P, 
   const n = forgeNombre(P, t.NumCards || 1, env), dest = zoneForge(t.Destination) || 'cimetiere';
   for (const j of joueursForge(P, t, env)) {
     const B = P.joueurs[j].bibliotheque;
-    for (let k = 0; k < n && B.length; k++) { const nid = deplace(P, B[B.length - 1], dest); if (t.RememberMilled === 'True') retiensForge(env.ctx, nid); }
+    for (let k = 0; k < n && B.length; k++) { const nid = deplace(P, B[B.length - 1], dest, {meule: true}); if (t.RememberMilled === 'True') retiensForge(env.ctx, nid); }
   }
 }, (t, op) => { op.op = 'meule'; op.n = nombreIA(t.NumCards || 1); op.qui = quiIA(t, op); op.hostile = !(op.qui && op.qui.vous); });
 
