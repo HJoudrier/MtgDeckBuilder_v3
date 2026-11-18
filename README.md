@@ -85,6 +85,7 @@ js/                 modules, chargés dans cet ordre :
   jeuPilote.js      dérouler une partie, question après question
   jeuCopie.js       copier une partie et la reprendre : la copie partage les définitions, la reprise repart d'un point sûr
   jeuVue.js         ce qu'un joueur voit de la partie, et une question lisible par un humain
+  jeuPileExplique.js  décrire un élément de pile, et garder celui qu'on résout pour que les questions s'y rapportent
   jeuArrets.js      quand demander à un joueur humain
   forgeValide.js    le langage de filtres de Forge (`Creature.OppCtrl+powerLE2`)
   forgeDescripteurs.js  ce qu'un filtre devient pour le moteur : emplacement de cible, genre de marqueur, zone
@@ -514,6 +515,22 @@ termine est avalé. Trois **dispositions** se choisissent au menu de la table, r
 `S.table.disposition` : l'Arène, un adversaire à la fois en cartes entières, qu'on fait défiler
 d'un glissé ; les Couloirs, un par joueur, chacun défilant seul ; le Tour de table, les adversaires
 en cartouches qu'on déplie.
+
+**Savoir de quoi on parle** (`js/jeuPileExplique.js`, `js/tableDispositions.js`, `js/tableQuestions.js`). La pile
+se lisait par ses tuiles — qui a lancé quoi —, sans dire ce que chaque élément *fait*, et « Le faire ? » ne disait
+pas ce qu'on s'apprêtait à faire. `descriptionPile()` décrit un élément de pile à un humain : son genre (sort,
+capacité déclenchée, activée, copie), son texte, son contrôleur, ses cibles, X et le kicker ; la vue l'emporte,
+chez l'invité comme chez l'hôte. La table l'écrit sous les tuiles (`pileExpliqueHTML()`) : ce qui se résout en ce
+moment, puis ce qui attend, **du sommet — le premier à se résoudre — au fond**, et la priorité nomme ce à quoi on
+répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
+`resoudre()` le retire avant de le dérouler, si bien qu'on le garde le temps de sa résolution (`RESOLVANTS`, hors
+de `P` pour que la copie d'une partie par l'IA ne l'emporte pas) et que **toute question posée pendant qu'il se
+résout dit de quoi il s'agit** (`contexteQuestionHTML()`) : « Pendant la résolution de *Geode Rager* (capacité
+déclenchée, la vôtre) — Landfall : goad each creature target player controls », puis « *Geode Rager* — Le faire ? ».
+Une question vague (`Le faire ?`, `Défausser ?`) est précédée du nom de sa carte (`sourceNom`). La **pause de
+résolution** — l'objet reste visible, « résolution : X » dans la barre du haut — dure maintenant le temps de
+lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; « Continuer »
+la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.
 
 **Une partie qu'on peut suivre.** Les automates jouent au **rythme** de la table (`pauseApres()`,
 `js/tableHote.js`) : une longue pause après chacun de leurs gestes visibles, une courte à chaque

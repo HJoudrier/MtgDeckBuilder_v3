@@ -63,13 +63,11 @@ function vue(P, j) {
     cim: J.cimetiere.map(id => carteVue(P, id, cartes)), exil: J.exil.map(id => carteVue(P, id, cartes)),
     cmd: J.commandement.map(id => carteVue(P, id, cartes)), degatsCmd: {...J.degatsCmd},
     elimine: J.elimine, raison: J.raison, pool: {...J.pool}}));
-  const pile = P.pile.map(it => {
-    const cs = [].concat(...it.effets.map(ef => [].concat(...ef.cibles)));
-    return {id: it.id, nom: it.sort ? it.def.nom : it.nom, ctrl: it.ctrl, sort: !!it.sort, cibles: cs.map(c => libelleRef(P, c)),
-      refs: cs.map(c => refPublique(P, c)).filter(Boolean), source: it.sort ? null : (refPublique(P, it.source) || {}).id, declenche: !!it.declencheur};
-  });
+  const pile = P.pile.map(it => descriptionPile(P, it));
+  /* L'élément qu'on est en train de résoudre : plus sur la pile, mais ce dont parlent les questions. */
+  const resolvant = resolvantDe(P) ? descriptionPile(P, resolvantDe(P)) : null;
   P.pile.forEach(it => { if (it.sort && !cartes[it.def.nom]) cartes[it.def.nom] = ficheVue(it.def); });
-  return {moi: j, tour: P.tour, etape: P.etape, actif: P.actif, joueurs, pile,
+  return {moi: j, tour: P.tour, etape: P.etape, actif: P.actif, joueurs, pile, resolvant,
     champ: P.champ.map(id => objetVue(P, obj(P, id), cartes)),
     main: P.joueurs[j].main.map(id => carteVue(P, id, cartes)),
     fin: P.fin ? {gagnant: P.fin.gagnant, nulle: !!P.fin.nulle, raison: P.fin.raison} : null, cartes};
@@ -103,7 +101,9 @@ function libelleAction(P, a) {
    vont qu'au joueur qui cherche : c'est à lui seul que la question est posée. */
 function questionPourUI(P, q) {
   const base = {n: q.n, q: q.q, joueur: q.joueur, min: q.min, max: q.max, multi: q.multi, texte: q.texte || '',
-    source: q.source && obj(P, q.source) ? q.source : null};
+    source: q.source && obj(P, q.source) ? q.source : null,
+    /* La carte dont il s'agit, nommée : « Le faire ? » ne dit pas quoi. */
+    sourceNom: q.source && obj(P, q.source) ? obj(P, q.source).def.nom : ''};
   const ref = c => (c && typeof c === 'object') ? {j: c.j, label: libelleRef(P, c)} : {id: c, label: libelleRef(P, c)};
   switch (q.q) {
     case 'priorite': return {...base, options: q.options.map(a => ({k: a.k, id: a.id, i: a.i, depuis: a.depuis, label: libelleAction(P, a)}))};

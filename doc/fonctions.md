@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1787 fonctions**, 274 modules, 1934 Ko de JavaScript.
+**1795 fonctions**, 275 modules, 1941 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -76,6 +76,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 125 |
+| [`jeuPileExplique.js`](#jsjeupileexpliquejs) | Dire ce qui est sur la pile, et ce qui se résout | 3 | 48 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 300 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 75 |
@@ -266,23 +267,23 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 15 | 197 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 16 | 209 |
 | [`tableImages.js`](#jstableimagesjs) | Le visuel d'une carte, à la table | 4 | 84 |
 | [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 123 |
 | [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 57 |
-| [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 15 | 146 |
+| [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 16 | 166 |
 | [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 12 | 134 |
-| [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 46 |
+| [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 48 |
 | [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi, en flèches | 7 | 103 |
 | [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 137 |
-| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 11 | 136 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 162 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 73 |
 | [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 13 | 141 |
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 67 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 78 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 4 | 79 |
 | [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 309 |
 | [`icones.js`](#jsiconesjs) |  | 0 | 21 |
 
@@ -1473,6 +1474,21 @@ Ce qu'un joueur voit de la partie. *8 fonctions, 125 lignes, 7.9 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `ZONES_PUBLIQUES` | Une cible ou une source qu'on peut montrer du doigt : un joueur, ou un objet d'une zone publique. |
+
+## js/jeuPileExplique.js
+
+Dire ce qui est sur la pile, et ce qui se résout. *3 fonctions, 48 lignes, 2.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `texteCourt(t, max = 420)` | Un texte de carte lisible d'une ligne : les retours à la ligne se lisent « // » dans les définitions. |
+| `descriptionPile(P, it)` | Un élément de pile tel qu'on le décrit à un humain. |
+| `resolvantDe(P)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `GENRES_PILE` | — |
+| `RESOLVANTS` | Le temps d'une résolution, l'élément est noté ici : les questions s'y rapportent. |
 
 ## js/jeuArrets.js
 
@@ -4447,12 +4463,13 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *15 fonctions, 197 lignes, 9.1 Ko.*
+La partie que ce navigateur héberge. *16 fonctions, 209 lignes, 9.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `pauseApres(q, r, s, etapeChangee)` | Combien attendre après une réponse, pour qu'un humain suive : longtemps après le geste d'un automate (un sort lancé, une attaque), un peu à chaque étape montrée dans la barre des phases,… |
 | `montrePile(q)` | Un objet va se résoudre : on le montre, avec ses flèches, le temps qu'on le lise — plus longtemps celui d'un adversaire que le sien. |
+| `attendreOuSuite(ms)` | Attendre, sauf si le joueur dit « Continuer » (`tSuite`). |
 | `vueTable(j)` | La vue d'un joueur, et qui la partie attend : celui qui a la priorité. |
 | `attendre(ms)` | — |
 | `signePublic(P)` | Ce qu'un humain verrait changer : la pile, le champ, les points de vie. |
@@ -4530,7 +4547,7 @@ Ce qu'on sait d'un joueur, d'un coup d'œil. *4 fonctions, 57 lignes, 3.4 Ko.*
 
 ## js/tableDispositions.js
 
-Trois façons de disposer la table. *15 fonctions, 146 lignes, 7.5 Ko.*
+Trois façons de disposer la table. *16 fonctions, 166 lignes, 9.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4543,6 +4560,7 @@ Trois façons de disposer la table. *15 fonctions, 146 lignes, 7.5 Ko.*
 | `adversairesTableHTML(v)` | La région des adversaires, selon la disposition. |
 | `moiHTML(v)` | Son propre champ. |
 | `pileHTML(v)` | La pile, du sommet au fond, chaque objet avec son lanceur et ses cibles. |
+| `pileExpliqueHTML(v)` | Ce qu'est chaque élément de la pile, en toutes lettres : ce qu'on résout en ce moment, puis ce qui attend, du sommet — le premier à se résoudre — au fond. |
 | `mainHTML(v)` | — |
 | `montrePage(k)` | Un onglet de l'Arène touché : la page de cet adversaire. |
 | `marqueOnglet(k)` | — |
@@ -4580,7 +4598,7 @@ Voir une carte en grand. *12 fonctions, 134 lignes, 6 Ko.*
 
 ## js/tablePhases.js
 
-Où en est le tour, et qui a la main. *2 fonctions, 46 lignes, 2.9 Ko.*
+Où en est le tour, et qui a la main. *2 fonctions, 48 lignes, 3.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4634,7 +4652,7 @@ La table, peinte depuis une vue. *10 fonctions, 137 lignes, 6.8 Ko.*
 
 ## js/tableQuestions.js
 
-Répondre à une question du moteur, à la main. *11 fonctions, 136 lignes, 7 Ko.*
+Répondre à une question du moteur, à la main. *14 fonctions, 162 lignes, 8.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4648,11 +4666,15 @@ Répondre à une question du moteur, à la main. *11 fonctions, 136 lignes, 7 Ko
 | `valideTable()` | « Valider » : la sélection en cours, sous la forme que le moteur attend. |
 | `bornes(q)` | — |
 | `chipsChoix(q, s, v)` | Les choix d'une question à cases : une carte se montre par son visuel, un joueur ou un mot par un bouton. |
+| `contexteQuestionHTML(q, v)` | À quoi se rapporte une question posée en pleine résolution : la carte ou la capacité, et ce qu'elle dit. |
+| `titreOui(q)` | — |
 | `questionHTML(q, v)` | Le bandeau de la question. |
+| `questionCorpsHTML(q, v)` | — |
 
 | Donnée | Rôle |
 |---|---|
 | `TITRES_Q` | — |
+| `QUESTIONS_VAGUES` | Une question « oui / non » trop vague (« Le faire ? ») se précise par la carte dont il s'agit. |
 
 ## js/tableCombat.js
 
@@ -4775,7 +4797,7 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *4 fonctions, 78 lignes, 4 Ko.*
+Les gestes de la table interactive. *4 fonctions, 79 lignes, 4.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|

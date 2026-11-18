@@ -20,6 +20,7 @@ function gestesTable(act, b) {
     case 'tChoix': { const q = TABLE.question; if (q) basculeChoix(q, selDe(q), i); return true; }
     case 'tValider': valideTable(); return true;
     case 'tPasserTour': passeTour(); return true;
+    case 'tSuite': if (TABLE.suite) TABLE.suite(); return true;
     case 'tDef': if (TABLE.question) { selDe(TABLE.question).def = i; renduTable(); } return true;
     case 'tAttTous': attaqueTous(); return true;
     case 'tAttAucun': if (TABLE.question) { selDe(TABLE.question).paires.clear(); renduTable(); } return true;

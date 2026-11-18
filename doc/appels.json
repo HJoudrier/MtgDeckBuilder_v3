@@ -66,6 +66,7 @@
   "jeuPilote.js",
   "jeuCopie.js",
   "jeuVue.js",
+  "jeuPileExplique.js",
   "jeuArrets.js",
   "forgeValide.js",
   "forgeDescripteurs.js",
@@ -4675,6 +4676,7 @@
     "degagement",
     "degatsCombat",
     "deplace",
+    "descriptionPile",
     "detruitObjet",
     "doitEtreBloque",
     "donneCadeau",
@@ -8869,6 +8871,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "jeuPileExplique.js (chargement)",
     "priorite"
    ]
   },
@@ -9586,8 +9589,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "questionPourUI",
-    "vue"
+    "descriptionPile",
+    "questionPourUI"
    ]
   },
   {
@@ -9601,7 +9604,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "vue"
+    "descriptionPile"
    ]
   },
   {
@@ -9611,11 +9614,10 @@
    "chargement": false,
    "appelle": [
     "carteVue",
+    "descriptionPile",
     "ficheVue",
-    "libelleRef",
     "obj",
-    "objetVue",
-    "refPublique"
+    "objetVue"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -9626,7 +9628,7 @@
   {
    "nom": "libelleAction",
    "fichier": "jeuVue.js",
-   "ligne": 79,
+   "ligne": 77,
    "chargement": false,
    "appelle": [
     "capacitesDe",
@@ -9641,7 +9643,7 @@
   {
    "nom": "questionPourUI",
    "fichier": "jeuVue.js",
-   "ligne": 104,
+   "ligne": 102,
    "chargement": false,
    "appelle": [
     "aMot",
@@ -9656,6 +9658,48 @@
    "appeleePar": [
     "envoieQuestion",
     "poseQuestion"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "jeuPileExplique.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [],
+   "appelleDiffere": [
+    "resoudre"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "texteCourt",
+   "fichier": "jeuPileExplique.js",
+   "ligne": 19,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "descriptionPile"
+   ]
+  },
+  {
+   "nom": "descriptionPile",
+   "fichier": "jeuPileExplique.js",
+   "ligne": 25,
+   "chargement": false,
+   "appelle": [
+    "libelleRef",
+    "obj",
+    "refPublique",
+    "texteCourt"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "montrePile",
+    "vue"
    ]
   },
   {
@@ -26280,6 +26324,7 @@
     "champRecherche",
     "chipsChoix",
     "combatHTML",
+    "contexteQuestionHTML",
     "corpsAffichage",
     "corpsArrets",
     "corpsBoiteRecalcul",
@@ -26354,11 +26399,12 @@
     "panneauEdhrec",
     "partiesHTML",
     "phasesHTML",
+    "pileExpliqueHTML",
     "pileHTML",
     "proposerMajCatalogue",
     "propositionsHTML",
     "puceStatut",
-    "questionHTML",
+    "questionCorpsHTML",
     "refCarte",
     "rejoindreHTML",
     "renderD",
@@ -26380,6 +26426,7 @@
     "tagDeck",
     "tagEdhrec",
     "tagIllegal",
+    "titreOui",
     "tuile",
     "tuileWishlist",
     "vignetteDeck",
@@ -30634,7 +30681,8 @@
    "ligne": 41,
    "chargement": false,
    "appelle": [
-    "attendre",
+    "attendreOuSuite",
+    "descriptionPile",
     "diffuseVues",
     "repondre"
    ],
@@ -30645,9 +30693,21 @@
    ]
   },
   {
+   "nom": "attendreOuSuite",
+   "fichier": "tableHote.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "montrePile"
+   ]
+  },
+  {
    "nom": "vueTable",
    "fichier": "tableHote.js",
-   "ligne": 49,
+   "ligne": 61,
    "chargement": false,
    "appelle": [
     "vue"
@@ -30664,21 +30724,20 @@
   {
    "nom": "attendre",
    "fichier": "tableHote.js",
-   "ligne": 55,
+   "ligne": 67,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "boucleTable",
-    "mesureBaseForge",
-    "montrePile"
+    "mesureBaseForge"
    ]
   },
   {
    "nom": "signePublic",
    "fichier": "tableHote.js",
-   "ligne": 58,
+   "ligne": 70,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -30690,7 +30749,7 @@
   {
    "nom": "siegeDeSource",
    "fichier": "tableHote.js",
-   "ligne": 63,
+   "ligne": 75,
    "chargement": false,
    "appelle": [
     "siegeDeck",
@@ -30705,7 +30764,7 @@
   {
    "nom": "commenceTable",
    "fichier": "tableHote.js",
-   "ligne": 72,
+   "ligne": 84,
    "chargement": false,
    "appelle": [
     "agentIA",
@@ -30729,7 +30788,7 @@
   {
    "nom": "boucleTable",
    "fichier": "tableHote.js",
-   "ligne": 97,
+   "ligne": 109,
    "chargement": false,
    "appelle": [
     "attendre",
@@ -30760,7 +30819,7 @@
   {
    "nom": "poseQuestion",
    "fichier": "tableHote.js",
-   "ligne": 124,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
     "diffuseVues",
@@ -30778,7 +30837,7 @@
   {
    "nom": "recoitReponse",
    "fichier": "tableHote.js",
-   "ligne": 140,
+   "ligne": 152,
    "chargement": false,
    "appelle": [
     "boucleTable",
@@ -30799,7 +30858,7 @@
   {
    "nom": "diffuseVues",
    "fichier": "tableHote.js",
-   "ligne": 157,
+   "ligne": 169,
    "chargement": false,
    "appelle": [
     "envoieVue",
@@ -30819,7 +30878,7 @@
   {
    "nom": "journalTable",
    "fichier": "tableHote.js",
-   "ligne": 172,
+   "ligne": 184,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -30832,7 +30891,7 @@
   {
    "nom": "majArretsTable",
    "fichier": "tableHote.js",
-   "ligne": 175,
+   "ligne": 187,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -30844,7 +30903,7 @@
   {
    "nom": "passeJusquaMonTour",
    "fichier": "tableHote.js",
-   "ligne": 182,
+   "ligne": 194,
    "chargement": false,
    "appelle": [
     "recoitReponse"
@@ -30859,7 +30918,7 @@
   {
    "nom": "quitteTable",
    "fichier": "tableHote.js",
-   "ligne": 190,
+   "ligne": 202,
    "chargement": false,
    "appelle": [
     "fermeLiaisons",
@@ -31283,6 +31342,7 @@
    "chargement": false,
    "appelle": [
     "esc",
+    "pileExpliqueHTML",
     "rangee",
     "tuile"
    ],
@@ -31293,9 +31353,23 @@
    ]
   },
   {
+   "nom": "pileExpliqueHTML",
+   "fichier": "tableDispositions.js",
+   "ligne": 103,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "pileHTML"
+   ]
+  },
+  {
    "nom": "mainHTML",
    "fichier": "tableDispositions.js",
-   "ligne": 100,
+   "ligne": 120,
    "chargement": false,
    "appelle": [
     "rangee",
@@ -31310,7 +31384,7 @@
   {
    "nom": "montrePage",
    "fichier": "tableDispositions.js",
-   "ligne": 106,
+   "ligne": 126,
    "chargement": false,
    "appelle": [
     "marqueOnglet"
@@ -31324,7 +31398,7 @@
   {
    "nom": "marqueOnglet",
    "fichier": "tableDispositions.js",
-   "ligne": 113,
+   "ligne": 133,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -31337,7 +31411,7 @@
   {
    "nom": "suisActif",
    "fichier": "tableDispositions.js",
-   "ligne": 119,
+   "ligne": 139,
    "chargement": false,
    "appelle": [
     "adversairesDe"
@@ -31351,7 +31425,7 @@
   {
    "nom": "appliquePage",
    "fichier": "tableDispositions.js",
-   "ligne": 129,
+   "ligne": 149,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -31363,7 +31437,7 @@
   {
    "nom": "defileTable",
    "fichier": "tableDispositions.js",
-   "ligne": 139,
+   "ligne": 159,
    "chargement": false,
    "appelle": [
     "marqueOnglet",
@@ -31875,7 +31949,7 @@
     "etatChoix",
     "etatJoueur",
     "gestesTable",
-    "questionHTML",
+    "questionCorpsHTML",
     "valideTable"
    ]
   },
@@ -32010,24 +32084,68 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "questionCorpsHTML"
+   ]
+  },
+  {
+   "nom": "contexteQuestionHTML",
+   "fichier": "tableQuestions.js",
+   "ligne": 107,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
     "questionHTML"
+   ]
+  },
+  {
+   "nom": "titreOui",
+   "fichier": "tableQuestions.js",
+   "ligne": 116,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "questionCorpsHTML"
    ]
   },
   {
    "nom": "questionHTML",
    "fichier": "tableQuestions.js",
-   "ligne": 106,
+   "ligne": 122,
    "chargement": false,
    "appelle": [
-    "chipsChoix",
-    "combatHTML",
-    "esc",
-    "selDe"
+    "contexteQuestionHTML",
+    "questionCorpsHTML"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
     "regionsPartie"
+   ]
+  },
+  {
+   "nom": "questionCorpsHTML",
+   "fichier": "tableQuestions.js",
+   "ligne": 127,
+   "chargement": false,
+   "appelle": [
+    "chipsChoix",
+    "combatHTML",
+    "esc",
+    "selDe",
+    "titreOui"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "questionHTML"
    ]
   },
   {
@@ -32065,7 +32183,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "questionHTML"
+    "questionCorpsHTML"
    ]
   },
   {
@@ -33076,7 +33194,7 @@
   {
    "nom": "choisitDisposition",
    "fichier": "gestesTable.js",
-   "ligne": 54,
+   "ligne": 55,
    "chargement": false,
    "appelle": [
     "renduTable",
@@ -33091,7 +33209,7 @@
   {
    "nom": "passeTour",
    "fichier": "gestesTable.js",
-   "ligne": 63,
+   "ligne": 64,
    "chargement": false,
    "appelle": [
     "envoiePasseTour",
@@ -33107,7 +33225,7 @@
   {
    "nom": "ouvreJournalTable",
    "fichier": "gestesTable.js",
-   "ligne": 70,
+   "ligne": 71,
    "chargement": false,
    "appelle": [
     "esc",

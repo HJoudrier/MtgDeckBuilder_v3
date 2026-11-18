@@ -102,8 +102,34 @@ function chipsChoix(q, s, v) {
 const TITRES_Q = {cibles: 'Choisissez la cible', cartes: 'Choisissez', defausse: 'Défaussez', dessous: 'Mettez dessous',
   sacrifice: 'Sacrifiez', scrute: 'Mettez dessous ce que vous ne voulez pas piocher', modes: 'Choisissez les modes'};
 
+/* À quoi se rapporte une question posée en pleine résolution : la carte ou la capacité, et ce qu'elle
+   dit. « Le faire ? » sans cela ne dit pas quoi. */
+function contexteQuestionHTML(q, v) {
+  if (!v || !v.resolvant || /^(priorite|mulligan|attaquants|bloqueurs)$/.test(q.q)) return '';
+  const r = v.resolvant, qui = r.ctrl === v.moi ? 'la vôtre' : esc(v.joueurs[r.ctrl].nom);
+  return `<div class="tq-ctx small"><span class="muted">Pendant la résolution de</span> <b>${esc(r.nom)}</b>
+    <span class="muted">(${esc(r.genreLibelle.toLowerCase())}, ${qui})</span>${r.texte ? ` — <span class="tq-ctx-texte">${esc(r.texte)}</span>` : ''}</div>`;
+}
+
+/* Une question « oui / non » trop vague (« Le faire ? ») se précise par la carte dont il s'agit. */
+const QUESTIONS_VAGUES = /^(Le faire|Défausser|Faire ceci) \?$/;
+function titreOui(q) {
+  const t = q.texte || 'Le faire ?';
+  return QUESTIONS_VAGUES.test(t) && q.sourceNom ? `${esc(q.sourceNom)} — ${esc(t)}` : esc(t);
+}
+
 /* Le bandeau de la question. */
 function questionHTML(q, v) {
+  const ctx = q ? contexteQuestionHTML(q, v) : '';
+  return ctx + questionCorpsHTML(q, v);
+}
+
+function questionCorpsHTML(q, v) {
+  if (!q && v && v.resout && !v.fin) {
+    const it = v.pile.length ? v.pile[v.pile.length - 1] : null;
+    return `<div class="tq-attente small">Résolution${it ? ' de <b>' + esc(it.nom) + '</b>' : ''}…
+      ${TABLE.role === 'hote' ? '<button type="button" class="btn sm" data-act="tSuite" title="Ne pas attendre : résoudre tout de suite">Continuer</button>' : ''}</div>`;
+  }
   if (!q) return v && v.fin ? '' : `<div class="small muted tq-attente">${TABLE.attenteNom ? esc(TABLE.attenteNom) + ' réfléchit…' : ''}</div>`;
   const s = selDe(q), err = TABLE.erreur ? `<div class="small tq-erreur">${esc(TABLE.erreur)}</div>` : '';
   const valider = (lib = 'Valider') => `<button type="button" class="btn pri" data-act="tValider">${lib}</button>`;
@@ -112,7 +138,7 @@ function questionHTML(q, v) {
       /* Trois Plaines en main font trois « Jouer Plains » : un seul bouton suffit. */
       const vus = new Set();
       const liste = q.options.map((a, i) => [a, i]).filter(([a]) => a.k !== 'passer' && !vus.has(a.label) && vus.add(a.label));
-      return `${err}<div class="tq-titre"><b>À vous</b> — ${esc(NOMS_ETAPES[v.etape] || v.etape)}${v.pile.length ? ', en réponse' : ''}
+      return `${err}<div class="tq-titre"><b>À vous</b> — ${esc(NOMS_ETAPES[v.etape] || v.etape)}${v.pile.length ? `, en réponse à <b>${esc(v.pile[v.pile.length - 1].nom)}</b> <span class="muted">(passez : il se résout)</span>` : ''}
           <span class="muted">${liste.length ? '· touchez une carte qui brille, ou :' : '· rien à jouer'}</span></div>
         ${liste.length ? `<div class="tq-actions" data-defile="actions">${liste.map(([a, i]) =>
           `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${esc(a.label)}</button>`).join('')}</div>` : ''}
@@ -123,7 +149,7 @@ function questionHTML(q, v) {
     case 'mulligan': return `${err}<div class="tq-titre"><b>Votre main de départ</b>${q.mulligans ? ` — après ${q.mulligans} mulligan(s)` : ''}</div>
       <div class="row"><button type="button" class="btn pri" data-act="tUn" data-i="0">Garder</button>
         <button type="button" class="btn" data-act="tUn" data-i="1">Mulligan</button></div>`;
-    case 'oui': return `${err}<div class="tq-titre">${esc(q.texte || 'Le faire ?')}</div>
+    case 'oui': return `${err}<div class="tq-titre">${titreOui(q)}</div>
       <div class="row"><button type="button" class="btn" data-act="tUn" data-i="0">Non</button>
         <button type="button" class="btn pri" data-act="tUn" data-i="1">Oui</button></div>`;
     case 'x': return `${err}<div class="tq-titre"><b>Valeur de X</b></div><div class="tq-actions">${q.options.slice(0, 31).map((x, i) =>
