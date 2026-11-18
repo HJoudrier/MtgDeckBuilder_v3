@@ -191,6 +191,7 @@
   "simStockage.js",
   "simulation.js",
   "simSection.js",
+  "simCollection.js",
   "forgeDepot.js",
   "forgeVue.js",
   "simResultats.js",
@@ -3724,6 +3725,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "cleCouvertureCollection",
     "definitionDe",
     "signatureAdversaire",
     "signatureComportements",
@@ -3874,6 +3876,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "classeCarteCollection",
     "definitionJeton",
     "siegeDepuisListe"
    ]
@@ -23542,6 +23545,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "classeCarteCollection",
     "fichesDeListe",
     "nomsManquants",
     "ouvreComportement",
@@ -23939,6 +23943,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "classeCarteCollection",
     "fichesDeListe"
    ]
   },
@@ -24104,6 +24109,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "cleCouvertureCollection",
     "couvertureTable",
     "lotPerime",
     "terminerLot"
@@ -24576,10 +24582,13 @@
    "fichier": "simSection.js",
    "ligne": 120,
    "chargement": false,
-   "appelle": [],
+   "appelle": [
+    "esc"
+   ],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "couvertureCollectionHTML",
     "couvertureHTML",
     "lectureHTML"
    ]
@@ -24610,6 +24619,7 @@
     "chargeResultats",
     "chargeSimCartes",
     "configSimulation",
+    "couvertureCollectionHTML",
     "couvertureHTML",
     "majProgressionSim",
     "manquesHTML",
@@ -24631,8 +24641,127 @@
     "renderAll",
     "supprimeAdversaireOui",
     "terminerLot",
+    "trancheCouvertureCollection",
     "verifieDecksLies",
     "verifieUnDeckLie"
+   ]
+  },
+  {
+   "nom": "cleCouvertureCollection",
+   "fichier": "simCollection.js",
+   "ligne": 27,
+   "chargement": false,
+   "appelle": [
+    "empreinte",
+    "signatureComportements"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureCollection"
+   ]
+  },
+  {
+   "nom": "classeCarteCollection",
+   "fichier": "simCollection.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [
+    "comportementDe",
+    "definitionDe",
+    "ficheParNom"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "trancheCouvertureCollection"
+   ]
+  },
+  {
+   "nom": "bilanVierge",
+   "fichier": "simCollection.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureCollection"
+   ]
+  },
+  {
+   "nom": "trancheCouvertureCollection",
+   "fichier": "simCollection.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "classeCarteCollection",
+    "renderK"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureCollection"
+   ]
+  },
+  {
+   "nom": "couvertureCollection",
+   "fichier": "simCollection.js",
+   "ligne": 80,
+   "chargement": false,
+   "appelle": [
+    "bilanVierge",
+    "cleCouvertureCollection",
+    "trancheCouvertureCollection"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureCollectionHTML"
+   ]
+  },
+  {
+   "nom": "ligneCouvertureCollection",
+   "fichier": "simCollection.js",
+   "ligne": 89,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureCollectionHTML"
+   ]
+  },
+  {
+   "nom": "listeCouvertureCollection",
+   "fichier": "simCollection.js",
+   "ligne": 98,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "couvertureCollectionHTML"
+   ]
+  },
+  {
+   "nom": "couvertureCollectionHTML",
+   "fichier": "simCollection.js",
+   "ligne": 106,
+   "chargement": false,
+   "appelle": [
+    "badgeCouverture",
+    "couvertureCollection",
+    "listeCouvertureCollection"
+   ],
+   "appelleDiffere": [
+    "ligneCouvertureCollection"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderK"
    ]
   },
   {
@@ -25148,6 +25277,7 @@
     "aideFormules",
     "alertesInvitesHTML",
     "areneAdversaires",
+    "badgeCouverture",
     "barreCatalogue",
     "barresHTML",
     "blocAchats",
@@ -25201,6 +25331,7 @@
     "ligneCausesCollection",
     "ligneCible",
     "ligneCommandant",
+    "ligneCouvertureCollection",
     "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
@@ -28722,7 +28853,7 @@
   {
    "nom": "reglageSimulation",
    "fichier": "gestesSimulation.js",
-   "ligne": 33,
+   "ligne": 34,
    "chargement": false,
    "appelle": [
     "renderK",

@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1718 fonctions** dans 258 modules, **5468 appels** relevés.
+**1726 fonctions** dans 259 modules, **5485 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1357,7 +1357,7 @@ Appelée par : `compileDefinition`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `definitionDe`, `signatureAdversaire`, `signatureComportements`, `signatureDeck`
+Appelée par : `cleCouvertureCollection`, `definitionDe`, `signatureAdversaire`, `signatureComportements`, `signatureDeck`
 
 ### `nombreFiche()` — ligne 39
 
@@ -1417,7 +1417,7 @@ Appelée par : `definitionDe`
 
 Appelle : `compileDefinition()` *(definitions.js)*, `definitionForge()` *(forgeDefinition.js)*, `empreinte()` *(definitions.js)*, `rangCouverture()` *(definitions.js)*
 
-Appelée par : `definitionJeton`, `siegeDepuisListe`
+Appelée par : `classeCarteCollection`, `definitionJeton`, `siegeDepuisListe`
 
 ### `definitionJeton()` — ligne 187
 
@@ -7917,7 +7917,7 @@ Appelée par : `ficheSansForge`, `imageConnue`
 
 Appelle : `avecForge()` *(simCartes.js)*, `ficheSansForge()` *(simCartes.js)*
 
-Appelée par : `fichesDeListe`, `nomsManquants`, `ouvreComportement`, `resolutionAdversaire`
+Appelée par : `classeCarteCollection`, `fichesDeListe`, `nomsManquants`, `ouvreComportement`, `resolutionAdversaire`
 
 ### `avecForge()` — ligne 75
 
@@ -8079,7 +8079,7 @@ Appelée par : `siegeDepuisListe`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `fichesDeListe`
+Appelée par : `classeCarteCollection`, `fichesDeListe`
 
 ### `bilanCouverture()` — ligne 24
 
@@ -8145,7 +8145,7 @@ Appelée par : `terminerLot`
 
 Appelle : `empreinte()` *(definitions.js)*
 
-Appelée par : `couvertureTable`, `lotPerime`, `terminerLot`
+Appelée par : `cleCouvertureCollection`, `couvertureTable`, `lotPerime`, `terminerLot`
 
 ## js/simStats.js
 
@@ -8337,9 +8337,9 @@ Appelée par : `adversairesHTML`
 
 ### `badgeCouverture()` — ligne 120
 
-N'appelle aucune fonction du projet.
+Appelle : `esc()` *(outils.js)*
 
-Appelée par : `couvertureHTML`, `lectureHTML`
+Appelée par : `couvertureCollectionHTML`, `couvertureHTML`, `lectureHTML`
 
 ### `couvertureHTML()` — ligne 126
 
@@ -8349,9 +8349,59 @@ Appelée par : `renderK`
 
 ### `renderK()` — ligne 147
 
-Appelle : `adversairesHTML()` *(simSection.js)*, `chargeResultats()` *(simStockage.js)*, `chargeSimCartes()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `couvertureHTML()` *(simSection.js)*, `majProgressionSim()` *(simulation.js)*, `manquesHTML()` *(forgeVue.js)*, `resultatsHTML()` *(simResultats.js)*, `tableHTML()` *(simSection.js)*
+Appelle : `adversairesHTML()` *(simSection.js)*, `chargeResultats()` *(simStockage.js)*, `chargeSimCartes()` *(simCartes.js)*, `configSimulation()` *(simulation.js)*, `couvertureCollectionHTML()` *(simCollection.js)*, `couvertureHTML()` *(simSection.js)*, `majProgressionSim()` *(simulation.js)*, `manquesHTML()` *(forgeVue.js)*, `resultatsHTML()` *(simResultats.js)*, `tableHTML()` *(simSection.js)*
 
-Appelée par : `appliqueComportement`, `chercheTableSauvee`, `effaceComportement`, `enregistreAdversaireFenetre`, `entete.js (chargement)`, `gestesSimulation`, `joueLot`, `lanceSimulation`, `reglageSimulation`, `renderAll`, `supprimeAdversaireOui`, `terminerLot`, `verifieDecksLies`, `verifieUnDeckLie`
+Appelée par : `appliqueComportement`, `chercheTableSauvee`, `effaceComportement`, `enregistreAdversaireFenetre`, `entete.js (chargement)`, `gestesSimulation`, `joueLot`, `lanceSimulation`, `reglageSimulation`, `renderAll`, `supprimeAdversaireOui`, `terminerLot`, `trancheCouvertureCollection`, `verifieDecksLies`, `verifieUnDeckLie`
+
+## js/simCollection.js
+
+### `cleCouvertureCollection()` — ligne 27
+
+Appelle : `empreinte()` *(definitions.js)*, `signatureComportements()` *(simPreparation.js)*
+
+Appelée par : `couvertureCollection`
+
+### `classeCarteCollection()` — ligne 35
+
+Appelle : `comportementDe()` *(simPreparation.js)*, `definitionDe()` *(definitions.js)*, `ficheParNom()` *(simCartes.js)*
+
+Appelée par : `trancheCouvertureCollection`
+
+### `bilanVierge()` — ligne 44
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `couvertureCollection`
+
+### `trancheCouvertureCollection()` — ligne 50
+
+Appelle : `classeCarteCollection()` *(simCollection.js)*, `renderK()` *(simSection.js)*
+
+Appelée par : `couvertureCollection`
+
+### `couvertureCollection()` — ligne 80
+
+Appelle : `bilanVierge()` *(simCollection.js)*, `cleCouvertureCollection()` *(simCollection.js)*, `trancheCouvertureCollection()` *(simCollection.js)*
+
+Appelée par : `couvertureCollectionHTML`
+
+### `ligneCouvertureCollection()` — ligne 89
+
+Appelle : `esc()` *(outils.js)*
+
+Appelée par : `couvertureCollectionHTML`
+
+### `listeCouvertureCollection()` — ligne 98
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `couvertureCollectionHTML`
+
+### `couvertureCollectionHTML()` — ligne 106
+
+Appelle : `badgeCouverture()` *(simSection.js)*, `couvertureCollection()` *(simCollection.js)*, `listeCouvertureCollection()` *(simCollection.js)*, → `ligneCouvertureCollection()` *(simCollection.js)*
+
+Appelée par : `renderK`
 
 ## js/forgeDepot.js
 
@@ -8557,7 +8607,7 @@ Appelée par : `renderK`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `acteSuggestion`, `actesAnnexe`, `actionsLoupe`, `adversairesHTML`, `aideFormules`, `alertesInvitesHTML`, `areneAdversaires`, `barreCatalogue`, `barresHTML`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `cartesHTML`, `cartouche`, `champBudget`, `champDeck`, `champRecherche`, `chipsChoix`, `combatHTML`, `corpsAffichage`, `corpsArrets`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsForge`, `corpsFormat`, `corpsSauvegarde`, `couvertureHTML`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etapeHTML`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `filHTML`, `finHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `historiqueHTML`, `inconnuesHTML`, `lectureHTML`, `libelleElement`, `lienDecksEdhrec`, `ligneAchats`, `ligneAcquisition`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeManques`, `listeSetsHTML`, `lotHTML`, `loupeHTML`, `majApercu`, `majApercuAdversaire`, `majBoutonAffichage`, `manquesHTML`, `marqueursHTML`, `menuHTML`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `optionsHTML`, `ouvreAdversaire`, `ouvreComportement`, `ouvreInconnues`, `ouvreJournal`, `ouvreJournalTable`, `paginationListe`, `panneauEdhrec`, `partiesHTML`, `pastilleLien`, `phasesHTML`, `pileHTML`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `questionHTML`, `refCarte`, `rejoindreHTML`, `relaisHTML`, `renderD`, `renderE`, `renderTop`, `repliHTML`, `resultatsAjoutHTML`, `resumeDeckConfig`, `resumeFiltres`, `salonHTML`, `sectionParametres`, `siegeDistantHTML`, `sugLigne`, `sugRow`, `supprimeAdversaire`, `svgGraph`, `symBg`, `symIcon`, `tableLoupe.js (chargement)`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `tuile`, `tuileWishlist`, `vignetteDeck`, `wishlistSection.js (chargement)`, `zoneCommandant`, `zoneHTML`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `actionsLoupe`, `adversairesHTML`, `aideFormules`, `alertesInvitesHTML`, `areneAdversaires`, `badgeCouverture`, `barreCatalogue`, `barresHTML`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `cardRow`, `cardTile`, `cartesHTML`, `cartouche`, `champBudget`, `champDeck`, `champRecherche`, `chipsChoix`, `combatHTML`, `corpsAffichage`, `corpsArrets`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsForge`, `corpsFormat`, `corpsSauvegarde`, `couvertureHTML`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etapeHTML`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `filHTML`, `finHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `historiqueHTML`, `inconnuesHTML`, `lectureHTML`, `libelleElement`, `lienDecksEdhrec`, `ligneAchats`, `ligneAcquisition`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneCouvertureCollection`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeManques`, `listeSetsHTML`, `lotHTML`, `loupeHTML`, `majApercu`, `majApercuAdversaire`, `majBoutonAffichage`, `manquesHTML`, `marqueursHTML`, `menuHTML`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openWantsModal`, `optionsHTML`, `ouvreAdversaire`, `ouvreComportement`, `ouvreInconnues`, `ouvreJournal`, `ouvreJournalTable`, `paginationListe`, `panneauEdhrec`, `partiesHTML`, `pastilleLien`, `phasesHTML`, `pileHTML`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `questionHTML`, `refCarte`, `rejoindreHTML`, `relaisHTML`, `renderD`, `renderE`, `renderTop`, `repliHTML`, `resultatsAjoutHTML`, `resumeDeckConfig`, `resumeFiltres`, `salonHTML`, `sectionParametres`, `siegeDistantHTML`, `sugLigne`, `sugRow`, `supprimeAdversaire`, `svgGraph`, `symBg`, `symIcon`, `tableLoupe.js (chargement)`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `tuile`, `tuileWishlist`, `vignetteDeck`, `wishlistSection.js (chargement)`, `zoneCommandant`, `zoneHTML`
 
 ### `eur()` — ligne 14
 
@@ -9743,7 +9793,7 @@ Appelle : `appliqueComportement()` *(fenComportement.js)*, `arreteSimulation()` 
 
 Appelée par : `app.js (chargement)`
 
-### `reglageSimulation()` — ligne 33
+### `reglageSimulation()` — ligne 34
 
 Appelle : `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*
 
