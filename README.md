@@ -130,6 +130,7 @@ js/                 modules, chargés dans cet ordre :
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
   forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
   forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
   forgeCoutsC.js    ce que les statiques font au coût de jouer : vie pour mana, autre coût accordé, capacités moins chères, flash
@@ -1594,6 +1595,23 @@ en jouant.
   pourrait lancer un éphémère (`loyauteEclair()`) ; `Spell.IsTargeting Valid …` (Timely Ward, Flash Photography)
   donne le flash dès qu'une cible de ce genre existe, **sans vérifier que la cible choisie en est une** —
   simplification annoncée. `flashAccorde()` ne prend plus une statique de loyauté pour un flash de sort.
+
+**Lot F66 : des paramètres d'écoute** (`js/forgeDeclencheursE.js`). Vingt-cinq cartes de plus :
+- **`ResolvedLimit$`** : déjà réécrit en limite d'activation pour tout déclencheur (F52) ; il ne restait qu'à le dire
+  connu des modes « once » qui le portent ;
+- **`FirstCombat$`** (Genji Glove, Hexplate Wallbreaker, Karlach) : la première phase de combat du tour ; la phase de
+  plus que donnent ces cartes n'en redéclenche donc pas une troisième ;
+- **`Threshold$`, `Metalcraft$`, `Blessing$`, `Hellbent$`** écrits comme paramètres du déclencheur (Kiora, Twilight
+  Prophet, Inventors' Fair) : `conditionForge()` les juge comme la condition de même nom. **`FirstUpkeep$`** (Paradox
+  Haze) : le rang de l'étape d'entretien dans le tour (`P.entretiensTour`), et l'étape qu'il sous-entend ;
+- **`ValidSAonCard$`** d'un sort lancé : le sort lui-même répond à un filtre (« same name as a card in their
+  graveyard », Dragonlord Kolaghan) ou a coûté moins de mana que sa valeur (`Spell.ManaSpent LTX`, Ancient
+  Cellarspawn) ;
+- **`ExcludedOrigins$`**, **`Phase$ BeginCombat->EndCombat`** d'un `ChangesZone` (The Lost and the Damned, The Blue
+  Spirit) ; **`ValidPlayer$`** de `Discarded` et de `LandPlayed` (Sangromancer, Shanid) ;
+- **Panharmonicon** : `ValidActivator$` et `ValidPlayer$` (Veyran, Dr. Beverly Crusher) ; **`ImmediateTrigger |
+  RememberSVarAmount$`** (Ancient Brass Dragon : « roll a d20. When you do… X ») garde le résultat du dé pour le
+  déclencheur réflexe. Restent : le doublement d'un déclencheur de sort sur la pile (`ValidZone$ Stack`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

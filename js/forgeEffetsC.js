@@ -186,12 +186,14 @@ forgeEffet('Investigate', ['Num'], function* (P, t, env) {
 
 /* Un déclencheur réflexe (« when you do, … ») : il va en attente, et
    monte sur la pile au prochain passage de priorité. */
-forgeEffet('ImmediateTrigger', ['Execute', 'RememberObjects'], function* (P, t, env) {
+forgeEffet('ImmediateTrigger', ['Execute', 'RememberObjects', 'RememberSVarAmount'], function* (P, t, env) {
   const effet = effetForge(env.op.face, forgeSousCapacite(env.op.face, t.Execute), env.op.jetons);
   if (!effet) return;
   const s = env.src;
   P.enAttente.push({src: s ? s.id : null, lki: s && s.lki ? s : null, ctrl: env.ctrl,
-    cap: {genre: 'declenchee', effet, texte: t.SpellDescription || t.TriggerDescription || ''}, evt: env.ctx.evt});
+    cap: {genre: 'declenchee', effet, texte: t.SpellDescription || t.TriggerDescription || ''}, evt: env.ctx.evt,
+    /* « Roll a d20. When you do… X » : la valeur de la SVar à cet instant, que lira `Count$TriggerRememberAmount`. */
+    nombre: t.RememberSVarAmount ? (env.ctx.vars || {})[t.RememberSVarAmount] || 0 : undefined});
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* Les modes : choisis au lancement (js/forgeDefinition.js), jamais

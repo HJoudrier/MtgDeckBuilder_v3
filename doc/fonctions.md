@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1764 fonctions**, 259 modules, 1853 Ko de JavaScript.
+**1767 fonctions**, 260 modules, 1859 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -86,7 +86,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 212 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 236 |
-| [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 200 |
+| [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 202 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 196 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 141 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 166 |
@@ -102,7 +102,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 147 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 127 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 226 |
-| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 282 |
+| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 286 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 10 | 170 |
@@ -128,14 +128,15 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeParadigme.js`](#jsforgeparadigmejs) | Paradigm | 1 | 39 |
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
 | [`forgeDeclencheursD.js`](#jsforgedeclencheursdjs) | Des déclencheurs de plus | 2 | 94 |
+| [`forgeDeclencheursE.js`](#jsforgedeclencheursejs) | Des paramètres de déclencheurs de plus | 3 | 96 |
 | [`forgeRadiation.js`](#jsforgeradiationjs) | Les marqueurs de radiation | 0 | 44 |
 | [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
-| [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
-| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 56 |
+| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 58 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 118 |
+| [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
@@ -1356,7 +1357,7 @@ Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 210 lignes, 11 Ko.*
 
 ## js/jeuTour.js
 
-Les étapes d'un tour. *6 fonctions, 132 lignes, 5.5 Ko.*
+Les étapes d'un tour. *6 fonctions, 132 lignes, 5.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1619,7 +1620,7 @@ Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 236 lignes, 15 K
 
 ## js/forgeEffetsC.js
 
-Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 200 lignes, 13 Ko.*
+Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 202 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1895,7 +1896,7 @@ Les capacités statiques de Forge. *10 fonctions, 226 lignes, 13 Ko.*
 
 ## js/forgeInterdits.js
 
-Ce que les statiques de Forge interdisent,. *33 fonctions, 282 lignes, 15 Ko.*
+Ce que les statiques de Forge interdisent,. *33 fonctions, 286 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2324,6 +2325,16 @@ Des déclencheurs de plus. *2 fonctions, 94 lignes, 5 Ko.*
 | `unSeulParLot(P, s, t, cle)` | « One or more » : le premier évènement du lot déclenche, les autres non. |
 | `meulee(P, t, e, s, env)` | — |
 
+## js/forgeDeclencheursE.js
+
+Des paramètres de déclencheurs de plus. *3 fonctions, 96 lignes, 5.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `enPremierCombat(P)` | —— La première phase de combat ———————————————————————————————————— |
+| `carteLanceeLisible(v)` | Un `ValidSAonCard$` : des alternatives, chacune `Spell.<filtre>` ou `Spell.ManaSpent LTX`. |
+| `carteLanceeValide(P, v, e, s, env)` | — |
+
 ## js/forgeRadiation.js
 
 Les marqueurs de radiation. *0 fonctions, 44 lignes, 1.8 Ko.*
@@ -2341,19 +2352,6 @@ L'Anneau vous tente, aux quatre niveaux. *2 fonctions, 51 lignes, 2.8 Ko.*
 |---|---|
 | `NIVEAUX_ANNEAU` | — |
 | `ANNEAU_DEFS` | — |
-
-## js/forgeCoutsC.js
-
-Ce que les statiques font au coût de jouer et au. *6 fonctions, 142 lignes, 7.9 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `vieEgaleMV(x)` | —— Jouer depuis une autre zone, pour de la vie ou pour rien ——————— |
-| `alternativeLisible(t)` | Le coût alternatif d'une statique est-il de ceux qu'on sait jouer ? La carte qui se le donne à elle-même, ou un permanent qui l'offre aux sorts de son contrôleur (`ValidSA$ Spell`,… |
-| `capacitesLisibles(t)` | La statique de coût vise-t-elle des capacités que `viseCapacite()` sait reconnaître ? |
-| `viseCapacite(P, t, src, j, o, k)` | Ce que la statique dit d'une capacité : `Type$ Ability` pour celles du permanent qu'elle vise, `ValidSpell$ Activated.Cycling` pour une famille. |
-| `flashLisible(v)` | Les formes de `ValidSA$` d'un `CastWithFlash` qu'on sait lire. |
-| `loyauteEclair(P, j, o)` | Teferi, Master of Time : ses capacités de loyauté, quand on pourrait lancer un éphémère. |
 
 ## js/forgeProtections.js
 
@@ -2376,7 +2374,7 @@ Se protéger : de tout, de chaque couleur, d'une. *6 fonctions, 110 lignes, 5.8 
 
 ## js/forgeFiltresC.js
 
-Des propriétés de filtre de plus. *1 fonctions, 56 lignes, 3.3 Ko.*
+Des propriétés de filtre de plus. *1 fonctions, 58 lignes, 3.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2412,6 +2410,19 @@ Lancer et activer autrement. *4 fonctions, 118 lignes, 6.7 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `MANA_DE` | —— Le mana venu de créatures —————————————————————————————————————————— |
+
+## js/forgeCoutsC.js
+
+Ce que les statiques font au coût de jouer et au. *6 fonctions, 142 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `vieEgaleMV(x)` | —— Jouer depuis une autre zone, pour de la vie ou pour rien ——————— |
+| `alternativeLisible(t)` | Le coût alternatif d'une statique est-il de ceux qu'on sait jouer ? La carte qui se le donne à elle-même, ou un permanent qui l'offre aux sorts de son contrôleur (`ValidSA$ Spell`,… |
+| `capacitesLisibles(t)` | La statique de coût vise-t-elle des capacités que `viseCapacite()` sait reconnaître ? |
+| `viseCapacite(P, t, src, j, o, k)` | Ce que la statique dit d'une capacité : `Type$ Ability` pour celles du permanent qu'elle vise, `ValidSpell$ Activated.Cycling` pour une famille. |
+| `flashLisible(v)` | Les formes de `ValidSA$` d'un `CastWithFlash` qu'on sait lire. |
+| `loyauteEclair(P, j, o)` | Teferi, Master of Time : ses capacités de loyauté, quand on pourrait lancer un éphémère. |
 
 ## js/forgeChoixMultiples.js
 

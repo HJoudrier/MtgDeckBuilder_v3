@@ -26,7 +26,7 @@ function defsCommandants(P, j) {
 }
 
 proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
-  if (!P && /^(sharesCreatureTypeWith Commander|doesNotShareNameWith )/.test(p)) return false;
+  if (!P && /^(sharesCreatureTypeWith Commander|doesNotShareNameWith |sharesNameWith )/.test(p)) return false;
   /* « shares a creature type with it » : sans objet nommé, avec la source du filtre (Coat of Arms, Locket of Yesterdays). */
   const part = /^shares(CardType|CreatureType|Name)With$/.exec(p);
   if (part) return !!P && !!src && !!src.def && PARTAGES[part[1]](P, {...c, nom: o.def.nom}, src);
@@ -41,6 +41,8 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
       const mes = sousTypesCreature(c);
       return defsCommandants(P, ctrl != null ? ctrl : o.ctrl).some(d => c.changelin || (d.sousTypes || []).some(t => !SOUSTYPES_NON_CREATURE.has(t) && (mes.includes(t) || !!d.changelin)));
     }
+    case 'sharesNameWith YourGraveyard':
+      return P.joueurs[ctrl != null ? ctrl : o.ctrl].cimetiere.some(id => id !== o.id && obj(P, id).def.nom === o.def.nom);
     case 'doesNotShareNameWith YourGraveyard': {
       const J = P.joueurs[ctrl != null ? ctrl : o.ctrl];
       return !J.cimetiere.some(id => id !== o.id && obj(P, id).def.nom === o.def.nom);
@@ -51,5 +53,5 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
   return g(P, o, p, c, src, ctrl, env);
 })(proprieteDesignee);
 
-forgeSait('filtre', ...['CardType', 'CreatureType', 'Name'].map(k => `shares${k}With`), 'IsRingbearer', 'hasABasicLandType', 'ManaCost0', 'ManaCost1', 'sharesCreatureTypeWith Commander',
+forgeSait('filtre', ...['CardType', 'CreatureType', 'Name'].map(k => `shares${k}With`), 'IsRingbearer', 'hasABasicLandType', 'ManaCost0', 'ManaCost1', 'sharesCreatureTypeWith Commander', 'sharesNameWith YourGraveyard',
   'doesNotShareNameWith YourGraveyard', 'doesNotShareNameWith OtherYourBattlefield');

@@ -59,7 +59,7 @@ function* etape(P, e) {
   if (etapeSautee(P, e)) return;
   switch (e) {
     case 'degagement': degagement(P); return;
-    case 'entretien': suspensionsEntretien(P); yield* rebondsEntretien(P); emet(P, {t: 'etape', etape: 'entretien', actif: P.actif}); break;
+    case 'entretien': suspensionsEntretien(P); yield* rebondsEntretien(P); emet(P, {t: 'etape', etape: 'entretien', actif: P.actif, rang: P.entretiensTour = (P.entretiensTour || 0) + 1}); break;
     case 'pioche':
       if (!(P.nb === 2 && P.tour === 1)) yield* pioche(P, P.actif, 1);
       emet(P, {t: 'etape', etape: 'pioche', actif: P.actif});
@@ -113,7 +113,7 @@ function* tour(P) {
   jn(P, `— Tour ${P.tour} : ${J.nom} —`);
   /* La file des étapes : une phase de plus (js/forgeEffetsH.js, `AddPhase`)
      s'y insère pendant le tour. */
-  P.fileEtapes = ETAPES.slice(); P.combatsTour = 0; P.iEtape = 0;
+  P.fileEtapes = ETAPES.slice(); P.combatsTour = 0; P.entretiensTour = 0; P.iEtape = 0;
   yield* suiteDuTour(P);
 }
 
