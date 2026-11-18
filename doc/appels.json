@@ -13,6 +13,7 @@
   "cartes.js",
   "liens.js",
   "etat.js",
+  "collectionDates.js",
   "decks.js",
   "archetypesSets.js",
   "filtres.js",
@@ -1278,6 +1279,7 @@
    "chargement": false,
    "appelle": [
     "annexeListe",
+    "deplaceDates",
     "unindexCard"
    ],
    "appelleDiffere": [],
@@ -1289,7 +1291,7 @@
   {
    "nom": "renameCard",
    "fichier": "cartes.js",
-   "ligne": 196,
+   "ligne": 197,
    "chargement": false,
    "appelle": [
     "indexCard",
@@ -1410,6 +1412,208 @@
     "entete.js (chargement)",
     "marqueOngletsPerimes",
     "signalerTravail"
+   ]
+  },
+  {
+   "nom": "dateDuJour",
+   "fichier": "collectionDates.js",
+   "ligne": 18,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "datesDe",
+   "fichier": "collectionDates.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "nbDates",
+   "fichier": "collectionDates.js",
+   "ligne": 31,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajusteDates",
+    "detailDates",
+    "openSupprCarteModal"
+   ]
+  },
+  {
+   "nom": "ajusteDates",
+   "fichier": "collectionDates.js",
+   "ligne": 38,
+   "chargement": false,
+   "appelle": [
+    "nbDates"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "deplaceDates",
+    "restaureDates",
+    "retireDeCollection"
+   ]
+  },
+  {
+   "nom": "ajouteACollection",
+   "fichier": "collectionDates.js",
+   "ligne": 51,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ajoutCollection",
+    "ajouterCarte",
+    "deckAdd",
+    "gestesAcquisition",
+    "gestesDeck",
+    "openImport"
+   ]
+  },
+  {
+   "nom": "retireDeCollection",
+   "fichier": "collectionDates.js",
+   "ligne": 61,
+   "chargement": false,
+   "appelle": [
+    "ajusteDates"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "retraitCollection"
+   ]
+  },
+  {
+   "nom": "supprimeDeCollection",
+   "fichier": "collectionDates.js",
+   "ligne": 69,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "openSupprCarteModal"
+   ]
+  },
+  {
+   "nom": "videCollection",
+   "fichier": "collectionDates.js",
+   "ligne": 75,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDonnees",
+    "openWipeModal"
+   ]
+  },
+  {
+   "nom": "deplaceDates",
+   "fichier": "collectionDates.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [
+    "ajusteDates"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "mergeInto"
+   ]
+  },
+  {
+   "nom": "restaureDates",
+   "fichier": "collectionDates.js",
+   "ligne": 94,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [
+    "ajusteDates"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "restore"
+   ]
+  },
+  {
+   "nom": "dateFr",
+   "fichier": "collectionDates.js",
+   "ligne": 106,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "detailDates",
+    "resumeDates"
+   ]
+  },
+  {
+   "nom": "resumeDates",
+   "fichier": "collectionDates.js",
+   "ligne": 112,
+   "chargement": false,
+   "appelle": [
+    "dateFr"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ligneDatesAjout"
+   ]
+  },
+  {
+   "nom": "detailDates",
+   "fichier": "collectionDates.js",
+   "ligne": 119,
+   "chargement": false,
+   "appelle": [
+    "dateFr",
+    "nbDates"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ficheHTML",
+    "ligneDatesAjout",
+    "openSupprCarteModal"
+   ]
+  },
+  {
+   "nom": "derniereDate",
+   "fichier": "collectionDates.js",
+   "ligne": 128,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "groupes.js (chargement)"
+   ]
+  },
+  {
+   "nom": "fusionneDates",
+   "fichier": "collectionDates.js",
+   "ligne": 137,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "fusionnePaquets"
    ]
   },
   {
@@ -2500,6 +2704,7 @@
    "ligne": null,
    "chargement": true,
    "appelle": [
+    "derniereDate",
     "mainType",
     "scoreEntree",
     "seauCmc",
@@ -2549,7 +2754,7 @@
   {
    "nom": "scoreEntree",
    "fichier": "groupes.js",
-   "ligne": 172,
+   "ligne": 176,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -2561,7 +2766,7 @@
   {
    "nom": "notesCollectionAJour",
    "fichier": "groupes.js",
-   "ligne": 191,
+   "ligne": 195,
    "chargement": false,
    "appelle": [
     "signatureSuggestions"
@@ -2575,7 +2780,7 @@
   {
    "nom": "notesCollection",
    "fichier": "groupes.js",
-   "ligne": 195,
+   "ligne": 199,
    "chargement": false,
    "appelle": [
     "contexteEvaluation",
@@ -2592,7 +2797,7 @@
   {
    "nom": "groupeCartes",
    "fichier": "groupes.js",
-   "ligne": 216,
+   "ligne": 220,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -19567,7 +19772,7 @@
   {
    "nom": "ecrire",
    "fichier": "stockage.js",
-   "ligne": 125,
+   "ligne": 126,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -19579,7 +19784,7 @@
   {
    "nom": "save",
    "fichier": "stockage.js",
-   "ligne": 129,
+   "ligne": 130,
    "chargement": false,
    "appelle": [
     "ecrire",
@@ -19601,7 +19806,7 @@
   {
    "nom": "scheduleSave",
    "fichier": "stockage.js",
-   "ligne": 160,
+   "ligne": 161,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -19641,7 +19846,7 @@
   {
    "nom": "restore",
    "fichier": "stockage.js",
-   "ligne": 166,
+   "ligne": 167,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -19651,6 +19856,7 @@
     "majTexteOracle",
     "reanalyser",
     "registerCard",
+    "restaureDates",
     "restaureDecks"
    ],
    "appelleDiffere": [],
@@ -19664,7 +19870,7 @@
   {
    "nom": "chargerSauvegarde",
    "fichier": "stockage.js",
-   "ligne": 282,
+   "ligne": 286,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -19903,7 +20109,7 @@
   {
    "nom": "nuageFond",
    "fichier": "nuagePaquet.js",
-   "ligne": 68,
+   "ligne": 69,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -19913,7 +20119,7 @@
   {
    "nom": "nuageVerse",
    "fichier": "nuagePaquet.js",
-   "ligne": 78,
+   "ligne": 79,
    "chargement": false,
    "appelle": [
     "restore"
@@ -19927,7 +20133,7 @@
   {
    "nom": "nuageComprime",
    "fichier": "nuagePaquet.js",
-   "ligne": 94,
+   "ligne": 95,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -19939,7 +20145,7 @@
   {
    "nom": "nuageDecomprime",
    "fichier": "nuagePaquet.js",
-   "ligne": 102,
+   "ligne": 103,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -19951,7 +20157,7 @@
   {
    "nom": "nuageEmballe",
    "fichier": "nuagePaquet.js",
-   "ligne": 112,
+   "ligne": 113,
    "chargement": false,
    "appelle": [
     "nuageComprime"
@@ -19965,7 +20171,7 @@
   {
    "nom": "nuageDeballe",
    "fichier": "nuagePaquet.js",
-   "ligne": 116,
+   "ligne": 117,
    "chargement": false,
    "appelle": [
     "nuageDecomprime"
@@ -20119,11 +20325,12 @@
   {
    "nom": "fusionnePaquets",
    "fichier": "nuageFusion.js",
-   "ligne": 193,
+   "ligne": 194,
    "chargement": false,
    "appelle": [
     "empreinteFond",
     "fusionneCache",
+    "fusionneDates",
     "fusionneDecks",
     "fusionneEnsemble",
     "fusionneQuantites",
@@ -23044,6 +23251,7 @@
    "ligne": 35,
    "chargement": false,
    "appelle": [
+    "ajouteACollection",
     "find",
     "recalculerAvecProgression"
    ],
@@ -23059,7 +23267,8 @@
    "ligne": 42,
    "chargement": false,
    "appelle": [
-    "recalculerAvecProgression"
+    "recalculerAvecProgression",
+    "retireDeCollection"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -23070,7 +23279,7 @@
   {
    "nom": "collectionCards",
    "fichier": "collection.js",
-   "ligne": 49,
+   "ligne": 48,
    "chargement": false,
    "appelle": [
     "find"
@@ -23092,7 +23301,7 @@
   {
    "nom": "filtered",
    "fichier": "collection.js",
-   "ligne": 58,
+   "ligne": 57,
    "chargement": false,
    "appelle": [
     "carteRetenue",
@@ -23114,7 +23323,7 @@
   {
    "nom": "causesCollection",
    "fichier": "collection.js",
-   "ligne": 76,
+   "ligne": 75,
    "chargement": false,
    "appelle": [
     "collectionCards",
@@ -23133,7 +23342,7 @@
   {
    "nom": "ligneCausesCollection",
    "fichier": "collection.js",
-   "ligne": 90,
+   "ligne": 89,
    "chargement": false,
    "appelle": [
     "causesCollection",
@@ -23154,7 +23363,7 @@
   {
    "nom": "renderB",
    "fichier": "collection.js",
-   "ligne": 101,
+   "ligne": 100,
    "chargement": false,
    "appelle": [
     "cardRow",
@@ -23182,6 +23391,59 @@
     "gestesGraphe",
     "renderAll",
     "runScryQueue"
+   ]
+  },
+  {
+   "nom": "boutonSupprCollection",
+   "fichier": "collection.js",
+   "ligne": 160,
+   "chargement": false,
+   "appelle": [
+    "esc"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cardRow",
+    "cardTile"
+   ]
+  },
+  {
+   "nom": "ligneDatesAjout",
+   "fichier": "collection.js",
+   "ligne": 165,
+   "chargement": false,
+   "appelle": [
+    "detailDates",
+    "esc",
+    "resumeDates"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "cardRow",
+    "cardTile"
+   ]
+  },
+  {
+   "nom": "openSupprCarteModal",
+   "fichier": "collection.js",
+   "ligne": 175,
+   "chargement": false,
+   "appelle": [
+    "closeDialog",
+    "detailDates",
+    "esc",
+    "nbDates",
+    "openDialog",
+    "recalculerAvecProgression",
+    "supprimeDeCollection",
+    "toast"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "gestesDonnees"
    ]
   },
   {
@@ -23232,6 +23494,7 @@
    "ligne": 93,
    "chargement": false,
    "appelle": [
+    "ajouteACollection",
     "annexeListe",
     "buildCard",
     "closeDialog",
@@ -23261,6 +23524,7 @@
    "ligne": 9,
    "chargement": false,
    "appelle": [
+    "ajouteACollection",
     "deckAdd",
     "fmt",
     "recalculerAvecProgression",
@@ -23811,6 +24075,7 @@
    "ligne": 71,
    "chargement": false,
    "appelle": [
+    "ajouteACollection",
     "annexeDe",
     "annexeListe",
     "availableFor",
@@ -24308,6 +24573,7 @@
     "cleVersion",
     "deckCounts",
     "deckEntries",
+    "detailDates",
     "edhrecAllFor",
     "esc",
     "estGameChanger",
@@ -26222,6 +26488,7 @@
     "blocEdhrec",
     "blocGraphe",
     "blocVersions",
+    "boutonSupprCollection",
     "cardRow",
     "cardTile",
     "cartesHTML",
@@ -26268,6 +26535,7 @@
     "ligneCible",
     "ligneCommandant",
     "ligneCouvertureCollection",
+    "ligneDatesAjout",
     "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
@@ -26296,6 +26564,7 @@
     "openAdd",
     "openCardModal",
     "openDialog",
+    "openSupprCarteModal",
     "openWantsModal",
     "optionsHTML",
     "ouvreAdversaire",
@@ -26488,6 +26757,7 @@
     "nuageDiagnostic",
     "nuageSynchro",
     "openImport",
+    "openSupprCarteModal",
     "openWantsModal",
     "openWipeModal",
     "ouvreComportement",
@@ -26586,6 +26856,7 @@
     "openFormatModal",
     "openImport",
     "openParametresModal",
+    "openSupprCarteModal",
     "openWantsModal",
     "openWipeModal",
     "ouvreAdversaire",
@@ -26629,6 +26900,7 @@
     "gestesNuage",
     "gestesVue",
     "openImport",
+    "openSupprCarteModal",
     "openWipeModal",
     "supprimeAdversaireOui"
    ]
@@ -27290,11 +27562,13 @@
     "aDeuxFaces",
     "actesAnnexe",
     "availableFor",
+    "boutonSupprCollection",
     "esc",
     "eur",
     "faceVisible",
     "fmt",
     "libelleFamillesLarges",
+    "ligneDatesAjout",
     "nbCartesLarges",
     "nbInteractions",
     "nbLiens",
@@ -27314,14 +27588,16 @@
   {
    "nom": "cardRow",
    "fichier": "tuiles.js",
-   "ligne": 115,
+   "ligne": 116,
    "chargement": false,
    "appelle": [
     "actesAnnexe",
     "availableFor",
+    "boutonSupprCollection",
     "esc",
     "eur",
     "fmt",
+    "ligneDatesAjout",
     "manaHTML",
     "tagDeck",
     "tagGameChanger",
@@ -27338,7 +27614,7 @@
   {
    "nom": "customPanel",
    "fichier": "tuiles.js",
-   "ligne": 143,
+   "ligne": 145,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -27350,7 +27626,7 @@
   {
    "nom": "tagEdhrec",
    "fichier": "tuiles.js",
-   "ligne": 167,
+   "ligne": 169,
    "chargement": false,
    "appelle": [
     "esc"
@@ -27365,7 +27641,7 @@
   {
    "nom": "tagsSuggestion",
    "fichier": "tuiles.js",
-   "ligne": 183,
+   "ligne": 185,
    "chargement": false,
    "appelle": [
     "libelleFamillesLarges",
@@ -27386,7 +27662,7 @@
   {
    "nom": "acteSuggestion",
    "fichier": "tuiles.js",
-   "ligne": 197,
+   "ligne": 199,
    "chargement": false,
    "appelle": [
     "esc"
@@ -27401,7 +27677,7 @@
   {
    "nom": "sugRow",
    "fichier": "tuiles.js",
-   "ligne": 206,
+   "ligne": 208,
    "chargement": false,
    "appelle": [
     "acteSuggestion",
@@ -27420,7 +27696,7 @@
   {
    "nom": "sugLigne",
    "fichier": "tuiles.js",
-   "ligne": 235,
+   "ligne": 237,
    "chargement": false,
    "appelle": [
     "acteSuggestion",
@@ -27683,6 +27959,7 @@
     "gestesVue",
     "lireCatalogueFichier",
     "openImport",
+    "openSupprCarteModal",
     "openWipeModal",
     "rattraperSuggestions",
     "removeFromDeck",
@@ -29142,7 +29419,8 @@
     "deckEntries",
     "openDialog",
     "recalculerAvecProgression",
-    "toast"
+    "toast",
+    "videCollection"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -29532,6 +29810,7 @@
    "ligne": 19,
    "chargement": false,
    "appelle": [
+    "ajouteACollection",
     "mettreEnCommande",
     "recalculerAvecProgression",
     "toast",
@@ -29621,6 +29900,7 @@
    "chargement": false,
    "appelle": [
     "addToDeck",
+    "ajouteACollection",
     "annexeSize",
     "apresReglage",
     "buyCard",
@@ -29674,6 +29954,7 @@
     "openAdd",
     "openDialog",
     "openImport",
+    "openSupprCarteModal",
     "openWipeModal",
     "rafraichirFenetreSauvegarde",
     "recalculerAvecProgression",
@@ -29682,7 +29963,8 @@
     "scheduleSave",
     "snapshot",
     "telechargerCatalogue",
-    "toast"
+    "toast",
+    "videCollection"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],

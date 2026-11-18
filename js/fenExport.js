@@ -167,7 +167,7 @@ function openWipeModal() {
 
   const confirmWipe = document.getElementById('confirmWipe');
   if (confirmWipe) confirmWipe.onclick = () => {
-    S.collection.clear();
+    videCollection();
     closeDialog();
     /* La collection commande les candidates — ce qu'on possède, ce qu'il faut
        acheter : elles sont à rebâtir, comme après un import. */

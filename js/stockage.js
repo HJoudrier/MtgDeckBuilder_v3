@@ -74,6 +74,7 @@ function snapshot() {
     v: 1,
     date: Date.now(),
     collection: [...S.collection],
+    collectionDates: [...S.collectionDates],
     enCours: [...S.enCours],
     decks: clesDecks().map(deckSnap),
     deckActif: S.deckActif,
@@ -207,6 +208,9 @@ function restore(d) {
   });
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));
+  /* Une sauvegarde d'hier n'en porte pas : la collection garde ses exemplaires, sans date. */
+  if (Array.isArray(d.collectionDates)) restaureDates(d.collectionDates);
+  else restaureDates([...S.collectionDates]);
   /* Une sauvegarde d'hier n'en porte pas, et un paquet de synchronisation non
      plus : l'absence du champ laisse les commandes de cet appareil intactes. */
   if (Array.isArray(d.enCours)) S.enCours = new Map(d.enCours.filter(([n, q]) => find(n) && q > 0));

@@ -174,9 +174,10 @@ function frontFace(n) {
 
 function mergeInto(card, canonical) {
   const q = S.collection.get(card.name) || 0, d = S.deck.get(card.name) || 0;
-  if (q) S.collection.set(canonical.name, (S.collection.get(canonical.name) || 0) + q);
+  if (q) { S.collection.set(canonical.name, (S.collection.get(canonical.name) || 0) + q); deplaceDates(card.name, canonical.name); }
   if (d) S.deck.set(canonical.name, (S.deck.get(canonical.name) || 0) + d);
   S.collection.delete(card.name);
+  S.collectionDates.delete(card.name);
   S.deck.delete(card.name);
   /* La réserve et l'étude portent les mêmes noms : elles suivent la fusion,
      sans quoi la carte y resterait sous un nom que la base ne connaît plus. */

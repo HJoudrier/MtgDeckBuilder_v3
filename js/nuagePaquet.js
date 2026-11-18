@@ -52,6 +52,7 @@ function nuagePaquet(appareil) {
   [...NUAGE_QTES, ...NUAGE_SCALAIRES, ...NUAGE_OBJETS, ...NUAGE_ENSEMBLES]
     .forEach(k => { fond[k] = s[k]; });
   fond.decks = s.decks;
+  fond.collectionDates = s.collectionDates;
   return {
     v: NUAGE_PAQUET_V,
     maj: Date.now(),

@@ -211,7 +211,8 @@ js/                 modules, chargés dans cet ordre :
   sugEdhrec.js      la section EDHREC : ce que les decks recensés recommandent
   sugCatalogue.js   la section du catalogue : tout le classement
   suggestions.js    les trois sections des propositions
-  collection.js     la section Collection
+  collection.js     la section Collection, et la suppression d'une carte
+  collectionDates.js  les dates d'ajout des cartes de la collection
   fenImport.js      importer une liste de cartes
   fenAjout.js       ajouter une carte à la main (les deux listes annexes)
   rechercheSection.js  le champ de recherche d'une section, et ses propositions
@@ -2156,6 +2157,21 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   exister, une carte qu'on ne possède pas y est comptée à l'achat —, et la fenêtre de confirmation
   annonce ce qu'elle retire, ce qu'elle garde, et combien de cartes du deck passeront à l'achat. Le
   geste qui prend tout reste « Effacer les données locales », dans la fenêtre des paramètres.
+- **Supprimer une carte, et garder la date de son ajout** (`js/collectionDates.js`). Chaque ligne et
+  chaque vignette de la collection porte un « ✕ » qui retire la carte entière, tous exemplaires, après
+  une fenêtre de confirmation (`openSupprCarteModal()`, `js/collection.js`) ; le « − » du champ de
+  recherche, lui, ôte un exemplaire. `S.collectionDates` dit quand les exemplaires sont venus — nom ->
+  `[[AAAA-MM-JJ, n], …]` : un jour où l'on ajoute deux exemplaires fait une entrée, non deux. Elle
+  n'est jamais écrite à la main : toute écriture dans la collection passe par `ajouteACollection()`,
+  `retireDeCollection()`, `supprimeDeCollection()` ou `videCollection()`, qui tiennent les deux tables
+  d'accord (un retrait ôte les exemplaires les plus récents). **Les dates ne couvrent pas forcément
+  toute la quantité** : une collection saisie avant elles n'en porte aucune, et l'on n'en invente pas ;
+  l'écart se lit « date inconnue ». La sauvegarde (`snapshot()`) les range ; `restore()` lit une
+  sauvegarde d'hier sans elles. Elles voyagent avec le fond de la synchronisation
+  (`fusionneDates()`, `js/nuageFusion.js`) : pour chaque date, le plus grand nombre vu d'un côté ou de
+  l'autre, puis rien au-delà de la quantité fusionnée. Une ligne affiche la première date et combien
+  d'autres (`05/01/2026 (+1)`), l'infobulle et la fiche les détaillent, et la collection se trie par
+  date d'ajout.
 - La collection et le deck portent les mêmes trois boutons — **Importer**, **Exporter**, **Vider** —
   et le même champ de recherche sous eux. Les deux barres divergeaient : « Ajouter » ouvrait une
   fenêtre, « Importer MTGO » n'était nommé que d'un côté, « Exporter » n'existait que pour le deck,

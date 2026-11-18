@@ -40,7 +40,7 @@ function gestesAcquisition(act, b) {
     const nom = b.dataset.name, qty = S.enCours.get(nom) || 0;
     if (!qty) return true;
     S.enCours.delete(nom);
-    S.collection.set(nom, (S.collection.get(nom) || 0) + qty);
+    ajouteACollection(nom, qty);
     toast(`${nom} : ${qty} exemplaire(s) reçus, ajoutés à la collection.`);
     recalculerAvecProgression(`${nom} reçue : ${qty} exemplaire(s) de plus en collection.`);
     return true;

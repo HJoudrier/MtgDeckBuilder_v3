@@ -117,6 +117,8 @@ let apercuCardName = null;
 
 const S = {
   collection: new Map(),
+  /* Quand les exemplaires sont venus : nom -> [[date, n], …] (js/collectionDates.js). */
+  collectionDates: new Map(),
   /* Les acquisitions en cours : nom de carte -> exemplaires commandés, pas
      encore reçus. Un entre-deux de la collection et de la liste d'achats. */
   enCours: new Map(),

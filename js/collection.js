@@ -35,14 +35,13 @@ function colorOK(card) {
 function ajoutCollection(nom) {
   const c = find(nom);
   if (!c) return;
-  S.collection.set(nom, (S.collection.get(nom) || 0) + 1);
+  ajouteACollection(nom, 1);
   recalculerAvecProgression(`${nom} ajoutée à la collection : les suggestions en tiennent compte.`);
 }
 
 function retraitCollection(nom) {
-  const n = S.collection.get(nom) || 0;
-  if (!n) return;
-  if (n <= 1) S.collection.delete(nom); else S.collection.set(nom, n - 1);
+  if (!(S.collection.get(nom) || 0)) return;
+  retireDeCollection(nom, 1);
   recalculerAvecProgression(`${nom} retirée de la collection : les suggestions en tiennent compte.`);
 }
 
@@ -152,4 +151,43 @@ function renderB() {
   const hintEl = document.getElementById('hintB');
   if (hintEl) hintEl.textContent = `${shown}/${total} ex.`;
   setTimeout(() => queueScryfall(page.map(e => e.card)), 0);
+}
+
+/* —— Supprimer une carte de la collection ———————————————————————————— */
+
+/* Le bouton, sur la ligne comme sur la vignette. Il retire la carte entière,
+   tous exemplaires : le « − » du champ de recherche retire un exemplaire. */
+function boutonSupprCollection(nom) {
+  return `<button class="btn sm danger" data-act="supprCollection" data-name="${esc(nom)}" title="Supprimer de la collection">✕</button>`;
+}
+
+/* La date d'ajout, en une ligne ; le détail, une date par ligne, est dans l'infobulle. */
+function ligneDatesAjout(nom, enLigne) {
+  const r = resumeDates(nom), detail = detailDates(nom).join('\n');
+  if (!r && !enLigne) return `<div class="small muted dateajout" title="${esc(detail)}">ajout : date inconnue</div>`;
+  if (!r) return `<span class="mono small muted" title="${esc(detail)}">date inconnue</span>`;
+  return enLigne
+    ? `<span class="mono small muted" title="${esc(detail)}">ajoutée ${esc(r)}</span>`
+    : `<div class="small muted dateajout" title="${esc(detail)}">ajoutée le ${esc(r)}</div>`;
+}
+
+/* Confirmer avant de retirer : la carte emporte ses exemplaires et ses dates. */
+function openSupprCarteModal(nom) {
+  const q = S.collection.get(nom) || 0;
+  if (!q) return;
+  const auDeck = S.deck.get(nom) || 0;
+  const dates = detailDates(nom);
+  openDialog('Supprimer de la collection',
+    `<p class="small"><b>${esc(nom)}</b> : ${q} exemplaire(s) seront retirés de la collection.</p>
+     ${nbDates(nom) ? `<p class="small muted">Les dates d'ajout sont perdues avec elle : ${dates.map(esc).join(' · ')}.</p>` : ''}
+     ${auDeck ? `<p class="small muted">${auDeck} exemplaire(s) sont dans le deck : ils y restent, et seront désormais comptés à l'achat.</p>` : ''}`,
+    `<button class="btn" value="cancel">Annuler</button>
+     <button class="btn danger" id="confirmSuppr" value="ok">Supprimer la carte</button>`);
+  const ok = document.getElementById('confirmSuppr');
+  if (ok) ok.onclick = () => {
+    supprimeDeCollection(nom);
+    closeDialog();
+    recalculerAvecProgression(`${nom} supprimée de la collection : les suggestions en tiennent compte.`);
+    toast(`${nom} supprimée de la collection.`);
+  };
 }

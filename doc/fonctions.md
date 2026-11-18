@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1789 fonctions**, 275 modules, 1943 Ko de JavaScript.
+**1807 fonctions**, 276 modules, 1953 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -20,16 +20,17 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 126 |
 | [`mana.js`](#jsmanajs) | Ce qu'une carte demande en mana, et ce qu'elle en produit | 11 | 211 |
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
-| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 213 |
+| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 214 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 206 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 208 |
+| [`collectionDates.js`](#jscollectiondatesjs) | Les dates d'ajout des cartes de la collection | 15 | 153 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 196 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
 | [`filtres.js`](#jsfiltresjs) | Les critères de la fenêtre « Filtres » | 14 | 157 |
 | [`restrictions.js`](#jsrestrictionsjs) | La restriction d'un deck | 12 | 128 |
 | [`retenue.js`](#jsretenuejs) | Ce qui reste après les filtres | 11 | 135 |
 | [`catalogueEtat.js`](#jscatalogueetatjs) | L'archive en mémoire, et les nœuds qu'elle touche | 5 | 71 |
-| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 237 |
+| [`groupes.js`](#jsgroupesjs) | Grouper et trier les listes de cartes | 7 | 241 |
 | [`barreGroupes.js`](#jsbarregroupesjs) | L'enveloppe d'un groupe, et la mise en page d'une liste | 8 | 118 |
 | [`marche.js`](#jsmarchejs) | Marché Cardmarket, estimations & panier d'achat | 5 | 69 |
 | [`achats.js`](#jsachatsjs) | Ce qu'il reste à acheter | 12 | 176 |
@@ -168,11 +169,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
 | [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 3 | 91 |
-| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 293 |
+| [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 297 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
-| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 123 |
-| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 234 |
+| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 124 |
+| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 236 |
 | [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
 | [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 275 |
 | [`nuageDiagnostic.js`](#jsnuagediagnosticjs) | Éprouver la connexion, étape par étape | 3 | 86 |
@@ -198,7 +199,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`decksSection.js`](#jsdeckssectionjs) | La section « Mes decks » | 4 | 103 |
 | [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 122 |
 | [`acquisitionSection.js`](#jsacquisitionsectionjs) | La section « Acquisition en cours » | 2 | 48 |
-| [`collection.js`](#jscollectionjs) | La section Collection | 9 | 156 |
+| [`collection.js`](#jscollectionjs) | La section Collection | 12 | 194 |
 | [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 223 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
 | [`rechercheSection.js`](#jsrecherchesectionjs) | Le champ de recherche d'une section | 11 | 178 |
@@ -207,7 +208,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 180 |
 | [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 224 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
-| [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 165 |
+| [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 169 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 10 | 132 |
 | [`simAdversaires.js`](#jssimadversairesjs) | La bibliothèque d'adversaires | 8 | 78 |
@@ -228,7 +229,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`couleurs.js`](#jscouleursjs) | Le vocabulaire des couleurs | 1 | 77 |
 | [`apercu.js`](#jsapercujs) | L'aperçu volant sous le curseur | 7 | 101 |
 | [`versions.js`](#jsversionsjs) | Les éditions d'une même carte | 14 | 173 |
-| [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 251 |
+| [`tuiles.js`](#jstuilesjs) | Les rendus d'une carte dans une liste | 12 | 253 |
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
@@ -253,7 +254,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
-| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 146 |
+| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 151 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 46 |
@@ -422,7 +423,7 @@ Les éditions d'une carte, et celle qu'on possède. *7 fonctions, 74 lignes, 2.9
 
 ## js/cartes.js
 
-La base de cartes et ses index. *19 fonctions, 213 lignes, 8.1 Ko.*
+La base de cartes et ses index. *19 fonctions, 214 lignes, 8.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -470,7 +471,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 206 lignes, 12 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 208 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -492,6 +493,32 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 | `apercuEl` | — |
 | `apercuCardName` | — |
 | `S` | — |
+
+## js/collectionDates.js
+
+Les dates d'ajout des cartes de la collection. *15 fonctions, 153 lignes, 6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `dateDuJour()` | — |
+| `datesDe(nom)` | Les dates d'une carte, copiées : `[[date, n], …]`. |
+| `nbDates(nom)` | Les exemplaires dont on connaît la date. |
+| `ajusteDates(nom)` | Remettre les dates d'une carte d'accord avec sa quantité : celles de trop, les plus récentes d'abord, sont ôtées ; une carte qui n'est plus en collection n'a plus de date. |
+| `ajouteACollection(nom, q = 1, date = dateDuJour()` | Ajouter `q` exemplaires, venus à `date` (aujourd'hui par défaut). |
+| `retireDeCollection(nom, q = 1)` | Retirer `q` exemplaires, les plus récents d'abord. |
+| `supprimeDeCollection(nom)` | Supprimer la carte de la collection, tous exemplaires et toutes dates. |
+| `videCollection()` | Vider la collection, ses dates avec. |
+| `deplaceDates(de, vers)` | Une carte change de nom (fusion avec sa version canonique) : ses dates suivent. |
+| `restaureDates(brut)` | Relire des dates enregistrées : ce qui n'a pas la forme attendue est écarté, et rien ne dépasse la quantité. |
+| `dateFr(d)` | « 12/11/2026 » |
+| `resumeDates(nom)` | Ce que la ligne et la vignette disent : la première date, et combien d'autres. |
+| `detailDates(nom)` | Le détail, pour l'infobulle et la fiche : une ligne par date. |
+| `derniereDate(nom)` | La date la plus récente d'une carte, ou '' : sert au tri. |
+| `fusionneDates(local, distant, valeurs)` | Fusionner les dates de deux appareils (js/nuageFusion.js) : pour chaque date, le plus grand nombre vu d'un côté ou de l'autre — une même date n'est pas additionnée, puisque c'est le plus… |
+
+| Donnée | Rôle |
+|---|---|
+| `DATE_VALIDE` | — |
 
 ## js/decks.js
 
@@ -628,7 +655,7 @@ L'archive en mémoire, et les nœuds qu'elle touche. *5 fonctions, 71 lignes, 3.
 
 ## js/groupes.js
 
-Grouper et trier les listes de cartes. *7 fonctions, 237 lignes, 11 Ko.*
+Grouper et trier les listes de cartes. *7 fonctions, 241 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2818,7 +2845,7 @@ Les dossiers de deck, rangés et relus. *3 fonctions, 91 lignes, 4 Ko.*
 
 ## js/stockage.js
 
-La sauvegarde locale. *9 fonctions, 293 lignes, 13 Ko.*
+La sauvegarde locale. *9 fonctions, 297 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2875,7 +2902,7 @@ Le magasin IndexedDB. *6 fonctions, 75 lignes, 3.1 Ko.*
 
 ## js/nuagePaquet.js
 
-Ce qui voyage d'un appareil à l'autre. *7 fonctions, 123 lignes, 5.4 Ko.*
+Ce qui voyage d'un appareil à l'autre. *7 fonctions, 124 lignes, 5.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2897,7 +2924,7 @@ Ce qui voyage d'un appareil à l'autre. *7 fonctions, 123 lignes, 5.4 Ko.*
 
 ## js/nuageFusion.js
 
-Fusionner deux appareils sans rien perdre. *11 fonctions, 234 lignes, 11 Ko.*
+Fusionner deux appareils sans rien perdre. *11 fonctions, 236 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3343,7 +3370,7 @@ La section « Acquisition en cours ». *2 fonctions, 48 lignes, 2.4 Ko.*
 
 ## js/collection.js
 
-La section Collection. *9 fonctions, 156 lignes, 7.9 Ko.*
+La section Collection. *12 fonctions, 194 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3356,6 +3383,9 @@ La section Collection. *9 fonctions, 156 lignes, 7.9 Ko.*
 | `causesCollection()` | Ce qui écarte des cartes de la collection affichée, cause par cause, dans l'ordre où les critères s'appliquent. |
 | `ligneCausesCollection()` | La phrase qui les nomme, chacune avec le geste qui la lève. |
 | `renderB()` | — |
+| `boutonSupprCollection(nom)` | Le bouton, sur la ligne comme sur la vignette. |
+| `ligneDatesAjout(nom, enLigne)` | La date d'ajout, en une ligne ; le détail, une date par ligne, est dans l'infobulle. |
+| `openSupprCarteModal(nom)` | Confirmer avant de retirer : la carte emporte ses exemplaires et ses dates. |
 
 | Donnée | Rôle |
 |---|---|
@@ -3500,7 +3530,7 @@ Le visuel de la fiche, et ses éditions. *5 fonctions, 116 lignes, 5.6 Ko.*
 
 ## js/fiche.js
 
-La fiche détaillée d'une carte. *1 fonctions, 165 lignes, 11 Ko.*
+La fiche détaillée d'une carte. *1 fonctions, 169 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3890,7 +3920,7 @@ Les éditions d'une même carte. *14 fonctions, 173 lignes, 6.9 Ko.*
 
 ## js/tuiles.js
 
-Les rendus d'une carte dans une liste. *12 fonctions, 251 lignes, 16 Ko.*
+Les rendus d'une carte dans une liste. *12 fonctions, 253 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4251,7 +4281,7 @@ Les fenêtres de réglage et leurs boutons. *1 fonctions, 140 lignes, 4.6 Ko.*
 
 ## js/gestesDeck.js
 
-Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 198 lignes, 7.8 Ko.*
+Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 198 lignes, 7.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4259,7 +4289,7 @@ Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 198 lignes, 7.8
 
 ## js/gestesDonnees.js
 
-Les gestes qui touchent aux données. *1 fonctions, 146 lignes, 4.9 Ko.*
+Les gestes qui touchent aux données. *1 fonctions, 151 lignes, 5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
