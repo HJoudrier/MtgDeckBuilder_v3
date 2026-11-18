@@ -133,7 +133,8 @@ function actionsLegales(P, j) {
     o.def.capacites.forEach((k, i) => {
       if (k.zone !== zone || k.genre !== 'activee') return;
       if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i)) || (k.phases && !dansPhases(P, k.phases))) return;
-      if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o}) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
+      const kc = capaciteReduite(P, j, o, k);
+      if (!coutAutrePossible(P, j, o, kc.cout) || !planPaiement(P, j, kc.cout.mana, 0, {capacite: o}) || !effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
       if (activationInterdite(P, j, o, k)) return;
       r.push({k: 'activer', id, i});
     });
@@ -146,7 +147,8 @@ function actionsLegales(P, j) {
       if (k.phases && !dansPhases(P, k.phases)) return;
       if (k.genre === 'activee') {
         if ((k.vitesse === 'rituel' && !rituel) || (k.unefois && P.unefois.has(id + '|a' + i))) return;
-        if (!coutAutrePossible(P, j, o, k.cout) || !planPaiement(P, j, k.cout.mana, 0, {capacite: o})) return;
+        const kc = capaciteReduite(P, j, o, k);
+        if (!coutAutrePossible(P, j, o, kc.cout) || !planPaiement(P, j, kc.cout.mana, 0, {capacite: o})) return;
         if (!effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
         r.push({k: 'activer', id, i});
       } else if (k.genre === 'loyaute') {

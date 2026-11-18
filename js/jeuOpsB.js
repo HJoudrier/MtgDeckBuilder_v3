@@ -45,7 +45,7 @@ OPS.prolifere = function* (P, op, ctx) {
 OPS.pompe = function* (P, op, ctx) {
   const f = valeur(P, op.f, ctx), e = valeur(P, op.e, ctx);
   resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ').forEach(o => {
-    o.mods.push({f, e, mots: op.mots || 0, fin: 'tour'});
+    o.mods.push(op.impose ? {f, e, mots: op.mots || 0, doitEtreBloque: true, fin: 'tour'} : {f, e, mots: op.mots || 0, fin: 'tour'});
     P.ver++;
   });
 };

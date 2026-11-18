@@ -156,14 +156,20 @@ OPS.porteJeton = function* (P, op, ctx) {
   if (s && !s.lki && s.zone === 'champ' && t != null) { s.att = t; P.ver++; }
 };
 
-/* « Must be blocked if able » : un bloqueur libre qui le peut s'y met. */
+/* « Must be blocked if able » : un bloqueur libre qui le peut s'y met. La
+   source peut être la carte, une statique, ou un bonus du tour
+   (`KW$ HIDDEN … must be blocked if able.`, js/forgeEffetsC.js). */
+function doitEtreBloque(P, id, fg) {
+  const o = obj(P, id);
+  return !!(o.def.params.doitEtreBloque || fg.get(id).doitEtreBloque || o.mods.some(m => m.doitEtreBloque));
+}
 function bloqueursImposes(P, atts, blqs, pose) {
   const cb = P.combat, fg = new Map(atts.map(a => [a, statiquesForgeSur(P, obj(P, a))]));
   /* L'attirance (Lure) : toute créature qui peut le bloquer le bloque. */
   atts.filter(a => obj(P, a).def.params.leurre || fg.get(a).leurre).forEach(a => {
     blqs.forEach(b => { if (!cb.bloqueurs.has(b) && peutBloquer(P, obj(P, b), obj(P, a))) pose(b, a); });
   });
-  atts.filter(a => (obj(P, a).def.params.doitEtreBloque || fg.get(a).doitEtreBloque) && !(cb.bloquesPar.get(a) || []).length).forEach(a => {
+  atts.filter(a => doitEtreBloque(P, a, fg) && !(cb.bloquesPar.get(a) || []).length).forEach(a => {
     const b = blqs.find(x => !cb.bloqueurs.has(x) && peutBloquer(P, obj(P, x), obj(P, a)));
     if (b != null) pose(b, a);
   });

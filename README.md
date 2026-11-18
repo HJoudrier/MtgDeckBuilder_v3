@@ -127,6 +127,8 @@ js/                 modules, chargés dans cet ordre :
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
   forgeManaC.js     le mana qui porte quelque chose : un mot-clé au sort qu'il paie, « when you spend this mana », le remplacement optionnel
   forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
+  forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
+  forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
   forgeActivations.js  la mise sous tension (PowerUp), lancer une copie pour un autre coût, le mana venu de créatures, Count$YourTurns
@@ -1438,6 +1440,61 @@ et les mêmes terrains engagés. Le filtre n'entre en jeu que si le solveur éch
 Profondeur bornée à deux : un filtre qui en nourrit un autre au-delà n'est pas cherché. Deux défauts
 plus anciens, vus en chemin : `Combo B G | Amount$ 2` ne donnait que `BB` ou `GG`, jamais `BG`
 (`multiensembles()`), et un `Return<1/CARDNAME>` dans un coût de mana faisait refuser la capacité.
+
+**Deux cartes demandées** (lot F59). *Reinforced Ronin* — Haste, retour en main à l'étape de fin,
+Channel depuis la main — était déjà jouée de bout en bout ; des parties scriptées le confirment (la
+capacité de la main est proposée, défausse la carte et pioche ; lancée, elle attaque puis revient). Seule
+*Anzrag, the Quake-Mole* manquait d'un élément : son activation, `Pump | KW$ HIDDEN CARDNAME must be
+blocked if able.`, était jetée sans bruit et la carte restait partielle.
+- **« Doit être bloqué » pour le tour** : le bonus posé par la pompe porte `doitEtreBloque`
+  (`pompeForge()`), et `doitEtreBloque()` (`js/forgeMotsClesD.js`) le lit avec les deux autres sources de
+  l'obligation — la carte et une statique. Le bonus tombe au nettoyage comme tout `fin: 'tour'`, et
+  l'obligation vaut pour chaque combat du tour, la phase de combat de plus que donne Anzrag comprise ;
+- **l'IA** n'activait jamais une pompe hors combat. Une pompe qui impose le blocage vaut maintenant 3 en
+  première principale ou au début du combat, pour une créature dégagée qui peut attaquer.
+
+**Les mêmes deux cartes, lues dans l'oracle** (suite du lot F59). Une fiche sans script Forge — l'archive
+n'est pas téléchargée, ou la carte n'y est pas — passe par le compilateur d'oracle, et *Reinforced Ronin* y
+était **injouable** : la ligne « Channel — {1}{R}, Discard ~ : Draw a card » n'était pas lue, et le mot
+« discard » la faisait classer comme contrepartie. Le script Forge ne suffit donc pas à juger une carte :
+le banc doit essayer les deux lectures (`definitionDe()` garde la mieux comprise).
+- **Channel** : `compileActivee()` ôte l'étiquette et lit le reste comme un coût d'activation ; `discard ~`
+  (`defausseSoi`) est un morceau de coût, et la capacité s'active depuis la main (`zone: 'main'`), comme un
+  cycle. Un `discard ~` sans « Channel » reste une capacité du champ, que `coutAutrePossible()` ne laisse jamais
+  payer ;
+- **Anzrag** : « must be blocked this turn if able » est une pompe sans bonus qui pose `doitEtreBloque`
+  (`op.impose`, lu par `OPS.pompe`), et « after this combat phase, there is an additional combat phase » une
+  opération `phaseSupp` qui partage `ajoutePhase()` avec le `AddPhase` de Forge. Les deux lectures — Forge et
+  oracle — jouent la carte à l'identique ; les 127 cartes de la base livrée gardent la même couverture.
+
+**Mesurer sur ce que les joueurs jouent** (lots F60 et suivants). Jusqu'ici on partait des cartes qu'on nous
+citait. Le banc part maintenant d'EDHREC : les cent premiers commandants de l'année, leurs pages, soit 7 379 cartes
+distinctes, chacune lue avec son script Forge (le dépôt cloné en partie, `forge-gui/res/cardsfolder` et
+`tokenscripts`) et sa couverture comptée, pondérée par le nombre de decks. Au départ, 6 063 cartes complètes, 830
+partielles, 484 injouables, et une longue traîne : 1 194 éléments manquants différents, dont 853 cartes qui n'en
+manquent qu'un. D'où des lots par famille d'éléments, les plus joués d'abord. Le banc rejoue aussi des parties : 500
+parties de decks tirés au hasard parmi les cartes complètes, sans une seule erreur du moteur.
+
+**Lot F60 : Channel, protections, filtres** (`js/forgeProtections.js`, `js/forgeFiltresC.js`).
+- **`ReduceCost$` d'une capacité** (cinquante cartes) : Boseiju, Otawara, Takenuma, Eiganjo, Sokenzan… coûtent
+  {1} de moins par légendaire qu'on contrôle. La capacité garde `reduit` ; `capaciteReduite()`
+  (`js/forgeActivations.js`) la rend avec son coût de mana diminué du générique, et trois sites la lisent — les
+  actions légales depuis la main et depuis le champ, et `activeCapacite()`. Jamais en dessous de zéro, jamais une
+  couleur ; une quantité illisible ne réduit rien ;
+- **protection from everything sur un joueur** (Teferi's Protection, The One Ring, The Stasis Coffin) : un
+  drapeau de joueur, `J.protTout`, qui tient jusqu'au début du prochain tour de celui qui l'a posé. On ne peut
+  plus le cibler (`ciblesLegales()` et `cibleEncoreLegale()` l'écartent), et les dégâts sont prévenus
+  (`degatsApresPrevention()`) ; ce qui ne cible pas l'atteint toujours. Teferi's Reproach la donne à l'adversaire
+  par une statique d'effet ;
+- **`Protection from each color`** : les cinq couleurs de `o.protTemp`, que `ciblable()` lisait déjà (Akroma's
+  Will, Eldritch Immunity) ; **`Hexproof:Black`** : `o.hexTemp`, qui n'arrête que les sources adverses de cette
+  couleur (Veil of Summer, permanents et joueur) ; le nettoyage les défait ;
+- **`CantChangeLife`** : `vieBloquee()` et `vieReduite()` rendent zéro tant qu'une statique la fige (Teferi's
+  Protection, Perch Protection, Flare of Fortitude) ;
+- **filtres** : `hasABasicLandType`, `ManaCost0` / `ManaCost1`, `doesNotShareNameWith …` et `sharesCreatureTypeWith
+  Commander`. Ce dernier se juge sur la partie : `forgeValideDef()` prend `P` en paramètre, que seul le
+  déclencheur « sort lancé » lui donne — Path of Ancestry n'a de scry que si la créature partage un type avec le
+  commandant.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

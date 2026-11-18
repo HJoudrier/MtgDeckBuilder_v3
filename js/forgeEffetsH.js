@@ -260,7 +260,7 @@ const FINS_DE_PHASE = new Set(['pioche', 'principale1', 'finCombat', 'principale
    an additional main phase » : les étapes s'insèrent dans la file du tour
    (js/jeuTour.js `tour()`), après la phase en cours, ou après celle que
    nomme `AfterPhase$`. Une étape d'entretien de plus suit l'étape en cours. */
-forgeEffet('AddPhase', ['ExtraPhase', 'AfterPhase', 'FollowedBy', 'ConditionPhases', 'NumPhases', 'ConditionFirstCombat'], function* (P, t, env) {
+function ajoutePhase(P, t, n) {
   const file = P.fileEtapes, ajout = PHASES_FORGE[t.ExtraPhase];
   if (!file || !ajout) return;
   if (t.ConditionPhases && !String(t.ConditionPhases).split(',').some(p => ETAPES_FORGE[p.trim()] === P.etape)) return;
@@ -269,7 +269,14 @@ forgeEffet('AddPhase', ['ExtraPhase', 'AfterPhase', 'FollowedBy', 'ConditionPhas
   const apres = t.AfterPhase ? file.indexOf(ETAPES_FORGE[t.AfterPhase], P.iEtape) : -1;
   if (apres >= 0) i = apres;
   else if (t.ExtraPhase !== 'Upkeep') while (i + 1 < file.length && !FINS_DE_PHASE.has(file[i])) i++;
-  const n = Math.min(forgeNombre(P, t.NumPhases || 1, env), 5);
-  for (let k = 0; k < n; k++) file.splice(i + 1, 0, ...ajout, ...(t.FollowedBy ? PHASES_FORGE[t.FollowedBy] || [] : []));
+  for (let k = 0; k < Math.min(n, 5); k++) file.splice(i + 1, 0, ...ajout, ...(t.FollowedBy ? PHASES_FORGE[t.FollowedBy] || [] : []));
   jn(P, `Une phase de plus : ${t.ExtraPhase}`);
+}
+
+/* La même phase de plus, lue dans l'oracle (« After this combat phase, there
+   is an additional combat phase »). */
+OPS.phaseSupp = function* (P, op) { ajoutePhase(P, op.t, 1); };
+
+forgeEffet('AddPhase', ['ExtraPhase', 'AfterPhase', 'FollowedBy', 'ConditionPhases', 'NumPhases', 'ConditionFirstCombat'], function* (P, t, env) {
+  ajoutePhase(P, t, forgeNombre(P, t.NumPhases || 1, env));
 }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !!PHASES_FORGE[t.ExtraPhase] && (!t.FollowedBy || !!PHASES_FORGE[t.FollowedBy])});
