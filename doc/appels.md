@@ -8,7 +8,17 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1703 fonctions** dans 252 modules, **5386 appels** relevés.
+**1703 fonctions** dans 254 modules, **5386 appels** relevés.
+
+## Noms définis deux fois
+
+Tout vivant dans la portée globale, le dernier chargé écrase le premier.
+
+- `joueurProtegeTout()` : `forgeProtections.js` puis `forgeProtections.js`
+- `joueurLinceulDe()` : `forgeProtections.js` puis `forgeProtections.js`
+- `joueursPompe()` : `forgeProtections.js` puis `forgeProtections.js`
+- `vieFigee()` : `forgeProtections.js` puis `forgeProtections.js`
+- `defsCommandants()` : `forgeFiltresC.js` puis `forgeFiltresC.js`
 
 ## Fonctions que personne n'appelle
 
@@ -5359,6 +5369,48 @@ Appelée par : `forgeFiltresC.js (chargement)`
 ### `chargement du module`
 
 Appelle : `choisitCartes()` *(jeuOpsA.js)*, `deplace()` *(jeuEtat.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeSait()` *(forgeCouverture.js)*, `jn()` *(jeuEtat.js)*, `melangeHasard()` *(jeuHasard.js)*, `retireDe()` *(jeuEtat.js)*, `synthese()` *(forgeMotsClesB.js)*, → `motCleLancementB()` *(forgeMotsClesE.js)*
+
+## js/forgeProtections.js
+
+### `chargement du module`
+
+Appelle : `finForge()` *(forgeDurees.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeStatique()` *(forgeStatiques.js)*, `joueurLinceulDe()` *(forgeProtections.js)*, `joueurProtegeTout()` *(forgeProtections.js)*, `joueursPompe()` *(forgeProtections.js)*, `vieFigee()` *(forgeProtections.js)*, → `ciblable()` *(jeuCibles.js)*, → `cibleEncoreLegale()` *(jeuCibles.js)*, → `ciblesLegales()` *(jeuCibles.js)*, → `degatsApresPrevention()` *(forgeRemplacements.js)*, → `pompeForge()` *(forgeEffetsC.js)*, → `vieBloquee()` *(forgeInterdits.js)*, → `vieReduite()` *(forgeRemplacementsD.js)*
+
+### `joueurProtegeTout()` — ligne 33
+
+Appelle : `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+
+Appelée par : `forgeProtections.js (chargement)`
+
+### `joueurLinceulDe()` — ligne 42
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `forgeProtections.js (chargement)`
+
+### `joueursPompe()` — ligne 48
+
+Appelle : `ciblesForge()` *(forgeDefini.js)*, `forgeDefinis()` *(forgeDefini.js)*
+
+Appelée par : `forgeProtections.js (chargement)`
+
+### `vieFigee()` — ligne 106
+
+Appelle : `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
+
+Appelée par : `forgeProtections.js (chargement)`
+
+## js/forgeFiltresC.js
+
+### `chargement du module`
+
+Appelle : `defsCommandants()` *(forgeFiltresC.js)*, `forgeSait()` *(forgeCouverture.js)*, `obj()` *(jeuEtat.js)*, `sousTypesCreature()` *(forgeMemoire.js)*, → `proprieteDesignee()` *(forgeDesignations.js)*
+
+### `defsCommandants()` — ligne 21
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `forgeFiltresC.js (chargement)`
 
 ## js/forgeAlias.js
 

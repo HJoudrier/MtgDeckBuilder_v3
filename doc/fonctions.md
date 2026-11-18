@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1739 fonctions**, 252 modules, 1815 Ko de JavaScript.
+**1746 fonctions**, 254 modules, 1823 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -130,6 +130,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
 | [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 49 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
+| [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
+| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 49 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 106 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
@@ -2338,6 +2340,37 @@ Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
 ## js/forgeHideaway.js
 
 Hideaway : cacher une carte, la jouer plus tard. *0 fonctions, 35 lignes, 1.9 Ko.*
+
+## js/forgeProtections.js
+
+Se protéger : de tout, de chaque couleur, d'une. *6 fonctions, 110 lignes, 5.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `motsCaches(t)` | — |
+| `linceulsDe(t)` | — |
+| `joueurProtegeTout(P, j)` | Un joueur est-il protégé de tout en ce moment ? « Until your next turn » tient jusqu'au début du prochain tour de celui qui l'a posé. |
+| `joueurLinceulDe(P, j, ctrl, couleurs)` | Un joueur est-il à l'abri de cette source (de ses couleurs) ? |
+| `joueursPompe(P, t, env)` | Les joueurs qu'une pompe désigne : ses cibles, ou ce que `Defined$` nomme. |
+| `vieFigee(P, j)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `KW_PROTEGE_TOUT` | — |
+| `KW_PROTEGE_COULEURS` | — |
+| `KW_LINCEUL_COULEUR` | — |
+
+## js/forgeFiltresC.js
+
+Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `defsCommandants(P, j)` | Les cartes que `j` a choisies pour commandants, en définitions. |
+
+| Donnée | Rôle |
+|---|---|
+| `TERRAINS_DE_BASE` | — |
 
 ## js/forgeAlias.js
 
