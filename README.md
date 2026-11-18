@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeEffetsJ.js   des effets durables : un nombre retenu par l'effet (SetChosenNumber)
   forgeMarqueursC.js  marqueurs et dés : retenir l'armée, N fois, par objet désigné, au plus N, pairs et impairs
   forgeMotsClesG.js les mots-clés, IV : évasions du tour, prévention, Training, Undaunted, Gravestorm, règles de deck sans effet en jeu
   forgeStatiquesC.js  des statiques refusées : hexproof contre un genre de sources, jouer d'en haut sous condition, ne plus piocher
@@ -1785,6 +1786,16 @@ d'un permanent sacrifié (Squandered Resources), le mana réservé au combat (Av
 Restent : les marqueurs de mot-clé (`CounterTypes$ Flying,Deathtouch`, Qarsi Revenant), `MoveCounter | ValidDefined$`, les
 dés qu'on garde (`IgnoreLower$`, `DifferentResults$`), le résultat naturel (`Natural$`), le remplacement d'un marqueur
 posé à un joueur (Winding Constrictor).
+
+**Lot F78 : animer, et un nombre retenu** (`js/forgeEffetsD.js`, `js/forgeEffetsJ.js`). Neuf cartes de plus :
+- **`Animate | AddAllCreatureTypes$`**, `AnimateAll` (Mutavault, Mirror Entity, Glamer Gifter, Oko, Shields of Velis Vel) :
+  l'animation porte `changelin: true`, que la couche propre à l'objet (`car()`) lit déjà — un changelin, le temps de
+  l'animation ;
+- **`Effect | SetChosenNumber$ X`** (Will, Scion of Peace ; Mutated Cultist ; Nahiri's Lithoforming) : l'effet retient un
+  nombre que `Count$ChosenNumber` lira plus tard.
+Restent : les remplacements et SVars qu'une animation accorde (`Replacements$`, `sVars$` : The Book of Exalted Deeds,
+Vorpal Sword), `CantHaveKeyword$`, et les effets qui posent un remplacement d'entrée avec marqueurs (Communal Brewing,
+Torgal : leur chaîne `Effect | ReplacementEffects$ … ExileOnMoved$ Stack` n'est pas encore lue).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

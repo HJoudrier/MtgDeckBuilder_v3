@@ -135,6 +135,7 @@
   "forgeStatiquesC.js",
   "forgeMotsClesG.js",
   "forgeMarqueursC.js",
+  "forgeEffetsJ.js",
   "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
@@ -4108,6 +4109,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsF.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEffetsJ.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeEntrees.js (chargement)",
     "forgeExecute.js (chargement)",
@@ -9913,6 +9915,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEffetsJ.js (chargement)",
     "forgeExpression",
     "forgeHideaway.js (chargement)",
     "forgeMarqueursC.js (chargement)",
@@ -11400,7 +11403,7 @@
   {
    "nom": "accordeAnimation",
    "fichier": "forgeEffetsD.js",
-   "ligne": 156,
+   "ligne": 158,
    "chargement": false,
    "appelle": [
     "capaciteForge",
@@ -11418,7 +11421,7 @@
   {
    "nom": "animationTenable",
    "fichier": "forgeEffetsD.js",
-   "ligne": 166,
+   "ligne": 168,
    "chargement": false,
    "appelle": [
     "accordeAnimation",
@@ -11540,6 +11543,7 @@
     "forgeDefinis",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeEffetsJ.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeExprC.js (chargement)",
     "forgeExpression",
@@ -17504,6 +17508,20 @@
     "jn",
     "retiensForge",
     "varsDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeEffetsJ.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "choixDe",
+    "forgeNombre",
+    "forgeSait"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],

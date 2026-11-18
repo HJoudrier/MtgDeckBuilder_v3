@@ -141,6 +141,8 @@ function animeForge(P, objets, t, env) {
     couleurs: t.Colors ? couleursMots(t.Colors) : null, ecrase: t.OverwriteColors === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True',
     /* Ce que l'animation ôte, et ce qu'elle accorde : capacités, déclencheurs
        et statiques compilés à la construction (`op.accorde`). */
+    /* « Gains all creature types » : un changelin, le temps de l'animation. */
+    changelin: t.AddAllCreatureTypes === 'True',
     retireTypes: t.RemoveCardTypes === 'True', retireTerrains: t.RemoveLandTypes === 'True', perdTout: t.RemoveAllAbilities === 'True',
     retireMots: t.RemoveKeywords ? motsForge(t.RemoveKeywords) : 0,
     capacites: ((env.op && env.op.accorde) || {}).capacites || null, statiques: ((env.op && env.op.accorde) || {}).statiques || null};
@@ -172,7 +174,7 @@ function animationTenable(t, op) {
 }
 
 const PARAMS_ANIME = ['Power', 'Toughness', 'Types', 'Keywords', 'Colors', 'OverwriteColors', 'Duration', 'RemoveCreatureTypes', 'RemoveCardTypes',
-  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT'];
+  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT', 'AddAllCreatureTypes'];
 
 forgeEffet('Animate', PARAMS_ANIME, function* (P, t, env) { animeForge(P, objetsForge(P, t, env), t, env); },
   (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: animationTenable});
