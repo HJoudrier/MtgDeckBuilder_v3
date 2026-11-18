@@ -129,6 +129,9 @@ js/                 modules, chargés dans cet ordre :
   forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
   forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
+  forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
+  forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
   forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
@@ -1507,6 +1510,26 @@ parties de decks tirés au hasard parmi les cartes complètes, sans une seule er
   comptent ensemble, joueur par joueur — chacun pioche autant que la plus grosse main défaussée ;
 - **`ShareLandType$`** (Myriad Landscape) : la première terre se choisit librement, la seconde parmi celles du même
   type de base.
+
+**Lot F62 : des déclencheurs, la radiation, l'Anneau** (`js/forgeDeclencheursD.js`, `js/forgeRadiation.js`,
+`js/forgeAnneau.js`).
+- **`TokenCreated`** (Mirkwood Bats, Rosie Cotton) : l'évènement d'entrée d'un jeton, jugé sur son joueur et son
+  filtre ;
+- **`Drawn | FirstCardInDrawStep$`** (Orcish Bowmasters, Xyris, douze cartes) : `piocheN()` note le rang de la carte
+  dans l'étape (`J.piocheEtape`) ; la première de l'étape de pioche ne déclenche pas, toute autre si. Une pioche du
+  début de partie n'est pas une pioche d'étape ;
+- **« one or more »** (`SacrificedOnce`, `LifeLostAll`, `MilledAll`) : un seul déclenchement par lot d'évènements,
+  par `P._lot` ; `ResolvedLimit$` limite par tour (`P.limitesTour`) ;
+- **meuler** : `deplace()` marque une carte meulée (`opts.meule`), que `Milled` et `MilledAll` reconnaissent ; une
+  carte mise au cimetière d'une autre façon n'est pas « meulée » ;
+- **la radiation** : `Radiation | Num$` donne des marqueurs ; au début de sa première principale, un joueur meule
+  autant de cartes, perd 1 vie et retire un marqueur par carte qui n'est pas un terrain (règle 727). Dix-huit
+  cartes (The Wise Mothman, Nuclear Fallout, Glowing One…) ;
+- **l'Anneau, niveaux 2 à 4** : jusqu'ici seul le premier niveau était joué. Les trois autres sont écrits comme un
+  script de Forge (`NIVEAUX_ANNEAU`), compilés une fois et posés, au passage du niveau, en effet permanent du joueur
+  (piocher puis défausser en attaquant ; le bloqueur sacrifié à la fin du combat ; 3 vie perdus par chaque
+  adversaire sur un dégât de combat). `IsRingBearer` désigne le porteur. `RingTemptsYou` est aussi un déclencheur
+  (Call of the Ring).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

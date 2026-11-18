@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1746 fonctions**, 254 modules, 1823 Ko de JavaScript.
+**1744 fonctions**, 255 modules, 1823 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -46,7 +46,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 8 | 174 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
-| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 225 |
+| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 228 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 69 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 148 |
@@ -93,7 +93,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 118 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
-| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 297 |
+| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 300 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 8 | 283 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
@@ -128,10 +128,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeParadigme.js`](#jsforgeparadigmejs) | Paradigm | 1 | 39 |
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
-| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 49 |
+| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 51 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
-| [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
-| [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 49 |
+| [`forgeDeclencheursD.js`](#jsforgedeclencheursdjs) | Des déclencheurs de plus | 3 | 63 |
+| [`forgeRadiation.js`](#jsforgeradiationjs) | Les marqueurs de radiation | 0 | 44 |
+| [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 106 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
@@ -917,7 +918,7 @@ Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
 
 ## js/jeuEtat.js
 
-Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 225 lignes, 10 Ko.*
+Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 228 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1704,7 +1705,7 @@ Les paramètres de plus des effets courants. *4 fonctions, 219 lignes, 12 Ko.*
 
 ## js/forgeEffetsG.js
 
-Les mécaniques de partie de Forge. *10 fonctions, 297 lignes, 19 Ko.*
+Les mécaniques de partie de Forge. *10 fonctions, 300 lignes, 20 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2327,7 +2328,7 @@ Se protéger : de tout, de chaque couleur, d'une. *6 fonctions, 110 lignes, 5.8 
 
 ## js/forgeFiltresC.js
 
-Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
+Des propriétés de filtre de plus. *1 fonctions, 51 lignes, 2.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2341,36 +2342,33 @@ Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
 
 Hideaway : cacher une carte, la jouer plus tard. *0 fonctions, 35 lignes, 1.9 Ko.*
 
-## js/forgeProtections.js
+## js/forgeDeclencheursD.js
 
-Se protéger : de tout, de chaque couleur, d'une. *6 fonctions, 110 lignes, 5.8 Ko.*
-
-| Fonction | Rôle |
-|---|---|
-| `motsCaches(t)` | — |
-| `linceulsDe(t)` | — |
-| `joueurProtegeTout(P, j)` | Un joueur est-il protégé de tout en ce moment ? « Until your next turn » tient jusqu'au début du prochain tour de celui qui l'a posé. |
-| `joueurLinceulDe(P, j, ctrl, couleurs)` | Un joueur est-il à l'abri de cette source (de ses couleurs) ? |
-| `joueursPompe(P, t, env)` | Les joueurs qu'une pompe désigne : ses cibles, ou ce que `Defined$` nomme. |
-| `vieFigee(P, j)` | — |
-
-| Donnée | Rôle |
-|---|---|
-| `KW_PROTEGE_TOUT` | — |
-| `KW_PROTEGE_COULEURS` | — |
-| `KW_LINCEUL_COULEUR` | — |
-
-## js/forgeFiltresC.js
-
-Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
+Des déclencheurs de plus. *3 fonctions, 63 lignes, 3.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `defsCommandants(P, j)` | Les cartes que `j` a choisies pour commandants, en définitions. |
+| `unSeulParLot(P, s, t, cle)` | « One or more » : le premier évènement du lot déclenche, les autres non. |
+| `sousLimiteDuTour(P, s, t)` | « Do this only once each turn » : au plus N déclenchements par tour. |
+| `meulee(P, t, e, s, env)` | — |
+
+## js/forgeRadiation.js
+
+Les marqueurs de radiation. *0 fonctions, 44 lignes, 1.8 Ko.*
+
+## js/forgeAnneau.js
+
+L'Anneau vous tente, aux quatre niveaux. *2 fonctions, 51 lignes, 2.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `capacitesAnneau(niveau)` | Les capacités d'un niveau, compilées une fois. |
+| `poseNiveauAnneau(P, j, niveau)` | Le niveau atteint par la tentation : pose, une fois par joueur et par niveau, l'effet qui porte ses déclencheurs. |
 
 | Donnée | Rôle |
 |---|---|
-| `TERRAINS_DE_BASE` | — |
+| `NIVEAUX_ANNEAU` | — |
+| `ANNEAU_DEFS` | — |
 
 ## js/forgeAlias.js
 

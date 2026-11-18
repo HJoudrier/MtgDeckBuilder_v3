@@ -272,8 +272,11 @@ forgeEffet('RingTemptsYou', [], function* (P, t, env) {
   if (!l.length) return;
   const pref = l.map(o => o.id).sort((a, b) => car(P, obj(P, b)).force - car(P, obj(P, a)).force)[0];
   const pris = yield* choisitCartes(P, env.ctrl, l.map(o => o.id), 1, 'Porteur de l’Anneau', 'cartes', 1);
-  obj(P, pris[0] != null ? pris[0] : pref).porteAnneau = true;
+  const porteur = pris[0] != null ? pris[0] : pref;
+  obj(P, porteur).porteAnneau = true;
   P.ver++;
+  poseNiveauAnneau(P, env.ctrl, J.anneau);
+  emet(P, {t: 'anneau', joueur: env.ctrl, id: porteur});
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* Un donjon simplifié : quatre salles — regard (scry 1), saignée (chaque

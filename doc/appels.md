@@ -8,17 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1703 fonctions** dans 254 modules, **5386 appels** relevés.
-
-## Noms définis deux fois
-
-Tout vivant dans la portée globale, le dernier chargé écrase le premier.
-
-- `joueurProtegeTout()` : `forgeProtections.js` puis `forgeProtections.js`
-- `joueurLinceulDe()` : `forgeProtections.js` puis `forgeProtections.js`
-- `joueursPompe()` : `forgeProtections.js` puis `forgeProtections.js`
-- `vieFigee()` : `forgeProtections.js` puis `forgeProtections.js`
-- `defsCommandants()` : `forgeFiltresC.js` puis `forgeFiltresC.js`
+**1707 fonctions** dans 255 modules, **5409 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -1452,7 +1442,7 @@ Appelée par : `defAvecMots`, `lisScriptForge`, `motAccordable`
 
 Appelle : `faceVide()` *(forgeScript.js)*, `forgeCoutMana()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*
 
-Appelée par : `definitionForge`, `jetonsForge`, `manquesDecks`, `mesureBaseForge`
+Appelée par : `capacitesAnneau`, `definitionForge`, `jetonsForge`, `manquesDecks`, `mesureBaseForge`
 
 ### `forgeSousCapacite()` — ligne 106
 
@@ -1470,7 +1460,7 @@ Appelle : `forgeLigneType()` *(forgeScript.js)*
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `empreinteAuLieu`, `etendEffet`, `forgeActivations.js (chargement)`, `forgeAlias.js (chargement)`, `forgeAuras.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCout.js (chargement)`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDefini.js (chargement)`, `forgeDefinition.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeDescripteurs.js (chargement)`, `forgeDesignations.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffet`, `forgeEffetsA.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeExecute.js (chargement)`, `forgeExpr.js (chargement)`, `forgeExprB.js (chargement)`, `forgeFiltresC.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeInterdits.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeMemoire.js (chargement)`, `forgeMode`, `forgeModes.js (chargement)`, `forgeMotsCles.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `forgeParadigme.js (chargement)`, `forgeProtections.js (chargement)`, `forgeRemplacements.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeStatique`, `forgeStatiques.js (chargement)`, `forgeStatiquesB.js (chargement)`, `forgeTraine.js (chargement)`, `jeuPioche.js (chargement)`
+Appelée par : `empreinteAuLieu`, `etendEffet`, `forgeActivations.js (chargement)`, `forgeAlias.js (chargement)`, `forgeAuras.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCout.js (chargement)`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeDefini.js (chargement)`, `forgeDefinition.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeDescripteurs.js (chargement)`, `forgeDesignations.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffet`, `forgeEffetsA.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeExecute.js (chargement)`, `forgeExpr.js (chargement)`, `forgeExprB.js (chargement)`, `forgeFiltresC.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeInterdits.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeMemoire.js (chargement)`, `forgeMode`, `forgeModes.js (chargement)`, `forgeMotsCles.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `forgeParadigme.js (chargement)`, `forgeProtections.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacements.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeStatique`, `forgeStatiques.js (chargement)`, `forgeStatiquesB.js (chargement)`, `forgeTraine.js (chargement)`, `jeuPioche.js (chargement)`
 
 ### `forgeConnu()` — ligne 32
 
@@ -1570,7 +1560,7 @@ Appelée par : `creeJetonsForge`, `deplace`, `forgeCopies.js (chargement)`, `for
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `aCopier`, `accordeJourNuit`, `actionsComplot`, `actionsLegales`, `actionsPossibles`, `actionsPrepare`, `activeCapacite`, `activeFiltre`, `appliqueSBA`, `assezDeControleurs`, `attaquantImpose`, `attaquantsDeclares`, `attaqueCalculee`, `attaqueParRegles`, `auraOrpheline`, `blocageCalcule`, `blocageParRegles`, `bloqueursImposes`, `bloqueursUtiles`, `candidatsDuControleur`, `candidatsRecherche`, `carteVue`, `cartesPermises`, `champDe`, `chercheBlocs`, `cibleDetournee`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `complote`, `compteDuTour`, `compteObjets`, `copiesFin`, `couchesHorsChamp`, `couchesStatiques`, `couleursProtection`, `coutAutrePossible`, `coutAutrePossibleB`, `coutAutrePossibleX`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `declencheursDeLancement`, `declencheursEtat`, `defausseCarte`, `defenseurDe`, `defenseurDeclare`, `defenseurVise`, `definisEtendus`, `degageAussi`, `degagement`, `degatsCombat`, `deplace`, `detruitObjet`, `doitEtreBloque`, `donneCadeau`, `dragage`, `ecouteRepond`, `effetsOuverture`, `elimine`, `emetCibles`, `enTournante`, `encodeChiffre`, `entreesAutres`, `epissures`, `equipe`, `estAMoi`, `etatApres`, `etendEffet`, `executeForge`, `exertsAttaque`, `exhumeesFin`, `exprDesignations`, `filtresMana`, `finCombat`, `finDuTour`, `flashPossible`, `forgeActivations.js (chargement)`, `forgeAuras.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDeclenche`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDefinis`, `forgeDegagements.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeFiltresC.js (chargement)`, `forgeManaB.js (chargement)`, `forgeMemoire.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeTraine.js (chargement)`, `forgeValideJoueur`, `fouilleForge`, `gardeAutre`, `hotePart`, `hotePartObjets`, `iaCartes`, `iaCibles`, `iaMulligan`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `initiativeVolee`, `jeuFacesB.js (chargement)`, `jeuManaFiltres.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `joueTerrain`, `joueurAttaque`, `lanceDepuisEffet`, `lancePrepare`, `lanceSort`, `leveDureesObjets`, `libelleAction`, `libelleRef`, `manaReflete`, `marqueurPose`, `meilleureCibleHostile`, `metEnJeu`, `miracle`, `modesPayables`, `mouvementEvt`, `mulligans`, `nettoyage`, `nomObj`, `noteHistorique`, `notesPriorite`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieAutreB`, `paieAutreX`, `paieEquipage`, `paieMana`, `paieReductions`, `paieTaxesAttaque`, `paireDe`, `paradigmesDebutPrincipale`, `passeOuPresent`, `payeAvantEntree`, `phasesEntrent`, `piocheN`, `prepareDeclencheur`, `presage`, `propObjet`, `questionPourUI`, `rebondsEntretien`, `reductionParCibles`, `reductionPossible`, `refPublique`, `remplacementsEnJeu`, `resoudre`, `resous`, `restaureClones`, `restreintCibles`, `restreintValeurTotale`, `retiensPartis`, `retourne`, `saValide`, `sacrifie`, `sagasFinies`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCiblante`, `sourceCtx`, `sourcesHorsChamp`, `sourcesMana`, `stabilise`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `utiliteEnMain`, `vue`
+Appelée par : `aCopier`, `accordeJourNuit`, `actionsComplot`, `actionsLegales`, `actionsPossibles`, `actionsPrepare`, `activeCapacite`, `activeFiltre`, `appliqueSBA`, `assezDeControleurs`, `attaquantImpose`, `attaquantsDeclares`, `attaqueCalculee`, `attaqueParRegles`, `auraOrpheline`, `blocageCalcule`, `blocageParRegles`, `bloqueursImposes`, `bloqueursUtiles`, `candidatsDuControleur`, `candidatsRecherche`, `carteVue`, `cartesPermises`, `champDe`, `chercheBlocs`, `cibleDetournee`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `complote`, `compteDuTour`, `compteObjets`, `copiesFin`, `couchesHorsChamp`, `couchesStatiques`, `couleursProtection`, `coutAutrePossible`, `coutAutrePossibleB`, `coutAutrePossibleX`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `declencheursDeLancement`, `declencheursEtat`, `defausseCarte`, `defenseurDe`, `defenseurDeclare`, `defenseurVise`, `definisEtendus`, `degageAussi`, `degagement`, `degatsCombat`, `deplace`, `detruitObjet`, `doitEtreBloque`, `donneCadeau`, `dragage`, `ecouteRepond`, `effetsOuverture`, `elimine`, `emetCibles`, `enTournante`, `encodeChiffre`, `entreesAutres`, `epissures`, `equipe`, `estAMoi`, `etatApres`, `etendEffet`, `executeForge`, `exertsAttaque`, `exhumeesFin`, `exprDesignations`, `filtresMana`, `finCombat`, `finDuTour`, `flashPossible`, `forgeActivations.js (chargement)`, `forgeAuras.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDeclenche`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeDefinis`, `forgeDegagements.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeFiltresC.js (chargement)`, `forgeManaB.js (chargement)`, `forgeMemoire.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeTraine.js (chargement)`, `forgeValideJoueur`, `fouilleForge`, `gardeAutre`, `hotePart`, `hotePartObjets`, `iaCartes`, `iaCibles`, `iaMulligan`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `initiativeVolee`, `jeuFacesB.js (chargement)`, `jeuManaFiltres.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `joueTerrain`, `joueurAttaque`, `lanceDepuisEffet`, `lancePrepare`, `lanceSort`, `leveDureesObjets`, `libelleAction`, `libelleRef`, `manaReflete`, `marqueurPose`, `meilleureCibleHostile`, `metEnJeu`, `miracle`, `modesPayables`, `mouvementEvt`, `mulligans`, `nettoyage`, `nomObj`, `noteHistorique`, `notesPriorite`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieAutreB`, `paieAutreX`, `paieEquipage`, `paieMana`, `paieReductions`, `paieTaxesAttaque`, `paireDe`, `paradigmesDebutPrincipale`, `passeOuPresent`, `payeAvantEntree`, `phasesEntrent`, `piocheN`, `prepareDeclencheur`, `presage`, `propObjet`, `questionPourUI`, `rebondsEntretien`, `reductionParCibles`, `reductionPossible`, `refPublique`, `remplacementsEnJeu`, `resoudre`, `resous`, `restaureClones`, `restreintCibles`, `restreintValeurTotale`, `retiensPartis`, `retourne`, `saValide`, `sacrifie`, `sagasFinies`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCiblante`, `sourceCtx`, `sourcesHorsChamp`, `sourcesMana`, `stabilise`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `utiliteEnMain`, `vue`
 
 ### `suit()` — ligne 69
 
@@ -1600,7 +1590,7 @@ Appelée par : `copieSort`, `deplace`, `forgeEffetsB.js (chargement)`, `paieAutr
 
 Appelle : `creeObjet()` *(jeuEtat.js)*, `destinationRemplacee()` *(forgeRemplacements.js)*, `emet()` *(jeuEtat.js)*, `hotePart()` *(jeuDurees.js)*, `hotePartObjets()` *(forgeDurees.js)*, `instantane()` *(jeuEtat.js)*, `noteEntree()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `retireDe()` *(jeuEtat.js)*, `suiviPart()` *(jeuDurees.js)*, `tableauZone()` *(jeuEtat.js)*
 
-Appelée par : `activeFiltre`, `appliqueSBA`, `complote`, `copiesFin`, `defausseCarte`, `deplaceForge`, `detruitObjet`, `dragage`, `elimine`, `encodeChiffre`, `executeForge`, `exhumeesFin`, `finCombat`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeTraine.js (chargement)`, `hotePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `metEnJeu`, `paieAutre`, `paieAutreB`, `paieAutreX`, `paieMana`, `paieReductions`, `presage`, `regardeForge`, `resoudre`, `sacrifie`, `suspend`
+Appelée par : `activeFiltre`, `appliqueSBA`, `complote`, `copiesFin`, `defausseCarte`, `deplaceForge`, `detruitObjet`, `dragage`, `elimine`, `encodeChiffre`, `executeForge`, `exhumeesFin`, `finCombat`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeTraine.js (chargement)`, `hotePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `metEnJeu`, `paieAutre`, `paieAutreB`, `paieAutreX`, `paieMana`, `paieReductions`, `presage`, `regardeForge`, `resoudre`, `sacrifie`, `suspend`
 
 ### `noteEntree()` — ligne 156
 
@@ -1612,13 +1602,13 @@ Appelée par : `creeJetonsForge`, `deplace`, `forgeCopies.js (chargement)`, `jeu
 
 Appelle : `noteHistorique()` *(jeuHistorique.js)*
 
-Appelée par : `activeCapacite`, `creeJetonsForge`, `declareAttaquants`, `declareBloqueurs`, `defausseCarte`, `degageObjet`, `deplace`, `emetCibles`, `engageObjet`, `etape`, `forgeCopies.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgePaliers.js (chargement)`, `gagneVie`, `infligeUnePart`, `jetonSimple`, `jeuOpsB.js (chargement)`, `joueTerrain`, `lanceSort`, `piocheN`, `poseMarqueurs`, `retourneFace`, `sacrifie`, `transforme`
+Appelée par : `activeCapacite`, `creeJetonsForge`, `declareAttaquants`, `declareBloqueurs`, `defausseCarte`, `degageObjet`, `deplace`, `emetCibles`, `engageObjet`, `etape`, `forgeCopies.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRadiation.js (chargement)`, `gagneVie`, `infligeUnePart`, `jetonSimple`, `jeuOpsB.js (chargement)`, `joueTerrain`, `lanceSort`, `piocheN`, `poseMarqueurs`, `retourneFace`, `sacrifie`, `transforme`
 
 ### `jn()` — ligne 165
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `activeCapacite`, `ajoutePhase`, `auraOrpheline`, `cloturePartie`, `complote`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeCopies.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `miracle`, `mulligans`, `piocheRemplacee`, `prendInitiative`, `presage`, `resoudre`, `retourneFace`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vitesseMonte`
+Appelée par : `activeCapacite`, `ajoutePhase`, `auraOrpheline`, `cloturePartie`, `complote`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeCopies.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRadiation.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `miracle`, `mulligans`, `piocheRemplacee`, `prendInitiative`, `presage`, `resoudre`, `retourneFace`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vitesseMonte`
 
 ### `nomObj()` — ligne 167
 
@@ -1662,7 +1652,7 @@ Appelle : `emet()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*
 
 Appelée par : `mulligans`, `pioche`
 
-### `question()` — ligne 219
+### `question()` — ligne 222
 
 N'appelle aucune fonction du projet.
 
@@ -1762,7 +1752,7 @@ Appelée par : `blocageParRegles`, `chercheBlocs`, `declareAttaquants`, `declare
 
 Appelle : `animation()` *(jeuCaracteristiques.js)*
 
-Appelée par : `actionsLegales`, `appliqueSBA`, `baseEval`, `capacitesTerrain`, `convocables`, `declareAttaquants`, `estCreature`, `forgeEffetsA.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExpression`, `forgeTraine.js (chargement)`, `iaCartes`, `iaScrute`, `infligeUnePart`, `lanceDepuisEffet`, `letalPour`, `notePrincipale`, `peutBloquer`, `sourcesMana`, `terrainsEnMain`, `utiliteEnMain`
+Appelée par : `actionsLegales`, `appliqueSBA`, `baseEval`, `capacitesTerrain`, `convocables`, `declareAttaquants`, `estCreature`, `forgeEffetsA.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExpression`, `forgeRadiation.js (chargement)`, `forgeTraine.js (chargement)`, `iaCartes`, `iaScrute`, `infligeUnePart`, `lanceDepuisEffet`, `letalPour`, `notePrincipale`, `peutBloquer`, `sourcesMana`, `terrainsEnMain`, `utiliteEnMain`
 
 ### `estCreature()` — ligne 135
 
@@ -2494,7 +2484,7 @@ Appelée par : `forgeEffetsA.js (chargement)`, `forgeEffetsD.js (chargement)`, `
 
 Appelle : `durees()` *(jeuDurees.js)*
 
-Appelée par : `forgeEffetsD.js (chargement)`, `forgeEffetsF.js (chargement)`
+Appelée par : `forgeEffetsD.js (chargement)`, `forgeEffetsF.js (chargement)`, `poseNiveauAnneau`
 
 ### `finDuTour()` — ligne 40
 
@@ -3170,7 +3160,7 @@ Appelle : `forgeSait()` *(forgeCouverture.js)*
 
 Appelle : `forgeExpression()` *(forgeExpr.js)*
 
-Appelée par : `animeForge`, `appliqueRemplacementDegats`, `bouclierDegats`, `capaciteReduite`, `choisitCibles`, `conditionForge`, `copiesFin`, `coutEquipement`, `coutUnless`, `coutsForge`, `filtresMana`, `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCopies.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExpression`, `forgeHideaway.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeStatiques.js (chargement)`, `forgeTraine.js (chargement)`, `fouilleForge`, `metEnJeu`, `nombreRemplace`, `pompeForge`, `prepareEffets`, `propObjet`, `quantiteRemplacee`, `reductionParCibles`, `reductionPossible`, `seuilForge`, `siAlors`, `sortInterdit`, `sourcesMana`, `tailleMainMax`, `taxeAttaque`, `terrainsParTour`
+Appelée par : `animeForge`, `appliqueRemplacementDegats`, `bouclierDegats`, `capaciteReduite`, `choisitCibles`, `conditionForge`, `copiesFin`, `coutEquipement`, `coutUnless`, `coutsForge`, `filtresMana`, `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCopies.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExpression`, `forgeHideaway.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeStatiques.js (chargement)`, `forgeTraine.js (chargement)`, `fouilleForge`, `metEnJeu`, `nombreRemplace`, `pompeForge`, `prepareEffets`, `propObjet`, `quantiteRemplacee`, `reductionParCibles`, `reductionPossible`, `seuilForge`, `siAlors`, `sortInterdit`, `sourcesMana`, `tailleMainMax`, `taxeAttaque`, `terrainsParTour`
 
 ### `mathForge()` — ligne 35
 
@@ -3296,7 +3286,7 @@ Appelée par : `avecDefinisEnPlus`, `candidatsDuControleur`, `cibleDetournee`, `
 
 Appelle : `ciblesForge()` *(forgeDefini.js)*, `forgeDefinis()` *(forgeDefini.js)*, `joueurDe()` *(forgeDefini.js)*
 
-Appelée par : `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeRemplacementsD.js (chargement)`
+Appelée par : `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeRemplacementsD.js (chargement)`
 
 ### `objetsForge()` — ligne 142
 
@@ -3374,7 +3364,7 @@ Appelle : `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `dansOri
 
 Appelle : `forgeSait()` *(forgeCouverture.js)*
 
-Appelée par : `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCopies.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeTraine.js (chargement)`
+Appelée par : `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCopies.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeTraine.js (chargement)`
 
 ### `seuilForge()` — ligne 33
 
@@ -3722,7 +3712,7 @@ Appelée par : `forgeCopies.js (chargement)`, `forgeEffetsF.js (chargement)`, `f
 
 ### `chargement du module`
 
-Appelle : `adversaires()` *(jeuEtat.js)*, `car()` *(jeuCaracteristiques.js)*, `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `choisitUn()` *(forgeChoix.js)*, `conditionForge()` *(forgeEffetsA.js)*, `couleursProtection()` *(forgeEffetsG.js)*, `coutMana()` *(oracleCouts.js)*, `coutManaVide()` *(oracleCouts.js)*, `creeObjet()` *(jeuEtat.js)*, `deplace()` *(jeuEtat.js)*, `elimine()` *(jeuEtatsDeJeu.js)*, `emet()` *(jeuEtat.js)*, `empreinteDe()` *(forgeEmpreinte.js)*, `entierHasard()` *(jeuHasard.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideObjet()` *(forgeValide.js)*, `gagneVie()` *(jeuOpsA.js)*, `gainsProtection()` *(forgeEffetsG.js)*, `jn()` *(jeuEtat.js)*, `joueSous()` *(forgeEffetsG.js)*, `joueurDe()` *(forgeDefini.js)*, `joueursForge()` *(forgeDefini.js)*, `manifeste()` *(forgeEffetsG.js)*, `motsForge()` *(forgeEffetsC.js)*, `nouvelleCarte()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `pioche()` *(jeuPioche.js)*, `poseMarqueurs()` *(jeuGestes.js)*, `question()` *(jeuEtat.js)*, `retiensForge()` *(forgeExecute.js)*, `retireDe()` *(jeuEtat.js)*, `seuilForge()` *(forgeEffetsA.js)*, `sourceCtx()` *(jeuOpsA.js)*, `sousEffets()` *(forgeEffetsG.js)*, `tranchesDe()` *(forgeEffetsG.js)*, `varsDe()` *(forgeEffetsG.js)*, → `estCreature()` *(jeuCaracteristiques.js)*
+Appelle : `adversaires()` *(jeuEtat.js)*, `car()` *(jeuCaracteristiques.js)*, `champDe()` *(jeuEtat.js)*, `choisitCartes()` *(jeuOpsA.js)*, `choisitUn()` *(forgeChoix.js)*, `conditionForge()` *(forgeEffetsA.js)*, `couleursProtection()` *(forgeEffetsG.js)*, `coutMana()` *(oracleCouts.js)*, `coutManaVide()` *(oracleCouts.js)*, `creeObjet()` *(jeuEtat.js)*, `deplace()` *(jeuEtat.js)*, `elimine()` *(jeuEtatsDeJeu.js)*, `emet()` *(jeuEtat.js)*, `empreinteDe()` *(forgeEmpreinte.js)*, `entierHasard()` *(jeuHasard.js)*, `forgeDefinis()` *(forgeDefini.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeValideObjet()` *(forgeValide.js)*, `gagneVie()` *(jeuOpsA.js)*, `gainsProtection()` *(forgeEffetsG.js)*, `jn()` *(jeuEtat.js)*, `joueSous()` *(forgeEffetsG.js)*, `joueurDe()` *(forgeDefini.js)*, `joueursForge()` *(forgeDefini.js)*, `manifeste()` *(forgeEffetsG.js)*, `motsForge()` *(forgeEffetsC.js)*, `nouvelleCarte()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `objetsForge()` *(forgeDefini.js)*, `objetsZone()` *(forgeExpr.js)*, `pioche()` *(jeuPioche.js)*, `poseMarqueurs()` *(jeuGestes.js)*, `poseNiveauAnneau()` *(forgeAnneau.js)*, `question()` *(jeuEtat.js)*, `retiensForge()` *(forgeExecute.js)*, `retireDe()` *(jeuEtat.js)*, `seuilForge()` *(forgeEffetsA.js)*, `sourceCtx()` *(jeuOpsA.js)*, `sousEffets()` *(forgeEffetsG.js)*, `tranchesDe()` *(forgeEffetsG.js)*, `varsDe()` *(forgeEffetsG.js)*, → `estCreature()` *(jeuCaracteristiques.js)*
 
 ### `sousEffets()` — ligne 19
 
@@ -4082,7 +4072,7 @@ Appelée par : `declencheurForge`, `forgeEffetsD.js (chargement)`
 
 Appelle : `forgeSait()` *(forgeCouverture.js)*
 
-Appelée par : `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeManaB.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`
+Appelée par : `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeManaB.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`
 
 ### `objetZone()` — ligne 43
 
@@ -4094,13 +4084,13 @@ Appelée par : `forgeDeclencheurs.js (chargement)`, `mouvementEvt`
 
 Appelle : `forgeValideObjet()` *(forgeValide.js)*
 
-Appelée par : `defenseurDeclare`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeManaB.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `marqueurPose`
+Appelée par : `defenseurDeclare`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeManaB.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `marqueurPose`
 
 ### `joueurOuRien()` — ligne 49
 
 Appelle : `forgeValideJoueur()` *(forgeValide.js)*
 
-Appelée par : `attaquantsDeclares`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeManaB.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`
+Appelée par : `attaquantsDeclares`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeManaB.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRemplacementsB.js (chargement)`
 
 ### `joueurDeCarte()` — ligne 53
 
@@ -5044,7 +5034,7 @@ Appelée par : `definitionDepuisScript`
 
 Appelle : `capaciteForge()` *(forgeDefinition.js)*, `capacitesImplicites()` *(definitions.js)*, `couleursDe()` *(definitions.js)*, `couleursForge()` *(forgeDefinition.js)*, `coutMana()` *(oracleCouts.js)*, `coutManaVide()` *(oracleCouts.js)*, `couvertureForge()` *(forgeCouverture.js)*, `declencheurForge()` *(forgeDefinition.js)*, `definitionAFaces()` *(forgeDefinition.js)*, `forgeApi()` *(forgeScript.js)*, `forgeLigneType()` *(forgeScript.js)*, `hausseDeCout()` *(forgeStatiquesB.js)*, `lisTypeLigne()` *(oracleTexte.js)*, `motCleForge()` *(forgeMotsCles.js)*, `remplacementForge()` *(forgeDefinition.js)*, `statiqueForge()` *(forgeEffetsD.js)*
 
-Appelée par : `definitionAFaces`, `definitionForge`, `forgeRemplacementsD.js (chargement)`, `jetonsForge`
+Appelée par : `capacitesAnneau`, `definitionAFaces`, `definitionForge`, `forgeRemplacementsD.js (chargement)`, `jetonsForge`
 
 ### `definitionForge()` — ligne 267
 
@@ -5140,7 +5130,7 @@ Appelée par : `quantiteRemplacee`
 
 Appelle : `conditionForge()` *(forgeEffetsA.js)*, `envRemplacement()` *(forgeRemplacements.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeValideJoueur()` *(forgeValide.js)*, `nombreRemplace()` *(forgeRemplacementsD.js)*, `remplacementsEnJeu()` *(forgeRemplacements.js)*, `seuilForge()` *(forgeEffetsA.js)*
 
-Appelée par : `forgeEffetsB.js (chargement)`, `forgeProtections.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`
+Appelée par : `forgeEffetsB.js (chargement)`, `forgeProtections.js (chargement)`, `forgeRadiation.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`
 
 ### `tourEnPlusSaute()` — ligne 141
 
@@ -5308,7 +5298,7 @@ Appelle : `forgeSait()` *(forgeCouverture.js)*, → `motCleLancementB()` *(forge
 
 Appelle : `creeObjet()` *(jeuEtat.js)*, `lanceDepuisEffet()` *(forgeEffetsE.js)*, `nouvelleCarte()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `question()` *(jeuEtat.js)*, `retireDe()` *(jeuEtat.js)*
 
-Appelée par : `etape`
+Appelée par : `etape`, `forgeRadiation.js (chargement)`
 
 ## js/forgeDesignes.js
 
@@ -5358,7 +5348,7 @@ Appelée par : `forgeProtections.js (chargement)`
 
 Appelle : `defsCommandants()` *(forgeFiltresC.js)*, `forgeSait()` *(forgeCouverture.js)*, `obj()` *(jeuEtat.js)*, `sousTypesCreature()` *(forgeMemoire.js)*, → `proprieteDesignee()` *(forgeDesignations.js)*
 
-### `defsCommandants()` — ligne 21
+### `defsCommandants()` — ligne 22
 
 N'appelle aucune fonction du projet.
 
@@ -5370,47 +5360,43 @@ Appelée par : `forgeFiltresC.js (chargement)`
 
 Appelle : `choisitCartes()` *(jeuOpsA.js)*, `deplace()` *(jeuEtat.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeSait()` *(forgeCouverture.js)*, `jn()` *(jeuEtat.js)*, `melangeHasard()` *(jeuHasard.js)*, `retireDe()` *(jeuEtat.js)*, `synthese()` *(forgeMotsClesB.js)*, → `motCleLancementB()` *(forgeMotsClesE.js)*
 
-## js/forgeProtections.js
+## js/forgeDeclencheursD.js
 
 ### `chargement du module`
 
-Appelle : `finForge()` *(forgeDurees.js)*, `forgeSait()` *(forgeCouverture.js)*, `forgeStatique()` *(forgeStatiques.js)*, `joueurLinceulDe()` *(forgeProtections.js)*, `joueurProtegeTout()` *(forgeProtections.js)*, `joueursPompe()` *(forgeProtections.js)*, `vieFigee()` *(forgeProtections.js)*, → `ciblable()` *(jeuCibles.js)*, → `cibleEncoreLegale()` *(jeuCibles.js)*, → `ciblesLegales()` *(jeuCibles.js)*, → `degatsApresPrevention()` *(forgeRemplacements.js)*, → `pompeForge()` *(forgeEffetsC.js)*, → `vieBloquee()` *(forgeInterdits.js)*, → `vieReduite()` *(forgeRemplacementsD.js)*
+Appelle : `forgeMode()` *(forgeDeclencheurs.js)*, `forgeSait()` *(forgeCouverture.js)*, `joueurOuRien()` *(forgeDeclencheurs.js)*, `obj()` *(jeuEtat.js)*, `sousLimiteDuTour()` *(forgeDeclencheursD.js)*, `unSeulParLot()` *(forgeDeclencheursD.js)*, `valideOuRien()` *(forgeDeclencheurs.js)*
 
-### `joueurProtegeTout()` — ligne 33
-
-Appelle : `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
-
-Appelée par : `forgeProtections.js (chargement)`
-
-### `joueurLinceulDe()` — ligne 42
+### `unSeulParLot()` — ligne 30
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `forgeProtections.js (chargement)`
+Appelée par : `forgeDeclencheursD.js (chargement)`
 
-### `joueursPompe()` — ligne 48
+### `sousLimiteDuTour()` — ligne 40
 
-Appelle : `ciblesForge()` *(forgeDefini.js)*, `forgeDefinis()` *(forgeDefini.js)*
+N'appelle aucune fonction du projet.
 
-Appelée par : `forgeProtections.js (chargement)`
+Appelée par : `forgeDeclencheursD.js (chargement)`
 
-### `vieFigee()` — ligne 106
-
-Appelle : `joueurStatique()` *(forgeInterdits.js)*, `statiqueQui()` *(forgeInterdits.js)*
-
-Appelée par : `forgeProtections.js (chargement)`
-
-## js/forgeFiltresC.js
+## js/forgeRadiation.js
 
 ### `chargement du module`
 
-Appelle : `defsCommandants()` *(forgeFiltresC.js)*, `forgeSait()` *(forgeCouverture.js)*, `obj()` *(jeuEtat.js)*, `sousTypesCreature()` *(forgeMemoire.js)*, → `proprieteDesignee()` *(forgeDesignations.js)*
+Appelle : `deplace()` *(jeuEtat.js)*, `emet()` *(jeuEtat.js)*, `estType()` *(jeuCaracteristiques.js)*, `forgeEffet()` *(forgeEffetsA.js)*, `forgeNombre()` *(forgeExpr.js)*, `forgeSait()` *(forgeCouverture.js)*, `jn()` *(jeuEtat.js)*, `joueursForge()` *(forgeDefini.js)*, `obj()` *(jeuEtat.js)*, `vieReduite()` *(forgeRemplacementsD.js)*, → `paradigmesDebutPrincipale()` *(forgeParadigme.js)*
 
-### `defsCommandants()` — ligne 21
+## js/forgeAnneau.js
 
-N'appelle aucune fonction du projet.
+### `capacitesAnneau()` — ligne 32
 
-Appelée par : `forgeFiltresC.js (chargement)`
+Appelle : `definitionDepuisScript()` *(forgeDefinition.js)*, `lisScriptForge()` *(forgeScript.js)*
+
+Appelée par : `poseNiveauAnneau`
+
+### `poseNiveauAnneau()` — ligne 42
+
+Appelle : `capacitesAnneau()` *(forgeAnneau.js)*, `poseEffet()` *(jeuDurees.js)*
+
+Appelée par : `forgeEffetsG.js (chargement)`
 
 ## js/forgeAlias.js
 

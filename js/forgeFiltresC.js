@@ -10,7 +10,8 @@
      (Guardian Project, Yenna) : le nom n'est pas déjà celui d'une carte de
      son cimetière, ou d'un autre permanent qu'on contrôle ;
    - `sharesCreatureTypeWith Commander` (Path of Ancestry) : un type de
-     créature en commun avec un commandant de son contrôleur.
+     créature en commun avec un commandant de son contrôleur ;
+   - `IsRingBearer` : le porteur de l'Anneau (js/forgeAnneau.js).
    Comme les autres : une propriété qu'on ne sait pas juger ne laisse rien
    passer (js/forgeValide.js).
    ===================================================================== */
@@ -25,6 +26,7 @@ function defsCommandants(P, j) {
 proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
   if (!P && /^(sharesCreatureTypeWith Commander|doesNotShareNameWith )/.test(p)) return false;
   switch (p) {
+    case 'IsRingBearer': return !!o.porteAnneau;
     case 'hasABasicLandType': return (c.sousTypes || []).some(t => TERRAINS_DE_BASE.includes(t));
     case 'ManaCost0': case 'ManaCost1': {
       const cout = o.def.cout;
@@ -44,5 +46,5 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
   return g(P, o, p, c, src, ctrl, env);
 })(proprieteDesignee);
 
-forgeSait('filtre', 'hasABasicLandType', 'ManaCost0', 'ManaCost1', 'sharesCreatureTypeWith Commander',
+forgeSait('filtre', 'IsRingBearer', 'hasABasicLandType', 'ManaCost0', 'ManaCost1', 'sharesCreatureTypeWith Commander',
   'doesNotShareNameWith YourGraveyard', 'doesNotShareNameWith OtherYourBattlefield');

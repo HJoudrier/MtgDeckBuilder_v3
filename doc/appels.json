@@ -120,8 +120,9 @@
   "forgeProtections.js",
   "forgeFiltresC.js",
   "forgeHideaway.js",
-  "forgeProtections.js",
-  "forgeFiltresC.js",
+  "forgeDeclencheursD.js",
+  "forgeRadiation.js",
+  "forgeAnneau.js",
   "forgeAlias.js",
   "forgeActivations.js",
   "forgeChoixMultiples.js",
@@ -3937,6 +3938,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "capacitesAnneau",
     "definitionForge",
     "jetonsForge",
     "manquesDecks",
@@ -4016,6 +4018,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
+    "forgeDeclencheursD.js (chargement)",
     "forgeDefini.js (chargement)",
     "forgeDefinition.js (chargement)",
     "forgeDegagements.js (chargement)",
@@ -4052,6 +4055,7 @@
     "forgePaliers.js (chargement)",
     "forgeParadigme.js (chargement)",
     "forgeProtections.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "forgeRemplacements.js (chargement)",
     "forgeRemplacementsB.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
@@ -4404,6 +4408,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
+    "forgeDeclencheursD.js (chargement)",
     "forgeDefinis",
     "forgeDegagements.js (chargement)",
     "forgeDesignes.js (chargement)",
@@ -4426,6 +4431,7 @@
     "forgeMotsClesE.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgePaliers.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "forgeRemplacementsB.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -4637,6 +4643,7 @@
     "forgeHideaway.js (chargement)",
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeTraine.js (chargement)",
     "hotePart",
@@ -4700,6 +4707,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgePaliers.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "gagneVie",
     "infligeUnePart",
     "jetonSimple",
@@ -4748,6 +4756,7 @@
     "forgeHideaway.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgePaliers.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "infligeUnePart",
     "jeuOpsA.js (chargement)",
     "jeuOpsB.js (chargement)",
@@ -4947,7 +4956,7 @@
   {
    "nom": "question",
    "fichier": "jeuEtat.js",
-   "ligne": 219,
+   "ligne": 222,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5321,6 +5330,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
+    "forgeRadiation.js (chargement)",
     "forgeTraine.js (chargement)",
     "iaCartes",
     "iaScrute",
@@ -7734,7 +7744,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeEffetsD.js (chargement)",
-    "forgeEffetsF.js (chargement)"
+    "forgeEffetsF.js (chargement)",
+    "poseNiveauAnneau"
    ]
   },
   {
@@ -9696,6 +9707,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
     "forgeHideaway.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeStatiques.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -10177,6 +10189,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeRemplacementsD.js (chargement)"
    ]
@@ -10453,6 +10466,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeHideaway.js (chargement)",
     "forgeMotsClesF.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeTraine.js (chargement)"
    ]
@@ -11661,6 +11675,7 @@
     "objetsZone",
     "pioche",
     "poseMarqueurs",
+    "poseNiveauAnneau",
     "question",
     "retiensForge",
     "retireDe",
@@ -12642,6 +12657,7 @@
    "appeleePar": [
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeDeclencheursD.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgePaliers.js (chargement)",
@@ -12677,6 +12693,7 @@
     "defenseurDeclare",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeDeclencheursD.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgePaliers.js (chargement)",
     "forgeRemplacementsB.js (chargement)",
@@ -12698,6 +12715,7 @@
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
+    "forgeDeclencheursD.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgePaliers.js (chargement)",
@@ -15527,6 +15545,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "capacitesAnneau",
     "definitionAFaces",
     "definitionForge",
     "forgeRemplacementsD.js (chargement)",
@@ -15823,6 +15842,7 @@
    "appeleePar": [
     "forgeEffetsB.js (chargement)",
     "forgeProtections.js (chargement)",
+    "forgeRadiation.js (chargement)",
     "infligeUnePart",
     "jeuOpsA.js (chargement)"
    ]
@@ -16357,7 +16377,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "etape"
+    "etape",
+    "forgeRadiation.js (chargement)"
    ]
   },
   {
@@ -16501,7 +16522,7 @@
   {
    "nom": "defsCommandants",
    "fichier": "forgeFiltresC.js",
-   "ligne": 21,
+   "ligne": 22,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -16531,6 +16552,101 @@
    ],
    "appelleParHtml": [],
    "appeleePar": []
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeDeclencheursD.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "forgeMode",
+    "forgeSait",
+    "joueurOuRien",
+    "obj",
+    "sousLimiteDuTour",
+    "unSeulParLot",
+    "valideOuRien"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "unSeulParLot",
+   "fichier": "forgeDeclencheursD.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDeclencheursD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "sousLimiteDuTour",
+   "fichier": "forgeDeclencheursD.js",
+   "ligne": 40,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeDeclencheursD.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeRadiation.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "deplace",
+    "emet",
+    "estType",
+    "forgeEffet",
+    "forgeNombre",
+    "forgeSait",
+    "jn",
+    "joueursForge",
+    "obj",
+    "vieReduite"
+   ],
+   "appelleDiffere": [
+    "paradigmesDebutPrincipale"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "capacitesAnneau",
+   "fichier": "forgeAnneau.js",
+   "ligne": 32,
+   "chargement": false,
+   "appelle": [
+    "definitionDepuisScript",
+    "lisScriptForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "poseNiveauAnneau"
+   ]
+  },
+  {
+   "nom": "poseNiveauAnneau",
+   "fichier": "forgeAnneau.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [
+    "capacitesAnneau",
+    "poseEffet"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeEffetsG.js (chargement)"
+   ]
   },
   {
    "nom": "chargement du module",

@@ -159,7 +159,7 @@ OPS.meule = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
   for (const j of joueursDe(P, op.qui, ctx)) {
     const B = P.joueurs[j].bibliotheque;
-    for (let k = 0; k < n && B.length; k++) deplace(P, B[B.length - 1], 'cimetiere');
+    for (let k = 0; k < n && B.length; k++) deplace(P, B[B.length - 1], 'cimetiere', {meule: true});
   }
 };
 OPS.defausse = function* (P, op, ctx) {
