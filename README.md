@@ -128,6 +128,7 @@ js/                 modules, chargés dans cet ordre :
   forgeManaC.js     le mana qui porte quelque chose : un mot-clé au sort qu'il paie, « when you spend this mana », le remplacement optionnel
   forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
+  forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
   forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
@@ -1495,6 +1496,17 @@ parties de decks tirés au hasard parmi les cartes complètes, sans une seule er
   Commander`. Ce dernier se juge sur la partie : `forgeValideDef()` prend `P` en paramètre, que seul le
   déclencheur « sort lancé » lui donne — Path of Ancestry n'a de scry que si la créature partage un type avec le
   commandant.
+
+**Lot F61 : Hideaway, les trois terrains d'Urza, Windfall, Myriad Landscape** (`js/forgeHideaway.js`).
+- **Hideaway N** (quinze cartes : Windbrisk Heights, Mosswort Bridge, Spinerock Knoll, Clive's Hideaway…) : un
+  déclencheur d'entrée synthétique dont l'effet, `Hideaway`, regarde le dessus, exile une carte (celle de la
+  source, `ExiledWith`) et met le reste dessous dans un ordre tiré. L'activation du terrain est un script ordinaire :
+  `Play | Defined$ ExiledWith`, sa condition jugée à la résolution (puissance totale, légendaires, attaquants) ;
+- **`Count$UrzaLands.3.1`** : trois si l'on contrôle la Mine, la Centrale et la Tour, un sinon ;
+- **`HighestValidGraveyard,Library,Exile`** (Windfall, Jace's Archivist, Whispering Madness) : les zones se
+  comptent ensemble, joueur par joueur — chacun pioche autant que la plus grosse main défaussée ;
+- **`ShareLandType$`** (Myriad Landscape) : la première terre se choisit librement, la seconde parmi celles du même
+  type de base.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

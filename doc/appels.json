@@ -119,6 +119,7 @@
   "forgeDesignes.js",
   "forgeProtections.js",
   "forgeFiltresC.js",
+  "forgeHideaway.js",
   "forgeAlias.js",
   "forgeActivations.js",
   "forgeChoixMultiples.js",
@@ -4033,6 +4034,7 @@
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
     "forgeFiltresC.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeInterdits.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeManaC.js (chargement)",
@@ -4234,6 +4236,7 @@
     "forgeEffetsA.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -4561,6 +4564,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesE.js (chargement)",
     "fouilleForge",
     "jeuOpsB.js (chargement)",
@@ -4628,6 +4632,7 @@
     "forgeEffetsE.js (chargement)",
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesB.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
@@ -4738,6 +4743,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeEntrees.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgePaliers.js (chargement)",
     "infligeUnePart",
@@ -6111,6 +6117,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
     "forgeMotsClesE.js (chargement)",
@@ -9686,6 +9693,7 @@
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeExpression",
+    "forgeHideaway.js (chargement)",
     "forgeRemplacementsD.js (chargement)",
     "forgeStatiques.js (chargement)",
     "forgeTraine.js (chargement)",
@@ -9989,7 +9997,7 @@
   {
    "nom": "compteJoueurs",
    "fichier": "forgeExprB.js",
-   "ligne": 122,
+   "ligne": 124,
    "chargement": false,
    "appelle": [
     "adversaires",
@@ -10441,6 +10449,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsH.js (chargement)",
     "forgeEffetsI.js (chargement)",
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "forgeRemplacementsC.js (chargement)",
     "forgeTraine.js (chargement)"
@@ -10562,7 +10571,7 @@
   {
    "nom": "nombreIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 193,
+   "ligne": 203,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -10577,7 +10586,7 @@
   {
    "nom": "quiIA",
    "fichier": "forgeEffetsA.js",
-   "ligne": 196,
+   "ligne": 206,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -14517,6 +14526,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeHideaway.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "motClePermanent",
     "motCleTraineB"
@@ -14984,6 +14994,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeHideaway.js (chargement)",
     "forgeManaB.js (chargement)",
     "forgeModes.js (chargement)",
     "forgeMotsClesF.js (chargement)",
@@ -16496,6 +16507,28 @@
    "appeleePar": [
     "forgeFiltresC.js (chargement)"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeHideaway.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "choisitCartes",
+    "deplace",
+    "forgeEffet",
+    "forgeNombre",
+    "forgeSait",
+    "jn",
+    "melangeHasard",
+    "retireDe",
+    "synthese"
+   ],
+   "appelleDiffere": [
+    "motCleLancementB"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "chargement du module",
