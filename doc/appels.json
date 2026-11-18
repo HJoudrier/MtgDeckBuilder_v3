@@ -130,6 +130,7 @@
   "forgeCoutsC.js",
   "forgeChoixC.js",
   "forgeExprC.js",
+  "forgeExprD.js",
   "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
@@ -4107,6 +4108,7 @@
     "forgeExpr.js (chargement)",
     "forgeExprB.js (chargement)",
     "forgeExprC.js (chargement)",
+    "forgeExprD.js (chargement)",
     "forgeFiltresC.js (chargement)",
     "forgeFiltresD.js (chargement)",
     "forgeHideaway.js (chargement)",
@@ -4398,6 +4400,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "aCopier",
+    "aProprieteJoueur",
     "accordeJourNuit",
     "actionsComplot",
     "actionsLegales",
@@ -4503,6 +4506,7 @@
     "forgeEffetsI.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeExprC.js (chargement)",
+    "forgeExprD.js (chargement)",
     "forgeFiltresC.js (chargement)",
     "forgeFiltresD.js (chargement)",
     "forgeManaB.js (chargement)",
@@ -4897,6 +4901,7 @@
     "forgeDefinis",
     "forgeEffetsB.js (chargement)",
     "forgeMemoire.js (chargement)",
+    "groupeJoueurs",
     "joueursAPartirDe",
     "priorite"
    ]
@@ -4955,9 +4960,11 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeExprC.js (chargement)",
+    "forgeExprD.js (chargement)",
     "forgeExpression",
     "forgeMotsClesC.js (chargement)",
     "forgeMotsClesD.js (chargement)",
+    "groupeJoueurs",
     "preparationRiposte",
     "variantesEtendues",
     "variantesMotsClesE"
@@ -4974,6 +4981,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "aProprieteJoueur",
     "actionsLegales",
     "actionsPossibles",
     "attaqueParRegles",
@@ -5185,15 +5193,18 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "aProprieteJoueur",
     "compteDuTour",
     "conditionEntree",
     "exprDesignations",
     "exprEtendue",
     "forgeDeclencheursC.js (chargement)",
+    "forgeExprD.js (chargement)",
     "forgeFiltresD.js (chargement)",
     "forgeMotsClesF.js (chargement)",
     "noteHistorique",
     "noteResolution",
+    "quantiteGroupe",
     "variantesEtendues"
    ]
   },
@@ -5233,7 +5244,7 @@
   {
    "nom": "noteResolution",
    "fichier": "jeuHistorique.js",
-   "ligne": 67,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "histoire",
@@ -5248,7 +5259,7 @@
   {
    "nom": "manaDepenseDe",
    "fichier": "jeuHistorique.js",
-   "ligne": 70,
+   "ligne": 72,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -5457,6 +5468,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "aProprieteJoueur",
     "actionsLegales",
     "appliqueSBA",
     "attaqueParRegles",
@@ -6086,6 +6098,7 @@
     "forgeExprC.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)",
+    "groupeJoueurs",
     "resous"
    ]
   },
@@ -9480,8 +9493,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "aProprieteJoueur",
     "forgeFiltresD.js (chargement)",
     "propObjet",
+    "quantiteGroupe",
     "saValide",
     "seuilForge"
    ]
@@ -9575,6 +9590,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "aCopier",
+    "aProprieteJoueur",
     "attaquantsDeclares",
     "caracEtendue",
     "carteLanceeValide",
@@ -9971,6 +9987,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeExprC.js (chargement)",
+    "forgeExprD.js (chargement)",
     "forgeExpression"
    ]
   },
@@ -10043,6 +10060,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeExprD.js (chargement)",
     "forgeNombre"
    ]
   },
@@ -10085,7 +10103,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "exprEtendue",
-    "forgeMotsClesF.js (chargement)"
+    "forgeExprD.js (chargement)",
+    "forgeMotsClesF.js (chargement)",
+    "quantiteGroupe"
    ]
   },
   {
@@ -10117,6 +10137,7 @@
     "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
     "forgeExprC.js (chargement)",
+    "forgeExprD.js (chargement)",
     "forgeExpression",
     "forgeMemoire.js (chargement)",
     "forgeMotsClesF.js (chargement)"
@@ -10258,6 +10279,7 @@
     "forgeEffetsG.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeZonesC.js (chargement)",
+    "groupeJoueurs",
     "joueursForge",
     "paieUnlessForge",
     "propObjet"
@@ -10329,6 +10351,7 @@
     "forgeEntrees.js (chargement)",
     "forgeMemoire.js (chargement)",
     "forgeZonesC.js (chargement)",
+    "groupeJoueurs",
     "joueursForge",
     "joueursPompe",
     "objetsForge",
@@ -17246,6 +17269,83 @@
    "appelleParHtml": [],
    "appeleePar": [
     "forgeExprC.js (chargement)"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeExprD.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "adversaires",
+    "cibleForge",
+    "forgeExpression",
+    "forgeSait",
+    "histoire",
+    "obj",
+    "quantiteGroupe",
+    "quantiteJoueur"
+   ],
+   "appelleDiffere": [
+    "exprEtendue"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "aProprieteJoueur",
+   "fichier": "forgeExprD.js",
+   "ligne": 36,
+   "chargement": false,
+   "appelle": [
+    "champDe",
+    "compareForge",
+    "forgeValideObjet",
+    "histoire",
+    "obj"
+   ],
+   "appelleDiffere": [
+    "estCreature"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "quantiteGroupe"
+   ]
+  },
+  {
+   "nom": "groupeJoueurs",
+   "fichier": "forgeExprD.js",
+   "ligne": 57,
+   "chargement": false,
+   "appelle": [
+    "adversaires",
+    "forgeDefinis",
+    "joueurDe",
+    "passeOuPresent",
+    "vivants"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "quantiteGroupe"
+   ]
+  },
+  {
+   "nom": "quantiteGroupe",
+   "fichier": "forgeExprD.js",
+   "ligne": 73,
+   "chargement": false,
+   "appelle": [
+    "aProprieteJoueur",
+    "compareForge",
+    "groupeJoueurs",
+    "histoire",
+    "quantiteJoueur"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeExprD.js (chargement)"
    ]
   },
   {

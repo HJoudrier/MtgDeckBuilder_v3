@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeExprD.js     des quantités sur les joueurs : vie perdue ce tour, groupes de joueurs, combien en ont la propriété
   forgeFiltresD.js  des propriétés de filtre, II : choisi, retenu, visé, cmc pair, force égale à l'endurance, plus de terrains que vous
   forgeCoutsC.js    ce que les statiques font au coût de jouer : vie pour mana, autre coût accordé, capacités moins chères, flash
   forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
@@ -1696,6 +1697,23 @@ déjà ou note désormais :
   Thrasher : « each other opponent » — ni vous, ni le joueur que le déclencheur vise).
 Restent : `TriggeredCards` (un lot de cartes), `hadToAttackThisCombat`, `blockedBySourceLKI`, les dégâts cumulés
 d'une source (`wasDealtDamageThisTurnBySource GE10`).
+
+**Lot F72 : des quantités sur les joueurs** (`js/forgeExprD.js`). Cinquante-sept cartes de plus. `PlayerCount<qui>$<quoi>`
+compte ou somme une propriété sur un groupe de joueurs :
+- **le groupe** : tous, les adversaires, les joueurs retenus (`Remembered`), leurs propriétaires, ceux que désigne
+  `Defined<…>` (`Registered` : tous), le contrôleur seul (`PropertyYou`) ;
+- **la quantité** : `HighestLifeLostThisTurn` (Y'shtola, Bloodchief Ascension, Knight of the Ebon Legion),
+  `LifeLostThisTurn`, `LifeTotal`, `CardsIn…`, `CardsDrawn`, `Counters.Poison`, `RingTemptedYou`, `LandsPlayed`,
+  `SacrificedThisTurn` — lues chez un joueur par `quantiteJoueur()`, que ce fichier étend ;
+- **`HasProperty<propriété> [GE1]`** : combien de joueurs l'ont (`LostLifeThisTurn`, `isMonarch`, `controlsCreature`,
+  `withMoreCreaturesThanYou`, `wasDealtCombatDamageThisTurnBy Zombie GE1`…), et **`ConditionGE2 CardsDrawn`** :
+  combien en ont au moins deux (Smuggler's Share) ;
+- **un joueur désigné** : `TargetedController$…`, `TriggeredDefendingPlayer$…`, `TriggeredTarget$…` ;
+- **le tour** : `Count$LifeYouLostThisTurn`, `Count$MaxOppDamageThisTurn` (Spinerock Knoll),
+  `Count$NonCombatDamageThisTurn` — l'historique du tour garde les dégâts reçus par joueur et ceux qu'un
+  contrôleur a infligés hors combat — `Count$YourStartingLife` (`J.vieDepart`), `DungeonsCompleted$Amount`.
+Restent : la vie perdue au tour précédent (`LifeLostLastTurn`), `HighestValid` / `LowestValid` sur les joueurs, les
+dégâts reçus « la dernière fois », `lifeGTX`.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

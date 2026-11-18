@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1774 fonctions**, 264 modules, 1893 Ko de JavaScript.
+**1777 fonctions**, 265 modules, 1903 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -48,7 +48,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 230 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
-| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 71 |
+| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 73 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 157 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 12 | 243 |
@@ -140,6 +140,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeChoixC.js`](#jsforgechoixcjs) | Choisir, défausser, répéter, sacrifier : ce que les | 3 | 216 |
 | [`forgeExprC.js`](#jsforgeexprcjs) | Des quantités de plus | 1 | 102 |
+| [`forgeExprD.js`](#jsforgeexprdjs) | Des quantités sur les joueurs | 3 | 141 |
 | [`forgeZonesC.js`](#jsforgezonescjs) | Chercher, creuser, déplacer : des paramètres de plus | 0 | 82 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
@@ -972,7 +973,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 55 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 71 lignes, 3.4 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 73 lignes, 3.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2459,6 +2460,16 @@ Des quantités de plus. *1 fonctions, 102 lignes, 7.4 Ko.*
 | Fonction | Rôle |
 |---|---|
 | `siSinon(P, q, vrai, env)` | La forme `a.b` : `a` si `vrai`, `b` sinon. |
+
+## js/forgeExprD.js
+
+Des quantités sur les joueurs. *3 fonctions, 141 lignes, 9.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `aProprieteJoueur(P, j, prop, env)` | Un joueur a-t-il cette propriété ? (`HasProperty<propriété>`) |
+| `groupeJoueurs(P, qui, env)` | —— Un groupe de joueurs —————————————————————————————————————————— |
+| `quantiteGroupe(P, qui, q, env)` | La quantité d'un groupe : `undefined` si l'on ne la sait pas lire. |
 
 ## js/forgeZonesC.js
 

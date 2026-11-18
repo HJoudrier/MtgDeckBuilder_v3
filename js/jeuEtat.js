@@ -27,7 +27,7 @@ function nouvellePartie(cfg) {
     montre: !!cfg.montre
   };
   cfg.sieges.forEach((s, i) => {
-    const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, poison: 0, energie: 0,
+    const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, vieDepart: s.vie || 20, poison: 0, energie: 0,
       pool: {W: 0, U: 0, B: 0, R: 0, G: 0, C: 0}, degatsCmd: {}, taxe: {}, commandants: [], terrainsJoues: 0,
       sortsTour: [], elimine: false, raison: null, piocheVide: false, mulligans: 0, tours: 0,
       stats: {terrainsT4: null, cmdTour: null, manaDepense: 0, manaDispo: 0, sorts: 0, degats: 0}};
