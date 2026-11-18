@@ -20,7 +20,13 @@ function motsForge(kw) {
    drapeau d'un permanent exercé, que l'étape de dégagement consomme
    (js/jeuTour.js `degagement()`). */
 const KW_SANS_DEGAGER = "hidden this card doesn't untap during your next untap step.";
-forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, 'flashback');
+/* « HIDDEN CARDNAME must be blocked if able. » (Anzrag, the Quake-Mole) : la
+   même règle que celle de la statique ou du mot-clé de la carte, mais posée
+   pour le tour. Elle se range dans le bonus lui-même (`m.doitEtreBloque`), que
+   `bloqueursImposes()` lit avec les autres sources de cette obligation, et
+   tombe avec lui au nettoyage. */
+const KW_DOIT_ETRE_BLOQUE = 'hidden cardname must be blocked if able.';
+forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, KW_DOIT_ETRE_BLOQUE, 'flashback');
 
 /* Un `+3` ou un `-X` de Forge, pour l'IA. */
 function bonusIA(v) { const s = String(v == null ? '0' : v); return /^[+-]?\d+$/.test(s) ? +s : /^-/.test(s) ? -2 : 2; }
@@ -33,10 +39,11 @@ function pompeForge(P, objets, t, env) {
   const sansDegager = String(t.KW || '').split('&').some(k => k.trim().toLowerCase() === KW_SANS_DEGAGER);
   if (sansDegager) vivants.forEach(o => { o.exerce = true; P.ver++; });
   if (sansDegager && !mots && !f && !e) return;
+  const impose = String(t.KW || '').split('&').some(k => k.trim().toLowerCase() === KW_DOIT_ETRE_BLOQUE);
   /* La durée (js/forgeDurees.js) ; une durée qu'on ne sait pas tenir finit au nettoyage. */
   const fd = finForge(t, env) || {fin: 'tour'};
   if (fd.fin === 'hote') P.hotesSuivis = true;
-  vivants.forEach(o => { o.mods.push({f, e, mots, ...fd}); P.ver++; });
+  vivants.forEach(o => { o.mods.push(impose ? {f, e, mots, doitEtreBloque: true, ...fd} : {f, e, mots, ...fd}); P.ver++; });
 }
 
 forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) {
@@ -47,6 +54,7 @@ forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function*
   (t, op) => {
     op.op = 'pompe'; op.f = bonusIA(t.NumAtt); op.e = bonusIA(t.NumDef); op.mots = motsForge(t.KW);
     op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.f < 0 || op.e < 0;
+    op.impose = String(t.KW || '').split('&').some(k => k.trim().toLowerCase() === KW_DOIT_ETRE_BLOQUE);
   }, {prepare: t => !t.PumpZone || t.PumpZone === 'Battlefield' || (t.PumpZone === 'Graveyard' && t.KW === 'Flashback' && !t.NumAtt && !t.NumDef)});
 
 forgeEffet('PumpAll', ['ValidCards', 'NumAtt', 'NumDef', 'KW', 'Duration'], function* (P, t, env) {

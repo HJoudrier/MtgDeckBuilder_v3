@@ -51,7 +51,9 @@ function scoreEffet(P, j, effet, src) {
       case 'place': s += op.vers === 'champ' ? 4 : 1.5; break;
       case 'sacrifie': s += op.qui && op.qui.vous ? -2 : 3; break;
       case 'defausse': s += op.qui && op.qui.vous ? -1 : 1.5; break;
-      case 'pompe': s += P.combat ? 2 : 0; break;
+      /* Se faire bloquer à coup sûr : avant d'attaquer, par une créature qui peut le faire. */
+      case 'pompe': s += op.impose ? (P.actif === j && !P.combat && src && estCreature(src) && src.zone === 'champ' && !src.engage &&
+        /^(principale1|debutCombat)$/.test(P.etape) ? 3 : 0) : P.combat ? 2 : 0; break;
       case 'contre': break;
       case 'mana': s += 0.5; break;
       case 'exhume': s += 3; break;

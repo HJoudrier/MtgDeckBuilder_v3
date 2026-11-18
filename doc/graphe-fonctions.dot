@@ -1085,6 +1085,7 @@ digraph appels {
     "forgeMotsClesD.js (chargement)" [label="chargement du module", fillcolor="#a86d8a33", color="#a86d8a", shape=note];
     "motClePermanent" [label="motClePermanent", fillcolor="#a86d8a33", color="#a86d8a"];
     "joueurAttaque" [label="joueurAttaque", fillcolor="#a86d8a33", color="#a86d8a"];
+    "doitEtreBloque" [label="doitEtreBloque", fillcolor="#a86d8a33", color="#a86d8a"];
     "bloqueursImposes" [label="bloqueursImposes", fillcolor="#a86d8a33", color="#a86d8a"];
     "benediction" [label="benediction", fillcolor="#a86d8a33", color="#a86d8a"];
     "coutStrive" [label="coutStrive", fillcolor="#a86d8a33", color="#a86d8a"];
@@ -4772,9 +4773,11 @@ digraph appels {
   "motClePermanent" -> "forgeSousCapacite" [color="#a86d8a99"];
   "motClePermanent" -> "effetForge" [color="#a86d8a99"];
   "joueurAttaque" -> "obj" [color="#a86d8a99"];
+  "doitEtreBloque" -> "obj" [color="#a86d8a99"];
   "bloqueursImposes" -> "statiquesForgeSur" [color="#a86d8a99"];
   "bloqueursImposes" -> "obj" [color="#a86d8a99"];
   "bloqueursImposes" -> "peutBloquer" [color="#a86d8a99"];
+  "bloqueursImposes" -> "doitEtreBloque" [color="#a86d8a99"];
   "benediction" -> "champDe" [color="#a86d8a99"];
   "coutStrive" -> "sommeMana" [color="#a86d8a99"];
   "coutStrive" -> "payableAvec" [color="#a86d8a99"];

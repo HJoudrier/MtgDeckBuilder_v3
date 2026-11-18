@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1729 fonctions**, 249 modules, 1799 Ko de JavaScript.
+**1730 fonctions**, 249 modules, 1800 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -86,7 +86,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 202 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 234 |
-| [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 179 |
+| [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 187 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 6 | 196 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 141 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 164 |
@@ -111,7 +111,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 217 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 171 |
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 216 |
-| [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 7 | 236 |
+| [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 8 | 242 |
 | [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 276 |
 | [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 287 |
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
@@ -132,7 +132,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
-| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 11 | 214 |
+| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 11 | 216 |
 | [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 6 | 95 |
 | [`iaEvaluation.js`](#jsiaevaluationjs) | Ce que vaut une position | 6 | 92 |
 | [`iaCombatCalcul.js`](#jsiacombatcalculjs) | Le combat calculé | 10 | 208 |
@@ -1606,7 +1606,7 @@ Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 234 lignes, 15 K
 
 ## js/forgeEffetsC.js
 
-Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 179 lignes, 11 Ko.*
+Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 187 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1620,6 +1620,7 @@ Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 179 lignes, 11 K
 | Donnée | Rôle |
 |---|---|
 | `KW_SANS_DEGAGER` | « HIDDEN This card doesn't untap during your next untap step. |
+| `KW_DOIT_ETRE_BLOQUE` | « HIDDEN CARDNAME must be blocked if able. |
 
 ## js/forgeEffetsD.js
 
@@ -2072,14 +2073,15 @@ Les mots-clés de lancement, suite. *14 fonctions, 216 lignes, 11 Ko.*
 
 ## js/forgeMotsClesD.js
 
-Les mots-clés des permanents, troisième partie. *7 fonctions, 236 lignes, 14 Ko.*
+Les mots-clés des permanents, troisième partie. *8 fonctions, 242 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `capMoteur(texte, ecoute, op)` | Une capacité déclenchée sur un évènement du moteur. |
 | `motClePermanent(def, k, face, jetons, tete, reste)` | Un mot-clé des permanents. Rend `null` s'il n'en est pas un. |
 | `joueurAttaque(P, e)` | Le joueur qu'attaque une créature, d'après l'évènement d'attaque. |
-| `bloqueursImposes(P, atts, blqs, pose)` | « Must be blocked if able » : un bloqueur libre qui le peut s'y met. |
+| `doitEtreBloque(P, id, fg)` | « Must be blocked if able » : un bloqueur libre qui le peut s'y met. |
+| `bloqueursImposes(P, atts, blqs, pose)` | — |
 | `benediction(P, j, src)` | Ascend : dix permanents et une source qui monte, et la bénédiction reste pour toute la partie. |
 | `coutStrive(P, j, s, d, effets, cout, x)` | Le coût d'un sort strive : un supplément par cible au-delà de la première. |
 | `effetsOuverture(P)` | Les Leylines, Gemstone Caverns : après les mulligans, chacun, dans l'ordre du tour, peut jouer l'effet des cartes de sa main de départ. |
@@ -2368,7 +2370,7 @@ Les choix du joueur automatique hors de la priorité. *7 fonctions, 124 lignes, 
 
 ## js/iaPriorite.js
 
-Ce que le joueur automatique fait de sa priorité. *11 fonctions, 214 lignes, 10 Ko.*
+Ce que le joueur automatique fait de sa priorité. *11 fonctions, 216 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|

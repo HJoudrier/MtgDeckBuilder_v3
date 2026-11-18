@@ -1439,6 +1439,18 @@ Profondeur bornée à deux : un filtre qui en nourrit un autre au-delà n'est pa
 plus anciens, vus en chemin : `Combo B G | Amount$ 2` ne donnait que `BB` ou `GG`, jamais `BG`
 (`multiensembles()`), et un `Return<1/CARDNAME>` dans un coût de mana faisait refuser la capacité.
 
+**Deux cartes demandées** (lot F59). *Reinforced Ronin* — Haste, retour en main à l'étape de fin,
+Channel depuis la main — était déjà jouée de bout en bout ; des parties scriptées le confirment (la
+capacité de la main est proposée, défausse la carte et pioche ; lancée, elle attaque puis revient). Seule
+*Anzrag, the Quake-Mole* manquait d'un élément : son activation, `Pump | KW$ HIDDEN CARDNAME must be
+blocked if able.`, était jetée sans bruit et la carte restait partielle.
+- **« Doit être bloqué » pour le tour** : le bonus posé par la pompe porte `doitEtreBloque`
+  (`pompeForge()`), et `doitEtreBloque()` (`js/forgeMotsClesD.js`) le lit avec les deux autres sources de
+  l'obligation — la carte et une statique. Le bonus tombe au nettoyage comme tout `fin: 'tour'`, et
+  l'obligation vaut pour chaque combat du tour, la phase de combat de plus que donne Anzrag comprise ;
+- **l'IA** n'activait jamais une pompe hors combat. Une pompe qui impose le blocage vaut maintenant 3 en
+  première principale ou au début du combat, pour une créature dégagée qui peut attaquer.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.
