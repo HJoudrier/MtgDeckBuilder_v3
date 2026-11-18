@@ -141,8 +141,12 @@ function joueursForge(P, t, env, cle = 'Defined') {
    `Defined$` nomme, sinon sa source. */
 function objetsForge(P, t, env, defaut = 'Self') {
   let l;
-  if (env.op && env.op.slot != null) l = ciblesForge(P, env, false);
-  else l = forgeDefinis(P, t.Defined || defaut, env);
+  if (env.op && env.op.slot != null) {
+    l = ciblesForge(P, env, false);
+    /* Une cible qui est un joueur et un `Defined$` qui désigne des objets (« goad each creature target player
+       controls ») : ce sont les objets que l'effet touche, le joueur n'est que le moyen de les choisir. */
+    if (t.Defined && l.length && l.every(x => x && x.j != null) && !/^(Targeted|You|Player|Opponent)/.test(t.Defined)) l = forgeDefinis(P, t.Defined, env);
+  } else l = forgeDefinis(P, t.Defined || defaut, env);
   return avecDefinisEnPlus(P, t, env, l).filter(x => x && x.j == null);
 }
 

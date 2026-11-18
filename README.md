@@ -1841,6 +1841,14 @@ Delina), `RemoveCounter` sur « n'importe quels permanents » (Eventide's Shadow
 (Comet), `Manifest` (Orochi Soul-Reaver), les effets « ne se dégagent pas » à durée (Kill Switch, Bontu's Last Reckoning),
 les chapitres et classes à effet retardé.
 
+**Correctif : cibler un joueur pour toucher ses créatures** (`objetsForge()`, `js/forgeDefini.js`). Un effet qui
+porte un `ValidTgts$ Player` et un `Defined$ Valid Creature.ControlledBy TargetedPlayer` — Geode Rager : « goad each
+creature target player controls » — ne touchait rien : avec un emplacement de cible, `objetsForge()` ne lisait que
+les cibles, des joueurs, qu'il écarte comme non-objets, et ne regardait jamais `Defined$`. Les créatures de
+l'adversaire choisi n'étaient donc jamais incitées. Quand toutes les cibles sont des joueurs et que `Defined$`
+désigne autre chose que le joueur lui-même, ce sont maintenant les objets désignés qui sont touchés — pour tous les
+effets qui s'écrivent ainsi, non pour le seul goad.
+
 **Lot F81 : copier et devenir** (`js/forgeCopiesB.js`). Onze cartes de plus. Ce que l'effet de copie ajoute à la copie :
 - `AddColors$` (Ratadrabik of Urborg, The Jolly Balloon Man) ; `RemoveCardTypes$ True` : la copie ne garde que les
   types ajoutés (Espers to Magicite) ;
