@@ -101,6 +101,8 @@ function capaciteForge(def, face, t, jetons) {
     const e = effetForge(face, t, jetons, true);
     if (!e) return false;
     def.sort = e;
+    const rs = restrictionSort(t);
+    if (rs) def.restrictionsSort = rs;
     const autre = Object.keys(c.cout).filter(k => k !== 'mana');
     if (autre.length) def.coutSup = c.cout;
     return true;
@@ -155,7 +157,8 @@ function capaciteForge(def, face, t, jetons) {
     def.capacites.push({genre: 'loyaute', delta: c.loyaute, effet, texte: texteForge(face, t)});
   } else def.capacites.push({genre: 'activee', cout: c.cout, effet, vitesse: t.SorcerySpeed === 'True' ? 'rituel' : null,
     unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {}),
-    ...(t.ReduceCost ? {reduit: t.ReduceCost, face} : {}), ...(t.Activation ? {activation: t.Activation} : {})});
+    ...(t.ReduceCost ? {reduit: t.ReduceCost, face} : {}), ...(t.Activation ? {activation: t.Activation} : {}),
+    ...(t.ActivationGameTypes ? {jeux: t.ActivationGameTypes} : {}), ...(restrictionSort(t) ? {restr: restrictionSort(t)} : {})});
   return true;
 }
 

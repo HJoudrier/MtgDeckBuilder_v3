@@ -40,7 +40,7 @@ function* nettoyage(P) {
     choix.forEach(id => defausseCarte(P, id, P.actif));
   }
   finDuTour(P);
-  P.joueurs.forEach(x => { x.prevention = 0; x.hexTemp = null; });
+  P.joueurs.forEach(x => { x.prevention = 0; x.hexTemp = null; x.protTemp = null; });
   for (const id of P.champ) {
     const o = obj(P, id);
     o.bless = 0; o.toucheMortel = false; o.regen = 0;

@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeEffetsL.js   des effets et conditions de plus : finir le tour, excès de dégâts, jeton bloquant, restrictions de moment
   forgeCopiesB.js   ce que la copie reçoit de plus : couleurs, types ôtés, mot-clé du tour, entrée engagée
   forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -1859,6 +1860,25 @@ Restent : la copie d'un **sort de permanent** (Storm of Saruman, Double Major : 
 le moteur ne sait pas poser sans le lancer), les copies **d'une carte nommée** (`DefinedName$` : le moteur ne
 cherche pas une carte par son nom hors du deck), les statiques ajoutées à une copie (`AddStaticAbilities$`), les
 échanges de contrôle conditionnels (Gilded Drake).
+
+**Lot F82 : des effets et des conditions de plus** (`js/forgeEffetsL.js`). Quinze cartes de plus :
+- **`EndTurn`** (Sundial of the Infinite, Day's Undoing) : la pile s'exile, `P.finTour` arrête les étapes, et
+  `suiteDuTour()` joue alors le nettoyage — sans lui les blessures auraient survécu au tour. **`AddTurn | SkipUntap$`**
+  (Savor the Moment) : le tour en plus saute le dégagement, mais ses permanents deviennent « prêts ».
+- **`DealDamage | ExcessDamage$ TargetedController`** (Ravenous Tyrannosaurus) : la créature ne reçoit que de quoi
+  mourir, le reste va à son contrôleur ; `ExcessSVarCondition$` (Goblin Negotiation, Hell to Pay).
+- **`Token | TokenBlocking$`** (Brimaz) : le jeton entre en bloquant l'attaquant ; **`Unattach`** (Akiri) ;
+  **`R:GainLife | Prevent$ True`** (Sulfuric Vortex).
+- **Les restrictions de moment**, qu'un sort portait sans qu'on les tienne : `OpponentTurn$` (Delirium),
+  `ActivationFirstCombat$` et `ActivationPhases$` (Berserk) valent maintenant pour le sort comme pour la capacité
+  (`restrictionsSort`, `restr`). Elles sont inscrites par effet, non comme paramètres communs : un déclencheur qui
+  porte `OpponentTurn$` doit la lire lui-même, comme `SpellCast` le fait.
+- **`ActivationGameTypes$`** (War Room) : la capacité ne s'active que dans une partie à commandants — un joueur qui en
+  a ; **`ConditionOpponentTurn$`** (Fevered Visions) ; **`ProtectionAll | ValidPlayers$ You`** (Seht's Tiger) : à l'abri
+  de la couleur contre les cibles et les dégâts ; **`Goad | RememberGoaded$`** (Havoc Eater).
+Restent : prendre le contrôle d'un joueur (`ControlPlayer`, Mindslaver, Sorin Markov), les attractions (`OpenAttraction`),
+`Recruit`, `ExchangeTextBox` (Deadpool), `ExchangeLife`, les paramètres de pioche `NonBasicSpell` et `Forecast`, et
+une dizaine de paramètres isolés (`Token.Boast`, `Tap.Tapper`, `Counter.ValidCause`, `Surveil.RememberMoved`…).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
