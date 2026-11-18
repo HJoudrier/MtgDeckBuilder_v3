@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1746 fonctions**, 253 modules, 1819 Ko de JavaScript.
+**1746 fonctions**, 254 modules, 1822 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -79,11 +79,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 12 | 288 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 75 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 171 |
-| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 153 |
+| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 158 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 150 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 202 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 212 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 234 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 187 |
@@ -129,6 +129,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDesignes.js`](#jsforgedesignesjs) | Désigner, filtrer, choisir parmi | 1 | 74 |
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
 | [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 49 |
+| [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 106 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
@@ -1501,7 +1502,7 @@ Les quantités de Forge. *8 fonctions, 171 lignes, 10 Ko.*
 
 ## js/forgeExprB.js
 
-Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 153 lignes, 9.7 Ko.*
+Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 158 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1563,7 +1564,7 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 202 lignes, 12 Ko.*
+Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 212 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2338,6 +2339,10 @@ Des propriétés de filtre de plus. *1 fonctions, 49 lignes, 2.7 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `TERRAINS_DE_BASE` | — |
+
+## js/forgeHideaway.js
+
+Hideaway : cacher une carte, la jouer plus tard. *0 fonctions, 35 lignes, 1.9 Ko.*
 
 ## js/forgeAlias.js
 
