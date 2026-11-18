@@ -35,7 +35,7 @@ const ANNEXES = {
 };
 const CLES_ANNEXES = Object.keys(ANNEXES);
 
-/* Les cinq onglets de l'atelier, dans l'ordre où ils paraissent sous
+/* Les onglets de l'atelier, dans l'ordre où ils paraissent sous
    l'entête. Chacun nomme les sections qu'il porte : c'est la seule table qui
    les répartisse, et tout le reste — la barre, le passage d'un onglet à
    l'autre, le signal d'un travail de fond — s'y réfère.
@@ -50,16 +50,16 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). Le catalogue garde
    la clé `suggestions`, comme partout où son rangement est en jeu.
 
-   L'onglet « Decks » montre deux choses : des vignettes de deck, qui ne se
-   règlent ni en colonnes ni en groupes, et la liste d'achats, qui est une liste
-   de cartes comme les autres. C'est elle que règle le bouton « Affichage » de
-   l'entête — la liste ou la grille, les colonnes, le groupement, le tri —,
-   et les vignettes de deck n'y sont pas soumises. Il vient en tête parce
-   qu'il répond à la première des questions : sur quel deck travaille-t-on.
-   L'onglet « Simulation », lui, n'en montre aucune : `liste` y est nul, et le
-   bouton s'efface. */
+   L'onglet « Decks » ne montre que des vignettes de deck, qui ne se règlent
+   ni en colonnes ni en groupes : `liste` y est nul, et le bouton s'efface.
+   Il vient en tête parce qu'il répond à la première des questions : sur quel
+   deck travaille-t-on. La liste d'achats, une liste de cartes comme les autres,
+   a sa propre page « Wishlist » : c'est elle que règle le bouton « Affichage »
+   — la liste ou la grille, les colonnes, le groupement, le tri. L'onglet
+   « Simulation » n'en montre aucune : `liste` y est nul aussi. */
 const ONGLETS = {
-  decks:      {label:'Decks',      sections:['secI','secJ'], liste:'achats'},
+  decks:      {label:'Decks',      sections:['secI'],        liste:null},
+  wishlist:   {label:'Wishlist',   sections:['secJ'],        liste:'achats'},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
