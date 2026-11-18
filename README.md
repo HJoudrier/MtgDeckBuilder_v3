@@ -136,6 +136,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeDefiniC.js   ce que Defined$ désigne encore : défenseur adversaire, sacrifié, joueurs par propriétés, bibliothèque, pile
   forgeExprD.js     des quantités sur les joueurs : vie perdue ce tour, groupes de joueurs, combien en ont la propriété
   forgeFiltresD.js  des propriétés de filtre, II : choisi, retenu, visé, cmc pair, force égale à l'endurance, plus de terrains que vous
   forgeCoutsC.js    ce que les statiques font au coût de jouer : vie pour mana, autre coût accordé, capacités moins chères, flash
@@ -1714,6 +1715,19 @@ compte ou somme une propriété sur un groupe de joueurs :
   contrôleur a infligés hors combat — `Count$YourStartingLife` (`J.vieDepart`), `DungeonsCompleted$Amount`.
 Restent : la vie perdue au tour précédent (`LifeLostLastTurn`), `HighestValid` / `LowestValid` sur les joueurs, les
 dégâts reçus « la dernière fois », `lifeGTX`.
+
+**Lot F73 : les désignations** (`js/forgeDefiniC.js`). Vingt-huit cartes de plus, par `definisEtendus()` :
+- **le combat** : `TriggeredDefender.Opponent` et `TriggeredAttackedTarget` (Hellrider, Myr Battlesphere, Raid
+  Bombardment : seul le défenseur qui est un adversaire compte) ;
+- **ce qu'on vient de sacrifier** : `Sacrificed`, `SacrificedCards` (les instantanés de `ctx.sacrifies`) ;
+- **`Spawner>TriggeredTarget`** (Dokuchi Silencer, Biting-Palm Ninja) : le déclencheur réflexe garde l'évènement de son
+  parent, le préfixe ne change donc rien à ce qu'il désigne ;
+- **des joueurs choisis par propriétés** : `Player.EnchantedBy` (Fraying Sanity), `Opponent.IsCorrupted` (au moins trois
+  marqueurs de poison), `Player.lifeEQ13`, `Player.controlsCreature.powerGE4_GE1` (au moins une créature de cette
+  force), `controlsCreature.attacking` — des propriétés de joueur que `proprieteJoueurEtendue()` apprend ;
+- `ValidLibrary`, `ValidStack`, `ExiledWithSource`, `NextPlayerToYourRight`, un filtre d'objet écrit seul (`Creature.YouCtrl`).
+Restent : `Convoked`, `TriggeredCards` et les listes d'un déplacement groupé (`ExiledCards`, `DiscardedCards`), `.Chosen,You`
+(une liste de joueurs à la place d'un seul), `Caster`.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1777 fonctions**, 265 modules, 1903 Ko de JavaScript.
+**1777 fonctions**, 266 modules, 1907 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -141,6 +141,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeChoixC.js`](#jsforgechoixcjs) | Choisir, défausser, répéter, sacrifier : ce que les | 3 | 216 |
 | [`forgeExprC.js`](#jsforgeexprcjs) | Des quantités de plus | 1 | 102 |
 | [`forgeExprD.js`](#jsforgeexprdjs) | Des quantités sur les joueurs | 3 | 141 |
+| [`forgeDefiniC.js`](#jsforgedefinicjs) | Ce que `Defined$` désigne encore | 0 | 63 |
 | [`forgeZonesC.js`](#jsforgezonescjs) | Chercher, creuser, déplacer : des paramètres de plus | 0 | 82 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
@@ -2470,6 +2471,10 @@ Des quantités sur les joueurs. *3 fonctions, 141 lignes, 9.2 Ko.*
 | `aProprieteJoueur(P, j, prop, env)` | Un joueur a-t-il cette propriété ? (`HasProperty<propriété>`) |
 | `groupeJoueurs(P, qui, env)` | —— Un groupe de joueurs —————————————————————————————————————————— |
 | `quantiteGroupe(P, qui, q, env)` | La quantité d'un groupe : `undefined` si l'on ne la sait pas lire. |
+
+## js/forgeDefiniC.js
+
+Ce que `Defined$` désigne encore. *0 fonctions, 63 lignes, 4.3 Ko.*
 
 ## js/forgeZonesC.js
 

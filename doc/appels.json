@@ -131,6 +131,7 @@
   "forgeChoixC.js",
   "forgeExprC.js",
   "forgeExprD.js",
+  "forgeDefiniC.js",
   "forgeZonesC.js",
   "forgeChoixMultiples.js",
   "iaValeur.js",
@@ -4089,6 +4090,7 @@
     "forgeDeclencheursD.js (chargement)",
     "forgeDeclencheursE.js (chargement)",
     "forgeDefini.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinition.js (chargement)",
     "forgeDegagements.js (chargement)",
     "forgeDescripteurs.js (chargement)",
@@ -4492,6 +4494,7 @@
     "forgeDeclencheursC.js (chargement)",
     "forgeDeclencheursD.js (chargement)",
     "forgeDeclencheursE.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeDegagements.js (chargement)",
     "forgeDesignes.js (chargement)",
@@ -4619,6 +4622,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "ciblesForge",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeEffetsI.js (chargement)",
     "forgeEmpreinte.js (chargement)",
@@ -4898,6 +4902,7 @@
     "forgeChoixC.js (chargement)",
     "forgeChoixMultiples.js (chargement)",
     "forgeDeclencheursD.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeEffetsB.js (chargement)",
     "forgeMemoire.js (chargement)",
@@ -5003,6 +5008,7 @@
     "exprDesignations",
     "forceDeFrappe",
     "forgeChoixC.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsF.js (chargement)",
@@ -5436,6 +5442,7 @@
     "convocables",
     "declareAttaquants",
     "estCreature",
+    "forgeDefiniC.js (chargement)",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsE.js (chargement)",
     "forgeEffetsH.js (chargement)",
@@ -9494,6 +9501,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "aProprieteJoueur",
+    "forgeDefiniC.js (chargement)",
     "forgeFiltresD.js (chargement)",
     "propObjet",
     "quantiteGroupe",
@@ -9616,6 +9624,7 @@
     "forgeCoutsC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursD.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeDegagements.js (chargement)",
     "forgeDesignes.js (chargement)",
@@ -9694,6 +9703,7 @@
     "forgeChoixC.js (chargement)",
     "forgeDeclencheurs.js (chargement)",
     "forgeDeclencheursB.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsI.js (chargement)",
     "forgeManaB.js (chargement)",
@@ -9938,6 +9948,7 @@
     "forgeAuras.js (chargement)",
     "forgeChoix.js (chargement)",
     "forgeChoixC.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeEffetsA.js (chargement)",
     "forgeEffetsB.js (chargement)",
@@ -10243,6 +10254,7 @@
     "cibleOuDefinis",
     "executeForge",
     "forgeAuras.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeEffetsB.js (chargement)",
     "forgeEffetsC.js (chargement)",
@@ -10336,6 +10348,7 @@
     "forgeChoixMultiples.js (chargement)",
     "forgeCopies.js (chargement)",
     "forgeDeclencheursC.js (chargement)",
+    "forgeDefiniC.js (chargement)",
     "forgeDesignes.js (chargement)",
     "forgeDurees.js (chargement)",
     "forgeEffetsA.js (chargement)",
@@ -10447,6 +10460,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDefiniC.js (chargement)",
     "forgeDefinis",
     "forgeDesignes.js (chargement)",
     "forgeEmpreinte.js (chargement)",
@@ -16947,6 +16961,7 @@
    ],
    "appelleParHtml": [],
    "appeleePar": [
+    "forgeDefiniC.js (chargement)",
     "forgeValideJoueur"
    ]
   },
@@ -17347,6 +17362,32 @@
    "appeleePar": [
     "forgeExprD.js (chargement)"
    ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "forgeDefiniC.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "champDe",
+    "ciblesForge",
+    "compareForge",
+    "estType",
+    "forgeDefinis",
+    "forgeSait",
+    "forgeValideJoueur",
+    "forgeValideObjet",
+    "obj",
+    "objetsZone",
+    "suit",
+    "vivants"
+   ],
+   "appelleDiffere": [
+    "definisEtendus",
+    "proprieteJoueurEtendue"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
   },
   {
    "nom": "chargement du module",
