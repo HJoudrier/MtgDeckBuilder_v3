@@ -59,7 +59,7 @@ forgeMode('RingTemptsYou', ['ValidPlayer', 'ValidCard'], (P, t, e, s, env) => e.
 FORGE_MODES.Attacks = (juge => function (P, t, e, s, env) {
   if (!juge(P, t, e, s, env)) return false;
   if (t.FirstAttack === 'True' && e.rang !== 1) return false;
-  if (t.CheckDefinedPlayer) {
+  if (t.CheckDefinedPlayer && /^TriggeredDefender\./.test(t.CheckDefinedPlayer)) {
     if (t.CheckDefinedPlayer !== 'TriggeredDefender.withMostLife') return false;
     const d = e.defenseur, j = d && (d.j != null ? d.j : obj(P, d.pw) && obj(P, d.pw).ctrl);
     if (j == null || P.joueurs[j].vie < Math.max(...vivants(P).map(J => J.vie))) return false;

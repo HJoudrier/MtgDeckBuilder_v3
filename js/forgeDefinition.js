@@ -106,7 +106,7 @@ function capaciteForge(def, face, t, jetons) {
     return true;
   }
   /* Depuis la main ou le cimetière : js/jeuLancer.js les propose aussi. */
-  const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
+  const zone = {Hand: 'main', Graveyard: 'cimetiere', Command: 'commandement'}[t.ActivationZone] || null;
   if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
   if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage)) return false;
   /* Une condition d'activation inconnue écarte la capacité (js/forgeActivations.js). */

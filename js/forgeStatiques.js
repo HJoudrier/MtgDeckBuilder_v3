@@ -42,7 +42,9 @@ function statiqueTenable(t) {
     /* Depuis la main, la permission ne sert que si elle rend le sort gratuit. */
     if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True') return false;
     if (t.RaiseCost && !coutForge(t.RaiseCost)) return false;
-    if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(/^(Graveyard|Exile|All|Exile,Graveyard|Graveyard,Exile)$/.test(t.EffectZone) && t.Affected === 'Card.Self')) return false;
+    /* Tenue par un effet (« mill a card, you may play it this turn ») : la zone de commandement, et les cartes retenues. */
+    const parEffet = t.EffectZone === 'Command' && /^Card\.IsRemembered(\+nonLand)?$/.test(t.Affected || '');
+    if (t.EffectZone && t.EffectZone !== 'Battlefield' && !parEffet && !(/^(Graveyard|Exile|All|Exile,Graveyard|Graveyard,Exile)$/.test(t.EffectZone) && t.Affected === 'Card.Self')) return false;
     return true;
   }
   /* Regarder le dessus de sa bibliothèque : une information, sans effet sur

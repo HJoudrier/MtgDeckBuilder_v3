@@ -79,7 +79,9 @@ function hotePart(P, id) {
    cesse. */
 function suiviPart(P, id, depuis) {
   const n = P.effets.length;
-  P.effets = P.effets.filter(e => !(e.finSiQuitte === depuis && e.memo.includes(id)));
+  P.effets = P.effets.filter(e => !(e.finSiQuitte && e.finSiQuitte.includes(depuis) && e.memo.includes(id)));
+  /* « ForgetOnMoved » : l'effet reste, sans cet objet. */
+  P.effets.forEach(e => { if (e.oubliSiQuitte && e.oubliSiQuitte.includes(depuis) && e.memo.includes(id)) { e.memo = e.memo.filter(x => x !== id); P.ver++; } });
   if (P.effets.length !== n) P.ver++;
 }
 

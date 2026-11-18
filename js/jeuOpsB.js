@@ -125,6 +125,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
     if (r === 1) { P.joueurs[ctrl].vie -= ent.payeVie; engage = false; }
   }
   const x = o.x || 0;
+  const avec = entreAvecPrevu(P, id);
+  if (avec.some(m => m.engage)) engage = true;
   const n = deplace(P, id, 'champ', {ctrl, engage});
   const no = obj(P, n);
   if (!no) return n;
@@ -155,6 +157,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
     const vise = (!m.cond || !m.cond.ValidCard || forgeValideObjet(P, no, m.cond.ValidCard, no, ctrl, env, true)) && conditionEntree(P, m.cond, no, ctrl);
     if (vise && (!m.cond || conditionForge(P, m.cond, env))) { const k = forgeNombre(P, m.n, env); if (k > 0) poseMarqueurs(P, no, m.genre, k, no); }
   }
+  avec.filter(m => !m.engage).forEach(m => { const y = obj(P, n); if (y) poseMarqueurs(P, y, m.genre, m.n, y); });
   if (opts.marqueurs) Object.entries(opts.marqueurs).forEach(([g, k]) => { const y = obj(P, n); if (y) poseMarqueurs(P, y, g, k, y); });
   return n;
 }

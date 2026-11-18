@@ -136,6 +136,8 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
+  forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
   forgeBatailles.js   les batailles : défense, protecteur, vaincre, lancer la face arrière
   forgeEffetsJ.js   des effets durables : un nombre retenu par l'effet (SetChosenNumber)
   forgeMarqueursC.js  marqueurs et dés : retenir l'armée, N fois, par objet désigné, au plus N, pairs et impairs
@@ -1821,6 +1823,28 @@ cartes de plus :
 Restent : les coûts de flashback, de squad, de replicate et d'escalate qui ne sont pas du mana (engager des créatures,
 exiler des cartes du cimetière), `Mobilize:X`, `Reinforce:X`, le deuxième coût de `Kicker`, les chapitres qui posent un
 effet à retardement ou animent « pour chaque adversaire », Monk Class (une carte exilée qui se lance sous condition).
+
+**Lot F80 : déclencheurs et effets refusés** (`js/forgeEntreesB.js`, `js/forgeEffetsK.js`, et des retouches). Dix-neuf
+cartes de plus :
+- **« Ce sort entre avec des marqueurs de plus »** (Torgal, Communal Brewing, Summon: Fenrir, Intrepid Paleontologist) et
+  « … entre engagé » (Edgar) : un déclencheur de lancement pose un `Effect` qui retient le sort et porte un remplacement
+  `Moved | ValidCard$ Card.IsRemembered`. L'effet disparaît quand le sort quitte la pile (`ExileOnMoved$ Stack`), donc
+  `metEnJeu()` relève ce qui l'attend *avant* de déplacer la carte (`entreAvecPrevu()`). Le nombre retenu
+  (`SetChosenNumber`) se range avec la carte hôte : deux sorts lancés de suite se partagent le dernier.
+- **Jouer la carte qu'on vient de meuler ou d'exiler** (Ark of Hunger, Tablet of Discovery, Court of Locthwain) : un
+  `Effect` à statique `MayPlay` tenue par la zone de commandement (`EffectZone$ Command | Affected$ Card.IsRemembered`).
+  `ExileOnMoved$` et `ForgetOnMoved$` prennent une liste de zones ; `Duration$ UntilEndOfTurn` est connue.
+- **`CheckDefinedPlayer$ Opponent.isMonarch` / `You.withMostLife`** (Queen Marchesa, Preacher of the Schism) ;
+  **`Spell.ManaSpent GTX`**, X lu sur la source (Liberator) ; **`ProtectionAll | Gains$ TargetedCardColor`** (Éowyn) :
+  les couleurs de la carte que l'effet vient d'exiler, lues sur son instantané ; **`Goad | Duration$ Permanent`**
+  (Nettling Nuisance) ; **`Animate | AtEOT$ YourExile`** (Puppeteer Clique, lu comme le prochain `Exile` : la fin
+  d'étape qui vient, pas forcément la vôtre).
+- **Mettre en jeu depuis la zone de commandement** (Derevi) : `ActivationZone$ Command`, avec la même route que le
+  ninjutsu du commandant.
+Restent : les effets qui animent « pour chaque adversaire » ou boucle à chaque joueur (`RepeatEach`, Mardu Siegebreaker,
+Delina), `RemoveCounter` sur « n'importe quels permanents » (Eventide's Shadow), les dés à sous-capacités par résultat
+(Comet), `Manifest` (Orochi Soul-Reaver), les effets « ne se dégagent pas » à durée (Kill Switch, Bontu's Last Reckoning),
+les chapitres et classes à effet retardé.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

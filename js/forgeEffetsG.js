@@ -149,12 +149,12 @@ forgeEffet('SetLife', ['LifeAmount'], function* (P, t, env) {
 /* Goad : jusqu'au prochain tour de qui l'a incitée, la créature attaque à
    chaque combat, et un autre joueur que lui si elle le peut. */
 forgeEffet('Goad', ['Duration'], function* (P, t, env) {
-  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.goad = {par: env.ctrl, tour: P.tour}; P.ver++; });
-}, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration || t.Duration === 'UntilYourNextTurn'});
+  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.goad = {par: env.ctrl, tour: P.tour, permanent: t.Duration === 'Permanent'}; P.ver++; });
+}, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration || /^(UntilYourNextTurn|Permanent)$/.test(t.Duration)});
 /* Ce que la protection gagnée sait lire : des couleurs, nommées ou au
    choix ; pas encore « protection from artifacts ». */
 function gainsProtection(t) { return /^(Choice|ChosenColor)$/.test(t.Gains || '') || String(t.Gains || '').split(',').every(c => FORGE_COULEURS[majuscule(c.trim())]); }
-function goadActif(P, o) { return !!o.goad && !(P.actif === o.goad.par && P.tour > o.goad.tour); }
+function goadActif(P, o) { return !!o.goad && (o.goad.permanent || !(P.actif === o.goad.par && P.tour > o.goad.tour)); }
 
 /* Les couleurs d'une protection gagnée : nommées (`Gains$ Red,Blue`), ou
    une au choix — l'IA prend celle que l'adversaire joue le plus. */
