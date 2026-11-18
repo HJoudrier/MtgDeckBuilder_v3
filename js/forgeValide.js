@@ -148,7 +148,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'equipped': return !!P && P.champ.some(id => { const a = obj(P, id); return a.att === o.id && !a.def.aura; });
     case 'Historic': return c.types.includes('artifact') || (c.supers || []).includes('legendary') || (c.sousTypes || []).includes('saga');
     case 'ChosenColor': { const k = P && src && choixDe(P, src).couleur; return !!k && c.couleurs.includes(k); }
-    case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || !!c.changelin); }
+    case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || (c.types || []).includes(k) || !!c.changelin); }
     /* Sans type choisi, tout passe : le choix précède toujours la lecture du filtre. */
     case 'IsNotChosenType': { const k = P && src && choixDe(P, src).type; return !k || !((c.sousTypes || []).includes(k) || !!c.changelin); }
     case 'IsRenowned': return !!o.renomme;

@@ -12,10 +12,10 @@
    La partie (`P`) n'est donnée que par qui en a besoin : un filtre qui
    regarde les commandants (« shares a creature type with your commander »)
    ne se juge pas sans elle, et ne laisse rien passer. */
-function forgeValideDef(def, valid, ctrl, lanceur, id, P = null) {
+function forgeValideDef(def, valid, ctrl, lanceur, id, P = null, source = null) {
   const pseudo = {id, def, lki: true, zone: 'pile', ctrl: lanceur, prop: lanceur, types: def.types, sousTypes: def.sousTypes,
     supers: def.supers, couleurs: def.couleurs, mots: def.mots, force: def.force || 0, endurance: def.endurance || 0, marq: {}};
-  return forgeValideObjet(P, pseudo, valid, {id}, ctrl, null);
+  return forgeValideObjet(P, pseudo, valid, source || {id}, ctrl, null);
 }
 
 /* Le genre de marqueur de Forge (`P1P1`) dans le vocabulaire du moteur. */

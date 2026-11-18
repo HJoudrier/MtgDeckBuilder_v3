@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1767 fonctions**, 260 modules, 1859 Ko de JavaScript.
+**1770 fonctions**, 261 modules, 1872 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -137,6 +137,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 118 |
 | [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
+| [`forgeChoixC.js`](#jsforgechoixcjs) | Choisir, défausser, répéter, sacrifier : ce que les | 3 | 216 |
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
@@ -1474,11 +1475,11 @@ Le langage de filtres de Forge. *12 fonctions, 288 lignes, 17 Ko.*
 
 ## js/forgeDescripteurs.js
 
-Ce que les filtres de Forge deviennent pour. *4 fonctions, 75 lignes, 5 Ko.*
+Ce que les filtres de Forge deviennent pour. *4 fonctions, 75 lignes, 5.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `forgeValideDef(def, valid, ctrl, lanceur, id, P = null)` | Une définition — un sort lancé, une carte qu'on réduit — répond-elle ? La partie (`P`) n'est donnée que par qui en a besoin : un filtre qui regarde les commandants (« shares a creature… |
+| `forgeValideDef(def, valid, ctrl, lanceur, id, P = null, source = null)` | Une définition — un sort lancé, une carte qu'on réduit — répond-elle ? La partie (`P`) n'est donnée que par qui en a besoin : un filtre qui regarde les commandants (« shares a creature… |
 | `genreMarqueur(t)` | Le genre de marqueur de Forge (`P1P1`) dans le vocabulaire du moteur. |
 | `descForge(valid, zone, sort)` | Un descripteur d'emplacement de cible, lu dans `ValidTgts$` et `TgtZone$`. |
 | `emplacementForge(t, face)` | Un emplacement de cible d'une table de Forge : son descripteur, son nombre de cibles, et les restrictions entre elles. |
@@ -2423,6 +2424,16 @@ Ce que les statiques font au coût de jouer et au. *6 fonctions, 142 lignes, 7.9
 | `viseCapacite(P, t, src, j, o, k)` | Ce que la statique dit d'une capacité : `Type$ Ability` pour celles du permanent qu'elle vise, `ValidSpell$ Activated.Cycling` pour une famille. |
 | `flashLisible(v)` | Les formes de `ValidSA$` d'un `CastWithFlash` qu'on sait lire. |
 | `loyauteEclair(P, j, o)` | Teferi, Master of Time : ses capacités de loyauté, quand on pourrait lancer un éphémère. |
+
+## js/forgeChoixC.js
+
+Choisir, défausser, répéter, sacrifier : ce que les. *3 fonctions, 216 lignes, 13 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `joueursAPartirDe(P, liste, debut)` | Les joueurs dans l'ordre du tour, en commençant par `debut`. |
+| `premierJoueur(P, t, env)` | — |
+| `defausseSpecifique(t)` | —— Défausser ————————————————————————————————————————————————————— |
 
 ## js/forgeChoixMultiples.js
 

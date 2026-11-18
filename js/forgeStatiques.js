@@ -178,7 +178,7 @@ function coutsForge(P, j, o) {
     if ((t.Type && t.Type !== 'Spell') || t.ValidTarget || t.Cost || (t.ValidSpell && !/^Spell/.test(t.ValidSpell))) continue;
     if (t.Activator === 'You' && j !== src.ctrl) continue;
     if (t.Activator === 'Opponent' && j === src.ctrl) continue;
-    if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id)) continue;
+    if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id, P, src)) continue;
     /* « The first creature spell you cast each turn » : aucun sort pareil lancé avant. */
     if (t.OnlyFirstSpell === 'True' && P.joueurs[j].sortsTour.some(d => !t.ValidCard || forgeValideDef(d, t.ValidCard, src.ctrl, j))) continue;
     const env = envStatique(src, s);

@@ -130,6 +130,7 @@ js/                 modules, chargés dans cet ordre :
   forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
   forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
   forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeChoixC.js    choisir, défausser, répéter, sacrifier : listes de types, « unless you discard », chacun son tour, force totale
   forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
@@ -1612,6 +1613,25 @@ en jouant.
 - **Panharmonicon** : `ValidActivator$` et `ValidPlayer$` (Veyran, Dr. Beverly Crusher) ; **`ImmediateTrigger |
   RememberSVarAmount$`** (Ancient Brass Dragon : « roll a d20. When you do… X ») garde le résultat du dé pour le
   déclencheur réflexe. Restent : le doublement d'un déclencheur de sort sur la pile (`ValidZone$ Stack`).
+
+**Lot F67 : choisir, défausser, répéter, sacrifier** (`js/forgeChoixC.js`). Trente et une cartes de plus :
+- **`ChooseType | ValidTypes$`** (Eclipsed Realms, Cloud Key, Gollum) : le type se choisit dans la liste. `ChosenType`
+  juge aussi un type de carte (« spells of the chosen type »), et `forgeValideDef()` reçoit la source du filtre pour
+  que la réduction de coût d'un Cloud Key lise son propre choix ;
+- **`Discard | UnlessType$`** (Thirst for Knowledge, Bandit's Talent) : si la main a une carte de ce type, on demande
+  si l'on défausse celle-là au lieu de N ; **`Optional$`** se pose à chaque joueur désigné (Snort : « each player may
+  discard their hand »), et **`RememberDiscardingPlayers$`** retient ceux qui l'ont fait, pour que `Draw` et
+  `DamageAll` ne visent qu'eux ;
+- **`RepeatEach | DefinedCards$`** (Curse of the Swine, Terastodon, Rampage of the Clans) : la boucle porte sur les
+  objets désignés ; **`ChooseOrder$`** : le joueur les range un à un, dans l'ordre qu'il veut (Sylvan Library,
+  Aetherspouts) ; **`StartingWith$`** : on boucle sur les joueurs à partir de celui qu'on dit ;
+- **`ChooseCard` à plusieurs joueurs** : chacun choisit à son tour, en commençant par `StartingWith$` (The Horus
+  Heresy, Druid of Purification) ; **`WithTotalPower$`** (Slaughter the Strong) : autant de créatures qu'on veut, de
+  force totale bornée — la réponse par défaut garde les plus fortes qui tiennent ;
+- **`ChoosePlayer | Random$`**, **`GenericChoice | FallbackAbility$`** (Torment of Hailfire : si aucune offre ne se
+  paie, on perd la vie), **`Sacrifice | StrictAmount$`** (tout ou rien : Scorched Ruins), `ChangeNum$` (Glacial
+  Chasm) et `ConditionNotPresent$` (Uro, Kroxa : « sacrifice it unless it escaped »), `DestroyAll | Zone$`.
+Restent : les modes qu'on annonce ou tire au hasard (`Charm | Announce$`, `Random$`), `SetState | Choices$`, le vote.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
