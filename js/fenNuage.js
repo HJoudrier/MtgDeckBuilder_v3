@@ -24,7 +24,7 @@ function nuageQuand(t) {
   return aujourdhui ? `aujourd'hui à ${heure}` : `le ${d.toLocaleDateString('fr-FR')} à ${heure}`;
 }
 
-const NUAGE_LISTES = {collection: 'collection', deck: 'deck', sideboard: 'réserve', considering: 'étude'};
+const NUAGE_LISTES = {collection: 'collection', enCours: 'acquisitions en cours', deck: 'deck', sideboard: 'réserve', considering: 'étude'};
 const NUAGE_CHAMPS = {commander: 'commandant', format: 'format', custom: 'format personnalisé',
   budget: 'budget', ciblesRoles: 'objectifs par rôle', achats: 'préférences d\'achat',
   nom: 'nom du deck', statut: 'avancement', restrictions: 'restrictions',

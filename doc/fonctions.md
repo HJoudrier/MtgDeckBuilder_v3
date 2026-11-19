@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1795 fonctions**, 275 modules, 1941 Ko de JavaScript.
+**1795 fonctions**, 275 modules, 1942 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -173,7 +173,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 297 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
-| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 124 |
+| [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 126 |
 | [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 236 |
 | [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
 | [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 275 |
@@ -253,7 +253,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesVue.js`](#jsgestesvuejs) | Les gestes qui règlent la vue | 1 | 112 |
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
-| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 151 |
+| [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 152 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 38 |
@@ -2917,7 +2917,7 @@ Le magasin IndexedDB. *6 fonctions, 75 lignes, 3.1 Ko.*
 
 ## js/nuagePaquet.js
 
-Ce qui voyage d'un appareil à l'autre. *7 fonctions, 124 lignes, 5.4 Ko.*
+Ce qui voyage d'un appareil à l'autre. *7 fonctions, 126 lignes, 5.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4021,7 +4021,7 @@ Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 
 ## js/fenNuage.js
 
-La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 159 lignes, 8.8 Ko.*
+La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 159 lignes, 8.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4258,7 +4258,7 @@ Les gestes du deck, de ses annexes et de la fiche. *1 fonctions, 198 lignes, 7.7
 
 ## js/gestesDonnees.js
 
-Les gestes qui touchent aux données. *1 fonctions, 151 lignes, 5 Ko.*
+Les gestes qui touchent aux données. *1 fonctions, 152 lignes, 5 Ko.*
 
 | Fonction | Rôle |
 |---|---|

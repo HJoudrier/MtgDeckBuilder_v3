@@ -1909,7 +1909,7 @@ n'est en jeu, les données vont de ce navigateur au nuage et en reviennent. Troi
 gouvernent.
 
 **Trois étages, fusionnés différemment** (`js/nuagePaquet.js`). Le **fond** — la collection, les
-decks avec tout ce qu'ils portent, le format personnalisé, les préférences d'achat — est l'intention
+acquisitions en cours, les decks avec tout ce qu'ils portent, le format personnalisé, les préférences d'achat — est l'intention
 du joueur, et se fusionne carte par carte. Les decks y forment un étage à eux, fusionné **dossier par
 dossier puis carte par carte** (`fusionneDecks()`, `js/nuageFusion.js`) ; **aucun marqueur de
 suppression n'est nécessaire**, la base à trois côtés tranchant seule les deux cas qui comptent — un

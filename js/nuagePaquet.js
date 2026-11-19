@@ -31,8 +31,10 @@ const NUAGE_PAQUET_V = 1;
    `snapshot()` les rend déjà en tableaux de paires. La collection y est seule
    depuis que les trois listes d'un deck vivent dans son dossier : les decks
    forment un étage à eux, fusionné dossier par dossier puis carte par carte
-   (`fusionneDecks()`, js/nuageFusion.js). */
-const NUAGE_QTES = ['collection'];
+   (`fusionneDecks()`, js/nuageFusion.js). Les acquisitions en cours — cartes
+   commandées, pas encore reçues — s'y fusionnent comme la collection : on
+   commande sur un PC, on reçoit devant l'autre. */
+const NUAGE_QTES = ['collection', 'enCours'];
 /* Ce qui ne vaut qu'une valeur, et se tranche en bloc. */
 const NUAGE_SCALAIRES = [];
 /* `achats` — comment on achète — voyage ; le plafond, lui, appartient au deck

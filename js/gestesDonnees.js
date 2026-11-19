@@ -38,6 +38,7 @@ function gestesDonnees(act, b) {
       idbVider();
       idbOublier(IDB_NUAGE_BASE);
       videCollection();
+      S.enCours.clear();
       S.deck.clear();
       CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
       S.commander = null;
