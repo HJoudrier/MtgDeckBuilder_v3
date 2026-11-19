@@ -112,6 +112,17 @@ function coutUnless(P, v, env) {
   return c && aCoutX(c.cout) ? {...c, cout: coutResolu(c.cout, forgeNombre(P, 'X', env), env.src)} : c;
 }
 
+/* L'entretien cumulatif qui se paie par un effet : du mana ajouté (il se dépense pendant l'entretien),
+   ou la vie qu'un adversaire gagne — le premier après son contrôleur ; on peut refuser, et sacrifier. */
+function* cumulEffet(P, ctx, s) {
+  const f = s.def.cumulFx, k = s.marq.age, J = P.joueurs[ctx.ctrl];
+  if (f.genre === 'mana') { J.pool[f.couleur] += f.n * k; P.ver++; return; }
+  const r = yield question(P, ctx.ctrl, 'oui', ['non', 'oui'], {texte: `Payer l'entretien de ${s.def.nom} (${k}) : un adversaire gagne ${f.n * k} PV ?`, source: s.id,
+    extra: {saufForge: {contre: false}}});
+  const adv = r === 1 ? adversaires(P, ctx.ctrl)[0] : null;
+  if (adv != null) gagneVie(P, adv, f.n * k); else sacrifie(P, s.id);
+}
+
 /* L'entretien cumulatif payé en vie ou en sacrifices, autant de fois
    qu'il y a de marqueurs d'âge (js/jeuVariantes.js `OPS.cumul`). */
 function* cumulAutre(P, ctx, s) {

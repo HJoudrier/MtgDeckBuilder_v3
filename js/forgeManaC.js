@@ -18,7 +18,7 @@
 
 capaciteForge = (g => function (def, face, t, jetons) {
   const api = forgeApi(t);
-  if (api !== 'Mana' || (!t.AddsKeywords && !t.AddsKeywordsValid && !t.AddsKeywordsUntil && !t.TriggersWhenSpent)) return g(def, face, t, jetons);
+  if (api !== 'Mana' || (!t.AddsKeywords && !t.AddsKeywordsValid && !t.AddsKeywordsUntil && !t.TriggersWhenSpent && !t.AddsCounters)) return g(def, face, t, jetons);
   const n = def.capacites.length;
   if (!g(def, face, t, jetons) || def.capacites.length !== n + 1 || def.capacites[n].genre !== 'mana') return false;
   const k = def.capacites[n];
@@ -28,6 +28,10 @@ capaciteForge = (g => function (def, face, t, jetons) {
     if (!kws.length || !t.AddsKeywordsValid || t.AddsKeywordsUntil !== 'UntilEOT' || kws.some(x => MOTS_ANGLAIS[x] == null)) return annule();
     k.porte = {mots: kws.reduce((m, x) => m | MOTS_ANGLAIS[x], 0), valid: t.AddsKeywordsValid};
   }
+  /* `AddsCounters$ Card.Creature_P1P1_1` : le sort qui répond au filtre entre avec ces marqueurs (Biophagus). */
+  const mq = t.AddsCounters && /^(.+)_(\w+)_(\d+)$/.exec(t.AddsCounters);
+  if (t.AddsCounters && !mq) return annule();
+  if (mq) k.porte = Object.assign(k.porte || {mots: 0}, {valid: mq[1].replace(/^Card/, 'Spell'), genre: genreMarqueur(mq[2]), n: +mq[3]});
   if (t.TriggersWhenSpent) {
     const tbl = face.svars[t.TriggersWhenSpent];
     const m = def.capacites.length;
@@ -36,7 +40,7 @@ capaciteForge = (g => function (def, face, t, jetons) {
   }
   return true;
 })(capaciteForge);
-forgeSait('param', 'Mana.AddsKeywords', 'Mana.AddsKeywordsValid', 'Mana.AddsKeywordsUntil', 'Mana.TriggersWhenSpent');
+forgeSait('param', 'Mana.AddsCounters', 'Mana.InstantSpeed', 'Mana.AddsKeywords', 'Mana.AddsKeywordsValid', 'Mana.AddsKeywordsUntil', 'Mana.TriggersWhenSpent');
 FORGE_RENVOIS.push('TriggersWhenSpent');
 
 /* À chaque mana que le paiement tire d'une source : le sort retient d'où il
@@ -45,7 +49,7 @@ function manaPorte(P, j, s, option, pour) {
   const sp = pour.sort;
   (sp.manaDeSources = sp.manaDeSources || []).push(s.id);
   (s.portes || []).filter(p => p.opts.includes(option) && manaPermis(P, j, p.porte.valid, pour))
-    .forEach(p => { sp.motsPortes = (sp.motsPortes || 0) | p.porte.mots; });
+    .forEach(p => { if (p.porte.mots) sp.motsPortes = (sp.motsPortes || 0) | p.porte.mots; if (p.porte.genre) (sp.marqPortes = sp.marqPortes || []).push({genre: p.porte.genre, n: p.porte.n}); });
 }
 
 /* « You may exile that spell instead » : un remplacement optionnel se
@@ -58,3 +62,24 @@ function* remplacementsOptionnels(P, o) {
   const r = yield question(P, x.src.ctrl, 'oui', ['non', 'oui'], {texte: x.r.t.Description || `Exiler ${o.def.nom} au lieu de le mettre au cimetière ?`, source: o.id});
   if (r !== 1) { o.refuseRemp = true; P.ver++; }
 }
+
+/* —— Le mana qui se perd ———————————————————————————————————————————— */
+
+/* « If you would lose unspent mana, that mana becomes colorless instead »
+   (Kruphix, Horizon Stone, Omnath) : la réserve ne se vide pas, elle devient
+   incolore (lot F76). */
+formeRemplacement = (g => function (face, r) {
+  if (r.Event === 'LoseMana' && r.ValidPlayer === 'You' && r.ReplaceWith && (!r.ActiveZones || r.ActiveZones === 'Battlefield')) {
+    const w = forgeSousCapacite(face, r.ReplaceWith);
+    if (w && w.DB === 'ReplaceMana' || /^ConvertMana$/.test(r.ReplaceWith)) return 'manaIncolore';
+  }
+  return g(face, r);
+})(formeRemplacement);
+
+videReserves = (g => function (P) {
+  const garde = P.joueurs.map(J => remplacementsEnJeu(P).some(x => x.r.forme === 'manaIncolore' && x.src.ctrl === J.i) ? LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0) : 0);
+  g(P);
+  P.joueurs.forEach((J, i) => { if (garde[i]) J.pool.C = Math.max(0, garde[i] - J.pool.R); });
+})(videReserves);
+forgeSait('repl', 'LoseMana');
+forgeSait('param', 'LoseMana.ValidPlayer', 'LoseMana.ReplaceWith', 'LoseMana.ActiveZones', 'LoseMana.ReplacementResult');

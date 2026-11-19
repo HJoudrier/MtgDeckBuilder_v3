@@ -81,9 +81,12 @@ FORGE_API.PumpAll.gen = (g => function* (P, t, env) {
   const zone = t.PumpZone ? ZONES_FORGE[t.PumpZone] : 'champ';
   const l = t.RememberPumped === 'True' ? objetsZone(P, zone).filter(o => forgeValideObjet(P, o, t.ValidCards || 'Creature', env.src, env.ctrl, env)) : [];
   if (zone === 'champ') yield* g(P, t, env);
+  /* Le flashback accordé aux cartes du cimetière que le filtre retient (Will of the Jeskai). */
+  if (t.PumpZone === 'Graveyard' && t.KW === 'Flashback') objetsZone(P, zone).filter(o => forgeValideObjet(P, o, t.ValidCards || 'Card', env.src, env.ctrl, env)).forEach(o => { o.flashbackTemp = P.tour; });
   l.forEach(o => retiensForge(env.ctx, o.id));
 })(FORGE_API.PumpAll.gen);
 FORGE_API.PumpAll.prepare = (p => function (t, op) {
+  if (t.PumpZone === 'Graveyard' && t.KW === 'Flashback' && !t.NumAtt && !t.NumDef) return true;
   if (t.PumpZone && t.PumpZone !== 'Battlefield') return !!ZONES_FORGE[t.PumpZone] && !t.NumAtt && !t.NumDef && !t.KW && t.RememberPumped === 'True';
   return p ? p.call(this, t, op) : true;
 })(FORGE_API.PumpAll.prepare);

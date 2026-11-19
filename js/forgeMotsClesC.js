@@ -35,9 +35,12 @@ function motCleLancement(def, k, face, jetons, tete, reste) {
       return !!c && !c.cout.engage && active('cimetiere', 'Encore ' + reste[0], {...c.cout, exileSoi: true}, {op: 'rappel'}, {vitesse: 'rituel'});
     case 'Transmute':
       return !!c && !autresCout(c.cout) && active('main', 'Transmute ' + reste[0], {...c.cout, defausseSoi: true}, {op: 'transmute'}, {vitesse: 'rituel'});
-    case 'Ninjutsu':
-      return !!c && !autresCout(c.cout) && active('main', 'Ninjutsu ' + reste[0],
-        {...c.cout, renvoie: {n: 1, desc: descForge('Creature.attacking+unblocked+YouCtrl')}}, {op: 'ninjutsu'}, {phases: 'Declare Blockers->Combat Damage'});
+    /* Ninjutsu, et sa version depuis la zone de commandement (`Ninjutsu:U B:Commander`). */
+    case 'Ninjutsu': {
+      const cmd = reste.length === 2 && reste[1] === 'Commander', cn = cmd ? coutForge(reste[0]) : c;
+      return !!cn && !autresCout(cn.cout) && active(cmd ? 'commandement' : 'main', (cmd ? 'Commander ninjutsu ' : 'Ninjutsu ') + reste[0],
+        {...cn.cout, renvoie: {n: 1, desc: descForge('Creature.attacking+unblocked+YouCtrl')}}, {op: 'ninjutsu'}, {phases: 'Declare Blockers->Combat Damage'});
+    }
     case 'Plot':
       if (!c || autresCout(c.cout)) return false;
       def.complot = c.cout.mana;
@@ -190,7 +193,7 @@ OPS.transmute = function* (P, op, ctx) {
    attaque le premier adversaire. */
 OPS.ninjutsu = function* (P, op, ctx) {
   const s = obj(P, ctx.source);
-  if (!s || s.zone !== 'main' || !P.combat) return;
+  if (!s || (s.zone !== 'main' && s.zone !== 'commandement') || !P.combat) return;
   const n = yield* metEnJeu(P, s.id, ctx.ctrl, {});
   if (n != null) entreAttaquant(P, obj(P, n), {});
 };

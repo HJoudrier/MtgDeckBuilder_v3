@@ -52,6 +52,10 @@ function deckNeuf(nom, modele) {
     nom: nom || 'Deck',
     format: FORMATS[m.format] ? m.format : 'edh',
     statut: DECK_STATUTS[m.statut] ? m.statut : 'construction',
+    /* Un deck qu'on étudie sans l'avoir monté : un deck de tournoi, celui d'un ami, une liste
+       trouvée en ligne. Il se lit, se complète, se joue et se simule comme les autres, mais ne
+       pèse pas sur la liste d'achats. Une bascule, dans un sens comme dans l'autre. */
+    externe: m.externe === true,
     deck:        new Map(m.deck || []),
     sideboard:   new Map(m.sideboard || []),
     considering: new Map(m.considering || []),
@@ -186,7 +190,7 @@ function bilanDeck(cle) {
     cartes += q;
     const p = Math.min(q, quantiteCollection(nom));
     possede += p;
-    manque += q - p;
+    manque += q - p - Math.min(q - p, quantiteEnCours(nom));
   });
   return {
     cle, deck:d, format:f, cartes, possede, manque,

@@ -27,7 +27,7 @@ function nouvellePartie(cfg) {
     montre: !!cfg.montre
   };
   cfg.sieges.forEach((s, i) => {
-    const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, poison: 0, energie: 0,
+    const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, vieDepart: s.vie || 20, poison: 0, energie: 0,
       pool: {W: 0, U: 0, B: 0, R: 0, G: 0, C: 0}, degatsCmd: {}, taxe: {}, commandants: [], terrainsJoues: 0,
       /* Le paiement manuel, et le droit d'en changer en cours de partie : des sièges humains
          seulement (js/jeuManaManuel.js). */
@@ -132,6 +132,8 @@ function deplace(P, id, vers, opts = {}) {
     return null;
   }
   const n = creeObjet(P, o.cid, o.prop, zone, zone === 'champ' ? (opts.ctrl != null ? opts.ctrl : o.prop) : o.prop);
+  /* Meulée ce tour : « target creature in a graveyard that was milled this turn ». */
+  if (opts.meule) n.meuleTour = P.tour;
   P.suivi.set(id, n.id);
   /* Exilée « avec » une source (Forger's Foundry) : la source la retrouve par `ExiledWith`. */
   if (o.exileAvec != null && zone === 'exil' && P.cartes[o.exileAvec]) (P.cartes[o.exileAvec].exilees = P.cartes[o.exileAvec].exilees || []).push(n.id);
@@ -143,7 +145,7 @@ function deplace(P, id, vers, opts = {}) {
        l'appelant (js/jeuLancer.js). */
   } else if (vers === 'dessous') P.joueurs[o.prop].bibliotheque.unshift(n.id);
   else P.joueurs[o.prop][zone].push(n.id);
-  emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, id: n.id, lki});
+  emet(P, {t: 'zone', de: depuis, vers: zone, ancien: id, id: n.id, lki, ...(opts.meule ? {meule: true} : {})});
   noteEntree(P, depuis, zone, depuis === 'champ' ? lki : n);
   if (zone === 'champ') emet(P, {t: 'entre', id: n.id, ctrl: n.ctrl});
   if (depuis === 'champ' && P.effets) hotePart(P, id);
@@ -203,6 +205,8 @@ function champDe(P, j) { return P.champ.map(id => obj(P, id)).filter(o => o.ctrl
 function piocheN(P, j, n) {
   const J = P.joueurs[j];
   for (let k = 0; k < n; k++) {
+    /* « Your opponents can't draw more than one card each turn » (js/forgeStatiquesC.js). */
+    if (typeof piocheInterdite === 'function' && piocheInterdite(P, j)) return;
     if (!J.bibliotheque.length) { J.piocheVide = true; return; }
     const id = J.bibliotheque.pop();
     const o = obj(P, id);
@@ -211,7 +215,10 @@ function piocheN(P, j, n) {
     const st = P.cartes[o.cid].st;
     if (!st.piochee) st.piochee = Math.max(1, J.tours);
     J.piochesTour = (J.piochesTour || 0) + 1;
-    emet(P, {t: 'pioche', joueur: j, n: J.piochesTour});
+    /* Le rang de la carte dans l'étape en cours : « except the first one they draw in each of their draw steps ». */
+    const pe = J.piocheEtape && J.piocheEtape.tour === P.tour && J.piocheEtape.etape === P.etape ? J.piocheEtape : (J.piocheEtape = {tour: P.tour, etape: P.etape, n: 0});
+    pe.n++;
+    emet(P, {t: 'pioche', joueur: j, n: J.piochesTour, etape: P.etape, rangEtape: pe.n});
   }
 }
 

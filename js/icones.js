@@ -1,7 +1,7 @@
 /* Icônes Lucide de la barre des onglets, en bas de la page : chaque onglet
    reçoit la sienne ici, que `createIcons()` remplace par un SVG. */
 (() => {
- const icons={collection:'library',decks:'layers',deck:'panels-top-left',graphe:'network',edhrec:'lightbulb',catalogue:'database',simulation:'swords'};
+ const icons={collection:'library',decks:'layers',wishlist:'shopping-cart',deck:'panels-top-left',graphe:'network',edhrec:'lightbulb',catalogue:'database',simulation:'swords'};
  function mount(){
   if(!window.lucide||typeof window.lucide.createIcons!=='function')return;
   document.querySelectorAll('#onglets [data-onglet]').forEach(b=>{

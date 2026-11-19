@@ -285,3 +285,13 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
   .tc.mini{--w:54px}
   .tl-carte{--w:300px}
 }
+
+/* Ce qu'est chaque élément de la pile, et à quoi se rapporte une question (js/tableDispositions.js, js/tableQuestions.js). */
+.tp-expl{display:flex;flex-direction:column;gap:6px;padding:6px 10px;border-bottom:1px solid var(--brass-d);background:var(--panel2);max-height:26vh;overflow:auto}
+.tp-sous{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);margin-bottom:2px}
+.tp-item{padding:4px 8px;border-left:3px solid var(--line2);margin-bottom:3px}
+.tp-item.courant{border-left-color:var(--brass);background:var(--panel);}
+.tp-etiq{font-size:11px;color:var(--brass);font-weight:700}
+.tp-texte{color:var(--txt);margin-top:1px}
+.tq-ctx{padding:4px 8px;margin-bottom:5px;border-left:3px solid var(--brass);background:var(--panel2)}
+.tq-ctx-texte{color:var(--txt)}

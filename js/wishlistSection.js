@@ -29,6 +29,8 @@ function ligneWishlist(l) {
     <span class="mono small buy">${l.inconnu ? 'prix inconnu' : `≈ ${eur(l.total)}`}</span>
     <span class="wl-decks">${decksDemandeurs(l)}</span>
     <a class="btn sm" href="${esc(cmLink(l.card))}" target="_blank" rel="noopener">Cardmarket ↗</a>
+    <button type="button" class="btn sm" data-act="commander" data-name="${esc(l.card.name)}"
+      title="Je l'ai commandée, sans l'avoir reçue : elle passe en acquisition en cours">Commandée</button>
     <button type="button" class="btn sm" data-act="ownIt" data-name="${esc(l.card.name)}"
       title="Je l'ai achetée : l'ajouter à la collection, ce qui la retire d'ici">Acquise ✓</button>
   </div>`;
@@ -55,6 +57,8 @@ function tuileWishlist(e) {
       <span class="mono">${l.inconnu ? 'prix ?' : `≈ ${eur(l.total)}`}</span>
       <div class="qty acts" style="margin-left:auto">
         <a class="btn sm" data-act="lienExterne" href="${esc(cmLink(c))}" target="_blank" rel="noopener" title="Voir sur Cardmarket">↗</a>
+        <button type="button" class="btn sm" data-act="commander" data-name="${esc(c.name)}"
+          title="Je l'ai commandée, sans l'avoir reçue : elle passe en acquisition en cours">📦</button>
         <button type="button" class="btn sm" data-act="ownIt" data-name="${esc(c.name)}"
           title="Je l'ai achetée : l'ajouter à la collection, ce qui la retire d'ici">✓</button>
       </div>
@@ -92,7 +96,7 @@ function renderJ() {
     return;
   }
 
-  const partages = clesDecks().filter(c => S.decks[c].exemplairesPropres === false);
+  const partages = clesDecks().filter(c => !S.decks[c].externe && S.decks[c].exemplairesPropres === false);
   corps.innerHTML = `
     <div class="row" style="margin-bottom:8px">
       <span class="pill">${b.lignes} carte(s) différente(s)</span>
@@ -100,7 +104,9 @@ function renderJ() {
       <span class="pill">${eur(b.total)} estimés</span>
       ${b.inconnus ? `<span class="pill" title="Scryfall ne publie pas de prix pour ces cartes.">${b.inconnus} sans prix</span>` : ''}
       ${b.plafonds ? `<span class="pill" title="La somme des budgets que vos decks se sont fixés. Rien ne la contraint : c'est un repère.">plafonds cumulés ${eur(b.plafonds)}</span>` : ''}
-      <button type="button" class="btn sm" data-act="wantsTout" style="margin-left:auto">Exporter la liste de wants Cardmarket</button>
+      <button type="button" class="btn sm" data-act="toutCommander" style="margin-left:auto"
+        title="Tout ce qui figure dans la liste passe en acquisition en cours">Tout est commandé</button>
+      <button type="button" class="btn sm" data-act="wantsTout">Exporter la liste de wants Cardmarket</button>
     </div>
     <div class="small muted" style="margin-bottom:8px">
       Un deck qui veut ses propres exemplaires ajoute sa demande ; ceux qui se partagent la collection

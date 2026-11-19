@@ -20,7 +20,30 @@ function motsForge(kw) {
    drapeau d'un permanent exercé, que l'étape de dégagement consomme
    (js/jeuTour.js `degagement()`). */
 const KW_SANS_DEGAGER = "hidden this card doesn't untap during your next untap step.";
-forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, 'flashback');
+/* « HIDDEN CARDNAME must be blocked if able. » (Anzrag, the Quake-Mole) : la
+   même règle que celle de la statique ou du mot-clé de la carte, mais posée
+   pour le tour. Elle se range dans le bonus lui-même (`m.doitEtreBloque`), que
+   `bloqueursImposes()` lit avec les autres sources de cette obligation, et
+   tombe avec lui au nettoyage. */
+const KW_DOIT_ETRE_BLOQUE = 'hidden cardname must be blocked if able.';
+
+/* Les autres mots-clés cachés qu'une pompe pose pour la durée : des
+   interdictions et des obligations de combat, que `car()` et
+   `bloqueursImposes()` lisent dans le bonus. « Can't block » : cent seize
+   scripts. */
+const CACHES_DU_TOUR = {
+  [KW_DOIT_ETRE_BLOQUE]: {doitEtreBloque: true},
+  "hidden cardname can't block.": {nePeutBloquer: true},
+  "hidden cardname can't attack.": {nePeutAttaquer: true},
+  "hidden cardname can't attack or block.": {nePeutAttaquer: true, nePeutBloquer: true},
+  'hidden all creatures able to block cardname do so.': {leurre: true},
+  /* Les évasions et la prévention posées pour le tour (js/forgeMotsClesG.js). */
+  'fear': {peur: true}, 'intimidate': {intimidation: true}, 'skulk': {furtif: true},
+  "hidden cardname's power and toughness are switched": {echange: true},
+  'prevent all damage that would be dealt by cardname.': {prevPar: true},
+  'prevent all damage that would be dealt to and dealt by cardname.': {prevPar: true, prevVers: true}
+};
+forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, ...Object.keys(CACHES_DU_TOUR), 'flashback');
 
 /* Un `+3` ou un `-X` de Forge, pour l'IA. */
 function bonusIA(v) { const s = String(v == null ? '0' : v); return /^[+-]?\d+$/.test(s) ? +s : /^-/.test(s) ? -2 : 2; }
@@ -33,10 +56,11 @@ function pompeForge(P, objets, t, env) {
   const sansDegager = String(t.KW || '').split('&').some(k => k.trim().toLowerCase() === KW_SANS_DEGAGER);
   if (sansDegager) vivants.forEach(o => { o.exerce = true; P.ver++; });
   if (sansDegager && !mots && !f && !e) return;
+  const drapeaux = Object.assign({}, ...String(t.KW || '').split('&').map(k => CACHES_DU_TOUR[k.trim().toLowerCase()]).filter(Boolean));
   /* La durée (js/forgeDurees.js) ; une durée qu'on ne sait pas tenir finit au nettoyage. */
   const fd = finForge(t, env) || {fin: 'tour'};
   if (fd.fin === 'hote') P.hotesSuivis = true;
-  vivants.forEach(o => { o.mods.push({f, e, mots, ...fd}); P.ver++; });
+  vivants.forEach(o => { o.mods.push({f, e, mots, ...drapeaux, ...fd}); P.ver++; });
 }
 
 forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) {
@@ -47,6 +71,8 @@ forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function*
   (t, op) => {
     op.op = 'pompe'; op.f = bonusIA(t.NumAtt); op.e = bonusIA(t.NumDef); op.mots = motsForge(t.KW);
     op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.f < 0 || op.e < 0;
+    op.impose = String(t.KW || '').split('&').some(k => k.trim().toLowerCase() === KW_DOIT_ETRE_BLOQUE);
+    op.hostile = op.hostile || String(t.KW || '').split('&').some(k => /can't (attack|block)/i.test(k));
   }, {prepare: t => !t.PumpZone || t.PumpZone === 'Battlefield' || (t.PumpZone === 'Graveyard' && t.KW === 'Flashback' && !t.NumAtt && !t.NumDef)});
 
 forgeEffet('PumpAll', ['ValidCards', 'NumAtt', 'NumDef', 'KW', 'Duration'], function* (P, t, env) {
@@ -166,12 +192,14 @@ forgeEffet('Investigate', ['Num'], function* (P, t, env) {
 
 /* Un déclencheur réflexe (« when you do, … ») : il va en attente, et
    monte sur la pile au prochain passage de priorité. */
-forgeEffet('ImmediateTrigger', ['Execute', 'RememberObjects'], function* (P, t, env) {
+forgeEffet('ImmediateTrigger', ['Execute', 'RememberObjects', 'RememberSVarAmount'], function* (P, t, env) {
   const effet = effetForge(env.op.face, forgeSousCapacite(env.op.face, t.Execute), env.op.jetons);
   if (!effet) return;
   const s = env.src;
   P.enAttente.push({src: s ? s.id : null, lki: s && s.lki ? s : null, ctrl: env.ctrl,
-    cap: {genre: 'declenchee', effet, texte: t.SpellDescription || t.TriggerDescription || ''}, evt: env.ctx.evt});
+    cap: {genre: 'declenchee', effet, texte: t.SpellDescription || t.TriggerDescription || ''}, evt: env.ctx.evt,
+    /* « Roll a d20. When you do… X » : la valeur de la SVar à cet instant, que lira `Count$TriggerRememberAmount`. */
+    nombre: t.RememberSVarAmount ? (env.ctx.vars || {})[t.RememberSVarAmount] || 0 : undefined});
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* Les modes : choisis au lancement (js/forgeDefinition.js), jamais

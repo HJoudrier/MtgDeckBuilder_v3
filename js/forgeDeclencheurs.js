@@ -82,7 +82,7 @@ forgeMode('Phase', ['Phase', 'ValidPlayer'], (P, t, e, s, env) => e.t === 'etape
   joueurOuRien(P, e.actif, t.ValidPlayer, s, env));
 forgeMode('SpellCast', ['ValidCard', 'ValidActivatingPlayer', 'ActivatorThisTurnCast', 'TargetsValid'], (P, t, e, s, env) => e.t === 'lance' &&
   (t.OpponentTurn !== 'True' || P.actif !== s.ctrl) &&
-  (!t.ValidCard || forgeValideDef(e.def, t.ValidCard, s.ctrl, e.joueur, e.id, s.id)) && joueurOuRien(P, e.joueur, t.ValidActivatingPlayer, s, env) &&
+  (!t.ValidCard || forgeValideDef(e.def, t.ValidCard, s.ctrl, e.joueur, e.id, P, s)) && joueurOuRien(P, e.joueur, t.ValidActivatingPlayer, s, env) &&
   (!t.ActivatorThisTurnCast || seuilForge(P, P.joueurs[e.joueur].sortsTour.length, t.ActivatorThisTurnCast, env)) &&
   (!t.TargetsValid || ciblesDuSort(P, e.id).some(c => c.j != null ? forgeValideJoueur(P, c.j, t.TargetsValid, s.ctrl, env)
     : forgeValideObjet(P, c, t.TargetsValid, s, s.ctrl, env))));

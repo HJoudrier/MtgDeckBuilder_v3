@@ -46,6 +46,7 @@ function morceauCout(p) {
   if (/^(\{[^}]+\})+$/.test(p) && !/\{[tqe]\}/.test(p)) { const c = coutMana(p); return c ? ['mana', c] : null; }
   if (p === 'sacrifice ~') return ['sacSoi', true];
   if (p === 'exile ~') return ['exileSoi', true];
+  if (p === 'discard ~') return ['defausseSoi', true];
   if ((m = /^sacrifice (a|an|another|two|three) (.+)$/.exec(p))) {
     const desc = lisDescripteur(m[2], {objets: true});
     if (!desc) return null;

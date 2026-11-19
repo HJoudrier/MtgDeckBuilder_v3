@@ -35,7 +35,7 @@ const ANNEXES = {
 };
 const CLES_ANNEXES = Object.keys(ANNEXES);
 
-/* Les cinq onglets de l'atelier, dans l'ordre où ils paraissent sous
+/* Les onglets de l'atelier, dans l'ordre où ils paraissent sous
    l'entête. Chacun nomme les sections qu'il porte : c'est la seule table qui
    les répartisse, et tout le reste — la barre, le passage d'un onglet à
    l'autre, le signal d'un travail de fond — s'y réfère.
@@ -50,16 +50,16 @@ const CLES_ANNEXES = Object.keys(ANNEXES);
    « Affichage » de l'entête (`LISTES_AFFICHAGE` plus bas). Le catalogue garde
    la clé `suggestions`, comme partout où son rangement est en jeu.
 
-   L'onglet « Decks » montre deux choses : des vignettes de deck, qui ne se
-   règlent ni en colonnes ni en groupes, et la liste d'achats, qui est une liste
-   de cartes comme les autres. C'est elle que règle le bouton « Affichage » de
-   l'entête — la liste ou la grille, les colonnes, le groupement, le tri —,
-   et les vignettes de deck n'y sont pas soumises. Il vient en tête parce
-   qu'il répond à la première des questions : sur quel deck travaille-t-on.
-   L'onglet « Simulation », lui, n'en montre aucune : `liste` y est nul, et le
-   bouton s'efface. */
+   L'onglet « Decks » ne montre que des vignettes de deck, qui ne se règlent
+   ni en colonnes ni en groupes : `liste` y est nul, et le bouton s'efface.
+   Il vient en tête parce qu'il répond à la première des questions : sur quel
+   deck travaille-t-on. La liste d'achats, une liste de cartes comme les autres,
+   a sa propre page « Wishlist » : c'est elle que règle le bouton « Affichage »
+   — la liste ou la grille, les colonnes, le groupement, le tri. L'onglet
+   « Simulation » n'en montre aucune : `liste` y est nul aussi. */
 const ONGLETS = {
-  decks:      {label:'Decks',      sections:['secI','secJ'], liste:'achats'},
+  decks:      {label:'Decks',      sections:['secI', 'secM'], liste:null},
+  wishlist:   {label:'Wishlist',   sections:['secL','secJ'], liste:'achats'},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
@@ -117,6 +117,11 @@ let apercuCardName = null;
 
 const S = {
   collection: new Map(),
+  /* Quand les exemplaires sont venus : nom -> [[date, n], …] (js/collectionDates.js). */
+  collectionDates: new Map(),
+  /* Les acquisitions en cours : nom de carte -> exemplaires commandés, pas
+     encore reçus. Un entre-deux de la collection et de la liste d'achats. */
+  enCours: new Map(),
   /* Les decks, par clé, et celui sur lequel on travaille. Les trois listes
      d'un deck, son commandant, son format, son budget, ses restrictions et
      ses objectifs vivent dans son dossier ; `js/decks.js` pose sur `S` les
@@ -185,13 +190,12 @@ const S = {
   enriching: false,
   scryHS: false,
   edhrec: {slug:null, status:'idle', data:null, error:null, secondaires:[], secStatus:'idle', cmdSignature:null},
-  /* Le mode de jeu. La bibliothèque d'adversaires et les comportements écrits
+  /* Le mode de jeu. Les comportements écrits
      à la main sont l'intention du joueur : ils se sauvegardent et voyagent.
      La configuration d'un lot — quel deck, contre qui, combien de parties —
      est de la vue : elle se sauvegarde, mais reste sur l'appareil. */
-  adversaires: {},
   comportements: {},
-  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, relais: '', forgeAuto: true, niveauIA: 'rapide'},
+  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, forgeAuto: true, niveauIA: 'rapide'},
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
      De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent. */

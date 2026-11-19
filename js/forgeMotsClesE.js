@@ -45,9 +45,11 @@ function motCleLancementB(def, face, jetons, tete, reste) {
       return true;
     }
     case 'Firebending': {
-      if (reste.length !== 1 || !/^\d+$/.test(reste[0])) return false;
+      /* X : la force de la créature ou le nombre de créatures contrôlées ; les marqueurs d'expérience ne se comptent pas ici. */
+      const suite = reste.slice(1).join(':'), x = reste[0] !== 'X' ? null : /power/.test(suite) ? 'force' : /number of creatures you control/.test(suite) ? 'creatures' : null;
+      if (!x && (reste.length !== 1 || !/^\d+$/.test(reste[0]))) return false;
       def.capacites.push({genre: 'declenchee', ecoutes: [{evt: 'attaque', sujet: 'soi'}], texte: 'Firebending ' + reste[0],
-        effet: {ops: [{op: 'feu', n: +reste[0], hostile: false}], cibles: [], modes: null}});
+        effet: {ops: [{op: 'feu', n: x ? 0 : +reste[0], ...(x ? {x} : {}), hostile: false}], cibles: [], modes: null}});
       return true;
     }
   }
@@ -226,8 +228,9 @@ OPS.cadeau = function* (P, op, ctx) {
    d'une étape à l'autre tant que le combat dure (js/jeuMana.js
    `videReserves()`). */
 OPS.feu = function* (P, op, ctx) {
-  const J = P.joueurs[ctx.ctrl];
-  J.pool.R += op.n; J.feu = (J.feu || 0) + op.n; P.ver++;
+  const J = P.joueurs[ctx.ctrl], s = sourceCtx(P, ctx);
+  const n = op.x === 'force' ? (s && !s.lki ? Math.max(0, car(P, s).force) : 0) : op.x === 'creatures' ? champDe(P, ctx.ctrl).filter(estCreature).length : op.n;
+  J.pool.R += n; J.feu = (J.feu || 0) + n; P.ver++;
 };
 
 /* —— Cipher ———————————————————————————————————————————————————————— */

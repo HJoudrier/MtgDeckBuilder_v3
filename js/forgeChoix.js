@@ -43,14 +43,16 @@ function typesFrequents(P, j) {
 
 const majuscule = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-forgeEffet('ChooseColor', [], function* (P, t, env) {
+forgeEffet('ChooseColor', ['Exclude'], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
   if (j == null) return;
   /* « MostProminentAttackers » : la couleur de qui attaque, l'adversaire. */
   const pourAdv = /Human|Opp|Attackers/.test(t.AILogic || '');
   const ordre = couleursFrequentes(P, pourAdv ? adversaires(P, j) : [j]);
-  const options = ['W', 'U', 'B', 'R', 'G'];
-  const i = yield* choisitUn(P, j, options.map(c => NOMS_COULEURS[c]), 'Choisir une couleur', options.indexOf(ordre[0]), env.ctx.source);
+  /* « Choose a color other than green » (les terrains Thriving) : `Exclude$`. */
+  const exclus = String(t.Exclude || '').split(',').map(c => FORGE_COULEURS[majuscule(c.trim())]).filter(Boolean);
+  const options = ['W', 'U', 'B', 'R', 'G'].filter(c => !exclus.includes(c));
+  const i = yield* choisitUn(P, j, options.map(c => NOMS_COULEURS[c]), 'Choisir une couleur', Math.max(0, options.indexOf(ordre.find(c => options.includes(c)))), env.ctx.source);
   choixDe(P, env.src).couleur = options[i];
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 

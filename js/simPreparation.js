@@ -1,5 +1,5 @@
 /* =====================================================================
-   js/simPreparation.js — D'un deck ou d'un adversaire à un siège de table
+   js/simPreparation.js — D'un deck à un siège de table
 
    Un siège, c'est ce que le moteur reçoit : des définitions de jeu et leurs
    quantités, un commandant, des points de vie de départ. On y joint la
@@ -88,14 +88,10 @@ function fichesDeListe(nom, format, liste, commandants) {
   return {nom, format, cartes, commandants: cmds, comportements, manquantes};
 }
 
-/* Les fiches d'une source du salon : un deck, un adversaire, ou ce qu'un
-   invité a envoyé. */
+/* Les fiches d'une source du salon : un deck, ou ce qu'un invité a envoyé. */
 function fichesDeSource(s) {
   if (s.fiches) return s.fiches;
-  const [g, k] = String(s.deck || '').split(':');
-  if (g === 'd') return fichesDeDeck(k);
-  const a = S.adversaires[k];
-  return a ? fichesDeListe(a.nom, a.format, a.liste, a.commandants) : null;
+  return fichesDeDeck(cleDeSource(s.deck));
 }
 
 /* Le siège d'un deck de l'atelier. Son commandant ne joue comme tel que si
@@ -109,20 +105,12 @@ function siegeDeck(cle) {
   return siegeDepuisListe(d.nom, d.format, liste, cmd);
 }
 
-function siegeAdversaire(cle) {
-  const a = S.adversaires[cle];
-  return a ? siegeDepuisListe(a.nom, a.format, a.liste, a.commandants) : null;
-}
-
 /* Les noms qu'aucune source ne connaît encore, pour toute une table. */
 function nomsManquants(cfg) {
   const noms = [];
   const d = S.decks[cfg.deck];
   if (d) [...d.deck.keys(), d.commander].filter(Boolean).forEach(n => { if (!ficheParNom(n)) noms.push(n); });
-  cfg.sieges.forEach(k => {
-    const a = S.adversaires[k];
-    if (a) [...a.liste.map(([n]) => n), ...a.commandants].forEach(n => { if (!ficheParNom(n)) noms.push(n); });
-  });
+  cfg.sieges.forEach(k => nomsDeSource(k).forEach(n => { if (!ficheParNom(n)) noms.push(n); }));
   return [...new Set(noms)];
 }
 

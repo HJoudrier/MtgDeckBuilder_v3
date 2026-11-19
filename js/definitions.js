@@ -59,7 +59,7 @@ function verseLigne(def, res, texte) {
     case 'statique': def.statiques.push(res.s); break;
     case 'mana': def.capacites.push({genre: 'mana', cout: res.cout, options: res.options, parChaque: res.parChaque, texte}); break;
     case 'activee':
-      if (res.cout && res.effet) def.capacites.push({genre: 'activee', cout: res.cout, effet: res.effet, vitesse: res.vitesse, unefois: res.unefois, texte});
+      if (res.cout && res.effet) def.capacites.push({genre: 'activee', cout: res.cout, effet: res.effet, vitesse: res.vitesse, unefois: res.unefois, texte, ...(res.zone ? {zone: res.zone} : {})});
       break;
     case 'loyaute': if (res.effet) def.capacites.push({genre: 'loyaute', delta: res.delta, effet: res.effet, texte}); break;
     case 'declenchee':

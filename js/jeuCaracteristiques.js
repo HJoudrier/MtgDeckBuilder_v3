@@ -28,6 +28,11 @@ function statiquesEnJeu(P) {
     const o = obj(P, id);
     if (o && o.def.statiques.length) o.def.statiques.forEach(s => { if (s.s === 'forge' && s.t.EffectZone === 'Graveyard' && s.t.Mode === 'Continuous' && !s.t.MayPlay) r.push({src: o, s}); });
   }
+  /* Les statiques de l'« eminence » (`EffectZone$ Battlefield,Command`) : un commandant agit aussi depuis sa zone. */
+  for (const J of P.joueurs) for (const id of J.commandement) {
+    const o = obj(P, id);
+    if (o && o.def.statiques.length) o.def.statiques.forEach(s => { if (s.s === 'forge' && s.t.EffectZone === 'Battlefield,Command') r.push({src: o, s}); });
+  }
   P._statV = P.ver; P._stat = r;
   /* Les statiques accordées par une statique : la liste est déjà posée,
      si bien que juger qui elles visent ne la recalcule pas. */
@@ -79,7 +84,15 @@ function car(P, o) {
       if (s.s === 'bonus') { force += s.f; endurance += s.e; mots |= s.mots; }
       else { if (s.attaque) nePeutAttaquer = true; if (s.blocage) nePeutBloquer = true; }
     }
-    for (const m of o.mods) { force += m.f || 0; endurance += m.e || 0; mots |= m.mots || 0; }
+    for (const m of o.mods) {
+      force += m.f || 0; endurance += m.e || 0; mots |= m.mots || 0;
+      if (m.nePeutAttaquer) nePeutAttaquer = true;
+      if (m.nePeutBloquer) nePeutBloquer = true;
+    }
+    /* « Power and toughness are switched » : après tous les bonus (couche 7e). */
+    if (o.mods.some(m => m.echange)) [force, endurance] = [endurance, force];
+    if (d.params && d.params.interditAttaque) nePeutAttaquer = true;
+    if (d.params && d.params.interditBlocage) nePeutBloquer = true;
     /* Ce qu'un effet retire (« loses flying until end of turn »), après ce
        qu'on ajoute ; la protection gagnée compte comme un mot-clé. */
     for (const m of o.mods) if (m.retire) mots &= ~m.retire;

@@ -16,7 +16,7 @@ function ajouterCarte(c, q, cible, completer) {
     recalculerAvecProgression(`${c.name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
     toast(n ? `${c.name} ×${n} ajoutée(s) au deck.` : `${c.name} : limite de ${fmt().maxCopies} copie(s) atteinte.`);
   } else {
-    S.collection.set(c.name, (S.collection.get(c.name) || 0) + q);
+    ajouteACollection(c.name, q);
     recalculerAvecProgression(`${c.name} ajoutée à la collection : les suggestions en tiennent compte.`);
     toast(`${c.name} ×${q} ajoutée(s) à la collection.`);
   }

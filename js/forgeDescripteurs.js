@@ -9,13 +9,13 @@
    ===================================================================== */
 
 /* Une définition — un sort lancé, une carte qu'on réduit — répond-elle ?
-   `idSource` est la carte qui juge (celle qui porte le déclencheur) : sans lui,
-   « Card.Self » se comparerait au sort jugé lui-même et serait toujours vrai —
-   un « when you cast this spell » partirait à chaque sort lancé, par quiconque. */
-function forgeValideDef(def, valid, ctrl, lanceur, id, idSource) {
+   La partie (`P`) n'est donnée que par qui en a besoin : un filtre qui
+   regarde les commandants (« shares a creature type with your commander »)
+   ne se juge pas sans elle, et ne laisse rien passer. */
+function forgeValideDef(def, valid, ctrl, lanceur, id, P = null, source = null) {
   const pseudo = {id, def, lki: true, zone: 'pile', ctrl: lanceur, prop: lanceur, types: def.types, sousTypes: def.sousTypes,
     supers: def.supers, couleurs: def.couleurs, mots: def.mots, force: def.force || 0, endurance: def.endurance || 0, marq: {}};
-  return forgeValideObjet(null, pseudo, valid, {id: idSource === undefined ? id : idSource}, ctrl, null);
+  return forgeValideObjet(P, pseudo, valid, source || {id}, ctrl, null);
 }
 
 /* Le genre de marqueur de Forge (`P1P1`) dans le vocabulaire du moteur. */
@@ -66,7 +66,7 @@ function emplacementForge(t, face) {
   if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
   const restrB = {...(t.TargetsWithDefinedController ? {ctrlDefini: t.TargetsWithDefinedController} : {}),
     ...(/^\d+$/.test(t.MaxTotalTargetCMC || '') ? {cmcMax: +t.MaxTotalTargetCMC} : {}), ...(t.TargetValidTargeting ? {visant: t.TargetValidTargeting} : {})};
-  return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr} : {}), ...restrB,
+  return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr, maxFace: face} : {}), ...restrB,
     /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
     ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True'
       ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True',

@@ -98,7 +98,7 @@ function dansOrigine(o, origine) {
 
 forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'Shuffle', 'Tapped', 'LibraryPosition',
   'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration',
-  'WithCountersType', 'WithCountersAmount', 'OriginAlternative', 'FaceDown'], function* (P, t, env) {
+  'WithCountersType', 'WithCountersAmount', 'OriginAlternative', 'FaceDown', 'ShareLandType'], function* (P, t, env) {
   const dest = zoneForge(t.Destination), ctx = env.ctx;
   if (!dest) return;
   /* « Exile … until ~ leaves the battlefield » : si l'hôte est déjà parti,
@@ -117,7 +117,17 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
     const ids = [].concat(...zones.map(z => z === 'champ' ? P.champ.filter(id => obj(P, id).ctrl === j) : P.joueurs[j][z].slice()))
       .filter(id => !t.ChangeType || forgeValideObjet(P, obj(P, id), t.ChangeType, env.src, env.ctrl, env));
     const n = t.ChangeNum === 'All' ? ids.length : forgeNombre(P, t.ChangeNum || 1, env);
-    const pris = yield* choisitCartes(P, t.Chooser ? env.ctrl : j, ids, n, 'Chercher', 'cartes', t.Mandatory === 'True' ? n : 0);
+    const qui = t.Chooser ? env.ctrl : j;
+    let pris;
+    /* « Up to two basic land cards that share a land type » (Myriad Landscape) :
+       la première se choisit librement, la seconde parmi celles de son type. */
+    if (t.ShareLandType === 'True' && n > 1) {
+      pris = yield* choisitCartes(P, qui, ids, 1, 'Chercher', 'cartes', 0);
+      if (pris.length) {
+        const type = id => (obj(P, id).def.sousTypes || []).find(x => TERRAINS_DE_BASE.includes(x));
+        pris = pris.concat(yield* choisitCartes(P, qui, ids.filter(id => id !== pris[0] && type(id) === type(pris[0])), n - 1, 'Chercher', 'cartes', 0));
+      }
+    } else pris = yield* choisitCartes(P, qui, ids, n, 'Chercher', 'cartes', t.Mandatory === 'True' ? n : 0);
     objets = pris.map(id => obj(P, id));
     if (zones.includes('bibliotheque') && t.Shuffle !== 'False' && t.NoShuffle !== 'True') ctx._melange = j;
   } else objets = objetsForge(P, t, env).filter(o => dansOrigine(o, t.Origin));
@@ -185,7 +195,7 @@ forgeEffet('Mill', ['NumCards', 'Destination', 'RememberMilled'], function* (P, 
   const n = forgeNombre(P, t.NumCards || 1, env), dest = zoneForge(t.Destination) || 'cimetiere';
   for (const j of joueursForge(P, t, env)) {
     const B = P.joueurs[j].bibliotheque;
-    for (let k = 0; k < n && B.length; k++) { const nid = deplace(P, B[B.length - 1], dest); if (t.RememberMilled === 'True') retiensForge(env.ctx, nid); }
+    for (let k = 0; k < n && B.length; k++) { const nid = deplace(P, B[B.length - 1], dest, {meule: true}); if (t.RememberMilled === 'True') retiensForge(env.ctx, nid); }
   }
 }, (t, op) => { op.op = 'meule'; op.n = nombreIA(t.NumCards || 1); op.qui = quiIA(t, op); op.hostile = !(op.qui && op.qui.vous); });
 

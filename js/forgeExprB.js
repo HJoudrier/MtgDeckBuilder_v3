@@ -107,6 +107,8 @@ function compteDuTour(P, q, env) {
   if ((k = /^Delirium\.(.+)$/.exec(q))) return siAlors(P, q, new Set([].concat(...J.cimetiere.map(id => obj(P, id).def.types))).size >= 4, env);
   if ((k = /^Threshold\.(.+)$/.exec(q))) return siAlors(P, q, J.cimetiere.length >= 7, env);
   if ((k = /^Void\.(.+)$/.exec(q))) return siAlors(P, q, h.vide, env);
+  /* Les trois terrains d'Urza : `Count$UrzaLands.3.1`, trois ensemble, un seul sinon. */
+  if ((k = /^UrzaLands\.(.+)$/.exec(q))) return siAlors(P, q, ["Urza's Mine", "Urza's Power Plant", "Urza's Tower"].every(n => champDe(P, j).some(o => o.def.nom === n)), env);
   if ((k = /^LeftGraveyardThisTurn (.+)$/.exec(q))) return h.quitteCimetiere.filter(o => o && forgeValideObjet(P, o, k[1], src, j, env, true)).length;
   if ((k = /^ValidBattlefield (.+)$/.exec(q))) return objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, k[1], src, j, env)).length;
   if ((k = /^MostProminentCreatureType (.+)$/.exec(q))) {
@@ -124,8 +126,11 @@ function compteJoueurs(P, tete, q, env) {
   let k;
   if (q === 'Amount') return qui.length;
   const max = f => Math.max(0, ...qui.map(f)), min = f => Math.min(...qui.map(f));
-  if ((k = /^HighestValid(Graveyard)? (.+)$/.exec(q))) {
-    return max(i => objetsZone(P, k[1] ? 'cimetiere' : 'champ').filter(o => forgeValideObjet(P, o, k[2], env.src, i, env)).length);
+  /* `HighestValidGraveyard,Library,Exile Card.IsRemembered+YouOwn` (Windfall) :
+     les zones se comptent ensemble, pour chaque joueur. */
+  if ((k = /^HighestValid((?:Graveyard|Hand|Library|Exile)(?:,(?:Graveyard|Hand|Library|Exile))*)? (.+)$/.exec(q))) {
+    const zones = k[1] ? k[1].split(',').map(z => ZONES_FORGE[z]) : ['champ'];
+    return max(i => zones.reduce((n, z) => n + objetsZone(P, z).filter(o => forgeValideObjet(P, o, k[2], env.src, i, env)).length, 0));
   }
   if ((k = /^HighestCounters\.(\w+)$/.exec(q))) return max(i => k[1] === 'Poison' ? P.joueurs[i].poison : 0);
   if (q === 'HighestCardsInGraveyard') return max(i => P.joueurs[i].cimetiere.length);
@@ -138,7 +143,7 @@ function compteJoueurs(P, tete, q, env) {
 forgeSait('expr', 'Count$Devotion', 'Count$DevotionDual', 'Count$Party', 'Count$Converge', 'Count$CastTotalManaSpent', 'Count$Adamant',
   'Count$YouDrewThisTurn', 'Count$LifeOppsLostThisTurn', 'Count$ResolvedThisTurn', 'Count$CountersAddedThisTurn', 'Count$Delirium',
   'Count$Threshold', 'Count$Void', 'Count$LeftGraveyardThisTurn', 'Count$ValidBattlefield', 'Count$MostProminentCreatureType',
-  'PlayerCountOpponents$HighestValid', 'PlayerCountOpponents$HighestValidGraveyard', 'PlayerCountOpponents$HighestCounters',
+  'PlayerCountOpponents$HighestValid', 'PlayerCountOpponents$HighestValidGraveyard', 'PlayerCountPlayers$HighestValidGraveyard', 'Count$UrzaLands', 'PlayerCountOpponents$HighestCounters',
   'PlayerCountOpponents$HighestCardsInGraveyard', 'PlayerCountPlayers$Amount', 'PlayerCountPlayers$LowestLifeTotal',
   'PlayerCountPlayers$HighestLifeTotal', 'PlayerCountOpponents$HighestLifeTotal', 'PlayerCountOpponents$HighestCardsInHand',
   'PlayerCountPropertyYou$SacrificedThisTurn', 'PlayerCountPropertyYou$CardsDiscardedThisTurn', 'TriggeredCard$CastTotalManaSpent',

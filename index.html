@@ -61,8 +61,7 @@
          dernières, secG et secH, sont nées de la division de l'onglet des
          suggestions : elles poursuivent la série sans rien renommer. -->
 
-    <!-- Onglet 1 — les decks qu'on suit, et ce qu'il reste à acheter pour
-         tous. C'est la page du projet d'ensemble : on y choisit le deck sur
+    <!-- Onglet 1 — les decks qu'on suit. C'est la page du projet d'ensemble : on y choisit le deck sur
          lequel on travaille, on en crée, on les configure ; l'onglet « Deck »
          reste celui où l'on construit. -->
     <div class="page" id="pageDecks" data-page="decks"
@@ -74,6 +73,26 @@
         </div>
         <div class="sec-body" id="bodyI"></div>
       </section>
+      <section class="sec" id="secM">
+        <div class="sec-head">
+          <h2>Decks externes</h2>
+          <div class="hint" id="hintM"></div>
+        </div>
+        <div class="sec-body" id="bodyM"></div>
+      </section>
+    </div>
+
+    <!-- Onglet 2 — ce qu'il reste à acheter pour compléter tous les decks :
+         la liste d'achats consolidée, qui vivait au bas de la page des decks -->
+    <div class="page" id="pageWishlist" data-page="wishlist"
+         role="tabpanel" aria-labelledby="ongletWishlist" tabindex="0" hidden>
+      <section class="sec" id="secL">
+        <div class="sec-head">
+          <h2>Acquisition en cours</h2>
+          <div class="hint" id="hintL"></div>
+        </div>
+        <div class="sec-body" id="bodyL"></div>
+      </section>
       <section class="sec" id="secJ">
         <div class="sec-head">
           <h2>Liste d'achats</h2>
@@ -81,6 +100,7 @@
         </div>
         <div class="sec-body" id="bodyJ"></div>
       </section>
+    </div>
     </div>
 
     <!-- Onglet 2 — ce que la collection pèse, et la collection -->
@@ -176,7 +196,7 @@
     </div>
   </main>
 
-  <!-- Les sept onglets, en bas de la fenêtre : la barre est fixe, et l'on passe
+  <!-- Les huit onglets, en bas de la fenêtre : la barre est fixe, et l'on passe
        d'un pan de l'atelier à l'autre sans remonter. L'entête, seule en haut,
        reste collante elle aussi. Les propositions se lisaient sous un seul
        onglet ; elles en ont désormais trois — le graphe et ce qu'il branche,
@@ -184,6 +204,7 @@
   <div class="onglets" id="onglets" role="tablist" aria-label="Navigation principale">
     <button type="button" class="onglet" id="ongletCollection" role="tab" data-onglet="collection" aria-selected="true" aria-controls="pageCollection" tabindex="0">Cartes</button>
     <button type="button" class="onglet" id="ongletDecks" role="tab" data-onglet="decks" aria-selected="false" aria-controls="pageDecks" tabindex="-1">Decks</button>
+    <button type="button" class="onglet" id="ongletWishlist" role="tab" data-onglet="wishlist" aria-selected="false" aria-controls="pageWishlist" tabindex="-1">Wishlist</button>
     <button type="button" class="onglet" id="ongletDeck" role="tab" data-onglet="deck" aria-selected="false" aria-controls="pageDeck" tabindex="-1">Construction</button>
     <button type="button" class="onglet" id="ongletGraphe" role="tab" data-onglet="graphe" aria-selected="false" aria-controls="pageGraphe" tabindex="-1">Graphe</button>
     <button type="button" class="onglet" id="ongletEdhrec" role="tab" data-onglet="edhrec" aria-selected="false" aria-controls="pageEdhrec" tabindex="-1">EDHREC</button>
@@ -219,6 +240,7 @@
   <script src="js/cartes.js?v=20261119a"></script>
   <script src="js/liens.js?v=20261119a"></script>
   <script src="js/etat.js?v=20261119a"></script>
+  <script src="js/collectionDates.js?v=20261119a"></script>
   <script src="js/decks.js?v=20261119a"></script>
   <script src="js/archetypesSets.js?v=20261119a"></script>
   <script src="js/filtres.js?v=20261119a"></script>
@@ -274,6 +296,7 @@
   <script src="js/jeuPilote.js?v=20261119a"></script>
   <script src="js/jeuCopie.js?v=20261119a"></script>
   <script src="js/jeuVue.js?v=20261119a"></script>
+  <script src="js/jeuPileExplique.js?v=20261119a"></script>
   <script src="js/jeuArrets.js?v=20261119a"></script>
   <script src="js/forgeValide.js?v=20261119a"></script>
   <script src="js/forgeDescripteurs.js?v=20261119a"></script>
@@ -288,10 +311,12 @@
   <script src="js/forgeEffetsC.js?v=20261119a"></script>
   <script src="js/forgeEffetsD.js?v=20261119a"></script>
   <script src="js/forgeEffetsE.js?v=20261119a"></script>
+  <script src="js/forgeBatailles.js?v=20261119a"></script>
   <script src="js/forgeChoix.js?v=20261119a"></script>
   <script src="js/forgeCopies.js?v=20261119a"></script>
   <script src="js/forgeTraine.js?v=20261119a"></script>
   <script src="js/forgeEffetsF.js?v=20261119a"></script>
+  <script src="js/forgeCopiesB.js?v=20261119a"></script>
   <script src="js/forgeEffetsG.js?v=20261119a"></script>
   <script src="js/forgeEffetsH.js?v=20261119a"></script>
   <script src="js/forgeEntrees.js?v=20261119a"></script>
@@ -305,6 +330,7 @@
   <script src="js/jeuCouches.js?v=20261119a"></script>
   <script src="js/forgeStatiquesB.js?v=20261119a"></script>
   <script src="js/forgeRemplacements.js?v=20261119a"></script>
+  <script src="js/forgeEntreesB.js?v=20261119a"></script>
   <script src="js/forgeRemplacementsB.js?v=20261119a"></script>
   <script src="js/forgePaliers.js?v=20261119a"></script>
   <script src="js/forgeMotsCles.js?v=20261119a"></script>
@@ -326,8 +352,28 @@
   <script src="js/forgeMotsClesF.js?v=20261119a"></script>
   <script src="js/forgeParadigme.js?v=20261119a"></script>
   <script src="js/forgeDesignes.js?v=20261119a"></script>
+  <script src="js/forgeDeclencheursD.js?v=20261119a"></script>
+  <script src="js/forgeDeclencheursE.js?v=20261119a"></script>
+  <script src="js/forgeRadiation.js?v=20261119a"></script>
+  <script src="js/forgeAnneau.js?v=20261119a"></script>
+  <script src="js/forgeProtections.js?v=20261119a"></script>
+  <script src="js/forgeFiltresC.js?v=20261119a"></script>
+  <script src="js/forgeFiltresD.js?v=20261119a"></script>
+  <script src="js/forgeHideaway.js?v=20261119a"></script>
   <script src="js/forgeAlias.js?v=20261119a"></script>
   <script src="js/forgeActivations.js?v=20261119a"></script>
+  <script src="js/forgeCoutsC.js?v=20261119a"></script>
+  <script src="js/forgeChoixC.js?v=20261119a"></script>
+  <script src="js/forgeExprC.js?v=20261119a"></script>
+  <script src="js/forgeExprD.js?v=20261119a"></script>
+  <script src="js/forgeDefiniC.js?v=20261119a"></script>
+  <script src="js/forgeStatiquesC.js?v=20261119a"></script>
+  <script src="js/forgeMotsClesG.js?v=20261119a"></script>
+  <script src="js/forgeMarqueursC.js?v=20261119a"></script>
+  <script src="js/forgeEffetsJ.js?v=20261119a"></script>
+  <script src="js/forgeEffetsK.js?v=20261119a"></script>
+  <script src="js/forgeEffetsL.js?v=20261119a"></script>
+  <script src="js/forgeZonesC.js?v=20261119a"></script>
   <script src="js/forgeChoixMultiples.js?v=20261119a"></script>
   <script src="js/iaValeur.js?v=20261119a"></script>
   <script src="js/iaChoix.js?v=20261119a"></script>
@@ -375,6 +421,7 @@
   <script src="js/suggestions.js?v=20261119a"></script>
   <script src="js/decksSection.js?v=20261119a"></script>
   <script src="js/wishlistSection.js?v=20261119a"></script>
+  <script src="js/acquisitionSection.js?v=20261119a"></script>
   <script src="js/collection.js?v=20261119a"></script>
   <script src="js/fenImport.js?v=20261119a"></script>
   <script src="js/fenAjout.js?v=20261119a"></script>
@@ -387,13 +434,13 @@
   <script src="js/fiche.js?v=20261119a"></script>
   <script src="js/ficheParcours.js?v=20261119a"></script>
   <script src="js/simCartes.js?v=20261119a"></script>
-  <script src="js/simAdversaires.js?v=20261119a"></script>
-  <script src="js/decksLies.js?v=20261119a"></script>
+  <script src="js/simSources.js?v=20261119a"></script>
   <script src="js/simPreparation.js?v=20261119a"></script>
   <script src="js/simStats.js?v=20261119a"></script>
   <script src="js/simStockage.js?v=20261119a"></script>
   <script src="js/simulation.js?v=20261119a"></script>
   <script src="js/simSection.js?v=20261119a"></script>
+  <script src="js/simCollection.js?v=20261119a"></script>
   <script src="js/forgeDepot.js?v=20261119a"></script>
   <script src="js/forgeVue.js?v=20261119a"></script>
   <script src="js/simResultats.js?v=20261119a"></script>
@@ -421,10 +468,10 @@
   <script src="js/fenListes.js?v=20261119a"></script>
   <script src="js/boiteCatalogue.js?v=20261119a"></script>
   <script src="js/fenExport.js?v=20261119a"></script>
-  <script src="js/fenAdversaire.js?v=20261119a"></script>
   <script src="js/fenComportement.js?v=20261119a"></script>
   <script src="js/fenJournal.js?v=20261119a"></script>
   <script src="js/gestesDecks.js?v=20261119a"></script>
+  <script src="js/gestesAcquisition.js?v=20261119a"></script>
   <script src="js/gestesVue.js?v=20261119a"></script>
   <script src="js/gestesReglages.js?v=20261119a"></script>
   <script src="js/gestesDeck.js?v=20261119a"></script>

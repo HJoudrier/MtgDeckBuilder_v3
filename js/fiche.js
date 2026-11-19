@@ -133,6 +133,10 @@ function ficheHTML(card) {
         <div class="small ${dispo>0?'muted':'buy'}">${dispo>0
           ? `${dispo} exemplaire(s) disponibles dans la collection${dansDeck?` · ${dansDeck} déjà dans le deck`:''}`
           : (offre ? `hors collection — ≈ ${eur(offre.price)} sur Cardmarket (${offre.condition} ou mieux)` : 'hors collection et hors budget')}</div>
+        ${(() => {
+          const l = (S.collection.get(card.name) || 0) > 0 ? detailDates(card.name) : [];
+          return l.length ? `<div class="small muted" title="Les exemplaires retirés ôtent d'abord les plus récents.">Ajoutée à la collection : ${l.map(esc).join(' · ')}</div>` : '';
+        })()}
         ${estGameChanger(card) === true ? `<div class="small" style="color:var(--gc-txt)">Classée <b>Game Changer</b> par Wizards : au Commander, sa présence hausse le palier du deck — aucune aux paliers 1 et 2, jusqu'à trois au palier 3.</div>` : ''}
         ${(() => {
           /* Où cette carte se trouve, si ce n'est pas dans la liste

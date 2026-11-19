@@ -80,7 +80,7 @@ function deckAdd(card, qty, opts) {
     const cur = S.deck.get(card.name) || 0;
     if (!opts.force && !/^Basic Land/i.test(card.type) && cur >= f.maxCopies) break;
     if (availableFor(card) <= 0) {
-      if (opts.completer) S.collection.set(card.name, (S.collection.get(card.name) || 0) + 1);
+      if (opts.completer) ajouteACollection(card.name, 1);
       else achetees++;
     }
     S.deck.set(card.name, cur + 1);

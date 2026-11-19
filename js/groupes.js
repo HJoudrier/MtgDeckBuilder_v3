@@ -140,6 +140,10 @@ const TRIS = {
      tri d'origine de la liste d'achats, qui met en tête ce qui pèse le plus.
      Il ne vaut que là, seule liste dont les entrées portent une `ligne`. */
   achat: {label:'Coût à acheter (décroissant)', cmp: (a, b) => ((b.ligne && b.ligne.total) || 0) - ((a.ligne && a.ligne.total) || 0) || a.card.name.localeCompare(b.card.name, 'fr')},
+  /* La date d'ajout la plus récente d'abord ; une carte sans date, que seule une collection saisie
+     avant les dates peut porter, passe en dernier. */
+  ajout: {label:"Date d'ajout (récente d'abord)", cmp: (a, b) => { const x = derniereDate(a.card.name), y = derniereDate(b.card.name);
+    return (x && !y) ? -1 : (!x && y) ? 1 : x < y ? 1 : x > y ? -1 : a.card.name.localeCompare(b.card.name); }},
   qty:   {label:'Quantité', cmp: (a, b) => (b.qty || 0) - (a.qty || 0) || a.card.name.localeCompare(b.card.name)},
   type:  {label:'Type', cmp: (a, b) => TYPE_ORDER.indexOf(mainType(a.card)) - TYPE_ORDER.indexOf(mainType(b.card))
            || (a.card.cmc || 0) - (b.card.cmc || 0) || a.card.name.localeCompare(b.card.name)},
@@ -155,7 +159,7 @@ const TRIS = {
    que là où toute carte en porte — l'onglet EDHREC. Ils y viennent en tête :
    c'est pour eux qu'on ouvre cette page. */
 const TRIS_SECTION = {
-  collection: ['cmc', 'alpha', 'price', 'type', 'qty', 'score'],
+  collection: ['cmc', 'alpha', 'price', 'type', 'qty', 'ajout', 'score'],
   deck:       ['type', 'cmc', 'alpha', 'price', 'qty', 'score'],
   graphe:     ['score', 'cmc', 'alpha', 'price', 'type'],
   suggestions:['score', 'cmc', 'alpha', 'price', 'type'],

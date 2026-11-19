@@ -73,7 +73,7 @@ forgeEffet('RegenerateAll', ['ValidCards'], function* (P, t, env) {
 
 /* Les durées qu'un effet de Forge sait tenir, dans le vocabulaire du
    moteur ; une autre rend la table injouable. */
-const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainTour', UntilHostLeavesPlay: 'hote', EndOfTurn: 'tour',
+const FORGE_DUREES = {'': 'tour', UntilEndOfTurn: 'tour', Permanent: null, UntilYourNextTurn: 'prochainTour', UntilHostLeavesPlay: 'hote', EndOfTurn: 'tour',
   /* Jusqu'à la fin de votre prochain tour (la pioche d'impulsion récente) ;
      jusqu'à la fin du combat, lu comme la fin du tour. */
   UntilTheEndOfYourNextTurn: 'finProchainTour', UntilEndOfCombat: 'tour', UntilEndOfCombatYourNextTurn: 'finProchainTour',
@@ -83,6 +83,12 @@ const FORGE_DUREES = {'': 'tour', Permanent: null, UntilYourNextTurn: 'prochainT
   /* « For as long as this remains on the battlefield » (The Wondrous Wasp). */
   AsLongAsInPlay: 'hote'};
 
+/* « Graveyard,Exile » : les zones que l'objet suivi ne doit pas quitter ; `null` si l'une est inconnue ou s'il n'y en a pas. */
+function zonesDe(v) {
+  const l = String(v || '').split(',').map(z => ZONES_FORGE[z.trim()]);
+  return v && l.every(Boolean) ? l : null;
+}
+
 forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stackable', 'ForgetOnMoved', 'ExileOnMoved', 'ReplacementEffects'], function* (P, t, env) {
   const prep = env.op.effet, src = env.src;
   const memo = [], memoJ = [];
@@ -90,7 +96,7 @@ forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stacka
   poseEffet(P, {nom: t.Name || (src ? 'Effet de ' + src.def.nom : 'Effet'), ctrl: env.ctrl, cid: src ? src.cid : null,
     srcId: src ? src.id : null, hote: src ? src.id : null, fin: FORGE_DUREES[t.Duration || ''],
     statiques: prep.statiques, capacites: prep.capacites, memo, memoJ, remplacements: prep.remplacements,
-    finSiQuitte: ZONES_FORGE[t.ExileOnMoved] || null});
+    finSiQuitte: zonesDe(t.ExileOnMoved), oubliSiQuitte: zonesDe(t.ForgetOnMoved)});
 }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {
   prepare(t, op) {
     if (!(String(t.Duration || '') in FORGE_DUREES)) return false;
@@ -109,7 +115,7 @@ forgeEffet('Effect', ['StaticAbilities', 'Triggers', 'Duration', 'Name', 'Stacka
       if (!forme) return false;
       remplacements.push({forme, t: r, face});
     }
-    if (t.ExileOnMoved && !ZONES_FORGE[t.ExileOnMoved]) return false;
+    if ((t.ExileOnMoved && !zonesDe(t.ExileOnMoved)) || (t.ForgetOnMoved && !zonesDe(t.ForgetOnMoved))) return false;
     op.effet = {statiques, capacites: tmp.capacites, remplacements};
     return true;
   }
@@ -134,19 +140,25 @@ forgeEffet('DelayedTrigger', ['Mode', 'Phase', 'ValidPlayer', 'Execute', 'ThisTu
 /* Animer : la couche propre à l'objet (js/jeuCaracteristiques.js
    `animation()`) — un terrain qui devient une créature 3/3 jusqu'à la fin
    du tour, un artefact qui devient une créature pour toujours. */
+/* La fin d'une animation : jamais, au prochain tour de son auteur, avec son hôte, sinon au nettoyage. */
+function finAnimation(t) {
+  return {Permanent: 'jamais', UntilYourNextTurn: 'prochainTour', AsLongAsControl: 'hote', UntilHostLeavesPlay: 'hote'}[t.Duration] || 'tour';
+}
 function animeForge(P, objets, t, env) {
   const ty = typesForge(t.Types);
-  const a = {types: ty.types, sousTypes: ty.sousTypes, mots: motsForge(t.Keywords), fin: t.Duration === 'Permanent' ? 'jamais' : 'tour',
+  const a = {types: ty.types, sousTypes: ty.sousTypes, mots: motsForge(t.Keywords), fin: finAnimation(t), par: env.ctrl, hote: env.src ? env.src.id : null,
     force: t.Power != null ? forgeNombre(P, t.Power, env) : null, endurance: t.Toughness != null ? forgeNombre(P, t.Toughness, env) : null,
     couleurs: t.Colors ? couleursMots(t.Colors) : null, ecrase: t.OverwriteColors === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True',
     /* Ce que l'animation ôte, et ce qu'elle accorde : capacités, déclencheurs
        et statiques compilés à la construction (`op.accorde`). */
+    /* « Gains all creature types » : un changelin, le temps de l'animation. */
+    changelin: t.AddAllCreatureTypes === 'True',
     retireTypes: t.RemoveCardTypes === 'True', retireTerrains: t.RemoveLandTypes === 'True', perdTout: t.RemoveAllAbilities === 'True',
     retireMots: t.RemoveKeywords ? motsForge(t.RemoveKeywords) : 0,
     capacites: ((env.op && env.op.accorde) || {}).capacites || null, statiques: ((env.op && env.op.accorde) || {}).statiques || null};
   objets.filter(o => o && o.j == null && o.zone === 'champ' && !o.lki).forEach(o => {
     (o.anime = o.anime || []).push({...a});
-    if (t.AtEOT) o.finEtape = t.AtEOT === 'Exile' ? 'exil' : t.AtEOT === 'Hand' ? 'main' : 'sacrifice';
+    if (t.AtEOT) o.finEtape = /Exile$/.test(t.AtEOT) ? 'exil' : t.AtEOT === 'Hand' ? 'main' : 'sacrifice';
     P.ver++;
   });
 }
@@ -164,15 +176,15 @@ function accordeAnimation(t, op) {
 
 /* Ce qu'une animation sait tenir : une durée connue, des couleurs nommées. */
 function animationTenable(t, op) {
-  if (t.Duration && t.Duration !== 'Permanent') return false;
+  if (t.Duration && !/^(Permanent|UntilYourNextTurn|AsLongAsControl|UntilHostLeavesPlay)$/.test(t.Duration)) return false;
   if ((t.Abilities || t.Triggers || t.staticAbilities) && !(op && accordeAnimation(t, op))) return false;
-  if (t.AtEOT && !/^(Sacrifice|Exile|Hand)$/.test(t.AtEOT)) return false;
+  if (t.AtEOT && !/^(Sacrifice|Exile|Hand|YourExile)$/.test(t.AtEOT)) return false;
   if (t.Colors && !couleursMots(t.Colors).length) return false;
   return true;
 }
 
 const PARAMS_ANIME = ['Power', 'Toughness', 'Types', 'Keywords', 'Colors', 'OverwriteColors', 'Duration', 'RemoveCreatureTypes', 'RemoveCardTypes',
-  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT'];
+  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT', 'AddAllCreatureTypes'];
 
 forgeEffet('Animate', PARAMS_ANIME, function* (P, t, env) { animeForge(P, objetsForge(P, t, env), t, env); },
   (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: animationTenable});

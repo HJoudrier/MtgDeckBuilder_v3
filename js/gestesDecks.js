@@ -22,6 +22,28 @@ function gestesDecks(act, b) {
     return true;
   }
 
+  /* Un deck externe : le même geste qu'un deck neuf, rangé dans l'autre section. */
+  if (act === 'nouveauDeckExterne') {
+    const cle = creerDeck('Deck externe', {format: S.format, externe: true});
+    activerDeck(cle);
+    openDeckModal(cle);
+    toast(`« ${S.decks[cle].nom} » créé : nommez-le, et collez ou ajoutez ses cartes.`);
+    return true;
+  }
+
+  /* Passer un deck de l'une des deux sections à l'autre. */
+  if (act === 'basculeExterne') {
+    const d = S.decks[b.dataset.deck];
+    if (!d) return true;
+    d.externe = !d.externe; d.maj = Date.now();
+    invaliderAchats();
+    scheduleSave();
+    renderAll();
+    toast(d.externe ? `« ${d.nom} » est maintenant un deck externe : il ne compte plus dans la liste d'achats.`
+      : `« ${d.nom} » est maintenant un de vos decks : ses cartes manquantes rejoignent la liste d'achats.`);
+    return true;
+  }
+
   if (act === 'activerDeck') {
     const cle = b.dataset.deck;
     if (activerDeck(cle)) toast(`Vous travaillez sur « ${S.decks[cle].nom} ».`);

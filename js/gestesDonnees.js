@@ -37,7 +37,8 @@ function gestesDonnees(act, b) {
       try { localStorage.removeItem(STORE_KEY); } catch(e) {}
       idbVider();
       idbOublier(IDB_NUAGE_BASE);
-      S.collection.clear();
+      videCollection();
+      S.enCours.clear();
       S.deck.clear();
       CLES_ANNEXES.forEach(cle => annexeListe(cle).clear());
       S.commander = null;
@@ -113,6 +114,11 @@ function gestesDonnees(act, b) {
 
   if (act === 'enrich') {
     enrichAllUnknown();
+    return true;
+  }
+
+  if (act === 'supprCollection') {
+    openSupprCarteModal(b.dataset.name);
     return true;
   }
 

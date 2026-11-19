@@ -80,6 +80,9 @@ function* lanceSort(P, j, a) {
   if (d !== s.def) s.def = d;
   /* La variante se lit dès le choix des cibles (« if this spell was bargained »). */
   s.varianteLance = a.variante || null;
+  s.kicked = a.variante === 'kicker';
+  /* Quand elle a été lancée : « if you cast it during your main phase » (Return to Dust). */
+  s.lanceeEn = {etape: P.etape, actif: P.actif};
   const annule = () => {
     const r = deplace(P, nid, a.depuis === 'commandement' ? 'commandement' : a.depuis);
     if (r != null && presageTour != null) obj(P, r).presageTour = presageTour;
@@ -155,7 +158,7 @@ function* lanceSort(P, j, a) {
 function* activeCapacite(P, j, a) {
   const o = obj(P, a.id);
   if (!o) return false;
-  const k = capacitesDe(P, o)[a.i];
+  const k = capaciteReduite(P, j, o, capacitesDe(P, o)[a.i]);
   const effets = yield* prepareEffets(P, j, o, k.effet, o.def.couleurs);
   if (!effets) return false;
   let x = 0, lki = null, retires = 0;
@@ -188,7 +191,7 @@ function* activeCapacite(P, j, a) {
        l'instantané de la carte, partie au cimetière. */
     if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }
   }
-  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, retires, engages: P.engagesCout || null});
+  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
   emet(P, {t: 'active', id: o.id, joueur: j, loyaute: k.genre === 'loyaute', lki});
   emetCibles(P, j, o, effets);
@@ -201,7 +204,7 @@ function* equipe(P, j, a) {
   const slot = {desc: {genre: 'objet', types: ['creature'], non: [], sousTypes: [], couleurs: [], filtres: [], zone: 'champ', mots: 0, ctrl: 'vous', autre: true}, min: 1, max: 1};
   const c = yield* choisitCibles(P, j, o, [slot], o.def.couleurs, {equipe: true});
   if (!c || !c[0].length || !paieMana(P, j, coutEquipement(P, j, o), 0, {capacite: o})) return false;
-  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, ctrl: j, x: 0, nom: o.def.nom,
+  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, ctrl: j, x: 0, nom: o.def.nom, texte: 'Équiper : attache cet équipement à la créature visée.',
     effets: [{ops: [{op: 'attache', a: {cible: 0}}], slots: [slot], cibles: c}]});
   return true;
 }

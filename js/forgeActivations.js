@@ -8,7 +8,9 @@
    - lancer une copie pour un autre coût (`PlayCost$`, Blue Mage's Cane) ;
    - le mana venu de créatures (`Spell.ManaFromCreature_3`, Inga and
      Esika), que js/jeuMana.js `paieMana()` retient sur le sort ;
-   - le nombre de tours qu'on a joués (`Count$YourTurns`, Spider-Man 2099).
+   - le nombre de tours qu'on a joués (`Count$YourTurns`, Spider-Man 2099) ;
+   - une capacité moins chère (`ReduceCost$`, les terrains Channel comme
+     Boseiju : « costs {1} less for each legendary creature you control »).
    ===================================================================== */
 
 /* —— La mise sous tension ——————————————————————————————————————————————— */
@@ -82,6 +84,34 @@ exprEtendue = (g => function (P, tete, q, env) {
   return tete === 'Count' && q === 'YourTurns' ? (P.joueurs[env.ctrl] || {}).tours || 0 : g(P, tete, q, env);
 })(exprEtendue);
 
+/* —— Une capacité moins chère ————————————————————————————————————————— */
+
+/* Le coût de mana d'une capacité vue par le joueur qui l'active : le
+   générique en moins, jamais en dessous de zéro, et jamais une couleur. La
+   quantité se lit à chaque fois — elle dépend de ce qu'on contrôle. Une
+   quantité que le moteur ne sait pas lire ne réduit rien : le coût reste
+   plein, ce qui ne rend jamais la capacité plus forte qu'elle n'est. */
+function capaciteReduite(P, j, o, k) {
+  if (!k.reduit) return k;
+  let n = 0;
+  try { n = forgeNombre(P, k.reduit, {face: k.face, ctx: {cibles: [], memo: [], memoJ: [], x: 0}, src: o, ctrl: j, op: {}}); } catch (e) { n = 0; }
+  n = Math.min(Math.max(0, +n || 0), k.cout.mana.generique || 0);
+  return n ? {...k, cout: {...k.cout, mana: moinsMana(k.cout.mana, {generique: n, couleurs: {}})}} : k;
+}
+
+/* —— N'activer que si… ———————————————————————————————————————————————— */
+
+/* « Activate only if there are four or more card types among cards in your
+   graveyard » (`Activation$ Delirium`, Threshold, Metalcraft, Hellbent) : la
+   même table de conditions que `Condition$`. */
+FORGE_CONDITIONS.Blessing = (P, env) => benediction(P, env.ctrl, env.src);
+activationInterdite = (g => function (P, j, o, k) {
+  if (k.activation && !FORGE_CONDITIONS[k.activation](P, {ctrl: j, src: o, ctx: {}})) return true;
+  return g(P, j, o, k);
+})(activationInterdite);
+
+FORGE_COMMUNS.add('Activation');
+FORGE_COMMUNS.add('ReduceCost');
 FORGE_COMMUNS.add('PowerUp');
-forgeSait('param', 'PowerUp', 'Play.PlayCost');
+forgeSait('param', 'PowerUp', 'ReduceCost', 'Activation', 'Play.PlayCost');
 forgeSait('expr', 'Count$YourTurns');

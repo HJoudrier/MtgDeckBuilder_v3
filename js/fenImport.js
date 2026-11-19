@@ -178,7 +178,7 @@ function openImport(cible) {
         avecEdition++;
       }
       if (!versDeck) {
-        S.collection.set(c.name, (S.collection.get(c.name) || 0) + e.qty);
+        ajouteACollection(c.name, e.qty);
         qty += e.qty;
         return;
       }

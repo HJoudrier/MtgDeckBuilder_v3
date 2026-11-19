@@ -115,7 +115,7 @@ function fusionneCache(local, distant) {
    suppression n'est donc nécessaire — c'est précisément ce pour quoi cette
    base existe, et sans elle un deck créé là-bas serait indiscernable d'un
    deck supprimé ici. */
-const DECK_CHAMPS_SIMPLES = ['nom', 'format', 'statut', 'commander', 'budget',
+const DECK_CHAMPS_SIMPLES = ['nom', 'format', 'statut', 'externe', 'commander', 'budget',
                              'exemplairesPropres', 'restrictions', 'ciblesRoles'];
 
 function indexDecks(liste) {
@@ -181,6 +181,7 @@ function empreinteFond(fond) {
     [...(fond[k] || [])].map(([n, q]) => n + '=' + q).sort().join(',')));
   NUAGE_ENSEMBLES.forEach(k => parts.push(k + ':' + [...(fond[k] || [])].sort().join(',')));
   [...NUAGE_SCALAIRES, ...NUAGE_OBJETS].forEach(k => parts.push(k + ':' + nuageStable(fond[k])));
+  parts.push('dates:' + nuageStable([...(fond.collectionDates || [])].sort((a, b) => a[0] < b[0] ? -1 : 1)));
   parts.push('decks:' + (fond.decks || []).map(empreinteDeck).sort().join(';'));
   return parts.join('|');
 }
@@ -197,6 +198,7 @@ function fusionnePaquets(base, local, distant) {
     fond[k] = r.valeurs;
     r.conflits.forEach(c => conflits.push({...c, liste: k}));
   });
+  fond.collectionDates = fusionneDates(local.fond.collectionDates, distant.fond.collectionDates, fond.collection);
   NUAGE_ENSEMBLES.forEach(k => {
     fond[k] = fusionneEnsemble(base && base[k], local.fond[k], distant.fond[k]);
   });

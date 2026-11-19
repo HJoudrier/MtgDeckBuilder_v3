@@ -871,16 +871,8 @@ tr.sim-maigre td{color:var(--dim2)}
   .sim-champ{display:flex;margin-right:0}
   .sim-barre{grid-template-columns:90px 1fr auto}
 }
-.sim-lien{border-color:var(--brass-d);color:var(--brass)}
-.sim-lien-ko{border-color:var(--bad-line);color:var(--bad-txt)}
 .sim-champ-large{display:flex;margin-right:0}
 .sim-champ-large input{width:100%;min-width:0;box-sizing:border-box}
-.sim-inconnues{margin:6px 0;padding-left:18px;max-height:240px;overflow:auto;font-size:.85em}
-.sim-inconnues-bloc{margin-top:6px}
-.sim-inconnues-bloc summary{cursor:pointer;color:var(--warn)}
-.pill.sim-inconnue{cursor:pointer;border:1px solid var(--warn);background:none;color:inherit;font:inherit}
-.sim-repli{border:1px solid var(--warn);border-radius:6px;padding:8px 10px;margin:4px 0 8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-.sim-relais{margin-top:8px}
 
 
 /* Refonte progressive : modernisation visuelle sans modifier les identifiants

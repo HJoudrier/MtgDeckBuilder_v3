@@ -97,12 +97,13 @@ function cardTile(e, ctx) {
     </div>` : `<div class="cname">${esc(c.name)}</div>`}
     ${scoreHTML}
     ${tagsHTML}
+    ${ctx === 'collection' ? ligneDatesAjout(c.name) : ''}
     <div class="foot bot">
       <span>${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>
       <span class="mono">${eur(c.price)}</span>
       <div class="qty acts" style="margin-left:auto">
         ${ctx==='collection'
-          ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>`
+          ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>${boutonSupprCollection(c.name)}`
           : ANNEXES[ctx]
           ? actesAnnexe(c, ctx)
           : `<button class="btn sm" data-act="fromDeck" data-name="${esc(c.name)}" title="Retirer du deck">−</button>
@@ -126,12 +127,13 @@ function cardRow(e, ctx) {
     ${tagIllegal(c)}${tagGameChanger(c)}${tagDeck(c, ctx)}
     ${c.set ? `<span class="mono small muted" title="Édition ${esc(c.setName || c.set)}${c.num?`, carte n°${esc(c.num)}`:''}">${esc(c.set)}${c.num?` ${esc(c.num)}`:''}</span>` : ''}
     <span class="mono small">${eur(c.price)}</span>
+    ${ctx === 'collection' ? ligneDatesAjout(c.name, true) : ''}
     <span class="mono small">${ctx==='collection'?`${e.qty} ex.`:`×${e.qty}`}</span>
     ${dispoBadge}
     ${scoreBadge}
     <div class="acts qty" style="margin-left:${note||dispoBadge?'6px':'auto'}">
       ${ctx==='collection'
-        ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>`
+        ? `<button class="btn sm" data-act="toDeck" data-name="${esc(c.name)}" title="Ajouter au deck">▲</button>${boutonSupprCollection(c.name)}`
         : ANNEXES[ctx]
         ? actesAnnexe(c, ctx, true)
         : `<button class="btn sm" data-act="fromDeck" data-name="${esc(c.name)}" title="Retirer">−</button>

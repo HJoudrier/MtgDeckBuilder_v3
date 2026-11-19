@@ -72,22 +72,20 @@ function majForgeUI(change) {
   restaureAncre(a);
 }
 
-/* Les noms de vos decks et adversaires, chacun avec le nombre de listes où
+/* Les noms de vos decks, chacun avec le nombre de listes où
    il figure : un élément qui manque à trois decks pèse trois fois. */
 function poidsPrioritaires() {
   const p = new Map();
   const ajoute = noms => new Set(noms).forEach(n => p.set(n, (p.get(n) || 0) + 1));
   Object.values(S.decks).forEach(d => ajoute([...d.deck.keys(), d.commander].filter(Boolean)));
-  Object.values(S.adversaires).forEach(a => ajoute([...a.liste.map(([n]) => n), ...a.commandants]));
   return p;
 }
 
-/* Ce qui manque pour vos cartes, recalculé quand un deck, un adversaire,
+/* Ce qui manque pour vos cartes, recalculé quand un deck,
    les scripts ou le savoir du moteur ont changé. */
 function manquesDecks() {
   const sait = Object.values(FORGE_SAIT).reduce((s, x) => s + x.size, 0);
-  const cle = [FORGE.textes.size, FORGE.commit, sait, ...Object.keys(S.decks).map(signatureDeck),
-    ...Object.values(S.adversaires).map(signatureAdversaire)].join('|');
+  const cle = [FORGE.textes.size, FORGE.commit, sait, ...Object.keys(S.decks).map(signatureDeck)].join('|');
   if (MANQUES.cle === cle) return MANQUES.val;
   const scripts = [], sans = [];
   let completes = 0;
@@ -149,7 +147,7 @@ function manquesHTML() {
   }
   const d = manquesDecks(), b = MANQUES.base;
   return `<div class="sim-bloc"><h3>Ce qu'il manque au moteur</h3>
-    <div class="small muted" style="margin-bottom:6px">${d.avec} des ${d.n} cartes de vos decks et adversaires ont un script
+    <div class="small muted" style="margin-bottom:6px">${d.avec} des ${d.n} cartes de vos decks ont un script
       Forge${d.sans.length ? ` (sans script : ${esc(d.sans.slice(0, 6).join(', '))}${d.sans.length > 6 ? '…' : ''})` : ''} ;
       ${d.completes} sont entièrement comprises. Ce qui manque, par nombre de vos cartes touchées :</div>
     ${d.manques.length ? listeManques(d.manques, 'carte') : '<div class="small">Rien : toutes vos cartes à script sont comprises.</div>'}

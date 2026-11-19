@@ -74,6 +74,8 @@ function snapshot() {
     v: 1,
     date: Date.now(),
     collection: [...S.collection],
+    collectionDates: [...S.collectionDates],
+    enCours: [...S.enCours],
     decks: clesDecks().map(deckSnap),
     deckActif: S.deckActif,
     achats: S.achats,
@@ -111,7 +113,6 @@ function snapshot() {
     catalogueActif: S.catalogueActif,
     prixMaj: S.prixMaj,
     majIgnoree: S.majIgnoree,
-    adversaires: S.adversaires,
     comportements: S.comportements,
     simulation: S.simulation,
     table: S.table,
@@ -206,6 +207,12 @@ function restore(d) {
   });
 
   S.collection = new Map((d.collection || []).filter(([n]) => find(n)));
+  /* Une sauvegarde d'hier n'en porte pas : la collection garde ses exemplaires, sans date. */
+  if (Array.isArray(d.collectionDates)) restaureDates(d.collectionDates);
+  else restaureDates([...S.collectionDates]);
+  /* Une sauvegarde d'hier n'en porte pas, et un paquet de synchronisation non
+     plus : l'absence du champ laisse les commandes de cet appareil intactes. */
+  if (Array.isArray(d.enCours)) S.enCours = new Map(d.enCours.filter(([n, q]) => find(n) && q > 0));
   /* Les dossiers avant tout le reste : `S.deck`, `S.commander`, `S.format` et
      `S.budget` sont des vues sur le deck ouvert, et une écriture faite avant
      qu'il y en ait un irait dans un dossier créé pour rien. */
@@ -266,12 +273,13 @@ function restore(d) {
   if (Array.isArray(d.deckPlie)) S.deckPlie = new Set(d.deckPlie);
   if (Array.isArray(d.groupesPlies)) S.groupesPlies = new Set(d.groupesPlies);
   /* Le mode de jeu, venu après tout le reste : une sauvegarde d'hier n'en
-     porte rien, et l'atelier part d'une bibliothèque d'adversaires vide. */
-  if (d.adversaires && typeof d.adversaires === 'object') S.adversaires = d.adversaires;
+     porte rien. */
   if (d.comportements && typeof d.comportements === 'object') S.comportements = d.comportements;
   if (d.simulation && typeof d.simulation === 'object') S.simulation = {...S.simulation, ...d.simulation};
   if (d.table && typeof d.table === 'object') S.table = {...S.table, ...d.table, sieges: (d.table.sieges || []).filter(s => s.mode === 'ia')};
   if (d.arrets && typeof d.arrets === 'object') S.arrets = d.arrets;
+  /* La bibliothèque d'adversaires d'hier devient des decks externes (js/decksStockage.js). */
+  if (d.adversaires && typeof d.adversaires === 'object') migreAdversaires(d.adversaires);
   return true;
 }
 
