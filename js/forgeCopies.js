@@ -8,14 +8,24 @@
    qui se résout comme le sort et disparaît.
    ===================================================================== */
 
-/* La définition d'une copie, avec ce que l'effet ajoute. */
-function defCopie(def, t) {
-  if (!t.AddTypes && !t.AddKeywords && !t.SetPower && !t.SetToughness && !t.PumpKeywords) return def;
-  const ty = typesForge(t.AddTypes);
+/* La définition d'une copie, avec ce que l'effet ajoute : des types (et
+   « Legendary »), des mots-clés, une force, un nom (`NewName$`), une couleur
+   (`SetColor$`), des types de créature qui remplacent les siens
+   (`SetCreatureTypes$`), et la capacité qui copie (`GainThisAbility$`,
+   passée par l'appelant). */
+function defCopie(def, t, capaciteCopie) {
+  if (!t.AddTypes && !t.AddKeywords && !t.SetPower && !t.SetToughness && !t.PumpKeywords && !t.NewName && !t.SetColor && !t.SetCreatureTypes && !capaciteCopie) return def;
+  const mots = String(t.AddTypes || '').split(/\s*[,&]\s*/).filter(Boolean), legendaire = mots.includes('Legendary');
+  const ty = typesForge(mots.filter(m => m !== 'Legendary').join(','));
   const d = {...def, types: [...new Set([...def.types, ...ty.types])], sousTypes: [...new Set([...def.sousTypes, ...ty.sousTypes])],
     mots: def.mots | motsForge(t.AddKeywords) | motsForge(t.PumpKeywords)};
+  if (legendaire) d.supers = [...new Set([...(def.supers || []), 'legendary'])];
   if (t.SetPower) d.force = +t.SetPower;
   if (t.SetToughness) d.endurance = +t.SetToughness;
+  if (t.NewName) d.nom = t.NewName;
+  if (t.SetColor) { const c = couleursMots(t.SetColor); if (c.length || /^Colorless$/.test(t.SetColor)) d.couleurs = c; }
+  if (t.SetCreatureTypes) d.sousTypes = [...new Set([...def.sousTypes.filter(x => SOUSTYPES_NON_CREATURE.has(x)), ...typesForge(t.SetCreatureTypes).sousTypes])];
+  if (capaciteCopie && !d.capacites.includes(capaciteCopie)) d.capacites = [...d.capacites, capaciteCopie];
   delete d._eph; delete d._ecoute; delete d._faceCachee;
   return d;
 }
@@ -28,8 +38,8 @@ function* aCopier(P, t, env) {
   return (yield* choisitCartes(P, env.ctrl, ids, 1, 'Copier', 'cartes', 1)).map(id => obj(P, id));
 }
 
-forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywords', 'SetPower', 'SetToughness', 'AtEOT', 'AtEOTTrig', 'Choices',
-  'Populate', 'Controller', 'RememberCopied', 'TokenTapped', 'TokenAttacking'], function* (P, t, env) {
+forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywords', 'SetPower', 'SetToughness', 'SetColor', 'SetCreatureTypes', 'AtEOT', 'AtEOTTrig', 'Choices',
+  'Populate', 'Controller', 'RememberCopied', 'TokenTapped', 'TokenAttacking', 'AtEOTCondition'], function* (P, t, env) {
   const modeles = (yield* aCopier(P, t.Populate === 'True' && !t.Choices ? {...t, Choices: 'Creature.token+YouCtrl'} : t, env))
     .filter(o => o && o.j == null);
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
@@ -45,7 +55,7 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
       /* `AtEOTTrig$` : le jeton porte lui-même « at the beginning of the end step,
          sacrifice this token » — même départ, à la même étape. */
       const fin = t.AtEOT || t.AtEOTTrig;
-      if (fin) o.finEtape = fin === 'Exile' ? 'exil' : 'sacrifice';
+      if (fin) { o.finEtape = fin === 'Exile' ? 'exil' : 'sacrifice'; o.finEtapeSi = conditionFinEtape(P, t, env); }
       if (t.TokenTapped === 'True') o.engage = true;
       P.champ.push(o.id);
       P.ver++;
@@ -62,15 +72,17 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
 
 /* Devenir la copie d'un objet (« Clone ») : l'objet désigné — souvent
    la carte qui entre — prend la définition copiée. */
-forgeEffet('Clone', ['Choices', 'AddTypes', 'AddKeywords', 'SetPower', 'SetToughness'], function* (P, t, env) {
+forgeEffet('Clone', ['Choices', 'AddTypes', 'AddKeywords', 'SetPower', 'SetToughness', 'NewName', 'GainThisAbility', 'SetColor', 'SetCreatureTypes'], function* (P, t, env) {
   const m = (yield* aCopier(P, {...t, Defined: undefined}, env))[0];
   const cible = forgeDefinis(P, t.Defined || 'Self', env).find(x => x && x.j == null && !x.lki && x.zone === 'champ');
   if (!m || !cible || m.id === cible.id) return;
-  cible.def = defCopie(m.def, t);
+  /* « Except it has this ability » : la capacité qui vient de s'activer, gardée par la copie. */
+  const moi = t.GainThisAbility === 'True' ? cible.def.capacites.find(k => k.effet && k.effet.ops.includes(env.op)) : null;
+  cible.def = defCopie(m.def, t, moi);
   cible.copie = true;
   P.ver++;
   jn(P, `${P.cartes[cible.cid].def.nom} devient une copie de ${m.def.nom}`);
-}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: (t, op) => op.slot == null});
+}, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* Copier un sort sur la pile : un élément qui se résout comme lui, avec de
    nouvelles cibles si l'on veut, et qui ne laisse aucune carte. */

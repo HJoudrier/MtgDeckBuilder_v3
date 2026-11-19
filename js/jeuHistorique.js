@@ -26,6 +26,10 @@ function noteHistorique(P, e) {
   switch (e.t) {
     case 'perteVie': case 'degatsJoueur':
       plusUn(h.perdu, e.joueur, e.n || 0);
+      /* Les dégâts reçus par joueur, et ceux qu'un contrôleur a infligés hors combat (`MaxOppDamageThisTurn`, `NonCombatDamageThisTurn`). */
+      if (e.t === 'degatsJoueur') { plusUn(h.degatsRecus = h.degatsRecus || {}, e.joueur, e.n || 0); if (!e.combat && e.ctrl != null) plusUn(h.degatsHorsCombat = h.degatsHorsCombat || {}, e.ctrl, e.n || 0); }
+      /* Qui a blessé ce joueur au combat ce tour (`dealtCombatDamageThisTurn You`). */
+      if (e.t === 'degatsJoueur' && e.combat) ((h.degatsCombatPar = h.degatsCombatPar || {})[e.joueur] = h.degatsCombatPar[e.joueur] || []).push(e.source);
       if (P.vitesses) vitesseMonte(P, e);
       if (e.t === 'degatsJoueur' && e.combat && P.initiative === e.joueur) initiativeVolee(P, e);
       /* Infliger des dégâts de combat au monarque prend la couronne. */

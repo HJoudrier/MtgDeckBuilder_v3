@@ -66,6 +66,14 @@ function corpsDeck() {
     </div>
 
     <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--txt);cursor:pointer">
+        <input type="checkbox" data-deckchamp="externe" ${d.externe ? 'checked' : ''} style="width:auto;margin:0">
+        Deck externe — je ne l'ai pas monté
+      </label>
+      <div class="small muted">Un deck externe — de tournoi, d'un ami, trouvé en ligne — se lit, se complète, se joue et se simule comme les autres, mais il paraît dans la section « Decks externes » et n'ajoute rien à la liste d'achats. On bascule dans un sens comme dans l'autre.</div>
+    </div>
+
+    <div class="field">
       <label class="lab" for="dk_format">Format de jeu</label>
       <select id="dk_format" data-deckchamp="format">
         ${Object.entries(FORMATS).map(([k, v]) => `<option value="${k}" ${d.format === k ? 'selected' : ''}>${esc(v.label)}</option>`).join('')}

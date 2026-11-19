@@ -15,17 +15,19 @@
    ===================================================================== */
 
 /* Les joueurs que `CheckDefinedPlayer$ You.isMonarch` sait juger. */
-const JOUEUR_COCHE = {isMonarch: (P, j) => P.monarque === j, hasInitiative: (P, j) => P.initiative === j};
+const JOUEUR_COCHE = {isMonarch: (P, j) => P.monarque === j, hasInitiative: (P, j) => P.initiative === j,
+  withMostLife: (P, j) => P.joueurs[j].vie >= Math.max(...vivants(P).map(J => J.vie))};
 
 /* Un `ValidSA$` de sort lancé qu'on sait lire. */
-function saLisible(v) { return /^Spell(\.MayPlaySource|\.ManaSpent (EQ|GE|LE|GT|LT)\d+)?$/.test(v); }
-function saValide(P, v, e, s) {
+function saLisible(v) { return /^Spell(\.MayPlaySource|\.ManaSpent (EQ|GE|LE|GT|LT)(\d+|X))?$/.test(v); }
+function saValide(P, v, e, s, env) {
   if (!v || v === 'Spell') return true;
   const o = obj(P, e.id);
   if (!o) return false;
   if (v === 'Spell.MayPlaySource') return o.varianteLance === 'permis' && !!s && (P.cartes[o.cid] || {}).permisSrc === s.id;
-  const m = /^Spell\.ManaSpent (EQ|GE|LE|GT|LT)(\d+)$/.exec(v);
-  return !!m && compareForge(Object.values(o.manaSort || {}).reduce((a, b) => a + b, 0), m[1], +m[2]);
+  const m = /^Spell\.ManaSpent (EQ|GE|LE|GT|LT)(\d+|X)$/.exec(v);
+  /* X se lit sur la source (« greater than ~'s power ») : Count$CardPower. */
+  return !!m && compareForge(Object.values(o.manaSort || {}).reduce((a, b) => a + b, 0), m[1], m[2] === 'X' ? forgeNombre(P, 'X', env) : +m[2]);
 }
 
 /* À la construction : réécrire ce qui se dit autrement, refuser ce qu'on
@@ -37,7 +39,8 @@ declencheurForge = (g => function (def, face, t, jetons) {
     u = {...u, Phase: 'Main2'}; delete u.PhaseCount;
   }
   if (t.ResolvedLimit) { if (!/^\d+$/.test(t.ResolvedLimit)) return false; u = {...u, ActivationLimit: t.ResolvedLimit}; delete u.ResolvedLimit; }
-  if (t.CheckDefinedPlayer && !/^You\.(isMonarch|hasInitiative)$/.test(t.CheckDefinedPlayer)) return false;
+  /* Le défenseur qui a le plus de vie : jugé par l'écoute d'attaque (js/forgeDeclencheursD.js). */
+  if (t.CheckDefinedPlayer && !/^((You|Opponent)\.(isMonarch|hasInitiative|withMostLife)|TriggeredDefender\.withMostLife)$/.test(t.CheckDefinedPlayer)) return false;
   if (t.ValidSA && t.Mode === 'SpellCast' && !saLisible(t.ValidSA)) return false;
   return g(def, face, u, jetons);
 })(declencheurForge);
@@ -46,11 +49,15 @@ declencheurForge = (g => function (def, face, t, jetons) {
 conditionForge = (g => function (P, t, env) {
   if (t.Revolt && (t.Revolt === 'True') !== !!(histoire(P).revolte || {})[env.ctrl]) return false;
   if (t.Delirium === 'True' && new Set([].concat(...P.joueurs[env.ctrl].cimetiere.map(id => obj(P, id).def.types))).size < 4) return false;
-  if (t.CheckDefinedPlayer) { const k = t.CheckDefinedPlayer.split('.')[1]; if (!JOUEUR_COCHE[k] || !JOUEUR_COCHE[k](P, env.ctrl)) return false; }
+  if (t.CheckDefinedPlayer && !/^TriggeredDefender\./.test(t.CheckDefinedPlayer)) {
+    const [base, k] = t.CheckDefinedPlayer.split('.');
+    const qui = base === 'Opponent' ? adversaires(P, env.ctrl) : [env.ctrl];
+    if (!JOUEUR_COCHE[k] || !qui.some(j => JOUEUR_COCHE[k](P, j))) return false;
+  }
   return g(P, t, env);
 })(conditionForge);
 
-FORGE_MODES.SpellCast = (j => (P, t, e, s, env) => j(P, t, e, s, env) && saValide(P, t.ValidSA, e, s))(FORGE_MODES.SpellCast);
+FORGE_MODES.SpellCast = (j => (P, t, e, s, env) => j(P, t, e, s, env) && saValide(P, t.ValidSA, e, s, env))(FORGE_MODES.SpellCast);
 FORGE_MODES.Drawn = (j => (P, t, e, s, env) => j(P, t, e, s, env) && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env))(FORGE_MODES.Drawn);
 
 /* Le sort lancé grâce à une permission garde la source qui l'a donnée

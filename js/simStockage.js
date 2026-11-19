@@ -41,13 +41,13 @@ function supprimeLot(id) {
 
 function lotParId(id) { return SIM_RES.lots.find(l => l.id === id) || null; }
 
-/* Un lot est périmé quand le deck, un adversaire, un comportement manuel ou
+/* Un lot est périmé quand un deck de la table, un comportement manuel ou
    le moteur ont changé depuis : ses chiffres restent lisibles, mais ses
    parties ne se rejouent plus à l'identique. */
 function lotPerime(lot) {
   if (lot.moteur !== MOTEUR_V) return 'moteur';
   if (!S.decks[lot.deck] || signatureDeck(lot.deck) !== lot.sigDeck) return 'deck';
-  if (lot.adversaires.some((k, i) => !S.adversaires[k] || signatureAdversaire(S.adversaires[k]) !== lot.sigAdv[i])) return 'adversaire';
+  if (lot.adversaires.some((k, i) => !sourceExiste(k) || signatureSource(k) !== lot.sigAdv[i])) return 'adversaire';
   if (lot.sigComp !== signatureComportements()) return 'comportements';
   return '';
 }

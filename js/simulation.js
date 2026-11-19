@@ -27,7 +27,7 @@ function configSimulation() {
   const c = S.simulation;
   const deck = S.decks[c.deck] ? c.deck : S.deckActif;
   const nb = Math.max(2, Math.min(6, +c.nbJoueurs || 2));
-  const sieges = Array.from({length: nb - 1}, (_, i) => S.adversaires[c.sieges[i]] ? c.sieges[i] : '');
+  const sieges = Array.from({length: nb - 1}, (_, i) => sourceExiste(c.sieges[i]) ? c.sieges[i] : '');
   return {deck, nbJoueurs: nb, sieges, parties: Math.max(1, Math.min(2000, +c.parties || 100)),
     graine: (+c.graine || 1) >>> 0, plafond: Math.max(5, Math.min(60, +c.plafond || 25)),
     niveau: NIVEAUX_IA.includes(c.niveauIA) ? c.niveauIA : NIVEAUX_IA[0]};
@@ -36,7 +36,8 @@ function configSimulation() {
 /* Ce qui empêche de lancer, en une phrase, ou rien. */
 function obstacleSimulation(cfg) {
   if (!S.decks[cfg.deck] || !S.decks[cfg.deck].deck.size) return 'Le deck testé est vide.';
-  if (cfg.sieges.some(k => !k)) return 'Choisissez un adversaire pour chaque siège.';
+  if (cfg.sieges.some(k => !k)) return 'Choisissez un deck pour chaque siège.';
+  if (cfg.sieges.some(sourceVide)) return 'Un siège est occupé par un deck vide.';
   return '';
 }
 
@@ -81,7 +82,7 @@ async function joueLot() {
     majProgressionSim();
     await chercheFichesScryfall(manquants);
   }
-  const sieges = [siegeDeck(cfg.deck), ...cfg.sieges.map(siegeAdversaire)];
+  const sieges = [siegeDeck(cfg.deck), ...cfg.sieges.map(siegeSource)];
   const N = sieges.length, total = Math.ceil(cfg.parties / N) * N;
   Object.assign(SIM, {etat: 'encours', total, debut: Date.now()});
   renderK();
@@ -115,8 +116,8 @@ function terminerLot(cfg, sieges, recs) {
     const terrains = sieges[0].cartes.filter(c => c.def.types.includes('land')).map(c => c.def.nom);
     const lot = {id: 'l-' + Date.now().toString(36), date: Date.now(), moteur: MOTEUR_V,
       deck: cfg.deck, deckNom: S.decks[cfg.deck].nom, sigDeck: signatureDeck(cfg.deck),
-      adversaires: cfg.sieges.slice(), advNoms: cfg.sieges.map(k => S.adversaires[k].nom),
-      sigAdv: cfg.sieges.map(k => signatureAdversaire(S.adversaires[k])), sigComp: signatureComportements(),
+      adversaires: cfg.sieges.slice(), advNoms: cfg.sieges.map(nomDeSiege),
+      sigAdv: cfg.sieges.map(signatureSource), sigComp: signatureComportements(),
       nbJoueurs: sieges.length, graine: cfg.graine, plafond: cfg.plafond, niveau: cfg.niveau, arrete,
       couvertures: sieges.map(s => ({taux: s.couverture.taux, injouable: s.couverture.injouable, manquantes: s.manquantes.length})),
       fiabilite: fiabilite(sieges.map(s => s.couverture)),
@@ -135,7 +136,7 @@ function arreteSimulation() { if (SIM.etat === 'encours') SIM.arret = true; }
 function rejouePartie(lot, k) {
   if (lotPerime(lot)) return null;
   const [g] = lot.parties[k];
-  const sieges = [siegeDeck(lot.deck), ...lot.adversaires.map(siegeAdversaire)];
+  const sieges = [siegeDeck(lot.deck), ...lot.adversaires.map(siegeSource)];
   const N = sieges.length, places = placesPartie(N, g), graine = graineDePartie(lot.graine, g);
   const P = joueJusquauBout({graine, premier: 0, plafondTours: lot.plafond, journal: true,
     sieges: places.map(t => sieges[t])}, places.map((_, s) => agentNiveau(lot.niveau || NIVEAUX_IA[0], graine, s)));

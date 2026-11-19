@@ -21,7 +21,7 @@ const TABLE = {ouverte: false, phase: '', role: '', h: null, sieges: [], agents:
   loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '',
   /* Le rythme, en ms à la vitesse normale : la pause après un geste visible
      d'un joueur automatique, et celle d'un changement d'étape. */
-  pauseIA: 1300, pauseEtape: 350};
+  pauseIA: 1300, pauseEtape: 350, pauseResolution: 1100, suite: null};
 
 /* Les vitesses de la table, réglées au menu (`S.table.vitesse`). */
 const VITESSES = {lente: {nom: 'Lente', k: 1.8}, normale: {nom: 'Normale', k: 1}, rapide: {nom: 'Rapide', k: 0.35}};
@@ -39,10 +39,22 @@ function pauseApres(q, r, s, etapeChangee) {
 /* Un objet va se résoudre : on le montre, avec ses flèches, le temps qu'on
    le lise — plus longtemps celui d'un adversaire que le sien. */
 async function montrePile(q) {
-  const k = (VITESSES[S.table.vitesse] || VITESSES.normale).k;
+  const k = (VITESSES[S.table.vitesse] || VITESSES.normale).k, P = TABLE.h.P;
+  const sommet = P.pile.length ? descriptionPile(P, P.pile[P.pile.length - 1]) : null;
+  /* Le temps de lire : une pause de base, et de quoi parcourir le texte de ce qui se résout. */
+  const lecture = sommet ? Math.min(2200, sommet.texte.length * 9) : 0;
   diffuseVues(true);
-  await attendre(k * (q.joueur === TABLE.moi ? TABLE.pauseEtape * 1.5 : TABLE.pauseIA));
+  await attendreOuSuite(k * ((q.joueur === TABLE.moi ? TABLE.pauseResolution : TABLE.pauseIA) + lecture));
   if (TABLE.h && TABLE.h.attente === q) repondre(TABLE.h, TABLE.agents, 0, Infinity, null);
+}
+
+/* Attendre, sauf si le joueur dit « Continuer » (`tSuite`). */
+function attendreOuSuite(ms) {
+  return new Promise(ok => {
+    const fin = () => { clearTimeout(t); TABLE.suite = null; ok(); };
+    const t = setTimeout(fin, ms);
+    TABLE.suite = fin;
+  });
 }
 
 /* La vue d'un joueur, et qui la partie attend : celui qui a la priorité. */
@@ -59,14 +71,19 @@ function signePublic(P) {
   return P.ver + '|' + P.pile.length + '|' + P.etape + '|' + P.joueurs.map(J => J.vie + ',' + J.main.length).join(';');
 }
 
-/* Le siège moteur d'une source choisie au salon : un deck de l'atelier, un
-   adversaire de la bibliothèque, ou les fiches reçues d'un invité. */
+/* Le siège moteur d'une source choisie au salon : un deck de l'atelier, ou les fiches reçues d'un invité. */
 function siegeDeSource(s) {
   if (s.fiches) return siegeDepuisFiches(s.nom, s.fiches.format, s.fiches.cartes, s.fiches.commandants, s.fiches.comportements);
-  const [genre, cle] = String(s.deck || '').split(':');
-  const siege = genre === 'a' ? siegeAdversaire(cle) : siegeDeck(cle);
+  const siege = siegeDeck(cleDeSource(s.deck));
   if (siege) siege.nom = s.nom || siege.nom;
   return siege;
+}
+
+/* Le paiement du mana d'un siège au départ : les sièges humains peuvent en changer en cours
+   de partie ; le mien commence selon le réglage du menu, un invité à l'automatique. Un
+   siège automatique paie toujours seul. */
+function reglageMana(mode) {
+  return mode === 'ia' ? {} : {reglable: true, manuel: mode === 'moi' && !!S.table.paiementManuel};
 }
 
 /* Commencer la partie que le salon décrit. Les cartes que personne ne
@@ -80,9 +97,11 @@ async function commenceTable() {
   const sieges = sources.map(siegeDeSource);
   if (sieges.some(x => !x || !x.cartes.length)) { toast('Un siège n\'a pas de deck jouable.'); return; }
   const graine = (Date.now() ^ (Math.random() * 4294967296)) >>> 0;
-  TABLE.config = {graine, premier: graine % sieges.length, montre: true};
+  /* Le paiement du mana de chaque siège, rangé avec la partie : la reprise le rejoue à l'identique. */
+  const mana = sources.map(s => reglageMana(s.mode));
+  TABLE.config = {graine, premier: graine % sieges.length, montre: true, mana};
   TABLE.h = creePartie({graine, premier: graine % sieges.length, plafondTours: 60, journal: true, consigne: true, montre: true,
-    sieges: sieges.map((x, i) => ({...x, nom: sources[i].nom}))});
+    sieges: sieges.map((x, i) => ({...x, nom: sources[i].nom, ...mana[i]}))});
   TABLE.agents = sieges.map(() => ({humain: true}));
   sources.forEach((s, i) => {
     s.ia = agentIA(graine, i);
@@ -92,6 +111,17 @@ async function commenceTable() {
   Object.assign(TABLE, {phase: 'partie', role: 'hote', question: null, erreur: '', sel: null, journalVu: 0});
   if (typeof envoieDebut === 'function') envoieDebut();
   boucleTable();
+}
+
+/* La réponse d'un automate. Un siège confié à l'automate qui payait son mana à la main
+   revient d'abord au paiement automatique, par la réponse que le moteur offre pour cela :
+   l'automate n'engage aucune source, il ne lancerait plus rien. */
+function reponseAutomate(P, q, s) {
+  if (q.q === 'priorite' && P.joueurs[q.joueur].manuel) {
+    const i = q.options.findIndex(a => a.k === 'reglage');
+    if (i >= 0) return i;
+  }
+  return s.ia.repond(P, q);
 }
 
 /* La boucle d'aiguillage. Elle s'arrête quand un humain doit répondre, et
@@ -106,7 +136,7 @@ async function boucleTable() {
       const s = TABLE.sieges[q.joueur];
       if (q.q === 'voir') { await montrePile(q); continue; }
       let r;
-      if (s.mode === 'ia' || s.confie) r = valideReponse(q, s.ia.repond(TABLE.h.P, q));
+      if (s.mode === 'ia' || s.confie) r = valideReponse(q, reponseAutomate(TABLE.h.P, q, s));
       else if (q.q === 'priorite' && !doitDemander(TABLE.h.P, q.joueur, q, s.arrets)) r = q.options.length - 1;
       else { poseQuestion(q); return; }
       const avant = signePublic(TABLE.h.P), etape = TABLE.h.P.etape;

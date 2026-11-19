@@ -41,15 +41,17 @@ OPS.prolifere = function* (P, op, ctx) {
   });
   P.joueurs.forEach(J => { if (J.i !== ctx.ctrl && J.poison > 0) J.poison++; });
   P.ver++;
+  emet(P, {t: 'prolifere', joueur: ctx.ctrl});
 };
 OPS.pompe = function* (P, op, ctx) {
   const f = valeur(P, op.f, ctx), e = valeur(P, op.e, ctx);
   resous(P, op.a, ctx).filter(o => o.j == null && o.zone === 'champ').forEach(o => {
-    o.mods.push({f, e, mots: op.mots || 0, fin: 'tour'});
+    o.mods.push(op.impose ? {f, e, mots: op.mots || 0, doitEtreBloque: true, fin: 'tour'} : {f, e, mots: op.mots || 0, fin: 'tour'});
     P.ver++;
   });
 };
-OPS.mana = function* (P, op, ctx) { ajouteMana(P, ctx.ctrl, op.options[0]); };
+/* Plusieurs options : le joueur choisit (js/jeuManaManuel.js) ; un automate garde la première. */
+OPS.mana = function* (P, op, ctx) { ajouteMana(P, ctx.ctrl, yield* choisitManaOption(P, ctx.ctrl, op.options, ctx.source, 0)); };
 OPS.cherche = function* (P, op, ctx) {
   const j = op.qui ? joueursDe(P, op.qui, ctx)[0] : ctx.ctrl;
   if (j == null) return;
@@ -124,6 +126,8 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
     if (r === 1) { P.joueurs[ctrl].vie -= ent.payeVie; engage = false; }
   }
   const x = o.x || 0;
+  const avec = entreAvecPrevu(P, id);
+  if (avec.some(m => m.engage)) engage = true;
   const n = deplace(P, id, 'champ', {ctrl, engage});
   const no = obj(P, n);
   if (!no) return n;
@@ -132,6 +136,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (opts.face) no.def = opts.face;
   if (opts.faceCachee) { no.vraieDef = P.cartes[no.cid].def; no.faceCachee = true; no.def = defFaceCachee(no.vraieDef); }
   if (no.def.loyaute != null) no.marq.loyaute = no.def.loyaute;
+  if (no.def.defense != null) poseDefense(P, no);
   if (ent.marqueurs && (!ent.siKicke || opts.kicked)) no.marq[ent.genre === 'loyalty' ? 'loyaute' : ent.genre] = ent.marqueurs === 'X' ? x : ent.marqueurs;
   /* Une aura de joueur (js/forgeAuras.js) tient au joueur, pas à un objet. */
   if (opts.attache != null) { if (typeof opts.attache === 'object') no.attJoueur = opts.attache.j; else no.att = opts.attache; }
@@ -153,6 +158,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
     const vise = (!m.cond || !m.cond.ValidCard || forgeValideObjet(P, no, m.cond.ValidCard, no, ctrl, env, true)) && conditionEntree(P, m.cond, no, ctrl);
     if (vise && (!m.cond || conditionForge(P, m.cond, env))) { const k = forgeNombre(P, m.n, env); if (k > 0) poseMarqueurs(P, no, m.genre, k, no); }
   }
+  avec.filter(m => !m.engage).forEach(m => { const y = obj(P, n); if (y) poseMarqueurs(P, y, m.genre, m.n, y); });
   if (opts.marqueurs) Object.entries(opts.marqueurs).forEach(([g, k]) => { const y = obj(P, n); if (y) poseMarqueurs(P, y, g, k, y); });
   return n;
 }

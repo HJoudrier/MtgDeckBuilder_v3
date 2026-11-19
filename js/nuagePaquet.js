@@ -31,15 +31,17 @@ const NUAGE_PAQUET_V = 1;
    `snapshot()` les rend déjà en tableaux de paires. La collection y est seule
    depuis que les trois listes d'un deck vivent dans son dossier : les decks
    forment un étage à eux, fusionné dossier par dossier puis carte par carte
-   (`fusionneDecks()`, js/nuageFusion.js). */
-const NUAGE_QTES = ['collection'];
+   (`fusionneDecks()`, js/nuageFusion.js). Les acquisitions en cours — cartes
+   commandées, pas encore reçues — s'y fusionnent comme la collection : on
+   commande sur un PC, on reçoit devant l'autre. */
+const NUAGE_QTES = ['collection', 'enCours'];
 /* Ce qui ne vaut qu'une valeur, et se tranche en bloc. */
 const NUAGE_SCALAIRES = [];
 /* `achats` — comment on achète — voyage ; le plafond, lui, appartient au deck
-   et part avec son dossier. La bibliothèque d'adversaires et les
+   et part avec son dossier. Les
    comportements écrits à la main sont du fond, et voyagent aussi ; la
    configuration d'un lot de simulations, de la vue, reste là. */
-const NUAGE_OBJETS = ['custom', 'achats', 'adversaires', 'comportements'];
+const NUAGE_OBJETS = ['custom', 'achats', 'comportements'];
 const NUAGE_ENSEMBLES = [];
 /* Le deck ouvert ne voyage pas : c'est de la vue, comme l'onglet. Un
    vingt-sept pouces et un portable peuvent regarder deux decks différents. */
@@ -52,6 +54,7 @@ function nuagePaquet(appareil) {
   [...NUAGE_QTES, ...NUAGE_SCALAIRES, ...NUAGE_OBJETS, ...NUAGE_ENSEMBLES]
     .forEach(k => { fond[k] = s[k]; });
   fond.decks = s.decks;
+  fond.collectionDates = s.collectionDates;
   return {
     v: NUAGE_PAQUET_V,
     maj: Date.now(),

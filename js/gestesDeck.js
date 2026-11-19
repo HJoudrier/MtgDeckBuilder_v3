@@ -141,7 +141,7 @@ function gestesDeck(act, b) {
 
   if (act === 'ownIt') {
     const n = b.dataset.name;
-    S.collection.set(n, (S.collection.get(n) || 0) + 1);
+    ajouteACollection(n, 1);
     toast(`${n} : 1 exemplaire ajouté à la collection.`);
     recalculerAvecProgression(`${n} : un exemplaire de plus en collection, les suggestions en tiennent compte.`);
     return true;

@@ -22,8 +22,8 @@ function peutBloquer(P, b, a) {
   if (ca.mots & MOT.IMBLOCABLE) return false;
   /* Terreur, intimidation (js/forgeTraine.js) : seuls un artefact ou une
      créature noire — ou partageant une couleur — bloquent. */
-  if (a.def.params.peur && !estType(b, 'artifact') && !cb.couleurs.includes('B')) return false;
-  if (a.def.params.intimidation && !estType(b, 'artifact') && !cb.couleurs.some(k => ca.couleurs.includes(k))) return false;
+  if ((a.def.params.peur || a.mods.some(m => m.peur)) && !estType(b, 'artifact') && !cb.couleurs.includes('B')) return false;
+  if ((a.def.params.intimidation || a.mods.some(m => m.intimidation)) && !estType(b, 'artifact') && !cb.couleurs.some(k => ca.couleurs.includes(k))) return false;
   const passe = a.def.params.passage;
   if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
@@ -31,7 +31,7 @@ function peutBloquer(P, b, a) {
   /* Ombre, cavalerie, furtivité (js/forgeMotsClesB.js). */
   if (!!a.def.params.ombre !== !!b.def.params.ombre) return false;
   if (a.def.params.cavalerie && !b.def.params.cavalerie) return false;
-  if (a.def.params.furtif && cb.force > ca.force) return false;
+  if ((a.def.params.furtif || a.mods.some(m => m.furtif)) && cb.force > ca.force) return false;
   if ((ca.mots & MOT.PROTECTION) && protectionsDe(a).some(k => cb.couleurs.includes(k))) return false;
   if (protegeFiltre(P, a, b)) return false;
   /* Le porteur de l'Anneau (js/forgeEffetsG.js). */
@@ -47,6 +47,7 @@ function* declareAttaquants(P) {
   if (!cands.length) return 0;
   const defenseurs = adversaires(P, j).map(i => ({j: i}));
   P.champ.forEach(id => { const o = obj(P, id); if (o.ctrl !== j && estType(o, 'planeswalker')) defenseurs.push({pw: id}); });
+  bataillesAttaquables(P, j).forEach(id => defenseurs.push({pw: id}));
   const r = yield question(P, j, 'attaquants', cands, {min: 0, max: cands.length, multi: true, defaut: [], extra: {defenseurs}});
   const choisis = new Map();
   for (const paire of Array.isArray(r) ? r : []) {
@@ -68,7 +69,9 @@ function* declareAttaquants(P) {
     P.combat.attaquants.set(id, def);
     P.attaquantsTour = (P.attaquantsTour || 0) + 1;
     if (!aMot(P, o, MOT.VIGILANCE)) engageObjet(P, o, false, true);
-    emet(P, {t: 'attaque', id, defenseur: def});
+    /* Le rang de cette attaque pour ce permanent, ce tour (« attacks for the first time each turn »). */
+    const rang = o.attaquesTour && o.attaquesTour.tour === P.tour ? ++o.attaquesTour.n : ((o.attaquesTour = {tour: P.tour, n: 1}).n);
+    emet(P, {t: 'attaque', id, defenseur: def, rang});
   }
   const n = P.combat.attaquants.size;
   if (n) emet(P, {t: 'attaquants', joueur: j, ids: [...P.combat.attaquants.keys()], defs: [...P.combat.attaquants.values()]});

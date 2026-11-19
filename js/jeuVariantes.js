@@ -106,7 +106,7 @@ function variantesSort(P, j, o, depuis) {
     r.push({variante, mana, autre, def: def || null});
   };
   /* Lancée par un effet (js/forgeEffetsE.js) : gratuitement, ou à son coût. */
-  if (o.lanceEffet) { essaie(o.lanceEffet.gratuit ? 'gratuit' : 'permis', o.lanceEffet.gratuit ? coutManaVide() : coutSort(P, j, o, depuis, o.lanceEffet.mana), d.coutSup || null); return r; }
+  if (o.lanceEffet) { essaie(o.lanceEffet.gratuit ? 'gratuit' : 'permis', o.lanceEffet.gratuit ? coutManaVide() : coutSort(P, j, o, depuis, o.lanceEffet.mana), d.coutSup || null, o.lanceEffet.dos ? d.dos : null); return r; }
   /* Défaussée avec la folie, ou au bout de sa suspension : une seule façon. */
   /* Comploté, ou exilé par warp (js/forgeMotsClesC.js). */
   if (depuis === 'exil' && variantesExilLancement(P, j, o, essaie)) return r;
@@ -285,8 +285,9 @@ const CAP_CUMUL = {genre: 'declenchee', ecoutes: [{evt: 'cumul'}], texte: 'Entre
 
 OPS.cumul = function* (P, op, ctx) {
   const s = sourceCtx(P, ctx);
-  if (!s || s.lki || s.zone !== 'champ' || !(s.def.cumul || s.def.cumulAutre)) return;
+  if (!s || s.lki || s.zone !== 'champ' || !(s.def.cumul || s.def.cumulAutre || s.def.cumulFx)) return;
   s.marq.age = (s.marq.age || 0) + 1; P.ver++;
+  if (s.def.cumulFx) return yield* cumulEffet(P, ctx, s);
   if (s.def.cumulAutre) return yield* cumulAutre(P, ctx, s);
   let c = coutManaVide();
   for (let k = 0; k < s.marq.age; k++) c = sommeMana(c, s.def.cumul);

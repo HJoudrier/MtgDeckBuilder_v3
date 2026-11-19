@@ -11,7 +11,7 @@ function ouvreJournal(idLot, k) {
   if (!lot) return;
   const r = rejouePartie(lot, k);
   if (!r) {
-    toast('Rejeu indisponible : le deck, un adversaire, un comportement ou le moteur ont changé depuis ce lot.');
+    toast('Rejeu indisponible : un deck, un comportement ou le moteur ont changé depuis ce lot.');
     return;
   }
   const {P, places, noms} = r;

@@ -51,8 +51,11 @@ function reprendTable() {
   });
   const sieges = TABLE.sieges.map(s => ({...siegeDepuisFiches(s.nom, s.fiches.format, s.fiches.cartes, s.fiches.commandants, s.fiches.comportements), nom: s.nom}));
   /* Une partie rangée avant les questions « voir » se rejoue sans elles. */
-  TABLE.config = {graine: d.graine, premier: d.premier, montre: !!d.montre};
-  TABLE.h = creePartie({graine: d.graine, premier: d.premier, plafondTours: 60, journal: true, consigne: true, montre: !!d.montre, sieges});
+  /* Une partie rangée avant le paiement manuel n'en connaît aucun. */
+  const mana = d.mana || sieges.map(() => ({}));
+  TABLE.config = {graine: d.graine, premier: d.premier, montre: !!d.montre, mana: d.mana};
+  TABLE.h = creePartie({graine: d.graine, premier: d.premier, plafondTours: 60, journal: true, consigne: true, montre: !!d.montre,
+    sieges: sieges.map((x, i) => ({...x, ...mana[i]}))});
   TABLE.agents = sieges.map(() => ({humain: true}));
   avance(TABLE.h, TABLE.agents, Infinity, null);
   for (const r of d.reponses) {

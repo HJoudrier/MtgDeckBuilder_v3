@@ -63,7 +63,7 @@ function reglageInvite(c, t) {
 
 /* « Prêt » : les fiches du deck choisi, la réponse et son QR. */
 async function pret() {
-  const cle = S.decks[S.table.deck] ? S.table.deck : S.deckActif;
+  const cle = cleDeckDeMoi();
   TABLE.etapeInvite = 'reponse'; TABLE.reponse = null;
   renduTable();
   await chargeSimCartes();
@@ -118,10 +118,10 @@ function rejoindreHTML() {
     <input type="url" data-tsalon="lienOffre" class="tb-code" placeholder="https://…#rejoindre=…">
     <button type="button" class="btn sm" data-act="tLienOffre">Rejoindre</button></div></div>`;
   if (e === 'deck') {
-    const decks = clesDecks().map(k => [k, S.decks[k].nom + ' · ' + ((FORMATS[S.decks[k].format] || {}).label || '')]);
+    const decks = clesDecks().map(k => [k, S.decks[k].nom + (S.decks[k].externe ? ' (externe)' : '') + ' · ' + ((FORMATS[S.decks[k].format] || {}).label || '')]);
     return `<div class="tb-salon">${tete}<div class="sim-bloc">
       <label class="sim-champ">Votre nom <input type="text" data-tsalon="inviteNom" value="${esc(S.table.nom || '')}" placeholder="Votre prénom"></label>
-      <label class="sim-champ">Votre deck <select data-tsalon="inviteDeck">${optionsHTML(decks, S.decks[S.table.deck] ? S.table.deck : S.deckActif)}</select></label>
+      <label class="sim-champ">Votre deck <select data-tsalon="inviteDeck">${optionsHTML(decks, cleDeckDeMoi())}</select></label>
       <div class="row"><button type="button" class="btn pri" data-act="tPret">Prêt</button>
         <span class="small muted">Votre deck part chez l'hôte, cartes comprises : il n'a pas besoin de les connaître.</span></div></div></div>`;
   }

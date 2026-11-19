@@ -10,7 +10,7 @@
    jour ne retélécharge que les fichiers dont l'empreinte a changé, et un
    téléchargement interrompu reprend où il en était.
 
-   Les cartes de vos decks et de vos adversaires passent d'abord : on peut
+   Les cartes de vos decks passent d'abord : on peut
    jouer avec elles bien avant que les trente-quatre mille soient là.
    ===================================================================== */
 
@@ -94,11 +94,10 @@ async function listeForge() {
   return {commit: c.sha, date: Date.parse(c.commit && c.commit.committer && c.commit.committer.date) || Date.now(), liste};
 }
 
-/* Les noms des cartes de vos decks et de vos adversaires. */
+/* Les noms des cartes de vos decks. */
 function nomsPrioritaires() {
   const n = new Set();
   Object.values(S.decks).forEach(d => { d.deck.forEach((_, k) => n.add(k)); if (d.commander) n.add(d.commander); });
-  Object.values(S.adversaires).forEach(a => { a.liste.forEach(([k]) => n.add(k)); a.commandants.forEach(k => n.add(k)); });
   return [...n];
 }
 

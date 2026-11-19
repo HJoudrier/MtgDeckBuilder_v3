@@ -51,7 +51,7 @@ function appliqueSBA(P) {
      suit juge les permanents tels qu'elles les font. */
   if (couchesStatiques(P)) change = true;
   if (couchesHorsChamp(P)) change = true;
-  const auCimetiere = new Set(), detruits = new Set(), legendes = new Map();
+  const vaincus = new Set(), auCimetiere = new Set(), detruits = new Set(), legendes = new Map();
   for (const id of P.champ) {
     const o = obj(P, id), c = car(P, o);
     if (estCreature(o)) {
@@ -59,6 +59,7 @@ function appliqueSBA(P) {
       else if ((o.bless >= c.endurance || (o.toucheMortel && o.bless > 0)) && !(c.mots & MOT.INDESTRUCTIBLE)) detruits.add(id);
     }
     if (estType(o, 'planeswalker') && (o.marq.loyaute || 0) <= 0) auCimetiere.add(id);
+    if (estType(o, 'battle') && o.marq.defense != null && o.marq.defense <= 0) vaincus.add(id);
     if (o.def.aura) { if (auraOrpheline(P, o)) auCimetiere.add(id); }
     else if (o.att != null) {
       const h = obj(P, o.att);
@@ -76,6 +77,7 @@ function appliqueSBA(P) {
     }
   }
   sagasFinies(P).forEach(id => auCimetiere.add(id));
+  vaincus.forEach(id => { if (vaincBataille(P, id)) change = true; });
   for (const id of auCimetiere) {
     if (obj(P, id) && obj(P, id).zone === 'champ') { deplace(P, id, 'cimetiere'); change = true; }
   }

@@ -116,6 +116,7 @@ function infligeUnePart(P, src, cible, n, combat) {
     if ((car(P, o).mots & MOT.PROTECTION) && protectionsDe(o).some(k => cs.couleurs.includes(k))) return 0;
     if (protegeFiltre(P, o, src)) return 0;
     if (estType(o, 'planeswalker') && !estCreature(o)) { o.marq.loyaute = (o.marq.loyaute || 0) - n; P.ver++; }
+    else if (estType(o, 'battle') && !estCreature(o)) { o.marq.defense = Math.max(0, (o.marq.defense || 0) - n); P.ver++; }
     else if ((mots & MOT.INFECTION) || (src.def && src.def.params && src.def.params.fletri)) poseMarqueurs(P, o, '-1/-1', n, src);
     else { o.bless += n; if (mots & MOT.CONTACT) o.toucheMortel = true; }
     emet(P, {t: 'degatsObjet', source: src.id, id: o.id, n, combat, ctrl});
@@ -159,7 +160,7 @@ OPS.meule = function* (P, op, ctx) {
   const n = valeur(P, op.n, ctx);
   for (const j of joueursDe(P, op.qui, ctx)) {
     const B = P.joueurs[j].bibliotheque;
-    for (let k = 0; k < n && B.length; k++) deplace(P, B[B.length - 1], 'cimetiere');
+    for (let k = 0; k < n && B.length; k++) deplace(P, B[B.length - 1], 'cimetiere', {meule: true});
   }
 };
 OPS.defausse = function* (P, op, ctx) {

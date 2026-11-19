@@ -216,6 +216,10 @@ function declenchementsEnPlus(P, s, cap, e) {
     if (t.ValidMode && !t.ValidMode.split(',').some(m => modes.has(m.trim()) || (m.trim() === 'ChangesZoneAll' && modes.has('ChangesZone')))) continue;
     if ((t.Destination && !zoneOuRien(t.Destination, mv.vers)) || (t.Origin && !zoneOuRien(t.Origin, mv.de))) continue;
     if (t.ValidCause && !objetOuRien(P, mv.o, t.ValidCause, src, env)) continue;
+    /* « If you casting … » / « if you gaining life » : le joueur de l'évènement. */
+    const qui = e.joueur != null ? e.joueur : e.ctrl;
+    if ((t.ValidActivator && !(qui != null && forgeValideJoueur(P, qui, t.ValidActivator, src.ctrl, env))) ||
+        (t.ValidPlayer && !(qui != null && forgeValideJoueur(P, qui, t.ValidPlayer, src.ctrl, env)))) continue;
     if (conditionForge(P, t, env)) n++;
   }
   return n;

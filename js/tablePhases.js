@@ -39,7 +39,9 @@ function phasesHTML(v) {
 /* La ligne du haut : le tour, le joueur actif, et qui a la priorité. */
 function etapeHTML(v) {
   const actif = v.joueurs[v.actif], nom = j => j === v.moi ? 'vous' : esc(v.joueurs[j].nom);
-  const prio = v.resout ? '<span class="tr-prio">résolution…</span>' : v.prio != null ? `<span class="tr-prio${v.prio === v.moi ? ' moi' : ''}">priorité : ${nom(v.prio)}</span>`
+  const sommet = v.pile.length ? v.pile[v.pile.length - 1].nom : '';
+  const prio = v.resout ? `<span class="tr-prio">résolution${sommet ? ' : ' + esc(sommet) : '…'}</span>`
+    : v.resolvant ? `<span class="tr-prio">résolution : ${esc(v.resolvant.nom)}</span>` : v.prio != null ? `<span class="tr-prio${v.prio === v.moi ? ' moi' : ''}">priorité : ${nom(v.prio)}</span>`
     : v.attend != null && v.attend !== v.moi ? `<span class="tr-prio">${esc(v.joueurs[v.attend].nom)} décide</span>` : '';
   return `<span class="tr-tour">Tour ${v.tour}</span> <span class="tr-actif">${actif.i === v.moi ? 'votre tour' : esc(actif.nom)}</span> ${prio}`;
 }

@@ -17,7 +17,7 @@ const FORGE_TYPES_CARTE = {Creature: 'creature', Artifact: 'artifact', Enchantme
   Planeswalker: 'planeswalker', Instant: 'instant', Sorcery: 'sorcery', Battle: 'battle', Kindred: 'kindred', Tribal: 'kindred'};
 const FORGE_COULEURS = {White: 'W', Blue: 'U', Black: 'B', Red: 'R', Green: 'G'};
 const FORGE_SUPERS = {Legendary: 'legendary', Basic: 'basic', Snow: 'snow'};
-const FORGE_TETES_JOUEUR = new Set(['Player', 'Opponent', 'You']);
+const FORGE_TETES_JOUEUR = new Set(['Player', 'Opponent', 'You', 'OppNonTriggeredTarget']);
 const FORGE_FILTRES = new Map();
 
 /* Les sous-types qui ne sont pas des types de créature : un changelin ne
@@ -77,7 +77,7 @@ const FORGE_PAS_SOUSTYPES = new Set(['Enchanted', 'Equipped', 'Historic', 'Modif
   'Attached', 'Remembered', 'Imprinted', 'Chosen', 'Token', 'Creatures', 'Permanents', 'Cards']);
 
 function sousTypeProbable(p) {
-  return /^[A-Z][a-z]+$/.test(p) && !FORGE_PAS_SOUSTYPES.has(p) && FORGE_TYPES_CARTE[p] == null && FORGE_COULEURS[p] == null &&
+  return /^[A-Z][a-z]+(?:'s)?$/.test(p) && !FORGE_PAS_SOUSTYPES.has(p) && FORGE_TYPES_CARTE[p] == null && FORGE_COULEURS[p] == null &&
     FORGE_SUPERS[p] == null && !FORGE_PROPS.includes(p);
 }
 
@@ -87,6 +87,9 @@ function familleProp(p) {
   if (/^non/.test(p) && sousTypeProbable(p.slice(3))) return 'nonSoustype';
   const m = /^(power|toughness|cmc)(GE|LE|GT|LT|EQ|NE)/.exec(p);
   if (m) return m[1] + 'XX';
+  const b = /^(basePower|baseToughness)(GE|LE|GT|LT|EQ|NE)/.exec(p);
+  if (b) return b[1] + 'XX';
+  if (/^totalPT_(GE|LE|GT|LT|EQ|NE)\d+$/.test(p)) return 'totalPT_XX';
   if (/^counters_/.test(p)) return 'counters';
   if (/^with(out)?/.test(p)) return p;
   if (/^named/.test(p)) return 'named';
@@ -96,7 +99,7 @@ function familleProp(p) {
 }
 
 function teteConnue(t) {
-  return t === 'Card' || t === 'Permanent' || t === 'Spell' || t === 'SpellAbility' || t === 'Any' || FORGE_TETES_JOUEUR.has(t) ||
+  return t === 'Card' || t === 'TargetedCard' || t === 'Permanent' || t === 'Spell' || t === 'SpellAbility' || t === 'Any' || FORGE_TETES_JOUEUR.has(t) ||
     FORGE_TYPES_CARTE[t] != null || sousTypeProbable(t);
 }
 
@@ -148,7 +151,7 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     case 'equipped': return !!P && P.champ.some(id => { const a = obj(P, id); return a.att === o.id && !a.def.aura; });
     case 'Historic': return c.types.includes('artifact') || (c.supers || []).includes('legendary') || (c.sousTypes || []).includes('saga');
     case 'ChosenColor': { const k = P && src && choixDe(P, src).couleur; return !!k && c.couleurs.includes(k); }
-    case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || !!c.changelin); }
+    case 'ChosenType': { const k = P && src && choixDe(P, src).type; return !!k && ((c.sousTypes || []).includes(k) || (c.types || []).includes(k) || !!c.changelin); }
     /* Sans type choisi, tout passe : le choix précède toujours la lecture du filtre. */
     case 'IsNotChosenType': { const k = P && src && choixDe(P, src).type; return !k || !((c.sousTypes || []).includes(k) || !!c.changelin); }
     case 'IsRenowned': return !!o.renomme;
@@ -259,7 +262,13 @@ function forgeValideObjet(P, o, valid, src, ctrl, env, base) {
   if (!o) return false;
   base = base || !!(env && env.base);
   const c = o.lki ? o : P && !base ? caracsJugees(P, o, false) : caracsJugees(P, o, true);
-  return forgeFiltre(valid).some(a => !a.joueur && teteObjet(a.tete, c, o) && a.props.every(p => propObjet(P, o, c, p, src, ctrl, env)));
+  return forgeFiltre(valid).some(a => !a.joueur && (a.tete === 'TargetedCard' ? ciblesObjets(P, env).some(id => id === o.id || (P && suit(P, id) === o.id)) : teteObjet(a.tete, c, o)) &&
+    a.props.every(p => propObjet(P, o, c, p, a.tete === 'TargetedCard' ? o : src, ctrl, env)));
+}
+
+/* Les objets que la capacité en cours a ciblés (`TargetedCard.Self`, Maelstrom Pulse). */
+function ciblesObjets(P, env) {
+  return env && env.ctx ? [].concat(...(env.ctx.cibles || [])).filter(x => typeof x === 'number') : [];
 }
 
 /* Un joueur répond-il à un filtre Forge ? */
@@ -269,6 +278,8 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
     if (!a.joueur && a.tete !== 'Any') return false;
     if (a.tete === 'Opponent' && j === ctrl) return false;
     if (a.tete === 'You' && j !== ctrl) return false;
+    /* « Each other opponent » : ni vous, ni le joueur que le déclencheur vise. */
+    if (a.tete === 'OppNonTriggeredTarget' && (j === ctrl || (env && env.ctx && env.ctx.evt && env.ctx.evt.joueur === j))) return false;
     return a.props.every(p => {
       switch (p) {
         case 'Opponent': return j !== ctrl;
@@ -281,7 +292,8 @@ function forgeValideJoueur(P, j, valid, ctrl, env) {
         case 'EnchantedBy': return !!(env && env.src && env.src.attJoueur === j);
         case 'EnchantedController': { const h = env && env.src && env.src.att != null ? obj(P, env.src.att) : null; return !!h && h.ctrl === j; }
       }
-      return false;
+      /* Les propriétés de joueur de plus (js/forgeFiltresD.js). */
+      return typeof proprieteJoueurEtendue === 'function' && proprieteJoueurEtendue(P, j, p, ctrl, env);
     });
   });
 }

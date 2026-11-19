@@ -149,12 +149,12 @@ forgeEffet('SetLife', ['LifeAmount'], function* (P, t, env) {
 /* Goad : jusqu'au prochain tour de qui l'a incitée, la créature attaque à
    chaque combat, et un autre joueur que lui si elle le peut. */
 forgeEffet('Goad', ['Duration'], function* (P, t, env) {
-  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.goad = {par: env.ctrl, tour: P.tour}; P.ver++; });
-}, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration || t.Duration === 'UntilYourNextTurn'});
+  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.goad = {par: env.ctrl, tour: P.tour, permanent: t.Duration === 'Permanent'}; P.ver++; });
+}, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration || /^(UntilYourNextTurn|Permanent)$/.test(t.Duration)});
 /* Ce que la protection gagnée sait lire : des couleurs, nommées ou au
    choix ; pas encore « protection from artifacts ». */
 function gainsProtection(t) { return /^(Choice|ChosenColor)$/.test(t.Gains || '') || String(t.Gains || '').split(',').every(c => FORGE_COULEURS[majuscule(c.trim())]); }
-function goadActif(P, o) { return !!o.goad && !(P.actif === o.goad.par && P.tour > o.goad.tour); }
+function goadActif(P, o) { return !!o.goad && (o.goad.permanent || !(P.actif === o.goad.par && P.tour > o.goad.tour)); }
 
 /* Les couleurs d'une protection gagnée : nommées (`Gains$ Red,Blue`), ou
    une au choix — l'IA prend celle que l'adversaire joue le plus. */
@@ -272,8 +272,11 @@ forgeEffet('RingTemptsYou', [], function* (P, t, env) {
   if (!l.length) return;
   const pref = l.map(o => o.id).sort((a, b) => car(P, obj(P, b)).force - car(P, obj(P, a)).force)[0];
   const pris = yield* choisitCartes(P, env.ctrl, l.map(o => o.id), 1, 'Porteur de l’Anneau', 'cartes', 1);
-  obj(P, pris[0] != null ? pris[0] : pref).porteAnneau = true;
+  const porteur = pris[0] != null ? pris[0] : pref;
+  obj(P, porteur).porteAnneau = true;
   P.ver++;
+  poseNiveauAnneau(P, env.ctrl, J.anneau);
+  emet(P, {t: 'anneau', joueur: env.ctrl, id: porteur});
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
 /* Un donjon simplifié : quatre salles — regard (scry 1), saignée (chaque

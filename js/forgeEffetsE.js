@@ -51,7 +51,7 @@ forgeEffet('PeekAndReveal', ['PeekAmount', 'RevealValid', 'RevealOptional', 'Rem
 /* Révéler jusqu'à trouver : les trouvées vont où `FoundDestination$` le
    dit, les autres où `RevealedDestination$` le dit. */
 forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestination', 'RevealedLibraryPosition', 'FoundLibraryPosition',
-  'RememberFound', 'RememberRevealed', 'Shuffle', 'RevealRandomOrder', 'MinTotalCMC'], function* (P, t, env) {
+  'RememberFound', 'RememberRevealed', 'Shuffle', 'RevealRandomOrder', 'MinTotalCMC', 'Tapped', 'GainControl'], function* (P, t, env) {
   for (const j of joueursForge(P, t, env)) {
     const B = P.joueurs[j].bibliotheque, voulu = forgeNombre(P, t.Amount || 1, env), trouves = [], reveles = [];
     /* « Until you exile cards with total mana value N or greater » : on s'arrête
@@ -70,7 +70,7 @@ forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestinat
        retient avec elles (Treasure Hunt, Balustrade Spy, Sanar). */
     const rd = zoneForge(t.RevealedDestination) || 'cimetiere', fd = zoneForge(t.FoundDestination) || rd;
     for (const id of trouves) {
-      const n = fd === 'bibliotheque' ? id : yield* deplaceForge(P, obj(P, id), fd, env, {});
+      const n = fd === 'bibliotheque' ? id : yield* deplaceForge(P, obj(P, id), fd, env, {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null});
       if (n != null && (t.RememberFound === 'True' || (t.RememberRevealed === 'True' && (!t.FoundDestination || seuil != null)))) retiensForge(env.ctx, n);
     }
     for (const id of reveles) {
@@ -107,7 +107,9 @@ forgeEffet('Play', ['Valid', 'ValidZone', 'ValidSA', 'Amount', 'Controller', 'Wi
   if (j == null) return;
   let l = t.Valid ? [].concat(...String(t.ValidZone || 'Hand').split(',').map(z => objetsZone(P, ZONES_FORGE[z.trim()] || 'main')))
     .filter(o => forgeValideObjet(P, o, t.Valid, env.src, env.ctrl, env)) : objetsForge(P, t, env, 'Targeted');
-  if (t.ValidSA && /^Spell\./.test(t.ValidSA)) l = l.filter(o => forgeValideDef(o.def, 'Card.' + t.ValidSA.slice(6), env.ctrl, j, o.id));
+  /* Les seuils écrits en SVar (`cmcLEX`, X = les blessures infligées) ne se lisent
+     qu'avec le contexte de la résolution : sans lui, X valait 0 et rien ne passait. */
+  if (t.ValidSA && /^Spell\./.test(t.ValidSA)) l = l.filter(o => forgeValideObjet(P, o, 'Card.' + t.ValidSA.slice(6), env.src, env.ctrl, env));
   /* « You may cast that card » : un sort, jamais un terrain (Chandra, Torch of Defiance). */
   if (t.ValidSA && /^Spell\b/.test(t.ValidSA)) l = l.filter(o => !estType(o, 'land'));
   const n = t.Amount === 'All' ? l.length : forgeNombre(P, t.Amount || 1, env);

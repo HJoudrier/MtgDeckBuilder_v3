@@ -150,6 +150,12 @@ function motCleForge(def, k, face, jetons) {
     /* L'entretien cumulatif : du mana, ou des points de vie, un sacrifice
        (`PayLife<1>:Pay 1 life.`), payés une fois par marqueur d'âge. */
     case 'Cumulative upkeep': {
+      /* Un adversaire gagne de la vie, ou on ajoute du mana : un coût qui ne se refuse jamais, jugé dans `OPS.cumul`. */
+      const sp = reste.length >= 1 && reste.length <= 2 ? /^(GainLife|AddMana)<(\d+)\/(Player\.Opponent|[WUBRG])>$/.exec(reste[0]) : null;
+      if (sp && (sp[1] === 'GainLife') === (sp[3] === 'Player.Opponent')) {
+        def.cumulFx = {genre: sp[1] === 'GainLife' ? 'viePourAdv' : 'mana', n: +sp[2], couleur: sp[3]};
+        def.capacites.push(CAP_CUMUL); return true;
+      }
       const c = reste.length >= 1 && reste.length <= 2 ? coutForge(reste[0]) : null, autre = c && autresCout(c.cout);
       if (!c || (autre && (c.cout.mana.total || Object.keys(autre).some(k => !/^(vie|sac)$/.test(k))))) return false;
       if (autre) def.cumulAutre = autre; else def.cumul = c.cout.mana;

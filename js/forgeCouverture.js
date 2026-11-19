@@ -64,14 +64,23 @@ function morceauxCout(cout) {
 }
 
 /* Les expressions d'une valeur de SVar : `Count$Valid Creature.YouCtrl` →
-   `expr:Count$Valid`. */
-function expressionsDe(v) {
+   `expr:Count$Valid`, et les propriétés de son filtre (`filtre:YouCtrl`) : un
+   filtre mal lu dans un compte rend la carte fausse sans qu'on le voie.
+   `Count$Compare X EQ0.1.0` suit la SVar `X`. */
+function expressionsDe(v, face, vus) {
   const s = String(v || '').trim();
   const m = /^([A-Za-z]+)\$([A-Za-z]+)/.exec(s);
   if (!m) return [];
   const r = ['expr:' + m[1] + '$' + m[2]];
   const agg = /^Count\$Valid\w* [^$]+\$(\w+)/.exec(s);
   if (agg) r.push('expr:$' + agg[1]);
+  const f = /^Count\$Valid\w* ([^$\s/]+)/.exec(s);
+  if (f && typeof famillesFiltre === 'function') r.push(...famillesFiltre(f[1]));
+  const c = /^Count\$Compare (\w+) /.exec(s);
+  if (c && face && face.svars[c[1]] != null && !(vus && vus.has('c:' + c[1]))) {
+    if (vus) vus.add('c:' + c[1]);
+    r.push(...expressionsDe(face.svars[c[1]], face, vus));
+  }
   return r;
 }
 
@@ -100,11 +109,11 @@ function elementsTable(face, t, genre, out, vus) {
     const val = String(t[k]);
     if (/^[A-Z][A-Za-z0-9]*$/.test(val) && face.svars[val] != null && !vus.has(val)) {
       vus.add(val);
-      expressionsDe(face.svars[val]).forEach(e => out.add(e));
+      expressionsDe(face.svars[val], face, vus).forEach(e => out.add(e));
     }
     /* Une expression écrite en place (`ConditionCheckSVar$ Count$Presence_Dragon.1.0`)
        compte comme celle d'une SVar. */
-    else if (/^[A-Za-z]+\$[A-Za-z]/.test(val) && !FORGE_DESCRIPTIFS.test(k)) expressionsDe(val).forEach(e => out.add(e));
+    else if (/^[A-Za-z]+\$[A-Za-z]/.test(val) && !FORGE_DESCRIPTIFS.test(k)) expressionsDe(val, face, vus).forEach(e => out.add(e));
   });
   out.delete('x');
   return out;

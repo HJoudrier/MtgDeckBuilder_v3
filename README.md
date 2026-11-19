@@ -61,6 +61,7 @@ js/                 modules, chargés dans cet ordre :
   jeuCibles.js      juger un objet contre un descripteur
   jeuMana.js        la réserve, et le paiement automatique
   jeuManaFiltres.js le mana qui coûte du mana : terrains-filtres, Cabal Coffers, Grinning Ignus — un complément du solveur de paiement
+  jeuManaManuel.js  le paiement manuel : engager ses sources soi-même, et choisir la couleur d'un effet de mana
   jeuOpsA.js        exécuter les opérations : références, dégâts, vie, cartes, retraits
   jeuOpsB.js        jetons, marqueurs, pompes, recherches ; l'enchaînement
   jeuDeclencheurs.js  des évènements aux capacités déclenchées
@@ -85,6 +86,7 @@ js/                 modules, chargés dans cet ordre :
   jeuPilote.js      dérouler une partie, question après question
   jeuCopie.js       copier une partie et la reprendre : la copie partage les définitions, la reprise repart d'un point sûr
   jeuVue.js         ce qu'un joueur voit de la partie, et une question lisible par un humain
+  jeuPileExplique.js  décrire un élément de pile, et garder celui qu'on résout pour que les questions s'y rapportent
   jeuArrets.js      quand demander à un joueur humain
   forgeValide.js    le langage de filtres de Forge (`Creature.OppCtrl+powerLE2`)
   forgeDescripteurs.js  ce qu'un filtre devient pour le moteur : emplacement de cible, genre de marqueur, zone
@@ -127,6 +129,29 @@ js/                 modules, chargés dans cet ordre :
   forgeMotsClesF.js les mots-clés, III : Afflict, Dethrone, Ravenous, Web-slinging, Freerunning, Harmonize, Impending, Soulbond, harness
   forgeManaC.js     le mana qui porte quelque chose : un mot-clé au sort qu'il paie, « when you spend this mana », le remplacement optionnel
   forgeParadigme.js Paradigm : exilé à la première résolution, une copie gratuite au début de chaque première principale
+  forgeProtections.js  se protéger : de tout (un joueur), de chaque couleur, d'une couleur au ciblage ; une vie qui ne change plus
+  forgeHideaway.js  Hideaway : cacher une carte du dessus, la jouer plus tard
+  forgeDeclencheursD.js  des déclencheurs de plus : jeton créé, première pioche de l'étape, « one or more », cartes meulées, l'Anneau
+  forgeZonesC.js    chercher, creuser, déplacer : valeur de mana totale, engagé, attaquant, manifester chez qui l'on dit
+  forgeExprC.js     des quantités de plus : lancée depuis l'exil, phase principale, métalcraft, nombre de couleurs, marqueurs par genre
+  forgeChoixC.js    choisir, défausser, répéter, sacrifier : listes de types, « unless you discard », chacun son tour, force totale
+  forgeDeclencheursE.js  des paramètres de déclencheur de plus : première phase de combat, conditions Threshold/Metalcraft/Blessing, sort lancé, zones exclues
+  forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
+  forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
+  forgeEffetsL.js   des effets et conditions de plus : finir le tour, excès de dégâts, jeton bloquant, restrictions de moment
+  forgeCopiesB.js   ce que la copie reçoit de plus : couleurs, types ôtés, mot-clé du tour, entrée engagée
+  forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
+  forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
+  forgeBatailles.js   les batailles : défense, protecteur, vaincre, lancer la face arrière
+  forgeEffetsJ.js   des effets durables : un nombre retenu par l'effet (SetChosenNumber)
+  forgeMarqueursC.js  marqueurs et dés : retenir l'armée, N fois, par objet désigné, au plus N, pairs et impairs
+  forgeMotsClesG.js les mots-clés, IV : évasions du tour, prévention, Training, Undaunted, Gravestorm, règles de deck sans effet en jeu
+  forgeStatiquesC.js  des statiques refusées : hexproof contre un genre de sources, jouer d'en haut sous condition, ne plus piocher
+  forgeDefiniC.js   ce que Defined$ désigne encore : défenseur adversaire, sacrifié, joueurs par propriétés, bibliothèque, pile
+  forgeExprD.js     des quantités sur les joueurs : vie perdue ce tour, groupes de joueurs, combien en ont la propriété
+  forgeFiltresD.js  des propriétés de filtre, II : choisi, retenu, visé, cmc pair, force égale à l'endurance, plus de terrains que vous
+  forgeCoutsC.js    ce que les statiques font au coût de jouer : vie pour mana, autre coût accordé, capacités moins chères, flash
+  forgeFiltresC.js  des propriétés de filtre de plus : type de terrain de base, coût {0} ou {1}, nom déjà pris, type partagé avec le commandant
   forgeDesignes.js  désigner et filtrer : NotDefinedTargeted, désignations pointées, choisir parmi des désignés, la force du sort qui déclenche
   forgeAlias.js     ce que Forge a tiré de Pump : TargetOnly, Bookkeeping, EndOfTurn, Nothing — chargé après tous les forge*.js
   forgeActivations.js  la mise sous tension (PowerUp), lancer une copie pour un autre coût, le mana venu de créatures, Count$YourTurns
@@ -155,6 +180,7 @@ js/                 modules, chargés dans cet ordre :
   scryfall.js       la file d'attente vers Scryfall
   recherches.js     les recherches nommées chez Scryfall
   decksStockage.js  les dossiers de deck, rangés et relus
+  simSources.js     ce qui s'assoit à un siège de la simulation : un deck de l'atelier, externe ou non
   stockage.js       la sauvegarde locale
   fenSauvegarde.js  les sections « Sauvegarde » et « Catalogue »
   idb.js            le magasin IndexedDB
@@ -175,6 +201,8 @@ js/                 modules, chargés dans cet ordre :
   — les sections —
   decksSection.js   la section « Mes decks »
   wishlistSection.js la section « Liste d'achats »
+  simCollection.js  la couverture de la collection : part entièrement comprise, listes des partielles et injouables
+  acquisitionSection.js la section « Acquisition en cours » : commandé, pas encore reçu
   graphe.js         graphe des capacités
   stats.js          statistiques
   notation.js       la note d'une carte candidate
@@ -186,7 +214,8 @@ js/                 modules, chargés dans cet ordre :
   sugEdhrec.js      la section EDHREC : ce que les decks recensés recommandent
   sugCatalogue.js   la section du catalogue : tout le classement
   suggestions.js    les trois sections des propositions
-  collection.js     la section Collection
+  collection.js     la section Collection, et la suppression d'une carte
+  collectionDates.js  les dates d'ajout des cartes de la collection
   fenImport.js      importer une liste de cartes
   fenAjout.js       ajouter une carte à la main (les deux listes annexes)
   rechercheSection.js  le champ de recherche d'une section, et ses propositions
@@ -197,10 +226,8 @@ js/                 modules, chargés dans cet ordre :
   ficheVisuel.js    le visuel de la fiche, et ses éditions
   fiche.js          la fiche détaillée d'une carte
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
-  simCartes.js      d'un nom de carte à sa fiche de jeu, adversaires compris
-  simAdversaires.js la bibliothèque d'adversaires
-  decksLies.js      les adversaires qui suivent un deck Moxfield ou Archidekt
-  simPreparation.js d'un deck ou d'un adversaire à un siège de table
+  simCartes.js      d'un nom de carte à sa fiche de jeu, cartes des decks externes comprises
+  simPreparation.js d'un deck à un siège de table
   simStats.js       ce qu'on retient d'une partie, et d'un lot
   simStockage.js    les résultats des lots, gardés et comparés
   simulation.js     un lot de parties, par tranches
@@ -236,19 +263,19 @@ js/                 modules, chargés dans cet ordre :
   fenListes.js      listes déroulantes des archétypes et des éditions
   boiteCatalogue.js progression du chargement de l'archive Scryfall
   fenExport.js      export du deck, liste d'achats, effacement
-  fenAdversaire.js  ajouter ou modifier un adversaire
   fenComportement.js  décrire à la main ce que fait une carte
   fenJournal.js     revoir une partie d'un lot
 
   — les gestes —
   gestesDecks.js    créer, ouvrir, configurer, dupliquer, supprimer un deck
+  gestesAcquisition.js commander, recevoir, annuler une acquisition
   gestesVue.js      fermer, cocher une couleur, changer d'onglet
   gestesReglages.js « Appliquer » des fenêtres de réglage, jauges, pagination
   gestesDeck.js     monter, démonter, garer, ouvrir une fiche
   gestesDonnees.js  sauvegarde, archive, EDHREC, import
   gestesNuage.js    connecter, synchroniser, déconnecter
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
-  gestesSimulation.js  lancer un lot, gérer les adversaires, revoir une partie
+  gestesSimulation.js  lancer un lot, décrire une carte, revoir une partie
 
   — la table interactive et sa liaison —
   qrCorps.js        le corps fini du QR code, et Reed–Solomon
@@ -282,18 +309,18 @@ js/                 modules, chargés dans cet ordre :
   app.js            l'aiguillage et le démarrage
 ```
 
-Les dix sections de la page se répartissent en sept onglets, rangés dans une barre fixe au bas de la
+Les dix sections de la page se répartissent en huit onglets, rangés dans une barre fixe au bas de la
 fenêtre — l'en-tête, seul en haut, reste collant, et rien d'autre ne se superpose au contenu. Sa
 hauteur est une constante CSS (`--h-barre`), dont le bas de la page et le toast tiennent compte.
-Sur un téléphone les sept onglets ne tiennent pas : la barre défile latéralement, alignée au début
+Sur un téléphone les huit onglets ne tiennent pas : la barre défile latéralement, alignée au début
 (`justify-content:center` sur un contenu qui déborde coupe la gauche, hors de portée du défilement) et
-`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks puis la liste d'achats commune,
+`renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks, **Wishlist** l'acquisition en cours puis la liste d'achats commune,
 **Collection** porte les statistiques puis la collection, **Deck** porte le
 deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
 recommandent — groupées et triées à part, avec deux tris qui n'existent que là : le taux
 d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé,
-**Simulation** fait jouer le deck contre des adversaires automatiques (plus bas). La table
+**Simulation** fait jouer le deck contre d'autres decks de l'atelier, menés par des joueurs automatiques (plus bas). La table
 `ONGLETS` (`js/etat.js`) est la seule à les répartir ; l'onglet ouvert tient dans `S.onglet` et se
 conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est traduit par
 `ONGLETS_ANCIENS`. Les sections sont rendues à chaque fois, celles qu'on ne
@@ -403,6 +430,24 @@ propre au deck et vivent dans son dossier (`S.budget`) ; l'état, la langue, le 
 pays disent *comment* on achète, valent pour tous les decks, et vivent dans `S.achats`. La même
 fenêtre règle les deux, sous deux titres.
 
+**Un deck est à soi, ou externe** (`d.externe`, `js/decks.js`). Un deck de tournoi, celui d'un ami, une liste
+trouvée en ligne : on veut l'étudier, y ajouter des cartes, le jouer, sans que ce soit un deck qu'on construit.
+La page « Decks » le range dans sa propre section, « Decks externes » (`renderM()`, `js/decksSection.js`), et
+chaque vignette porte la bascule — « Marquer externe » / « C'est le mien » —, que la fenêtre de configuration
+répète en case à cocher. C'est un **drapeau du dossier**, pas un type : un deck externe s'ouvre, se complète,
+s'exporte, se duplique et se configure exactement comme un autre ; il voyage avec la synchronisation
+(`DECK_CHAMPS_SIMPLES`, `js/nuageFusion.js`) et se range avec lui. **Une seule chose change : la liste
+d'achats.** Un deck externe ne demande rien (`demandesTousDecks()`, `js/achats.js`) — on ne l'a pas monté, on ne
+compte pas l'acheter —, son budget n'entre pas dans les plafonds, et sa vignette dit combien de ses cartes sont
+hors de la collection, non combien il y a à acheter. Le basculer d'un côté à l'autre rend ou retire sa demande à
+la liste, sans autre geste.
+
+**N'importe quel deck à n'importe quel siège** (`js/simSources.js`). Les sièges de la simulation se remplissent
+d'un deck de l'atelier, le sien comme un externe, par une source `d:<clé>`. Le deck testé reste un deck, du tout
+premier au dernier. Au salon de jeu, l'hôte s'assoit lui aussi avec n'importe quel deck (`sourceDeMoi()`,
+`js/tableSalon.js`), de même que chaque siège automatique ; l'invité, dont le deck part chez l'hôte, choisit parmi
+les decks de l'atelier. Il n'y a plus de bibliothèque d'adversaires à part : voir « Le mode de jeu ».
+
 **Une restriction est un filtre que le deck porte lui-même.** Elle a la forme de `FILTRES_VIDE`,
 plus les couleurs — qu'elle peut déduire du commandant, ce qui évite de reposer la barre de mana à
 chaque fois qu'on revient sur un deck. Elle porte partout où porte un filtre : `carteRetenue()`
@@ -427,49 +472,25 @@ demande, si bien que l'en-tête ne paie rien de plus qu'avant.
 ## Le mode de jeu
 
 L'onglet **Simulation** fait jouer le deck ouvert — ou n'importe lequel de « Mes decks » — par un
-joueur automatique, contre un à cinq adversaires automatiques, des centaines de fois, et en tire de
+joueur automatique, contre un à cinq decks menés par des joueurs automatiques, des centaines de fois, et en tire de
 quoi classer sa force. Chaque siège garde le format de son deck : un deck Commander joue à 40 points
 de vie avec sa zone de commandement, sa taxe et ses dégâts de commandant, un deck de soixante à 20.
-Les adversaires viennent d'une **bibliothèque à part** (`S.adversaires`) : des listes collées, au
-format MTGO ou Arena, lues par l'analyseur de l'import (`parseMtgoList()`), qui n'encombrent ni
-« Mes decks » ni la liste d'achats. Leurs cartes n'ont pas à être possédées : `ficheParNom()`
+Chaque siège est un **deck de l'atelier** — le sien comme un deck externe, sans distinction
+(`js/simSources.js`) : il n'y a plus de bibliothèque d'adversaires à part, un deck qu'on veut affronter
+se range dans « Decks externes ». Les cartes de ces decks n'ont pas à être possédées : `ficheParNom()`
 (`js/simCartes.js`) les cherche dans l'atelier, puis dans l'archive indexée par nom, puis chez
-Scryfall, et les garde dans IndexedDB (`sim-cartes`) — **jamais dans `DB`**, que la sauvegarde
-locale emporterait.
+Scryfall, et garde ce qui vient de là dans IndexedDB (`sim-cartes`) — **jamais dans `DB`**, que la
+sauvegarde locale emporterait.
 
-**Les adversaires liés.** Un adversaire peut suivre un deck publié sur Moxfield ou Archidekt
-(`js/decksLies.js`) : le lien se donne dans sa fenêtre, et à l'ouverture de l'atelier, une fois
-par jour au plus, la liste est relue ; un changement met l'adversaire à jour, le dit d'un toast
-(« +3 −2 »), et rend périmés les lots joués contre l'ancienne version — sans code à part, le lien
-n'étant qu'un champ de plus sur l'adversaire (`lien`), sauvegardé et synchronisé avec lui. Chaque
-site est un petit adaptateur (`SITES_DECKS`) : où est son API, comment lire sa réponse ; la réserve
-et les « maybe » ne jouent pas. La lecture suit une **chaîne de repli**, parce que Moxfield n'a pas
-d'API publique et refuse probablement d'être lu depuis une autre page (CORS) : la lecture directe
-d'abord ; puis, s'il est réglé, un **relais** à soi (`S.simulation.relais`, propre à l'appareil) ;
-en dernier recours, la fenêtre de l'adversaire s'ouvre sur un lien vers le deck et l'on colle son
-export — le lien est gardé, la vérification du lendemain réessaiera. Ce dernier chemin marche
-toujours ; rien ne garantit les deux premiers, qu'un site peut fermer du jour au lendemain. La
-pastille de l'adversaire dit où il en est, et son bouton « Mettre à jour » relit à la demande.
-
-Le relais est un Cloudflare Worker gratuit : sur le tableau de bord Cloudflare, *Workers* → *Créer*,
-coller le script ci-dessous, *Déployer*, puis copier son adresse dans le réglage « Relais » de la
-section des adversaires. Il ne lit que les API des deux sites, ne voit que l'identifiant d'un deck
-public, et ajoute l'en-tête qui autorise la page à lire la réponse. Si un site refuse aussi les
-requêtes du relais, il reste le collage.
-
-```js
-export default {
-  async fetch(requete) {
-    const cible = new URL(requete.url).searchParams.get('url') || '';
-    const cors = {'Access-Control-Allow-Origin': '*'};
-    if (!/^https:\/\/(api2\.moxfield\.com|archidekt\.com\/api)\//.test(cible))
-      return new Response('adresse refusée', {status: 400, headers: cors});
-    const r = await fetch(cible, {headers: {'Accept': 'application/json', 'User-Agent': 'atelier-mtg (relais personnel)'}});
-    return new Response(r.body, {status: r.status, headers: {...cors,
-      'Content-Type': r.headers.get('Content-Type') || 'application/json', 'Cache-Control': 'max-age=600'}});
-  }
-};
-```
+**D'où viennent les anciens adversaires.** Une sauvegarde d'hier porte une bibliothèque d'adversaires
+(`adversaires`) : à la lecture, `migreAdversaires()` (`js/decksStockage.js`) en fait des **decks externes**
+sous la même clé, si bien que les sièges et les lots d'hier qui les nommaient les retrouvent. Un
+adversaire dont le nom est déjà celui d'un deck n'est pas recréé — le deck existant prend sa place aux
+sièges —, et ses cartes que l'atelier ne connaît pas entrent comme à l'import, « inconnues », à compléter.
+**Le lien Moxfield ou Archidekt et son relais ont disparu avec la bibliothèque** (lecture automatique
+quotidienne, adaptateurs de sites, relais Cloudflare) : un deck externe s'importe par collage, comme
+tous les autres, et ne se relit pas seul. Les lots joués contre un ancien adversaire sont donnés pour
+périmés — la signature d'un deck n'est pas celle d'une liste d'adversaire —, leurs chiffres restent lisibles.
 
 **La table interactive.** « Jouer une partie » ouvre un salon en plein écran : son deck, puis
 des sièges automatiques ou des **invités**, qui jouent chacun sur leur appareil — téléphone ou
@@ -496,6 +517,22 @@ termine est avalé. Trois **dispositions** se choisissent au menu de la table, r
 d'un glissé ; les Couloirs, un par joueur, chacun défilant seul ; le Tour de table, les adversaires
 en cartouches qu'on déplie.
 
+**Savoir de quoi on parle** (`js/jeuPileExplique.js`, `js/tableDispositions.js`, `js/tableQuestions.js`). La pile
+se lisait par ses tuiles — qui a lancé quoi —, sans dire ce que chaque élément *fait*, et « Le faire ? » ne disait
+pas ce qu'on s'apprêtait à faire. `descriptionPile()` décrit un élément de pile à un humain : son genre (sort,
+capacité déclenchée, activée, copie), son texte, son contrôleur, ses cibles, X et le kicker ; la vue l'emporte,
+chez l'invité comme chez l'hôte. La table l'écrit sous les tuiles (`pileExpliqueHTML()`) : ce qui se résout en ce
+moment, puis ce qui attend, **du sommet — le premier à se résoudre — au fond**, et la priorité nomme ce à quoi on
+répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
+`resoudre()` le retire avant de le dérouler, si bien qu'on le garde le temps de sa résolution (`RESOLVANTS`, hors
+de `P` pour que la copie d'une partie par l'IA ne l'emporte pas) et que **toute question posée pendant qu'il se
+résout dit de quoi il s'agit** (`contexteQuestionHTML()`) : « Pendant la résolution de *Geode Rager* (capacité
+déclenchée, la vôtre) — Landfall : goad each creature target player controls », puis « *Geode Rager* — Le faire ? ».
+Une question vague (`Le faire ?`, `Défausser ?`) est précédée du nom de sa carte (`sourceNom`). La **pause de
+résolution** — l'objet reste visible, « résolution : X » dans la barre du haut — dure maintenant le temps de
+lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; « Continuer »
+la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.
+
 **Une partie qu'on peut suivre.** Les automates jouent au **rythme** de la table (`pauseApres()`,
 `js/tableHote.js`) : une longue pause après chacun de leurs gestes visibles, une courte à chaque
 étape, rien après une priorité passée — à trois vitesses, réglées au menu (`S.table.vitesse`). Mais
@@ -512,6 +549,20 @@ carte qui s'active à sa capacité, l'attaquant au joueur qu'il attaque, le bloq
 à ce qui est public (`refPublique()`). La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
 étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
 après un rechargement.
+
+**Payer son mana soi-même** (`js/jeuManaManuel.js`). Par défaut le solveur de `js/jeuMana.js` paie à la
+place du joueur, et choisit les terrains qu'il engage. Un siège humain peut passer au **paiement
+manuel** (`J.manuel`) : `planPaiement()` ne lui laisse plus que la réserve, chaque source devient une
+action de priorité `{k: 'mana', id, option}` — une par couleur qu'elle sait produire —, et un sort ne
+se propose que lorsque le mana engagé le paie. La bascule est elle-même une action (`{k: 'reglage'}`),
+donc une réponse comme une autre : rangée avec les autres, elle laisse la partie rejouable à
+l'identique, ce qu'un réglage posé hors du moteur casserait. Le menu de la table (`S.table.paiementManuel`)
+dit comment *commence* le siège de l'hôte ; un invité commence à l'automatique et bascule depuis son
+bandeau. Un siège confié à l'automate revient d'abord à l'automatique (`reponseAutomate()`) : l'automate
+n'engage aucune source. Limites assumées : le mana restreint (« spend only on creature spells »), les
+filtres et les sources qui demandent un sacrifice ou un coût de plus ne s'engagent pas à la main. Les
+effets qui ajoutent du mana (« Add {R} or {G} ») demandent la couleur au joueur
+(`choisitManaOption()`), au lieu de prendre la première ; un automate garde son choix d'avant.
 
 **Sans aucun serveur.** L'utilisateur a voulu une liaison WebRTC sans tiers : ni signalisation, ni
 STUN, ni TURN (`js/liaison.js`). Les deux descriptions passent donc **par la lumière** : l'hôte
@@ -554,7 +605,11 @@ silencieuse. Une seule grammaire désigne les objets (`lisDescripteur()`), un se
 **injouable** : quand une part ignorée ressemble à une contrepartie (« you lose », « sacrifice »,
 « unless », « can't »…), l'IA ne la lance jamais. Ne pas comprendre une carte ne doit **jamais**
 rendre un deck plus fort qu'il n'est. La section affiche le taux de chaque deck de la table, et
-chaque résultat porte un badge de fiabilité. Une carte se décrit à la main dans la fenêtre des
+chaque résultat porte un badge de fiabilité. Un bloc distinct (`js/simCollection.js`) donne la part
+de la **collection** entièrement couverte — en cartes différentes, terrains écartés comme pour un deck — et déplie
+les listes des partielles et des injouables. Compiler tout une collection prend de l'ordre de la seconde :
+le calcul se fait par tranches de 15 ms sous une signature, et n'avance que sous les yeux ; le texte
+d'attente se met à jour en place, car repeindre la section à chaque tranche emporterait la saisie en cours. Une carte se décrit à la main dans la fenêtre des
 comportements (`S.comportements`), **avec le même compilateur** : on la réécrit en formules qu'il
 comprend, il dit ligne par ligne ce qu'il en lit, et deux directives s'y ajoutent — `#vanille`,
 `#injouable`. Aucune syntaxe à apprendre, aucun second interprète à tenir.
@@ -681,7 +736,7 @@ NumDmg$ 3`. L'atelier s'en sert, sans rien en embarquer.
 GitHub, sur l'appareil seulement, et gardés par paquets dans IndexedDB (clés `forge-*`, qu'`idbVider()`
 épargne). La liste vient de l'API (quatre requêtes, avec l'empreinte `sha` de chaque fichier), les
 fichiers de `raw.githubusercontent.com` épinglé au commit, dix à la fois. Vos cartes et celles de
-vos adversaires passent d'abord ; un téléchargement interrompu reprend ; une fois par semaine, seuls
+vos decks passent d'abord ; un téléchargement interrompu reprend ; une fois par semaine, seuls
 les fichiers dont l'empreinte a changé sont relus. Le premier téléchargement attend qu'on le demande
 (paramètres, « Cartes Forge »).
 
@@ -694,6 +749,12 @@ cibles, la pile, les déclencheurs, l'IA restent ceux du moteur : rien n'a été
 déclencheurs deviennent des écoutes `{evt: 'forge'}`, les statiques des `{s: 'forge'}` lues par
 `car()`, `coutSort()` et `peutBloquer()`. Les objets retenus (`Remembered`) et les cartes exilées
 (`ExiledWith`) appartiennent à la carte, comme dans Forge.
+
+**Piège : `Card.Self` d'un déclencheur de lancement.** `forgeValideDef(def, valid, ctrl, lanceur, id, idSource)`
+juge une définition — celle du sort lancé. `idSource` est la carte qui porte le déclencheur : sans lui,
+`Self` se comparait au sort jugé lui-même et « when you cast this spell » partait à chaque sort lancé,
+par quiconque. De même, un seuil écrit en SVar (`Spell.cmcLEX`, X = les blessures) ne se lit qu'avec
+l'`env` de la résolution : `forgeValideObjet()` le reçoit, pas `forgeValideDef()`.
 
 **La meilleure des deux lectures.** `definitionDe()` lit une carte qui porte son script des deux
 façons, et joue celle qui comprend le plus — complète avant partielle avant injouable, puis le
@@ -1439,6 +1500,425 @@ Profondeur bornée à deux : un filtre qui en nourrit un autre au-delà n'est pa
 plus anciens, vus en chemin : `Combo B G | Amount$ 2` ne donnait que `BB` ou `GG`, jamais `BG`
 (`multiensembles()`), et un `Return<1/CARDNAME>` dans un coût de mana faisait refuser la capacité.
 
+**Deux cartes demandées** (lot F59). *Reinforced Ronin* — Haste, retour en main à l'étape de fin,
+Channel depuis la main — était déjà jouée de bout en bout ; des parties scriptées le confirment (la
+capacité de la main est proposée, défausse la carte et pioche ; lancée, elle attaque puis revient). Seule
+*Anzrag, the Quake-Mole* manquait d'un élément : son activation, `Pump | KW$ HIDDEN CARDNAME must be
+blocked if able.`, était jetée sans bruit et la carte restait partielle.
+- **« Doit être bloqué » pour le tour** : le bonus posé par la pompe porte `doitEtreBloque`
+  (`pompeForge()`), et `doitEtreBloque()` (`js/forgeMotsClesD.js`) le lit avec les deux autres sources de
+  l'obligation — la carte et une statique. Le bonus tombe au nettoyage comme tout `fin: 'tour'`, et
+  l'obligation vaut pour chaque combat du tour, la phase de combat de plus que donne Anzrag comprise ;
+- **l'IA** n'activait jamais une pompe hors combat. Une pompe qui impose le blocage vaut maintenant 3 en
+  première principale ou au début du combat, pour une créature dégagée qui peut attaquer.
+
+**Les mêmes deux cartes, lues dans l'oracle** (suite du lot F59). Une fiche sans script Forge — l'archive
+n'est pas téléchargée, ou la carte n'y est pas — passe par le compilateur d'oracle, et *Reinforced Ronin* y
+était **injouable** : la ligne « Channel — {1}{R}, Discard ~ : Draw a card » n'était pas lue, et le mot
+« discard » la faisait classer comme contrepartie. Le script Forge ne suffit donc pas à juger une carte :
+le banc doit essayer les deux lectures (`definitionDe()` garde la mieux comprise).
+- **Channel** : `compileActivee()` ôte l'étiquette et lit le reste comme un coût d'activation ; `discard ~`
+  (`defausseSoi`) est un morceau de coût, et la capacité s'active depuis la main (`zone: 'main'`), comme un
+  cycle. Un `discard ~` sans « Channel » reste une capacité du champ, que `coutAutrePossible()` ne laisse jamais
+  payer ;
+- **Anzrag** : « must be blocked this turn if able » est une pompe sans bonus qui pose `doitEtreBloque`
+  (`op.impose`, lu par `OPS.pompe`), et « after this combat phase, there is an additional combat phase » une
+  opération `phaseSupp` qui partage `ajoutePhase()` avec le `AddPhase` de Forge. Les deux lectures — Forge et
+  oracle — jouent la carte à l'identique ; les 127 cartes de la base livrée gardent la même couverture.
+
+**Mesurer sur ce que les joueurs jouent** (lots F60 et suivants). Jusqu'ici on partait des cartes qu'on nous
+citait. Le banc part maintenant d'EDHREC : les cent premiers commandants de l'année, leurs pages, soit 7 379 cartes
+distinctes, chacune lue avec son script Forge (le dépôt cloné en partie, `forge-gui/res/cardsfolder` et
+`tokenscripts`) et sa couverture comptée, pondérée par le nombre de decks. Au départ, 6 063 cartes complètes, 830
+partielles, 484 injouables, et une longue traîne : 1 194 éléments manquants différents, dont 853 cartes qui n'en
+manquent qu'un. D'où des lots par famille d'éléments, les plus joués d'abord. Le banc rejoue aussi des parties : 500
+parties de decks tirés au hasard parmi les cartes complètes, sans une seule erreur du moteur.
+
+**Lot F60 : Channel, protections, filtres** (`js/forgeProtections.js`, `js/forgeFiltresC.js`).
+- **`ReduceCost$` d'une capacité** (cinquante cartes) : Boseiju, Otawara, Takenuma, Eiganjo, Sokenzan… coûtent
+  {1} de moins par légendaire qu'on contrôle. La capacité garde `reduit` ; `capaciteReduite()`
+  (`js/forgeActivations.js`) la rend avec son coût de mana diminué du générique, et trois sites la lisent — les
+  actions légales depuis la main et depuis le champ, et `activeCapacite()`. Jamais en dessous de zéro, jamais une
+  couleur ; une quantité illisible ne réduit rien ;
+- **protection from everything sur un joueur** (Teferi's Protection, The One Ring, The Stasis Coffin) : un
+  drapeau de joueur, `J.protTout`, qui tient jusqu'au début du prochain tour de celui qui l'a posé. On ne peut
+  plus le cibler (`ciblesLegales()` et `cibleEncoreLegale()` l'écartent), et les dégâts sont prévenus
+  (`degatsApresPrevention()`) ; ce qui ne cible pas l'atteint toujours. Teferi's Reproach la donne à l'adversaire
+  par une statique d'effet ;
+- **`Protection from each color`** : les cinq couleurs de `o.protTemp`, que `ciblable()` lisait déjà (Akroma's
+  Will, Eldritch Immunity) ; **`Hexproof:Black`** : `o.hexTemp`, qui n'arrête que les sources adverses de cette
+  couleur (Veil of Summer, permanents et joueur) ; le nettoyage les défait ;
+- **`CantChangeLife`** : `vieBloquee()` et `vieReduite()` rendent zéro tant qu'une statique la fige (Teferi's
+  Protection, Perch Protection, Flare of Fortitude) ;
+- **filtres** : `hasABasicLandType`, `ManaCost0` / `ManaCost1`, `doesNotShareNameWith …` et `sharesCreatureTypeWith
+  Commander`. Ce dernier se juge sur la partie : `forgeValideDef()` prend `P` en paramètre, que seul le
+  déclencheur « sort lancé » lui donne — Path of Ancestry n'a de scry que si la créature partage un type avec le
+  commandant.
+
+**Lot F61 : Hideaway, les trois terrains d'Urza, Windfall, Myriad Landscape** (`js/forgeHideaway.js`).
+- **Hideaway N** (quinze cartes : Windbrisk Heights, Mosswort Bridge, Spinerock Knoll, Clive's Hideaway…) : un
+  déclencheur d'entrée synthétique dont l'effet, `Hideaway`, regarde le dessus, exile une carte (celle de la
+  source, `ExiledWith`) et met le reste dessous dans un ordre tiré. L'activation du terrain est un script ordinaire :
+  `Play | Defined$ ExiledWith`, sa condition jugée à la résolution (puissance totale, légendaires, attaquants) ;
+- **`Count$UrzaLands.3.1`** : trois si l'on contrôle la Mine, la Centrale et la Tour, un sinon ;
+- **`HighestValidGraveyard,Library,Exile`** (Windfall, Jace's Archivist, Whispering Madness) : les zones se
+  comptent ensemble, joueur par joueur — chacun pioche autant que la plus grosse main défaussée ;
+- **`ShareLandType$`** (Myriad Landscape) : la première terre se choisit librement, la seconde parmi celles du même
+  type de base.
+
+**Lot F62 : des déclencheurs, la radiation, l'Anneau** (`js/forgeDeclencheursD.js`, `js/forgeRadiation.js`,
+`js/forgeAnneau.js`).
+- **`TokenCreated`** (Mirkwood Bats, Rosie Cotton) : l'évènement d'entrée d'un jeton, jugé sur son joueur et son
+  filtre ;
+- **`Drawn | FirstCardInDrawStep$`** (Orcish Bowmasters, Xyris, douze cartes) : `piocheN()` note le rang de la carte
+  dans l'étape (`J.piocheEtape`) ; la première de l'étape de pioche ne déclenche pas, toute autre si. Une pioche du
+  début de partie n'est pas une pioche d'étape ;
+- **« one or more »** (`SacrificedOnce`, `LifeLostAll`, `MilledAll`) : un seul déclenchement par lot d'évènements,
+  par `P._lot` ; `ResolvedLimit$` limite par tour (`P.limitesTour`) ;
+- **meuler** : `deplace()` marque une carte meulée (`opts.meule`), que `Milled` et `MilledAll` reconnaissent ; une
+  carte mise au cimetière d'une autre façon n'est pas « meulée » ;
+- **la radiation** : `Radiation | Num$` donne des marqueurs ; au début de sa première principale, un joueur meule
+  autant de cartes, perd 1 vie et retire un marqueur par carte qui n'est pas un terrain (règle 727). Dix-huit
+  cartes (The Wise Mothman, Nuclear Fallout, Glowing One…) ;
+- **l'Anneau, niveaux 2 à 4** : jusqu'ici seul le premier niveau était joué. Les trois autres sont écrits comme un
+  script de Forge (`NIVEAUX_ANNEAU`), compilés une fois et posés, au passage du niveau, en effet permanent du joueur
+  (piocher puis défausser en attaquant ; le bloqueur sacrifié à la fin du combat ; 3 vie perdus par chaque
+  adversaire sur un dégât de combat). `IsRingBearer` désigne le porteur. `RingTemptsYou` est aussi un déclencheur
+  (Call of the Ring).
+
+**Lot F63 : copies, clones, « activate only if »** (`js/forgeCopies.js`, `js/forgeActivations.js`).
+- **`Clone`** devient une capacité à cible : Thespian's Stage copie un terrain, Shifting Woodland une carte de son
+  cimetière. `NewName$` (Sarkhan, Soul Aflame), `AddTypes$ Legendary` (un supertype, non un sous-type),
+  `SetColor$`, `SetCreatureTypes$` (qui remplacent la couleur et les types de créature, et gardent les sous-types de
+  terrain ou d'artefact) et `GainThisAbility$` (la copie garde la capacité qui vient de s'activer : retrouvée dans la
+  définition par l'identité de son opération). `CopyPermanent` lit les mêmes `SetColor$` et `SetCreatureTypes$`,
+  plus `AtEOTCondition$` (Sauron, the Necromancer : le jeton ne part pas si Sauron porte l'Anneau) ;
+- **`Activation$`** (une quarantaine de cartes : Delirium, Threshold, Metalcraft, Hellbent, la bénédiction) : « activate only
+  if… », jugé par la table de `Condition$`. Une condition qu'on ne connaît pas écarte la capacité, et une capacité de mana
+  soumise à `Activation$` n'est pas jouée du tout — le planificateur de paiement ne sait pas la juger, et la jouer
+  donnerait du mana qu'on n'a pas le droit de produire ;
+- **`sharesCreatureTypeWith` seul** (Coat of Arms, Mana Echoes, Alpha Status, Locket of Yesterdays) : le type partagé
+  avec la source du filtre, c'est-à-dire la créature à laquelle le bonus s'applique.
+
+**La couverture lit désormais les filtres des comptes.** Un `SVar:X:Count$Valid Card.Self+IsRingbearer` n'était
+pas examiné : Sauron, the Necromancer passait pour complet alors que la propriété (`IsRingbearer` — Forge l'écrit
+ainsi) n'était pas jugée, et le jeton partait toujours. `expressionsDe()` relève les propriétés du filtre d'un
+`Count$Valid` et suit `Count$Compare X …` jusqu'à la SVar `X`. Quatorze cartes sont repassées de complètes à
+partielles ou injouables, toutes à raison ; Coat of Arms, Mana Echoes et Alpha Status l'ont aussitôt été de nouveau
+en jouant.
+
+**Lot F64 : les interdictions de combat du tour, l'eminence, Aurelia, Thriving** (`js/forgeEffetsC.js`,
+`js/forgeDeclencheursD.js`). La liste qui reste est dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md).
+- **`KW$ HIDDEN CARDNAME can't block.`** (cent seize scripts) **, `can't attack`, `can't attack or block`, `All
+  creatures able to block CARDNAME do so`** : la pompe pose le drapeau dans le bonus du tour (`CACHES_DU_TOUR`), que
+  `car()` lit pour `nePeutAttaquer` et `nePeutBloquer`, et `bloqueursImposes()` pour l'attirance ;
+- **`Activation$` sur une capacité de mana** (Mox Opal, Metalcraft) : `sourcesMana()` demandait déjà
+  `activationInterdite()` à chaque capacité de mana, et le drapeau `activation` y répond maintenant ; seule la
+  condition inconnue écarte la capacité ;
+- **`Attacks | FirstAttack$`** : chaque attaque porte son rang pour le permanent, ce tour (`o.attaquesTour`) ;
+  Aurelia déclenche une fois, la phase de combat de plus (F59) ne la déclenche pas deux fois.
+  **`CheckDefinedPlayer$ TriggeredDefender.withMostLife`** (Scourge of the Throne) se juge sur le défenseur de l'attaque ;
+- **`TriggerObjectsAttackers$Amount`** (The Ur-Dragon) : le nombre d'attaquants qui répondent au filtre du
+  déclencheur, gardé sur l'évènement à la décision ;
+- **l'eminence** : les statiques `EffectZone$ Battlefield,Command` d'un commandant agissent depuis sa zone
+  (`statiquesEnJeu()`), pour les réductions et hausses de coût ;
+- **`Exclude$`** de `ChooseColor` (les dix terrains Thriving) ; **`Proliferate | Amount$`** et le déclencheur
+  `Proliferate` (Ezuri).
+
+**Lot F65 : permissions de jeu et coûts alternatifs** (`js/forgeCoutsC.js`). Seize cartes de plus :
+- **`MayPlayAltManaCost$ PayLife<ConvertedManaCost>`** (Bolas's Citadel, Valgavoth, Nashi, Gwenom, Inside Information) :
+  `coutPermis()` rend un coût de mana vide et `autrePermis()` y ajoute la vie égale à la valeur de mana ; `$ 0`
+  rend le sort gratuit. Les autres valeurs (`PayEnergy`, `Waterbend`, un mana précis) restent refusées ;
+- **`OnlyFirstSpell$`** (Conduit of Ruin, Serah Farron) : la réduction ne vaut que si aucun sort de même genre n'a
+  été lancé ce tour ;
+- **`AlternativeCost` accordé par un permanent** (Fist of Suns, Rooftop Storm, Leyline of Mutation) : une variante
+  `alt1xx` de plus par statique qui convient (`variantesEtendues()`), avec `CheckSecondSVar$` (Submerge, Mogg
+  Salvage : deux conditions) ;
+- **`ReduceCost` / `RaiseCost` des capacités** (Silver-Fur Master, Fluctuator, Blossoming Tortoise, Tithe Taker,
+  Power Artifact) : `capaciteReduite()` ajoute ce que disent les statiques du coût de mana de l'activation, avec
+  `MinMana$` ; le cycle et le ninjutsu se reconnaissent à leur capacité ;
+- **flash** : les capacités de loyauté de Teferi, Master of Time et de The Wandering Emperor s'activent quand on
+  pourrait lancer un éphémère (`loyauteEclair()`) ; `Spell.IsTargeting Valid …` (Timely Ward, Flash Photography)
+  donne le flash dès qu'une cible de ce genre existe, **sans vérifier que la cible choisie en est une** —
+  simplification annoncée. `flashAccorde()` ne prend plus une statique de loyauté pour un flash de sort.
+
+**Lot F66 : des paramètres d'écoute** (`js/forgeDeclencheursE.js`). Vingt-cinq cartes de plus :
+- **`ResolvedLimit$`** : déjà réécrit en limite d'activation pour tout déclencheur (F52) ; il ne restait qu'à le dire
+  connu des modes « once » qui le portent ;
+- **`FirstCombat$`** (Genji Glove, Hexplate Wallbreaker, Karlach) : la première phase de combat du tour ; la phase de
+  plus que donnent ces cartes n'en redéclenche donc pas une troisième ;
+- **`Threshold$`, `Metalcraft$`, `Blessing$`, `Hellbent$`** écrits comme paramètres du déclencheur (Kiora, Twilight
+  Prophet, Inventors' Fair) : `conditionForge()` les juge comme la condition de même nom. **`FirstUpkeep$`** (Paradox
+  Haze) : le rang de l'étape d'entretien dans le tour (`P.entretiensTour`), et l'étape qu'il sous-entend ;
+- **`ValidSAonCard$`** d'un sort lancé : le sort lui-même répond à un filtre (« same name as a card in their
+  graveyard », Dragonlord Kolaghan) ou a coûté moins de mana que sa valeur (`Spell.ManaSpent LTX`, Ancient
+  Cellarspawn) ;
+- **`ExcludedOrigins$`**, **`Phase$ BeginCombat->EndCombat`** d'un `ChangesZone` (The Lost and the Damned, The Blue
+  Spirit) ; **`ValidPlayer$`** de `Discarded` et de `LandPlayed` (Sangromancer, Shanid) ;
+- **Panharmonicon** : `ValidActivator$` et `ValidPlayer$` (Veyran, Dr. Beverly Crusher) ; **`ImmediateTrigger |
+  RememberSVarAmount$`** (Ancient Brass Dragon : « roll a d20. When you do… X ») garde le résultat du dé pour le
+  déclencheur réflexe. Restent : le doublement d'un déclencheur de sort sur la pile (`ValidZone$ Stack`).
+
+**Lot F67 : choisir, défausser, répéter, sacrifier** (`js/forgeChoixC.js`). Trente et une cartes de plus :
+- **`ChooseType | ValidTypes$`** (Eclipsed Realms, Cloud Key, Gollum) : le type se choisit dans la liste. `ChosenType`
+  juge aussi un type de carte (« spells of the chosen type »), et `forgeValideDef()` reçoit la source du filtre pour
+  que la réduction de coût d'un Cloud Key lise son propre choix ;
+- **`Discard | UnlessType$`** (Thirst for Knowledge, Bandit's Talent) : si la main a une carte de ce type, on demande
+  si l'on défausse celle-là au lieu de N ; **`Optional$`** se pose à chaque joueur désigné (Snort : « each player may
+  discard their hand »), et **`RememberDiscardingPlayers$`** retient ceux qui l'ont fait, pour que `Draw` et
+  `DamageAll` ne visent qu'eux ;
+- **`RepeatEach | DefinedCards$`** (Curse of the Swine, Terastodon, Rampage of the Clans) : la boucle porte sur les
+  objets désignés ; **`ChooseOrder$`** : le joueur les range un à un, dans l'ordre qu'il veut (Sylvan Library,
+  Aetherspouts) ; **`StartingWith$`** : on boucle sur les joueurs à partir de celui qu'on dit ;
+- **`ChooseCard` à plusieurs joueurs** : chacun choisit à son tour, en commençant par `StartingWith$` (The Horus
+  Heresy, Druid of Purification) ; **`WithTotalPower$`** (Slaughter the Strong) : autant de créatures qu'on veut, de
+  force totale bornée — la réponse par défaut garde les plus fortes qui tiennent ;
+- **`ChoosePlayer | Random$`**, **`GenericChoice | FallbackAbility$`** (Torment of Hailfire : si aucune offre ne se
+  paie, on perd la vie), **`Sacrifice | StrictAmount$`** (tout ou rien : Scorched Ruins), `ChangeNum$` (Glacial
+  Chasm) et `ConditionNotPresent$` (Uro, Kroxa : « sacrifice it unless it escaped »), `DestroyAll | Zone$`.
+Restent : les modes qu'on annonce ou tire au hasard (`Charm | Announce$`, `Random$`), `SetState | Choices$`, le vote.
+
+**Lot F68 : des quantités de plus** (`js/forgeExprC.js`). Trente-cinq cartes de plus, toutes par `exprEtendue()`,
+`caracForge()` et `agregeForge()` :
+- **sur le sort lui-même**, en forme `a.b` (« `a` si c'est vrai, `b` sinon ») : `Count$wasCastFromExile` (la zone
+  d'où il a été lancé), `Count$AltCost` (une variante `alt…`), `Count$IfCastInOwnMainPhase` (`jeuActions.js` garde
+  quand : `lanceeEn`), `Count$Metalcraft` ;
+- **le tour et les joueurs** : `Count$TotalOppPoisonCounters`, `Count$CreaturesAttackedThisTurn <filtre>` (le rang
+  d'attaque posé par F64, `o.attaquesTour`), `Count$Landfall`, `Count$YourCountersRAD` ;
+- **des ensembles** : `Count$MostCardName <filtre>` (le plus de cartes de même nom : Mechanized Production),
+  `Count$Valid … $CardCounters.P1P1` (Toph : les marqueurs d'un genre sur des terres), et les agrégats
+  `$CardNumColors`, `$CardSumPT`, `$CardTypesPermanent`, `$PlaneswalkerType` ;
+- **des objets désignés** : `Sacrificed$Valid` (combien de ce qu'on vient de sacrifier répond au filtre),
+  `ExiledWith$Amount` et `$CardManaCost`, `ChosenCard$CardManaCost`, `Equipped$CardPower`, `TriggeredSource$…`,
+  `TriggeredAttacker$Valid`, `TriggeredActivator$SpellsCastThisTurn`, `TriggerCount$ScryNum`,
+  `TriggerObjectsAttackers$CardPower` (la liste des attaquants qui répondent au filtre du déclencheur, gardée sur
+  l'évènement à la décision).
+Restent : les coûts optionnels payés (`OptionalGenericCostPaid`), le foretell, les activations du tour
+(`ThisTurnActivated`), les listes de cartes d'un déplacement groupé (`TriggerObjectsCards`).
+
+**Lot F69 : chercher, creuser, déplacer** (`js/forgeZonesC.js`). Vingt et une cartes de plus :
+- **`DigUntil | Tapped$`** (The Ring Goes South, Clifftop Lookout) : la carte trouvée entre engagée ; **`GainControl$`**
+  (Sméagol, Atla Palani) : sous le contrôle de celui qui creuse ; **`Dig | Attacking$`** (Owlbear Cub, Winota) :
+  elle entre attaquante ; `SkipReorder$` est connu, le moteur ne demandant jamais l'ordre du reste ;
+- **`ChangeZone | WithTotalCMC$`** (Protean Hulk, Lively Dirge) : autant de cartes qu'on veut, de valeur de mana
+  totale bornée — la réponse par défaut prend les plus chères qui tiennent ; **`RememberSearcher$`** (Tempt with
+  Discovery) retient celui qui cherche ;
+- **`Manifest | DefinedPlayer$`** (Reality Shift) : le joueur désigné manifeste le dessus de sa bibliothèque ;
+- **`ConditionNotPresent$`** passe dans les paramètres communs : tout effet peut le porter (`conditionForge()`, F67).
+`ChangeZoneAll | AtEOT$` ne se lit que pour `Sacrifice` et `Exile` : « exile at your next upkeep » (Rally the
+Ancestors) reste refusé, plutôt que lu comme un sacrifice.
+
+**Un défaut ancien trouvé par le banc.** Le plafond d'un choix de cibles (`TargetMax$ OneEach`, The Horus Heresy) se
+calculait sans la face du script : `Cannot read properties of undefined (reading 'svars')`, deux parties sur cinq
+cents. Le descripteur de cible garde maintenant sa face (`maxFace`).
+
+**Lot F70 : les autres filtres** (`js/forgeFiltresD.js`). Quarante et une cartes de plus :
+- **ce qu'un effet a choisi, retenu ou visé** : `nonChosenCard` (Mount Doom, Planetary Annihilation : « destroy the
+  creatures not chosen »), `TargetedPlayerOwn` et `RememberedPlayerOwn` (Search Warrant, Singularity Rupture),
+  `ExiledWithEffectSource`, et la **tête `TargetedCard`** (Maelstrom Pulse, Legions to Ashes : la carte visée
+  elle-même — `Self` y désigne cette carte, non la source du sort) ;
+- **la carte** : `withToxic`, `withFlashback`, `cmcEven`, `equalPT`, `hasManaAbility`, `hasAbility
+  Activated.hasTapCost`, `basePowerEQ0` et `baseToughness…`, `totalPT_LE5` (Cut Down), `powerNOTbasePower`,
+  `greatestCMC_Artifact`, `sharesPermanentTypeWith`, `TopGraveyardCreature` (Shallow Grave : la dernière créature du
+  cimetière), `EnchantedBy Aura.YouCtrl`, `bargained`, et le sous-type `Urza's` (une apostrophe dans un sous-type) ;
+- **le plateau** : `ControllerControlsMoreLand`, et `Player.withMoreLandsThanYou` par le crochet
+  `proprieteJoueurEtendue()` que `forgeValideJoueur()` appelle pour ce qu'il ne connaît pas.
+Restent : le décomposé (`withDecayed`), les enquêtes résolues (`IsSolved`), `EACH Forest & Plains`.
+
+**Lot F71 : les filtres du tour** (`js/forgeFiltresD.js`). Vingt-six cartes de plus, toutes sur ce que le moteur note
+déjà ou note désormais :
+- **d'où une carte est entrée** : `ThisTurnEnteredFrom_Graveyard`, `_Battlefield`, `_Library` (Celes, Samwise, Captain
+  N'ghathrod), jugés sur `P.entresTour` ; **`milledThisTurn`** (The Master, Transcendent) : `deplace()` marque la carte
+  meulée (`o.meuleTour`) ;
+- **comment un sort a été lancé** : `wasCastFromTheirHand` (Ghostly Pilferer, Drannith Magistrate : le sort venait de la
+  main de qui le lance), `CastSa Spell.MayPlaySource`, `Spell.ManaFromTreasure`, `Spell.ManaSpent EQ0` ;
+- **le combat** : `attackingYou` (le défenseur est vous, ou un planeswalker qui vous appartient), `attackedThisCombat`,
+  `dealtCombatDamageThisTurn You` (l'historique du tour garde qui a blessé quel joueur au combat) ;
+- **le déclencheur** : `TriggeredAttacker`, `TriggeredNewCard`, et la tête de joueur `OppNonTriggeredTarget` (Parapet
+  Thrasher : « each other opponent » — ni vous, ni le joueur que le déclencheur vise).
+Restent : `TriggeredCards` (un lot de cartes), `hadToAttackThisCombat`, `blockedBySourceLKI`, les dégâts cumulés
+d'une source (`wasDealtDamageThisTurnBySource GE10`).
+
+**Lot F72 : des quantités sur les joueurs** (`js/forgeExprD.js`). Cinquante-sept cartes de plus. `PlayerCount<qui>$<quoi>`
+compte ou somme une propriété sur un groupe de joueurs :
+- **le groupe** : tous, les adversaires, les joueurs retenus (`Remembered`), leurs propriétaires, ceux que désigne
+  `Defined<…>` (`Registered` : tous), le contrôleur seul (`PropertyYou`) ;
+- **la quantité** : `HighestLifeLostThisTurn` (Y'shtola, Bloodchief Ascension, Knight of the Ebon Legion),
+  `LifeLostThisTurn`, `LifeTotal`, `CardsIn…`, `CardsDrawn`, `Counters.Poison`, `RingTemptedYou`, `LandsPlayed`,
+  `SacrificedThisTurn` — lues chez un joueur par `quantiteJoueur()`, que ce fichier étend ;
+- **`HasProperty<propriété> [GE1]`** : combien de joueurs l'ont (`LostLifeThisTurn`, `isMonarch`, `controlsCreature`,
+  `withMoreCreaturesThanYou`, `wasDealtCombatDamageThisTurnBy Zombie GE1`…), et **`ConditionGE2 CardsDrawn`** :
+  combien en ont au moins deux (Smuggler's Share) ;
+- **un joueur désigné** : `TargetedController$…`, `TriggeredDefendingPlayer$…`, `TriggeredTarget$…` ;
+- **le tour** : `Count$LifeYouLostThisTurn`, `Count$MaxOppDamageThisTurn` (Spinerock Knoll),
+  `Count$NonCombatDamageThisTurn` — l'historique du tour garde les dégâts reçus par joueur et ceux qu'un
+  contrôleur a infligés hors combat — `Count$YourStartingLife` (`J.vieDepart`), `DungeonsCompleted$Amount`.
+Restent : la vie perdue au tour précédent (`LifeLostLastTurn`), `HighestValid` / `LowestValid` sur les joueurs, les
+dégâts reçus « la dernière fois », `lifeGTX`.
+
+**Lot F73 : les désignations** (`js/forgeDefiniC.js`). Vingt-huit cartes de plus, par `definisEtendus()` :
+- **le combat** : `TriggeredDefender.Opponent` et `TriggeredAttackedTarget` (Hellrider, Myr Battlesphere, Raid
+  Bombardment : seul le défenseur qui est un adversaire compte) ;
+- **ce qu'on vient de sacrifier** : `Sacrificed`, `SacrificedCards` (les instantanés de `ctx.sacrifies`) ;
+- **`Spawner>TriggeredTarget`** (Dokuchi Silencer, Biting-Palm Ninja) : le déclencheur réflexe garde l'évènement de son
+  parent, le préfixe ne change donc rien à ce qu'il désigne ;
+- **des joueurs choisis par propriétés** : `Player.EnchantedBy` (Fraying Sanity), `Opponent.IsCorrupted` (au moins trois
+  marqueurs de poison), `Player.lifeEQ13`, `Player.controlsCreature.powerGE4_GE1` (au moins une créature de cette
+  force), `controlsCreature.attacking` — des propriétés de joueur que `proprieteJoueurEtendue()` apprend ;
+- `ValidLibrary`, `ValidStack`, `ExiledWithSource`, `NextPlayerToYourRight`, un filtre d'objet écrit seul (`Creature.YouCtrl`).
+Restent : `Convoked`, `TriggeredCards` et les listes d'un déplacement groupé (`ExiledCards`, `DiscardedCards`), `.Chosen,You`
+(une liste de joueurs à la place d'un seul), `Caster`.
+
+**Lot F74 : des statiques refusées** (`js/forgeStatiquesC.js`). Treize cartes de plus ; ici la couverture ne dit pas ce qui
+manquait — `construction:Continuous` cache n'importe quelle propriété —, il a fallu lire la ligne qui échouait pour chaque
+carte :
+- **`K:Hexproof:<filtre>`** (Breaker of Creation : de chaque couleur ; General Ferrous Rokiric : des monocolores ; Elenda :
+  des éphémères) : `def.params.hexproofDe`, que `ciblable()` juge contre la source adverse ;
+- **`ValidAfterStack$ Spell.cmcGE4`** (Glarb, Thundermane Dragon, Nahiri) : on joue d'en haut de la bibliothèque, mais les
+  sorts seulement s'ils répondent au filtre — les terrains passent toujours ;
+- **`Mode$ CantDraw`** (Narset, Parter of Veils : « your opponents can't draw more than one card each turn » ; Mornsong
+  Aria) : `piocheInterdite()`, que `piocheN()` demande avant chaque carte, compte les cartes déjà piochées ce tour ;
+- **`MayPlay` avec `EffectZone$ Exile,Graveyard`** (Squee, the Immortal).
+Ce qui reste dans ce lot, et pourquoi : l'équipement payé en vie (`Equip:2 PayLife<2>`), les gardes qui coûtent des
+marqueurs de saignée (`Ward:Blight<2>`), les attaques interdites sur un joueur déjà attaqué (Bloodthirster), les
+déclencheurs accordés à tout un camp (`AddTrigger`, Tyvar, Danny Pink), les effets dont les statiques portent leurs
+propres déclencheurs (`Effect | Triggers$`, Osteomancer Adept).
+
+**Lot F75 : les mots-clés, IV** (`js/forgeMotsClesG.js`). Vingt-sept cartes de plus :
+- **posés pour le tour** : `KW$ Fear`, `Intimidate`, `Skulk` (Shizo, Aphotic Wisps), « power and toughness are
+  switched » (Twisted Image, Inversion Behemoth, Myr Quadropod), `Prevent all damage that would be dealt by CARDNAME`
+  — des drapeaux du bonus (`CACHES_DU_TOUR`) que `peutBloquer()`, `car()` (l'échange se fait après tous les bonus) et
+  `degatsApresPrevention()` lisent ;
+- **imprimés** : « prevent all combat damage that would be dealt to [and dealt by] CARDNAME » (Guard Gomazoa, Fog Bank),
+  « can't attack or block » (Grakk), **Training** (un déclencheur synthétique, « greater power » jugé par `powerGTX`),
+  **Undaunted** (`coutsForge()` : un de moins par adversaire), **Gravestorm** (une copie par permanent mis au cimetière
+  ce tour) ;
+- **sans effet en jeu** : Companion (la simulation n'a pas de réserve), `DeckLimit`, « a deck can have any number of
+  cards named… », « can be your commander » : des règles de construction, acceptées pour qu'elles ne fassent pas
+  passer une carte pour partielle.
+Restent : Suspend accordé, Read ahead, Champion, les mots-clés d'un autre jeu (Firebending, Beam me up), Mutate.
+
+**Lot F76 : le mana** (`js/forgeManaC.js`). Quatre cartes de plus, et deux qui n'étaient complètes qu'en apparence :
+- **`LoseMana | ReplaceWith$ ConvertMana`** (Kruphix, Horizon Stone, Omnath) : une forme de remplacement `manaIncolore` ;
+  `videReserves()` garde alors tout le mana du joueur, devenu incolore, au lieu de le perdre ;
+- **`AddsCounters$ Card.Creature_P1P1_1`** (Biophagus) : le mana porte, comme les mots-clés de Carnelian Orb, des
+  marqueurs que le sort payé reçoit en entrant (`o.marqPortes`, appliqués par `js/jeuPile.js`) ; une quantité en SVar
+  (Opal Palace) reste refusée ;
+- **une capacité de mana qui défausse** (Lion's Eye Diamond, Diamond Lion : « discard your hand ») était lue mais ne
+  pouvait jamais payer : le planificateur de `sourcesMana()` écarte tout coût de défausse. Elle est désormais refusée
+  à la construction, et la carte passe de complète à partielle — la couverture était fausse.
+Restent : les coûts à X ou en marqueurs (Hazel of the Rootbloom, Crucible of the Spirit Dragon, Wall of Roots), le mana
+d'un permanent sacrifié (Squandered Resources), le mana réservé au combat (Avatar Roku).
+
+**Lot F77 : marqueurs et dés** (`js/forgeMarqueursC.js`). Treize cartes de plus :
+- **`Amass | RememberAmass$`** (Foray of Orcs, Grishnákh, Widespread Brutality) : l'armée qui reçoit les marqueurs se retient,
+  pour le déclencheur réflexe « deals X damage, where X is the amassed Army's power » ;
+- **`Connive | ConniveNum$`** (Spymaster's Vault, Raffine), **`Explore | Num$`** (Jadelight Spelunker, Over the Edge) :
+  N fois ;
+- **`PutCounter | CounterNumPerDefined$`** (Canopy Gargantuan, Sovereign Okinec Ahau) : le même nombre sur chaque objet
+  désigné ; **`UpTo$`** : de zéro à N, au choix ;
+- **`RollDice | EvenOddResults$`** (Clown Car) : chaque dé se lit à part ; `EvenResults` et `OddResults` valent combien
+  sont pairs et impairs, pour les sous-capacités qui les lisent.
+Restent : les marqueurs de mot-clé (`CounterTypes$ Flying,Deathtouch`, Qarsi Revenant), `MoveCounter | ValidDefined$`, les
+dés qu'on garde (`IgnoreLower$`, `DifferentResults$`), le résultat naturel (`Natural$`), le remplacement d'un marqueur
+posé à un joueur (Winding Constrictor).
+
+**Lot F78 : animer, et un nombre retenu** (`js/forgeEffetsD.js`, `js/forgeEffetsJ.js`). Neuf cartes de plus :
+- **`Animate | AddAllCreatureTypes$`**, `AnimateAll` (Mutavault, Mirror Entity, Glamer Gifter, Oko, Shields of Velis Vel) :
+  l'animation porte `changelin: true`, que la couche propre à l'objet (`car()`) lit déjà — un changelin, le temps de
+  l'animation ;
+- **`Effect | SetChosenNumber$ X`** (Will, Scion of Peace ; Mutated Cultist ; Nahiri's Lithoforming) : l'effet retient un
+  nombre que `Count$ChosenNumber` lira plus tard.
+Restent : les remplacements et SVars qu'une animation accorde (`Replacements$`, `sVars$` : The Book of Exalted Deeds,
+Vorpal Sword), `CantHaveKeyword$`, et les effets qui posent un remplacement d'entrée avec marqueurs (Communal Brewing,
+Torgal : leur chaîne `Effect | ReplacementEffects$ … ExileOnMoved$ Stack` n'est pas encore lue).
+
+**Lot F79 : batailles, classes, chapitres, mots-clés de lancement** (`js/forgeBatailles.js`, et des retouches). Dix-huit
+cartes de plus :
+- **Les batailles** (Invasion of Ikoria, Tarkir, Theros, Fiora…). Une carte à deux faces dont l'avant porte `Defense:N`
+  n'était jamais « tenue » : la détection des faces transformables ne lisait que `Transformed$ True` dans un texte brut,
+  jamais la forme des tables lues (`"Transformed":"True"`) — les deux se reconnaissent maintenant, et `Defense` suffit.
+  La bataille entre avec N marqueurs défense et un protecteur — l'adversaire qui suit son contrôleur dans l'ordre du tour,
+  sans choix ; son contrôleur l'attaque comme un planeswalker (`defenseurDe()` rend le protecteur, qui bloque), les
+  dégâts ôtent de la défense, et à zéro elle part en exil, d'où sa face arrière se lance sans payer
+  (`lanceEffet.dos`). Simplification : pas de détour par le cimetière, pas de choix du protecteur.
+- **`Devour:N:Type`** (Famished Worldsire) et **`Firebending:X`** — X est la force de la créature ou le nombre de
+  créatures contrôlées. Les marqueurs d'expérience ne se comptent pas.
+- **Les classes** dont un déclencheur porte déjà son `IsPresent` (Hunter's Talent) : le niveau se garde à part
+  (`ClassLevelAtLeast`, jugé par `conditionForge()`). `MustBlock | BlockAllDefined$` (Fighter Class).
+- **`Animate`/`AnimateAll` jusqu'au prochain tour** ou tant que l'hôte reste (Song of Freyalise), qui permettent à un
+  chapitre de saga de les poser.
+- **L'entretien cumulatif en effet** : « un adversaire gagne N vie » (Wall of Shards) ou « ajoutez {R} » (Braid of
+  Fire) — le mana ajouté se dépense pendant l'entretien.
+- **`Charm` à minimum calculé** (Inscription of Abundance : « tout nombre si kické ») ; `PumpAll | PumpZone$ Graveyard |
+  KW$ Flashback` (Will of the Jeskai) ; `Count$Kicked` se lit dès le choix des modes.
+- **Commander ninjutsu** (Yuriko, the Tiger's Shadow) : la capacité s'active depuis la zone de commandement.
+Restent : les coûts de flashback, de squad, de replicate et d'escalate qui ne sont pas du mana (engager des créatures,
+exiler des cartes du cimetière), `Mobilize:X`, `Reinforce:X`, le deuxième coût de `Kicker`, les chapitres qui posent un
+effet à retardement ou animent « pour chaque adversaire », Monk Class (une carte exilée qui se lance sous condition).
+
+**Lot F80 : déclencheurs et effets refusés** (`js/forgeEntreesB.js`, `js/forgeEffetsK.js`, et des retouches). Dix-neuf
+cartes de plus :
+- **« Ce sort entre avec des marqueurs de plus »** (Torgal, Communal Brewing, Summon: Fenrir, Intrepid Paleontologist) et
+  « … entre engagé » (Edgar) : un déclencheur de lancement pose un `Effect` qui retient le sort et porte un remplacement
+  `Moved | ValidCard$ Card.IsRemembered`. L'effet disparaît quand le sort quitte la pile (`ExileOnMoved$ Stack`), donc
+  `metEnJeu()` relève ce qui l'attend *avant* de déplacer la carte (`entreAvecPrevu()`). Le nombre retenu
+  (`SetChosenNumber`) se range avec la carte hôte : deux sorts lancés de suite se partagent le dernier.
+- **Jouer la carte qu'on vient de meuler ou d'exiler** (Ark of Hunger, Tablet of Discovery, Court of Locthwain) : un
+  `Effect` à statique `MayPlay` tenue par la zone de commandement (`EffectZone$ Command | Affected$ Card.IsRemembered`).
+  `ExileOnMoved$` et `ForgetOnMoved$` prennent une liste de zones ; `Duration$ UntilEndOfTurn` est connue.
+- **`CheckDefinedPlayer$ Opponent.isMonarch` / `You.withMostLife`** (Queen Marchesa, Preacher of the Schism) ;
+  **`Spell.ManaSpent GTX`**, X lu sur la source (Liberator) ; **`ProtectionAll | Gains$ TargetedCardColor`** (Éowyn) :
+  les couleurs de la carte que l'effet vient d'exiler, lues sur son instantané ; **`Goad | Duration$ Permanent`**
+  (Nettling Nuisance) ; **`Animate | AtEOT$ YourExile`** (Puppeteer Clique, lu comme le prochain `Exile` : la fin
+  d'étape qui vient, pas forcément la vôtre).
+- **Mettre en jeu depuis la zone de commandement** (Derevi) : `ActivationZone$ Command`, avec la même route que le
+  ninjutsu du commandant.
+Restent : les effets qui animent « pour chaque adversaire » ou boucle à chaque joueur (`RepeatEach`, Mardu Siegebreaker,
+Delina), `RemoveCounter` sur « n'importe quels permanents » (Eventide's Shadow), les dés à sous-capacités par résultat
+(Comet), `Manifest` (Orochi Soul-Reaver), les effets « ne se dégagent pas » à durée (Kill Switch, Bontu's Last Reckoning),
+les chapitres et classes à effet retardé.
+
+**Correctif : cibler un joueur pour toucher ses créatures** (`objetsForge()`, `js/forgeDefini.js`). Un effet qui
+porte un `ValidTgts$ Player` et un `Defined$ Valid Creature.ControlledBy TargetedPlayer` — Geode Rager : « goad each
+creature target player controls » — ne touchait rien : avec un emplacement de cible, `objetsForge()` ne lisait que
+les cibles, des joueurs, qu'il écarte comme non-objets, et ne regardait jamais `Defined$`. Les créatures de
+l'adversaire choisi n'étaient donc jamais incitées. Quand toutes les cibles sont des joueurs et que `Defined$`
+désigne autre chose que le joueur lui-même, ce sont maintenant les objets désignés qui sont touchés — pour tous les
+effets qui s'écrivent ainsi, non pour le seul goad.
+
+**Lot F81 : copier et devenir** (`js/forgeCopiesB.js`). Onze cartes de plus. Ce que l'effet de copie ajoute à la copie :
+- `AddColors$` (Ratadrabik of Urborg, The Jolly Balloon Man) ; `RemoveCardTypes$ True` : la copie ne garde que les
+  types ajoutés (Espers to Magicite) ;
+- `PumpKeywords$` avec `PumpDuration$ EOT` : le mot-clé est un bonus du tour (`mods`), il n'entre pas dans la
+  définition de la copie (Ashling, the Limitless, God-Pharaoh's Gift) ;
+- `Clone | IntoPlayTapped$ True` (Vesuva) ; `AddSVars$` (Kimahri, Court of Vantress, Lazav, Irma) n'ajoute rien :
+  la capacité copiée emporte déjà ses SVars ; `CopySpellAbility | UnlessAI$` est un indice pour l'IA de Forge
+  (Chain of Vapor).
+Restent : la copie d'un **sort de permanent** (Storm of Saruman, Double Major : elle devient un jeton sur la pile, que
+le moteur ne sait pas poser sans le lancer), les copies **d'une carte nommée** (`DefinedName$` : le moteur ne
+cherche pas une carte par son nom hors du deck), les statiques ajoutées à une copie (`AddStaticAbilities$`), les
+échanges de contrôle conditionnels (Gilded Drake).
+
+**Lot F82 : des effets et des conditions de plus** (`js/forgeEffetsL.js`). Quinze cartes de plus :
+- **`EndTurn`** (Sundial of the Infinite, Day's Undoing) : la pile s'exile, `P.finTour` arrête les étapes, et
+  `suiteDuTour()` joue alors le nettoyage — sans lui les blessures auraient survécu au tour. **`AddTurn | SkipUntap$`**
+  (Savor the Moment) : le tour en plus saute le dégagement, mais ses permanents deviennent « prêts ».
+- **`DealDamage | ExcessDamage$ TargetedController`** (Ravenous Tyrannosaurus) : la créature ne reçoit que de quoi
+  mourir, le reste va à son contrôleur ; `ExcessSVarCondition$` (Goblin Negotiation, Hell to Pay).
+- **`Token | TokenBlocking$`** (Brimaz) : le jeton entre en bloquant l'attaquant ; **`Unattach`** (Akiri) ;
+  **`R:GainLife | Prevent$ True`** (Sulfuric Vortex).
+- **Les restrictions de moment**, qu'un sort portait sans qu'on les tienne : `OpponentTurn$` (Delirium),
+  `ActivationFirstCombat$` et `ActivationPhases$` (Berserk) valent maintenant pour le sort comme pour la capacité
+  (`restrictionsSort`, `restr`). Elles sont inscrites par effet, non comme paramètres communs : un déclencheur qui
+  porte `OpponentTurn$` doit la lire lui-même, comme `SpellCast` le fait.
+- **`ActivationGameTypes$`** (War Room) : la capacité ne s'active que dans une partie à commandants — un joueur qui en
+  a ; **`ConditionOpponentTurn$`** (Fevered Visions) ; **`ProtectionAll | ValidPlayers$ You`** (Seht's Tiger) : à l'abri
+  de la couleur contre les cibles et les dégâts ; **`Goad | RememberGoaded$`** (Havoc Eater).
+Restent : prendre le contrôle d'un joueur (`ControlPlayer`, Mindslaver, Sorin Markov), les attractions (`OpenAttraction`),
+`Recruit`, `ExchangeTextBox` (Deadpool), `ExchangeLife`, les paramètres de pioche `NonBasicSpell` et `Forecast`, et
+une dizaine de paramètres isolés (`Token.Boast`, `Tap.Tapper`, `Counter.ValidCause`, `Surveil.RememberMoved`…).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.
@@ -1450,7 +1930,7 @@ n'est en jeu, les données vont de ce navigateur au nuage et en reviennent. Troi
 gouvernent.
 
 **Trois étages, fusionnés différemment** (`js/nuagePaquet.js`). Le **fond** — la collection, les
-decks avec tout ce qu'ils portent, le format personnalisé, les préférences d'achat — est l'intention
+acquisitions en cours, les decks avec tout ce qu'ils portent, le format personnalisé, les préférences d'achat — est l'intention
 du joueur, et se fusionne carte par carte. Les decks y forment un étage à eux, fusionné **dossier par
 dossier puis carte par carte** (`fusionneDecks()`, `js/nuageFusion.js`) ; **aucun marqueur de
 suppression n'est nécessaire**, la base à trois côtés tranchant seule les deux cas qui comptent — un
@@ -1646,11 +2126,20 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
 - La page **Decks** répond à la question qui précède toutes les autres : sur quoi travaille-t-on.
   « Mes decks » montre une vignette par deck — avancement, taille visée, part possédée, reste à
   acheter, budget, restrictions — et porte les gestes : *Nouveau*, *Travailler dessus*, *Configurer*,
-  *Dupliquer*, *Supprimer*. « Liste d'achats » montre le total consolidé. La pastille de l'en-tête y
-  mène et dit le deck ouvert. Cet onglet ne montre aucune des cinq listes de cartes — des vignettes
-  de deck et un tableau d'achats ne se règlent ni en colonnes ni en groupes —, d'où son `liste` nul
+  *Dupliquer*, *Supprimer*. La liste d'achats, qui montre le total consolidé, a sa propre page **Wishlist**. La pastille de
+  l'en-tête mène à Decks et dit le deck ouvert. Cet onglet ne montre aucune des cinq listes de cartes — des vignettes
+  de deck ne se règlent ni en colonnes ni en groupes —, d'où son `liste` nul
   dans `ONGLETS` : le bouton « Affichage » s'efface alors, plutôt que de régler une liste
   qu'on ne voit pas.
+- **L'acquisition en cours** est l'entre-deux de la collection et de la liste d'achats : ce qui est
+  commandé et pas encore reçu. `S.enCours` (nom -> exemplaires) est sauvegardé par `snapshot()` ;
+  `restore()` ne le touche que si le champ est présent, si bien qu'une sauvegarde d'hier ou un paquet
+  de synchronisation laisse les commandes de l'appareil intactes — elles ne voyagent pas : une fusion
+  par le maximum ressusciterait une commande reçue sur l'autre poste. Une carte en route compte comme
+  **couverte** pour les paniers (`aAcheter()`, `wishlist()`, `coutDeck()`, `bilanDeck()`) et donc pour le
+  budget, mais **pas comme possédée** — suggestions, légalité et jeu lisent toujours la collection. C'est une
+  décision : le budget dit ce qu'il reste à acheter, non ce qu'on a engagé. « Reçue » verse tout à la
+  collection ; « Annuler » rend la carte à la liste d'achats.
 - Le dernier deck ne se supprime pas : l'atelier n'a pas d'état sans deck ouvert, et « supprimer »
   vaudrait « vider », qui a son propre bouton. Deux decks ne peuvent pas porter le même nom — un
   doublon reçoit un numéro —, sans quoi ils seraient indiscernables dans la pastille comme dans
@@ -1706,6 +2195,21 @@ monde et six cents traits ne disent plus rien. Graphviz absent, les `.dot` sont 
   exister, une carte qu'on ne possède pas y est comptée à l'achat —, et la fenêtre de confirmation
   annonce ce qu'elle retire, ce qu'elle garde, et combien de cartes du deck passeront à l'achat. Le
   geste qui prend tout reste « Effacer les données locales », dans la fenêtre des paramètres.
+- **Supprimer une carte, et garder la date de son ajout** (`js/collectionDates.js`). Chaque ligne et
+  chaque vignette de la collection porte un « ✕ » qui retire la carte entière, tous exemplaires, après
+  une fenêtre de confirmation (`openSupprCarteModal()`, `js/collection.js`) ; le « − » du champ de
+  recherche, lui, ôte un exemplaire. `S.collectionDates` dit quand les exemplaires sont venus — nom ->
+  `[[AAAA-MM-JJ, n], …]` : un jour où l'on ajoute deux exemplaires fait une entrée, non deux. Elle
+  n'est jamais écrite à la main : toute écriture dans la collection passe par `ajouteACollection()`,
+  `retireDeCollection()`, `supprimeDeCollection()` ou `videCollection()`, qui tiennent les deux tables
+  d'accord (un retrait ôte les exemplaires les plus récents). **Les dates ne couvrent pas forcément
+  toute la quantité** : une collection saisie avant elles n'en porte aucune, et l'on n'en invente pas ;
+  l'écart se lit « date inconnue ». La sauvegarde (`snapshot()`) les range ; `restore()` lit une
+  sauvegarde d'hier sans elles. Elles voyagent avec le fond de la synchronisation
+  (`fusionneDates()`, `js/nuageFusion.js`) : pour chaque date, le plus grand nombre vu d'un côté ou de
+  l'autre, puis rien au-delà de la quantité fusionnée. Une ligne affiche la première date et combien
+  d'autres (`05/01/2026 (+1)`), l'infobulle et la fiche les détaillent, et la collection se trie par
+  date d'ajout.
 - La collection et le deck portent les mêmes trois boutons — **Importer**, **Exporter**, **Vider** —
   et le même champ de recherche sous eux. Les deux barres divergeaient : « Ajouter » ouvrait une
   fenêtre, « Importer MTGO » n'était nommé que d'un côté, « Exporter » n'existait que pour le deck,

@@ -1,8 +1,9 @@
 /* =====================================================================
    js/jeuMana.js — La réserve de mana, et le paiement automatique
 
-   Au lot 1, personne ne choisit à la main quels terrains engager : un
-   solveur le fait. Les symboles colorés passent d'abord, appariés aux
+   Par défaut, personne ne choisit à la main quels terrains engager : un
+   solveur le fait. (Le joueur qui préfère engager ses sources lui-même, et ne
+   payer que sur sa réserve, passe au paiement manuel : js/jeuManaManuel.js.) Les symboles colorés passent d'abord, appariés aux
    sources par chemins augmentants — un Forêt-Île ne doit pas payer le vert
    que seule une Forêt pouvait payer, laissant le bleu sans source —, puis le
    générique, payé par les sources les moins précieuses : les terrains avant
@@ -108,7 +109,9 @@ function planPaiement(P, j, cout, x, pour) {
   /* Une source qui produit plusieurs manas d'un coup (« WG », « CC ») compte
      pour chacun d'eux : une part par lettre, activée une seule fois. */
   const src = [];
-  sourcesMana(P, j, pour).forEach(s => {
+  /* Au paiement manuel, seule la réserve paie : les sources, c'est au joueur de les engager
+     (js/jeuManaManuel.js). */
+  if (!paiementManuel(P, j)) sourcesMana(P, j, pour).forEach(s => {
     if (s.options.length === 1 && s.options[0].length > 1) s.options[0].split('').forEach(l => src.push({...s, options: [l], couleurs: [l], cap: 1, base: s}));
     else src.push(s);
   });
@@ -202,16 +205,7 @@ function paieMana(P, j, cout, x, pour) {
     const n = typeof option === 'string' ? option.length : 1, c = o.zone === 'champ' ? car(P, o) : o.def;
     ['creature', 'artifact'].forEach(t => { if ((c.types || []).includes(t)) de[t] += n; });
     if ((c.sousTypes || []).includes('treasure')) de.treasure += n;
-    /* Une source de la main s'exile (js/forgeManaB.js). */
-    if (s.main) { deplace(P, s.id, 'exil'); ajouteMana(P, j, option); continue; }
-    /* Ce que ce mana donne au sort (js/forgeManaC.js) : d'où il vient, et ce qu'il accorde. */
-    if (pour && pour.sort) { manaPorte(P, j, s, option, pour); }
-    engageObjet(P, o, option || true);
-    if (s.nonContre && s.nonContre.includes(option) && pour && pour.sort) pour.sort.nonContrable = true;
-    if (s.reste) o.exerce = true;
-    if (s.vie) J.vie -= s.vie;
-    if (s.sac) deplace(P, s.id, 'cimetiere');
-    ajouteMana(P, j, option);
+    activeSource(P, j, s, option, pour);
   }
   let sup = null;
   for (const {s, option} of plan) if (s.filtre) sup = activeFiltre(P, j, s, option, sup);
@@ -221,6 +215,24 @@ function paieMana(P, j, cout, x, pour) {
   /* Le mana dépensé pour un sort, couleur par couleur (convergence). */
   if (pour && pour.sort) { pour.sort.manaSort = manaSortSansFiltres(Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]])), sup); pour.sort.manaDe = de; }
   return true;
+}
+
+/* Activer une source de mana : l'engager (ou la sacrifier, la payer en vie…) et verser son
+   mana dans la réserve. Le paiement automatique en passe par là pour chaque source de son
+   plan, le joueur qui paie à la main pour celle qu'il choisit. */
+function activeSource(P, j, s, option, pour) {
+  const o = obj(P, s.id), J = P.joueurs[j];
+  if (!o) return;
+  /* Une source de la main s'exile (js/forgeManaB.js). */
+  if (s.main) { deplace(P, s.id, 'exil'); ajouteMana(P, j, option); return; }
+  /* Ce que ce mana donne au sort (js/forgeManaC.js) : d'où il vient, et ce qu'il accorde. */
+  if (pour && pour.sort) { manaPorte(P, j, s, option, pour); }
+  engageObjet(P, o, option || true);
+  if (s.nonContre && s.nonContre.includes(option) && pour && pour.sort) pour.sort.nonContrable = true;
+  if (s.reste) o.exerce = true;
+  if (s.vie) J.vie -= s.vie;
+  if (s.sac) deplace(P, s.id, 'cimetiere');
+  ajouteMana(P, j, option);
 }
 
 /* Les réserves se vident à la fin de chaque étape (règle 500.4). */

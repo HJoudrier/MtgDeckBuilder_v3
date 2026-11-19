@@ -47,9 +47,11 @@ function effetForge(face, t0, jetons, racine) {
     /* « Choose one. If you control a commander, choose both » : un plafond calculé au lancement. */
     const maxV = t0.CharmNum && !/^\d+$/.test(t0.CharmNum) ? String(face.svars[t0.CharmNum] || t0.CharmNum) : null;
     const max = maxV ? (/xPaid/.test(maxV) || t0.MinCharmNum == null ? null : opts.length) : +(t0.CharmNum || 1);
-    const min = t0.MinCharmNum != null ? (/^\d+$/.test(t0.MinCharmNum) ? +t0.MinCharmNum : null) : max;
+    /* Un minimum qui se calcule aussi (« choose any number if kicked » : X vaut 0 ou 3). */
+    const minV = t0.MinCharmNum != null && !/^\d+$/.test(t0.MinCharmNum) ? String(face.svars[t0.MinCharmNum] || t0.MinCharmNum) : null;
+    const min = t0.MinCharmNum != null ? (minV ? 0 : +t0.MinCharmNum) : max;
     if (max == null || min == null) return null;
-    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null, ...(maxV ? {maxForge: {v: maxV, face}} : {})}};
+    return {ops: [], cibles: [], modes: {min, max, options: opts, restr: t0.ChoiceRestriction || null, ...(maxV ? {maxForge: {v: maxV, face}} : {}), ...(minV ? {minForge: {v: minV, face}} : {})}};
   }
   const ops = [], cibles = [], chaine = ++CHAINES_FORGE;
   let t = t0, parent = null, garde = 0;
@@ -99,31 +101,36 @@ function capaciteForge(def, face, t, jetons) {
     const e = effetForge(face, t, jetons, true);
     if (!e) return false;
     def.sort = e;
+    const rs = restrictionSort(t);
+    if (rs) def.restrictionsSort = rs;
     const autre = Object.keys(c.cout).filter(k => k !== 'mana');
     if (autre.length) def.coutSup = c.cout;
     return true;
   }
   /* Depuis la main ou le cimetière : js/jeuLancer.js les propose aussi. */
-  const zone = {Hand: 'main', Graveyard: 'cimetiere'}[t.ActivationZone] || null;
+  const zone = {Hand: 'main', Graveyard: 'cimetiere', Command: 'commandement'}[t.ActivationZone] || null;
   if (t.ActivationZone && t.ActivationZone !== 'Battlefield' && !zone) return false;
   if (zone && (api === 'Mana' || t.Planeswalker === 'True' || c.cout.engage)) return false;
+  /* Une condition d'activation inconnue écarte la capacité (js/forgeActivations.js). */
+  if (t.Activation && !FORGE_CONDITIONS[t.Activation]) return false;
+  const cond = t.Activation ? {activation: t.Activation} : {};
   /* « Add one mana of any color a land you control could produce »
      (Reflecting Pool, Exotic Orchard) : les couleurs se lisent au moment
      de payer (js/jeuMana.js `manaReflete()`). */
   if (api === 'ManaReflected' && !t.SubAbility && t.Valid && !/^Defined/.test(t.Valid)) {
-    def.capacites.push({genre: 'mana', cout: c.cout, options: [], reflete: {valid: t.Valid, type: t.ColorOrType === 'Type'}, texte: texteForge(face, t)});
+    def.capacites.push({genre: 'mana', cout: c.cout, options: [], reflete: {valid: t.Valid, type: t.ColorOrType === 'Type'}, texte: texteForge(face, t), ...cond});
     return true;
   }
   /* « It doesn't untap during your next untap step » (Cinder Marsh) : un
      drapeau de la source, que le paiement pose (js/jeuMana.js). */
   const resteEngage = api === 'Mana' && t.SubAbility && /^DB\$ Effect \| ReplacementEffects\$ DontUntap \| RememberObjects\$ Self\b/.test(face.svars[t.SubAbility] || '');
   /* Le planificateur de paiement ne sait ni choisir X ni payer ces morceaux. */
-  if (api === 'Mana' && (aCoutX(c.cout) || c.cout.ajoute || c.cout.exileChamp)) return false;
+  if (api === 'Mana' && (aCoutX(c.cout) || c.cout.ajoute || c.cout.exileChamp || c.cout.defausse || c.cout.defausseSoi)) return false;
   if (api === 'Mana' && (!t.SubAbility || resteEngage)) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */
     if (/^Combo ColorIdentity$/.test(t.Produced || '') && (t.Amount || '1') === '1' && tableJouable(t)) {
-      def.capacites.push({genre: 'mana', cout: c.cout, options: [], identite: true, texte: texteForge(face, t)});
+      def.capacites.push({genre: 'mana', cout: c.cout, options: [], identite: true, texte: texteForge(face, t), ...cond});
       return true;
     }
     /* La couleur choisie (« add one mana of the chosen color »), une
@@ -137,16 +144,21 @@ function capaciteForge(def, face, t, jetons) {
     def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {}),
       ...(t.SorcerySpeed === 'True' ? {vitesse: 'rituel'} : {}),
       ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face}),
-      ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {})});
+      ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {}), ...cond});
     return true;
   }
+  /* `Activation$ Delirium` : « activate only if… », jugé par FORGE_CONDITIONS ; une
+     condition inconnue laisse la capacité écartée (js/forgeActivations.js). */
+  if (t.Activation && !FORGE_CONDITIONS[t.Activation]) return false;
   const effet = effetForge(face, t, jetons, true);
   if (!effet) return false;
   if (t.Planeswalker === 'True') {
     if (c.loyaute == null) return false;
     def.capacites.push({genre: 'loyaute', delta: c.loyaute, effet, texte: texteForge(face, t)});
   } else def.capacites.push({genre: 'activee', cout: c.cout, effet, vitesse: t.SorcerySpeed === 'True' ? 'rituel' : null,
-    unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {})});
+    unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {}),
+    ...(t.ReduceCost ? {reduit: t.ReduceCost, face} : {}), ...(t.Activation ? {activation: t.Activation} : {}),
+    ...(t.ActivationGameTypes ? {jeux: t.ActivationGameTypes} : {}), ...(restrictionSort(t) ? {restr: restrictionSort(t)} : {})});
   return true;
 }
 
@@ -229,7 +241,7 @@ function definitionDepuisScript(s, fiche, jetons) {
   const pt = /^(-?\d+)\/(-?\d+)$/.exec(face.pt || '');
   const def = {nom: fiche.nom || face.nom, cout, mv: cout.total, types: ti.types, sousTypes: ti.sousTypes, supers: ti.supers,
     couleurs: face.couleurs ? couleursForge(face.couleurs) : couleursDe(cout, {}), force: pt ? +pt[1] : null,
-    endurance: pt ? +pt[2] : null, loyaute: /^\d+$/.test(face.loyaute || '') ? +face.loyaute : null, mots: 0, params: {},
+    endurance: pt ? +pt[2] : null, loyaute: /^\d+$/.test(face.loyaute || '') ? +face.loyaute : null, defense: /^\d+$/.test(face.defense || '') ? +face.defense : null, mots: 0, params: {},
     sort: null, capacites: [], statiques: [], entree: null, aura: null, equipe: null, kicker: null, flashback: null, cycling: null,
     jeton: !!fiche.jeton, couverture: null, coutTexte: face.cout, typeLigne, texteOracle: face.oracle.replace(/\n/g, ' // '), source: 'forge'};
   if (def.types.includes('creature') && (def.force == null || def.endurance == null)) {
@@ -292,7 +304,7 @@ function definitionAFaces(s, fiche, jetons) {
   const brut = JSON.stringify(s.faces.map(f => [f.a, f.t, f.svars, f.k]));
   /* Une carte transformable est jouée si quelque chose la transforme : un
      effet, le jour et la nuit, disturb, craft, ou un retour « transformed ». */
-  const tenu = FORGE_FACES.includes(s.mode) && (!/^(DoubleFaced|Flip)$/.test(s.mode) || /SetState|Daybound|Nightbound|Disturb|Craft|Transformed\$ True/.test(brut));
+  const tenu = FORGE_FACES.includes(s.mode) && (!/^(DoubleFaced|Flip)$/.test(s.mode) || /SetState|Daybound|Nightbound|Disturb|Craft|Transformed\$ True|"Transformed":"True"/.test(brut) || s.faces[0].defense != null);
   if (tenu) { def.dos = ar.def; def.modeFaces = s.mode; portesRoom(def); }
   const manque = tenu ? ar.def.couverture.manque.filter(e => !c.manque.includes(e)) : ['construction:' + (s.mode || 'faces')];
   if (c.etat === 'complete' && (manque.length || ar.def.couverture.etat !== 'complete')) c.etat = 'partielle';

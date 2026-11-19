@@ -76,8 +76,14 @@ function compileDeclenchee(ligne, puces) {
 function compileActivee(ligne, puces) {
   const i = deuxPoints(ligne);
   if (i < 0) return null;
-  const avant = ligne.slice(0, i).trim(), ry = oteRythme(ligne.slice(i + 1).trim());
+  let avant = ligne.slice(0, i).trim();
+  const ry = oteRythme(ligne.slice(i + 1).trim());
   let m;
+  /* Channel — {1}{R}, Discard ~: s'active depuis la main, comme un cycle ; le
+     mot n'est qu'une étiquette, c'est la défausse de la carte qui la rend
+     possible là et pas sur le champ. */
+  const canal = (m = /^channel\s*[—-]\s*(.+)$/.exec(avant)) != null;
+  if (canal) avant = m[1];
   if ((m = /^([+-]?\d+|[+-]x)$/.exec(avant))) {
     const c = contexteOracle();
     const r = compileEffetModal(ry.txt, c, puces);
@@ -92,7 +98,7 @@ function compileActivee(ligne, puces) {
   const ops = r.effet.ops;
   if (ops.length === 1 && ops[0].op === 'mana' && !r.rates.length && !c.cibles.length)
     return {genre: 'mana', cout, options: ops[0].options, parChaque: ops[0].parChaque || null, rates: []};
-  return {genre: 'activee', cout, effet: r.effet, vitesse: ry.vitesse, unefois: ry.unefois, rates: r.rates};
+  return {genre: 'activee', cout, effet: r.effet, vitesse: ry.vitesse, unefois: ry.unefois, rates: r.rates, ...(canal && cout.defausseSoi ? {zone: 'main'} : {})};
 }
 
 /* Ranger une ligne. `estSort` : la carte est un éphémère ou un rituel, et

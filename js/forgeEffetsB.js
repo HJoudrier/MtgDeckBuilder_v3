@@ -73,12 +73,20 @@ function letalPour(P, c) {
    la somme dans la variable que lira `ConditionCheckSVar$ Excess`
    (« if excess damage was dealt this way »). */
 function infligeAvecExces(P, t, env, src, c, n) {
-  const letal = letalPour(P, c), fait = infligeDegats(P, src, c, n, false);
+  const letal = letalPour(P, c);
+  /* `ExcessDamage$ TargetedController` : la créature ne reçoit que de quoi la tuer, le reste va à son contrôleur. */
+  if (t.ExcessDamage === 'TargetedController' && c.j == null && c.zone === 'champ') {
+    const part = Math.min(n, letal), exces = n - part, fait = part > 0 ? infligeDegats(P, src, c, part, false) : 0;
+    if (exces > 0) infligeDegats(P, src, {j: c.ctrl}, exces, false);
+    if (t.ExcessSVar) { const v = varsDe(env.ctx); v[t.ExcessSVar] = (v[t.ExcessSVar] || 0) + exces; }
+    return fait + exces;
+  }
+  const fait = infligeDegats(P, src, c, n, false);
   if (t.ExcessSVar) { const v = varsDe(env.ctx); v[t.ExcessSVar] = (v[t.ExcessSVar] || 0) + Math.max(0, fait - letal); }
   return fait;
 }
 
-forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose', 'ExcessSVar'], function* (P, t, env) {
+forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose', 'ExcessSVar', 'ExcessDamage', 'ExcessSVarCondition'], function* (P, t, env) {
   const n = forgeNombre(P, t.NumDmg || 0, env), src = sourceDegats(P, t, env);
   if (t.ExcessSVar) varsDe(env.ctx)[t.ExcessSVar] = 0;
   const cibles = env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Targeted', env);
@@ -229,5 +237,7 @@ forgeEffet('RemoveCounter', ['CounterType', 'CounterNum'], function* (P, t, env)
   });
 }, (t, op) => { op.op = 'forge'; op.hostile = op.slot != null; });
 
-forgeEffet('Proliferate', [], function* (P, t, env) { yield* OPS.prolifere(P, {}, env.ctx); },
+forgeEffet('Proliferate', ['Amount'], function* (P, t, env) {
+  for (let k = forgeNombre(P, t.Amount || 1, env); k > 0; k--) yield* OPS.prolifere(P, {}, env.ctx);
+},
   (t, op) => { op.op = 'prolifere'; op.hostile = false; });
