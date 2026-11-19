@@ -62,7 +62,7 @@ function vue(P, j) {
     i: J.i, nom: J.nom, vie: J.vie, poison: J.poison, energie: J.energie || 0, main: J.main.length, bib: J.bibliotheque.length,
     cim: J.cimetiere.map(id => carteVue(P, id, cartes)), exil: J.exil.map(id => carteVue(P, id, cartes)),
     cmd: J.commandement.map(id => carteVue(P, id, cartes)), degatsCmd: {...J.degatsCmd},
-    elimine: J.elimine, raison: J.raison, pool: {...J.pool}}));
+    elimine: J.elimine, raison: J.raison, pool: {...J.pool}, manuel: !!J.manuel}));
   const pile = P.pile.map(it => {
     const cs = [].concat(...it.effets.map(ef => [].concat(...ef.cibles)));
     return {id: it.id, nom: it.sort ? it.def.nom : it.nom, ctrl: it.ctrl, sort: !!it.sort, cibles: cs.map(c => libelleRef(P, c)),
@@ -80,6 +80,8 @@ function libelleAction(P, a) {
   if (a.k === 'passer') return 'Passer';
   const o = obj(P, a.id), nom = o ? o.def.nom : '?';
   if (a.k === 'terrain') return 'Jouer ' + (a.variante === 'dos' && o ? o.def.dos.nom : nom) + (a.depuis ? ` (depuis ${ZONES_DEPUIS[a.depuis]})` : '');
+  if (a.k === 'mana') return (a.sac ? 'Sacrifier ' : 'Engager ') + nom + ' : mana ' + libelleManaOption(a.option);
+  if (a.k === 'reglage') return a.manuel ? 'Payer le mana à la main' : 'Payer le mana automatiquement';
   if (a.k === 'retourner') return 'Retourner ' + (o && o.vraieDef ? o.vraieDef.nom : nom);
   if (a.k === 'equiper') return 'Équiper : ' + nom;
   if (a.k === 'presager') return 'Présager ' + nom;
@@ -106,7 +108,8 @@ function questionPourUI(P, q) {
     source: q.source && obj(P, q.source) ? q.source : null};
   const ref = c => (c && typeof c === 'object') ? {j: c.j, label: libelleRef(P, c)} : {id: c, label: libelleRef(P, c)};
   switch (q.q) {
-    case 'priorite': return {...base, options: q.options.map(a => ({k: a.k, id: a.id, i: a.i, depuis: a.depuis, label: libelleAction(P, a)}))};
+    case 'priorite': return {...base, options: q.options.map(a => ({k: a.k, id: a.id, i: a.i, depuis: a.depuis, label: libelleAction(P, a),
+      ...(a.k === 'mana' ? {option: a.option} : a.k === 'reglage' ? {manuel: a.manuel} : {})}))};
     case 'cibles': return {...base, options: q.options.map(ref), aura: !!(q.extra && q.extra.aura)};
     case 'attaquants': return {...base, options: q.options.map(ref),
       defenseurs: q.extra.defenseurs.map(d => d.j != null ? {j: d.j, label: P.joueurs[d.j].nom} : {pw: d.pw, label: libelleRef(P, d.pw)})};

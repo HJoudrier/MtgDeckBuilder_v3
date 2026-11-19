@@ -234,5 +234,7 @@ function* executeAction(P, j, a) {
   if (a.k === 'comploter') return yield* complote(P, j, a);
   if (a.k === 'suspendre') return yield* suspend(P, j, a);
   if (a.k === 'retourner') return yield* retourne(P, j, a);
+  if (a.k === 'mana') return activeManaManuel(P, j, a);
+  if (a.k === 'reglage') return basculeReglage(P, j, a);
   return false;
 }

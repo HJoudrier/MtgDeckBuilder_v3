@@ -49,7 +49,8 @@ OPS.pompe = function* (P, op, ctx) {
     P.ver++;
   });
 };
-OPS.mana = function* (P, op, ctx) { ajouteMana(P, ctx.ctrl, op.options[0]); };
+/* Plusieurs options : le joueur choisit (js/jeuManaManuel.js) ; un automate garde la première. */
+OPS.mana = function* (P, op, ctx) { ajouteMana(P, ctx.ctrl, yield* choisitManaOption(P, ctx.ctrl, op.options, ctx.source, 0)); };
 OPS.cherche = function* (P, op, ctx) {
   const j = op.qui ? joueursDe(P, op.qui, ctx)[0] : ctx.ctrl;
   if (j == null) return;

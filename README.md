@@ -61,6 +61,7 @@ js/                 modules, chargés dans cet ordre :
   jeuCibles.js      juger un objet contre un descripteur
   jeuMana.js        la réserve, et le paiement automatique
   jeuManaFiltres.js le mana qui coûte du mana : terrains-filtres, Cabal Coffers, Grinning Ignus — un complément du solveur de paiement
+  jeuManaManuel.js  le paiement manuel : engager ses sources soi-même, et choisir la couleur d'un effet de mana
   jeuOpsA.js        exécuter les opérations : références, dégâts, vie, cartes, retraits
   jeuOpsB.js        jetons, marqueurs, pompes, recherches ; l'enchaînement
   jeuDeclencheurs.js  des évènements aux capacités déclenchées
@@ -513,6 +514,20 @@ carte qui s'active à sa capacité, l'attaquant au joueur qu'il attaque, le bloq
 étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
 après un rechargement.
 
+**Payer son mana soi-même** (`js/jeuManaManuel.js`). Par défaut le solveur de `js/jeuMana.js` paie à la
+place du joueur, et choisit les terrains qu'il engage. Un siège humain peut passer au **paiement
+manuel** (`J.manuel`) : `planPaiement()` ne lui laisse plus que la réserve, chaque source devient une
+action de priorité `{k: 'mana', id, option}` — une par couleur qu'elle sait produire —, et un sort ne
+se propose que lorsque le mana engagé le paie. La bascule est elle-même une action (`{k: 'reglage'}`),
+donc une réponse comme une autre : rangée avec les autres, elle laisse la partie rejouable à
+l'identique, ce qu'un réglage posé hors du moteur casserait. Le menu de la table (`S.table.paiementManuel`)
+dit comment *commence* le siège de l'hôte ; un invité commence à l'automatique et bascule depuis son
+bandeau. Un siège confié à l'automate revient d'abord à l'automatique (`reponseAutomate()`) : l'automate
+n'engage aucune source. Limites assumées : le mana restreint (« spend only on creature spells »), les
+filtres et les sources qui demandent un sacrifice ou un coût de plus ne s'engagent pas à la main. Les
+effets qui ajoutent du mana (« Add {R} or {G} ») demandent la couleur au joueur
+(`choisitManaOption()`), au lieu de prendre la première ; un automate garde son choix d'avant.
+
 **Sans aucun serveur.** L'utilisateur a voulu une liaison WebRTC sans tiers : ni signalisation, ni
 STUN, ni TURN (`js/liaison.js`). Les deux descriptions passent donc **par la lumière** : l'hôte
 montre un QR — une adresse `#rejoindre=…` que l'appareil photo ouvre, ou que l'invité lit dans son
@@ -694,6 +709,12 @@ cibles, la pile, les déclencheurs, l'IA restent ceux du moteur : rien n'a été
 déclencheurs deviennent des écoutes `{evt: 'forge'}`, les statiques des `{s: 'forge'}` lues par
 `car()`, `coutSort()` et `peutBloquer()`. Les objets retenus (`Remembered`) et les cartes exilées
 (`ExiledWith`) appartiennent à la carte, comme dans Forge.
+
+**Piège : `Card.Self` d'un déclencheur de lancement.** `forgeValideDef(def, valid, ctrl, lanceur, id, idSource)`
+juge une définition — celle du sort lancé. `idSource` est la carte qui porte le déclencheur : sans lui,
+`Self` se comparait au sort jugé lui-même et « when you cast this spell » partait à chaque sort lancé,
+par quiconque. De même, un seuil écrit en SVar (`Spell.cmcLEX`, X = les blessures) ne se lit qu'avec
+l'`env` de la résolution : `forgeValideObjet()` le reçoit, pas `forgeValideDef()`.
 
 **La meilleure des deux lectures.** `definitionDe()` lit une carte qui porte son script des deux
 façons, et joue celle qui comprend le plus — complète avant partielle avant injouable, puis le

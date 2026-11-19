@@ -8,11 +8,14 @@
    s'inscrivent au registre de la couverture.
    ===================================================================== */
 
-/* Une définition — un sort lancé, une carte qu'on réduit — répond-elle ? */
-function forgeValideDef(def, valid, ctrl, lanceur, id) {
+/* Une définition — un sort lancé, une carte qu'on réduit — répond-elle ?
+   `idSource` est la carte qui juge (celle qui porte le déclencheur) : sans lui,
+   « Card.Self » se comparerait au sort jugé lui-même et serait toujours vrai —
+   un « when you cast this spell » partirait à chaque sort lancé, par quiconque. */
+function forgeValideDef(def, valid, ctrl, lanceur, id, idSource) {
   const pseudo = {id, def, lki: true, zone: 'pile', ctrl: lanceur, prop: lanceur, types: def.types, sousTypes: def.sousTypes,
     supers: def.supers, couleurs: def.couleurs, mots: def.mots, force: def.force || 0, endurance: def.endurance || 0, marq: {}};
-  return forgeValideObjet(null, pseudo, valid, {id}, ctrl, null);
+  return forgeValideObjet(null, pseudo, valid, {id: idSource === undefined ? id : idSource}, ctrl, null);
 }
 
 /* Le genre de marqueur de Forge (`P1P1`) dans le vocabulaire du moteur. */

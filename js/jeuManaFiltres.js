@@ -109,7 +109,7 @@ function planAvecFiltres(P, j, cout, x, pour, base) {
    n'en rappelle pas un autre : `EXCLUS_MANA` est alors rempli. */
 planPaiement = (g => function (P, j, cout, x, pour) {
   const p = g(P, j, cout, x, pour);
-  if (p || EXCLUS_MANA.size || !P.champ.some(id => aUnFiltre(obj(P, id).def))) return p;
+  if (p || EXCLUS_MANA.size || paiementManuel(P, j) || !P.champ.some(id => aUnFiltre(obj(P, id).def))) return p;
   return planAvecFiltres(P, j, cout, x, pour, g);
 })(planPaiement);
 

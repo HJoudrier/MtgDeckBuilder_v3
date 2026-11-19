@@ -14,7 +14,7 @@
 const ZONES_JOUEUR = ['bibliotheque', 'main', 'cimetiere', 'exil', 'commandement'];
 
 /* Créer une partie. `cfg.sieges` : `[{nom, format, vie, cartes:[{def, n}],
-   commandants:[def]}]` ; `cfg.premier` : le siège qui commence. */
+   commandants:[def], manuel, reglable}]` ; `cfg.premier` : le siège qui commence. */
 function nouvellePartie(cfg) {
   const P = {
     graine: cfg.graine >>> 0, rng: etatHasard(cfg.graine), joueurs: [], objets: new Map(), champ: [], pile: [],
@@ -29,6 +29,9 @@ function nouvellePartie(cfg) {
   cfg.sieges.forEach((s, i) => {
     const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, poison: 0, energie: 0,
       pool: {W: 0, U: 0, B: 0, R: 0, G: 0, C: 0}, degatsCmd: {}, taxe: {}, commandants: [], terrainsJoues: 0,
+      /* Le paiement manuel, et le droit d'en changer en cours de partie : des sièges humains
+         seulement (js/jeuManaManuel.js). */
+      manuel: !!s.manuel, reglable: !!s.reglable,
       sortsTour: [], elimine: false, raison: null, piocheVide: false, mulligans: 0, tours: 0,
       stats: {terrainsT4: null, cmdTour: null, manaDepense: 0, manaDispo: 0, sorts: 0, degats: 0}};
     ZONES_JOUEUR.forEach(z => { J[z] = []; });

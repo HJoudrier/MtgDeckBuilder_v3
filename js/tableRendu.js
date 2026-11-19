@@ -95,6 +95,10 @@ function menuHTML() {
       <div class="row"><b>Vitesse des adversaires</b></div>
       <div class="row tm-vitesse">${Object.entries(VITESSES).map(([k, x]) => `<button type="button" class="btn sm" data-act="tVitesse" data-d="${k}"
         aria-pressed="${k === (VITESSES[S.table.vitesse] ? S.table.vitesse : 'normale')}">${esc(x.nom)}</button>`).join('')}</div>
+      <div class="row"><b>Paiement du mana</b></div>
+      <div class="row tm-vitesse">${[[false, 'Automatique'], [true, 'À la main']].map(([k, nom]) => `<button type="button" class="btn sm" data-act="tMana" data-d="${k ? 1 : 0}"
+        aria-pressed="${k === manuelMoi()}">${nom}</button>`).join('')}</div>
+      <div class="small muted">À la main : on engage ses terrains soi-même, puis on lance ; le solveur ne paie plus.</div>
       <div class="row"><button type="button" class="btn" data-act="tArrets">Arrêts</button>
         <button type="button" class="btn" data-act="tPasserTour">Passer jusqu'à mon tour</button>
         <button type="button" class="btn" data-act="tQuitterDemande">Quitter la table</button></div></div>`;

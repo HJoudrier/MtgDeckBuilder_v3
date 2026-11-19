@@ -159,7 +159,7 @@ function actionsLegales(P, j) {
     if (o.def.equipe && rituel && planPaiement(P, j, coutEquipement(P, j, o), 0, {capacite: o}) &&
         champDe(P, j).some(c => estCreature(c) && c.id !== o.att)) r.push({k: 'equiper', id});
   }
-  r.push(PASSE);
+  r.push(...actionsManuelles(P, j), PASSE);
   return r;
 }
 

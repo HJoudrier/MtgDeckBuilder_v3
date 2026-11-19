@@ -107,7 +107,9 @@ forgeEffet('Play', ['Valid', 'ValidZone', 'ValidSA', 'Amount', 'Controller', 'Wi
   if (j == null) return;
   let l = t.Valid ? [].concat(...String(t.ValidZone || 'Hand').split(',').map(z => objetsZone(P, ZONES_FORGE[z.trim()] || 'main')))
     .filter(o => forgeValideObjet(P, o, t.Valid, env.src, env.ctrl, env)) : objetsForge(P, t, env, 'Targeted');
-  if (t.ValidSA && /^Spell\./.test(t.ValidSA)) l = l.filter(o => forgeValideDef(o.def, 'Card.' + t.ValidSA.slice(6), env.ctrl, j, o.id));
+  /* Les seuils écrits en SVar (`cmcLEX`, X = les blessures infligées) ne se lisent
+     qu'avec le contexte de la résolution : sans lui, X valait 0 et rien ne passait. */
+  if (t.ValidSA && /^Spell\./.test(t.ValidSA)) l = l.filter(o => forgeValideObjet(P, o, 'Card.' + t.ValidSA.slice(6), env.src, env.ctrl, env));
   /* « You may cast that card » : un sort, jamais un terrain (Chandra, Torch of Defiance). */
   if (t.ValidSA && /^Spell\b/.test(t.ValidSA)) l = l.filter(o => !estType(o, 'land'));
   const n = t.Amount === 'All' ? l.length : forgeNombre(P, t.Amount || 1, env);

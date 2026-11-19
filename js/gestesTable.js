@@ -32,6 +32,7 @@ function gestesTable(act, b) {
     case 'tQuitterDemande': TABLE.menu = 'quitter'; renduTable(); return true;
     case 'tDisposition': choisitDisposition(b.dataset.d); return true;
     case 'tVitesse': if (VITESSES[b.dataset.d]) { S.table.vitesse = b.dataset.d; scheduleSave(); renduTable(); } return true;
+    case 'tMana': choisitPaiementMana(b.dataset.d === '1'); return true;
     case 'tPage': montrePage(i); return true;
     case 'tDeplie': TABLE.deplie = TABLE.deplie === +b.dataset.j ? null : +b.dataset.j; renduTable(); return true;
     case 'tJournal': ouvreJournalTable(); return true;
@@ -57,6 +58,24 @@ function choisitDisposition(d) {
   TABLE.menu = null;
   scheduleSave();
   renduTable();
+}
+
+/* Mon siège paie-t-il son mana à la main ? La partie en cours le dit ; à défaut, le réglage. */
+function manuelMoi() {
+  const m = TABLE.vue && TABLE.vue.joueurs[TABLE.vue.moi];
+  return m ? !!m.manuel : !!S.table.paiementManuel;
+}
+
+/* Le paiement du mana choisi au menu : retenu pour les parties suivantes, et appliqué à
+   celle-ci si la priorité est à nous — le réglage est une réponse du moteur
+   (js/jeuManaManuel.js), qu'on ne peut donner qu'à cette question. */
+function choisitPaiementMana(manuel) {
+  S.table.paiementManuel = manuel;
+  scheduleSave();
+  const q = TABLE.question;
+  const i = q && q.q === 'priorite' ? q.options.findIndex(a => a.k === 'reglage' && a.manuel === manuel) : -1;
+  TABLE.menu = null;
+  if (i >= 0) repondsTable(i); else renduTable();
 }
 
 /* « Passer jusqu'à mon tour », sur l'hôte comme depuis un invité. */

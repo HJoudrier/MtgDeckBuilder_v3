@@ -108,9 +108,10 @@ forgeEffet('ManaReflected', [], function* (P, t, env) {
 forgeEffet('Mana', ['Produced', 'Amount', 'RestrictValid'], function* (P, t, env) {
   const opts = optionsMana(t.Produced, forgeNombre(P, t.Amount || 1, env));
   if (!opts.length) return;
-  /* Une couleur au choix : celle que la main réclame le plus. */
+  /* Une couleur au choix : le joueur la choisit ; un automate prend celle que sa main réclame le plus. */
   const J = P.joueurs[env.ctrl], voulu = k => J.main.reduce((s, id) => s + ((obj(P, id).def.cout.couleurs || {})[k[0]] || 0), 0);
-  ajouteMana(P, env.ctrl, opts.slice().sort((a, b) => voulu(b) - voulu(a))[0]);
+  const prefere = opts.indexOf(opts.slice().sort((a, b) => voulu(b) - voulu(a))[0]);
+  ajouteMana(P, env.ctrl, yield* choisitManaOption(P, env.ctrl, opts, env.ctx.source, prefere));
 }, (t, op) => { op.op = 'mana'; op.options = optionsMana(t.Produced, 1); op.hostile = false; });
 
 forgeEffet('Fight', [], function* (P, t, env) {

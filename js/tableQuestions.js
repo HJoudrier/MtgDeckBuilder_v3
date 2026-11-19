@@ -111,13 +111,20 @@ function questionHTML(q, v) {
     case 'priorite': {
       /* Trois Plaines en main font trois « Jouer Plains » : un seul bouton suffit. */
       const vus = new Set();
-      const liste = q.options.map((a, i) => [a, i]).filter(([a]) => a.k !== 'passer' && !vus.has(a.label) && vus.add(a.label));
+      const tous = q.options.map((a, i) => [a, i]).filter(([a]) => a.k !== 'passer' && !vus.has(a.label) && vus.add(a.label));
+      /* Le mana qu'on engage à la main et le réglage du paiement ont leur propre rangée. */
+      const mana = tous.filter(([a]) => a.k === 'mana'), reglage = tous.find(([a]) => a.k === 'reglage');
+      const liste = tous.filter(([a]) => a.k !== 'mana' && a.k !== 'reglage');
+      const moi = v.joueurs[v.moi], manuel = !!(moi && moi.manuel);
       return `${err}<div class="tq-titre"><b>À vous</b> — ${esc(NOMS_ETAPES[v.etape] || v.etape)}${v.pile.length ? ', en réponse' : ''}
-          <span class="muted">${liste.length ? '· touchez une carte qui brille, ou :' : '· rien à jouer'}</span></div>
+          <span class="muted">${liste.length ? '· touchez une carte qui brille, ou :' : manuel && mana.length ? '· engagez votre mana, puis lancez' : '· rien à jouer'}</span></div>
+        ${mana.length ? `<div class="tq-actions tq-mana" data-defile="mana">${mana.map(([a, i]) =>
+          `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${String(a.option).split('').map(l => symIcon(l, 'sm')).join('')} ${esc(a.label)}</button>`).join('')}</div>` : ''}
         ${liste.length ? `<div class="tq-actions" data-defile="actions">${liste.map(([a, i]) =>
           `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${esc(a.label)}</button>`).join('')}</div>` : ''}
         <div class="row"><button type="button" class="btn pri tq-passer" data-act="tAction" data-i="${q.options.length - 1}">Passer</button>
-          <button type="button" class="btn sm" data-act="tPasserTour" title="Ne plus rien demander jusqu'au début de votre prochain tour">Jusqu'à mon tour</button></div>`;
+          <button type="button" class="btn sm" data-act="tPasserTour" title="Ne plus rien demander jusqu'au début de votre prochain tour">Jusqu'à mon tour</button>
+          ${reglage ? `<button type="button" class="btn sm" data-act="tAction" data-i="${reglage[1]}" title="Le réglage est aussi au menu de la table">${esc(reglage[0].label)}</button>` : ''}</div>`;
     }
     case 'attaquants': case 'bloqueurs': return err + combatHTML(q, s, v);
     case 'mulligan': return `${err}<div class="tq-titre"><b>Votre main de départ</b>${q.mulligans ? ` — après ${q.mulligans} mulligan(s)` : ''}</div>
@@ -129,7 +136,9 @@ function questionHTML(q, v) {
     case 'x': return `${err}<div class="tq-titre"><b>Valeur de X</b></div><div class="tq-actions">${q.options.slice(0, 31).map((x, i) =>
       `<button type="button" class="btn sm" data-act="tUn" data-i="${i}">${esc(x)}</button>`).join('')}</div>`;
   }
-  return `${err}<div class="tq-titre"><b>${esc(TITRES_Q[q.q] || q.texte || 'Choisissez')}</b> — ${bornes(q)}${q.texte && TITRES_Q[q.q] ? ' · ' + esc(q.texte) : ''}</div>
+  /* Un choix unique parmi des mots (quel mana ajouter ?) se titre de sa question. */
+  const parTexte = q.q === 'modes' && q.max === 1 && !!q.texte;
+  return `${err}<div class="tq-titre"><b>${esc(parTexte ? q.texte : TITRES_Q[q.q] || q.texte || 'Choisissez')}</b>${parTexte ? '' : ' — ' + bornes(q)}${!parTexte && q.texte && TITRES_Q[q.q] ? ' · ' + esc(q.texte) : ''}</div>
     ${chipsChoix(q, s, v)}
     <div class="row">${q.min === 1 && q.max === 1 ? '' : valider(s.choix.size ? 'Valider' : q.min === 0 ? 'Aucun' : 'Valider')}</div>`;
 }
