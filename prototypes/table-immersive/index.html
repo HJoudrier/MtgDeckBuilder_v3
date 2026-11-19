@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- /entete -->
+<title>Table immersive</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="page.css?v=20261119a">
+<link rel="stylesheet" href="table.css?v=20261119a">
+<link rel="stylesheet" href="variantes.css?v=20261119a">
+</head>
+<body>
+<header class="tete">
+  <p class="surtitre">Atelier MTG · maquettes de la table de jeu</p>
+  <h1>Cinq façons de jouer la même partie</h1>
+  <p class="chapo">Une petite partie contre Mirela, jouable sous chaque piste. Changez de piste quand vous voulez : la partie continue là où
+    elle en est, on compare le même instant. Activez le son, et ouvrez la page sur un téléphone Android pour sentir les vibrations.</p>
+</header>
+
+<nav class="pistes" role="tablist" aria-label="Les cinq pistes">
+  <button type="button" role="tab" data-piste="bouton"><span class="n">1</span><b>Le bouton de tour</b><small>un seul bouton, sur la ligne de front</small></button>
+  <button type="button" role="tab" data-piste="gestes"><span class="n">2</span><b>Tout au doigt</b><small>on glisse, on lâche</small></button>
+  <button type="button" role="tab" data-piste="carte"><span class="n">3</span><b>Sur la carte</b><small>les actions s'ouvrent autour d'elle</small></button>
+  <button type="button" role="tab" data-piste="theatre"><span class="n">4</span><b>Le théâtre</b><small>projecteur, perspective, chocs</small></button>
+  <button type="button" role="tab" data-piste="fil"><span class="n">5</span><b>Le fil du tour</b><small>un jeton qui avance sur les étapes</small></button>
+</nav>
+
+<main class="corps">
+  <section class="demo" aria-label="Maquette jouable">
+    <div class="reglages" role="group" aria-label="Réglages">
+      <button type="button" class="interrupteur" data-reglage="son" aria-pressed="false">Son</button>
+      <button type="button" class="interrupteur" data-reglage="vibre" aria-pressed="true">Vibrations</button>
+      <button type="button" class="interrupteur" data-reglage="reduit" aria-pressed="false">Mouvements réduits</button>
+    </div>
+    <div class="telephone" id="telephone">
+      <div class="ecran" id="ecran"></div>
+      <button type="button" class="sortie-plein" data-page="plein" aria-label="Quitter le plein écran">✕</button>
+    </div>
+    <p class="temoin" id="temoin" aria-live="polite">Les vibrations s'inscrivent ici quand elles se déclenchent.</p>
+    <div class="demo-actions">
+      <button type="button" class="btn" data-page="rejouer">Rejouer la partie</button>
+      <button type="button" class="btn" data-page="plein">Plein écran</button>
+    </div>
+  </section>
+  <article class="fiche" id="fiche" aria-live="polite"></article>
+</main>
+
+<section class="bande">
+  <div class="bande-in">
+    <h2>Ce qui vaut pour les cinq</h2>
+    <div class="socle">
+      <div>
+        <h3>Les cartes voyagent</h3>
+        <p>De la main à la pile, de la pile au champ, du champ au cimetière : chaque carte part de sa place d'avant. La table de l'atelier
+          repeint déjà ses régions d'un coup (<code>peinsRegions()</code>) : il suffit de mesurer les cartes avant et après pour les faire
+          glisser, sans qu'aucun écran n'écrive d'animation.</p>
+      </div>
+      <div>
+        <h3>Les effets se lisent dans la vue</h3>
+        <p>Les sons, vibrations et éclats se déduisent de la différence entre deux vues : une carte en moins dans la main, des points de vie en
+          moins. Ça marche chez l'invité comme chez l'hôte, sans toucher au moteur. Une réserve : le moteur donne un identifiant neuf à chaque
+          changement de zone, et la vue devrait porter l'identifiant d'avant quand le joueur voyait les deux zones.</p>
+      </div>
+      <div>
+        <h3>Des sons sans fichier</h3>
+        <p>Tout est synthétisé par Web Audio : pas un octet à télécharger, et l'atelier reste un fichier qu'on ouvre. Les vibrations passent par
+          <code>navigator.vibrate</code> : Android les rend, l'iPhone non. Dans cette page de démonstration, le cadre peut aussi les bloquer :
+          le témoin sous le téléphone les montre alors.</p>
+      </div>
+      <div>
+        <h3>Réglables, et sobres par défaut</h3>
+        <p>Trois réglages au menu de la table : son, vibrations, intensité des effets. « Mouvements réduits » du système est respecté : les
+          cartes changent de place sans glisser, rien ne tremble.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="comparer">
+  <h2>Comparer</h2>
+  <div class="tableau-defile">
+    <table>
+      <thead><tr><th scope="col"></th><th scope="col">1 · Bouton</th><th scope="col">2 · Gestes</th><th scope="col">3 · Sur la carte</th><th scope="col">4 · Théâtre</th><th scope="col">5 · Fil</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Prise en main au premier essai</th><td><i class="note n3">●●●</i></td><td><i class="note n1">●○○</i></td><td><i class="note n3">●●●</i></td><td><i class="note n2">●●○</i></td><td><i class="note n2">●●○</i></td></tr>
+        <tr><th scope="row">Vitesse pour un habitué</th><td><i class="note n2">●●○</i></td><td><i class="note n3">●●●</i></td><td><i class="note n2">●●○</i></td><td><i class="note n1">●○○</i></td><td><i class="note n3">●●●</i></td></tr>
+        <tr><th scope="row">Immersion</th><td><i class="note n2">●●○</i></td><td><i class="note n2">●●○</i></td><td><i class="note n1">●○○</i></td><td><i class="note n3">●●●</i></td><td><i class="note n1">●○○</i></td></tr>
+        <tr><th scope="row">L'action là où elle se passe</th><td><i class="note n2">●●○</i></td><td><i class="note n3">●●●</i></td><td><i class="note n3">●●●</i></td><td><i class="note n2">●●○</i></td><td><i class="note n3">●●●</i></td></tr>
+        <tr><th scope="row">Tient à quatre ou six joueurs</th><td><i class="note n3">●●●</i></td><td><i class="note n2">●●○</i></td><td><i class="note n2">●●○</i></td><td><i class="note n1">●○○</i></td><td><i class="note n3">●●●</i></td></tr>
+        <tr><th scope="row">Effort d'intégration</th><td>moyen</td><td>gros</td><td>moyen</td><td>gros</td><td>moyen</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="reco">
+    <h3>Ce que je ferais</h3>
+    <p>Le socle commun d'abord, dans toutes les dispositions : les cartes qui voyagent, les sons, les vibrations, réglables. Puis la piste 1,
+      le bouton de tour, qui se comprend sans explication et tient à six joueurs, avec trois emprunts : la phrase « si vous passez… » et les arrêts
+      posés d'un appui long sur les étapes (piste 5), et le glisser vers le haut pour jouer une carte, en plus du toucher (piste 2). Le théâtre
+      devient le niveau « spectaculaire » du réglage des effets, à deux joueurs.</p>
+  </div>
+</section>
+
+<footer class="pied">Maquette sans rapport avec le moteur de l'atelier : une partie écrite à la main, des cartes inventées. Données d'exemple.</footer>
+
+<script src="donnees.js?v=20261119a"></script>
+<script src="scene.js?v=20261119a"></script>
+<script src="regles.js?v=20261119a"></script>
+<script src="tour.js?v=20261119a"></script>
+<script src="sons.js?v=20261119a"></script>
+<script src="rendu.js?v=20261119a"></script>
+<script src="mouvements.js?v=20261119a"></script>
+<script src="actions.js?v=20261119a"></script>
+<script src="effets.js?v=20261119a"></script>
+<script src="ecran.js?v=20261119a"></script>
+<script src="p1-bouton.js?v=20261119a"></script>
+<script src="p2-gestes.js?v=20261119a"></script>
+<script src="p3-carte.js?v=20261119a"></script>
+<script src="p4-theatre.js?v=20261119a"></script>
+<script src="p5-fil.js?v=20261119a"></script>
+<script src="fiches.js?v=20261119a"></script>
+<script src="page.js?v=20261119a"></script>
+</body>
+</html>

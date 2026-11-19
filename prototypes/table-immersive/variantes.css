@@ -1,0 +1,200 @@
+/* =====================================================================
+   variantes.css — Ce qui distingue chaque piste
+
+   Chaque bloc ne touche que sa piste (`.v-bouton`, `.v-gestes`…). Le reste
+   — cartes, champs, joueurs, effets — vient de table.css.
+   ===================================================================== */
+
+/* ---------- 1 · Le bouton de tour ---------- */
+.p1-front{position:relative;height:100%;display:grid;grid-template-columns:minmax(0,1fr) 96px;grid-template-rows:auto minmax(0,1fr) auto;
+  grid-template-areas:"etape cmd" "centre cmd" "sous cmd";column-gap:6px;padding:6px 8px 6px 12px;
+  border-block:1px dashed var(--line2);background:linear-gradient(90deg,transparent,var(--brass-a1) 30%,var(--brass-a1) 70%,transparent)}
+.p1-etape{grid-area:etape;display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+.ph-points li{width:6px;height:6px;border-radius:3px;background:var(--line2);margin-right:3px;transition:width .3s}
+.ph-points li span{display:none}
+.ph-points li.passee{background:var(--brass-d)}
+.ph-points li.en-cours{width:16px;background:var(--brass)}
+.ph-points li.arret{box-shadow:0 0 0 1.5px var(--bad)}
+.p1-ph{font-size:12px;color:var(--txt-vif);white-space:nowrap}
+.p1-centre{grid-area:centre;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0}
+.p1-sous{grid-area:sous;font-size:11.5px;color:var(--dim);line-height:1.3;min-height:15px}
+.p1-commande{grid-area:cmd;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.p1-puces{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.puce{padding:3px 8px;border:1px solid var(--line2);border-radius:99px;background:var(--panel);font-size:11px;cursor:pointer;white-space:nowrap}
+.p1-bouton{position:relative;width:84px;height:84px;border-radius:50%;border:0;padding:8px;cursor:pointer;color:var(--sur-brass);font:700 13px/1.15 var(--body);
+  background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--brass) 65%,white),var(--brass) 70%);box-shadow:0 6px 16px var(--ombre),inset 0 -3px 0 rgba(0,0,0,.2)}
+.p1-bouton:active{transform:scale(.95)}
+.p1-bouton.fort{animation:respire 1.8s ease-in-out infinite}
+@keyframes respire{50%{box-shadow:0 0 0 6px var(--brass-a3),0 6px 16px var(--ombre),inset 0 -3px 0 rgba(0,0,0,.2)}}
+.p1-bouton.attente{background:var(--panel2);color:var(--dim);box-shadow:inset 0 0 0 1px var(--line2);cursor:default;font-weight:600;font-size:12px}
+.p1-bouton.auto{background:var(--panel);color:var(--txt-vif);box-shadow:inset 0 0 0 1px var(--line2),0 6px 16px var(--ombre)}
+.p1-lib{position:relative;z-index:1}
+.p1-anneau{position:absolute;inset:-5px;width:calc(100% + 10px);height:calc(100% + 10px);transform:rotate(-90deg)}
+.p1-anneau circle,.p5-anneau circle{fill:none;stroke:var(--brass);stroke-width:5;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;animation:anneau linear forwards}
+@keyframes anneau{to{stroke-dashoffset:0}}
+.p1-attente,.p5-attente{position:absolute;inset:-4px;border-radius:50%;border:3px solid transparent;border-top-color:var(--brass);animation:tourne 1s linear infinite}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.p1 .pl-main{--kw:70px}
+
+/* ---------- 2 · Tout au doigt ---------- */
+.p2-milieu{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:4px 12px}
+.p2-milieu .tour-chip{position:absolute;left:10px;top:6px}
+.p2-ph{position:absolute;right:12px;top:8px;font-size:11.5px;color:var(--dim)}
+.p2-pile{min-height:0;display:flex}
+.p2-aide{margin:0;font-size:12px;color:var(--dim);text-align:center;max-width:32ch;min-height:31px;display:flex;align-items:center}
+.p2-curseur{position:relative;width:100%;max-width:330px;height:50px;border-radius:99px;background:var(--panel2);border:1px solid var(--line2);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.p2-piste-txt{position:relative;z-index:1;font-weight:600;font-size:13.5px;color:var(--txt);padding-left:30px;letter-spacing:.01em}
+.p2-remplir{position:absolute;left:0;top:0;bottom:0;width:calc(var(--f,0) * 100%);background:var(--brass-a3)}
+.p2-poignee{position:absolute;left:4px;top:3px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;z-index:2;cursor:grab;touch-action:none;
+  background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--brass) 65%,white),var(--brass) 70%);box-shadow:0 3px 8px var(--ombre)}
+.p2-poignee svg{width:20px;height:20px;fill:none;stroke:var(--sur-brass);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.p2-curseur.fort{border-color:var(--brass);animation:respire-curseur 1.8s ease-in-out infinite}
+@keyframes respire-curseur{50%{box-shadow:0 0 0 4px var(--brass-a2)}}
+.p2-curseur.attente .p2-piste-txt,.p2-curseur.auto .p2-piste-txt{padding-left:0;color:var(--dim)}
+.p2-curseur.auto{cursor:pointer;border-color:var(--brass)}
+.p2-curseur.auto .p2-remplir{animation:remplir 1.7s linear forwards}
+@keyframes remplir{from{width:0}to{width:100%}}
+.p2 .pl-main{--kw:60px}
+.p2 .main.rangee{gap:8px;overflow-x:auto;justify-content:safe center;padding-inline:4px;scrollbar-width:none}
+.p2-coach{position:absolute;transform:translateX(-50%);pointer-events:none!important;display:flex;flex-direction:column;align-items:center;gap:6px}
+.p2-doigt{width:30px;height:30px;border-radius:50%;background:var(--txt-vif);opacity:.35;box-shadow:0 0 0 6px var(--brass-a3);animation:coach 1.8s ease-in-out infinite}
+@keyframes coach{0%{transform:translateY(0);opacity:0}15%{opacity:.4}70%{transform:translateY(-110px);opacity:.4}100%{transform:translateY(-120px);opacity:0}}
+.p2-coach-txt{order:-1;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;background:var(--txt-vif);color:var(--bg);transform:translateY(-130px)}
+
+/* ---------- 3 · Sur la carte ---------- */
+.p3 .champ{padding-right:36px}
+.p3-rail{position:absolute;right:6px;top:46px;bottom:176px;width:24px;display:flex}
+.ph-rail{flex-direction:column;justify-content:space-between;align-items:center;width:100%;position:relative}
+.ph-rail::before{content:"";position:absolute;top:4px;bottom:4px;left:50%;width:2px;margin-left:-1px;background:var(--line2)}
+.ph-rail li{position:relative;width:9px;height:9px;border-radius:50%;background:var(--panel);border:2px solid var(--line2)}
+.ph-rail li.passee{background:var(--brass-d);border-color:var(--brass-d)}
+.ph-rail li.en-cours{width:14px;height:14px;background:var(--brass);border-color:var(--brass);box-shadow:0 0 0 3px var(--brass-a3)}
+.ph-rail li span{display:none}
+.ph-rail li.en-cours span{display:block;position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:10.5px;font-weight:600;
+  padding:2px 6px;border-radius:5px;background:var(--brass);color:var(--sur-brass)}
+.p3-ligne{position:relative;height:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 40px 18px 12px}
+.p3-ligne::before{content:"";position:absolute;left:12px;right:40px;top:50%;border-top:1px dashed var(--line2);z-index:-1}
+.p3-ligne .tour-chip{position:absolute;left:10px;top:6px}
+.p3-pile{display:flex;justify-content:center;min-width:0}
+.p3-passer{position:absolute;right:42px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;
+  border:1px solid var(--brass);background:var(--panel);color:var(--txt-vif);font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 12px var(--ombre)}
+.p3-passer i{font-style:normal;color:var(--brass)}
+.p3-passer.fort{background:var(--brass);color:var(--sur-brass)}
+.p3-passer.fort i{color:var(--sur-brass)}
+.p3-passer[aria-disabled="true"]{border-color:var(--line2);color:var(--dim);box-shadow:none;cursor:default}
+.p3-sous{position:absolute;left:12px;right:42px;bottom:4px;font-size:11px;color:var(--dim);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p3-epee{position:absolute;left:50%;top:-12px;transform:translateX(-50%);z-index:3;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  background:var(--panel);border:1.5px solid var(--brass-d);cursor:pointer;box-shadow:0 2px 5px var(--ombre)}
+.p3-epee svg{width:13px;height:13px;fill:var(--brass)}
+.p3-epee.on{background:var(--bad);border-color:var(--bad)}
+.p3-epee.on svg{fill:var(--sur-brass)}
+.p3-fond{position:absolute;inset:0;background:var(--brass-a1)}
+.p3-halo{position:absolute;transform:translate(-50%,-50%);border-radius:12px;box-shadow:0 0 0 2px var(--brass),0 0 24px var(--lueur);pointer-events:none!important;animation:eclot .2s ease-out}
+.p3-pastille{position:absolute;transform:translate(-50%,-50%);padding:8px 13px;border-radius:99px;border:1px solid var(--line2);background:var(--panel);font-size:13px;font-weight:600;
+  white-space:nowrap;cursor:pointer;box-shadow:0 6px 16px var(--ombre);animation:eclot .26s cubic-bezier(.2,1.4,.4,1) both;animation-delay:var(--d,0ms)}
+.p3-pastille.fort{background:var(--brass);border-color:var(--brass);color:var(--sur-brass)}
+.p3-pastille.faible{color:var(--dim)}
+@keyframes eclot{from{transform:translate(-50%,-50%) scale(.3);opacity:0}}
+.p3-bulle{position:absolute;padding:10px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--bad);box-shadow:0 10px 26px var(--ombre);display:flex;flex-direction:column;gap:3px;
+  font-size:12.5px;animation:bulle .25s ease-out}
+.p3-bulle.mini{border-color:var(--brass)}
+@keyframes bulle{from{opacity:0;transform:translateY(6px)}}
+.p3-bulle::after{content:"";position:absolute;top:30px;width:12px;height:12px;background:var(--panel);border:inherit;border-width:0 0 1px 1px;transform:rotate(45deg)}
+.p3-bulle.pointe-gauche::after{left:-7px}
+.p3-bulle.pointe-droite::after{right:-7px;transform:rotate(-135deg)}
+.p3-bulle b{font-family:var(--display);font-size:15px}
+.p3-qui{font-size:11px;color:var(--dim)}
+.p3-effet{color:var(--bad-txt);font-weight:600}
+.p3-note{color:var(--dim)}
+.p3-boutons{display:flex;gap:6px;margin-top:6px}
+.p3-b{flex:1;padding:8px 6px;border-radius:9px;border:1px solid var(--line2);background:var(--panel2);font-weight:600;font-size:12.5px;cursor:pointer}
+.p3-b.fort{background:var(--brass);border-color:var(--brass);color:var(--sur-brass)}
+.p3-b.auto,.p4-b.auto{background:linear-gradient(90deg,var(--brass-a3) 50%,var(--panel2) 50%) right/200% 100% no-repeat;
+  animation:jauge var(--duree,1.7s) linear var(--retard,0ms) forwards}
+@keyframes jauge{to{background-position:left}}
+.p3 .pl-main{--kw:66px}
+
+/* ---------- 4 · Le théâtre ---------- */
+.p4{background:radial-gradient(90% 55% at 50% 42%,var(--tapis1),var(--tapis2) 80%)}
+.p4 .jr{background:transparent;border:0}
+.p4-salle{flex:1 1 auto;min-height:0;perspective:820px;display:flex;align-items:center;padding:0 6px}
+.p4-tapis{width:100%;display:flex;flex-direction:column;gap:0;padding:6px 0;border-radius:26px;transform:rotateX(14deg);transform-origin:50% 70%;
+  background:radial-gradient(ellipse at center,color-mix(in srgb,var(--tapis1) 80%,var(--brass) 20%),var(--tapis2) 75%);
+  box-shadow:inset 0 0 0 2px var(--brass-a3),inset 0 0 50px rgba(0,0,0,.28),0 20px 40px var(--ombre)}
+.p4 .champ-adv{--kw:52px}
+.p4 .champ-moi{--kw:60px}
+.p4-ligne{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-block:1px solid var(--brass-a3);margin:2px 18px}
+.p4-indice{margin:0;font:600 13px var(--display);color:var(--txt-vif);text-align:center;animation:bulle .3s ease-out}
+.p4-pile-basse .pile{--kw:44px}
+.p4 .champ-moi .k.va-att,.p4 .champ-moi .k.attaque{top:-26px}
+.p4 .champ-adv .k.attaque{top:26px}
+.p4-acte{display:flex;align-items:center;justify-content:center;gap:8px;font:italic 13px var(--display);color:var(--dim);padding:2px 0 4px}
+.p4-sceau{position:absolute;right:10px;top:46%;z-index:6;width:78px;height:78px;border-radius:50%;border:0;padding:8px;cursor:pointer;color:var(--sur-brass);
+  font:700 12.5px/1.15 var(--display);background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--brass) 55%,white),var(--brass) 60%,color-mix(in srgb,var(--brass) 70%,black));
+  box-shadow:0 0 0 3px var(--brass-a3),0 8px 20px var(--ombre),inset 0 -3px 0 rgba(0,0,0,.25)}
+.p4-sceau.fort{animation:respire 1.8s ease-in-out infinite}
+.p4-sceau.attente{background:var(--panel);color:var(--dim);box-shadow:inset 0 0 0 1px var(--line2);font-family:var(--body);font-weight:600;font-size:11px;cursor:default}
+.p4 .pl-main{--kw:74px}
+.p4-proj{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px}
+.p4-nuit{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 0 90px,var(--voile-modal) 200px);backdrop-filter:blur(1.5px);animation:nuit .35s ease-out}
+.p4-proj.de-adv .p4-nuit{background:radial-gradient(circle at 50% 40%,var(--bad-a) 0 40px,transparent 120px,var(--voile-modal) 210px)}
+@keyframes nuit{from{opacity:0}}
+.p4-scene-pile{position:relative;display:flex;justify-content:center}
+.p4-vedette{--kw:150px;z-index:2}
+.p4-vedette .k-corps{box-shadow:0 0 0 2px var(--brass),0 0 40px 6px var(--lueur),0 20px 40px var(--ombre)}
+.p4-dessous{--kw:96px;position:absolute;top:30px;left:calc(50% - 130px + var(--i) * 12px);opacity:.75}
+.p4-legende{position:relative;text-align:center;max-width:280px;padding:8px 12px;border-radius:10px;background:var(--panel);box-shadow:0 6px 18px var(--ombre);display:flex;flex-direction:column;gap:2px}
+.p4-legende b{font:600 18px var(--display);color:var(--txt-vif)}
+.p4-legende span{font-size:12px;color:var(--dim)}
+.p4-legende p{margin:.3em 0 0;font-size:12.5px}
+.p4-raison{color:var(--bad-txt)}
+.p4-choix{position:relative;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+.p4-b{min-width:120px;padding:11px 16px;border-radius:12px;border:1px solid var(--line2);background:var(--panel);font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 12px var(--ombre)}
+.p4-b.fort{background:var(--brass);border-color:var(--brass);color:var(--sur-brass)}
+.p4-note{margin:0;padding:6px 10px;border-radius:8px;background:var(--panel);color:var(--dim);font-size:12.5px}
+
+/* ---------- 5 · Le fil du tour ---------- */
+.p5-fil{height:100%;display:flex;flex-direction:column;justify-content:center;padding:4px 8px;gap:2px}
+.p5-entete{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px}
+.p5-legende-arret{font-size:10px;color:var(--dim2);display:inline-flex;align-items:center;gap:4px;text-align:right}
+.p5-piste{position:relative;height:98px;flex:0 0 auto}
+.p5-piste ol{list-style:none;margin:0;padding:0;position:absolute;inset:0}
+.p5-piste ol::before,.p5-piste ol::after{content:"";position:absolute;left:14px;top:57px;height:3px;border-radius:2px}
+.p5-piste ol::before{right:14px;background:var(--line2)}
+.p5-piste ol::after{width:calc(var(--k) * (100% - 28px));background:var(--brass)}
+.p5-pas{position:absolute;left:calc(14px + var(--x) * (100% - 28px));top:52px;width:40px;margin-left:-20px;display:flex;flex-direction:column;align-items:center;gap:3px;touch-action:none;cursor:pointer}
+.p5-pas i{width:13px;height:13px;border-radius:50%;background:var(--panel);border:2px solid var(--line2);box-sizing:border-box}
+.p5-pas span{font-size:9px;color:var(--dim);white-space:nowrap;letter-spacing:-.01em}
+.p5-pas.passe i{background:var(--brass);border-color:var(--brass)}
+.p5-pas.ici span{color:var(--txt-vif);font-weight:700;margin-top:16px}
+.p5-pas.vise i{border-color:var(--brass);background:var(--brass-a3)}
+.p5-pas.arret::before,.p5-drapeau{content:"";position:absolute;top:-10px;left:50%;width:9px;height:8px;background:var(--bad);clip-path:polygon(0 0,100% 30%,0 60%)}
+.p5-drapeau{position:relative;top:0;left:0;display:inline-block}
+.p5-pas.arret::after{content:"";position:absolute;top:-10px;left:calc(50% - 1px);width:1.5px;height:14px;background:var(--bad)}
+.p5-jeton{position:absolute;left:calc(14px + var(--x) * (100% - 28px));top:58px;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:0;z-index:3;
+  display:grid;place-items:center;color:var(--sur-brass);font:700 14px var(--body);cursor:pointer;touch-action:none;
+  background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--brass) 60%,white),var(--brass) 65%,color-mix(in srgb,var(--brass) 70%,black));
+  box-shadow:0 0 0 3px var(--bg),0 5px 14px var(--ombre)}
+.p5-jeton.fort{animation:respire 1.8s ease-in-out infinite}
+.p5-jeton.attente{background:var(--panel);color:var(--dim);box-shadow:0 0 0 3px var(--bg),inset 0 0 0 1px var(--line2);cursor:default}
+.p5-jeton.en-glisse{box-shadow:0 0 0 3px var(--bg),0 0 0 7px var(--brass-a3),0 10px 20px var(--ombre)}
+.p5-jeton span{position:relative;z-index:1}
+.p5-mini{font-size:10.5px;color:var(--txt-vif)}
+.p5-anneau{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);transform:rotate(-90deg)}
+.p5-anneau circle{stroke-dasharray:277;stroke-dashoffset:277}
+.p5-pile{position:absolute;left:calc(14px + var(--x) * (100% - 28px));top:-14px;transform:translateX(-50%);z-index:4}
+.p5-pile .pile{--kw:40px}
+.p5-apercu{margin:0;font-size:12px;color:var(--dim);text-align:center;min-height:16px;padding:0 6px}
+.p5-apercu b{color:var(--txt-vif)}
+.p5-fil.chez-adv .p5-piste ol::after{background:var(--dim2)}
+.p5-fil.chez-adv .p5-pas.passe i{background:var(--dim2);border-color:var(--dim2)}
+.p5 .pl-main{--kw:64px}
+
+/* Un téléphone bas : les cartes rapetissent pour que tout tienne. */
+@media (max-height:700px){
+  .champ-adv,.p4 .champ-adv{--kw:42px}
+  .champ-moi,.p4 .champ-moi{--kw:48px}
+  .rang.terres,.champ-moi .rang.terres{--kw:30px;min-height:42px}
+  .p1 .pl-main,.p2 .pl-main,.p3 .pl-main,.p4 .pl-main,.p5 .pl-main{--kw:56px}
+}
