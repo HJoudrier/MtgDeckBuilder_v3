@@ -21,7 +21,8 @@ const FICHES = {
     sons: 'Un déclic à chaque geste, une clochette quand la priorité revient, un choc sourd quand une carte se pose.',
     vibrations: 'Brève à la pose, double quand c\'est à vous, longue quand vous perdez des points de vie.',
     atelier: `<code>tableQuestions.js</code> ne peint plus un bandeau mais le bouton et ses puces ; <code>tableRendu.js</code> ajoute une région
-      « front » à la charpente, entre les adversaires et votre champ, et la pile y migre. L'appui long et la loupe ne changent pas.`,
+      « front » à la charpente, entre les adversaires et votre champ, et la pile y migre. L'anneau donne une forme à la pause de lecture
+      qui existe déjà (<code>attendreOuSuite()</code> et son « Continuer ») ; la phrase sous le bouton reprend <code>contexteQuestionHTML()</code>.`,
     limites: 'Les questions rares (valeur de X, modes, cartes à choisir dans une liste) ne tiennent pas dans un bouton : elles gardent une feuille qui monte du bas.'
   },
   gestes: {
@@ -57,7 +58,8 @@ const FICHES = {
     sons: 'Sobres : un froissement à l\'ouverture de la couronne, la clochette de la priorité.',
     vibrations: 'Un tic à l\'ouverture, le double coup quand c\'est à vous.',
     atelier: `La loupe (<code>tableLoupe.js</code>) devient une couronne pour les cas simples et garde sa fiche pour l'appui long.
-      <code>questionHTML()</code> éclate en bulles ancrées : elles ont besoin de la position des cartes, que <code>tableFleches.js</code> calcule déjà.`,
+      <code>questionHTML()</code> éclate en bulles ancrées : elles ont besoin de la position des cartes, que <code>tableFleches.js</code> calcule déjà.
+      La bulle d'un sort porte le texte de <code>descriptionPile()</code>, et le paiement manuel s'y prête : toucher un terrain ouvre « Engager ».`,
     limites: 'À cinq adversaires, la bulle doit trouver sa place sans masquer ; près des bords, la couronne se replie.'
   },
   theatre: {
@@ -75,8 +77,8 @@ const FICHES = {
     sons: 'Un gong à chaque tour, un souffle pour l\'attaque, un impact, des éclats, un accord quand un sort se résout.',
     vibrations: 'Motif d\'alerte quand on vous attaque, coup long quand vous perdez des points de vie, salve en fin de partie.',
     atelier: `Le plus coûteux. La perspective gêne la lecture des petites cartes : elle se réserve à la disposition « Arène » et à deux joueurs.
-      L'intensité devient un réglage du menu de la table (<code>S.table.effets</code> : sobres, normaux, spectaculaires), à ranger dans
-      <code>snapshot()</code> et <code>restore()</code>.`,
+      Le projecteur affiche ce que <code>pileExpliqueHTML()</code> écrit déjà sous la pile. L'intensité devient un réglage du menu de la table
+      (<code>S.table.effets</code> : sobres, normaux, spectaculaires), à ranger dans <code>snapshot()</code> et <code>restore()</code>.`,
     limites: 'Fatigue sur une longue partie, lenteur ressentie, et la perspective ne tient pas à six joueurs : doit pouvoir se réduire.'
   },
   fil: {

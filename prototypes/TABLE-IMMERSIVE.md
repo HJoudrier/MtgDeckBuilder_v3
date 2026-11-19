@@ -37,6 +37,11 @@ l'adversaire à laquelle on répond, le tour adverse), rien de plus.
 - **Réglables** : son, vibrations, intensité des effets, à ranger dans `S.table` et donc dans
   `snapshot()`/`restore()`. « Mouvements réduits » est respecté.
 
+La table a gagné entre-temps l'explication de la pile (`descriptionPile()`, `pileExpliqueHTML()`), le
+contexte des questions et une pause de lecture avec « Continuer » : les pistes s'y appuient (la bulle de
+la piste 3 et le projecteur de la piste 4 en portent le texte, l'anneau de la piste 1 rend la pause
+visible). Le paiement manuel (`jeuManaManuel.js`) se loge dans la couronne de la piste 3.
+
 ## Recommandation
 
 Le socle commun d'abord, puis la piste 1, avec trois emprunts : la phrase « si vous passez… » et
