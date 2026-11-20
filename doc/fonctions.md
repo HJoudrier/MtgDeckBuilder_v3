@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1852 fonctions**, 282 modules, 1986 Ko de JavaScript.
+**1853 fonctions**, 282 modules, 1987 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -71,7 +71,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 152 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 12 | 211 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 13 | 226 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 132 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
@@ -1408,13 +1408,14 @@ La priorité, la pile, la résolution. *5 fonctions, 152 lignes, 8.2 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *12 fonctions, 211 lignes, 11 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 226 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `peutAttaquer(P, o)` | — |
 | `peutBloquer(P, b, a)` | — |
 | `declareAttaquants(P)` | Déclarer les attaquants (règle 508). Rend leur nombre. |
+| `defenseurIncite(P, o, defenseurs, def)` | Le défenseur qu'une créature incitée doit viser : un joueur autre que celui qui l'incite (701.15b), qu'elle peut attaquer sans taxe ; à défaut d'un tel joueur, `def` reste. |
 | `paieTaxesAttaque(P, j, choisis)` | La taxe d'attaque (Ghostly Prison) : l'attaquant la paie en une fois, ou les attaquants taxés restent chez eux — les plus chers d'abord, tant que le total dépasse ce qu'il peut payer. |
 | `defenseurDe(P, def)` | Le joueur que vise un attaquant, directement ou par son planeswalker. |
 | `declareBloqueurs(P)` | Déclarer les bloqueurs (règle 509), défenseur par défenseur. |

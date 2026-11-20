@@ -1941,6 +1941,14 @@ l'adversaire choisi n'étaient donc jamais incitées. Quand toutes les cibles so
 désigne autre chose que le joueur lui-même, ce sont maintenant les objets désignés qui sont touchés — pour tous les
 effets qui s'écrivent ainsi, non pour le seul goad.
 
+**Correctif : l'incitation s'impose aussi à qui a répondu** (`defenseurIncite()`, `js/jeuCombat.js`). Une créature
+incitée attaque un autre joueur que celui qui l'incite, si elle le peut. `declareAttaquants()` n'appliquait
+cette règle qu'à la créature que le moteur *forçait* d'attaquer parce que son contrôleur l'avait oubliée ; une
+créature que l'adversaire déclarait lui-même passait telle quelle, contre l'inciteur — Geode Rager incitait
+bien, et rien n'en tenait compte. La réponse est maintenant corrigée (et le journal le dit) : seuls les
+joueurs autres que l'inciteur comptent — un planeswalker n'est pas « un joueur » —, et sans autre joueur à
+attaquer, l'attaque reste sur l'inciteur. Une incitation expirée (au tour de qui l'a posée) ne contraint plus.
+
 **Lot F81 : copier et devenir** (`js/forgeCopiesB.js`). Onze cartes de plus. Ce que l'effet de copie ajoute à la copie :
 - `AddColors$` (Ratadrabik of Urborg, The Jolly Balloon Man) ; `RemoveCardTypes$ True` : la copie ne garde que les
   types ajoutés (Espers to Magicite) ;

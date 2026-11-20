@@ -54,12 +54,18 @@ function* declareAttaquants(P) {
     const id = cands[paire[0]], def = defenseurs[paire[1]];
     if (id != null && def && !choisis.has(id) && attaquePermise(P, obj(P, id), def)) choisis.set(id, def);
   }
+  /* Une créature incitée attaque un autre joueur que celui qui l'incite, si elle le peut : ce
+     que son contrôleur a répondu n'y change rien. */
+  for (const [id, def] of choisis) {
+    const autre = defenseurIncite(P, obj(P, id), defenseurs, def);
+    if (autre !== def) { choisis.set(id, autre); jn(P, `${nomObj(P, id)} est incitée : elle attaque ${P.joueurs[autre.j].nom}`); }
+  }
   /* « Attacks each combat if able » : la créature qui le doit et le peut
      attaque le premier défenseur permis, si son contrôleur l'a oubliée. */
   cands.forEach(id => {
     if (choisis.has(id) || !doitAttaquer(P, obj(P, id))) return;
-    const goad = obj(P, id).goad, libres = defenseurs.filter(d => attaquePermise(P, obj(P, id), d) && !taxeAttaque(P, obj(P, id), d));
-    const def = libres.find(d => !goad || d.j !== goad.par) || libres[0];
+    const libres = defenseurs.filter(d => attaquePermise(P, obj(P, id), d) && !taxeAttaque(P, obj(P, id), d));
+    const def = defenseurIncite(P, obj(P, id), libres, libres[0]);
     if (def) choisis.set(id, def);
   });
   yield* paieTaxesAttaque(P, j, choisis);
@@ -77,6 +83,15 @@ function* declareAttaquants(P) {
   if (n) emet(P, {t: 'attaquants', joueur: j, ids: [...P.combat.attaquants.keys()], defs: [...P.combat.attaquants.values()]});
   if (n) jn(P, `${P.joueurs[j].nom} attaque avec ${[...P.combat.attaquants.keys()].map(id => nomObj(P, id)).join(', ')}`);
   return n;
+}
+
+/* Le défenseur qu'une créature incitée doit viser : un joueur autre que celui qui l'incite
+   (701.15b), qu'elle peut attaquer sans taxe ; à défaut d'un tel joueur, `def` reste. Un
+   planeswalker n'est pas « un joueur » : il ne satisfait pas l'incitation. */
+function defenseurIncite(P, o, defenseurs, def) {
+  if (!o.goad || typeof goadActif !== 'function' || !goadActif(P, o)) return def;
+  const autres = defenseurs.filter(d => d.j != null && d.j !== o.goad.par && attaquePermise(P, o, d) && !taxeAttaque(P, o, d));
+  return !autres.length || autres.includes(def) ? def : autres[0];
 }
 
 /* La taxe d'attaque (Ghostly Prison) : l'attaquant la paie en une fois,
