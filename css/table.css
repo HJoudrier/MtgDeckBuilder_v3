@@ -212,8 +212,9 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 .mn .tc-rang{flex:1;min-width:0;gap:5px;padding-top:8px}
 .mn.serre .tc + .tc{margin-left:calc(var(--w) * -.3)}
 /* ---------- La question ---------- */
-.tq{background:var(--panel2);border-top:1px solid var(--line2);padding:6px 8px calc(8px + env(safe-area-inset-bottom, 0px));display:flex;flex-direction:column;gap:6px}
-.tq.a-vous{border-top:2px solid var(--brass);box-shadow:0 -4px 14px var(--brass-a2)}
+/* Le bandeau des questions : au milieu de la table, entre les adversaires et son propre champ, là où l'œil est. */
+.tq{background:var(--panel2);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:6px 8px;display:flex;flex-direction:column;gap:6px;max-height:40vh;max-height:40dvh;overflow-y:auto}
+.tq.a-vous{border-top:2px solid var(--brass);border-bottom:2px solid var(--brass);box-shadow:0 0 14px var(--brass-a2)}
 .tq-titre{font-size:13px;line-height:1.3}
 .tq-actions{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
 .tq-actions .btn{flex:0 0 auto;max-width:72vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -297,4 +298,6 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 .tq-ctx .tc{margin-bottom:2px}
 .tq-ctx-corps{min-width:0;flex:1}
 .tq-ctx-texte{color:var(--txt);margin-top:2px}
+/* Un écran bas : la carte du contexte rapetisse, pour laisser voir le plateau. */
+@media (max-height:700px){.tq-ctx .tc{--tw:38px !important}.tq-ctx-texte{max-height:4.6em;overflow-y:auto}}
 

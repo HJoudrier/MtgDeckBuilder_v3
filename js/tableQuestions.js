@@ -2,7 +2,8 @@
    js/tableQuestions.js — Répondre à une question du moteur, à la main
 
    La priorité et le combat se règlent sur la ligne de front, au bouton de
-   tour (js/tableFront.js). Le bandeau du bas garde ce qui ne tient pas dans
+   tour (js/tableFront.js). Le bandeau des questions — au milieu de la table,
+   entre les adversaires et son propre champ — garde ce qui ne tient pas dans
    un bouton — une cible à prendre dans une liste, X, les modes, oui ou non,
    le mulligan, le mana qu'on engage à la main — et propose ses réponses en
    boutons. Les cartes concernées sont aussi surlignées sur la table, et un

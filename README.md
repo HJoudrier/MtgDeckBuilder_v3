@@ -530,7 +530,7 @@ le pouce, un bouton rond dont le libellé dit ce qui va se passer — « Combat 
 « Attaquer (2) », « Bloquer (1) », « Fin du tour » —, une phrase dessous le précisant
 (`actionTour()`). Des puces au-dessus portent le reste : « Toutes », « Aucune », l'adversaire visé,
 les blocages à défaire, « Jusqu'à mon tour », et ce qu'aucune carte visible ne porte (un flashback
-depuis le cimetière). Le bandeau du bas ne garde que les questions qui ne tiennent pas dans un
+depuis le cimetière). Le bandeau des questions ne garde que les questions qui ne tiennent pas dans un
 bouton : une cible prise dans une liste, X, les modes, oui ou non, le mulligan, et le mana qu'on
 engage à la main. Un toucher sur une carte qui n'a qu'une façon de se jouer la **lève** au lieu de la
 jouer (`TABLE.leve`, valable pour la seule question où elle a été levée) : le bouton dit alors
@@ -578,6 +578,12 @@ de `P` pour que la copie d'une partie par l'IA ne l'emporte pas) et que **toute 
 résout dit de quoi il s'agit** : « Se résout *Geode Rager* (capacité déclenchée, la vôtre) — Landfall : goad each
 creature target player controls », puis « *Geode Rager* — Le faire ? ».
 Une question vague (`Le faire ?`, `Défausser ?`) est précédée du nom de sa carte (`sourceNom`).
+
+**Le bandeau des questions est au milieu de la table** (région `question`, `charpentePartie()`), entre les adversaires
+et la ligne de front, plutôt qu'au pied de l'écran : c'est là que l'œil est, et la question ne se confond plus avec la
+main. Il est borné à 40 % de la hauteur et défile au-delà ; sur un écran bas (moins de 700 px) la carte de contexte
+rapetisse. Le plateau des adversaires, seul élément qui s'étire, cède la place qu'il faut : sous 650 px de haut,
+une question haute le réduit presque à rien.
 
 **La carte sous les yeux, pour toute question de choix** (`contexteQuestion()`, `js/jeuPileExplique.js`). Ce contexte
 n'existait qu'en texte, et seulement pendant une résolution : une cible à prendre pour un sort qu'on lance, un coût à

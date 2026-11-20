@@ -277,7 +277,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 51 |
 | [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi, en flèches | 7 | 103 |
 | [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 155 |
-| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 164 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 165 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 49 |
 | [`tableBloque.js`](#jstablebloquejs) | Bloquer en glissant une créature sur son attaquant | 9 | 129 |
 | [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 9 | 135 |
@@ -4689,7 +4689,7 @@ La table, peinte depuis une vue. *10 fonctions, 155 lignes, 8.1 Ko.*
 
 ## js/tableQuestions.js
 
-Répondre à une question du moteur, à la main. *14 fonctions, 164 lignes, 8.7 Ko.*
+Répondre à une question du moteur, à la main. *14 fonctions, 165 lignes, 8.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4747,7 +4747,7 @@ Bloquer en glissant une créature sur son attaquant. *9 fonctions, 129 lignes, 5
 
 ## js/tableFront.js
 
-La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.8 Ko.*
+La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|

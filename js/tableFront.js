@@ -7,7 +7,7 @@
    « Laisser résoudre », « Fin du tour ». Une phrase dessous le précise.
    On décide là où la partie se joue, plus au pied de l'écran.
 
-   Le bandeau du bas (js/tableQuestions.js) ne garde que les questions qui
+   Le bandeau des questions (js/tableQuestions.js), juste au-dessus de la ligne, ne garde que les questions qui
    ne tiennent pas dans un bouton : une cible à prendre dans une liste, X,
    les modes, oui ou non, le mulligan — et le mana qu'on engage à la main.
    ===================================================================== */
@@ -29,7 +29,7 @@ const cibleTexte = it => it.cibles && it.cibles.length ? ' → ' + it.cibles.joi
 
 /* Ce que ferait le bouton de tour maintenant : son libellé, la phrase qui
    le précise, et s'il agit. Rien quand la question se règle dans le
-   bandeau du bas. */
+   bandeau des questions. */
 function actionTour(v) {
   const q = TABLE.question;
   if (!v || v.fin) return null;
@@ -123,7 +123,7 @@ function pileTuilesHTML(v) {
 /* La ligne de front, et sous elle l'explication de la pile. */
 function frontHTML(v) {
   const a = actionTour(v), err = TABLE.erreur && TABLE.question && /^(priorite|attaquants|bloqueurs)$/.test(TABLE.question.q) ? TABLE.erreur : '';
-  const q = TABLE.question, autre = q && !a ? (q.q === 'cibles' ? 'Touchez une cible qui brille, ou choisissez en bas.' : 'Répondez en bas de l\'écran.') : '';
+  const q = TABLE.question, autre = q && !a ? (q.q === 'cibles' ? 'Touchez une cible qui brille, ou choisissez dans le bandeau.' : 'Répondez dans le bandeau ci-dessus.') : '';
   const phrase = err || (a && a.sous) || autre, alerte = err || (a && a.alerte);
   return `<div class="tfr${a && a.fort ? ' fort' : ''}${TABLE.question ? ' a-vous' : ''}">
       <div class="tfr-gauche">${phasesPointsHTML(v)}</div>

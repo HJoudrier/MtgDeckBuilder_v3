@@ -28,10 +28,10 @@ function charpentePartie() {
     <div class="tr" data-region="fil"></div>
     <div class="tr" data-region="alertes"></div>
     <div class="tr-plateau" data-defile="plateau"><div class="tr" data-region="adv"></div></div>
+    <div class="tr" data-region="question"></div>
     <div class="tr" data-region="front"></div>
     <div class="tr" data-region="moi"></div>
     <div class="tr" data-region="main"></div>
-    <div class="tr" data-region="question"></div>
     <div class="tr" data-region="fin"></div>
     <svg class="tf" aria-hidden="true"></svg>
     <div class="tmv" aria-hidden="true"></div>
