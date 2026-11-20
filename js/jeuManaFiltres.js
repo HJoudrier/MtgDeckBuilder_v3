@@ -44,7 +44,7 @@ function filtresMana(P, j, pour) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j || !aUnFiltre(o.def)) continue;
-    for (const k of capacitesDe(P, o)) {
+    for (const [i, k] of capacitesDe(P, o).entries()) {
       const c = k.cout;
       if (k.genre !== 'mana' || !c || !((c.mana && c.mana.total > 0) || c.renvoieSoi)) continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
@@ -65,7 +65,7 @@ function filtresMana(P, j, pour) {
         opts = opts.map(s => s.repeat(n));
       }
       if (!opts.length) continue;
-      r.push({id, filtre: true, cout: c.mana || coutManaVide(), engage: !!c.engage, renvoie: !!c.renvoieSoi, options: opts, vie: 0, sac: false, reste: false});
+      r.push({id, i, filtre: true, cout: c.mana || coutManaVide(), engage: !!c.engage, renvoie: !!c.renvoieSoi, options: opts, vie: 0, sac: false, reste: false});
     }
   }
   return r;

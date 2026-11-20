@@ -100,10 +100,21 @@ function actionsLoupe(id) {
   if (!q) return '';
   if (q.q === 'priorite') return q.options.map((a, i) => [a, i]).filter(([a]) => a.id === id && a.k !== 'passer')
     .map(([a, i]) => `<button type="button" class="btn pri" data-act="tAction" data-i="${i}">${esc(a.label)}</button>`).join('');
+  if (q.q === 'bloqueurs') return blocagesLoupe(q, id);
   const e = etatChoix(id);
   if (e === 'choix') return `<button type="button" class="btn pri" data-act="tCarte" data-id="${id}">Choisir</button>`;
   if (e === 'choisi') return `<button type="button" class="btn" data-act="tCarte" data-id="${id}">Retirer du choix</button>`;
   return '';
+}
+
+/* Une créature qui peut bloquer : un bouton par attaquant qu'elle peut
+   bloquer, et de quoi défaire le blocage posé. */
+function blocagesLoupe(q, id) {
+  const bi = q.options.findIndex(o => o.id === id);
+  if (bi < 0) return '';
+  const ai = selDe(q).paires.get(bi);
+  return q.options[bi].legaux.filter(a => a !== ai).map(a => `<button type="button" class="btn pri" data-act="tBloque" data-i="${bi}" data-a="${a}">Bloquer ${esc(q.attaquants[a].label)}</button>`).join('')
+    + (ai != null ? `<button type="button" class="btn" data-act="tRetirePaire" data-i="${bi}">Annuler ce blocage</button>` : '');
 }
 
 function loupeHTML(v) {

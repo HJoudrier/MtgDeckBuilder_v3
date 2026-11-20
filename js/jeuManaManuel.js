@@ -13,6 +13,10 @@
      une par couleur qu'elle sait produire : on engage, la réserve se remplit,
      puis on lance. Une capacité de mana n'utilise pas la pile : le joueur
      garde la priorité après l'avoir jouée ;
+   - les capacités de mana qui coûtent elles-mêmes du mana (Selvala, Signets,
+     terrains-filtres, Cabal Coffers) sont des actions `{k: 'manaFiltre'}` :
+     le coût se paie sur la réserve — on engage d'abord une source pour lui —,
+     puis le permanent s'engage et verse son mana à son tour ;
    - une action `{k: 'reglage'}` bascule d'un mode à l'autre. C'est une réponse
      comme une autre, rangée avec les autres : la partie reste rejouable à
      l'identique, ce qu'un réglage fait hors du moteur ne permettrait pas.
@@ -54,6 +58,37 @@ function basculeReglage(P, j, a) {
   J.manuel = !!a.manuel;
   jn(P, `${J.nom} paie son mana ${J.manuel ? 'à la main' : 'automatiquement'}`);
   P.ver++;
+  return true;
+}
+
+/* Les capacités de mana payantes qu'on peut jouer maintenant. Le paiement
+   automatique, lui, s'en sert tout seul (js/jeuManaFiltres.js) ; ici, au
+   paiement manuel, rien ne les proposait. Leur coût est jugé sans le
+   permanent lui-même : une Selvala ne se paie pas de son propre mana. */
+function actionsManaFiltre(P, j) {
+  if (!paiementManuel(P, j)) return [];
+  return filtresMana(P, j, null).filter(f => manaPayableSansSoi(P, j, f, obj(P, f.id))).map(f => ({k: 'manaFiltre', id: f.id, i: f.i}));
+}
+
+function manaPayableSansSoi(P, j, f, o) {
+  const avant = EXCLUS_MANA;
+  EXCLUS_MANA = new Set([...avant, f.id]);
+  try { return !!planPaiement(P, j, f.cout, 0, {capacite: o}); } finally { EXCLUS_MANA = avant; }
+}
+
+/* Payer le coût sur la réserve, engager, verser le mana choisi. Rend faux
+   si l'état a changé depuis que la réponse a été donnée. */
+function* activeManaFiltre(P, j, a) {
+  const o = obj(P, a.id);
+  if (!o || o.zone !== 'champ' || o.ctrl !== j || !paiementManuel(P, j)) return false;
+  const f = filtresMana(P, j, null).find(x => x.id === a.id && x.i === a.i);
+  if (!f || !manaPayableSansSoi(P, j, f, o)) return false;
+  const option = yield* choisitManaOption(P, j, f.options, o.id, 0);
+  const avant = EXCLUS_MANA;
+  EXCLUS_MANA = new Set([...avant, f.id]);
+  try { if (f.cout.total > 0 && !paieMana(P, j, f.cout, 0, {capacite: o})) return false; } finally { EXCLUS_MANA = avant; }
+  activeFiltre(P, j, {...f, cout: coutManaVide()}, option, null);
+  jn(P, `${P.joueurs[j].nom} active ${o.def.nom} : mana ${libelleManaOption(option)}`);
   return true;
 }
 

@@ -79,6 +79,7 @@ function libelleAction(P, a) {
   const o = obj(P, a.id), nom = o ? o.def.nom : '?';
   if (a.k === 'terrain') return 'Jouer ' + (a.variante === 'dos' && o ? o.def.dos.nom : nom) + (a.depuis ? ` (depuis ${ZONES_DEPUIS[a.depuis]})` : '');
   if (a.k === 'mana') return (a.sac ? 'Sacrifier ' : 'Engager ') + nom + ' : mana ' + libelleManaOption(a.option);
+  if (a.k === 'manaFiltre') { const k = o && capacitesDe(P, o)[a.i]; return 'Engager ' + nom + ' : ' + ((k && k.cout.mana && k.cout.mana.sym.join('')) || '') + ' → mana'; }
   if (a.k === 'reglage') return a.manuel ? 'Payer le mana à la main' : 'Payer le mana automatiquement';
   if (a.k === 'retourner') return 'Retourner ' + (o && o.vraieDef ? o.vraieDef.nom : nom);
   if (a.k === 'equiper') return 'Équiper : ' + nom;

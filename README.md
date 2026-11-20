@@ -298,7 +298,8 @@ js/                 modules, chargés dans cet ordre :
   tableFleches.js   ce qui vise quoi, en flèches : cibles, activations, combat
   tableRendu.js     la table, peinte depuis une vue, région par région
   tableQuestions.js répondre à une question du moteur, à la main
-  tableCombat.js    attaquer et bloquer, au doigt
+  tableCombat.js    attaquer au doigt ; l'état d'une carte pendant un combat
+  tableBloque.js    bloquer en glissant une créature sur son attaquant
   tableFront.js     la ligne de front : la pile et le bouton de tour
   tableLever.js     lever une carte puis la jouer, ou la pousser vers le haut
   tableSons.js      les sons synthétisés et les vibrations de la table
@@ -539,6 +540,18 @@ main ne défile qu'à l'horizontale (`touch-action: pan-x`), le glissé vertical
 une source de mana reste immédiat. Pendant la pause de résolution, un **anneau** se remplit sur le
 bouton le temps qu'elle dure (`TABLE.pause`) : le toucher la coupe, comme « Continuer ».
 
+**Bloquer se fait au glissé** (`js/tableBloque.js`) : on prend une de ses créatures, on la dépose
+sur l'attaquant qu'elle bloque. Souris et doigt passent par les mêmes évènements de pointeur, écoutés
+à côté de ceux de `js/tableLever.js` — qui, lui, ne démarre que sur une carte de la main : celui-ci ne
+démarre que sur une créature du champ, pendant la question des bloqueurs. Pendant le glissé, la table
+n'est **pas repeinte** — une carte ôtée du DOM sous un doigt qui la tient perd ses évènements —, seules
+des classes changent (les attaquants légaux brillent, `bloc-cible`) et une copie suit le pointeur. Les
+créatures qui peuvent bloquer ont `touch-action:none` le temps de la question : sans cela le
+navigateur prendrait le geste pour le défilement de leur rangée. Déposée sur un attaquant qu'elle ne
+peut pas bloquer, la créature le dit dans la phrase de la ligne de front. Le toucher simple ne sert
+plus qu'à lire la carte ; sa loupe propose « Bloquer X » pour qui ne glisse pas, ou dont l'attaquant
+est sur une autre page de l'Arène.
+
 **Des cartes qui voyagent, une table qu'on entend** (`js/tableMouvements.js`, `js/tableRessenti.js`,
 `js/tableSons.js`). `renduTable()` mesure les cartes avant `peinsRegions()` et les fait partir de leur
 ancienne place après (le principe « FLIP ») : une carte ne porte donc jamais de `transform` en propre,
@@ -595,9 +608,14 @@ donc une réponse comme une autre : rangée avec les autres, elle laisse la part
 l'identique, ce qu'un réglage posé hors du moteur casserait. Le menu de la table (`S.table.paiementManuel`)
 dit comment *commence* le siège de l'hôte ; un invité commence à l'automatique et bascule depuis le
 menu de sa table, ou depuis le bandeau de son mana quand il paie déjà à la main. Un siège confié à l'automate revient d'abord à l'automatique (`reponseAutomate()`) : l'automate
-n'engage aucune source. Limites assumées : le mana restreint (« spend only on creature spells »), les
-filtres et les sources qui demandent un sacrifice ou un coût de plus ne s'engagent pas à la main. Les
-effets qui ajoutent du mana (« Add {R} or {G} ») demandent la couleur au joueur
+n'engage aucune source. Les capacités de mana qui coûtent elles-mêmes du mana (Selvala, Signets,
+terrains-filtres, Cabal Coffers) sont des actions `{k: 'manaFiltre'}` : le coût se paie **sur la
+réserve** — on engage d'abord une source pour lui, le solveur n'étant plus là —, puis le permanent
+s'engage et verse son mana. Elles n'existent qu'à ce mode : au paiement automatique, le solveur s'en
+sert tout seul quand un sort le demande. Une capacité « n'importe quelle combinaison de couleurs » se
+joue d'une seule couleur à la fois (« vert ×2 »), comme dans le solveur. Limites assumées : le mana
+restreint (« spend only on creature spells ») et les sources qui demandent un sacrifice ou un coût de
+plus ne s'engagent pas à la main. Les effets qui ajoutent du mana (« Add {R} or {G} ») demandent la couleur au joueur
 (`choisitManaOption()`), au lieu de prendre la première ; un automate garde son choix d'avant.
 
 **Sans aucun serveur.** L'utilisateur a voulu une liaison WebRTC sans tiers : ni signalisation, ni

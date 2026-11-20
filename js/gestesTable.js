@@ -27,7 +27,8 @@ function gestesTable(act, b) {
     case 'tDef': if (TABLE.question) { selDe(TABLE.question).def = i; renduTable(); } return true;
     case 'tAttTous': attaqueTous(); return true;
     case 'tAttAucun': if (TABLE.question) { selDe(TABLE.question).paires.clear(); renduTable(); } return true;
-    case 'tRetirePaire': if (TABLE.question) { selDe(TABLE.question).paires.delete(i); renduTable(); } return true;
+    case 'tRetirePaire': if (TABLE.question) { selDe(TABLE.question).paires.delete(i); TABLE.loupe = null; renduTable(); } return true;
+    case 'tBloque': if (TABLE.question && TABLE.question.q === 'bloqueurs') posePaire(TABLE.question, i, +b.dataset.a); return true;
     case 'tFermeLoupe': TABLE.loupe = null; renduTable(); return true;
     case 'tZone': TABLE.zone = {j: +b.dataset.j, z: b.dataset.z}; renduTable(); return true;
     case 'tFermeZone': TABLE.zone = null; renduTable(); return true;

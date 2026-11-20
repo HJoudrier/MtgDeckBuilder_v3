@@ -12,7 +12,7 @@
 
 /* La sélection en cours, propre à la question affichée. */
 function selDe(q) {
-  if (!TABLE.sel || TABLE.sel.n !== q.n) TABLE.sel = {n: q.n, choix: new Set(), paires: new Map(), def: 0, courant: null};
+  if (!TABLE.sel || TABLE.sel.n !== q.n) TABLE.sel = {n: q.n, choix: new Set(), paires: new Map(), def: 0};
   return TABLE.sel;
 }
 
@@ -132,12 +132,12 @@ function questionCorpsHTML(q, v) {
     case 'priorite': {
       /* Le mana qu'on engage à la main, et le réglage du paiement : le reste est sur la ligne de front. */
       const vus = new Set();
-      const mana = q.options.map((a, i) => [a, i]).filter(([a]) => a.k === 'mana' && !vus.has(a.label) && vus.add(a.label));
+      const mana = q.options.map((a, i) => [a, i]).filter(([a]) => (a.k === 'mana' || a.k === 'manaFiltre') && !vus.has(a.label) && vus.add(a.label));
       const reglage = q.options.map((a, i) => [a, i]).find(([a]) => a.k === 'reglage');
       if (!mana.length) return '';
       return `<div class="tq-titre"><b>Votre mana</b> <span class="muted">· engagez-le, puis lancez</span></div>
         <div class="tq-actions tq-mana" data-defile="mana">${mana.map(([a, i]) =>
-          `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${String(a.option).split('').map(l => symIcon(l, 'sm')).join('')} ${esc(a.label)}</button>`).join('')}
+          `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${a.k === 'mana' ? String(a.option).split('').map(l => symIcon(l, 'sm')).join('') + ' ' + esc(a.label) : texteOracleHTML(a.label)}</button>`).join('')}
           ${reglage ? `<button type="button" class="btn sm" data-act="tAction" data-i="${reglage[1]}" title="Le réglage est aussi au menu de la table">${esc(reglage[0].label)}</button>` : ''}</div>`;
     }
     case 'attaquants': case 'bloqueurs': return '';

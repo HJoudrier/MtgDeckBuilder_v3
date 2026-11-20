@@ -3,11 +3,14 @@
 
    Attaquer : toucher ses créatures, chacune part vers l'adversaire choisi
    dans les puces de la ligne de front (js/tableFront.js), puis le bouton de
-   tour. Bloquer : toucher un de ses bloqueurs, puis l'attaquant qu'il
-   bloque — seuls les attaquants qu'il peut légalement bloquer s'allument
-   (vol, portée, imblocable : `peutBloquer()`, calculé par l'hôte). Une menace
-   bloquée par une seule créature est signalée avant qu'on valide, sans quoi
-   le moteur effacerait ce blocage en silence.
+   tour. Bloquer : glisser un de ses bloqueurs sur l'attaquant qu'il bloque
+   (js/tableBloque.js) — seuls les attaquants qu'il peut légalement bloquer
+   s'allument (vol, portée, imblocable : `peutBloquer()`, calculé par l'hôte).
+   Un toucher sur une créature ne sert plus qu'à la lire : sa loupe propose
+   aussi de la faire bloquer, pour qui ne glisse pas ou dont l'attaquant est
+   sur une autre page de l'Arène. Une menace bloquée par une seule créature
+   est signalée avant qu'on valide, sans quoi le moteur effacerait ce blocage
+   en silence.
    ===================================================================== */
 
 function etatCombatTable(q, s, id) {
@@ -16,32 +19,18 @@ function etatCombatTable(q, s, id) {
     return i < 0 ? '' : s.paires.has(i) ? 'choisi' : 'choix';
   }
   const bi = q.options.findIndex(o => o.id === id);
-  if (bi >= 0) return s.paires.has(bi) || s.courant === bi ? 'choisi' : 'choix';
-  const ai = q.attaquants.findIndex(a => a.id === id);
-  if (ai < 0) return '';
-  return s.courant != null && q.options[s.courant].legaux.includes(ai) ? 'choix' : 'vise';
+  if (bi >= 0) return s.paires.has(bi) ? 'choisi' : 'choix';
+  return q.attaquants.some(a => a.id === id) ? 'vise' : '';
 }
 
-/* Un toucher pendant un combat. Rend vrai s'il a servi. */
+/* Un toucher pendant un combat. Rend vrai s'il a servi : celui d'une
+   attaque seulement, un blocage se fait au glissé. */
 function clicCombat(q, s, id) {
-  if (q.q === 'attaquants') {
-    const i = q.options.findIndex(o => o.id === id);
-    if (i < 0) return false;
-    if (s.paires.has(i)) s.paires.delete(i); else s.paires.set(i, s.def);
-    return true;
-  }
-  const bi = q.options.findIndex(o => o.id === id);
-  if (bi >= 0) {
-    if (s.paires.has(bi)) { s.paires.delete(bi); s.courant = null; } else s.courant = s.courant === bi ? null : bi;
-    return true;
-  }
-  const ai = q.attaquants.findIndex(a => a.id === id);
-  if (ai >= 0 && s.courant != null && q.options[s.courant].legaux.includes(ai)) {
-    s.paires.set(s.courant, ai);
-    s.courant = null;
-    return true;
-  }
-  return false;
+  if (q.q !== 'attaquants') return false;
+  const i = q.options.findIndex(o => o.id === id);
+  if (i < 0) return false;
+  if (s.paires.has(i)) s.paires.delete(i); else s.paires.set(i, s.def);
+  return true;
 }
 
 /* Les menaces bloquées par une seule créature : le moteur effacerait ce

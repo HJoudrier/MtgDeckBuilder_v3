@@ -108,6 +108,17 @@ body.table-ouverte{overflow:hidden}
 .tc.attaque .tc-corps{box-shadow:0 0 0 2px var(--bad),0 0 10px var(--bad-a)}
 .tc.attaque.choisi .tc-corps,.tc.attaque.choix .tc-corps{box-shadow:0 0 0 3px var(--bad),0 0 12px var(--bad)}
 
+/* Bloquer en glissant (js/tableBloque.js) : la créature tenue s'efface à sa
+   place, sa copie suit le pointeur, les attaquants qu'elle peut bloquer
+   brillent. Sous le doigt, la carte ne défile plus : sans cela le navigateur
+   prendrait le geste pour le défilement de sa rangée. */
+body.table-bloquer #table .tc.choix,body.table-bloquer #table .tc.choisi{touch-action:none;cursor:grab}
+body.en-blocage{user-select:none;-webkit-user-select:none;cursor:grabbing}
+.tc.bloc-tenu{opacity:.4}
+.tc-fantome{position:fixed;z-index:1000;pointer-events:none;margin:0;transform:translate(-50%,-50%) scale(1.1);opacity:.92;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.tc.bloc-cible .tc-corps{box-shadow:0 0 0 3px var(--brass),0 0 14px 3px var(--brass);opacity:1}
+.tc.bloc-cible.bloc-survol .tc-corps{box-shadow:0 0 0 4px var(--ok),0 0 18px 5px var(--ok)}
+
 /* La carte qui s'active pulse ; celle qu'un sort vise est cernée de rouge. */
 .tc.active .tc-corps{animation:tc-active 1s ease-in-out infinite}
 @keyframes tc-active{50%{box-shadow:0 0 0 3px var(--brass),0 0 16px 4px var(--brass)}}

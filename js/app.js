@@ -8,7 +8,7 @@
    ===================================================================== */
 
 document.addEventListener('click', ev => {
-  if (clicAvale()) return;
+  if (clicAvale() || bloqueAvale()) return;
   const b = ev.target.closest('button, [data-act], [data-node], [data-node2], [data-card], [data-onglet], [data-gsrc], [data-cmode], [data-color], [data-col], [data-restrcoul], [data-restrrole]');
   if (!b) return;
 
@@ -29,6 +29,11 @@ document.addEventListener('pointerdown', glisseDebut);
 document.addEventListener('pointermove', glisseBouge, {passive: true});
 document.addEventListener('pointerup', glisseFin);
 document.addEventListener('pointercancel', glisseFin);
+/* Et une créature glissée sur l'attaquant qu'elle bloque (js/tableBloque.js). */
+document.addEventListener('pointerdown', bloqueDebut);
+document.addEventListener('pointermove', bloqueBouge, {passive: true});
+document.addEventListener('pointerup', bloqueFin);
+document.addEventListener('pointercancel', bloqueFin);
 document.addEventListener('contextmenu', ev => { if (loupeContextuelle(ev)) ev.preventDefault(); });
 document.addEventListener('scroll', defileTable, {capture: true, passive: true});
 

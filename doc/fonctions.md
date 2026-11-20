@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1839 fonctions**, 281 modules, 1977 Ko de JavaScript.
+**1852 fonctions**, 282 modules, 1986 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -58,13 +58,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 98 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 259 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 244 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 245 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 301 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
 | [`jeuCoutsX.js`](#jsjeucoutsxjs) | Les coûts dont la quantité est X, et ceux qui | 11 | 138 |
 | [`jeuManaFiltres.js`](#jsjeumanafiltresjs) | Le mana qui coûte du mana : les filtres | 6 | 139 |
-| [`jeuManaManuel.js`](#jsjeumanamanueljs) | Engager son mana soi-même, et choisir sa couleur | 6 | 78 |
+| [`jeuManaManuel.js`](#jsjeumanamanueljs) | Engager son mana soi-même, et choisir sa couleur | 9 | 113 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 160 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 139 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
@@ -76,7 +76,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
-| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 128 |
+| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 129 |
 | [`jeuPileExplique.js`](#jsjeupileexpliquejs) | Dire ce qui est sur la pile, et ce qui se résout | 3 | 48 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 300 |
@@ -273,12 +273,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 127 |
 | [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 57 |
 | [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 15 | 164 |
-| [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 12 | 134 |
+| [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 13 | 145 |
 | [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 51 |
 | [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi, en flèches | 7 | 103 |
-| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 154 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 155 |
 | [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 159 |
-| [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 60 |
+| [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 49 |
+| [`tableBloque.js`](#jstablebloquejs) | Bloquer en glissant une créature sur son attaquant | 9 | 129 |
 | [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 9 | 135 |
 | [`tableLever.js`](#jstableleverjs) | Lever une carte, puis la jouer | 7 | 113 |
 | [`tableSons.js`](#jstablesonsjs) | Les sons et les vibrations de la table | 6 | 112 |
@@ -289,8 +290,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 70 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 6 | 101 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 314 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 6 | 102 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 319 |
 | [`icones.js`](#jsiconesjs) |  | 0 | 21 |
 
 ## js/reglesEffets.js
@@ -1173,7 +1174,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 259 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 244 lignes, 12 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 245 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1288,7 +1289,7 @@ Le mana qui coûte du mana : les filtres. *6 fonctions, 139 lignes, 6.7 Ko.*
 
 ## js/jeuManaManuel.js
 
-Engager son mana soi-même, et choisir sa couleur. *6 fonctions, 78 lignes, 3.7 Ko.*
+Engager son mana soi-même, et choisir sa couleur. *9 fonctions, 113 lignes, 5.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1296,6 +1297,9 @@ Engager son mana soi-même, et choisir sa couleur. *6 fonctions, 78 lignes, 3.7 
 | `actionsManuelles(P, j)` | Les actions de mana d'un joueur au paiement manuel : chaque source, pour chacune de ses options. |
 | `activeManaManuel(P, j, a)` | Engager une source pour la couleur choisie : son mana va dans la réserve. |
 | `basculeReglage(P, j, a)` | Basculer entre le paiement automatique et le paiement manuel. |
+| `actionsManaFiltre(P, j)` | Les capacités de mana payantes qu'on peut jouer maintenant. |
+| `manaPayableSansSoi(P, j, f, o)` | — |
+| `activeManaFiltre(P, j, a)` | Payer le coût sur la réserve, engager, verser le mana choisi. |
 | `libelleManaOption(option)` | Une option de mana, en mots : « rouge », « rouge ×2 », « blanc + bleu ». |
 | `choisitManaOption(P, j, options, source, prefere)` | Choisir ce que produit un effet de mana. `prefere` : l'indice que prend un joueur automatique, qui ne se pose pas la question. Rend l'option. |
 
@@ -1482,7 +1486,7 @@ Copier une partie, et la reprendre. *7 fonctions, 117 lignes, 5.2 Ko.*
 
 ## js/jeuVue.js
 
-Ce qu'un joueur voit de la partie. *8 fonctions, 128 lignes, 8.2 Ko.*
+Ce qu'un joueur voit de la partie. *8 fonctions, 129 lignes, 8.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4599,7 +4603,7 @@ Trois façons de disposer la table. *15 fonctions, 164 lignes, 9.1 Ko.*
 
 ## js/tableLoupe.js
 
-Voir une carte en grand. *12 fonctions, 134 lignes, 6 Ko.*
+Voir une carte en grand. *13 fonctions, 145 lignes, 6.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4614,6 +4618,7 @@ Voir une carte en grand. *12 fonctions, 134 lignes, 6 Ko.*
 | `etatEnMots(o, v)` | Ce que la partie a fait à un permanent, en mots. |
 | `texteOracleHTML(t)` | Les symboles d'un texte d'oracle, en pastilles. |
 | `actionsLoupe(id)` | Ce qu'on peut faire de la carte maintenant, en boutons. |
+| `blocagesLoupe(q, id)` | Une créature qui peut bloquer : un bouton par attaquant qu'elle peut bloquer, et de quoi défaire le blocage posé. |
 | `loupeHTML(v)` | — |
 
 | Donnée | Rôle |
@@ -4656,7 +4661,7 @@ Ce qui vise quoi, en flèches. *7 fonctions, 103 lignes, 5.1 Ko.*
 
 ## js/tableRendu.js
 
-La table, peinte depuis une vue. *10 fonctions, 154 lignes, 8 Ko.*
+La table, peinte depuis une vue. *10 fonctions, 155 lignes, 8.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4703,18 +4708,39 @@ Répondre à une question du moteur, à la main. *14 fonctions, 159 lignes, 8.3 
 
 ## js/tableCombat.js
 
-Attaquer et bloquer, au doigt. *4 fonctions, 60 lignes, 2.4 Ko.*
+Attaquer et bloquer, au doigt. *4 fonctions, 49 lignes, 2.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `etatCombatTable(q, s, id)` | — |
-| `clicCombat(q, s, id)` | Un toucher pendant un combat. Rend vrai s'il a servi. |
+| `clicCombat(q, s, id)` | Un toucher pendant un combat. Rend vrai s'il a servi : celui d'une attaque seulement, un blocage se fait au glissé. |
 | `menacesSeules(q, s)` | Les menaces bloquées par une seule créature : le moteur effacerait ce blocage en silence, on le dit avant qu'on valide. |
 | `attaqueTous()` | — |
 
+## js/tableBloque.js
+
+Bloquer en glissant une créature sur son attaquant. *9 fonctions, 129 lignes, 5.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `bloqueDebut(ev)` | Un doigt ou un bouton se pose sur l'une de ses créatures qui peut bloquer. |
+| `bloqueFantome(el)` | La carte qui suit le pointeur : la copie de celle qu'on tient. |
+| `bloqueCommence(q)` | Le glissé commence vraiment : les attaquants que cette créature peut bloquer s'allument. |
+| `bloqueBouge(ev)` | Le pointeur bouge : la copie le suit, la cible sous lui s'intensifie. |
+| `bloqueCibleSous(ev)` | L'attaquant que cette créature peut bloquer, sous le pointeur, ou rien. |
+| `bloqueFin(ev)` | Le pointeur se lève : déposé sur un attaquant, c'est un blocage ; ailleurs, le blocage ne se fait pas — et l'on dit pourquoi si la cible existait mais ne pouvait pas être bloquée. |
+| `bloqueNettoie()` | — |
+| `bloqueAvale()` | Le clic qui suit un glissé est avalé. |
+| `posePaire(q, bi, ai)` | Un blocage posé : cette créature bloque cet attaquant, et plus rien d'autre. |
+
+| Donnée | Rôle |
+|---|---|
+| `BLOQUE` | — |
+| `BLOQUE_SEUIL` | — |
+
 ## js/tableFront.js
 
-La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.9 Ko.*
+La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4735,7 +4761,7 @@ La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.9 Ko.*
 
 ## js/tableLever.js
 
-Lever une carte, puis la jouer. *7 fonctions, 113 lignes, 4.1 Ko.*
+Lever une carte, puis la jouer. *7 fonctions, 113 lignes, 4.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4912,7 +4938,7 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *6 fonctions, 101 lignes, 5.1 Ko.*
+Les gestes de la table interactive. *6 fonctions, 102 lignes, 5.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4925,7 +4951,7 @@ Les gestes de la table interactive. *6 fonctions, 101 lignes, 5.1 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 314 lignes, 13 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 319 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|

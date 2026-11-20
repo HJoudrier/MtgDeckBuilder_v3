@@ -133,6 +133,7 @@ function renduTable() {
   if (!el) return;
   el.hidden = !TABLE.ouverte;
   document.body.classList.toggle('table-ouverte', TABLE.ouverte);
+  document.body.classList.toggle('table-bloquer', !!(TABLE.ouverte && TABLE.question && TABLE.question.q === 'bloqueurs'));
   const pleine = html => { el.className = 'table'; el.innerHTML = html; REPEINT.charpente = ''; TABLE.vuePeinte = null; };
   if (!TABLE.ouverte) return pleine('');
   if (TABLE.phase === 'salon') return pleine(salonHTML());

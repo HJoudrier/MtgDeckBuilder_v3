@@ -6,7 +6,7 @@
    bouton, la joue. On ne lance plus rien par mégarde en parcourant sa
    main du doigt. Pousser une carte de la main vers le haut la joue d'un
    seul geste. Engager un terrain pour son mana reste immédiat : on en
-   engage souvent plusieurs d'affilée.
+   engage souvent plusieurs d'affilée — une Selvala ou un Signet de même.
 
    Le glisser s'écoute sur le document, à côté de l'appui long
    (js/app.js) : la carte qu'on pousse n'est pas un élément qu'on peut
@@ -36,7 +36,7 @@ function toucheCarteJouable(q, id) {
   const acts = actionsDeCarte(q, id);
   if (acts.length !== 1) return false;
   const [a, i] = acts[0], l = leveValide(q);
-  if (a.k === 'mana' || (l && l.id === id)) {
+  if (a.k === 'mana' || a.k === 'manaFiltre' || (l && l.id === id)) {
     TABLE.leve = null;
     sonTable('tic');
     repondsTable(i);

@@ -21,7 +21,7 @@ const PHRASE_PASSER = {principale1: 'Passer : on va au combat.', principale2: 'P
 
 /* Le verbe d'une action de priorité, assez court pour un bouton rond. */
 function verbeAction(a) {
-  return {terrain: 'Jouer', lancer: 'Lancer', mana: 'Engager', equiper: 'Équiper', presager: 'Présager', comploter: 'Comploter',
+  return {terrain: 'Jouer', lancer: 'Lancer', mana: 'Engager', manaFiltre: 'Engager', equiper: 'Équiper', presager: 'Présager', comploter: 'Comploter',
     suspendre: 'Suspendre', retourner: 'Retourner'}[a.k] || 'Activer';
 }
 
@@ -64,7 +64,7 @@ function actionTour(v) {
     const menaces = menacesSeules(q, s);
     return {lib: n ? `Bloquer (${n})` : 'Pas de blocage', act: true, fort: n > 0, alerte: menaces.length > 0,
       sous: menaces.length ? `Menace : ${menaces.join(', ')} doit être bloqué par au moins deux créatures.`
-        : s.courant != null ? `${q.options[s.courant].label} bloque… touchez un attaquant.` : 'Touchez un bloqueur, puis l\'attaquant qu\'il bloque.'};
+        : 'Glissez une de vos créatures sur l\'attaquant qu\'elle bloque.'};
   }
   return null;
 }
