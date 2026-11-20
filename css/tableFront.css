@@ -1,0 +1,86 @@
+/* =====================================================================
+   La ligne de front et le bouton de tour (js/tableFront.js), la carte
+   levée et poussée (js/tableLever.js), le calque des cartes qui s'en vont
+   et des points de vie qui jaillissent (js/tableMouvements.js,
+   js/tableRessenti.js).
+
+   Comme table.css : aucune couleur en dur, seulement les variables des
+   deux thèmes. Le reflet du bouton se mêle de blanc, qui éclaire aussi
+   bien le laiton sombre du thème clair que le laiton clair du sombre.
+   ===================================================================== */
+
+/* La ligne de front (js/tableFront.js) : l'étape à gauche, la pile au
+   centre, le bouton de tour à droite, sous le pouce. */
+.en-partie [data-region="front"]{--tw:44px;border-top:1px dashed var(--line2);
+  background:linear-gradient(90deg,transparent,var(--brass-a1) 25%,var(--brass-a1) 75%,transparent)}
+.tfr{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"gauche cmd" "centre cmd" "phrase cmd";column-gap:8px;row-gap:2px;
+  padding:5px 8px 5px 10px;min-height:92px;align-items:center}
+.tfr.a-vous{box-shadow:inset 0 2px 0 var(--brass)}
+.tfr-gauche{grid-area:gauche;display:flex;align-items:center;gap:7px;min-width:0}
+.tfr-phases{display:inline-flex;gap:3px;flex:0 0 auto}
+.tfr-phases i{width:6px;height:6px;border-radius:3px;background:var(--line2);transition:width .3s}
+.tfr-phases i.passee{background:var(--brass-d)}
+.tfr-phases i.en-cours{width:16px;background:var(--brass)}
+.tfr-etape{font-size:12.5px;color:var(--txt-vif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tfr-centre{grid-area:centre;min-width:0;display:flex;align-items:center}
+.tfr-pile{flex:1;min-width:0;gap:8px;min-height:0;padding:3px 2px}
+.tfr-phrase{grid-area:phrase;font-size:12px;color:var(--dim);line-height:1.3;min-height:16px}
+.tfr-phrase.erreur{color:var(--bad-txt)}
+.tfr-cmd{grid-area:cmd;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;max-width:46vw}
+.tfr-puces{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:100%}
+.tfr-puces:empty{display:none}
+.tfr-puce{max-width:100%;padding:3px 9px;border:1px solid var(--line2);border-radius:99px;background:var(--panel);color:var(--txt);font:inherit;font-size:11.5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.tfr-puce[aria-pressed="true"]{border-color:var(--brass);background:var(--brass-a3)}
+.tfr-bouton{position:relative;flex:0 0 auto;width:78px;height:78px;border-radius:50%;border:0;padding:6px;cursor:pointer;color:var(--sur-brass);
+  font:700 12.5px/1.15 var(--body);background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--brass) 62%,white),var(--brass) 70%);
+  box-shadow:0 6px 16px var(--ombre),inset 0 -3px 0 var(--brass-a3);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.tfr-bouton:active{transform:scale(.95)}
+.tfr-bouton span{position:relative;z-index:1}
+.tfr-bouton.fort{animation:tfr-respire 1.8s ease-in-out infinite}
+@keyframes tfr-respire{50%{box-shadow:0 0 0 6px var(--brass-a3),0 6px 16px var(--ombre)}}
+.tfr-bouton.attente{background:var(--panel2);color:var(--dim);box-shadow:inset 0 0 0 1px var(--line2);cursor:default;font-weight:600}
+.tfr-bouton.pause{background:var(--panel);color:var(--txt-vif);box-shadow:inset 0 0 0 1px var(--line2),0 6px 16px var(--ombre)}
+.tfr-anneau{position:absolute;inset:-5px;width:calc(100% + 10px);height:calc(100% + 10px);transform:rotate(-90deg)}
+.tfr-anneau circle{fill:none;stroke:var(--brass);stroke-width:5;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;animation:tfr-anneau linear forwards}
+@keyframes tfr-anneau{to{stroke-dashoffset:0}}
+.tfr-tourne{position:absolute;inset:-4px;border-radius:50%;border:3px solid transparent;border-top-color:var(--brass);animation:tfr-tourne 1s linear infinite}
+@keyframes tfr-tourne{to{transform:rotate(360deg)}}
+
+/* L'éventail : le corps de chaque carte tourne, la carte descend un peu
+   vers les bords. Ce qui se joue monte ; la carte levée monte plus haut
+   (js/tableLever.js). Un glissé vertical est à la page, l'horizontal fait
+   défiler la main. */
+.mn .tc{touch-action:pan-x;top:var(--lev,0px)}
+.mn .tc-corps{transform:rotate(var(--rot,0deg))}
+.mn .tc.choix{top:calc(var(--lev,0px) - 6px)}
+.tc.leve{top:-16px;z-index:3}
+.mn .tc.leve{top:-22px}
+.tc.leve .tc-corps{transform:none;box-shadow:0 0 0 3px var(--brass),0 10px 22px var(--ombre)}
+.tc.glisse{z-index:60;pointer-events:none;transition:none}
+.tc.glisse .tc-corps{transform:scale(1.08);box-shadow:0 18px 30px var(--ombre),0 0 0 2px var(--brass)}
+.en-partie [data-region="moi"].depot{background:var(--brass-a2);box-shadow:inset 0 0 0 2px var(--brass)}
+
+/* Le calque des cartes qui quittent la table et des points de vie qui
+   jaillissent (js/tableMouvements.js, js/tableRessenti.js). */
+.tmv{position:fixed;inset:0;z-index:940;pointer-events:none}
+.tmv .tc{position:fixed}
+.tmv-vie{position:fixed;font:800 20px/1 var(--mono);color:var(--bad-txt);text-shadow:0 0 3px var(--bg),0 0 8px var(--bg);white-space:nowrap}
+.tmv-vie.gain{color:var(--ok-txt)}
+
+/* Un téléphone couché : une ligne plus basse. */
+@media (max-height:560px){
+  .tfr{min-height:70px}
+  .tfr-bouton{width:62px;height:62px;font-size:11px}
+}
+
+/* Un grand écran : une pile plus lisible. */
+@media (min-width:900px) and (min-height:600px){
+  .en-partie [data-region="front"]{--tw:60px}
+  .tfr-cmd{max-width:40vw}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .tfr-bouton.fort{animation:none}
+  .tfr-phases i{transition:none}
+}

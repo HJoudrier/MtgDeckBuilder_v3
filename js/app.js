@@ -18,12 +18,17 @@ document.addEventListener('click', ev => {
 });
 
 /* L'appui long sur une carte de la table l'ouvre en grand, et le clic qui
-   le termine est avalé (js/tableLoupe.js). Le défilement ne remonte pas :
+   le termine est avalé (js/tableLoupe.js) ; une carte de la main poussée
+   vers le haut est jouée (js/tableLever.js). Le défilement ne remonte pas :
    il s'écoute à la capture. */
 document.addEventListener('pointerdown', appuiDebut);
 document.addEventListener('pointermove', appuiBouge, {passive: true});
 document.addEventListener('pointerup', appuiFin);
 document.addEventListener('pointercancel', appuiAnnule);
+document.addEventListener('pointerdown', glisseDebut);
+document.addEventListener('pointermove', glisseBouge, {passive: true});
+document.addEventListener('pointerup', glisseFin);
+document.addEventListener('pointercancel', glisseFin);
 document.addEventListener('contextmenu', ev => { if (loupeContextuelle(ev)) ev.preventDefault(); });
 document.addEventListener('scroll', defileTable, {capture: true, passive: true});
 

@@ -41,16 +41,10 @@ body.table-ouverte{overflow:hidden}
 .tr-btn{min-width:38px;height:32px;border:1px solid var(--line2);border-radius:8px;background:var(--panel2);color:var(--txt);font:inherit;font-size:13px;padding:0 10px;cursor:pointer;flex:0 0 auto}
 .tr-fil{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:var(--bg2);color:var(--dim);font:inherit;font-size:12px;padding:3px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .tr-plateau{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding:4px 6px}
-.en-partie [data-region="pile"],.en-partie [data-region="moi"],.en-partie [data-region="main"],.en-partie [data-region="question"],.en-partie [data-region="fin"]{flex:0 0 auto}
+.en-partie [data-region="front"],.en-partie [data-region="moi"],.en-partie [data-region="main"],.en-partie [data-region="question"],.en-partie [data-region="fin"]{flex:0 0 auto}
 .en-partie [data-region="moi"]{--tw:58px;border-top:1px solid var(--line2);background:var(--bg2);padding:2px 6px 0}
 .en-partie [data-region="main"]{--tw:66px;padding:0 6px}
 
-/* La barre des phases : la case en cours s'allume et dit son nom entier. */
-.tph{display:flex;gap:2px;margin:0;padding:3px 6px;list-style:none;background:var(--panel);border-bottom:1px solid var(--line);overflow:hidden}
-.tph li{flex:1 1 0;min-width:0;padding:3px 2px;border-radius:5px;background:var(--bg2);color:var(--dim2);font-size:10px;line-height:1.2;
-  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tph li.passee{color:var(--dim);background:var(--brass-a1)}
-.tph li.en-cours{flex:0 0 auto;max-width:48%;padding:3px 8px;background:var(--brass);color:var(--sur-brass);font-weight:700;font-size:11px}
 .tr-prio{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:99px;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);font-size:12px}
 .tr-prio.moi{border-color:var(--brass);background:var(--brass);color:var(--sur-brass);font-weight:700}
 .tj-prio{margin-left:2px;padding:1px 6px;border-radius:99px;background:var(--brass);color:var(--sur-brass);font-size:10px;font-weight:700;letter-spacing:.02em}
@@ -200,16 +194,12 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 .tt-resume{border:0;background:none;color:var(--dim);font:inherit;font-size:12px;text-align:left;padding:2px 0;cursor:pointer}
 .tt-plier{align-self:flex-start}
 
-/* ---------- La pile, la main ---------- */
-.tp{display:flex;align-items:flex-start;gap:6px;padding:4px 8px 0;border-top:1px solid var(--brass-d);border-bottom:1px solid var(--brass-d);background:var(--brass-a2);--tw:48px}
+/* ---------- La main ---------- */
 .tp-titre{writing-mode:vertical-rl;transform:rotate(180deg);align-self:center;font-size:11px;color:var(--brass);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.tp .tc-rang{flex:1;min-width:0;padding-bottom:30px;gap:12px}
 .mn{display:flex;align-items:stretch;gap:4px;border-top:1px solid var(--line2);background:var(--panel2);margin:0 -6px;padding:0 6px}
 .mn .tp-titre{color:var(--dim)}
 .mn .tc-rang{flex:1;min-width:0;gap:5px;padding-top:8px}
 .mn.serre .tc + .tc{margin-left:calc(var(--w) * -.3)}
-.mn .tc.choix{transform:translateY(-6px)}
-
 /* ---------- La question ---------- */
 .tq{background:var(--panel2);border-top:1px solid var(--line2);padding:6px 8px calc(8px + env(safe-area-inset-bottom, 0px));display:flex;flex-direction:column;gap:6px}
 .tq.a-vous{border-top:2px solid var(--brass);box-shadow:0 -4px 14px var(--brass-a2)}
@@ -261,7 +251,6 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 
 /* Un téléphone couché : peu de hauteur, des cartes plus basses. */
 @media (max-height:560px){
-  .tph{padding:2px 6px}
   .table.en-partie{--tw:42px}
   .en-partie [data-region="moi"]{--tw:46px}
   .en-partie [data-region="main"]{--tw:50px}
@@ -295,3 +284,4 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 .tp-texte{color:var(--txt);margin-top:1px}
 .tq-ctx{padding:4px 8px;margin-bottom:5px;border-left:3px solid var(--brass);background:var(--panel2)}
 .tq-ctx-texte{color:var(--txt)}
+

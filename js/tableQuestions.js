@@ -1,12 +1,13 @@
 /* =====================================================================
    js/tableQuestions.js — Répondre à une question du moteur, à la main
 
-   Le bandeau du bas dit ce que le moteur demande, et propose les réponses
-   en boutons — le geste qui marche partout, au doigt comme à la souris. Les
-   cartes concernées sont aussi surlignées sur la table, et un toucher sur
-   l'une d'elles vaut le bouton : on joue sa carte en la touchant. Une
-   question à un seul choix part dès qu'on choisit ; les autres attendent
-   « Valider ».
+   La priorité et le combat se règlent sur la ligne de front, au bouton de
+   tour (js/tableFront.js). Le bandeau du bas garde ce qui ne tient pas dans
+   un bouton — une cible à prendre dans une liste, X, les modes, oui ou non,
+   le mulligan, le mana qu'on engage à la main — et propose ses réponses en
+   boutons. Les cartes concernées sont aussi surlignées sur la table, et un
+   toucher sur l'une d'elles vaut le bouton. Une question à un seul choix
+   part dès qu'on choisit ; les autres attendent « Valider ».
    ===================================================================== */
 
 /* La sélection en cours, propre à la question affichée. */
@@ -53,18 +54,14 @@ function basculeChoix(q, s, i) {
   renduTable();
 }
 
-/* Un toucher sur une carte de la table : la jouer s'il n'y a qu'une façon
-   de le faire, la choisir si la question l'attend ; sinon la voir en grand,
-   avec ce qu'on peut en faire. */
+/* Un toucher sur une carte de la table : la lever s'il n'y a qu'une façon
+   de la jouer (js/tableLever.js), la choisir si la question l'attend ;
+   sinon la voir en grand, avec ce qu'on peut en faire. */
 function clicCarte(id) {
   const q = TABLE.question;
   if (!q) return ouvreLoupe(id);
   const s = selDe(q);
-  if (q.q === 'priorite') {
-    const acts = q.options.map((a, i) => [a, i]).filter(([a]) => a.id === id && a.k !== 'passer');
-    if (acts.length === 1) return repondsTable(acts[0][1]);
-    return ouvreLoupe(id);
-  }
+  if (q.q === 'priorite') return toucheCarteJouable(q, id) || ouvreLoupe(id);
   if (q.q === 'attaquants' || q.q === 'bloqueurs') return clicCombat(q, s, id) ? renduTable() : ouvreLoupe(id);
   const i = q.options.findIndex(o => o && o.id === id);
   if (i < 0) return ouvreLoupe(id);
@@ -124,35 +121,26 @@ function questionHTML(q, v) {
   return ctx + questionCorpsHTML(q, v);
 }
 
+/* L'attente, la résolution, la priorité et le combat n'ont plus de bandeau :
+   le bouton de tour les porte. La priorité n'en garde un que pour le mana
+   qu'on engage à la main. */
 function questionCorpsHTML(q, v) {
-  if (!q && v && v.resout && !v.fin) {
-    const it = v.pile.length ? v.pile[v.pile.length - 1] : null;
-    return `<div class="tq-attente small">Résolution${it ? ' de <b>' + esc(it.nom) + '</b>' : ''}…
-      ${TABLE.role === 'hote' ? '<button type="button" class="btn sm" data-act="tSuite" title="Ne pas attendre : résoudre tout de suite">Continuer</button>' : ''}</div>`;
-  }
-  if (!q) return v && v.fin ? '' : `<div class="small muted tq-attente">${TABLE.attenteNom ? esc(TABLE.attenteNom) + ' réfléchit…' : ''}</div>`;
+  if (!q) return '';
   const s = selDe(q), err = TABLE.erreur ? `<div class="small tq-erreur">${esc(TABLE.erreur)}</div>` : '';
   const valider = (lib = 'Valider') => `<button type="button" class="btn pri" data-act="tValider">${lib}</button>`;
   switch (q.q) {
     case 'priorite': {
-      /* Trois Plaines en main font trois « Jouer Plains » : un seul bouton suffit. */
+      /* Le mana qu'on engage à la main, et le réglage du paiement : le reste est sur la ligne de front. */
       const vus = new Set();
-      const tous = q.options.map((a, i) => [a, i]).filter(([a]) => a.k !== 'passer' && !vus.has(a.label) && vus.add(a.label));
-      /* Le mana qu'on engage à la main et le réglage du paiement ont leur propre rangée. */
-      const mana = tous.filter(([a]) => a.k === 'mana'), reglage = tous.find(([a]) => a.k === 'reglage');
-      const liste = tous.filter(([a]) => a.k !== 'mana' && a.k !== 'reglage');
-      const moi = v.joueurs[v.moi], manuel = !!(moi && moi.manuel);
-      return `${err}<div class="tq-titre"><b>À vous</b> — ${esc(NOMS_ETAPES[v.etape] || v.etape)}${v.pile.length ? `, en réponse à <b>${esc(v.pile[v.pile.length - 1].nom)}</b> <span class="muted">(passez : il se résout)</span>` : ''}
-          <span class="muted">${liste.length ? '· touchez une carte qui brille, ou :' : manuel && mana.length ? '· engagez votre mana, puis lancez' : '· rien à jouer'}</span></div>
-        ${mana.length ? `<div class="tq-actions tq-mana" data-defile="mana">${mana.map(([a, i]) =>
-          `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${String(a.option).split('').map(l => symIcon(l, 'sm')).join('')} ${esc(a.label)}</button>`).join('')}</div>` : ''}
-        ${liste.length ? `<div class="tq-actions" data-defile="actions">${liste.map(([a, i]) =>
-          `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${esc(a.label)}</button>`).join('')}</div>` : ''}
-        <div class="row"><button type="button" class="btn pri tq-passer" data-act="tAction" data-i="${q.options.length - 1}">Passer</button>
-          <button type="button" class="btn sm" data-act="tPasserTour" title="Ne plus rien demander jusqu'au début de votre prochain tour">Jusqu'à mon tour</button>
+      const mana = q.options.map((a, i) => [a, i]).filter(([a]) => a.k === 'mana' && !vus.has(a.label) && vus.add(a.label));
+      const reglage = q.options.map((a, i) => [a, i]).find(([a]) => a.k === 'reglage');
+      if (!mana.length) return '';
+      return `<div class="tq-titre"><b>Votre mana</b> <span class="muted">· engagez-le, puis lancez</span></div>
+        <div class="tq-actions tq-mana" data-defile="mana">${mana.map(([a, i]) =>
+          `<button type="button" class="btn sm" data-act="tAction" data-i="${i}">${String(a.option).split('').map(l => symIcon(l, 'sm')).join('')} ${esc(a.label)}</button>`).join('')}
           ${reglage ? `<button type="button" class="btn sm" data-act="tAction" data-i="${reglage[1]}" title="Le réglage est aussi au menu de la table">${esc(reglage[0].label)}</button>` : ''}</div>`;
     }
-    case 'attaquants': case 'bloqueurs': return err + combatHTML(q, s, v);
+    case 'attaquants': case 'bloqueurs': return '';
     case 'mulligan': return `${err}<div class="tq-titre"><b>Votre main de départ</b>${q.mulligans ? ` — après ${q.mulligans} mulligan(s)` : ''}</div>
       <div class="row"><button type="button" class="btn pri" data-act="tUn" data-i="0">Garder</button>
         <button type="button" class="btn" data-act="tUn" data-i="1">Mulligan</button></div>`;

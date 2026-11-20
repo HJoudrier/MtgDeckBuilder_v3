@@ -1,18 +1,18 @@
 /* =====================================================================
    js/tablePhases.js — Où en est le tour, et qui a la main
 
-   Le tour découpé en ses phases, de l'entretien à la fin, dans une barre
-   qui allume celle en cours et l'écrit en entier : « Déclaration des
-   attaquants », « Attribution des blessures ». Le moteur a plus d'étapes
-   que la barre n'a de cases — le dégagement tient dans l'entretien, le
-   début du combat dans la déclaration des attaquants — mais le nom écrit
-   est toujours celui de l'étape exacte.
+   Le tour découpé en ses phases, de l'entretien à la fin, en points sur la
+   ligne de front : celui en cours s'allonge, et l'étape s'écrit en entier
+   à côté — « Déclaration des attaquants », « Attribution des blessures ».
+   Le moteur a plus d'étapes que la ligne n'a de points — le dégagement
+   tient dans l'entretien, le début du combat dans la déclaration des
+   attaquants — mais le nom écrit est toujours celui de l'étape exacte.
 
    Et la priorité : le joueur que la partie attend, désigné dans la barre
    du haut et sur son cartouche.
    ===================================================================== */
 
-/* Les cases de la barre : un nom court, et le nom complet de chaque étape
+/* Les points de la ligne : un nom court, et le nom complet de chaque étape
    qu'elle couvre. */
 const PHASES_TOUR = [
   {k: 'entretien', court: 'Entretien', etapes: {degagement: 'Dégagement', entretien: 'Entretien'}},
@@ -30,10 +30,13 @@ const PHASES_TOUR = [
 const PHASE_DE = {};
 PHASES_TOUR.forEach(p => Object.keys(p.etapes).forEach(e => { if (e !== 'degagement' && e !== 'nettoyage') PHASE_DE[e] = p.k; }));
 
-function phasesHTML(v) {
+/* Les phases en points, pour la ligne de front (js/tableFront.js) : celle
+   en cours s'allonge, et l'étape exacte s'écrit en entier à côté. */
+function phasesPointsHTML(v) {
   const k = PHASES_TOUR.findIndex(p => p.etapes[v.etape]);
-  return `<ol class="tph" aria-label="Phases du tour">${PHASES_TOUR.map((p, i) => `<li class="${i < k ? 'passee' : i === k ? 'en-cours' : ''}"${
-    i === k ? ' aria-current="step"' : ''}>${esc(i === k ? p.etapes[v.etape] : p.court)}</li>`).join('')}</ol>`;
+  const nom = k >= 0 ? PHASES_TOUR[k].etapes[v.etape] : (NOMS_ETAPES[v.etape] || v.etape);
+  return `<span class="tfr-phases" role="img" aria-label="Étape : ${esc(nom)}">${PHASES_TOUR.map((p, i) =>
+    `<i class="${i < k ? 'passee' : i === k ? 'en-cours' : ''}" title="${esc(p.court)}"></i>`).join('')}</span><b class="tfr-etape">${esc(nom)}</b>`;
 }
 
 /* La ligne du haut : le tour, le joueur actif, et qui a la priorité. */

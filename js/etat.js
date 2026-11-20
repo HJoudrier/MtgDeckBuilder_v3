@@ -198,8 +198,11 @@ const S = {
   simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, forgeAuto: true, niveauIA: 'rapide'},
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
-     De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent. */
-  table: {nom: '', deck: '', sieges: [], adresse: '', disposition: 'arene', vitesse: 'normale', paiementManuel: false},
+     De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent.
+     Les effets (son, vibrations, mouvements) aussi : un téléphone vibre, un
+     ordinateur non. Le son est coupé au départ. */
+  table: {nom: '', deck: '', sieges: [], adresse: '', disposition: 'arene', vitesse: 'normale', paiementManuel: false,
+    son: false, vibre: true, mouvements: true},
   arrets: {}
 };
 

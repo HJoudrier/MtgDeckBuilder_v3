@@ -21,7 +21,11 @@ const TABLE = {ouverte: false, phase: '', role: '', h: null, sieges: [], agents:
   loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '',
   /* Le rythme, en ms à la vitesse normale : la pause après un geste visible
      d'un joueur automatique, et celle d'un changement d'étape. */
-  pauseIA: 1300, pauseEtape: 350, pauseResolution: 1100, suite: null};
+  pauseIA: 1300, pauseEtape: 350, pauseResolution: 1100, suite: null,
+  /* La pause d'une résolution en cours (son début, sa durée), que l'anneau
+     du bouton de tour montre ; la carte levée, prête à jouer ; la dernière
+     vue peinte, dont la suivante se compare pour les sons et les mouvements. */
+  pause: null, leve: null, vuePeinte: null};
 
 /* Les vitesses de la table, réglées au menu (`S.table.vitesse`). */
 const VITESSES = {lente: {nom: 'Lente', k: 1.8}, normale: {nom: 'Normale', k: 1}, rapide: {nom: 'Rapide', k: 0.35}};
@@ -43,8 +47,14 @@ async function montrePile(q) {
   const sommet = P.pile.length ? descriptionPile(P, P.pile[P.pile.length - 1]) : null;
   /* Le temps de lire : une pause de base, et de quoi parcourir le texte de ce qui se résout. */
   const lecture = sommet ? Math.min(2200, sommet.texte.length * 9) : 0;
+  const ms = k * ((q.joueur === TABLE.moi ? TABLE.pauseResolution : TABLE.pauseIA) + lecture);
+  /* La pause et son « Continuer » existent avant qu'on peigne : le bouton de
+     tour montre son anneau dès la première image. */
+  TABLE.pause = {debut: Date.now(), duree: ms};
+  const fin = attendreOuSuite(ms);
   diffuseVues(true);
-  await attendreOuSuite(k * ((q.joueur === TABLE.moi ? TABLE.pauseResolution : TABLE.pauseIA) + lecture));
+  await fin;
+  TABLE.pause = null;
   if (TABLE.h && TABLE.h.attente === q) repondre(TABLE.h, TABLE.agents, 0, Infinity, null);
 }
 
@@ -223,6 +233,6 @@ function quitteTable() {
   if (TABLE.role === 'hote' && TABLE.h) oublieTableSauvee();
   if (typeof fermeLiaisons === 'function') fermeLiaisons();
   Object.assign(TABLE, {ouverte: false, phase: '', h: null, question: null, vue: null, role: '',
-    loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: ''});
+    loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '', pause: null, leve: null, vuePeinte: null});
   renduTable();
 }

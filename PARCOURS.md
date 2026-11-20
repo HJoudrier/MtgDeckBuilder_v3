@@ -977,7 +977,7 @@ tout est semé : la partie d'un lot se rejoue à l'identique.
 
 ### 3.26 Voir une carte en grand, à la table
 
-Un toucher court joue la carte ou la choisit ; un appui long la montre. Les écouteurs du pointeur
+Un toucher court lève la carte, ou la choisit ; un appui long la montre. Les écouteurs du pointeur
 sont dans `app.js`, comme le clic ; la table ne repeint que la couche qui s'ouvre.
 
 ```mermaid
@@ -1002,8 +1002,46 @@ sequenceDiagram
         APP->>Q: repondsTable(i)
     end
     alt toucher court
-        APP->>Q: clicCarte(id) — une seule action : jouée ; plusieurs : la loupe
+        APP->>Q: clicCarte(id) — une seule action : levée (3.27) ; plusieurs : la loupe
     end
+```
+
+### 3.27 Jouer une carte au bouton de tour
+
+La priorité et le combat se règlent sur la ligne de front, entre les adversaires et son champ. Une
+carte se lève d'un toucher, se joue d'un second ou du bouton de tour, ou d'une poussée vers le haut.
+Le repeint qui suit fait voyager la carte et en tire les sons et les vibrations.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Joueur
+    participant APP as app.js
+    participant LV as tableLever.js
+    participant F as tableFront.js
+    participant Q as tableQuestions.js
+    participant R as tableRendu.js
+    participant MV as tableMouvements.js
+    participant RS as tableRessenti.js
+
+    alt toucher
+        U->>APP: click sur une carte de la main (tCarte)
+        APP->>Q: clicCarte(id)
+        Q->>LV: toucheCarteJouable(q, id) — une action : TABLE.leve
+        LV->>R: renduTable() — la carte monte, le bouton dit « Lancer »
+        U->>APP: click sur le bouton (tTour) ou second toucher
+        APP->>F: faitTour() → repondsTable(i)
+    else poussée
+        U->>APP: pointerdown, pointermove vers le haut
+        APP->>LV: glisseDebut(), glisseBouge() — la carte suit le doigt
+        U->>APP: pointerup au-delà du seuil
+        APP->>LV: glisseFin() → repondsTable(i), le clic suivant avalé
+    end
+    Note over R: la vue suivante arrive (hôte ou invité)
+    R->>MV: releveTuiles() — avant peinsRegions()
+    R->>R: peinsRegions(), traceFleches()
+    R->>MV: rejoueTrajets() — appariées par nom, de la main à la pile
+    R->>RS: ressens(vue d'avant, vue d'après) — sons, vibrations, points de vie
 ```
 
 ---

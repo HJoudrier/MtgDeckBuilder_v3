@@ -294,11 +294,16 @@ js/                 modules, chargés dans cet ordre :
   tableJoueurs.js   le cartouche d'un joueur : vie, main, bibliothèque, cimetière
   tableDispositions.js  Arène, Couloirs, Tour de table : trois façons de disposer la table
   tableLoupe.js     voir une carte en grand, d'un appui long
-  tablePhases.js    la barre des phases du tour, et qui a la priorité
+  tablePhases.js    les phases du tour en points, et qui a la priorité
   tableFleches.js   ce qui vise quoi, en flèches : cibles, activations, combat
   tableRendu.js     la table, peinte depuis une vue, région par région
   tableQuestions.js répondre à une question du moteur, à la main
   tableCombat.js    attaquer et bloquer, au doigt
+  tableFront.js     la ligne de front : la pile et le bouton de tour
+  tableLever.js     lever une carte puis la jouer, ou la pousser vers le haut
+  tableSons.js      les sons synthétisés et les vibrations de la table
+  tableRessenti.js  sons, vibrations et points de vie, lus d'une vue à la suivante
+  tableMouvements.js  les cartes qui voyagent d'une zone à l'autre
   tableSalon.js     le salon : qui s'assoit, avec quel deck
   tableLiaison.js   les invités de l'hôte
   tableInvite.js    rejoindre la table d'un autre
@@ -517,11 +522,42 @@ termine est avalé. Trois **dispositions** se choisissent au menu de la table, r
 d'un glissé ; les Couloirs, un par joueur, chacun défilant seul ; le Tour de table, les adversaires
 en cartouches qu'on déplie.
 
+**Le bouton de tour** (`js/tableFront.js`, `js/tableLever.js`). On décidait au pied de l'écran, dans
+un bandeau sous sa main, loin des cartes. Une **ligne de front** court maintenant entre les
+adversaires et son propre champ : l'étape à gauche, en points, la pile au centre, et à droite, sous
+le pouce, un bouton rond dont le libellé dit ce qui va se passer — « Combat », « Laisser résoudre »,
+« Attaquer (2) », « Bloquer (1) », « Fin du tour » —, une phrase dessous le précisant
+(`actionTour()`). Des puces au-dessus portent le reste : « Toutes », « Aucune », l'adversaire visé,
+les blocages à défaire, « Jusqu'à mon tour », et ce qu'aucune carte visible ne porte (un flashback
+depuis le cimetière). Le bandeau du bas ne garde que les questions qui ne tiennent pas dans un
+bouton : une cible prise dans une liste, X, les modes, oui ou non, le mulligan, et le mana qu'on
+engage à la main. Un toucher sur une carte qui n'a qu'une façon de se jouer la **lève** au lieu de la
+jouer (`TABLE.leve`, valable pour la seule question où elle a été levée) : le bouton dit alors
+« Lancer », « Jouer », « Activer », et un second toucher ou le bouton la joue — on ne lance plus rien
+en parcourant sa main du doigt. Pousser une carte de la main vers le haut la joue d'un geste ; la
+main ne défile qu'à l'horizontale (`touch-action: pan-x`), le glissé vertical est au geste. Engager
+une source de mana reste immédiat. Pendant la pause de résolution, un **anneau** se remplit sur le
+bouton le temps qu'elle dure (`TABLE.pause`) : le toucher la coupe, comme « Continuer ».
+
+**Des cartes qui voyagent, une table qu'on entend** (`js/tableMouvements.js`, `js/tableRessenti.js`,
+`js/tableSons.js`). `renduTable()` mesure les cartes avant `peinsRegions()` et les fait partir de leur
+ancienne place après (le principe « FLIP ») : une carte ne porte donc jamais de `transform` en propre,
+l'éventail de la main et l'engagement tournent son corps. Le moteur donnant un identifiant neuf à
+chaque changement de zone, la carte qui quitte la main et celle qui arrive sur la pile s'apparient
+par leur nom dans un même repeint ; ce qui vient d'une main cachée part du cartouche de son joueur,
+ce qui s'en va rejoint le cimetière ou l'exil où la vue le retrouve. Les sons, les vibrations et les
+points de vie qui jaillissent se lisent dans la différence entre la vue peinte et la nouvelle
+(`ressens()`) : l'invité les a comme l'hôte, sans que rien d'autre ne voyage. Les sons sont
+synthétisés par Web Audio, sans fichier ; les vibrations passent par `navigator.vibrate`, qu'Android
+honore et qu'un iPhone ignore. Trois réglages au menu de la table, propres à l'appareil : son (coupé au
+départ), vibrations, mouvements (`S.table.son`, `.vibre`, `.mouvements`) ; « mouvements réduits » du
+système coupe les trajets.
+
 **Savoir de quoi on parle** (`js/jeuPileExplique.js`, `js/tableDispositions.js`, `js/tableQuestions.js`). La pile
 se lisait par ses tuiles — qui a lancé quoi —, sans dire ce que chaque élément *fait*, et « Le faire ? » ne disait
 pas ce qu'on s'apprêtait à faire. `descriptionPile()` décrit un élément de pile à un humain : son genre (sort,
 capacité déclenchée, activée, copie), son texte, son contrôleur, ses cibles, X et le kicker ; la vue l'emporte,
-chez l'invité comme chez l'hôte. La table l'écrit sous les tuiles (`pileExpliqueHTML()`) : ce qui se résout en ce
+chez l'invité comme chez l'hôte. La table l'écrit sous la ligne de front (`pileExpliqueHTML()`) : ce qui se résout en ce
 moment, puis ce qui attend, **du sommet — le premier à se résoudre — au fond**, et la priorité nomme ce à quoi on
 répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
 `resoudre()` le retire avant de le dérouler, si bien qu'on le garde le temps de sa résolution (`RESOLVANTS`, hors
@@ -530,8 +566,8 @@ résout dit de quoi il s'agit** (`contexteQuestionHTML()`) : « Pendant la réso
 déclenchée, la vôtre) — Landfall : goad each creature target player controls », puis « *Geode Rager* — Le faire ? ».
 Une question vague (`Le faire ?`, `Défausser ?`) est précédée du nom de sa carte (`sourceNom`). La **pause de
 résolution** — l'objet reste visible, « résolution : X » dans la barre du haut — dure maintenant le temps de
-lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; « Continuer »
-la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.
+lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; le bouton de
+tour, qui dit alors « Continuer », la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.
 
 **Une partie qu'on peut suivre.** Les automates jouent au **rythme** de la table (`pauseApres()`,
 `js/tableHote.js`) : une longue pause après chacun de leurs gestes visibles, une courte à chaque
@@ -540,9 +576,9 @@ quand personne ne peut répondre, le moteur passait la priorité de lui-même et
 dans le souffle où il était lancé : la pile n'était jamais vue. À la table seulement
 (`cfg.montre`), le moteur pose donc une question « voir » avant chaque résolution ; l'hôte y répond
 seul, après le temps de la lire (`montrePile()`). Les lots ne la posent jamais, et les copies d'une
-IA qui essaie ses coups non plus ; une partie rangée avant elle se rejoue sans. Une barre nomme les
-**phases** du tour, de l'entretien à la fin, et écrit en entier l'étape en cours — « Déclaration des
-attaquants », « Attribution des blessures » (`js/tablePhases.js`). La vue de la table dit qui a la
+IA qui essaie ses coups non plus ; une partie rangée avant elle se rejoue sans. La ligne de front montre
+les **phases** du tour en points, de l'entretien à la fin, et écrit en entier l'étape en cours —
+« Déclaration des attaquants », « Attribution des blessures » (`js/tablePhases.js`). La vue de la table dit qui a la
 **priorité** (`vueTable()`). Des **flèches** relient chaque objet de la pile à ses cibles, la
 carte qui s'active à sa capacité, l'attaquant au joueur qu'il attaque, le bloqueur à l'attaquant
 (`js/tableFleches.js`) ; pour les tracer, la vue de la pile porte ses cibles et sa source, réduites
@@ -557,8 +593,8 @@ action de priorité `{k: 'mana', id, option}` — une par couleur qu'elle sait p
 se propose que lorsque le mana engagé le paie. La bascule est elle-même une action (`{k: 'reglage'}`),
 donc une réponse comme une autre : rangée avec les autres, elle laisse la partie rejouable à
 l'identique, ce qu'un réglage posé hors du moteur casserait. Le menu de la table (`S.table.paiementManuel`)
-dit comment *commence* le siège de l'hôte ; un invité commence à l'automatique et bascule depuis son
-bandeau. Un siège confié à l'automate revient d'abord à l'automatique (`reponseAutomate()`) : l'automate
+dit comment *commence* le siège de l'hôte ; un invité commence à l'automatique et bascule depuis le
+menu de sa table, ou depuis le bandeau de son mana quand il paie déjà à la main. Un siège confié à l'automate revient d'abord à l'automatique (`reponseAutomate()`) : l'automate
 n'engage aucune source. Limites assumées : le mana restreint (« spend only on creature spells »), les
 filtres et les sources qui demandent un sacrifice ou un coût de plus ne s'engagent pas à la main. Les
 effets qui ajoutent du mana (« Add {R} or {G} ») demandent la couleur au joueur

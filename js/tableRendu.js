@@ -4,8 +4,9 @@
    La même peinture sert l'hôte et l'invité : elle ne lit qu'une vue
    (js/jeuVue.js) et une question, jamais l'état de la partie. De haut en
    bas : l'étape, les adversaires (disposés selon js/tableDispositions.js),
-   la pile, son propre champ, sa main, la question. Pensé d'abord pour un
-   téléphone tenu en portrait.
+   la ligne de front — la pile et le bouton de tour (js/tableFront.js) —,
+   son propre champ, sa main, et les questions qui ne tiennent pas dans un
+   bouton. Pensé d'abord pour un téléphone tenu en portrait.
 
    Exception assumée à « `renderAll()` est l'unique porte du repeint » : la
    table se repeint à chaque message de la partie, des dizaines de fois par
@@ -24,16 +25,16 @@ function charpentePartie() {
   return `<div class="tr-haut"><div class="tr" data-region="etape"></div>
       <button type="button" class="tr-btn" data-act="tJournal">Journal</button>
       <button type="button" class="tr-btn" data-act="tMenu" aria-label="Menu de la table">☰</button></div>
-    <div class="tr" data-region="phases"></div>
     <div class="tr" data-region="fil"></div>
     <div class="tr" data-region="alertes"></div>
     <div class="tr-plateau" data-defile="plateau"><div class="tr" data-region="adv"></div></div>
-    <div class="tr" data-region="pile"></div>
+    <div class="tr" data-region="front"></div>
     <div class="tr" data-region="moi"></div>
     <div class="tr" data-region="main"></div>
     <div class="tr" data-region="question"></div>
     <div class="tr" data-region="fin"></div>
     <svg class="tf" aria-hidden="true"></svg>
+    <div class="tmv" aria-hidden="true"></div>
     <div class="tr" data-region="couche"></div>`;
 }
 
@@ -53,7 +54,8 @@ function restaureDefile(el, m) {
 
 /* Peindre les régions qui ont changé, et elles seules. */
 function peinsRegions(el, regions, charpente) {
-  if (REPEINT.charpente !== charpente) {
+  const neuve = REPEINT.charpente !== charpente;
+  if (neuve) {
     el.innerHTML = charpente;
     REPEINT.charpente = charpente;
     REPEINT.html = {};
@@ -68,6 +70,7 @@ function peinsRegions(el, regions, charpente) {
     restaureDefile(z, defile);
     REPEINT.html[k] = h;
   }
+  return neuve;
 }
 
 /* Les dernières lignes du journal, qui disent ce que les autres ont fait. */
@@ -99,6 +102,9 @@ function menuHTML() {
       <div class="row tm-vitesse">${[[false, 'Automatique'], [true, 'À la main']].map(([k, nom]) => `<button type="button" class="btn sm" data-act="tMana" data-d="${k ? 1 : 0}"
         aria-pressed="${k === manuelMoi()}">${nom}</button>`).join('')}</div>
       <div class="small muted">À la main : on engage ses terrains soi-même, puis on lance ; le solveur ne paie plus.</div>
+      <div class="row"><b>Effets</b></div>
+      <div class="row tm-vitesse">${EFFETS_TABLE.map(([k, nom]) => `<button type="button" class="btn sm" data-act="tEffet" data-d="${k}"
+        aria-pressed="${!!S.table[k]}">${nom}</button>`).join('')}</div>
       <div class="row"><button type="button" class="btn" data-act="tArrets">Arrêts</button>
         <button type="button" class="btn" data-act="tPasserTour">Passer jusqu'à mon tour</button>
         <button type="button" class="btn" data-act="tQuitterDemande">Quitter la table</button></div></div>`;
@@ -113,10 +119,11 @@ function finHTML(v) {
 }
 
 function regionsPartie(v) {
-  return {etape: etapeHTML(v), phases: phasesHTML(v), fil: filHTML(),
+  const question = questionHTML(TABLE.question, v);
+  return {etape: etapeHTML(v), fil: filHTML(),
     alertes: (typeof alertesInvitesHTML === 'function' ? alertesInvitesHTML() : '') + (TABLE.liaisonPerdue ? perteHoteHTML() : ''),
-    adv: adversairesTableHTML(v), pile: pileHTML(v), moi: moiHTML(v), main: mainHTML(v),
-    question: `<div class="tq${TABLE.question ? ' a-vous' : ''}">${questionHTML(TABLE.question, v)}</div>`,
+    adv: adversairesTableHTML(v), front: frontHTML(v), moi: moiHTML(v), main: mainHTML(v),
+    question: question ? `<div class="tq a-vous">${question}</div>` : '',
     fin: finHTML(v), couche: loupeHTML(v) || zoneHTML(v) || menuHTML()};
 }
 
@@ -126,7 +133,7 @@ function renduTable() {
   if (!el) return;
   el.hidden = !TABLE.ouverte;
   document.body.classList.toggle('table-ouverte', TABLE.ouverte);
-  const pleine = html => { el.className = 'table'; el.innerHTML = html; REPEINT.charpente = ''; };
+  const pleine = html => { el.className = 'table'; el.innerHTML = html; REPEINT.charpente = ''; TABLE.vuePeinte = null; };
   if (!TABLE.ouverte) return pleine('');
   if (TABLE.phase === 'salon') return pleine(salonHTML());
   if (TABLE.phase === 'rejoindre' && typeof rejoindreHTML === 'function') return pleine(rejoindreHTML());
@@ -134,7 +141,13 @@ function renduTable() {
   if (!v) return pleine('<div class="tb-attente">Préparation de la partie…</div>');
   el.className = 'table en-partie disp-' + dispositionTable() + (v.joueurs.length > 2 ? ' multi' : '');
   suisActif(v);
-  peinsRegions(el, regionsPartie(v), charpentePartie());
+  /* Les cartes sont mesurées avant le repeint, pour voyager après ; les
+     flèches se tracent avant le départ, aux places d'arrivée. */
+  const avant = releveTuiles(el), prec = TABLE.vuePeinte;
+  const neuve = peinsRegions(el, regionsPartie(v), charpentePartie());
   appliquePage();
   traceFleches();
+  if (!neuve) rejoueTrajets(el, avant, prec, v);
+  ressens(prec, v);
+  TABLE.vuePeinte = v;
 }

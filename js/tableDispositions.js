@@ -90,14 +90,6 @@ function moiHTML(v) {
   return `<section class="ar-moi">${cartouche(J, v, 'moi')}${champDeuxRangs(J, v, 'moi')}</section>`;
 }
 
-/* La pile, du sommet au fond, chaque objet avec son lanceur et ses cibles. */
-function pileHTML(v) {
-  if (!v.pile.length && !v.resolvant) return '';
-  const tuiles = v.pile.length ? `<div class="tp"><span class="tp-titre">Pile</span>${rangee('pile', v.pile.slice().reverse().map(it => tuile(it, v, {
-    legende: esc(v.joueurs[it.ctrl].nom) + (it.cibles.length ? ' → ' + esc(it.cibles.join(', ')) : '')})).join(''))}</div>` : '';
-  return tuiles + pileExpliqueHTML(v);
-}
-
 /* Ce qu'est chaque élément de la pile, en toutes lettres : ce qu'on résout en ce moment, puis ce qui
    attend, du sommet — le premier à se résoudre — au fond. Les tuiles disent qui ; ceci dit quoi. */
 function pileExpliqueHTML(v) {
@@ -117,9 +109,15 @@ function pileExpliqueHTML(v) {
   </div>`;
 }
 
+/* La main, en éventail : chaque carte tourne de quelques degrés autour du
+   centre — son corps tourne, pas elle, pour que sa mesure reste juste
+   quand elle voyage (js/tableMouvements.js). */
 function mainHTML(v) {
-  return `<div class="mn${v.main.length > 5 ? ' serre' : ''}"><span class="tp-titre">Main ${v.main.length}</span>${rangee('main',
-    v.main.map(c => tuile(c, v)).join('') || '<span class="small muted">Main vide</span>')}</div>`;
+  const n = v.main.length, pas = Math.min(4, 22 / Math.max(n, 1));
+  return `<div class="mn${n > 5 ? ' serre' : ''}"><span class="tp-titre">Main ${n}</span>${rangee('main',
+    v.main.map((c, i) => { const r = i - (n - 1) / 2;
+      return tuile(c, v, {style: `--rot:${(r * pas).toFixed(1)}deg;--lev:${(r * r * pas * .35).toFixed(1)}px`}); }).join('') ||
+    '<span class="small muted">Main vide</span>')}</div>`;
 }
 
 /* Un onglet de l'Arène touché : la page de cet adversaire. */

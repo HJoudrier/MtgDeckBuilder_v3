@@ -21,6 +21,9 @@ function gestesTable(act, b) {
     case 'tValider': valideTable(); return true;
     case 'tPasserTour': passeTour(); return true;
     case 'tSuite': if (TABLE.suite) TABLE.suite(); return true;
+    case 'tTour': faitTour(); return true;
+    case 'tReposer': reposeCarte(); return true;
+    case 'tEffet': basculeEffet(b.dataset.d); return true;
     case 'tDef': if (TABLE.question) { selDe(TABLE.question).def = i; renduTable(); } return true;
     case 'tAttTous': attaqueTous(); return true;
     case 'tAttAucun': if (TABLE.question) { selDe(TABLE.question).paires.clear(); renduTable(); } return true;

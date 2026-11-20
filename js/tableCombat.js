@@ -2,7 +2,8 @@
    js/tableCombat.js — Attaquer et bloquer, au doigt
 
    Attaquer : toucher ses créatures, chacune part vers l'adversaire choisi
-   au-dessus. Bloquer : toucher un de ses bloqueurs, puis l'attaquant qu'il
+   dans les puces de la ligne de front (js/tableFront.js), puis le bouton de
+   tour. Bloquer : toucher un de ses bloqueurs, puis l'attaquant qu'il
    bloque — seuls les attaquants qu'il peut légalement bloquer s'allument
    (vol, portée, imblocable : `peutBloquer()`, calculé par l'hôte). Une menace
    bloquée par une seule créature est signalée avant qu'on valide, sans quoi
@@ -43,26 +44,12 @@ function clicCombat(q, s, id) {
   return false;
 }
 
-function combatHTML(q, s, v) {
-  if (q.q === 'attaquants') {
-    const defs = q.defenseurs;
-    return `<div class="tq-titre"><b>Attaquer</b> — touchez les créatures qui attaquent</div>
-      ${defs.length > 1 ? `<div class="tq-actions">${defs.map((d, i) => `<button type="button" class="btn sm"
-        aria-pressed="${s.def === i}" data-act="tDef" data-i="${i}">vers ${esc(d.label)}</button>`).join('')}</div>` : ''}
-      <div class="small">${[...s.paires].map(([i, d]) => `${esc(q.options[i].label)} → ${esc(defs[d].label)}`).join(' · ') || 'aucune attaque'}</div>
-      <div class="row"><button type="button" class="btn sm" data-act="tAttTous">Toutes</button>
-        <button type="button" class="btn sm" data-act="tAttAucun">Aucune</button>
-        <button type="button" class="btn pri" data-act="tValider">${s.paires.size ? 'Attaquer' : 'Ne pas attaquer'}</button></div>`;
-  }
+/* Les menaces bloquées par une seule créature : le moteur effacerait ce
+   blocage en silence, on le dit avant qu'on valide. */
+function menacesSeules(q, s) {
   const seules = new Map();
   [...s.paires].forEach(([, a]) => seules.set(a, (seules.get(a) || 0) + 1));
-  const menaces = [...seules].filter(([a, n]) => n === 1 && q.attaquants[a].menace).map(([a]) => q.attaquants[a].label);
-  return `<div class="tq-titre"><b>Bloquer</b> — touchez un bloqueur, puis l'attaquant qu'il bloque</div>
-    <div class="tq-actions">${[...s.paires].map(([b, a]) => `<button type="button" class="btn sm" data-act="tRetirePaire" data-i="${b}"
-      title="Annuler ce blocage">${esc(q.options[b].label)} bloque ${esc(q.attaquants[a].label)} ✕</button>`).join('')}</div>
-    ${s.courant != null ? `<div class="small">${esc(q.options[s.courant].label)} bloque… (touchez un attaquant)</div>` : ''}
-    ${menaces.length ? `<div class="small tq-erreur">Menace : ${esc(menaces.join(', '))} doit être bloqué par au moins deux créatures.</div>` : ''}
-    <div class="row"><button type="button" class="btn pri" data-act="tValider">${s.paires.size ? 'Bloquer' : 'Ne pas bloquer'}</button></div>`;
+  return [...seules].filter(([a, n]) => n === 1 && q.attaquants[a].menace).map(([a]) => q.attaquants[a].label);
 }
 
 function attaqueTous() {

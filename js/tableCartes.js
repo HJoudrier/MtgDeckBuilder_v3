@@ -53,7 +53,10 @@ function etatsHTML(o) {
 /* Une carte de la table. `o` est un objet de la vue — permanent, carte
    d'une zone, élément de la pile — ou une option de question ({id, nom}).
    `opts` : mode ('carte' ou 'vignette'), act et i (le geste du toucher),
-   etat (forcé), n (une pile de cartes identiques), legende (sous la carte). */
+   etat (forcé), n (une pile de cartes identiques), legende (sous la carte),
+   style (l'angle de l'éventail de la main). Une carte levée pour être jouée
+   (js/tableLever.js) monte. `data-ctrl` dit d'où part une carte venue d'une
+   main cachée (js/tableMouvements.js). */
 function tuile(o, v, opts = {}) {
   const f = (v && v.cartes && v.cartes[o.nom]) || (opts.fiches && opts.fiches[o.nom]) || {};
   const etat = opts.etat != null ? opts.etat : etatChoix(o.id);
@@ -62,8 +65,9 @@ function tuile(o, v, opts = {}) {
   const m = v && v.pile ? marquesPile(v) : null;
   const cls = ['tc', vign ? 'vign' : '', o.engage ? 'engage' : '', o.jeton ? 'jeton' : '', o.attaque ? 'attaque' : '',
     m && m.sources.has(o.id) ? 'active' : '', m && m.visees.has(o.id) ? 'ciblee' : '',
-    o.bloque != null ? 'bloque' : '', opts.classe || '', etat].filter(Boolean).join(' ');
-  return `<button type="button" class="${cls}" data-act="${opts.act || 'tCarte'}" data-id="${o.id}"${opts.i != null ? ` data-i="${opts.i}"` : ''}
+    o.bloque != null ? 'bloque' : '', leveValide(TABLE.question) && TABLE.leve.id === o.id ? 'leve' : '', opts.classe || '', etat].filter(Boolean).join(' ');
+  return `<button type="button" class="${cls}" data-act="${opts.act || 'tCarte'}" data-id="${o.id}"${opts.i != null ? ` data-i="${opts.i}"` : ''}${
+    o.ctrl != null ? ` data-ctrl="${o.ctrl}"` : ''}${opts.style ? ` style="${opts.style}"` : ''}
     data-loupe="${o.id}" data-teinte="${teinteCarte(f)}" aria-label="${esc(o.nom)}"><span class="tc-corps">
       <span class="tc-cadre"><span class="tc-nom">${esc(o.nom)}</span><span class="tc-type">${esc(f.type || '')}</span></span>
       ${img ? `<span class="tc-img" style="background-image:url('${esc(img)}')"></span>` : ''}</span>
