@@ -7,7 +7,7 @@
      Singularity Rupture), `ExiledWithEffectSource` ;
    - la carte elle-même : `withToxic`, `withFlashback`, `cmcEven` / `cmcOdd`,
      `equalPT`, `hasManaAbility`, `hasAbility Activated.hasTapCost`,
-     `basePowerEQ0`, `totalPT_LE5`, `powerNOTbasePower`, `greatestCMC_Artifact`,
+     `basePowerEQ0`, `totalPT_LE5`, `powerNOTbasePower`, `greatestCMC_Artifact`, `greatestPower`,
      `sharesPermanentTypeWith`, `TopGraveyardCreature` (Shallow Grave),
      `EnchantedBy Aura.YouCtrl` ;
    - le plateau : `ControllerControlsMoreLand`, `Player.withMoreLandsThanYou`.
@@ -37,6 +37,9 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
     case 'hasAbility Activated.hasTapCost': return (o.zone === 'champ' ? capacitesDe(P, o) : o.def.capacites).some(k => k.genre === 'activee' && !!(k.cout && k.cout.engage));
     case 'powerNOTbasePower': return c.force !== (o.def.force || 0);
     case 'greatestCMC_Artifact': return !!P && !P.champ.some(id => { const x = obj(P, id); return x.ctrl === joueur && estType(x, 'artifact') && mvDe(x) > mvDe(o); });
+    /* La plus grande force parmi les créatures du champ, de qui que ce soit — à égalité, toutes y sont :
+       « Count$Valid Card.greatestPower » compte donc les ex æquo (Selvala, Heart of the Wilds). */
+    case 'greatestPower': return !!P && (c.types || []).includes('creature') && !P.champ.some(id => { const x = obj(P, id); return estCreature(x) && car(P, x).force > c.force; });
     case 'sharesPermanentTypeWith':
       return !!src && !!src.def && TYPES_PERMANENTS.some(t => (c.types || []).includes(t) && (src.lki ? src.types : car(P, src).types).includes(t));
     case 'TopGraveyardCreature': {
@@ -81,7 +84,7 @@ function proprieteJoueurEtendue(P, j, p, ctrl) {
 }
 
 forgeSait('filtre', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
-  'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith',
+  'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith', 'greatestPower',
   'TopGraveyardCreature', 'ControllerControlsMoreLand', 'wasCastFromTheirHand', 'milledThisTurn', 'attackingYou', 'attackedThisCombat', 'dealtCombatDamageThisTurn You', 'TriggeredAttacker', 'TriggeredNewCard', 'OppNonTriggeredTarget',
   'CastSa Spell.MayPlaySource', 'CastSa Spell.ManaFromTreasure', 'CastSa Spell.ManaSpent EQ0', ...['Graveyard', 'Battlefield', 'Library', 'Hand', 'Exile'].map(z => 'ThisTurnEnteredFrom_' + z), 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',
   'EnchantedBy Aura.YouCtrl', 'basePowerXX', 'baseToughnessXX', 'totalPT_XX');

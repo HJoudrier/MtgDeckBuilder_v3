@@ -1949,6 +1949,15 @@ bien, et rien n'en tenait compte. La réponse est maintenant corrigée (et le jo
 joueurs autres que l'inciteur comptent — un planeswalker n'est pas « un joueur » —, et sans autre joueur à
 attaquer, l'attaque reste sur l'inciteur. Une incitation expirée (au tour de qui l'a posée) ne contraint plus.
 
+**Correctif : la propriété `greatestPower`** (`js/forgeFiltresD.js`). Selvala, Heart of the Wilds pose sa condition
+en deux SVars : `Z = TriggeredCard$Valid Card.greatestPower`, `Y = Count$Valid Card.greatestPower`, comparées par
+`EQY`. Le moteur ne connaissait pas la propriété ; or une propriété qu'il ne sait pas juger ne laisse rien passer,
+donc Z et Y valaient 0, `0 = 0` était vrai, et la question « le faire ? » sortait à chaque créature entrée. La
+propriété suit Forge : une créature l'a si aucune créature du champ, de qui que ce soit, n'a une force strictement
+plus grande — à égalité, toutes l'ont, `Y` compte les ex æquo et `EQY` n'est vrai que pour l'unique plus forte.
+Ce n'est pas le contrôleur de Selvala qui décide mais celui de la créature entrée (`OptionalDecider$
+TriggeredCardController`) : le moteur le faisait déjà, et la question ne va qu'à lui.
+
 **Lot F81 : copier et devenir** (`js/forgeCopiesB.js`). Onze cartes de plus. Ce que l'effet de copie ajoute à la copie :
 - `AddColors$` (Ratadrabik of Urborg, The Jolly Balloon Man) ; `RemoveCardTypes$ True` : la copie ne garde que les
   types ajoutés (Espers to Magicite) ;

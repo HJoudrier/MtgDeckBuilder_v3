@@ -139,7 +139,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeAnneau.js`](#jsforgeanneaujs) | L'Anneau vous tente, aux quatre niveaux | 2 | 51 |
 | [`forgeProtections.js`](#jsforgeprotectionsjs) | Se protéger : de tout, de chaque couleur, d'une | 6 | 110 |
 | [`forgeFiltresC.js`](#jsforgefiltrescjs) | Des propriétés de filtre de plus | 1 | 58 |
-| [`forgeFiltresD.js`](#jsforgefiltresdjs) | Des propriétés de filtre de plus, II | 2 | 88 |
+| [`forgeFiltresD.js`](#jsforgefiltresdjs) | Des propriétés de filtre de plus, II | 2 | 91 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
 | [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 118 |
@@ -2502,7 +2502,7 @@ Des propriétés de filtre de plus. *1 fonctions, 58 lignes, 3.5 Ko.*
 
 ## js/forgeFiltresD.js
 
-Des propriétés de filtre de plus, II. *2 fonctions, 88 lignes, 6.4 Ko.*
+Des propriétés de filtre de plus, II. *2 fonctions, 91 lignes, 6.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
