@@ -106,7 +106,9 @@ function questionPourUI(P, q) {
   const base = {n: q.n, q: q.q, joueur: q.joueur, min: q.min, max: q.max, multi: q.multi, texte: q.texte || '',
     source: q.source && obj(P, q.source) ? q.source : null,
     /* La carte dont il s'agit, nommée : « Le faire ? » ne dit pas quoi. */
-    sourceNom: q.source && obj(P, q.source) ? obj(P, q.source).def.nom : ''};
+    sourceNom: q.source && obj(P, q.source) ? obj(P, q.source).def.nom : '',
+    /* La carte et la capacité qui posent la question, même si elle a déjà quitté le champ. */
+    contexte: contexteQuestion(P, q)};
   const ref = c => (c && typeof c === 'object') ? {j: c.j, label: libelleRef(P, c)} : {id: c, label: libelleRef(P, c)};
   switch (q.q) {
     case 'priorite': return {...base, options: q.options.map(a => ({k: a.k, id: a.id, i: a.i, depuis: a.depuis, label: libelleAction(P, a),

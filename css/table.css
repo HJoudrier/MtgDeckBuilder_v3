@@ -293,6 +293,8 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 .tp-item.courant{border-left-color:var(--brass);background:var(--panel);}
 .tp-etiq{font-size:11px;color:var(--brass);font-weight:700}
 .tp-texte{color:var(--txt);margin-top:1px}
-.tq-ctx{padding:4px 8px;margin-bottom:5px;border-left:3px solid var(--brass);background:var(--panel2)}
-.tq-ctx-texte{color:var(--txt)}
+.tq-ctx{display:flex;gap:10px;align-items:flex-start;padding:4px 8px;margin-bottom:5px;border-left:3px solid var(--brass);background:var(--panel2)}
+.tq-ctx .tc{margin-bottom:2px}
+.tq-ctx-corps{min-width:0;flex:1}
+.tq-ctx-texte{color:var(--txt);margin-top:2px}
 

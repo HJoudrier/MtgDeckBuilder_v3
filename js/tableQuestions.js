@@ -99,13 +99,18 @@ function chipsChoix(q, s, v) {
 const TITRES_Q = {cibles: 'Choisissez la cible', cartes: 'Choisissez', defausse: 'Défaussez', dessous: 'Mettez dessous',
   sacrifice: 'Sacrifiez', scrute: 'Mettez dessous ce que vous ne voulez pas piocher', modes: 'Choisissez les modes'};
 
-/* À quoi se rapporte une question posée en pleine résolution : la carte ou la capacité, et ce qu'elle
-   dit. « Le faire ? » sans cela ne dit pas quoi. */
+/* À quoi se rapporte une question de choix : la carte, en image, et ce qu'elle fait. Sans cela la
+   carte a déjà quitté la pile quand on répond, et le joueur répond à une question qu'il ne connaît
+   pas. Un toucher sur l'image l'ouvre en grand ; elle reste lisible même si la carte a quitté la table. */
 function contexteQuestionHTML(q, v) {
-  if (!v || !v.resolvant || /^(priorite|mulligan|attaquants|bloqueurs)$/.test(q.q)) return '';
-  const r = v.resolvant, qui = r.ctrl === v.moi ? 'la vôtre' : esc(v.joueurs[r.ctrl].nom);
-  return `<div class="tq-ctx small"><span class="muted">Pendant la résolution de</span> <b>${esc(r.nom)}</b>
-    <span class="muted">(${esc(r.genreLibelle.toLowerCase())}, ${qui})</span>${r.texte ? ` — <span class="tq-ctx-texte">${esc(r.texte)}</span>` : ''}</div>`;
+  const c = q.contexte;
+  if (!c) return '';
+  const qui = c.ctrl === v.moi ? 'la vôtre' : esc(v.joueurs[c.ctrl].nom);
+  const quand = c.resout ? 'Se résout' : c.genreLibelle === 'Carte' ? 'À propos de' : c.genreLibelle === 'Sort' ? 'Vous lancez' : 'Vous activez';
+  return `<div class="tq-ctx">${tuile({id: ID_CONTEXTE, nom: c.nom}, v, {fiches: {[c.nom]: c.fiche}, etat: '', style: '--tw:54px'})}
+    <div class="tq-ctx-corps small"><span class="muted">${quand}</span> <b>${esc(c.nom)}</b>
+      <span class="pill">${esc(c.genreLibelle)}</span> <span class="muted">${qui}</span>
+      ${c.texte ? `<div class="tq-ctx-texte">${texteOracleHTML(c.texte)}</div>` : ''}</div></div>`;
 }
 
 /* Une question « oui / non » trop vague (« Le faire ? ») se précise par la carte dont il s'agit. */

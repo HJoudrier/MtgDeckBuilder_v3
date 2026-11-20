@@ -575,9 +575,22 @@ moment, puis ce qui attend, **du sommet — le premier à se résoudre — au fo
 répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
 `resoudre()` le retire avant de le dérouler, si bien qu'on le garde le temps de sa résolution (`RESOLVANTS`, hors
 de `P` pour que la copie d'une partie par l'IA ne l'emporte pas) et que **toute question posée pendant qu'il se
-résout dit de quoi il s'agit** (`contexteQuestionHTML()`) : « Pendant la résolution de *Geode Rager* (capacité
-déclenchée, la vôtre) — Landfall : goad each creature target player controls », puis « *Geode Rager* — Le faire ? ».
-Une question vague (`Le faire ?`, `Défausser ?`) est précédée du nom de sa carte (`sourceNom`). La **pause de
+résout dit de quoi il s'agit** : « Se résout *Geode Rager* (capacité déclenchée, la vôtre) — Landfall : goad each
+creature target player controls », puis « *Geode Rager* — Le faire ? ».
+Une question vague (`Le faire ?`, `Défausser ?`) est précédée du nom de sa carte (`sourceNom`).
+
+**La carte sous les yeux, pour toute question de choix** (`contexteQuestion()`, `js/jeuPileExplique.js`). Ce contexte
+n'existait qu'en texte, et seulement pendant une résolution : une cible à prendre pour un sort qu'on lance, un coût à
+choisir, les cibles d'un déclencheur qu'on met en pile, tout cela se demandait sans rien dire — la carte avait
+déjà disparu de la pile, et un joueur inattentif répondait à une question qu'il ne connaissait pas. Le moteur
+note maintenant **qui agit** avant que ce soit sur la pile (`AGISSANTS`, comme `RESOLVANTS` hors de `P` ; rendu
+à l'état d'avant à la sortie, pour qu'un sort lancé en réponse n'efface pas celui qu'on lançait) : `lanceSort()`,
+`activeCapacite()`, `equipe()` et `prepareDeclencheur()` sont enveloppés par `enAgissant()`. `questionPourUI()` joint à
+chaque question de choix (hors priorité, combat, mulligan) un `contexte` : le sort ou la capacité qu'on résout, qu'on
+lance ou qu'on active, à défaut la carte que la question nomme (`source`), avec sa fiche. La table
+(`contexteQuestionHTML()`) la montre **en image**, avec son texte, au-dessus de la question — l'image reste là même si
+la carte a quitté le champ, et un toucher l'ouvre en grand (la loupe, identifiant `ID_CONTEXTE`, qui n'est celui
+d'aucun objet de la partie). La **pause de
 résolution** — l'objet reste visible, « résolution : X » dans la barre du haut — dure maintenant le temps de
 lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; le bouton de
 tour, qui dit alors « Continuer », la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.

@@ -45,3 +45,51 @@ resoudre = (g => function* (P, item) {
   RESOLVANTS.set(P, item);
   try { return yield* g(P, item); } finally { RESOLVANTS.delete(P); }
 })(resoudre);
+
+/* Ce qu'on fait avant que ce soit sur la pile : lancer un sort (modes, cibles, X, coûts à choisir),
+   activer une capacité, mettre un déclencheur en pile (ses cibles). Rien n'est encore sur la pile,
+   mais la question qui se pose — « quelle cible ? », « quoi défausser ? » — doit pouvoir dire pour
+   quelle carte. Noté ici, comme `RESOLVANTS`, et rendu à l'état d'avant à la sortie : un sort lancé
+   en réponse n'efface pas celui qu'on lançait. */
+const AGISSANTS = new WeakMap();
+const agissantDe = P => AGISSANTS.get(P) || null;
+
+function enAgissant(g, decrit) {
+  return function* (P, ...args) {
+    const avant = AGISSANTS.get(P);
+    let d = null;
+    try { d = decrit(P, ...args); } catch (e) { d = null; }
+    if (d) AGISSANTS.set(P, d);
+    try { return yield* g(P, ...args); } finally { if (avant) AGISSANTS.set(P, avant); else AGISSANTS.delete(P); }
+  };
+}
+
+const decritObjet = (o, j, genre, texte) => o && {nom: o.def.nom, genreLibelle: GENRES_PILE[genre], texte: texteCourt(texte), ctrl: j, def: o.def};
+lanceSort = enAgissant(lanceSort, (P, j, a) => { const o = obj(P, a.id); return decritObjet(o, j, 'sort', o && o.def.texteOracle); });
+activeCapacite = enAgissant(activeCapacite, (P, j, a) => { const o = obj(P, a.id); return decritObjet(o, j, 'activee', o && (capacitesDe(P, o)[a.i] || {}).texte); });
+equipe = enAgissant(equipe, (P, j, a) => decritObjet(obj(P, a.id), j, 'activee', 'Équiper : attache cet équipement à la créature visée.'));
+prepareDeclencheur = enAgissant(prepareDeclencheur, (P, t) => decritObjet(obj(P, t.src) || t.lki, t.ctrl, 'declenchee', t.cap.texte));
+
+/* À quoi se rapporte une question de choix : la carte et ce qu'elle fait. Le sort ou la capacité
+   qu'on résout, qu'on lance ou qu'on active ; à défaut, la carte que la question nomme. Rien pour
+   celles qui se règlent sur la table même — priorité, combat, mulligan. */
+function contexteQuestion(P, q) {
+  if (/^(priorite|mulligan|attaquants|bloqueurs|voir)$/.test(q.q)) return null;
+  const r = resolvantDe(P);
+  let c = null, def = null;
+  if (r) {
+    const d = descriptionPile(P, r), src = r.sort ? r : (obj(P, r.source) || r.lki);
+    def = r.sort ? r.def : src && src.def;
+    c = {nom: d.nom, genreLibelle: d.genreLibelle, texte: d.texte, ctrl: d.ctrl, resout: true};
+  } else if (agissantDe(P)) {
+    const a = agissantDe(P);
+    def = a.def;
+    c = {nom: a.nom, genreLibelle: a.genreLibelle, texte: a.texte, ctrl: a.ctrl};
+  } else if (q.source && obj(P, q.source)) {
+    const o = obj(P, q.source);
+    def = o.def;
+    c = {nom: o.def.nom, genreLibelle: 'Carte', texte: texteCourt(o.def.texteOracle), ctrl: o.ctrl};
+  }
+  return c && def ? {...c, fiche: ficheVue(def)} : null;
+}
+

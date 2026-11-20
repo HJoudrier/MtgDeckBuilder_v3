@@ -11,6 +11,9 @@
    pas la jouer. Les écouteurs sont dans js/app.js, ici les gestes.
    ===================================================================== */
 
+/* L'identifiant de la carte du contexte d'une question : jamais celui d'un objet de la partie. */
+const ID_CONTEXTE = -1;
+
 const APPUI = {t: null, x: 0, y: 0, ouvert: 0};
 const APPUI_MS = 380;
 
@@ -74,7 +77,9 @@ function objetVisible(id) {
   if (o) return o;
   const q = TABLE.question;
   const opt = q && Array.isArray(q.options) && q.options.find(x => x && x.id === id);
-  return opt ? {id, nom: opt.label} : null;
+  if (opt) return {id, nom: opt.label};
+  /* La carte dont parle la question — elle a pu quitter la table, la loupe la montre quand même. */
+  return id === ID_CONTEXTE && q && q.contexte ? {id, nom: q.contexte.nom} : null;
 }
 
 /* Ce que la partie a fait à un permanent, en mots. */
@@ -122,7 +127,7 @@ function loupeHTML(v) {
   const o = objetVisible(TABLE.loupe);
   if (!o) return '';
   const q = TABLE.question;
-  const f = v.cartes[o.nom] || (q && q.cartes && q.cartes[o.nom]) || {};
+  const f = v.cartes[o.nom] || (q && q.cartes && q.cartes[o.nom]) || (q && q.contexte && q.contexte.nom === o.nom && q.contexte.fiche) || {};
   const pt = o.f != null && o.types && o.types.includes('creature') ? `${o.f}/${o.e - (o.bless || 0)}` : estNombre(f.f) ? `${f.f}/${f.e}` : '';
   const img = imageCarte(o.nom, 'normal');
   const etat = etatEnMots(o, v), actions = actionsLoupe(o.id);
