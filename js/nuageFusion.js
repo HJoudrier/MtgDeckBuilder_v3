@@ -191,7 +191,7 @@ function empreinteFond(fond) {
    alors sur une fusion à deux côtés — tout changement est réputé venir des
    deux, donc chaque divergence est un conflit signalé plutôt qu'un arbitrage
    silencieux. */
-function fusionnePaquets(base, local, distant) {
+function fusionnePaquets(base, local, distant, distantDejaVu) {
   const fond = {}, conflits = [];
   NUAGE_QTES.forEach(k => {
     const r = fusionneQuantites(base && base[k], local.fond[k], distant.fond[k]);
@@ -225,11 +225,13 @@ function fusionnePaquets(base, local, distant) {
     },
     conflits,
     /* Y a-t-il quelque chose à verser ici : le fond a bougé, ou le distant
-       connaissait des cartes que nous ignorions. */
-    changeIci: eFusion !== empreinteFond(local.fond) || cartes.venu > 0 || enrich.venu > 0,
+       connaissait des cartes que nous ignorions. Un distant dont la révision est celle de notre
+       dernier accord n'a rien de neuf : ce qu'il porte en plus d'une carte que `restore()` n'a pas
+       su recopier ne s'est pas « reçu » une fois de plus. */
+    changeIci: eFusion !== empreinteFond(local.fond) || (!distantDejaVu && (cartes.venu > 0 || enrich.venu > 0)),
     /* Et quelque chose à pousser là-bas. */
     changeLaBas: eFusion !== empreinteFond(distant.fond) || cartes.manque > 0 || enrich.manque > 0,
-    venu: cartes.venu + enrich.venu,
+    venu: distantDejaVu ? 0 : cartes.venu + enrich.venu,
     donne: cartes.manque + enrich.manque
   };
 }

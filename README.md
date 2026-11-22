@@ -187,7 +187,7 @@ js/                 modules, chargés dans cet ordre :
   nuagePaquet.js    ce qui voyage d'un appareil à l'autre, et sous quelle forme
   nuageFusion.js    fusionner deux appareils sans rien perdre
   nuageDropbox.js   l'adaptateur Dropbox : PKCE, et le `rev` comme verrou
-  nuage.js          la synchronisation : sa configuration, et son calendrier
+  nuage.js          la synchronisation : sa configuration, et son calendrier (à l'ouverture, puis sur demande)
   nuageDiagnostic.js  éprouver la connexion, étape par étape
   edhrec.js         les statistiques d'EDHREC pour un commandant
   edhrecForme.js    deviner la forme des pages de thèmes d'EDHREC
@@ -2035,6 +2035,16 @@ voyage en union sans conflit possible, et c'est lui qui fait le vrai gain : sans
 appareil refait des centaines d'appels pour retrouver ce que le premier savait déjà. Le paquet est
 une projection de `snapshot()` et se verse par `restore()` : la vue reste locale **par son absence
 du paquet**, non par une liste d'exceptions à tenir à jour.
+
+**Un calendrier court** (`js/nuage.js`). Un seul tour est automatique : celui de l'ouverture, si « Synchroniser à
+l'ouverture » est cochée ; ensuite, rien ne part chez Dropbox sans « Synchroniser maintenant ». Il y avait aussi un tour
+après chaque geste (au plus toutes les quinze secondes) et au retour sur l'onglet, et il tournait en pleine partie. Surtout,
+il bouclait : « *N* cartes reçues », le même *N* à chaque tour. Deux causes. `restore()` ne recopiait ni le texte
+complet ni le prix d'une carte que l'appareil connaissait déjà (un import de liste, sans texte) : la copie du nuage
+restait « plus garnie » que la nôtre après chaque versement, donc « reçue » de nouveau — et le versement relançait une
+sauvegarde, donc un tour. `restore()` les recopie maintenant, et `fusionnePaquets()` ne compte plus rien comme reçu
+quand la révision du distant est celle de notre dernier accord (`NUAGE.rev`) : personne n'a écrit depuis. Qui ne
+synchronise plus après chaque geste doit donc penser au bouton avant de changer d'appareil.
 
 **Une fusion à trois côtés** (`js/nuageFusion.js`) : le local, le distant, et la **base** — le fond
 au dernier accord, gardée dans IndexedDB. Sans elle, trois exemplaires d'un côté et deux de l'autre

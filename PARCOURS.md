@@ -600,7 +600,7 @@ sequenceDiagram
     participant UI as interface
 
     APP->>NU: nuageSynchro()
-    Note over NU: à l'ouverture, au retour sur l'onglet,<br/>ou au plus une fois toutes les 15 s après un geste
+    Note over NU: à l'ouverture seulement (si cochée),<br/>puis sur demande : « Synchroniser maintenant »
     NU->>DBX: dbxLire(chemin)
     DBX->>DBX: dbxJetonValide() — rafraîchit 1 min avant l'échéance
     DBX->>DROP: files/download

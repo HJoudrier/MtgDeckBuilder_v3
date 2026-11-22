@@ -151,10 +151,6 @@ function save() {
       : "Sauvegarde impossible : le stockage du navigateur est saturé. Exportez un fichier depuis la fenêtre de sauvegarde pour ne rien perdre.");
   }
   if (saveState === 'ok') dernierEtatSignale = 'ok';
-  /* Les données ont changé et sont écrites : s'il y a un appareil jumeau, il y
-     a lieu de l'en avertir. La poussée est étranglée et différée
-     (`js/nuage.js`) — `save()` se déclenche à chaque geste. */
-  if (typeof nuagePousseeDifferee === 'function') nuagePousseeDifferee();
 }
 
 function scheduleSave() {
@@ -180,6 +176,10 @@ function restore(d) {
     if (o.B) card.imgB = o.B;
     if (o.BL) card.imgBL = o.BL;
     card.unknown = !!o.k;
+    /* Le texte complet, et le prix, d'une carte que cet appareil connaissait sans eux : sans quoi
+       la copie du nuage resterait indéfiniment « plus garnie » que la nôtre. */
+    if (o.X && o.x && !card.textFull) majTexteOracle(card, o.x);
+    if (o.p && !card.price) card.price = o.p;
     if (typeof o.lg === 'string') card.legal = o.lg;
     /* Le mana produit, tel que Scryfall l'a dit une fois. Facultatif : une
        sauvegarde qui ne le porte pas laisse la carte lire son texte. */

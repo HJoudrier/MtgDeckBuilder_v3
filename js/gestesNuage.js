@@ -83,7 +83,6 @@ function gestesNuageChange(t) {
   if (t.dataset.act === 'nuageAuto') {
     NUAGE.auto = !!t.checked;
     nuageEcrire();
-    if (NUAGE.auto) nuageSynchro(false);
     return true;
   }
 

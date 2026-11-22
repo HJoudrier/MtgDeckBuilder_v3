@@ -135,10 +135,10 @@ function nuageCorpsConnecte() {
     ${nuageConflits()}
     <label class="row small" style="gap:8px;margin-top:6px">
       <input type="checkbox" id="nuageAuto" ${NUAGE.auto ? 'checked' : ''} data-act="nuageAuto">
-      Synchroniser toute seule
+      Synchroniser à l'ouverture
     </label>
-    <div class="small muted">À l'ouverture, au retour sur l'onglet, et au plus une fois toutes les
-      quinze secondes après un changement. Décochée, seul le bouton ci-dessous agit.</div>
+    <div class="small muted">Un seul tour automatique, au démarrage de l'atelier ; ensuite, rien ne part
+      chez Dropbox sans que vous le demandiez. Décochée, seul le bouton ci-dessous agit.</div>
     <div class="row" style="gap:6px;margin-top:6px">
       <button type="button" class="btn sm pri" data-act="nuageMaintenant"
         ${NUAGE.enCours ? 'disabled' : ''}>Synchroniser maintenant</button>

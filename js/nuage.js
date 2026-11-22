@@ -12,20 +12,16 @@
    et son `rev` par les nôtres — les deux appareils se battraient alors pour le
    même verrou. Le thème a la même exception, pour une autre raison.
 
+   **Le calendrier est court** : un tour à l'ouverture (si la synchronisation est
+   réglée sur « à l'ouverture »), puis seulement quand l'utilisateur le demande.
+   Il y en avait aussi un après chaque geste et au retour sur l'onglet : en pleine
+   partie, l'atelier partait chez Dropbox toutes les quinze secondes.
+
    La base de fusion dort dans IndexedDB : le fond seul, une trentaine
    d'octets par carte, là où `localStorage` est déjà au bord de son quota.
    ===================================================================== */
 
 const NUAGE_CLE = 'mtg-atelier-nuage';
-/* Une poussée au plus toutes les quinze secondes : `scheduleSave()` se
-   déclenche à chaque geste, et l'on ne va pas chez Dropbox à chaque carte
-   ajoutée. */
-const NUAGE_ETRANGLE = 15000;
-/* Au retour sur l'onglet, on ne retire que si le dernier accord a plus d'une
-   minute : revenir d'un autre onglet trois fois de suite ne vaut pas trois
-   allers-retours. */
-const NUAGE_FRAICHEUR = 60000;
-
 const NUAGE = {
   /* — ce qui est conservé — */
   service: 'dropbox',
@@ -126,7 +122,8 @@ async function nuageTour(rejoue) {
   }
 
   const base = await nuageBaseLire();
-  const f = fusionnePaquets(base, local, distant.paquet);
+  /* Le distant est-il celui de notre dernier accord ? Alors personne n'a écrit depuis : rien à recevoir. */
+  const f = fusionnePaquets(base, local, distant.paquet, !!NUAGE.rev && distant.rev === NUAGE.rev);
 
   /* Verser d'abord, pousser ensuite : si la poussée échoue, l'appareil garde
      au moins ce que l'autre avait à lui apprendre. */
@@ -210,25 +207,6 @@ async function nuageSynchro(manuel) {
   }
 }
 
-/* La poussée qui suit un geste. Étranglée, et toujours différée : on ne part
-   pas chez Dropbox au milieu d'un ajout de carte. */
-let nuageMinuteur = null;
-let nuageDerniereAuto = 0;
-
-function nuagePousseeDifferee() {
-  if (!NUAGE.auto || !nuageConnecte()) return;
-  /* Un tour en cours écrit lui-même par `save()` : s'en servir pour
-     programmer le tour suivant ferait un aller-retour à vide après chaque
-     synchronisation. */
-  if (NUAGE.enCours) return;
-  clearTimeout(nuageMinuteur);
-  const reste = NUAGE_ETRANGLE - (Date.now() - nuageDerniereAuto);
-  nuageMinuteur = setTimeout(() => {
-    nuageDerniereAuto = Date.now();
-    nuageSynchro(false);
-  }, Math.max(reste, 2000));
-}
-
 /* ---------- le démarrage ---------- */
 
 async function nuageDemarrer() {
@@ -251,16 +229,8 @@ async function nuageDemarrer() {
     toast('Connexion Dropbox : ' + NUAGE.msg);
   }
 
+  /* Le seul tour automatique : celui de l'ouverture. Ensuite, c'est l'utilisateur qui le demande. */
   if (nuageConnecte() && NUAGE.auto) nuageSynchro(false);
-
-  /* Revenir sur l'onglet est le moment où l'autre appareil a le plus de
-     chances d'avoir écrit. */
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState !== 'visible') return;
-    if (!NUAGE.auto || !nuageConnecte()) return;
-    if (Date.now() - NUAGE.dernier < NUAGE_FRAICHEUR) return;
-    nuageSynchro(false);
-  });
 }
 
 function nuageDeconnecte() {

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1857 fonctions**, 282 modules, 1991 Ko de JavaScript.
+**1856 fonctions**, 282 modules, 1990 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -175,9 +175,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 126 |
-| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 236 |
+| [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 238 |
 | [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
-| [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 12 | 275 |
+| [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 11 | 245 |
 | [`nuageDiagnostic.js`](#jsnuagediagnosticjs) | Éprouver la connexion, étape par étape | 3 | 86 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
 | [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
@@ -255,7 +255,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 152 |
-| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 92 |
+| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 91 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 38 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
@@ -2973,7 +2973,7 @@ Ce qui voyage d'un appareil à l'autre. *7 fonctions, 126 lignes, 5.5 Ko.*
 
 ## js/nuageFusion.js
 
-Fusionner deux appareils sans rien perdre. *11 fonctions, 236 lignes, 11 Ko.*
+Fusionner deux appareils sans rien perdre. *11 fonctions, 238 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2987,7 +2987,7 @@ Fusionner deux appareils sans rien perdre. *11 fonctions, 236 lignes, 11 Ko.*
 | `fusionneDecks(base, local, distant)` | — |
 | `empreinteDeck(o)` | L'empreinte d'un dossier, aux listes ordonnées : sans quoi deux dossiers identiques aux paires rangées autrement passeraient pour différents, et chaque tour pousserait pour rien. |
 | `empreinteFond(fond)` | L'empreinte du fond, ordonnée : deux fonds égaux la partagent, quel que soit l'ordre où leurs tables ont été bâties. |
-| `fusionnePaquets(base, local, distant)` | La fusion entière. `base` est le fond du dernier accord, et peut manquer : au premier accord, ou après un effacement des données locales. On retombe alors sur une fusion à deux côtés —… |
+| `fusionnePaquets(base, local, distant, distantDejaVu)` | La fusion entière. `base` est le fond du dernier accord, et peut manquer : au premier accord, ou après un effacement des données locales. On retombe alors sur une fusion à deux côtés —… |
 
 | Donnée | Rôle |
 |---|---|
@@ -3027,7 +3027,7 @@ L'adaptateur Dropbox. *17 fonctions, 240 lignes, 10 Ko.*
 
 ## js/nuage.js
 
-La synchronisation : sa configuration, et son calendrier. *12 fonctions, 275 lignes, 9.8 Ko.*
+La synchronisation : sa configuration, et son calendrier. *11 fonctions, 245 lignes, 9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3040,19 +3040,14 @@ La synchronisation : sa configuration, et son calendrier. *12 fonctions, 275 lig
 | `nuageTour(rejoue)` | Tirer, fusionner, verser, pousser. Un conflit de `rev` — l'autre appareil a écrit pendant notre aller-retour — se rejoue une fois : on relit, on refusionne sur le nouveau distant, on… |
 | `nuagePoids(o)` | — |
 | `nuageSynchro(manuel)` | Le tour, habillé : un seul à la fois, l'état rendu à la fenêtre si elle est ouverte, et un mot au lecteur quand c'est lui qui a demandé. |
-| `nuagePousseeDifferee()` | — |
 | `nuageDemarrer()` | — |
 | `nuageDeconnecte()` | — |
 
 | Donnée | Rôle |
 |---|---|
 | `NUAGE_CLE` | — |
-| `NUAGE_ETRANGLE` | Une poussée au plus toutes les quinze secondes : `scheduleSave()` se déclenche à chaque geste, et l'on ne va pas chez Dropbox à chaque carte ajoutée. |
-| `NUAGE_FRAICHEUR` | Au retour sur l'onglet, on ne retire que si le dernier accord a plus d'une minute : revenir d'un autre onglet trois fois de suite ne vaut pas trois allers-retours. |
 | `NUAGE` | — |
 | `NUAGE_DURABLE` | — |
-| `nuageMinuteur` | La poussée qui suit un geste. Étranglée, et toujours différée : on ne part pas chez Dropbox au milieu d'un ajout de carte. |
-| `nuageDerniereAuto` | — |
 
 ## js/nuageDiagnostic.js
 
@@ -4300,7 +4295,7 @@ Les gestes qui touchent aux données. *1 fonctions, 152 lignes, 5 Ko.*
 
 ## js/gestesNuage.js
 
-Les gestes de la synchronisation. *2 fonctions, 92 lignes, 3.2 Ko.*
+Les gestes de la synchronisation. *2 fonctions, 91 lignes, 3.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
