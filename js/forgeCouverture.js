@@ -23,7 +23,7 @@ const FORGE_SAIT = {api: new Set(), trig: new Set(), stat: new Set(), repl: new 
 /* Les paramètres dont la valeur est un filtre (js/forgeValide.js), et ceux
    qui désignent (js/forgeDefini.js) : leurs propriétés et leurs valeurs
    comptent dans la couverture comme des éléments à part entière. */
-const FORGE_CLES_FILTRE = /^(ValidTgts|ValidCards?|Affected|ChangeType|ChangeValid|SacValid|ValidTarget|ValidSource|ValidPlayers?|ValidActivatingPlayer|ValidAttacker|ValidBlocker|IsPresent|ValidDefender)$/;
+const FORGE_CLES_FILTRE = /^(ValidTgts|ValidCards?|Affected|ChangeType|ChangeValid|SacValid|ValidTarget|ValidSource|ValidPlayers?|ValidActivatingPlayer|ValidAttacker|ValidBlocker|IsPresent|IsPresent2|ValidDefender)$/;
 const FORGE_CLES_DEFINI = /^(Defined(Player|Cards)?|RememberObjects|ForgetDefined|AttachedTo|TokenOwner|NewController|DamageSource|Controller)$/;
 
 /* Les paramètres qu'on ne lit que pour certaines valeurs : `forgeValeurs('ChangeZone.Activator', ['You.!Active'])`. */
@@ -51,7 +51,7 @@ const FORGE_COMMUNS = new Set(['Cost', 'SubAbility', 'ValidTgts', 'TargetMin', '
   'ConditionCompare', 'ConditionCheckSVar', 'ConditionSVarCompare', 'ConditionZone', 'ConditionPlayerTurn', 'Condition',
   'RememberObjects', 'RememberTargets', 'SorcerySpeed', 'ActivationLimit', 'Planeswalker', 'Execute', 'TriggerZones', 'ActivationPhases',
   'ForgetOtherRemembered', 'ForgetOtherTargets', 'TargetsWithSameController', 'TargetsWithDifferentControllers', 'DifferentNames', 'TargetsForEachPlayer',
-  'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'PlayerTurn', 'TargetUnique', 'Mandatory',
+  'CheckSVar', 'SVarCompare', 'IsPresent', 'PresentCompare', 'PresentZone', 'IsPresent2', 'PresentCompare2', 'PresentZone2', 'PlayerTurn', 'TargetUnique', 'Mandatory',
   'ActivationZone']);
 
 /* Les paramètres dont la valeur nomme une autre SVar à suivre. */

@@ -245,7 +245,8 @@ function propObjet(P, o, c, p, src, ctrl, env) {
     if (bit == null) return false;
     return m[1] ? (c.mots & bit) === 0 : (c.mots & bit) !== 0;
   }
-  if ((m = /^named(.+)$/.exec(p))) return o.def.nom === m[1];
+  /* Une virgule du nom s'écrit « ; » dans un filtre (« Bruna; the Fading Light »). */
+  if ((m = /^named(.+)$/.exec(p))) return o.def.nom === m[1].replace(/;/g, ',');
   if ((m = /^in(?:Real)?Zone(\w+)$/.exec(p))) return ZONES_FORGE[m[1]] === (o.lki ? 'champ' : o.zone);
   if ((m = /^AttachedTo (.+)$/.exec(p))) { const h = P && o.att != null ? obj(P, o.att) : null; return !!h && forgeValideObjet(P, h, m[1], src, ctrl, env); }
   if ((m = /^non(.+)$/.exec(p))) {

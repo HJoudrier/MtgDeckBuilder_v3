@@ -191,12 +191,15 @@ function* choisitCibles(P, j, src, slots, couleurs, extra) {
   for (let si = 0; si < slots.length; si++) {
     const sl = slots[si];
     /* Un contrôleur imposé par le déclencheur (js/forgeEntrees.js). */
-    const cands = enTournante(P, sl, candidatsDuControleur(P, sl, ciblesLegales(P, sl, src, j, couleurs), src, j, extra, choix));
+    /* Les cibles qu'un adversaire choisit (« target creature of an opponent's choice they control », Arena) : js/forgeChoisisseur.js. */
+    const qui = sl.choisisseur ? yield* adversaireChoisisseur(P, j, src) : j;
+    const cands = enTournante(P, sl, candidatsDuControleur(P, sl, ciblesLegales(P, sl, src, j, couleurs), src, j, extra, choix))
+      .filter(c => !sl.choisisseur || !sl.controle || (typeof c === 'number' ? (obj(P, c) || {}).ctrl : c.j) === qui);
     if (cands.length < sl.min) return null;
     if (!cands.length) { choix.push([]); continue; }
     const plafond = sl.maxExpr ? Math.max(sl.min, forgeNombre(P, sl.maxExpr, {face: sl.maxFace || {svars: {}}, ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: j, op: {}})) : sl.max;
     const max = Math.min(plafond, cands.length);
-    const r = yield question(P, j, 'cibles', cands, {min: sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
+    const r = yield question(P, qui, 'cibles', cands, {min: sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
     const pris = restreintCibles(P, sl, (Array.isArray(r) ? r : [r]).map(i => cands[i]).filter(x => x != null));
     /* Un choix que la restriction a réduit sous le minimum n'est pas un choix. */
     if (pris.length < sl.min) return null;

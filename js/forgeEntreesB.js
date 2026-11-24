@@ -20,6 +20,11 @@ formeRemplacement = (g => function (face, r) {
   /* La suite peut seulement retirer l'effet (`ChangeZone | Defined$ Self | Origin$ Command`) : il disparaît de lui-même. */
   const suite = w && w.SubAbility && forgeSousCapacite(face, w.SubAbility), seulementRetrait = !!suite && suite.DB === 'ChangeZone' && suite.Defined === 'Self' && suite.Origin === 'Command' && !suite.SubAbility;
   if (w && w.DB === 'Tap' && w.Defined === 'ReplacedCard' && w.ETB === 'True' && (!w.SubAbility || seulementRetrait)) return 'entreEngage';
+  if (w && w.DB === 'PutCounter' && w.Defined === 'ReplacedCard' && w.ETB === 'True' && genreMarqueur(w.CounterType) && suite && suite.DB === 'Tap' && suite.Defined === 'ReplacedCard' && suite.ETB === 'True') {
+    /* Des marqueurs, puis engagé, puis (peut-être) le retrait de l'effet : Loch Larent, « enters tapped and with a stun counter ». */
+    const fin = suite.SubAbility && forgeSousCapacite(face, suite.SubAbility);
+    if (!fin || (fin.DB === 'ChangeZone' && fin.Defined === 'Self' && fin.Origin === 'Command' && !fin.SubAbility)) return 'entreAvecEngage';
+  }
   return w && w.DB === 'PutCounter' && w.Defined === 'ReplacedCard' && w.ETB === 'True' && (!w.SubAbility || seulementRetrait) && genreMarqueur(w.CounterType) ? 'entreAvec' : b;
 })(formeRemplacement);
 
@@ -28,8 +33,9 @@ formeRemplacement = (g => function (face, r) {
 function entreAvecPrevu(P, id) {
   const l = [];
   for (const {src, r} of remplacementsEnJeu(P)) {
-    if (!/^entre(Avec|Engage)$/.test(r.forme) || !(src.memo || []).includes(id)) continue;
+    if (!/^entre(Avec|Engage|AvecEngage)$/.test(r.forme) || !(src.memo || []).includes(id)) continue;
     if (r.forme === 'entreEngage') { l.push({engage: true}); continue; }
+    if (r.forme === 'entreAvecEngage') l.push({engage: true});
     const w = forgeSousCapacite(r.face, r.t.ReplaceWith), n = forgeNombre(P, w.CounterNum || 1, envRemplacement(src, r));
     if (n > 0) l.push({genre: genreMarqueur(w.CounterType), n});
   }

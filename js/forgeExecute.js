@@ -72,7 +72,8 @@ function* executeForge(P, op, ctx) {
     if (autre) yield* paieAutre(P, ctx.ctrl, porteur, autre);
     if (decl) deplace(P, decl.id, 'exil');
   }
-  if ((t.Optional === 'True' || t.OptionalDecider) && !api.optionnel) {
+  /* Le joueur choisi décide lui-même, par sa propre question (js/forgeChoisisseur.js). */
+  if ((t.Optional === 'True' || t.OptionalDecider) && !api.optionnel && t.Chooser !== 'ChosenPlayer') {
     /* Celui qui décide est nommé, jamais déduit des cibles. */
     const j = t.OptionalDecider ? forgeDefinis(P, t.OptionalDecider, env).map(x => joueurDe(x)).find(x => x != null) : ctx.ctrl;
     if (j == null) return;

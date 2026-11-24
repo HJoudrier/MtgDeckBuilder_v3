@@ -134,6 +134,7 @@ function* lanceSort(P, j, a) {
      le reste) : un terrain engagé peut ensuite être sacrifié, et un échec
      de paiement ne laisse rien de payé à moitié. */
   s.depuisCommandement = a.depuis === 'commandement';
+  s.kickePaiement = a.variante === 'kicker';
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   if (autre) yield* paieAutre(P, j, s, autre);
   if (ga) yield* paieAutre(P, j, s, ga);
@@ -167,7 +168,7 @@ function* activeCapacite(P, j, a) {
   const k = capaciteReduite(P, j, o, capacitesDe(P, o)[a.i]);
   const effets = yield* prepareEffets(P, j, o, k.effet, o.def.couleurs);
   if (!effets) return false;
-  let x = 0, lki = null, retires = 0;
+  let x = 0, lki = null, retires = 0, pourC = null;
   if (k.genre === 'loyaute') {
     let delta = k.delta;
     if (delta === 'X') {
@@ -188,15 +189,17 @@ function* activeCapacite(P, j, a) {
     }
     const cout = coutResolu(k.cout, x, o);
     retires = cout.retire ? cout.retire.n : 0;
+    /* Les sources dont le mana a payé la capacité (« when you spend this mana to activate an ability », Sunken Palace). */
     if (!coutAutrePossible(P, j, o, cout) || !planPaiement(P, j, cout.mana, x, {capacite: o})) return false;
     P.engagesCout = null;
+    pourC = {capacite: o, sources: []};
     /* « Sacrifice all lands » : le mana d'abord, avec ces terrains-là — après, il n'y en a plus (Tomb of Urami). */
     if (cout.sac && cout.sac.tout) {
-      if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
+      if (!paieMana(P, j, k.cout.mana, x, pourC)) return false;
       lki = yield* paieAutre(P, j, o, cout);
     } else {
       lki = yield* paieAutre(P, j, o, cout);
-      if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
+      if (!paieMana(P, j, k.cout.mana, x, pourC)) return false;
     }
     if (k.unefois) P.unefois.add(a.id + '|a' + a.i);
     noteLimitePartie(P, o, k);
@@ -204,7 +207,7 @@ function* activeCapacite(P, j, a) {
        l'instantané de la carte, partie au cimetière. */
     if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }
   }
-  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null});
+  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null, manaDeSources: pourC ? pourC.sources : null});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
   emet(P, {t: 'active', id: o.id, joueur: j, loyaute: k.genre === 'loyaute', lki});
   emetCibles(P, j, o, effets);

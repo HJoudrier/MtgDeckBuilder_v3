@@ -199,7 +199,8 @@ function entreeForge(def, face, r) {
   const v = /^(Card|Permanent|Creature|Land)\.Self(\+kicked)?$/.exec(r.ValidCard || '');
   if (r.Event !== 'Moved' || r.Destination !== 'Battlefield' || !v) return false;
   const w = forgeSousCapacite(face, r.ReplaceWith);
-  if (!w || w.Defined !== 'Self' || w.ETB !== 'True') return false;
+  /* `Defined$ ReplacedCard` désigne ici le terrain lui-même : Loch Larent réutilise le nom de SVar `ETBTapped` pour son effet, que le dernier écrit l'emporte. */
+  if (!w || (w.Defined !== 'Self' && w.Defined !== 'ReplacedCard') || w.ETB !== 'True') return false;
   const ent = def.entree = def.entree || {};
   /* « Enters tapped if it was played from your hand » (Fetching Garden) : seul le terrain posé l'est (js/forgeEntreesC.js). */
   if (r.ValidCause) {
@@ -300,7 +301,7 @@ function nomsJetonsForge(texte) {
 /* Les modes de cartes à deux faces que le moteur sait jouer : la face
    arrière d'une carte modale, partagée ou à aventure se lance ; celle d'une
    carte transformable n'est jouée que si un effet la transforme. */
-const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced', 'Flip', 'Omen', 'Prepare'];
+const FORGE_FACES = ['Modal', 'Split', 'Adventure', 'DoubleFaced', 'Flip', 'Omen', 'Prepare', 'Meld'];
 
 /* Une carte à deux faces : la définition de chacune, la face arrière
    rangée dans `def.dos`. La carte n'est complète que si les deux le sont,

@@ -51,7 +51,9 @@ function filtresMana(P, j, pour) {
       if (activationInterdite(P, j, o, k)) continue;
       /* « Activate only as a sorcery » : une phase principale, pile vide. */
       if (k.vitesse === 'rituel' && !enPhasePrincipale(P, j)) continue;
-      if (Object.keys(c).some(f => c[f] && !['mana', 'engage', 'renvoieSoi'].includes(f))) continue;
+      if (Object.keys(c).some(f => c[f] && !['mana', 'engage', 'renvoieSoi', 'exileCimetiere'].includes(f))) continue;
+      /* Exiler N cartes de son cimetière, n'importe lesquelles (Sunken Palace). */
+      if (c.exileCimetiere && !(c.exileCimetiere.desc && c.exileCimetiere.desc.forge === 'Card' && typeof c.exileCimetiere.n === 'number' && P.joueurs[j].cimetiere.length >= c.exileCimetiere.n)) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       let opts = k.options || [];
       if (k.montant) {
@@ -65,7 +67,7 @@ function filtresMana(P, j, pour) {
         opts = opts.map(s => s.repeat(n));
       }
       if (!opts.length) continue;
-      r.push({id, i, filtre: true, cout: c.mana || coutManaVide(), engage: !!c.engage, renvoie: !!c.renvoieSoi, options: opts, vie: 0, sac: false, reste: false});
+      r.push({id, i, filtre: true, cout: c.mana || coutManaVide(), engage: !!c.engage, renvoie: !!c.renvoieSoi, exileCim: c.exileCimetiere ? c.exileCimetiere.n : 0, ...(k.porte ? {portes: [{opts, porte: k.porte}]} : {}), options: opts, vie: 0, sac: false, reste: false});
     }
   }
   return r;
@@ -120,6 +122,7 @@ function activeFiltre(P, j, s, option, sup) {
   if (!o) return sup;
   if (s.engage) engageObjet(P, o, true);
   if (s.renvoie) deplace(P, s.id, 'main');
+  if (s.exileCim) P.joueurs[j].cimetiere.slice(0, s.exileCim).forEach(id => deplace(P, id, 'exil'));
   ajouteMana(P, j, option);
   return sup ? sommeMana(sup, s.cout) : s.cout;
 }

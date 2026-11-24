@@ -106,7 +106,11 @@ function collecteDeclencheurs(P) {
           if (P.unefois.has(cle)) return;
           P.unefois.add(cle);
         }
-        if (s.zone === 'effet') P.enAttente.push({src: s.srcId, lki: s, ctrl: s.ctrl, cap, evt: e, memo: s.memo, memoJ: s.memoJ});
+        if (s.zone === 'effet') {
+          P.enAttente.push({src: s.srcId, lki: s, ctrl: s.ctrl, cap, evt: e, memo: s.memo, memoJ: s.memoJ});
+          /* Une faveur à usage unique (`Boon$ True`, Loch Larent) disparaît à son premier déclenchement. */
+          if (s.boon) { s.boon = false; P.effets = P.effets.filter(x => x !== s); P.ver++; }
+        }
         else {
           /* Panharmonicon : la même capacité, une fois de plus par statique. */
           for (let k = 1 + declenchementsEnPlus(P, s, cap, e); k > 0; k--) P.enAttente.push({src: s.id, lki: s.lki ? s : null, ctrl: s.ctrl, cap, evt: e});

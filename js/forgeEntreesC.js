@@ -41,4 +41,4 @@ entreeSoiForge = (g => function (def, face, r) {
 
 forgeSait('param', 'ChooseType.ETB');
 forgeSait('param', 'Moved.ValidCause');
-forgeValeurs('Moved.ValidCause', ['LandAbility.YouCtrl']);
+forgeValeurs('Moved.ValidCause', ['LandAbility.YouCtrl', 'SpellAbility.OppCtrl']);

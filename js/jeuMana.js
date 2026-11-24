@@ -33,6 +33,13 @@ function manaPermis(P, j, filtre, pour) {
   if (!pour) return false;
   return forgeFiltre(filtre).some(a => {
     const reste = a.props.length ? '.' + a.props.join('+') : '';
+    /* « Spend this mana only to cast kicked spells » : le sort dit à l'avance s'il l'est (js/jeuActions.js). */
+    if (a.tete === 'Spell' && pour.sort && a.props.includes('Kicked')) {
+      const sans = a.props.filter(p => p !== 'Kicked');
+      return !!pour.sort.kickePaiement && forgeValideDef(pour.sort.def, 'Card' + (sans.length ? '.' + sans.join('+') : ''), j, j, pour.sort.id);
+    }
+    /* Un sort réel se juge comme objet (commandant, propriétaire) ; un modèle de sort, sur sa définition. */
+    if (a.tete === 'Spell' && pour.sort && pour.sort.zone && pour.sort.cid != null) return forgeValideObjet(P, pour.sort, 'Card' + reste, pour.sort, j, null, true);
     if (a.tete === 'Spell' && pour.sort) return forgeValideDef(pour.sort.def, 'Card' + reste, j, j, pour.sort.id);
     if (a.tete === 'Activated' && pour.capacite) return !reste || forgeValideObjet(P, pour.capacite, 'Card' + reste, pour.capacite, j, null, true);
     return false;
@@ -44,19 +51,23 @@ function sourcesMana(P, j, pour) {
   for (const id of P.champ) {
     const o = obj(P, id);
     if (o.ctrl !== j) continue;
-    let options = null, rang = 0, sac = false, vie = 0, reste = false, nonContre = [], portes = [];
+    let options = null, compteurs = null, rang = 0, sac = false, vie = 0, exileCim = 0, reste = false, nonContre = [], portes = [];
     for (const k of capacitesDe(P, o)) {
       if (k.genre !== 'mana') continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
       if (activationInterdite(P, j, o, k)) continue;
-      const c = coutManaSup(P, o, k.cout);
+      let c = coutManaSup(P, o, k.cout);
+      /* Une capacité qui retire des marqueurs de son porteur (Crucible of the Spirit Dragon) : js/forgeManaCompteurs.js. */
+      if (k.compteurs) c = {...c, retire: null};
       if (c.mana && c.mana.total > 0) continue;
-      if (c.sac || c.defausse || c.defausseTout || c.degageAutres || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
+      /* Exiler N cartes de son cimetière, sans choix : n'importe lesquelles (Sunken Palace). */
+      if (c.exileCimetiere && !(c.exileCimetiere.desc && c.exileCimetiere.desc.forge === 'Card' && typeof c.exileCimetiere.n === 'number' && P.joueurs[j].cimetiere.length >= c.exileCimetiere.n)) continue;
+      if (c.sac || c.defausse || c.defausseTout || c.degageAutres || c.engageAutres || c.retire || c.degage || c.energie || c.renvoie ||
         c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || c.renvoieSoi || coutSpecial(c)) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
       if (c.sacSoi && sacrificeInterdit(P, o, true)) continue;
       if (c.vie && (P.joueurs[j].vie <= c.vie || payerVieInterdit(P, j))) continue;
-      let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? (k.combo ? choixDe(P, o).couleurs || [] : [choixDe(P, o).couleur].filter(Boolean)) : k.reflete ? manaReflete(P, j, o, k)
+      let opts = k.compteurs ? optionsCompteurs(P, o, k) : k.identite ? identiteJoueur(P, j) : k.fixes ? couleursFixees(P, j, k.fixes) : k.choisie ? (k.combo ? choixDe(P, o).couleurs || [] : [choixDe(P, o).couleur].filter(Boolean)) : k.reflete ? manaReflete(P, j, o, k)
         : k.couleursParmi ? [couleursParmi(P, j, o, k.couleursParmi)].filter(Boolean) : k.options;
       if (!opts.length) continue;
       if (k.montant) {
@@ -74,13 +85,15 @@ function sourcesMana(P, j, pour) {
       if (k.porte) portes.push({opts, porte: k.porte});
       if (c.sacSoi) sac = true;
       if (c.vie) vie = c.vie;
+      if (c.exileCimetiere) exileCim = c.exileCimetiere.n;
+      if (k.compteurs) compteurs = {genre: k.compteurs.genre, x: k.compteurs.n === 'X', n: k.compteurs.n, opts: new Set(opts)};
       if (k.resteEngage) reste = true;
     }
     if (!options) continue;
     /* Une source qui ne se dégagera pas passe après les autres. */
     rang = (estType(o, 'land') ? 0 : sac ? 3 : estCreature(o) ? 2 : 1) + (reste ? 2 : 0);
     const couleurs = [...new Set(options.join('').split(''))];
-    r.push({id, options, rang, sac, vie, reste, couleurs, cap: Math.max(...options.map(s => s.length)), ...(nonContre.length ? {nonContre} : {}), ...(portes.length ? {portes} : {})});
+    r.push({id, options, rang, sac, vie, exileCim, compteurs, reste, couleurs, cap: Math.max(...options.map(s => s.length)), ...(nonContre.length ? {nonContre} : {}), ...(portes.length ? {portes} : {})});
   }
   r.sort((a, b) => a.rang - b.rang || a.couleurs.length - b.couleurs.length);
   return r;
@@ -209,7 +222,12 @@ function paieMana(P, j, cout, x, pour) {
     activeSource(P, j, s, option, pour);
   }
   let sup = null;
-  for (const {s, option} of plan) if (s.filtre) sup = activeFiltre(P, j, s, option, sup);
+  for (const {s, option} of plan) if (s.filtre) {
+    sup = activeFiltre(P, j, s, option, sup);
+    /* Le mana d'un filtre compte aussi comme celui de sa source (« when you spend this mana », js/forgeManaC.js). */
+    if (pour && pour.sort) { manaPorte(P, j, s, option, pour); }
+    if (pour && pour.capacite && pour.sources) pour.sources.push(s.id);
+  }
   const avant = LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0), reserve = {...J.pool};
   if (!debite(J.pool, sup ? sommeMana(cout, sup) : cout, x)) return false;
   J.stats.manaDepense += avant - LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
@@ -232,6 +250,9 @@ function activeSource(P, j, s, option, pour) {
   if (s.nonContre && s.nonContre.includes(option) && pour && pour.sort) pour.sort.nonContrable = true;
   if (s.reste) o.exerce = true;
   if (s.vie) J.vie -= s.vie;
+  if (s.compteurs && s.compteurs.opts.has(option)) o.marq[s.compteurs.genre] = Math.max(0, (o.marq[s.compteurs.genre] || 0) - (s.compteurs.x ? String(option).length : s.compteurs.n));
+  if (s.exileCim) J.cimetiere.slice(0, s.exileCim).forEach(id => deplace(P, id, 'exil'));
+  if (pour && pour.capacite && pour.sources) pour.sources.push(s.id);
   if (s.sac) deplace(P, s.id, 'cimetiere');
   ajouteMana(P, j, option);
 }

@@ -66,7 +66,9 @@ function emplacementForge(t, face) {
   if (/singleTarget|numTargets EQ1/.test(t.TargetType || '')) desc.uneCible = true;
   const restrB = {...(t.TargetsWithDefinedController ? {ctrlDefini: t.TargetsWithDefinedController} : {}),
     ...(/^\d+$/.test(t.MaxTotalTargetCMC || '') ? {cmcMax: +t.MaxTotalTargetCMC} : {}), ...(t.TargetValidTargeting ? {visant: t.TargetValidTargeting} : {})};
-  return {desc, min, max, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr, maxFace: face} : {}), ...restrB,
+  /* Un autre joueur choisit la cible (js/forgeChoisisseur.js). */
+  const choisisseur = t.TargetingPlayer === 'Player.Opponent' ? {choisisseur: 'adversaire', controle: t.TargetingPlayerControls === 'True'} : {};
+  return {desc, min, max, ...choisisseur, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr, maxFace: face} : {}), ...restrB,
     /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
     ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True' || t.TargetsWithSameCreatureType === 'True'
       ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', type: t.TargetsWithSameCreatureType === 'True',

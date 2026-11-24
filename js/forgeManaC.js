@@ -38,7 +38,7 @@ capaciteForge = (g => function (def, face, t, jetons) {
   if (t.TriggersWhenSpent) {
     const tbl = face.svars[t.TriggersWhenSpent];
     const m = def.capacites.length;
-    if (!tbl || !/^Mode\$ SpellCast\b/.test(tbl) || !declencheurForge(def, face, forgeTable(tbl), jetons)) return annule();
+    if (!tbl || !/^Mode\$ (SpellCast|SpellAbilityCast)\b/.test(tbl) || !declencheurForge(def, face, forgeTable(tbl), jetons)) return annule();
     def.capacites.slice(m).forEach(c => c.ecoutes.forEach(ec => { ec.viaMana = true; }));
   }
   return true;

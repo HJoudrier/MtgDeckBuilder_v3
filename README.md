@@ -2261,6 +2261,30 @@ d'Alchemy (`MakeCard`, `Empower`), le choix d'une cible par un autre joueur (Are
 Les trois lots F96 à F98 : 6 716 → 6 743 cartes complètes parmi celles d'EDHREC (les terrains : 17 sur 19), 29 306 → 29 476 parmi les 34 482 scripts de Forge —
 le détail est dans [doc/couverture-detail.md](doc/couverture-detail.md) et [doc/couverture-sets.md](doc/couverture-sets.md), remesurés.
 
+**Lot F99 : les derniers terrains** (`js/forgeAlchemie.js`, `js/forgeDefausseDessus.js`, `js/forgeCopiesAbilite.js`, `js/forgeChoisisseur.js`, `js/forgeBloqueurs.js`,
+`js/forgeManaCompteurs.js`, `js/forgeMeld.js`, `js/forgeTerrains.js`). Dix-sept terrains de plus, les derniers : les 1 200 terrains de Forge sont lus entièrement, et 146 cartes d'autres
+types avec eux (aucune n'a reculé). Chaque terrain avait sa propre mécanique :
+- **Conjurer** (`MakeCard | Name$ | Zone$ Hand|Battlefield`, Phyrexian Scrapyard, Jace's Saga) : une carte neuve, possédée, créée d'après le script Forge de son nom
+  (`defNommee()`, js/forgeDepot.js) — un nom que l'appareil ne connaît pas ne produit rien. **Empower** (Theorist's Sanctum) : les marqueurs de loyauté du jeton Jace qu'on contrôle,
+  créé d'abord s'il manque ; son script (`u_empower_jace`) est gardé dans le code, aucune carte ne le nomme.
+- **Nephalia Academy** : la défausse par un sort ou une capacité adverse (`P.causeCtrl`, posé par `resoudre()`) range un déclencheur en attente qui propose de remettre la carte sur la
+  bibliothèque. La carte a donc touché le cimetière : les déclencheurs de défausse l'ont vue, ce que le remplacement de Forge interdirait.
+- **Sunken Palace** : `SpellAbilityCast` écoute le sort lancé et la capacité activée ; `activeCapacite()` retient les sources de mana de la capacité (`manaDeSources`) comme `lanceSort()` le fait du sort ;
+  `CopySpellAbility` copie l'élément de pile d'une capacité, avec de nouvelles cibles. Exiler sept cartes du cimetière se paie sans choix, les premières.
+- **Arena** : l'emplacement de cible porte `choisisseur` — l'adversaire répond à la question, parmi ses propres créatures. **Stardew Valley** : le joueur choisi décide de prendre le contrôle,
+  et lui seul (`Chooser$ ChosenPlayer`). **Sorrow's Path** : deux bloqueurs échangent leurs attaquants (`SwitchBlock`), si l'un et l'autre le peuvent.
+- **Crucible of the Spirit Dragon, Throne of Makindi** : du mana restreint payé en marqueurs. Le solveur reçoit une option par quantité possible (jusqu'à cinq mana, chaque combinaison de
+  couleurs), retire les marqueurs en payant, et ne les offre qu'aux sorts et capacités que `RestrictValid$` permet — y compris « kicked » (`kickePaiement`).
+- **Meld** (Hanweir Battlements, Gisela et Bruna, Urza, Mishra…) : la face fusionnée est la face arrière de la carte primaire ; le permanent est la primaire, entrée avec cette face, et la seconde
+  carte, sans objet, est notée dessus (`meldAvec`). Il quitte le champ : les deux cartes arrivent dans la zone d'arrivée. `IsPresent2$` (deux présences) et le nom à virgule écrit « ; » en sont les compléments.
+- **Ice Floe** : `Duration$ UntilUntaps` — l'effet dure tant que l'hôte reste engagé ; un marqueur d'**étourdissement** remplace un dégagement (règle 122.1g). **Loch Larent** : une faveur
+  (`Boon$`), effet qui disparaît au premier déclenchement, offerte à un adversaire (`EffectOwner$`) ; le nom de SVar `ETBTapped` y sert deux fois, le dernier l'emporte.
+- **Cryptic Spires, Paliano** : les couleurs fixées avant la partie. Le moteur ne construit ni ne draft : les couleurs entourées sont les deux que le deck porte le plus ; Paliano, hors draft, ne produit rien.
+- **Thawing Glaciers** : « at the beginning of the next cleanup step » se lit comme l'étape de fin (`Cleanup` → `fin` pour un déclencheur retardé ; un déclencheur ordinaire garde son refus). **The Heron Moon** :
+  `BottomLibrary`, `nonCopiedSpell`, `NameCard | ChooseFromList$`, et `Play | CopyFromChosenName$` (la carte nommée, conjurée puis lancée gratuitement) ; `ChangeZoneAll | ValidTgts$ Opponent` ne vise plus que la bibliothèque visée.
+Ce que les filtres de mana ne savent pas : le solveur n'en choisit un que faute de mieux, et Opal Palace (« {1}, {T} : mana de l'identité de couleurs, des marqueurs sur le commandant »)
+n'est donc jamais préféré à son mana incolore. La carte est lue entièrement ; son effet ne se produit que si un joueur l'oriente (paiement manuel).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

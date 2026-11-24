@@ -61,12 +61,14 @@ function conditionForge(P, t, env) {
     const n = t.ConditionPresent ? base.filter(o => forgeValideObjet(P, o, t.ConditionPresent, env.src, env.ctrl, env)).length : base.length;
     if (!seuilForge(P, n, t.ConditionCompare, env)) return false;
   }
-  if (t.IsPresent) {
+  /* Une présence, et une seconde (`IsPresent2$` : Gisela et Bruna, toutes deux là). */
+  for (const sfx of ['', '2']) {
+    if (!t['IsPresent' + sfx]) continue;
     /* Compté sur des objets désignés (`PresentDefined$`), ou chez un joueur (`PresentPlayer$`). */
-    const zone = ZONES_FORGE[t.PresentZone] || 'champ', qui = t.PresentPlayer ? forgeDefinis(P, t.PresentPlayer, env).map(x => joueurDe(x)) : null;
-    const n = (t.PresentDefined ? forgeDefinis(P, t.PresentDefined, env).filter(x => x && x.j == null) : objetsZone(P, zone))
-      .filter(o => (!qui || qui.includes(zone === 'champ' ? o.ctrl : o.prop)) && forgeValideObjet(P, o, t.IsPresent, env.src, env.ctrl, env)).length;
-    if (!seuilForge(P, n, t.PresentCompare, env)) return false;
+    const zone = ZONES_FORGE[t['PresentZone' + sfx]] || 'champ', qui = t['PresentPlayer' + sfx] ? forgeDefinis(P, t['PresentPlayer' + sfx], env).map(x => joueurDe(x)) : null;
+    const n = (t['PresentDefined' + sfx] ? forgeDefinis(P, t['PresentDefined' + sfx], env).filter(x => x && x.j == null) : objetsZone(P, zone))
+      .filter(o => (!qui || qui.includes(zone === 'champ' ? o.ctrl : o.prop)) && forgeValideObjet(P, o, t['IsPresent' + sfx], env.src, env.ctrl, env)).length;
+    if (!seuilForge(P, n, t['PresentCompare' + sfx], env)) return false;
   }
   return true;
 }
@@ -159,7 +161,10 @@ forgeEffet('ChangeZoneAll', ['Origin', 'Destination', 'ChangeType', 'Shuffle', '
   const dest = zoneForge(t.Destination);
   if (!dest) return;
   const zones = String(t.Origin || 'Battlefield').split(',').map(z => ZONES_FORGE[z.trim()]).filter(Boolean);
-  const objets = [].concat(...zones.map(z => objetsZone(P, z))).filter(o => forgeValideObjet(P, o, t.ChangeType || 'Card', env.src, env.ctrl, env));
+  let objets = [].concat(...zones.map(z => objetsZone(P, z))).filter(o => forgeValideObjet(P, o, t.ChangeType || 'Card', env.src, env.ctrl, env));
+  /* « Target opponent's library » : les cartes du joueur visé, pas de toutes les bibliothèques. */
+  const visés = env.op.slot != null ? ciblesForge(P, env, false).filter(x => x && x.j != null).map(x => x.j) : [];
+  if (visés.length) objets = objets.filter(o => visés.includes(o.prop));
   /* « In a random order » : le dessous de la bibliothèque se remplit dans un ordre tiré. */
   if (t.RandomOrder === 'True') melangeHasard(P.rng, objets);
   for (const o of objets) {
