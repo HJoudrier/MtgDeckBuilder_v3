@@ -49,7 +49,7 @@ function sourcesMana(P, j, pour) {
       if (k.genre !== 'mana') continue;
       if (k.restreint && !manaPermis(P, j, k.restreint, pour)) continue;
       if (activationInterdite(P, j, o, k)) continue;
-      const c = k.cout;
+      const c = coutManaSup(P, o, k.cout);
       if (c.mana && c.mana.total > 0) continue;
       if (c.sac || c.defausse || c.defausseTout || c.degageAutres || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
         c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || c.renvoieSoi || coutSpecial(c)) continue;

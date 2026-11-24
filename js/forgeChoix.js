@@ -43,9 +43,11 @@ function typesFrequents(P, j) {
 
 const majuscule = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-forgeEffet('ChooseColor', ['Exclude'], function* (P, t, env) {
+forgeEffet('ChooseColor', ['Exclude', 'Random', 'InstantSpeed'], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
   if (j == null) return;
+  /* « Choose a color at random » (Gem Bazaar) : le hasard décide, pas le joueur. */
+  if (t.Random === 'True') { choixDe(P, env.src).couleur = ['W', 'U', 'B', 'R', 'G'][entierHasard(P.rng, 5)]; return; }
   /* « MostProminentAttackers » : la couleur de qui attaque, l'adversaire. */
   const pourAdv = /Human|Opp|Attackers/.test(t.AILogic || '');
   const ordre = couleursFrequentes(P, pourAdv ? adversaires(P, j) : [j]);

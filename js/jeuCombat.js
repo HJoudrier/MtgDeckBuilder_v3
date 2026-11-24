@@ -79,6 +79,8 @@ function* declareAttaquants(P) {
     if (!aMot(P, o, MOT.VIGILANCE)) engageObjet(P, o, false, true);
     /* Le rang de cette attaque pour ce permanent, ce tour (« attacks for the first time each turn »). */
     const rang = o.attaquesTour && o.attaquesTour.tour === P.tour ? ++o.attaquesTour.n : ((o.attaquesTour = {tour: P.tour, n: 1}).n);
+    /* Le tour de son contrôleur où elle a attaqué (« creatures that attacked during their controller's last turn », Halls of Mist). */
+    o.attaqueAuTourDe = P.joueurs[o.ctrl].tours;
     emet(P, {t: 'attaque', id, defenseur: def, rang});
   }
   const n = P.combat.attaquants.size;

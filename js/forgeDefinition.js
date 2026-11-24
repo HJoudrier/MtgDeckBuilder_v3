@@ -158,7 +158,7 @@ function capaciteForge(def, face, t, jetons) {
     if (c.loyaute == null) return false;
     def.capacites.push({genre: 'loyaute', delta: c.loyaute, effet, texte: texteForge(face, t)});
   } else def.capacites.push({genre: 'activee', cout: c.cout, effet, vitesse: t.SorcerySpeed === 'True' ? 'rituel' : null,
-    unefois: !!t.ActivationLimit, texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {}),
+    unefois: !!t.ActivationLimit, ...(/^\d+$/.test(t.GameActivationLimit || '') ? {limitePartie: +t.GameActivationLimit} : {}), texte: texteForge(face, t), ...(zone ? {zone} : {}), ...(t.ActivationPhases ? {phases: t.ActivationPhases} : {}),
     ...(t.ReduceCost ? {reduit: t.ReduceCost, face} : {}), ...(t.Activation ? {activation: t.Activation} : {}),
     ...(t.ActivationGameTypes ? {jeux: t.ActivationGameTypes} : {}), ...(restrictionSort(t) ? {restr: restrictionSort(t)} : {})});
   return true;

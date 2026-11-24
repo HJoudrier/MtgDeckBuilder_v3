@@ -25,13 +25,16 @@ capaciteForge = (g => function (def, face, t, jetons) {
   const annule = () => { def.capacites.length = n; return false; };
   if (t.AddsKeywords || t.AddsKeywordsValid || t.AddsKeywordsUntil) {
     const kws = String(t.AddsKeywords || '').split('&').map(x => x.trim().toLowerCase()).filter(Boolean);
-    if (!kws.length || !t.AddsKeywordsValid || t.AddsKeywordsUntil !== 'UntilEOT' || kws.some(x => MOTS_ANGLAIS[x] == null)) return annule();
-    k.porte = {mots: kws.reduce((m, x) => m | MOTS_ANGLAIS[x], 0), valid: t.AddsKeywordsValid};
+    if (!kws.length || !t.AddsKeywordsValid || (t.AddsKeywordsUntil && t.AddsKeywordsUntil !== 'UntilEOT') || kws.some(x => MOTS_ANGLAIS[x] == null)) return annule();
+    /* Sans « until end of turn » (Hall of the Bandit Lord) : le mot-clé reste. */
+    k.porte = {mots: kws.reduce((m, x) => m | MOTS_ANGLAIS[x], 0), valid: t.AddsKeywordsValid, ...(t.AddsKeywordsUntil ? {} : {permanent: true})};
   }
   /* `AddsCounters$ Card.Creature_P1P1_1` : le sort qui répond au filtre entre avec ces marqueurs (Biophagus). */
-  const mq = t.AddsCounters && /^(.+)_(\w+)_(\d+)$/.exec(t.AddsCounters);
-  if (t.AddsCounters && !mq) return annule();
-  if (mq) k.porte = Object.assign(k.porte || {mots: 0}, {valid: mq[1].replace(/^Card/, 'Spell'), genre: genreMarqueur(mq[2]), n: +mq[3]});
+  const mq = t.AddsCounters && /^(.+)_(\w+)_(\w+)$/.exec(t.AddsCounters);
+  /* Le nombre : écrit, ou « les fois où le commandant a été lancé de la zone de commandement » (Opal Palace). */
+  const nb = mq && (/^\d+$/.test(mq[3]) ? +mq[3] : /^Count\$CommanderCastFromCommandZone$/.test(face.svars[mq[3]] || '') ? 'commandant' : null);
+  if (t.AddsCounters && (!mq || nb == null)) return annule();
+  if (mq) k.porte = Object.assign(k.porte || {mots: 0}, {valid: mq[1].replace(/^Card/, 'Spell'), genre: genreMarqueur(mq[2]), n: nb});
   if (t.TriggersWhenSpent) {
     const tbl = face.svars[t.TriggersWhenSpent];
     const m = def.capacites.length;
@@ -40,6 +43,7 @@ capaciteForge = (g => function (def, face, t, jetons) {
   }
   return true;
 })(capaciteForge);
+forgeSait('expr', 'Count$CommanderCastFromCommandZone');
 forgeSait('param', 'Mana.AddsCounters', 'Mana.InstantSpeed', 'Mana.AddsKeywords', 'Mana.AddsKeywordsValid', 'Mana.AddsKeywordsUntil', 'Mana.TriggersWhenSpent');
 FORGE_RENVOIS.push('TriggersWhenSpent');
 
@@ -49,7 +53,12 @@ function manaPorte(P, j, s, option, pour) {
   const sp = pour.sort;
   (sp.manaDeSources = sp.manaDeSources || []).push(s.id);
   (s.portes || []).filter(p => p.opts.includes(option) && manaPermis(P, j, p.porte.valid, pour))
-    .forEach(p => { if (p.porte.mots) sp.motsPortes = (sp.motsPortes || 0) | p.porte.mots; if (p.porte.genre) (sp.marqPortes = sp.marqPortes || []).push({genre: p.porte.genre, n: p.porte.n}); });
+    .forEach(p => {
+      if (p.porte.mots) { sp.motsPortes = (sp.motsPortes || 0) | p.porte.mots; if (p.porte.permanent) sp.motsPermanents = true; }
+      /* « Le nombre de fois lancé de la zone de commandement » compte le lancer en cours, que la taxe n'a pas encore noté. */
+      const n = p.porte.n === 'commandant' ? (P.joueurs[j].taxe[sp.cid] || 0) + (sp.depuisCommandement ? 1 : 0) : p.porte.n;
+      if (p.porte.genre && n > 0) (sp.marqPortes = sp.marqPortes || []).push({genre: p.porte.genre, n});
+    });
 }
 
 /* « You may exile that spell instead » : un remplacement optionnel se

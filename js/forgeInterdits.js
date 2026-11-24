@@ -43,7 +43,7 @@ function objetOuRien(P, o, v, src, env) { return !v || (!!o && forgeValideObjet(
 function zoneOuRien(v, zone) { return !v || v.split(',').some(z => ZONES_FORGE[z.trim()] === zone); }
 
 [['MustAttack', ['ValidCreature']], ['MustBlock', ['ValidCreature']], ['CantBeCast', ['ValidCard', 'Caster', 'Origin', 'NumLimitEachTurn', 'OnlySorcerySpeed']],
-  ['CastWithFlash', ['ValidCard', 'ValidSA', 'Caster']], ['CantBeActivated', ['ValidCard', 'ValidSA', 'Activator', 'AffectedZone']],
+  ['CastWithFlash', ['ValidCard', 'ValidSA', 'Caster', 'AffectedZone']], ['CantBeActivated', ['ValidCard', 'ValidSA', 'Activator', 'AffectedZone']],
   ['CanAttackDefender', ['ValidCard']], ['MinMaxBlocker', ['ValidCard', 'Min', 'Max']], ['CombatDamageToughness', ['ValidCard']],
   ['CantGainLife', ['ValidPlayer']], ['CantPreventDamage', ['ValidSource', 'IsCombat']],
   ['CantTarget', ['ValidTarget', 'ValidSource', 'ValidSA', 'Activator', 'AffectedZone']],
@@ -287,3 +287,9 @@ function goadStatique(P, o) {
   return statiquesMode(P, 'Continuous').some(x => x.s.t.Goad && !!viseForge(P, x.src, x.s, o));
 }
 forgeSait('param', 'Continuous.Goad', 'Continuous.RemoveKeyword', 'Continuous.AddStaticAbility', 'Continuous.MayPlayIgnoreColor');
+
+const ZONES_LANCEMENT = 'Exile,Graveyard,Hand,Library,Command';
+/* « You may cast creature spells as though they had flash » vaut de toute zone d'où l'on lance (Winding Canyons) : les cinq zones
+   listées en sont le tout. Une zone seule (Exile) restreindrait — elle reste inconnue. */
+forgeSait('param', 'CastWithFlash.AffectedZone');
+forgeValeurs('CastWithFlash.AffectedZone', [ZONES_LANCEMENT]);

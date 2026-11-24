@@ -84,6 +84,8 @@ function exprDesignations(P, tete, q, env) {
     if (q === 'HasPropertyBeenAttackedThisCombat') return P.combat && [...P.combat.attaquants.values()].some(d => def(d) === j) ? 1 : 0;
     if (q === 'OpponentsAttackedThisTurn') return new Set(((histoire(P).attaques || {})[j] || [])).size;
   }
+  /* Combien de fois le commandant qui vient d'être lancé l'a été de la zone de commandement (Study Hall). */
+  if (tete === 'TriggeredCard' && q === 'CommanderCastFromCommandZone') { const o = evt.id != null ? obj(P, evt.id) : null; return o ? (P.joueurs[o.ctrl != null ? o.ctrl : j].taxe[o.cid] || 0) : 0; }
   if (tete === 'TriggeredTarget' && q === 'LifeTotal') return evt.joueur != null ? P.joueurs[evt.joueur].vie : 0;
   /* Les marqueurs que le coût a retirés (js/jeuActions.js `activeCapacite()`). */
   if (tete === 'SVar' && q === 'CostCountersRemoved') return (env.ctx || {}).retires || 0;
@@ -93,7 +95,7 @@ function exprDesignations(P, tete, q, env) {
 forgeSait('expr', 'SVar$CostCountersRemoved', 'Count$Presence', 'Count$Blessing', 'Count$Monarch', 'Count$StartingPlayer', 'Count$wasCastFromGraveyard', 'Count$YourCountersExperience',
   'Count$YourCountersEnergy', 'Count$YourCountersRad', 'Count$YourCountersTicket', 'Count$TotalCommanderCastFromCommandZone',
   'PlayerCountPropertyYou$HasPropertyBeenAttackedThisCombat', 'PlayerCountPropertyYou$OpponentsAttackedThisTurn',
-  'TriggeredTarget$LifeTotal', 'TargetedPlayer$CardsInLibrary', 'TriggeredPlayer$CardsInLibrary');
+  'TriggeredTarget$LifeTotal', 'TriggeredCard$CommanderCastFromCommandZone', 'TargetedPlayer$CardsInLibrary', 'TriggeredPlayer$CardsInLibrary');
 
 /* Les propriétés de plus des filtres (js/forgeValide.js). */
 function proprieteDesignee(P, o, p) {

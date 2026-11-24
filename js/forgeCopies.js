@@ -39,7 +39,7 @@ function* aCopier(P, t, env) {
 }
 
 forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywords', 'SetPower', 'SetToughness', 'SetColor', 'SetCreatureTypes', 'AtEOT', 'AtEOTTrig', 'Choices',
-  'Populate', 'Controller', 'RememberCopied', 'TokenTapped', 'TokenAttacking', 'AtEOTCondition'], function* (P, t, env) {
+  'Populate', 'Controller', 'RememberCopied', 'TokenTapped', 'TokenAttacking', 'AtEOTCondition', 'WithCountersType', 'WithCountersAmount'], function* (P, t, env) {
   const modeles = (yield* aCopier(P, t.Populate === 'True' && !t.Choices ? {...t, Choices: 'Creature.token+YouCtrl'} : t, env))
     .filter(o => o && o.j == null);
   const j = t.Controller ? forgeDefinis(P, t.Controller, env).map(x => joueurDe(x))[0] : env.ctrl;
@@ -59,6 +59,8 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
       if (t.TokenTapped === 'True') o.engage = true;
       P.champ.push(o.id);
       P.ver++;
+      /* « Except it enters with an additional +1/+1 counter » (Littjara Mirrorlake). */
+      if (t.WithCountersType && genreMarqueur(t.WithCountersType)) poseMarqueurs(P, o, genreMarqueur(t.WithCountersType), forgeNombre(P, t.WithCountersAmount || 1, env), o);
       emet(P, {t: 'entre', id: o.id, ctrl: j, jeton: true});
       noteEntree(P, null, 'champ', o);
       if (t.RememberCopied === 'True' || t.RememberTokens === 'True') retiensForge(env.ctx, o.id);

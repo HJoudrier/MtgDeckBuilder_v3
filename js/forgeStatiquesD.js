@@ -130,7 +130,23 @@ gardeAutre = (g => function (P, j, effets) {
   return r;
 })(gardeAutre);
 
-forgeSait('param', 'RaiseCost.Activator', 'RaiseCost.Type');
+/* « Mana abilities of ~ cost an additional 1 life to activate » (Thran Portal) : une hausse de vie sur les capacités de mana
+   du permanent lui-même. */
+const hausseManaVieTenable = t => t.Type === 'Ability' && t.ValidSpell === 'Activated.ManaAbility' && t.ValidCard === 'Card.Self' && /^PayLife<\d+>$/.test(t.Cost || '') &&
+  (!t.EffectZone || t.EffectZone === 'All' || t.EffectZone === 'Battlefield');
+
+/* Le coût d'une capacité de mana de cet objet, vie en plus s'il y a lieu (js/jeuMana.js `sourcesMana()`). */
+function coutManaSup(P, o, c) {
+  let n = 0;
+  for (const x of statiquesMode(P, 'RaiseCost')) {
+    const t = x.s.t;
+    if (!hausseManaVieTenable(t) || x.src.id !== o.id || !conditionForge(P, t, envStatique(x.src, x.s))) continue;
+    n += +/\d+/.exec(t.Cost)[0];
+  }
+  return n ? {...c, vie: (c.vie || 0) + n} : c;
+}
+
+forgeSait('param', 'RaiseCost.Activator', 'RaiseCost.Type', 'RaiseCost.ValidSpell');
 forgeSait('param', 'Continuous.MayPlayText');
 
 /* —— Cibler malgré la défense talismanique ———————————————————————— */

@@ -59,7 +59,7 @@ function* suiteDesTours(P) {
     /* Un tour supplémentaire passe devant le suivant (js/forgeEffetsG.js). */
     const enPlus = (P.toursEnPlus || []).shift();
     /* Un tour en plus qu'un remplacement saute n'a pas lieu (js/forgeRemplacementsD.js). */
-    P.actif = enPlus != null && !P.joueurs[enPlus].elimine && !tourEnPlusSaute(P, enPlus) ? enPlus : suivantVivant(P, P.actif);
+    P.actif = enPlus != null && !P.joueurs[enPlus].elimine && !tourEnPlusSaute(P, enPlus) ? enPlus : suivantNonSaute(P, P.actif);
     yield* tour(P);
   }
 }

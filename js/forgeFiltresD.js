@@ -60,6 +60,7 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
       const d = P && P.combat && P.combat.attaquants.get(o.id);
       return !!d && (d.j != null ? d.j !== joueur : !!obj(P, d.pw) && obj(P, d.pw).ctrl !== joueur);
     }
+    case 'attackedLastTurn': return !!P && o.attaqueAuTourDe != null && o.attaqueAuTourDe === P.joueurs[o.ctrl].tours - 1;
     case 'attackedThisCombat': return !!P && !!P.combat && P.combat.attaquants.has(o.id);
     case 'bargained': return !!o.marchande || o.varianteLance === 'bargain';
   }
@@ -88,7 +89,7 @@ function proprieteJoueurEtendue(P, j, p, ctrl) {
   return false;
 }
 
-forgeSait('filtre', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
+forgeSait('filtre', 'attackedLastTurn', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
   'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith', 'greatestPower',
   'TopGraveyardCreature', 'ControllerControlsMoreLand', 'wasCastFromTheirHand', 'milledThisTurn', 'attackingYou', 'attackingYouOrYourPWLKI', 'attacking Opponent', 'attackedThisCombat', 'dealtCombatDamageThisTurn You', 'TriggeredAttacker', 'TriggeredNewCard', 'OppNonTriggeredTarget',
   'CastSa Spell.MayPlaySource', 'CastSa Spell.ManaFromTreasure', 'CastSa Spell.ManaSpent EQ0', ...['Graveyard', 'Battlefield', 'Library', 'Hand', 'Exile'].map(z => 'ThisTurnEnteredFrom_' + z), 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',

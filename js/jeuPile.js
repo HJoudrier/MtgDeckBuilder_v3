@@ -78,12 +78,12 @@ function* resoudre(P, item) {
   if (item.sort && item.def.types.some(t => TYPES_PERMANENTS.includes(t))) {
     const aura = item.effets[0] && item.effets[0].aura ? item.effets[0].cibles[0][0] : null;
     jn(P, `${item.def.nom} arrive`);
-    const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance, motsPortes = obj(P, item.id) && obj(P, item.id).motsPortes, marqPortes = obj(P, item.id) && obj(P, item.id).marqPortes;
+    const k = obj(P, item.id) && P.cartes[obj(P, item.id).cid], lance = obj(P, item.id) && obj(P, item.id).lance, motsPortes = obj(P, item.id) && obj(P, item.id).motsPortes, marqPortes = obj(P, item.id) && obj(P, item.id).marqPortes, motsPerm = obj(P, item.id) && obj(P, item.id).motsPermanents;
     const n = yield* metEnJeu(P, item.id, item.ctrl, {attache: aura, kicked: item.kicked, evoque: item.evoque, suspendu: item.suspendu, escaped: item.variante === 'escape', variante: item.variante,
       face: k && item.def !== k.def ? item.def : null, faceCachee: item.variante === 'morph'});
     if (n != null && obj(P, n) && lance) obj(P, n).lance = lance;
     /* Le mot-clé que le mana a donné au sort (Carnelian Orb) : jusqu'à la fin du tour. */
-    if (n != null && obj(P, n) && motsPortes) { obj(P, n).mods.push({f: 0, e: 0, mots: motsPortes, fin: 'tour'}); P.ver++; }
+    if (n != null && obj(P, n) && motsPortes) { obj(P, n).mods.push({f: 0, e: 0, mots: motsPortes, fin: motsPerm ? 'jamais' : 'tour'}); P.ver++; }
     /* Les marqueurs que le mana a donnés (Biophagus) : il entre avec. */
     if (n != null && obj(P, n) && marqPortes) marqPortes.forEach(m => poseMarqueurs(P, obj(P, n), m.genre, m.n, obj(P, n)));
     if (n != null && item.variante === 'dash') apresDash(P, obj(P, n));

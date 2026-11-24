@@ -133,6 +133,7 @@ function* lanceSort(P, j, a) {
   /* Le mana d'abord (règle 601.2g-h : on engage pour du mana avant de payer
      le reste) : un terrain engagé peut ensuite être sacrifié, et un échec
      de paiement ne laisse rien de payé à moitié. */
+  s.depuisCommandement = a.depuis === 'commandement';
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   if (autre) yield* paieAutre(P, j, s, autre);
   if (ga) yield* paieAutre(P, j, s, ga);
@@ -192,6 +193,7 @@ function* activeCapacite(P, j, a) {
     lki = yield* paieAutre(P, j, o, cout);
     if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
     if (k.unefois) P.unefois.add(a.id + '|a' + a.i);
+    noteLimitePartie(P, o, k);
     /* Un cycle s'entend : « when you cycle ~ » écoute à travers
        l'instantané de la carte, partie au cimetière. */
     if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }

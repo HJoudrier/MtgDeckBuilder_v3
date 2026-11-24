@@ -9,7 +9,7 @@
    ===================================================================== */
 
 forgeEffet('Dig', ['DigNum', 'ChangeNum', 'ChangeValid', 'DestinationZone', 'DestinationZone2', 'LibraryPosition',
-  'LibraryPosition2', 'DefinedPlayer', 'AnyNumber', 'Optional', 'RememberChanged'], function* (P, t, env) {
+  'LibraryPosition2', 'DefinedPlayer', 'AnyNumber', 'Optional', 'RememberChanged', 'RevealOptional'], function* (P, t, env) {
   /* La bibliothèque de chaque joueur désigné (`Defined$ Player` : de tous),
      ou ciblé. */
   const qui = t.DefinedPlayer ? [...new Set(forgeDefinis(P, t.DefinedPlayer, env).map(x => joueurDe(x)).filter(j => j != null))]

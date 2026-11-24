@@ -19,7 +19,7 @@ const FORGE_DEFINIS = ['Self', 'You', 'Targeted', 'TargetedPlayer', 'TargetedCon
   /* L'objet qu'un remplacement détourne : lu par js/forgeRemplacements.js. */
   'ReplacedCard', 'TriggeredTargetLKICopy', 'TriggeredBlockerLKICopy', 'TriggeredAttackers', 'TriggeredAttackerController',
   'TriggeredBlockerController', 'TriggeredTargetController', 'TriggeredDefender', 'TriggeredSourceLKICopy', 'RememberedLKI', 'Parent',
-  'TargetedAndYou', 'ThisTargetedCard', 'ThisTargetedPlayer', 'TriggeredSourceSA', 'ChosenCard', 'ChosenPlayer', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
+  'TargetedAndYou', 'ThisTargetedCard', 'ThisTargetedPlayer', 'TriggeredSourceSA', 'ChosenCard', 'ChosenPlayer', 'CorrectedSelf', 'Player.Chosen', 'TriggeredSpellAbility', 'TriggeredSpellAbilityTargeted',
   'RememberedCard'];
 
 /* Les cibles prises par l'emplacement de la capacité en cours, ou de celle
@@ -52,7 +52,7 @@ function forgeDefinis(P, val, env) {
     return objetsZone(P, zone).filter(o => forgeValideObjet(P, o, m[2], src, ctrl, env));
   }
   switch (v) {
-    case 'Self': { const o = src && !src.lki ? obj(P, suit(P, src.id)) : src; return o ? [o] : []; }
+    case 'Self': case 'CorrectedSelf': { const o = src && !src.lki ? obj(P, suit(P, src.id)) : src; return o ? [o] : []; }
     case 'You': return [{j: ctrl}];
     case 'Targeted': case 'ThisTargetedCard': return ciblesForge(P, env, false).filter(x => v === 'Targeted' || x.j == null);
     case 'ThisTargetedPlayer': return ciblesForge(P, env, false).filter(x => x.j != null);
@@ -118,7 +118,7 @@ function forgeDefinis(P, val, env) {
     case 'TriggeredSpellAbility': { const o = evt.t === 'lance' && evt.id != null ? obj(P, evt.id) : null; return o && o.zone === 'pile' ? [o] : []; }
     case 'TriggeredSpellAbilityTargeted': return evt.t === 'lance' ? ciblesDuSort(P, evt.id) : [];
     case 'ChosenCard': return cartesChoisies(P, env).map(id => obj(P, id)).filter(Boolean);
-    case 'ChosenPlayer': { const j = choixDe(P, src).joueur; return j != null ? [{j}] : []; }
+    case 'ChosenPlayer': case 'Player.Chosen': { const j = choixDe(P, src).joueur; return j != null ? [{j}] : []; }
     case 'ExiledWith': {
       const k = src && P.cartes[src.cid];
       return ((k && k.exilees) || []).map(id => obj(P, id)).filter(o => o && o.zone === 'exil');

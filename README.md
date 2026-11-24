@@ -2226,6 +2226,25 @@ treize d'EDHREC. Ce qu'ils avaient en commun : une phrase de plus que le moteur 
 - **`TargetsWithSameCreatureType`** (Secret Tunnel), **`GainControlVariant | ChangeController$ CardOwner`** (Homeward Path), et le mana d'un terrain qui
   reflète les couleurs du cimetière (**The Grey Havens**).
 
+**Lot F97 : des terrains, deuxième tour** (`js/forgeSeek.js`, `js/forgeTerrains.js`, et des retouches). Vingt-deux terrains de plus, dont quatre
+d'EDHREC (Opal Palace, Study Hall, Thran Portal, Hall of the Bandit Lord). Les capacités de mana qui s'accompagnent d'autre chose :
+- **Un mana qui porte** (`js/forgeManaC.js`) : « si ce mana paie une créature, elle gagne la célérité » sans « until end of turn » (Hall of the Bandit
+  Lord) reste permanent (`motsPermanents`) ; `AddsCounters$ …_ManaAddsCounterNum` compte les fois où le commandant a été lancé de la zone de
+  commandement, ce lancer-ci compris (Opal Palace : `depuisCommandement`, posé avant le paiement) ; `TriggeredCard$CommanderCastFromCommandZone`
+  donne la même quantité au déclencheur (Study Hall).
+- **`RaiseCost | Type$ Ability | ValidSpell$ Activated.ManaAbility | Cost$ PayLife<1>`** (Thran Portal) : `coutManaSup()` ajoute la vie au coût des capacités de
+  mana du permanent, là où `sourcesMana()` le lit.
+- **`Seek`** (Gate to Manorborn et les cinq autres portes, Echoing Cavern) : N cartes tirées au hasard dans la bibliothèque parmi celles qui répondent à `Type$`,
+  mises en main, sans mélange ni évènement de recherche. **`GameActivationLimit$`** : une capacité jouée N fois de la partie (`P.limites`, par carte et par texte).
+- **Entrer et sortir** : `K:Phasing` (Teferi's Isle) sort au dégagement de son contrôleur, et revient au suivant — ensemble, ce qui revient ne ressort pas ;
+  « return ~ to its owner's hand during your next untap step » (Undiscovered Paradise) est une marque (`rentreEnMain`) levée au dégagement ; `SkipTurn`
+  (Magosi) compte les tours sautés (`P.sautes`), que `suiteDesTours()` passe.
+- **Le reste** : `ChooseColor | Random$` (Gem Bazaar), `InstantSpeed$` (Rhystic Cave), `CorrectedSelf` et `Player.Chosen` (Rainbow Vale : l'adversaire choisi prend le
+  terrain à la fin du tour), un jeton **Wastes** pour `CopyPermanent | DefinedName$ Wastes` (Waste Land), `WithCountersType` d'un jeton copie (Littjara Mirrorlake),
+  `Dig | RevealOptional$` (Isolated Watchtower), `attackedLastTurn` (Halls of Mist : `attaqueAuTourDe`), et le flash « de toute zone » (`CastWithFlash | AffectedZone$`, Winding Canyons).
+Un terrain dont la capacité de mana passe par une sous-capacité (Rainbow Vale, Gem Bazaar, Undiscovered Paradise, Tomb of Urami) est lu comme une capacité qui
+passe par la pile : son mana arrive à la résolution, il ne paie donc pas un sort tout seul — la limite du moteur, pas de la carte.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.
