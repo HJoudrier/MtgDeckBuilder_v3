@@ -2112,6 +2112,20 @@ reprend le cas pair-impair de `js/forgeMarqueursC.js` (Clown Car) ; `forgeDes.js
 version s'applique la première. Restent le remplacement d'un lancer (Wyll, Barbarian Class : « roll that many dice plus
 one and ignore the lowest », deux quantités à remplacer à la fois) et les dés d'une attaque (Iron Mastiff).
 
+**Lot F89 : ce que la copie reçoit** (`js/forgeCopiesC.js`). Quinze cartes de plus (6 656 → 6 671) :
+- **`RemoveSubTypes$ True`** (Imposter Mech, Dino DNA, Taskmaster, Benthic Anomaly) : la copie ne garde que les sous-types
+  qu'on lui ajoute, comme `RemoveCardTypes` (lot F81) garde les types ; ce dernier se lit aussi pour `Clone` ;
+- **`ChoiceZone$ Graveyard`** (Echoing Deeps, Invasion of Amonkhet, Voq) : on copie une carte d'un cimetière — `aCopier()` choisit
+  hors du champ ;
+- **`AddTriggers$`, `AddStaticAbilities$`, `AddAbilities$`** (Phantasmal Image, Sakashima of a Thousand Faces, Machine God's
+  Effigy, Callidus Assassin, Estrid's Invocation, Firion) : la copie reçoit des déclencheurs, des statiques ou des capacités
+  lus dans les SVars du script qui copie (`_face`, que les deux effets passent à `defCopie()`), compilés comme ceux d'une
+  carte. Un morceau que le moteur ne sait pas construire est écarté : la copie en a moins, jamais plus ;
+- **`AddKeywords$ Crew:3`** : un mot-clé qui porte une capacité se construit comme sur une carte ; une copie qui devient un
+  véhicule peut donc être équipée d'équipage. Jusqu'ici `motsForge()` ne retenait que les mots-clés simples.
+Restent les copies d'un nom (`DefinedName$`, Mutable Explorer), d'un sort permanent (`CopySpellAbility | NonLegendary`) et
+la copie au choix facultatif (Brudiclad).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

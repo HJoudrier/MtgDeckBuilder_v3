@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1873 fonctions**, 290 modules, 2023 Ko de JavaScript.
+**1873 fonctions**, 291 modules, 2027 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -98,6 +98,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 104 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
 | [`forgeCopiesB.js`](#jsforgecopiesbjs) | Des copies de plus (lot F81) | 0 | 43 |
+| [`forgeCopiesC.js`](#jsforgecopiescjs) | Des copies de plus, III (lot F89) | 0 | 66 |
 | [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 300 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 8 | 283 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
@@ -1833,6 +1834,14 @@ Les paramètres de plus des effets courants. *4 fonctions, 219 lignes, 12 Ko.*
 ## js/forgeCopiesB.js
 
 Des copies de plus (lot F81). *0 fonctions, 43 lignes, 2.2 Ko.*
+
+## js/forgeCopiesC.js
+
+Des copies de plus, III (lot F89). *0 fonctions, 66 lignes, 4 Ko.*
+
+| Donnée | Rôle |
+|---|---|
+| `PARAMS_AJOUTS_COPIE` | — |
 
 ## js/forgeEffetsG.js
 
