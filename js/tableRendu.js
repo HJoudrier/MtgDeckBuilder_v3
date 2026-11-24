@@ -26,6 +26,7 @@ function charpentePartie() {
       <button type="button" class="tr-btn" data-act="tJournal">Journal</button>
       <button type="button" class="tr-btn" data-act="tMenu" aria-label="Menu de la table">☰</button></div>
     <div class="tr" data-region="fil"></div>
+    <div class="tr" data-region="annule"></div>
     <div class="tr" data-region="alertes"></div>
     <div class="tr-plateau" data-defile="plateau"><div class="tr" data-region="adv"></div></div>
     <div class="tr" data-region="question"></div>
@@ -120,7 +121,7 @@ function finHTML(v) {
 
 function regionsPartie(v) {
   const question = questionHTML(TABLE.question, v);
-  return {etape: etapeHTML(v), fil: filHTML(),
+  return {etape: etapeHTML(v), fil: filHTML(), annule: annulerHTML(),
     alertes: (typeof alertesInvitesHTML === 'function' ? alertesInvitesHTML() : '') + (TABLE.liaisonPerdue ? perteHoteHTML() : ''),
     adv: adversairesTableHTML(v), front: frontHTML(v), moi: moiHTML(v), main: mainHTML(v),
     question: question ? `<div class="tq a-vous">${question}</div>` : '',

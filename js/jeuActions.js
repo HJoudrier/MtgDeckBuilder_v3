@@ -143,6 +143,7 @@ function* lanceSort(P, j, a) {
      de paiement ne laisse rien de payé à moitié. */
   s.depuisCommandement = a.depuis === 'commandement';
   s.kickePaiement = a.variante === 'kicker';
+  yield* choisitManaPaye(P, j, cout, x);
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   if (autre) yield* paieAutre(P, j, s, autre);
   if (ga) yield* paieAutre(P, j, s, ga);
@@ -208,6 +209,7 @@ function* activeCapacite(P, j, a) {
     P.engagesCout = null;
     pourC = {capacite: o, sources: []};
     /* « Sacrifice all lands » : le mana d'abord, avec ces terrains-là — après, il n'y en a plus (Tomb of Urami). */
+    yield* choisitManaPaye(P, j, k.cout.mana, x);
     if (cout.sac && cout.sac.tout) {
       if (!paieMana(P, j, k.cout.mana, x, pourC)) return false;
       lki = yield* paieAutre(P, j, o, cout);

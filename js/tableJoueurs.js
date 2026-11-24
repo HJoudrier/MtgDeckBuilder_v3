@@ -11,7 +11,12 @@
 function reserveHTML(J) {
   const p = J.pool || {};
   const s = 'WUBRGC'.split('').filter(c => p[c] > 0);
-  return s.length ? `<span class="tj-reserve" title="mana en réserve">${s.map(c => symIcon(c, 'sm') + (p[c] > 1 ? `<small>${p[c]}</small>` : '')).join('')}</span>` : '';
+  const ordinaire = s.length ? `<span class="tj-reserve" title="mana en réserve">${s.map(c => symIcon(c, 'sm') + (p[c] > 1 ? `<small>${p[c]}</small>` : '')).join('')}</span>` : '';
+  /* Le mana restreint, groupé par ce qu'il paie. */
+  const r = new Map();
+  (J.poolR || []).forEach(e => { const m = r.get(e.pour) || {}; m[e.l] = (m[e.l] || 0) + 1; r.set(e.pour, m); });
+  const restreint = [...r].map(([pour, m]) => `<span class="tj-reserve restreint" title="mana en réserve : ${esc(pour)}">${Object.keys(m).map(c => symIcon(c, 'sm') + (m[c] > 1 ? `<small>${m[c]}</small>` : '')).join('')}<small class="tj-pour">${esc(pour.replace(/ seulement$/, ''))}</small></span>`).join('');
+  return ordinaire + restreint;
 }
 
 /* Les compteurs d'un joueur. Le cimetière et l'exil s'ouvrent d'un toucher. */

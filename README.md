@@ -169,6 +169,11 @@ js/                 modules, chargés dans cet ordre :
   forgeInstantsE.js       endurance égale, marqueur de plus ou de moins, cibles de la cible, listes désignées, filtres de blocage, cleave, X annoncé
   forgeInstantsF.js       dégâts d'un sort visé, Storyweave, réserve vidée, mana dépensé, dessus ou dessous au choix du propriétaire
   forgeInstantsG.js       X annoncé avant les cibles, exiler des cartes bleues pour payer moins
+  forgeClones.js         un clone qui garde les marqueurs de son modèle (Dominion Saboteur)
+  forgeManaRestreintB.js  engager à la main une source de mana restreint (Herd Heirloom)
+  jeuManaChoix.js         choisir quel mana de la réserve paie le générique
+  jeuRevelations.js       montrer toutes les cartes révélées, les non choisissables grisées
+  tableAnnuler.js         « Annuler » : rejouer la partie sans la dernière réponse
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2355,6 +2360,21 @@ pas entièrement se jouent tous ; 6 791 → 6 868 cartes complètes d'EDHREC (le
   `entierHasard()`. Un tour en plus avec `SkipUntap` (Savor the Moment) reste accepté.
 Limites : Waterbend ne se paie qu'en mana (on ne tape pas d'artefact ni de créature pour y aider) ; Master Warcraft et Illusion of Choice font répondre le lanceur, mais un automate répond avec ses propres yeux, non ceux du joueur
 qu'il dirige ; Critical Hit lit tout jet de dé comme naturel (le moteur ne modifie aucun jet) ; une capacité sur la pile n'est pas une cible que le moteur propose (Not of This World ne contrecarre que des sorts).
+
+**Lot F102 : le copieur Dominion Saboteur et quatre gestes de la table** (`js/forgeClones.js`, `js/forgeManaRestreintB.js`, `js/jeuManaChoix.js`, `js/jeuRevelations.js`, `js/tableAnnuler.js`).
+- **Dominion Saboteur** : `Clone | RememberCloneOrigin` retient le modèle copié, `PutCounter | CounterType$ EachFromSource` pose sur le clone un marqueur de chaque sorte, autant que le modèle en porte ;
+  la copie n'est pas légendaire (`NonLegendary`).
+- **Du mana restreint, engagé à la main** (Herd Heirloom). Au paiement manuel, une source n'était proposée que si elle payait quelque chose de précis ; le mana restreint ne se juge qu'au sort qu'il paie, qu'on ne connaît
+  pas en engageant. Ces sources sont proposées à part (`actionsManaRestreint()`) : l'action engage le permanent et verse son mana dans `J.poolR`, d'où seul un sort permis le tire. La réserve (`reserveHTML()`) le montre
+  à part, avec ce qu'il paie.
+- **Choisir quel mana paie le générique.** Quand la réserve ordinaire offre un vrai choix — plus de mana qu'il n'en faut pour le générique, de plus d'une couleur —, un siège humain se voit poser la question
+  (`choisitManaPaye()`, q = `modes`, une unité de mana par choix) avant de lancer un sort ou d'activer une capacité ; la réponse est retenue dans `J.prefGen`, que `debite()` (js/jeuMana.js) honore avant le solveur.
+  Un siège automatique ne la voit jamais ; le mana que paieraient des sources encore dégagées reste affaire du paiement à la main.
+- **Montrer toutes les cartes révélées** (Sanar, Etali). `DigUntil` et `Dig` notent ce qu'ils révèlent (`noteRevelation()`, `P.revelees`, valable pour la résolution en cours) ; le choix de cartes qui en touche une
+  (`choisitCartes()`) et la question « le faire ? » d'un effet optionnel emportent la liste (`extra.revelees`), suivie à travers les déplacements (`suit()`). L'interface montre toutes les cartes, grise celles qu'on ne
+  peut pas prendre (`tGrise`). Limite : un choix à un seul candidat obligatoire se fait sans question, donc sans cette liste ; les révélations d'un adversaire ne sont montrées que dans une question qu'on se voit poser.
+- **Annuler.** Le moteur étant déterministe, `annuleTable()` rejoue la partie avec les réponses qui précèdent la dernière de ce siège (`TABLE.points`, relevés par `recoitReponse()`) ; le bouton « ↶ Annuler » paraît quand une
+  question attend le joueur et qu'aucun autre humain ne joue à la table. Les automates sont refaits avec un agent neuf : ils peuvent jouer autrement qu'avant.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

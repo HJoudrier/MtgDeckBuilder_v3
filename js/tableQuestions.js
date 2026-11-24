@@ -90,6 +90,15 @@ const bornes = q => q.min === q.max ? `${q.min}` : q.max >= 99 ? `au moins ${q.m
 /* Les choix d'une question à cases : une carte se montre par son visuel,
    un joueur ou un mot par un bouton. */
 function chipsChoix(q, s, v) {
+  /* Des cartes révélées : toutes, dans l'ordre où elles sont venues ; celles qu'on ne peut pas prendre, grisées. */
+  if (q.revelees) {
+    const fiches = q.cartes;
+    return `<div class="small muted tq-rev-titre">Cartes révélées — celles qui sont grisées ne peuvent pas être choisies</div>` + rangee('choix', q.revelees.map(r => {
+      const i = q.options.findIndex(o => o && o.id === r.id);
+      if (i >= 0) return tuile({id: r.id, nom: r.label}, v, {act: 'tChoix', i, etat: s.choix.has(i) ? 'choisi' : 'choix', fiches});
+      return tuile({id: r.id, nom: r.label}, v, {act: 'tGrise', etat: 'grise', fiches});
+    }).join(''), 'tq-choix');
+  }
   return rangee('choix', q.options.map((o, i) => {
     const etat = s.choix.has(i) ? 'choisi' : 'choix';
     if (o && o.id != null) return tuile({id: o.id, nom: o.label}, v, {act: 'tChoix', i, etat, fiches: q.cartes});
@@ -151,6 +160,7 @@ function questionCorpsHTML(q, v) {
       <div class="row"><button type="button" class="btn pri" data-act="tUn" data-i="0">Garder</button>
         <button type="button" class="btn" data-act="tUn" data-i="1">Mulligan</button></div>`;
     case 'oui': return `${err}<div class="tq-titre">${titreOui(q)}</div>
+      ${q.revelees ? `<div class="small muted tq-rev-titre">Cartes révélées</div>` + rangee('choix', q.revelees.map(r => tuile({id: r.id, nom: r.label}, v, {act: 'tGrise', etat: '', fiches: q.cartes})).join(''), 'tq-choix') : ''}
       <div class="row"><button type="button" class="btn" data-act="tUn" data-i="0">Non</button>
         <button type="button" class="btn pri" data-act="tUn" data-i="1">Oui</button></div>`;
     case 'x': return `${err}<div class="tq-titre"><b>Valeur de X</b></div><div class="tq-actions">${q.options.slice(0, 31).map((x, i) =>

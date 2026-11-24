@@ -118,7 +118,7 @@ async function commenceTable() {
     if (s.mode === 'moi') { s.arrets = {...arretsParDefaut(), ...S.arrets}; TABLE.moi = i; }
     else if (!s.arrets) s.arrets = arretsParDefaut();
   });
-  Object.assign(TABLE, {phase: 'partie', role: 'hote', question: null, erreur: '', sel: null, journalVu: 0});
+  Object.assign(TABLE, {phase: 'partie', role: 'hote', question: null, erreur: '', sel: null, journalVu: 0, points: []});
   if (typeof envoieDebut === 'function') envoieDebut();
   boucleTable();
 }
@@ -188,7 +188,11 @@ function recoitReponse(j, n, r) {
     if (s.mode === 'moi') { TABLE.erreur = err; renduTable(); } else if (typeof envoieErreur === 'function') envoieErreur(s, n, err);
     return;
   }
-  if (s.mode === 'moi') { TABLE.question = null; TABLE.erreur = ''; }
+  if (s.mode === 'moi') {
+    TABLE.question = null; TABLE.erreur = '';
+    /* Où la partie en était avant ma réponse : le point où « Annuler » la remet (js/tableAnnuler.js). */
+    (TABLE.points = TABLE.points || []).push(TABLE.h.P.reponses.length);
+  }
   repondre(TABLE.h, TABLE.agents, r, Infinity, null);
   diffuseVues();
   boucleTable();

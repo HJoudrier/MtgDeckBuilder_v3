@@ -189,10 +189,13 @@ function ajouteMana(P, j, lettres) {
 /* Retirer un coût d'une réserve qui suffit : couleurs exigées, hybrides,
    puis le générique, pris d'abord dans l'incolore puis dans les couleurs
    les plus abondantes. */
+let PREF_GEN = null;
 function debite(pool, cout, x) {
   LETTRES_MANA.forEach(k => { pool[k] -= cout.couleurs[k] || 0; });
   cout.hybrides.forEach(h => { const k = h.reduce((a, b) => pool[b] > pool[a] ? b : a); pool[k]--; });
   let g = (cout.generique || 0) + (cout.x || 0) * (x || 0);
+  /* Le mana que le joueur a choisi de dépenser pour le générique passe d'abord (js/jeuManaChoix.js). */
+  if (PREF_GEN) LETTRES_MANA.forEach(k => { const n = Math.min(PREF_GEN[k] || 0, pool[k], g); pool[k] -= n; g -= n; });
   while (g > 0) {
     const k = pool.C > 0 ? 'C' : LETTRES_MANA.reduce((a, b) => pool[b] > pool[a] ? b : a);
     if (pool[k] <= 0) return false;
@@ -229,7 +232,10 @@ function paieMana(P, j, cout, x, pour) {
     if (pour && pour.capacite && pour.sources) pour.sources.push(s.id);
   }
   const avant = LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0), reserve = {...J.pool};
-  if (!debite(J.pool, sup ? sommeMana(cout, sup) : cout, x)) return false;
+  PREF_GEN = J.prefGen || null; J.prefGen = null;
+  const paye = debite(J.pool, sup ? sommeMana(cout, sup) : cout, x);
+  PREF_GEN = null;
+  if (!paye) return false;
   J.stats.manaDepense += avant - LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
   /* Le mana dépensé pour un sort, couleur par couleur (convergence). */
   if (pour && pour.sort) { pour.sort.manaSort = manaSortSansFiltres(Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]])), sup); pour.sort.manaDe = de; }

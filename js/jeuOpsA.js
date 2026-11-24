@@ -134,7 +134,8 @@ function* choisitCartes(P, j, ids, n, texte, q = 'cartes', min) {
   const hi = Math.min(n, ids.length);
   if (!ids.length || hi === 0) return [];
   if (lo === ids.length) return ids.slice();
-  const r = yield question(P, j, q, ids, {min: lo, max: hi, multi: true, texte});
+  const rev = revelationPour(P, ids);
+  const r = yield question(P, j, q, ids, {min: lo, max: hi, multi: true, texte, ...(rev ? {extra: {revelees: rev}} : {})});
   return (Array.isArray(r) ? r : [r]).map(i => ids[i]).filter(x => x != null);
 }
 

@@ -62,7 +62,9 @@ function vue(P, j) {
     i: J.i, nom: J.nom, vie: J.vie, poison: J.poison, energie: J.energie || 0, main: J.main.length, bib: J.bibliotheque.length,
     cim: J.cimetiere.map(id => carteVue(P, id, cartes)), exil: J.exil.map(id => carteVue(P, id, cartes)),
     cmd: J.commandement.map(id => carteVue(P, id, cartes)), degatsCmd: {...J.degatsCmd},
-    elimine: J.elimine, raison: J.raison, pool: {...J.pool}, manuel: !!J.manuel}));
+    elimine: J.elimine, raison: J.raison, pool: {...J.pool}, manuel: !!J.manuel,
+    /* Le mana qui ne paie pas n'importe quoi, et ce qu'il paie (js/forgeManaRestreintB.js). */
+    poolR: (J.poolR || []).map(e => ({l: e.l, pour: libelleRestriction(e.valid)}))}));
   const pile = P.pile.map(it => descriptionPile(P, it));
   /* L'élément qu'on est en train de résoudre : plus sur la pile, mais ce dont parlent les questions. */
   const resolvant = resolvantDe(P) ? descriptionPile(P, resolvantDe(P)) : null;
@@ -123,9 +125,15 @@ function questionPourUI(P, q) {
         attaquants: atts.map(a => ({...ref(a), menace: aMot(P, obj(P, a), MOT.MENACE)}))};
     }
     case 'mulligan': return {...base, options: q.options, mulligans: q.extra ? q.extra.n : 0};
-    case 'modes': case 'x': case 'oui': return {...base, options: q.options.map(String)};
+    case 'modes': case 'x': return {...base, options: q.options.map(String)};
+    case 'oui': {
+      const cartes = {}, revelees = q.extra && q.extra.revelees ? q.extra.revelees.map(id => { const o = obj(P, id); if (o && !cartes[o.def.nom]) cartes[o.def.nom] = ficheVue(o.def); return ref(id); }) : null;
+      return {...base, options: q.options.map(String), ...(revelees ? {revelees, cartes} : {})};
+    }
   }
   const cartes = {};
   const opts = q.options.map(id => { const o = obj(P, id); if (o && !cartes[o.def.nom]) cartes[o.def.nom] = ficheVue(o.def); return ref(id); });
-  return {...base, options: opts, cartes};
+  /* Tout ce qui a été révélé, dont on ne peut prendre qu'une part (js/jeuRevelations.js). */
+  const revelees = q.extra && q.extra.revelees ? q.extra.revelees.map(id => { const o = obj(P, id); if (o && !cartes[o.def.nom]) cartes[o.def.nom] = ficheVue(o.def); return ref(id); }) : null;
+  return {...base, options: opts, cartes, ...(revelees ? {revelees} : {})};
 }

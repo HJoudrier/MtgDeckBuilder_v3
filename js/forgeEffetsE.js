@@ -65,6 +65,8 @@ forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestinat
     }
     /* Remises au dessus le temps de les déplacer : `deplaceForge()` part de
        la bibliothèque comme d'une autre zone. */
+    /* Ce qu'on a révélé, que les choix qui suivent montrent tout entier (js/jeuRevelations.js). */
+    noteRevelation(P, [...reveles, ...trouves]);
     [...reveles, ...trouves].forEach(id => B.push(id));
     /* Sans `FoundDestination$`, la carte trouvée suit les révélées, et se
        retient avec elles (Treasure Hunt, Balustrade Spy, Sanar). */

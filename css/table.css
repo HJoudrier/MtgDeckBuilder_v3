@@ -104,6 +104,9 @@ body.table-ouverte{overflow:hidden}
 /* Ce que la question attend : la carte brille, choisie elle s'allume. */
 .tc.choix .tc-corps{box-shadow:0 0 0 2px var(--brass),0 0 12px 2px var(--brass)}
 .tc.choisi .tc-corps{box-shadow:0 0 0 3px var(--ok),0 0 10px var(--ok)}
+.tc.grise{opacity:.4;filter:grayscale(1);cursor:default}
+.tc.grise .tc-corps{box-shadow:none}
+.tq-rev-titre{margin-top:4px}
 .tc.vise .tc-corps{box-shadow:0 0 0 2px var(--bad-line);opacity:.75}
 .tc.attaque .tc-corps{box-shadow:0 0 0 2px var(--bad),0 0 10px var(--bad-a)}
 .tc.attaque.choisi .tc-corps,.tc.attaque.choix .tc-corps{box-shadow:0 0 0 3px var(--bad),0 0 12px var(--bad)}
@@ -173,6 +176,8 @@ body.en-blocage{user-select:none;-webkit-user-select:none;cursor:grabbing}
 button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:4px 6px;cursor:pointer}
 .tj-reserve{display:inline-flex;align-items:center;gap:1px}
 .tj-reserve small{font:600 10px var(--mono);margin-right:3px}
+.tj-reserve.restreint{border:1px dashed var(--line,#888);border-radius:6px;padding:0 4px;margin-left:3px}
+.tj-reserve .tj-pour{font:500 10px var(--font,inherit);opacity:.75;margin-left:2px}
 
 /* ---------- Arène ---------- */
 .ar-onglets{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px}
@@ -301,3 +306,4 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 /* Un écran bas : la carte du contexte rapetisse, pour laisser voir le plateau. */
 @media (max-height:700px){.tq-ctx .tc{--tw:38px !important}.tq-ctx-texte{max-height:4.6em;overflow-y:auto}}
 
+.tr-annule{margin:2px 6px;align-self:flex-start}

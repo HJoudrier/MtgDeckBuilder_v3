@@ -77,7 +77,9 @@ function* executeForge(P, op, ctx) {
     /* Celui qui décide est nommé, jamais déduit des cibles. */
     const j = t.OptionalDecider ? forgeDefinis(P, t.OptionalDecider, env).map(x => joueurDe(x)).find(x => x != null) : ctx.ctrl;
     if (j == null) return;
-    const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: op.texte || 'Le faire ?', source: ctx.source, extra: {ops: [op]}});
+    /* Ce qu'on a révélé juste avant (Etali : les cartes exilées) se montre avec la question (js/jeuRevelations.js). */
+    const rev = revelationPour(P, null);
+    const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: op.texte || 'Le faire ?', source: ctx.source, extra: {ops: [op], ...(rev ? {revelees: rev} : {})}});
     if (r !== 1) return;
   }
   if (t.UnlessCost) {

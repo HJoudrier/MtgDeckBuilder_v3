@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1920 fonctions**, 318 modules, 2210 Ko de JavaScript.
+**1929 fonctions**, 323 modules, 2226 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -52,13 +52,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 77 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 171 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 277 |
-| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 225 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 283 |
+| [`jeuManaChoix.js`](#jsjeumanachoixjs) | Choisir quel mana de la réserve paie le générique | 2 | 48 |
+| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 226 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 189 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 148 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 266 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 278 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 280 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 303 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -77,7 +78,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 78 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
-| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 132 |
+| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 140 |
 | [`jeuPileExplique.js`](#jsjeupileexpliquejs) | Dire ce qui est sur la pile, et ce qui se résout | 7 | 96 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 307 |
@@ -89,11 +90,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 151 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 223 |
 | [`forgeChaque.js`](#jsforgechaquejs) | « Search for a Forest card and a Plains card » | 2 | 26 |
-| [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 120 |
+| [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 122 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 258 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 215 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 208 |
-| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 143 |
+| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 145 |
 | [`forgeBatailles.js`](#jsforgebataillesjs) | Les batailles (Siege) : points de défense, | 4 | 63 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 184 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 132 |
@@ -173,6 +174,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
 | [`forgeFouilles.js`](#jsforgefouillesjs) | Fouiller, chercher : ce que le moteur en dit | 0 | 46 |
+| [`jeuRevelations.js`](#jsjeurevelationsjs) | Montrer toutes les cartes révélées | 2 | 42 |
 | [`forgeDes.js`](#jsforgedesjs) | Des dés de plus | 0 | 45 |
 | [`forgeEffetsJ.js`](#jsforgeeffetsjjs) | Des effets durables : un nombre retenu | 0 | 16 |
 | [`forgeEffetsK.js`](#jsforgeeffetskjs) | Des effets de plus (lot F80) | 1 | 21 |
@@ -192,6 +194,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeInstantsE.js`](#jsforgeinstantsejs) | Les instants : filtres, marqueurs, piles, coûts | 0 | 231 |
 | [`forgeInstantsF.js`](#jsforgeinstantsfjs) | Les instants : la pile, la réserve, les dés | 1 | 127 |
 | [`forgeInstantsG.js`](#jsforgeinstantsgjs) | Les instants : un nombre de cibles annoncé | 3 | 67 |
+| [`forgeManaRestreintB.js`](#jsforgemanarestreintbjs) | Engager à la main une source de mana restreint | 2 | 60 |
+| [`forgeClones.js`](#jsforgeclonesjs) | Un clone qui garde les marqueurs de son modèle | 0 | 34 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
@@ -304,16 +308,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 18 | 239 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 18 | 243 |
 | [`tableImages.js`](#jstableimagesjs) | Le visuel d'une carte, à la table | 4 | 84 |
 | [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 127 |
-| [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 57 |
+| [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 62 |
 | [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 15 | 164 |
 | [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 13 | 150 |
 | [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 51 |
 | [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi, en flèches | 7 | 103 |
-| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 155 |
-| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 165 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 156 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 175 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 49 |
 | [`tableBloque.js`](#jstablebloquejs) | Bloquer en glissant une créature sur son attaquant | 9 | 129 |
 | [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 9 | 135 |
@@ -325,8 +329,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 70 |
+| [`tableAnnuler.js`](#jstableannulerjs) | Revenir en arrière d'une réponse | 3 | 47 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 6 | 102 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 6 | 104 |
 | [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 319 |
 | [`icones.js`](#jsiconesjs) |  | 0 | 21 |
 
@@ -1101,7 +1106,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.9 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *13 fonctions, 277 lignes, 15 Ko.*
+La réserve de mana, et le paiement automatique. *13 fonctions, 283 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1113,7 +1118,7 @@ La réserve de mana, et le paiement automatique. *13 fonctions, 277 lignes, 15 K
 | `planPaiement(P, j, cout, x, pour)` | Le plan d'un paiement : quelles sources activer, et pour quelle option. |
 | `manaDispo(P, j)` | Ce qu'un joueur peut produire en tout : sa réserve et toutes ses sources. |
 | `ajouteMana(P, j, lettres)` | — |
-| `debite(pool, cout, x)` | Retirer un coût d'une réserve qui suffit : couleurs exigées, hybrides, puis le générique, pris d'abord dans l'incolore puis dans les couleurs les plus abondantes. |
+| `debite(pool, cout, x)` | — |
 | `paieMana(P, j, cout, x, pour)` | Payer un coût en mana : activer les sources du plan, verser leur mana dans la réserve, puis en retirer le coût. |
 | `activeSource(P, j, s, option, pour)` | Activer une source de mana : l'engager (ou la sacrifier, la payer en vie…) et verser son mana dans la réserve. |
 | `videReserves(P)` | Les réserves se vident à la fin de chaque étape (règle 500.4). |
@@ -1122,10 +1127,24 @@ La réserve de mana, et le paiement automatique. *13 fonctions, 277 lignes, 15 K
 | Donnée | Rôle |
 |---|---|
 | `LETTRES_MANA` | — |
+| `PREF_GEN` | Retirer un coût d'une réserve qui suffit : couleurs exigées, hybrides, puis le générique, pris d'abord dans l'incolore puis dans les couleurs les plus abondantes. |
+
+## js/jeuManaChoix.js
+
+Choisir quel mana de la réserve paie le générique. *2 fonctions, 48 lignes, 2.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `manaAChoisir(P, j, cout, x)` | Ce que le générique laisse à choisir : les mana de la réserve, un par unité, ou `null` s'il n'y a rien à décider. |
+| `choisitManaPaye(P, j, cout, x)` | La question : quel mana dépenser pour la part incolore du coût. |
+
+| Donnée | Rôle |
+|---|---|
+| `NOMS_MANA_CHOIX` | — |
 
 ## js/jeuOpsA.js
 
-Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 225 lignes, 10 Ko.*
+Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 226 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1212,7 +1231,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 266 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 278 lignes, 14 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 280 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1537,7 +1556,7 @@ Copier une partie, et la reprendre. *7 fonctions, 117 lignes, 5.2 Ko.*
 
 ## js/jeuVue.js
 
-Ce qu'un joueur voit de la partie. *8 fonctions, 132 lignes, 8.7 Ko.*
+Ce qu'un joueur voit de la partie. *8 fonctions, 140 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1742,7 +1761,7 @@ Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 223 lignes
 
 ## js/forgeExecute.js
 
-La porte des effets de Forge : `executeForge()`. *5 fonctions, 120 lignes, 7.5 Ko.*
+La porte des effets de Forge : `executeForge()`. *5 fonctions, 122 lignes, 7.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1811,7 +1830,7 @@ Les effets de Forge qui durent : régénération,. *8 fonctions, 208 lignes, 13 
 
 ## js/forgeEffetsE.js
 
-Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 143 lignes, 9.3 Ko.*
+Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 145 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2844,6 +2863,15 @@ Marqueurs et dés : des paramètres de plus. *0 fonctions, 56 lignes, 2.9 Ko.*
 
 Fouiller, chercher : ce que le moteur en dit. *0 fonctions, 46 lignes, 2.8 Ko.*
 
+## js/jeuRevelations.js
+
+Montrer toutes les cartes révélées. *2 fonctions, 42 lignes, 2.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `noteRevelation(P, ids)` | Retenir des cartes révélées. Plusieurs révélations d'une même résolution s'ajoutent (Etali : une par joueur). |
+| `revelationPour(P, ids)` | La liste à montrer avec ce choix, ou `null` : les cartes révélées encore présentes, si le choix en touche une. |
+
 ## js/forgeDes.js
 
 Des dés de plus. *0 fonctions, 45 lignes, 3 Ko.*
@@ -2992,6 +3020,19 @@ Les instants : un nombre de cibles annoncé. *3 fonctions, 67 lignes, 3.7 Ko.*
 | `sortXCibles(effet)` | Un sort dont un emplacement de cible se compte en X ? |
 | `choisitXAvant(P, j, s, d, cout0, nid)` | Choisir X avant les cibles : au plus ce que le mana permet, et ce que les cibles légales offrent. |
 | `exileFacultatif(t)` | « As an additional cost, you may exile any number of blue cards from your hand » : le nombre, `Y`, n'est pas écrit ; la statique est acceptée, et chaque nombre possible devient une façon… |
+
+## js/forgeManaRestreintB.js
+
+Engager à la main une source de mana restreint. *2 fonctions, 60 lignes, 3.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `actionsManaRestreint(P, j)` | Les actions de mana restreint d'un joueur qui paie à la main : une par source et par couleur. |
+| `libelleRestriction(valid)` | Ce que ce mana paie, en mots : « créatures », « instants et rituels », sinon la restriction de Forge. |
+
+## js/forgeClones.js
+
+Un clone qui garde les marqueurs de son modèle. *0 fonctions, 34 lignes, 1.9 Ko.*
 
 ## js/iaValeur.js
 
@@ -4839,7 +4880,7 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *18 fonctions, 239 lignes, 11 Ko.*
+La partie que ce navigateur héberge. *18 fonctions, 243 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4910,7 +4951,7 @@ Une carte posée sur la table. *12 fonctions, 127 lignes, 7 Ko.*
 
 ## js/tableJoueurs.js
 
-Ce qu'on sait d'un joueur, d'un coup d'œil. *4 fonctions, 57 lignes, 3.4 Ko.*
+Ce qu'on sait d'un joueur, d'un coup d'œil. *4 fonctions, 62 lignes, 4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5010,7 +5051,7 @@ Ce qui vise quoi, en flèches. *7 fonctions, 103 lignes, 5.1 Ko.*
 
 ## js/tableRendu.js
 
-La table, peinte depuis une vue. *10 fonctions, 155 lignes, 8.1 Ko.*
+La table, peinte depuis une vue. *10 fonctions, 156 lignes, 8.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5031,7 +5072,7 @@ La table, peinte depuis une vue. *10 fonctions, 155 lignes, 8.1 Ko.*
 
 ## js/tableQuestions.js
 
-Répondre à une question du moteur, à la main. *14 fonctions, 165 lignes, 8.8 Ko.*
+Répondre à une question du moteur, à la main. *14 fonctions, 175 lignes, 9.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5269,6 +5310,16 @@ Reprendre une partie après un rechargement. *4 fonctions, 70 lignes, 3.1 Ko.*
 | `SAUVE_TABLE` | — |
 | `TABLE_SAUVEE` | — |
 
+## js/tableAnnuler.js
+
+Revenir en arrière d'une réponse. *3 fonctions, 47 lignes, 2.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `peutAnnulerTable()` | — |
+| `annulerHTML()` | — |
+| `annuleTable()` | — |
+
 ## js/fenArrets.js
 
 Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
@@ -5287,7 +5338,7 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *6 fonctions, 102 lignes, 5.2 Ko.*
+Les gestes de la table interactive. *6 fonctions, 104 lignes, 5.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|

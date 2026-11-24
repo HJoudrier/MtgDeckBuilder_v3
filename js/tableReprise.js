@@ -62,7 +62,7 @@ function reprendTable() {
     if (TABLE.h.fini || !TABLE.h.attente) break;
     repondre(TABLE.h, TABLE.agents, r, Infinity, null);
   }
-  Object.assign(TABLE, {ouverte: true, phase: 'partie', role: 'hote', moi: d.moi, question: null, erreur: '', sel: null});
+  Object.assign(TABLE, {ouverte: true, phase: 'partie', role: 'hote', moi: d.moi, question: null, erreur: '', sel: null, points: []});
   TABLE_SAUVEE = null;
   diffuseVues(true);
   boucleTable();
