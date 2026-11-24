@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1873 fonctions**, 292 modules, 2032 Ko de JavaScript.
+**1873 fonctions**, 292 modules, 2033 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -49,7 +49,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 235 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
-| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 75 |
+| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 77 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 163 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 256 |
@@ -58,7 +58,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 260 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 250 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 251 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 301 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -108,14 +108,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 147 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 127 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 228 |
-| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 286 |
+| [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 290 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 10 | 170 |
 | [`forgeEntreesB.js`](#jsforgeentreesbjs) | « Ce sort entre avec des marqueurs de plus » | 1 | 38 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
 | [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 161 |
-| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 223 |
+| [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 227 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 170 |
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 219 |
 | [`forgeMotsClesD.js`](#jsforgemotsclesdjs) | Les mots-clés des permanents, troisième partie | 8 | 247 |
@@ -1026,7 +1026,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 55 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 75 lignes, 4.1 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 77 lignes, 4.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1184,7 +1184,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 260 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 250 lignes, 12 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 251 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2028,7 +2028,7 @@ Les capacités statiques de Forge. *10 fonctions, 228 lignes, 14 Ko.*
 
 ## js/forgeInterdits.js
 
-Ce que les statiques de Forge interdisent,. *33 fonctions, 286 lignes, 16 Ko.*
+Ce que les statiques de Forge interdisent,. *33 fonctions, 290 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2169,7 +2169,7 @@ Les paliers : Station, classes, Rooms, vitesse. *6 fonctions, 161 lignes, 9 Ko.*
 
 ## js/forgeMotsCles.js
 
-Les mots-clés de Forge (`K:`). *4 fonctions, 223 lignes, 12 Ko.*
+Les mots-clés de Forge (`K:`). *4 fonctions, 227 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2526,7 +2526,7 @@ Des propriétés de filtre de plus. *1 fonctions, 58 lignes, 3.5 Ko.*
 
 ## js/forgeFiltresD.js
 
-Des propriétés de filtre de plus, II. *2 fonctions, 96 lignes, 7.1 Ko.*
+Des propriétés de filtre de plus, II. *2 fonctions, 96 lignes, 7.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|

@@ -124,7 +124,7 @@ function forgeExpression(P, expr, env, prof) {
   if (tete !== 'Count') return 0;
   let k;
   if (q === 'xPaid') return ctx.x || 0;
-  if ((k = /^Valid(Graveyard|Hand|Exile|Library)? ([^$]+)(?:\$(\w+))?$/.exec(q))) {
+  if ((k = /^Valid(Graveyard|Hand|Exile|Library|All)? ([^$]+)(?:\$(\w+))?$/.exec(q))) {
     const zone = {Graveyard: 'cimetiere', Hand: 'main', Exile: 'exil', Library: 'bibliotheque'}[k[1]] || 'champ';
     const l = objetsZone(P, zone).filter(o => forgeValideObjet(P, o, k[2], src, ctrl, env));
     return agregeForge(P, l, k[3]);
@@ -159,7 +159,7 @@ function forgeExpression(P, expr, env, prof) {
   return 0;
 }
 
-forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$ValidHand', 'Count$ValidExile',
+forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidAll', 'Count$ValidGraveyard', 'Count$ValidHand', 'Count$ValidExile',
   'Count$ValidLibrary', 'Count$CardCounters', 'Count$CardPower', 'Count$CardToughness', 'Count$CardManaCost',
   'Count$YourLifeTotal', 'Count$CardsInYourHand', 'Count$InYourHand', 'Count$InYourGraveyard', 'TriggerCount$DamageAmount',
   'TriggerCount$Amount', 'TriggerCount$Result', 'TriggeredCard$CardPower', 'TriggeredCard$CardToughness', 'TriggeredCard$CardManaCost',

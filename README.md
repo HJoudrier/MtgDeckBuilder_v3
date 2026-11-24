@@ -2147,6 +2147,18 @@ Restent `BecomeMonarch | BeginTurn$` (Knights of the Black Rose : « si vous ét
   Steward of Elements) : ce qu'on dit au joueur, non ce qui se joue ; **`DigMultiple | SourceZone$`, `LibraryPosition$`**
   (Kaalia, Zenith Seeker) : la bibliothèque, la seule zone que fouille `DigMultiple`.
 
+**Lot F92 : attaquer, équiper, compter** (retouches de `js/forgeInterdits.js`, `js/forgeMotsCles.js`, `js/forgeExpr.js`). Cinq cartes de
+plus (6 690 → 6 695) :
+- **`CantAttack | Target$ Player.CardOwner`** (Alexios, Xantcha : « can't attack its owner ») et **`Player.attackedBySourceThisTurn`**
+  (Bloodthirster : « a player it has already attacked this turn ») : `defenseurVise()` juge le défenseur contre le propriétaire de la
+  source, et contre les joueurs que la créature a déjà attaqués ce tour (`o.cibleTour`, tenu par l'historique) ;
+- **`K:Equip:<coût>` avec un coût de plus que du mana** (My Precious : « {2}, pay 2 life » ; Pact Weapon : « discard a card ») :
+  `def.equipeAutre` garde le reste du coût, que l'action d'équiper vérifie avant de payer le mana, puis paie ;
+- **`Count$ValidAll`** et **`attackingYouOrYourPWLKI`** (Mangara, the Diplomat) : le compte se fait sur le champ, et la créature qui
+  attaque le joueur ou l'un de ses planeswalkers compte.
+Le coût d'équipement est donc complet quand l'équipement est équipé pour {0} (Bruenor) : le reste du coût n'est alors pas payé,
+simplification annoncée.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

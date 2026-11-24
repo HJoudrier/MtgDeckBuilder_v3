@@ -61,7 +61,7 @@ function statiqueTenable(t) {
   if (t.AddType && /ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType') return false;
   if (t.AddHiddenKeyword && !t.AddHiddenKeyword.split('&').every(k => CACHES_TENUS[k.trim()])) return false;
   if (t.GainControl && t.GainControl !== 'You') return false;
-  if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl)$/.test(x.trim()))) return false;
+  if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl|Player\.CardOwner|Player\.attackedBySourceThisTurn|Planeswalker\.ControlledBy Player\.CardOwner)$/.test(x.trim()))) return false;
   if (t.UnlessDefender && !DEFENSEUR_PROPRIETE.test(t.UnlessDefender)) return false;
   if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z])$/.test(t.Cost || '')) return false;
   if (t.Mode === 'CastWithFlash' && t.ValidSA && !flashLisible(t.ValidSA)) return false;

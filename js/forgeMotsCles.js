@@ -83,8 +83,12 @@ function motCleForge(def, k, face, jetons) {
     }
     case 'Equip': {
       const c = coutForge(reste[0]);
-      if (!c || Object.keys(c.cout).some(x => x !== 'mana')) return false;
-      def.equipe = c.cout.mana; return true;
+      if (!c) return false;
+      def.equipe = c.cout.mana;
+      /* Le reste du coût (« Equip—Discard a card », « {2}, pay 2 life ») se paie avec le mana (js/jeuActions.js `equipe()`). */
+      const autre = autresCout(c.cout);
+      if (autre) def.equipeAutre = autre;
+      return true;
     }
     /* « Flashback—Sacrifice three creatures », « {1}{U}, Pay 3 life » : le
        reste du coût se paie avec le mana (js/jeuVariantes.js). */

@@ -47,6 +47,8 @@ function noteHistorique(P, e) {
       /* Les adversaires attaqués ce tour, par attaquant (js/forgeDesignations.js). */
       const d = e.defenseur, j = d && (d.j != null ? d.j : d.pw != null && obj(P, d.pw) ? obj(P, d.pw).ctrl : null);
       if (o && j != null) ((h.attaques = h.attaques || {})[o.ctrl] = h.attaques[o.ctrl] || []).push(j);
+      /* Les joueurs que cette créature a attaqués ce tour (« can't attack a player it has already attacked »). */
+      if (o && j != null) { if (!o.cibleTour || o.cibleTour.tour !== P.tour) o.cibleTour = {tour: P.tour, l: []}; o.cibleTour.l.push(j); }
       break;
     }
     case 'degatsObjet': {

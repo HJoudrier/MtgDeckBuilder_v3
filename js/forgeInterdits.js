@@ -132,6 +132,10 @@ function defenseurVise(P, def, v, src, env) {
   if (!v) return true;
   return v.split(',').some(x => {
     x = x.trim();
+    /* Le propriétaire de la source (« can't attack its owner ») ; ce qu'elle a déjà attaqué ce tour (Bloodthirster). */
+    if (def.j != null && x === 'Player.CardOwner') return def.j === src.prop;
+    if (def.j != null && x === 'Player.attackedBySourceThisTurn') return !!src.cibleTour && src.cibleTour.tour === P.tour && src.cibleTour.l.includes(def.j);
+    if (def.j == null && x === 'Planeswalker.ControlledBy Player.CardOwner') { const w = obj(P, def.pw); return !!w && w.ctrl === src.prop; }
     if (def.j != null) return x === 'You' ? def.j === src.ctrl : x === 'Opponent' ? def.j !== src.ctrl : x === 'Player';
     const pw = obj(P, def.pw);
     return !!pw && x !== 'You' && x !== 'Player' && forgeValideObjet(P, pw, x, src, src.ctrl, env, true);
