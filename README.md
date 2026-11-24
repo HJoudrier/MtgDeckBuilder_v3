@@ -2159,6 +2159,15 @@ plus (6 690 → 6 695) :
 Quand un équipement s'équipe pour {0} (Bruenor), seul le mana est remis : le reste du coût se paie quand même — simplification
 annoncée.
 
+**Lot F93 : ce qui ne s'adresse qu'à l'IA de Forge** (`js/forgeFouilles.js`). Six cartes de plus (6 695 → 6 701) : cinq
+paramètres que le script écrit pour l'IA de Forge ou pour l'écran de son joueur, et qui ne changent rien à ce qui se joue —
+`UnlessAI$` (comment l'IA répond à un « unless » : Lim-Dûl's Vault, Champions of Minas Tirith, Indulgent Tormentor),
+`AiChoiceLogic$`, `ChoicePrompt$` (Sin Prodder), `PrimaryPrompt$` — et `Charm | Announce$ X` (Kozilek's Command, Profane
+Command), où le {X} du coût fait déjà choisir X au lancement. `Announce$ X` d'un sort dont le coût n'a pas de {X}
+(Waterbender's Restoration, Soul Immolation) reste refusé : le moteur ne demande X que pour un coût qui en porte un.
+Les modes en « empreintes » (`Pawprint$`, les quatre Season of…) et au hasard (`Charm | Random$`) restent à faire :
+les modes se choisissent à la construction, non à la résolution.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -35,3 +35,11 @@ choisitCartes = (g => function* (P, j, ids, n, texte, q, min) {
 
 forgeMode('SearchedLibrary', ['ValidPlayer', 'SearchOwnLibrary'], (P, t, e, s, env) => e.t === 'cherche' && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env) &&
   (t.SearchOwnLibrary !== 'True' || e.siennes));
+
+/* —— Ce qui ne s'adresse qu'à l'IA de Forge ou qu'à l'écran de son joueur (lot F93) ——————————— */
+
+/* `UnlessAI$` règle comment l'IA de Forge répond à un « unless » ; `AiChoiceLogic$` comment elle choisit une copie ;
+   `ChoicePrompt$`, `PrimaryPrompt$` : une question dite au joueur. Aucun ne change ce qui se joue. `Charm.Announce$ X` :
+   le X du sort, que le coût `{X}` fait choisir. */
+forgeSait('param', 'Effect.UnlessAI', 'Counter.UnlessAI', 'Draw.UnlessAI', 'StoreSVar.UnlessAI', 'Clone.AiChoiceLogic',
+  'GenericChoice.ChoicePrompt', 'Dig.PrimaryPrompt', 'Charm.Announce');

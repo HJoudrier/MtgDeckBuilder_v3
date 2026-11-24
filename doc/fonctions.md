@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1873 fonctions**, 292 modules, 2033 Ko de JavaScript.
+**1873 fonctions**, 292 modules, 2034 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -159,7 +159,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 72 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
-| [`forgeFouilles.js`](#jsforgefouillesjs) | Fouiller, chercher : ce que le moteur en dit | 0 | 38 |
+| [`forgeFouilles.js`](#jsforgefouillesjs) | Fouiller, chercher : ce que le moteur en dit | 0 | 46 |
 | [`forgeDes.js`](#jsforgedesjs) | Des dés de plus | 0 | 45 |
 | [`forgeEffetsJ.js`](#jsforgeeffetsjjs) | Des effets durables : un nombre retenu | 0 | 16 |
 | [`forgeEffetsK.js`](#jsforgeeffetskjs) | Des effets de plus (lot F80) | 1 | 21 |
@@ -2694,7 +2694,7 @@ Marqueurs et dés : des paramètres de plus. *0 fonctions, 56 lignes, 2.9 Ko.*
 
 ## js/forgeFouilles.js
 
-Fouiller, chercher : ce que le moteur en dit. *0 fonctions, 38 lignes, 2.1 Ko.*
+Fouiller, chercher : ce que le moteur en dit. *0 fonctions, 46 lignes, 2.8 Ko.*
 
 ## js/forgeDes.js
 
