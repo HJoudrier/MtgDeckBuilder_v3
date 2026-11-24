@@ -153,13 +153,13 @@ function actionsLegales(P, j) {
         if (!effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
         r.push({k: 'activer', id, i});
       } else if (k.genre === 'loyaute') {
-        if (!(rituel || loyauteEclair(P, j, o)) || P.unefois.has(id + '|loyaute')) return;
+        if (!(rituel || loyauteEclair(P, j, o)) || loyauteEpuisee(P, o)) return;
         if (typeof k.delta === 'number' && k.delta < 0 && (o.marq.loyaute || 0) < -k.delta) return;
         if (!effetCiblable(P, j, o, k.effet, o.def.couleurs)) return;
         r.push({k: 'activer', id, i});
       }
     });
-    if (o.def.equipe && rituel && planPaiement(P, j, coutEquipement(P, j, o), 0, {capacite: o}) &&
+    if (o.def.equipe && (rituel || equipEclair(P, j, o)) && planPaiement(P, j, coutEquipement(P, j, o), 0, {capacite: o}) &&
         champDe(P, j).some(c => estCreature(c) && c.id !== o.att)) r.push({k: 'equiper', id});
   }
   r.push(...actionsManuelles(P, j), ...actionsManaFiltre(P, j), PASSE);

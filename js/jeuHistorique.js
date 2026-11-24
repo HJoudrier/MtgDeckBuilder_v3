@@ -38,6 +38,8 @@ function noteHistorique(P, e) {
     case 'sacrifie': plusUn(h.sacrifies, e.joueur); break;
     case 'defausse': plusUn(h.defausses, e.joueur); break;
     case 'marqueur': h.marqueurs += e.n || 0; break;
+    /* Les activations du tour, pour `Count$ThisTurnActivated` (js/forgeActivationsB.js). */
+    case 'active': (h.activations = h.activations || []).push({joueur: e.joueur, id: e.id, loyaute: !!e.loyaute, equip: !!e.equip, lki: e.lki}); break;
     case 'entre': { const o = obj(P, e.id); if (o) { o.entreTour = P.tour; jourNuitEntree(P, o); } break; }
     case 'attaque': {
       const o = obj(P, e.id);

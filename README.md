@@ -2081,6 +2081,18 @@ et des retouches). Huit cartes de plus (6 629 → 6 637 complètes) :
 Soixante-quinze parties au hasard supplémentaires, sans une erreur du moteur. La liste de ce qui reste, par poids, est
 dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md), remesurée le 24 novembre.
 
+**Lot F86 : les activations du tour** (`js/forgeActivationsB.js`). Cinq cartes de plus (6 637 → 6 642) :
+- **`Count$ThisTurnActivated_Activated.<filtre>`** (The Chain Veil, Bruenor Battlehammer, Forge Anew) : chaque activation
+  — et chaque équipement, qui n'émettait rien — entre dans l'historique du tour (`h.activations`) ; le filtre lit le
+  genre (`Equip`, `Loyalty`), le type de la source et qui l'a activée. Un filtre plus fin (`IsTargeting…`) vaut zéro ;
+- **`NumLoyaltyAct`** (Oath of Teferi, The Chain Veil, Kaito) : `Twice$ True` ou `Additional$ N` autorisent une capacité de
+  loyauté de plus par tour. La limite se tient par clé (`id|loyaute`, `id|loyaute2`…) dans `P.unefois`, que
+  `loyauteEpuisee()` et `noteLoyaute()` lisent à la place de l'ancienne clé unique ;
+- **`AlternativeCost | ValidSA$ Activated.Equip | Cost$ 0`** (Bruenor, Forge Anew) : la première capacité d'équipement du tour
+  coûte {0} (`coutEquipement()`) ; **`CastWithFlash | ValidSA$ Activated.Equip`** : équiper à vitesse d'éclair, pendant son tour ;
+- **`Taps | ValidActivatingPlayer$`** (Tezzeret) : le contrôleur du permanent qui s'engage.
+Kíli the Resourceful reste partielle (« an enduring story » et `Storied` ne sont pas lus).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

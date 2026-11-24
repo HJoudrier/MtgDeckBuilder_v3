@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1867 fonctions**, 287 modules, 2012 Ko de JavaScript.
+**1872 fonctions**, 288 modules, 2017 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -49,7 +49,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 235 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
-| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 73 |
+| [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 75 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 161 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 256 |
@@ -58,7 +58,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 260 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 249 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 250 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 301 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -152,6 +152,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeStatiquesD.js`](#jsforgestatiquesdjs) | Des statiques que le moteur ne connaissait pas | 7 | 133 |
 | [`forgeEffetsM.js`](#jsforgeeffetsmjs) | Des effets et des déclencheurs de plus | 0 | 57 |
 | [`forgeEffetsN.js`](#jsforgeeffetsnjs) | Des paramètres d'effets de plus | 0 | 43 |
+| [`forgeActivationsB.js`](#jsforgeactivationsbjs) | Compter les activations du tour | 5 | 95 |
 | [`forgeManaD.js`](#jsforgemanadjs) | Dépenser du mana d'une autre couleur, et en compter la dépense | 2 | 73 |
 | [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 53 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
@@ -1021,7 +1022,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 55 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 73 lignes, 3.8 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 75 lignes, 4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1155,7 +1156,7 @@ Les actions d'état, et un joueur qui perd. *2 fonctions, 99 lignes, 4.4 Ko.*
 
 ## js/jeuLancer.js
 
-Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 260 lignes, 15 Ko.*
+Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 260 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1179,7 +1180,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 260 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 249 lignes, 12 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 250 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2625,6 +2626,18 @@ Des effets et des déclencheurs de plus. *0 fonctions, 57 lignes, 3.2 Ko.*
 ## js/forgeEffetsN.js
 
 Des paramètres d'effets de plus. *0 fonctions, 43 lignes, 2.6 Ko.*
+
+## js/forgeActivationsB.js
+
+Compter les activations du tour. *5 fonctions, 95 lignes, 4.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `loyautesPermises(P, o)` | Combien de capacités de loyauté ce planeswalker peut-il activer ce tour ? |
+| `cleLoyaute(o, k)` | — |
+| `loyauteEpuisee(P, o)` | A-t-il épuisé ses activations de loyauté ? |
+| `noteLoyaute(P, o)` | Une activation de loyauté de plus a eu lieu. |
+| `equipEclair(P, j, o)` | Peut-on équiper maintenant, hors d'une phase principale ? |
 
 ## js/forgeManaD.js
 

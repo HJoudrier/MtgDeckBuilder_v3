@@ -174,7 +174,7 @@ function* activeCapacite(P, j, a) {
       delta = -x;
     }
     o.marq.loyaute = (o.marq.loyaute || 0) + delta;
-    P.unefois.add(o.id + '|loyaute');
+    noteLoyaute(P, o);
     P.ver++;
   } else {
     if (k.cout.mana.x) x = maxX(P, j, k.cout.mana);
@@ -208,6 +208,7 @@ function* equipe(P, j, a) {
   const slot = {desc: {genre: 'objet', types: ['creature'], non: [], sousTypes: [], couleurs: [], filtres: [], zone: 'champ', mots: 0, ctrl: 'vous', autre: true}, min: 1, max: 1};
   const c = yield* choisitCibles(P, j, o, [slot], o.def.couleurs, {equipe: true});
   if (!c || !c[0].length || !paieMana(P, j, coutEquipement(P, j, o), 0, {capacite: o})) return false;
+  emet(P, {t: 'active', id: o.id, joueur: j, equip: true, loyaute: false, lki: instantane(P, o)});
   P.pile.push({id: P.prochainId++, capacite: true, source: o.id, ctrl: j, x: 0, nom: o.def.nom, texte: 'Équiper : attache cet équipement à la créature visée.',
     effets: [{ops: [{op: 'attache', a: {cible: 0}}], slots: [slot], cibles: c}]});
   return true;
