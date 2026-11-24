@@ -61,6 +61,8 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
       return !!d && (d.j != null ? d.j !== joueur : !!obj(P, d.pw) && obj(P, d.pw).ctrl !== joueur);
     }
     /* La carte du dessous de sa bibliothèque (The Heron Moon) ; un sort qui n'est pas une copie. */
+    /* Partager une couleur avec la source de l'effet (Kasmina, Enigma Sage). */
+    case 'SharesColorWith': return !!src && !!src.def && (src.lki ? src.couleurs : car(P, src).couleurs).some(k => c.couleurs.includes(k));
     case 'BottomLibrary': return !!P && o.zone === 'bibliotheque' && P.joueurs[o.prop].bibliotheque[0] === o.id;
     case 'nonCopiedSpell': return !!P && !(P.cartes[o.cid] && P.cartes[o.cid].copieSort);
     case 'attackedLastTurn': return !!P && o.attaqueAuTourDe != null && o.attaqueAuTourDe === P.joueurs[o.ctrl].tours - 1;
@@ -92,7 +94,7 @@ function proprieteJoueurEtendue(P, j, p, ctrl) {
   return false;
 }
 
-forgeSait('filtre', 'BottomLibrary', 'nonCopiedSpell', 'attackedLastTurn', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
+forgeSait('filtre', 'SharesColorWith', 'BottomLibrary', 'nonCopiedSpell', 'attackedLastTurn', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
   'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith', 'greatestPower',
   'TopGraveyardCreature', 'ControllerControlsMoreLand', 'wasCastFromTheirHand', 'milledThisTurn', 'attackingYou', 'attackingYouOrYourPWLKI', 'attacking Opponent', 'attackedThisCombat', 'dealtCombatDamageThisTurn You', 'TriggeredAttacker', 'TriggeredNewCard', 'OppNonTriggeredTarget',
   'CastSa Spell.MayPlaySource', 'CastSa Spell.ManaFromTreasure', 'CastSa Spell.ManaSpent EQ0', ...['Graveyard', 'Battlefield', 'Library', 'Hand', 'Exile'].map(z => 'ThisTurnEnteredFrom_' + z), 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',

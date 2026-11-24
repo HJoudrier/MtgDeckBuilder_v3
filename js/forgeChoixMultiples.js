@@ -30,7 +30,7 @@ FORGE_API.ChooseCard.gen = (g => function* (P, t, env) {
   if (src) choixDe(P, src).cartes = tous;
 })(FORGE_API.ChooseCard.gen);
 FORGE_API.ChooseCard.prepare = (p => function (t, op) {
-  if (t.ControlledByPlayer && !/^(Chooser|You)$/.test(t.ControlledByPlayer)) return false;
+  if (t.ControlledByPlayer && !/^(Chooser|You|Remembered)$/.test(t.ControlledByPlayer)) return false;
   return p ? p.call(this, t, op) : true;
 })(FORGE_API.ChooseCard.prepare);
 

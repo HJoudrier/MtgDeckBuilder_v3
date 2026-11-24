@@ -55,15 +55,17 @@ function statiqueTenable(t) {
   if (t.Mode === 'OptionalCost') return optionnelTenable(t);
   if (t.Mode === 'OptionalAttackCost') return exertTenable(t);
   if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t) || hausseVieTenable(t) || hausseManaVieTenable(t);
+  /* « The first activated ability of an artifact you activate each turn costs {2} less » (Tezzeret) : js/forgePlaneswalkers.js. */
+  if (t.Mode === 'ReduceCost' && reduitCapaciteTenable(t)) return true;
   if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip') && !capacitesLisibles(t)) return false;
   if (t.Mode === 'MustAttack' && t.MustAttack && !/^(Player\.Other|Player|Opponent)$/.test(t.MustAttack)) return false;
   if (t.RemoveType && !typesForge(t.RemoveType).types.length) return false;
   if (t.AddType && /ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType') return false;
   if (t.AddHiddenKeyword && !t.AddHiddenKeyword.split('&').every(k => CACHES_TENUS[k.trim()])) return false;
   if (t.GainControl && t.GainControl !== 'You') return false;
-  if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl|Player\.CardOwner|Player\.attackedBySourceThisTurn|Planeswalker\.ControlledBy Player\.CardOwner)$/.test(x.trim()))) return false;
+  if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl|Player\.CardOwner|Player\.attackedBySourceThisTurn|Planeswalker\.ControlledBy Player\.CardOwner|[A-Z][a-z]+\.YouCtrl|Card\.Self\+AttachedTo Creature)$/.test(x.trim()))) return false;
   if (t.UnlessDefender && !DEFENSEUR_PROPRIETE.test(t.UnlessDefender)) return false;
-  if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z])$/.test(t.Cost || '')) return false;
+  if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z]|PayLife<\d+>)$/.test(t.Cost || '')) return false;
   if (t.Mode === 'CastWithFlash' && t.ValidSA && !flashLisible(t.ValidSA)) return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
   if (t.Mode === 'AlternativeCost') return alternativeLisible(t);
@@ -138,7 +140,7 @@ forgeStatique('Continuous', ['AddType', 'SetColor', 'AddColor', 'Affected', 'Aff
 
 /* Une interdiction qui dépend du défenseur se juge à la déclaration
    (js/forgeInterdits.js `attaquePermise()`). */
-forgeStatique('CantAttack', ['ValidCard'], (P, src, s, o, r) => { if (!s.t.Target && !s.t.UnlessDefender && viseForge(P, src, s, o, 'ValidCard')) r.attaque = true; });
+forgeStatique('CantAttack', ['ValidCard'], (P, src, s, o, r) => { if (!s.t.Target && !s.t.UnlessDefender && !s.t.DefenderNotNearestToYouInChosenDirection && viseForge(P, src, s, o, 'ValidCard')) r.attaque = true; });
 forgeStatique('CantBlock', ['ValidCard'], (P, src, s, o, r) => { if (viseForge(P, src, s, o, 'ValidCard')) r.blocage = true; });
 /* « Can't attack or block », écrit en un seul mode. */
 forgeSait('stat', 'CantAttack,CantBlock');

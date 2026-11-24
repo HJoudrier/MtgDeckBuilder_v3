@@ -16,21 +16,26 @@
    changement de la partie.
    ===================================================================== */
 
-forgeSait('param', 'Continuous.GainsAbilitiesOf', 'Continuous.GainsAbilitiesOfZones');
+forgeSait('param', 'Continuous.GainsAbilitiesOf', 'Continuous.GainsAbilitiesOfZones', 'Continuous.GainsAbilitiesOfDefined', 'Continuous.GainsValidAbilities');
 
 capacitesAccordees = (g => function (P, o) {
   const r = g(P, o);
-  if (P._gaV !== P.ver) { P._ga = statiquesMode(P, 'Continuous').filter(x => x.s.t.GainsAbilitiesOf); P._gaV = P.ver; }
+  if (P._gaV !== P.ver) { P._ga = statiquesMode(P, 'Continuous').filter(x => x.s.t.GainsAbilitiesOf || x.s.t.GainsAbilitiesOfDefined); P._gaV = P.ver; }
   if (!P._ga.length) return r;
   const plus = [];
   for (const {src, s} of P._ga) {
     if (!viseForge(P, src, s, o)) continue;
     const t = s.t, env = envStatique(src, s);
     const zones = String(t.GainsAbilitiesOfZones || 'Battlefield').split(',').map(z => ZONES_FORGE[z.trim()]).filter(Boolean);
-    for (const z of zones) for (const so of objetsZone(P, z)) {
-      if (so.id === o.id || !forgeValideObjet(P, so, t.GainsAbilitiesOf, src, src.ctrl, env)) continue;
+    /* Les capacités de loyauté, quand le texte les nomme (`GainsValidAbilities$ Activated.Loyalty`, Nicol Bolas, Kasmina) ; sinon les activées et de mana. */
+    const loyaute = /Loyalty/.test(t.GainsValidAbilities || '');
+    const genres = loyaute ? ['loyaute'] : ['activee', 'mana'];
+    const sources = t.GainsAbilitiesOfDefined ? forgeDefinis(P, t.GainsAbilitiesOfDefined, env).filter(x => x && x.j == null)
+      : [].concat(...zones.map(z => objetsZone(P, z))).filter(so => forgeValideObjet(P, so, t.GainsAbilitiesOf, src, src.ctrl, env));
+    for (const so of sources) {
+      if (so.id === o.id) continue;
       so.def.capacites.forEach(k => {
-        if ((k.genre === 'activee' || k.genre === 'mana') && !k.zone && !plus.includes(k) && !r.includes(k) && !o.def.capacites.includes(k)) plus.push(k);
+        if (genres.includes(k.genre) && !k.zone && !plus.includes(k) && !r.includes(k) && !o.def.capacites.includes(k)) plus.push(k);
       });
     }
   }

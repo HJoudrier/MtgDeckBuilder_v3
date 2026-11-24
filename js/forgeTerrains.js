@@ -100,13 +100,17 @@ function defWastes() {
   return DEF_WASTES;
 }
 
+/* Une copie d'une carte qu'on nomme (« a Lord of the Pit token », Thomil ; « a Black Lotus token », Arzakon) : la définition vient du script Forge de ce nom
+   (js/forgeAlchemie.js `defNommee()`) ; Wastes, qui n'a pas de script, se construit ici. Un `DefinedName` qui n'est pas un nom (`Targeted`,
+   `Remembered`…) est une désignation, que le moteur lit autrement. */
+const DESIGNATIONS_NOM = /^(Targeted|Remembered|RememberedLKI|ChosenCard|Triggered\w*|ValidLibrary.*|Self|Imprinted)$/;
 aCopier = (g => function* (P, t, env) {
-  if (t.DefinedName !== 'Wastes') return yield* g(P, t, env);
-  const def = defWastes();
+  if (!t.DefinedName || DESIGNATIONS_NOM.test(t.DefinedName)) return yield* g(P, t, env);
+  const def = t.DefinedName === 'Wastes' ? defWastes() : defNommee(t.DefinedName);
   return def ? [{id: -1, def}] : [];
 })(aCopier);
 forgeSait('param', 'CopyPermanent.DefinedName');
-forgeValeurs('CopyPermanent.DefinedName', ['Wastes']);
+forgeValeurs('CopyPermanent.DefinedName', v => !DESIGNATIONS_NOM.test(v));
 
 /* —— Rentrer en main au prochain dégagement ———————————————————————————— */
 

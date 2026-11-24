@@ -91,7 +91,10 @@ function* deplaceForge(P, o, dest, env, opts = {}) {
     return yield* metEnJeu(P, o.id, ctrl, {engage: !!opts.engage, marqueurs: opts.marqueurs, faceCachee: !!opts.faceCachee});
   }
   if (dest === 'bibliotheque') return deplace(P, o.id, opts.dessous ? 'dessous' : 'dessus');
-  return deplace(P, o.id, dest);
+  const n = deplace(P, o.id, dest);
+  /* Des marqueurs sur ce qui arrive ailleurs que sur le champ (une carte exilée avec un marqueur d'argent, Karn). */
+  if (opts.marqueurs && n != null && obj(P, n)) Object.entries(opts.marqueurs).forEach(([g, k]) => { obj(P, n).marq[g] = (obj(P, n).marq[g] || 0) + k; });
+  return n;
 }
 
 /* Les objets d'une zone d'origine (`Battlefield,Graveyard`, `Any`). */
@@ -102,7 +105,7 @@ function dansOrigine(o, origine) {
 
 forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'Shuffle', 'Tapped', 'LibraryPosition',
   'GainControl', 'RememberChanged', 'DefinedPlayer', 'Chooser', 'ShuffleNonMandatory', 'NoLooking', 'Reorder', 'Duration',
-  'WithCountersType', 'WithCountersAmount', 'OriginAlternative', 'FaceDown', 'ShareLandType'], function* (P, t, env) {
+  'WithCountersType', 'WithCountersAmount', 'OriginAlternative', 'FaceDown', 'ShareLandType', 'NumCards'], function* (P, t, env) {
   const dest = zoneForge(t.Destination), ctx = env.ctx;
   if (!dest) return;
   /* « Exile … until ~ leaves the battlefield » : si l'hôte est déjà parti,
@@ -120,7 +123,7 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
     const zones = String((t.Origin || 'Library') + (t.OriginAlternative ? ',' + t.OriginAlternative : '')).split(',').map(z => ZONES_FORGE[z.trim()]).filter(Boolean);
     const ids = [].concat(...zones.map(z => z === 'champ' ? P.champ.filter(id => obj(P, id).ctrl === j) : P.joueurs[j][z].slice()))
       .filter(id => !t.ChangeType || chaqueFiltres(t.ChangeType) ? true : forgeValideObjet(P, obj(P, id), t.ChangeType, env.src, env.ctrl, env));
-    const n = t.ChangeNum === 'All' ? ids.length : forgeNombre(P, t.ChangeNum || 1, env);
+    const n = t.ChangeNum === 'All' ? ids.length : forgeNombre(P, t.ChangeNum || t.NumCards || 1, env);
     const qui = t.Chooser ? env.ctrl : j;
     let pris;
     /* « Up to two basic land cards that share a land type » (Myriad Landscape) :

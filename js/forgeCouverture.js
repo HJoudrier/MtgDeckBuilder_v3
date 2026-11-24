@@ -28,6 +28,7 @@ const FORGE_CLES_DEFINI = /^(Defined(Player|Cards)?|RememberObjects|ForgetDefine
 
 /* Les paramètres qu'on ne lit que pour certaines valeurs : `forgeValeurs('ChangeZone.Activator', ['You.!Active'])`. */
 const FORGE_VALEURS = {};
+/* `valeurs` : une liste, ou une fonction qui dit si la valeur est lue. */
 function forgeValeurs(nom, valeurs) { FORGE_VALEURS[nom] = valeurs; }
 
 /* Inscrire ce qu'un module du moteur sait faire. */
@@ -99,7 +100,8 @@ function elementsTable(face, t, genre, out, vus) {
     else if (!FORGE_DESCRIPTIFS.test(k)) {
       const nom = FORGE_COMMUNS.has(k) || !famille ? k : famille + '.' + k;
       /* Un paramètre lu pour certaines valeurs seulement : une autre reste inconnue. */
-      out.add('param:' + (FORGE_VALEURS[nom] && !FORGE_VALEURS[nom].includes(t[k]) ? nom + '=' + t[k] : nom));
+      const vs = FORGE_VALEURS[nom], bon = !vs || (typeof vs === 'function' ? vs(t[k]) : vs.includes(t[k]));
+      out.add('param:' + (bon ? nom : nom + '=' + t[k]));
     }
     /* Les mots-clés d'une pompe : chacun est une valeur à reconnaître. */
     if (k === 'KW') String(t[k]).split('&').map(x => x.trim().toLowerCase()).filter(Boolean).forEach(x => out.add('kwval:' + x));

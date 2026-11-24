@@ -9,7 +9,7 @@
    ===================================================================== */
 
 forgeEffet('Dig', ['DigNum', 'ChangeNum', 'ChangeValid', 'DestinationZone', 'DestinationZone2', 'LibraryPosition',
-  'LibraryPosition2', 'DefinedPlayer', 'AnyNumber', 'Optional', 'RememberChanged', 'RevealOptional'], function* (P, t, env) {
+  'LibraryPosition2', 'DefinedPlayer', 'AnyNumber', 'Optional', 'RememberChanged', 'RevealOptional', 'WithCounters', 'Choser', 'ExileWithCounters'], function* (P, t, env) {
   /* La bibliothèque de chaque joueur désigné (`Defined$ Player` : de tous),
      ou ciblé. */
   const qui = t.DefinedPlayer ? [...new Set(forgeDefinis(P, t.DefinedPlayer, env).map(x => joueurDe(x)).filter(j => j != null))]
@@ -26,10 +26,12 @@ function* fouilleForge(P, t, env, j) {
   const ok = dessus.filter(id => !t.ChangeValid || forgeValideObjet(P, obj(P, id), t.ChangeValid, env.src, env.ctrl, env));
   const k = t.ChangeNum === 'All' ? ok.length : forgeNombre(P, t.ChangeNum || 1, env);
   const libre = t.AnyNumber === 'True' || t.Optional === 'True';
-  const pris = yield* choisitCartes(P, env.ctrl, ok, k, 'Prendre', 'cartes', libre ? 0 : k);
+  /* « An opponent chooses one of them » (`Choser$ Player.Opponent`, Karn, Scion of Urza). */
+  const chooser = t.Choser ? joueurDe(forgeDefinis(P, t.Choser, env)[0]) : null;
+  const pris = yield* choisitCartes(P, chooser != null ? chooser : env.ctrl, ok, k, 'Prendre', 'cartes', libre ? 0 : k);
   const d1 = zoneForge(t.DestinationZone) || 'main', d2 = zoneForge(t.DestinationZone2) || 'bibliotheque';
   for (const id of pris) {
-    const nid = yield* deplaceForge(P, obj(P, id), d1, env, {dessous: t.LibraryPosition === '-1'});
+    const nid = yield* deplaceForge(P, obj(P, id), d1, env, {dessous: t.LibraryPosition === '-1', marqueurs: t.WithCounters ? {[genreMarqueur(t.WithCounters)]: 1} : null});
     if (nid != null && t.RememberChanged === 'True') retiensForge(env.ctx, nid);
     if (nid != null && t.Imprint === 'True') retiensEmpreinte(empreinteDe(P, env.ctx, env.src), nid);
   }
@@ -37,7 +39,7 @@ function* fouilleForge(P, t, env, j) {
     /* `DestZone2Optional$` : l'autre destination n'est qu'une permission (« otherwise, you may put it into your graveyard »). */
     if (t.DestZone2Optional === 'True' && d2 !== 'bibliotheque' && (yield question(P, env.ctrl, 'oui', ['non', 'oui'], {texte: `Mettre ${obj(P, id).def.nom} dans ${d2 === 'cimetiere' ? 'le cimetière' : 'l\'autre zone'} ?`, source: env.ctx.source})) !== 1) continue;
     if (d2 === 'bibliotheque') { if (t.LibraryPosition2 !== '0') { retireDe(B, id); B.unshift(id); } }
-    else yield* deplaceForge(P, obj(P, id), d2, env, {});
+    else yield* deplaceForge(P, obj(P, id), d2, env, {marqueurs: t.ExileWithCounters ? {[genreMarqueur(t.ExileWithCounters)]: 1} : null});
   }
 }
 
