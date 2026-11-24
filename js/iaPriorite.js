@@ -44,7 +44,9 @@ function scoreEffet(P, j, effet, src) {
     switch (op.op) {
       case 'pioche': s += (op.qui && op.qui.vous ? 2 : 0.5) * n; break;
       case 'gagneVie': s += 0.3 * n; break;
-      case 'perdVie': s += op.qui && op.qui.chaque ? 0.7 * n : 0.3 * n; break;
+      /* Perdre de la vie soi-même n'a rien à gagner : le prix d'une capacité, jamais son profit. */
+      case 'perdVie': s += op.qui && op.qui.vous && !op.qui.chaque ? -0.7 * n : op.qui && op.qui.chaque ? 0.7 * n : 0.3 * n; break;
+      case 'degats': s += op.soi ? -0.7 * n : 0.5; break;
       case 'jetons': s += n * valeurDef(op._def || (op._def = definitionJeton(op.jeton))); break;
       case 'marqueurs': s += n * (op.genre === '+1/+1' ? 1 : 0.5); break;
       case 'cherche': s += 3; break;
@@ -83,11 +85,21 @@ function impactSort(P, j, o) {
   return v + d.mv * 0.3;
 }
 
+/* Un sort non-terrain de la main, qu'une réserve d'un mana de plus rendrait payable ? */
+function manaDePileUtile(P, j) {
+  const dispo = manaDispo(P, j);
+  return P.joueurs[j].main.some(id => { const d = obj(P, id).def; return !d.types.includes('land') && d.mv > dispo && d.mv <= dispo + 1; });
+}
+
 /* L'effet d'une capacité qu'on activerait maintenant. */
 function impactCapacite(P, j, o, k, ag) {
   const cle = P.tour + '|' + o.id + '|' + capacitesDe(P, o).indexOf(k);
   if ((ag.activations.get(cle) || 0) >= 3) return -1;
-  let s = scoreEffet(P, j, k.effet, o);
+  /* Du mana qui passe par la pile (un talisman qui blesse) : il arrive dans la réserve, qui se vide à la fin de l'étape. Il ne vaut que
+     s'il rend payable un sort de la main, sinon activer la capacité n'est qu'une perte — de vie, le plus souvent. */
+  const ops = k.effet ? k.effet.ops : [], mana = ops.some(op => op.op === 'mana');
+  let s = scoreEffet(P, j, mana ? {...k.effet, ops: ops.filter(op => op.op !== 'mana')} : k.effet, o);
+  if (mana) s += manaDePileUtile(P, j) ? 3 : -1.5;
   if (k.genre === 'loyaute') return typeof k.delta === 'number' ? s + k.delta * 0.6 + 1 : s;
   /* Cycler, c'est renoncer à la carte : ce qu'elle vaudrait en main se paie. */
   if (k.cycle) s -= 0.4 * utiliteEnMain(P, j, o.id);

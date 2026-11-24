@@ -183,7 +183,7 @@ js/                 modules, chargés dans cet ordre :
   forgeDefinition.js  d'un script de Forge à une définition de jeu
   iaValeur.js       ce que vaut une carte, un permanent, un adversaire
   iaChoix.js        garder sa main, cibler, chercher, défausser
-  iaPriorite.js     ce que le joueur automatique fait de sa priorité
+  iaPriorite.js     ce que le joueur automatique fait de sa priorité — jamais perdre de la vie ou activer du mana de pile sans un sort que ce mana rend payable
   iaCombat.js       attaquer et bloquer
   iaEvaluation.js   ce que vaut une position : la note commune que le combat calculé et la recherche comparent
   iaCombatCalcul.js le combat calculé : alpha-bêta à deux niveaux sur un modèle réduit du combat

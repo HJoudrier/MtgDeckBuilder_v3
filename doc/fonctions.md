@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1897 fonctions**, 305 modules, 2095 Ko de JavaScript.
+**1898 fonctions**, 305 modules, 2096 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -181,7 +181,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeChoixMultiples.js`](#jsforgechoixmultiplesjs) | Choisir à plusieurs, en plusieurs fois | 1 | 150 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
-| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 11 | 216 |
+| [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
 | [`iaCombat.js`](#jsiacombatjs) | Attaquer et bloquer, pour le joueur automatique | 6 | 95 |
 | [`iaEvaluation.js`](#jsiaevaluationjs) | Ce que vaut une position | 6 | 92 |
 | [`iaCombatCalcul.js`](#jsiacombatcalculjs) | Le combat calculé | 10 | 208 |
@@ -2901,13 +2901,14 @@ Les choix du joueur automatique hors de la priorité. *7 fonctions, 124 lignes, 
 
 ## js/iaPriorite.js
 
-Ce que le joueur automatique fait de sa priorité. *11 fonctions, 216 lignes, 10 Ko.*
+Ce que le joueur automatique fait de sa priorité. *12 fonctions, 228 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `meilleureCibleHostile(P, j, slot, src, n)` | Le meilleur candidat hostile d'un emplacement, et sa valeur. |
 | `scoreEffet(P, j, effet, src)` | Ce qu'un effet rapporte, à grands traits. |
 | `impactSort(P, j, o)` | L'effet d'un sort qu'on lancerait maintenant. |
+| `manaDePileUtile(P, j)` | Un sort non-terrain de la main, qu'une réserve d'un mana de plus rendrait payable ? |
 | `impactCapacite(P, j, o, k, ag)` | L'effet d'une capacité qu'on activerait maintenant. |
 | `scoreTerrain(P, j, o)` | Le meilleur terrain à jouer : celui qui ouvre les couleurs que réclame la main, et qui entre dégagé. |
 | `iaReponse(P, j, actions, ag)` | Hors phase principale : faut-il agir maintenant ? |

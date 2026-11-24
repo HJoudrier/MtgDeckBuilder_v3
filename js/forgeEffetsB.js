@@ -109,7 +109,7 @@ forgeEffet('DealDamage', ['NumDmg', 'DamageSource', 'DividedAsYouChoose', 'Exces
     return;
   }
   for (const c of cibles) infligeAvecExces(P, t, env, src, c, n);
-}, (t, op) => { op.op = 'degats'; op.n = nombreIA(t.NumDmg || 0); op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null || /Opponent/.test(t.Defined || ''); });
+}, (t, op) => { op.op = 'degats'; op.n = nombreIA(t.NumDmg || 0); op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = op.slot != null || /Opponent/.test(t.Defined || ''); op.soi = t.Defined === 'You'; });
 
 forgeEffet('DamageAll', ['NumDmg', 'ValidCards', 'ValidPlayers', 'DamageSource'], function* (P, t, env) {
   const n = forgeNombre(P, t.NumDmg || 0, env), src = sourceDegats(P, t, env);
