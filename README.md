@@ -2319,8 +2319,8 @@ sa phrase ; ce qui revient plusieurs fois :
   copier avec une autre loyauté (`SetLoyalty$`), `Perpetual` pour une force et une endurance (Freyalise), un crime commis ce tour, la première phase de combat (Zariel), les attaquants d'un déclenchement, des cartes
   face cachée de la force qu'on dit (Tezzeret, Cruel Machinist), quitter le champ c'est être exilé (Personal Decoy), Gideon Jura, Oko, Lord of the Fae (un planeswalker conjuré au hasard).
 Restent douze planeswalkers, tous hors d'EDHREC : l'Alchemy et ses effets « perpétuels » sur une carte (Davriel, Garruk Wrath of the Wilds, Sarkhan Wanderer to Shiv, Teyo Aegis Adept, Tibalt ×2 — `Draft`, `Spellbook`),
-les secteurs d'Unfinity (Space Beleren), `Casualty` d'un permanent (Ob Nixilis, the Adversary), le phasing d'un joueur (Teferi, Timeless Voyager), un nom choisi pour en copier une carte (Svega), un effet « avec Partner » qui
-dure le tour d'un autre (Rowan Kenrith) et les choix au hasard d'Urza, Academy Headmaster.
+les secteurs d'Unfinity (Space Beleren), `Casualty` d'un permanent (Ob Nixilis, the Adversary), le phasing d'un joueur (Teferi, Timeless Voyager), un nom choisi pour en copier une carte (Svega), un effet qui dure jusqu'à la fin du tour d'un autre joueur et se défait au nettoyage
+(Rowan Kenrith) et les choix au hasard d'Urza, Academy Headmaster.
 Deux corrections de passage : un Spirit Guide ne se paie plus de son propre mana en se lançant (la partie bouclait), et le sort qu'on lance n'est plus une source de sa propre main (`js/forgeManaB.js`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
