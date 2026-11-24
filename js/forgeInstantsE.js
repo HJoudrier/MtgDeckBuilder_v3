@@ -114,12 +114,14 @@ forgeSait('param', 'ReduceCost.Relative');
 
 definisEtendus = (g => function (P, v, env) {
   let m;
+  /* `AffectedDefined$ AttachedBy Self` (les Umbra, cinquante cartes) : ce à quoi la source est attachée. */
+  if (v === 'AttachedBy Self') { const h = env.src && !env.src.lki && env.src.att != null ? obj(P, env.src.att) : null; return h ? [h] : []; }
   if ((m = /^Top_(\d+)_OfLibrary$/.exec(v))) return P.joueurs[env.ctrl].bibliotheque.slice(-m[1]).reverse().map(id => obj(P, id)).filter(Boolean);
   /* `.Chosen,You` : le joueur choisi, et moi. */
   if (/^[.\w]+(,[.\w]+)+$/.test(v)) return [].concat(...v.split(',').map(x => forgeDefinis(P, x === '.Chosen' ? 'Player.Chosen' : x, env)));
   return g(P, v, env);
 })(definisEtendus);
-forgeSait('defini', 'Top_4_OfLibrary', '.Chosen,You');
+forgeSait('defini', 'Top_4_OfLibrary', '.Chosen,You', 'AttachedBy');
 
 /* —— Déplacer tout, et s'en souvenir ———————————————————————————————— */
 

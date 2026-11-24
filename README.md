@@ -2376,6 +2376,9 @@ qu'il dirige ; Critical Hit lit tout jet de dé comme naturel (le moteur ne modi
 - **Annuler.** Le moteur étant déterministe, `annuleTable()` rejoue la partie avec les réponses qui précèdent la dernière de ce siège (`TABLE.points`, relevés par `recoitReponse()`) ; le bouton « ↶ Annuler » paraît quand une
   question attend le joueur et qu'aucun autre humain ne joue à la table. Les automates sont refaits avec un agent neuf : ils peuvent jouer autrement qu'avant.
 
+**Correctif : les Umbra** (`js/forgeInstantsE.js`). `AffectedDefined$ AttachedBy Self`, qu'écrivent une cinquantaine de cartes (Snake Umbra, Hyena Umbra…), n'était pas une désignation que le moteur sût lire : la
+statique n'atteignait personne, et l'aura passait pour complète sans rien faire — ni +1/+1, ni capacité accordée. Elle désigne maintenant la créature à laquelle la source est attachée.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -191,7 +191,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeInstantsB.js`](#jsforgeinstantsbjs) | Les instants : mémoires, tours en plus, combats | 5 | 226 |
 | [`forgeInstantsC.js`](#jsforgeinstantscjs) | Les instants : la pile, les coûts facultatifs | 0 | 132 |
 | [`forgeInstantsD.js`](#jsforgeinstantsdjs) | Les instants : mots accordés, vie, déclarations | 3 | 124 |
-| [`forgeInstantsE.js`](#jsforgeinstantsejs) | Les instants : filtres, marqueurs, piles, coûts | 0 | 231 |
+| [`forgeInstantsE.js`](#jsforgeinstantsejs) | Les instants : filtres, marqueurs, piles, coûts | 0 | 233 |
 | [`forgeInstantsF.js`](#jsforgeinstantsfjs) | Les instants : la pile, la réserve, les dés | 1 | 127 |
 | [`forgeInstantsG.js`](#jsforgeinstantsgjs) | Les instants : un nombre de cibles annoncé | 3 | 67 |
 | [`forgeManaRestreintB.js`](#jsforgemanarestreintbjs) | Engager à la main une source de mana restreint | 2 | 60 |
@@ -2997,7 +2997,7 @@ Les instants : mots accordés, vie, déclarations. *3 fonctions, 124 lignes, 7.4
 
 ## js/forgeInstantsE.js
 
-Les instants : filtres, marqueurs, piles, coûts. *0 fonctions, 231 lignes, 14 Ko.*
+Les instants : filtres, marqueurs, piles, coûts. *0 fonctions, 233 lignes, 14 Ko.*
 
 ## js/forgeInstantsF.js
 
