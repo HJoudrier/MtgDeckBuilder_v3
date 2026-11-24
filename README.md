@@ -145,6 +145,11 @@ js/                 modules, chargés dans cet ordre :
   forgeDeclencheursF.js  marqueurs posés par lot, vie à l'entretien, déclencheurs d'entrée coupés
   forgeCopiesB.js   ce que la copie reçoit de plus : couleurs, types ôtés, mot-clé du tour, entrée engagée
   forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
+  forgeEntreesC.js  entrer engagé sauf si l'on révèle ou contrôle ; sacrifier les homonymes avant d'entrer
+  forgeChaque.js    « EACH Forest & Plains » : chercher une carte par filtre
+  forgeTerrains.js  ce que les terrains font de plus : cibles de même type, rendre les créatures, mana du cimetière
+  forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
+  forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
   forgeBatailles.js   les batailles : défense, protecteur, vaincre, lancer la face arrière
   forgeEffetsJ.js   des effets durables : un nombre retenu par l'effet (SetChosenNumber)
