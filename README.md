@@ -2080,6 +2080,8 @@ et des retouches). Huit cartes de plus (6 629 → 6 637 complètes) :
   directement ou par un planeswalker ; **`Dig | NoLooking$`** (Expressive Iteration), qui ne change rien à ce que voit le joueur.
 Soixante-quinze parties au hasard supplémentaires, sans une erreur du moteur. La liste de ce qui reste, par poids, est
 dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md), remesurée le 24 novembre.
+Le détail — par type de carte, par structure, par mécanisme, sur tout le pool Forge (34 482 cartes) comme sur les cartes d'EDHREC — est dans
+[doc/couverture-detail.md](doc/couverture-detail.md).
 
 **Lot F86 : les activations du tour** (`js/forgeActivationsB.js`). Cinq cartes de plus (6 637 → 6 642) :
 - **`Count$ThisTurnActivated_Activated.<filtre>`** (The Chain Veil, Bruenor Battlehammer, Forge Anew) : chaque activation
