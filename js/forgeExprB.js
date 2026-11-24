@@ -33,7 +33,8 @@ function exprEtendue(P, tete, q, env) {
   if (tete === 'Remembered' || tete === 'RememberedLKI') {
     const l = (ctx.memo || []).map(id => passeOuPresent(P, id)).filter(Boolean);
     if ((k = /^Valid ([^$]+)(?:\$(\w+))?$/.exec(q))) return agregeForge(P, l.filter(o => forgeValideObjet(P, o, k[1], env.src, env.ctrl, env)), k[2]);
-    if (tete === 'RememberedLKI') return caracForge(P, l[0], q);
+    /* Plusieurs cartes retenues : le total (« damage equal to their total power », Angrath). */
+    if (tete === 'RememberedLKI') return l.length > 1 && /^Card(Power|Toughness|ManaCost)$/.test(q) ? l.reduce((s, o) => s + caracForge(P, o, q), 0) : caracForge(P, l[0], q);
     return undefined;
   }
   if (tete === 'Targeted' && (k = /^Valid ([^$]+)$/.exec(q))) {

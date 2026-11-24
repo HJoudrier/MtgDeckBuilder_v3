@@ -96,6 +96,8 @@ function collecteRetardes(P, e) {
   if (!P.retardes || !P.retardes.length) return;
   P.retardes = P.retardes.filter(r => {
     if (r.apresTour != null && P.tour <= r.apresTour) return true;
+    /* Un déclencheur retardé qui n'écoute que le tour d'un joueur (`DelayedTriggerDefinedPlayer$`, Gideon Jura). */
+    if (r.joueurCible != null && e.actif !== r.joueurCible) return true;
     const s = obj(P, r.src) || r.lki || {id: r.src, ctrl: r.ctrl, def: {nom: r.nom, couleurs: []}, marq: {}};
     if (!forgeDeclenche(P, {t: r.t, face: r.face}, e, {...s, ctrl: r.ctrl})) return true;
     P.enAttente.push({src: r.src, lki: obj(P, r.src) ? null : r.lki, ctrl: r.ctrl, evt: e, memo: r.memo, memoJ: r.memoJ, nombre: r.nombre,

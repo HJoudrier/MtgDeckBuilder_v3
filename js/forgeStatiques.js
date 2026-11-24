@@ -37,7 +37,7 @@ function statiqueTenable(t) {
   /* Jouer depuis une autre zone : la pioche d'impulsion, le cimetière, le
      dessus de la bibliothèque (js/jeuPermis.js). */
   if (t.MayPlay) {
-    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand)(,(Exile|Graveyard|Library|Hand))*$/.test(t.AffectedZone || '')) return false;
+    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand|Stack)(,(Exile|Graveyard|Library|Hand|Stack))*$/.test(t.AffectedZone || '')) return false;
     if ((t.MayPlayAltManaCost && !/^(0|PayLife<ConvertedManaCost>)$/.test(t.MayPlayAltManaCost)) || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
     /* Depuis la main, la permission ne sert que si elle rend le sort gratuit. */
     if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True') return false;
@@ -58,7 +58,7 @@ function statiqueTenable(t) {
   /* « The first activated ability of an artifact you activate each turn costs {2} less » (Tezzeret) : js/forgePlaneswalkers.js. */
   if (t.Mode === 'ReduceCost' && reduitCapaciteTenable(t)) return true;
   if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip') && !capacitesLisibles(t)) return false;
-  if (t.Mode === 'MustAttack' && t.MustAttack && !/^(Player\.Other|Player|Opponent)$/.test(t.MustAttack)) return false;
+  if (t.Mode === 'MustAttack' && t.MustAttack && !/^(Player\.Other|Player|Opponent|EffectSource)$/.test(t.MustAttack)) return false;
   if (t.RemoveType && !typesForge(t.RemoveType).types.length) return false;
   if (t.AddType && /ChosenType/.test(t.AddType) && t.AddType !== 'ChosenType') return false;
   if (t.AddHiddenKeyword && !t.AddHiddenKeyword.split('&').every(k => CACHES_TENUS[k.trim()])) return false;

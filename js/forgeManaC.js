@@ -18,7 +18,8 @@
 
 capaciteForge = (g => function (def, face, t, jetons) {
   const api = forgeApi(t);
-  if (api !== 'Mana' || (!t.AddsKeywords && !t.AddsKeywordsValid && !t.AddsKeywordsUntil && !t.TriggersWhenSpent && !t.AddsCounters)) return g(def, face, t, jetons);
+  /* Une capacité de loyauté n'est pas une capacité de mana : son mana porte ses faveurs dans la réserve (js/forgeManaRestreint.js). */
+  if (api !== 'Mana' || t.Planeswalker === 'True' || (!t.AddsKeywords && !t.AddsKeywordsValid && !t.AddsKeywordsUntil && !t.TriggersWhenSpent && !t.AddsCounters)) return g(def, face, t, jetons);
   const n = def.capacites.length;
   if (!g(def, face, t, jetons) || def.capacites.length !== n + 1 || def.capacites[n].genre !== 'mana') return false;
   const k = def.capacites[n];

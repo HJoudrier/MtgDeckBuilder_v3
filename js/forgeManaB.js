@@ -56,6 +56,8 @@ sourcesMana = (g => function (P, j, pour) {
   const r = g(P, j, pour);
   if (!MANA_B.main) return r;
   for (const id of P.joueurs[j].main) {
+    /* Le sort qu'on lance ne se paie pas de son propre mana : il quitte la main avant le paiement (un Spirit Guide qui se lançait en s'exilant boucle). */
+    if (pour && pour.sort && pour.sort.id === id) continue;
     const o = obj(P, id), d = o.def;
     /* Appelé à chaque plan de paiement : la réponse se garde sur la définition. */
     if (d._manaMain === undefined) d._manaMain = d.capacites.some(k => k.genre === 'mana' && k.zone === 'main');

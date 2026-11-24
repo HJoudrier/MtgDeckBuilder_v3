@@ -249,7 +249,7 @@ function activeSource(P, j, s, option, pour) {
   engageObjet(P, o, option || true);
   if (s.nonContre && s.nonContre.includes(option) && pour && pour.sort) pour.sort.nonContrable = true;
   if (s.reste) o.exerce = true;
-  if (s.vie) J.vie -= s.vie;
+  if (s.vie) payeVie(P, j, s.vie, false);
   if (s.compteurs && s.compteurs.opts.has(option)) o.marq[s.compteurs.genre] = Math.max(0, (o.marq[s.compteurs.genre] || 0) - (s.compteurs.x ? String(option).length : s.compteurs.n));
   if (s.exileCim) J.cimetiere.slice(0, s.exileCim).forEach(id => deplace(P, id, 'exil'));
   if (pour && pour.capacite && pour.sources) pour.sources.push(s.id);

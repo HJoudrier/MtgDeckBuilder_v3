@@ -125,7 +125,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (ent.engagee && ent.saufRevele && !opts.engage && P.joueurs[ctrl].main.some(x => x !== id && correspond(P, obj(P, x), ent.saufRevele, o, ctrl))) engage = false;
   if (ent.engagee && ent.payeVie && !opts.engage) {
     const r = yield question(P, ctrl, 'oui', ['non', 'oui'], {texte: `Payer ${ent.payeVie} PV pour qu'il entre dégagé ?`, source: id});
-    if (r === 1) { P.joueurs[ctrl].vie -= ent.payeVie; engage = false; }
+    if (r === 1) { payeVie(P, ctrl, ent.payeVie, false); engage = false; }
   }
   const x = o.x || 0;
   const avec = entreAvecPrevu(P, id);

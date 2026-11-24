@@ -14,7 +14,7 @@ function* paieAutre(P, j, o, c) {
   let lki = null;
   if (c.engage) engageObjet(P, o);
   if (c.degage) degageObjet(P, o);
-  if (c.vie) { P.joueurs[j].vie -= c.vie; emet(P, {t: 'payeVie', joueur: j, n: c.vie}); }
+  if (c.vie) payeVie(P, j, c.vie);
   if (c.retire) { o.marq[c.retire.genre] -= c.retire.n; P.ver++; emet(P, {t: 'marqueurRetire', id: o.id, genre: c.retire.genre, n: c.retire.n}); }
   if (c.engageAutres) {
     const ids = champDe(P, j).filter(x => !x.engage && x.id !== o.id && correspond(P, x, c.engageAutres.desc, o, j)).map(x => x.id);
@@ -179,6 +179,9 @@ function* activeCapacite(P, j, a) {
     o.marq.loyaute = (o.marq.loyaute || 0) + delta;
     noteLoyaute(P, o);
     P.ver++;
+    /* Un marqueur de loyauté posé ou retiré par le coût : B.O.B. et Chandra, Fire Artisan l'écoutent. */
+    if (delta > 0) emet(P, {t: 'marqueur', id: o.id, genre: 'loyaute', n: delta, source: o.id});
+    else if (delta < 0) emet(P, {t: 'marqueurRetire', id: o.id, genre: 'loyaute', n: -delta});
   } else {
     if (k.cout.mana.x) x = maxX(P, j, k.cout.mana);
     /* X dans le reste du coût : choisi, sans dépasser ce qu'on peut payer

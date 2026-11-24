@@ -51,15 +51,16 @@ function conjure(P, j, def) {
 }
 
 forgeEffet('MakeCard', ['Name', 'Zone', 'Conjure', 'RememberMade'], function* (P, t, env) {
-  const def = defNommee(t.Name);
-  if (!def) { jn(P, `${t.Name} : aucun script, rien n'est conjuré`); return; }
+  const nom = t.Name === 'ChosenName' ? choixDe(P, env.src).nom : t.Name, def = nom ? defNommee(nom) : null;
+  if (!def) { jn(P, `${nom || t.Name} : aucun script, rien n'est conjuré`); return; }
   for (const j of joueursForge(P, t, env)) {
     const o = conjure(P, j, def);
     jn(P, `${P.joueurs[j].nom} conjure ${def.nom}`);
-    if (t.Zone === 'Battlefield') { const n = yield* metEnJeu(P, o.id, j, {}); if (n != null && t.RememberMade === 'True') retiensForge(env.ctx, n); }
+    if (t.Zone === 'Exile') { const n = deplace(P, o.id, 'exil'); if (n != null && t.RememberMade === 'True') retiensForge(env.ctx, n); }
+    else if (t.Zone === 'Battlefield') { const n = yield* metEnJeu(P, o.id, j, {}); if (n != null && t.RememberMade === 'True') retiensForge(env.ctx, n); }
     else if (t.RememberMade === 'True') retiensForge(env.ctx, o.id);
   }
-}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !!t.Name && !t.DefinedName && !t.Spellbook && /^(Hand|Battlefield)$/.test(t.Zone || 'Hand')});
+}, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !!t.Name && !t.DefinedName && !t.Spellbook && /^(Hand|Battlefield|Exile)$/.test(t.Zone || 'Hand')});
 
 /* —— Empower ———————————————————————————————————————————————————— */
 
@@ -109,3 +110,23 @@ FORGE_API.Play.gen = (g => function* (P, t, env) {
 })(FORGE_API.Play.gen);
 FORGE_API.Play.prepare = (p => (t, op) => (t.CopyFromChosenName === 'True' || !p || p(t, op)))(FORGE_API.Play.prepare);
 forgeSait('param', 'Play.CopyFromChosenName');
+
+/* —— Nommer une carte au hasard parmi toutes celles qu'on connaît ———————————————— */
+
+/* « Conjure a random planeswalker card » (Oko, Lord of the Fae) : `NameCard | AtRandom$ True | ValidCards$ Planeswalker` nomme un planeswalker au hasard parmi les scripts de
+   l'appareil (js/forgeDepot.js) ; sans eux, rien n'est nommé. */
+let NOMS_PLANESWALKERS = null;
+function nomsPlaneswalkers() {
+  if (NOMS_PLANESWALKERS && NOMS_PLANESWALKERS.taille === FORGE.textes.size) return NOMS_PLANESWALKERS.l;
+  const l = [];
+  FORGE.textes.forEach((txt, ch) => { if (!ch.startsWith('jetons/') && /^Types:.*\bPlaneswalker\b/m.test(txt) && !/^AlternateMode:/m.test(txt)) l.push((/^Name:(.*)$/m.exec(txt) || [])[1]); });
+  NOMS_PLANESWALKERS = {taille: FORGE.textes.size, l: l.filter(Boolean).sort()};
+  return NOMS_PLANESWALKERS.l;
+}
+FORGE_API.NameCard.gen = (g => function* (P, t, env) {
+  if (t.AtRandom !== 'True' || t.ValidCards !== 'Planeswalker') return yield* g(P, t, env);
+  const l = nomsPlaneswalkers();
+  if (!l.length) return;
+  choixDe(P, env.src).nom = l[entierHasard(P.rng, l.length)];
+  jn(P, `${choixDe(P, env.src).nom} est nommé au hasard`);
+})(FORGE_API.NameCard.gen);

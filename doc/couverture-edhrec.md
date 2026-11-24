@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F99) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F100) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6753** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 354 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 229 |
+| complètes | 6063 | 6611 | 6552 | **6791** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 329 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 216 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, 201 cartes de plus complètes.
+exactement : même banc, mêmes cartes, 239 cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -31,7 +31,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:AddPhase.ExtraPhaseDelayedTrigger` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
 | `param:AddPhase.ExtraPhaseDelayedTriggerExecute` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
 | `expr:Count$ValidStack` | 1 | Mindbreak Trap |
-| `param:ChooseCard.ChooseEach` | 4 | Liliana, Dreadhorde General, Ajani, Nacatl Pariah, Tragic Arrogance |
 | `param:Phases.AnyNumber` | 1 | Ripples of Potential |
 | `param:Proliferate.RememberPut` | 1 | Ripples of Potential |
 | `api:ExchangeLifeVariant` | 2 | Tree of Redemption, Tree of Perdition |
@@ -43,7 +42,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:AbilityTriggered.ValidSource` | 3 | Firebender Ascension, Aboleth Spawn, Historian's Boon |
 | `param:Animate.sVars` | 3 | Summon: Primal Odin, Whip of Erebos, Vorpal Sword |
 | `param:PutCounter.RememberCards` | 2 | Promise of Loyalty, Season of Gathering |
-| `construction:ReduceCost` | 4 | Professor Hojo, Doc Aurlock, Grizzled Genius, Tezzeret, Betrayer of Flesh |
 | `filtre:TriggeredCards` | 1 | Hedge Shredder |
 | `kw:Mutate` | 18 | Nethroi, Apex of Death, Gemrazer, Brokkos, Apex of Forever |
 | `defini:ReplacedNewCard.Creature` | 1 | Spark Double |
@@ -64,11 +62,9 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:RollDice.ValidPlayer` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
 | `param:RollDice.ReplaceWith` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
 | `expr:ReplaceCount$Ignore` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
-| `param:Continuous.GainsValidAbilities` | 2 | Drana and Linvala, Nicol Bolas, Dragon-God |
 | `param:AbilityTriggered.TriggeredOwnAbility` | 2 | Firebender Ascension, Aboleth Spawn |
 | `defini:Player.Opponent+IsRemembered` | 2 | Molten Psyche, Chaos Dragon |
 | `param:Panharmonicon.ValidZone` | 1 | Echoes of Eternity |
-| `api:ControlPlayer` | 5 | Emrakul, the Promised End, Mindslaver, Sorin Markov |
 | `expr:Count$CardNumAttacksThisTurn` | 1 | Moraug, Fury of Akoum |
 | `param:Continuous.ManaConversion` | 2 | Drana and Linvala, Grell Philosopher |
 | `trig:Mutates` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
@@ -93,7 +89,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Pump.DefinedKW` | 1 | Skrelv, Defector Mite |
 | `kwval:myriad` | 2 | Mass of Mysteries, Ironwill Forger |
 | `construction:ETBReplacement` | 1 | Serra's Emissary |
-| `param:Continuous.GainsAbilitiesOfDefined` | 3 | Quicksilver Elemental, Grell Philosopher, Havengul Lich |
 | `trig:AbilityResolves` | 2 | Narci, Fable Singer, Tom Bombadil |
 | `param:AbilityResolves.ValidSource` | 2 | Narci, Fable Singer, Tom Bombadil |
 | `param:AbilityResolves.ValidSpellAbility` | 2 | Narci, Fable Singer, Tom Bombadil |
@@ -102,6 +97,11 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `defini:TriggeredObjectLKICopy` | 2 | Rikku, Resourceful Guardian, Grafted Exoskeleton |
 | `expr:Count$OptionalGenericCostPaid` | 4 | Spirit Water Revival, Burning Curiosity, Dragon's Fire |
 | `param:ChooseNumber.Random` | 1 | Tibalt's Trickery |
+| `param:PumpAll.ConditionPhases` | 1 | Unbreakable Formation |
+| `param:PutCounterAll.ConditionPhases` | 1 | Unbreakable Formation |
+| `param:ChangeZoneAll.DefinedPlayer` | 1 | Teferi's Puzzle Box |
+| `stat:CantBlockUnless` | 1 | Archangel of Tithes |
+| `param:CantBlockUnless.ValidCard` | 1 | Archangel of Tithes |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -114,7 +114,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Mindbreak Trap | `expr:Count$ValidStack` |
 | I | Ripples of Potential | `param:Phases.AnyNumber`, `param:Proliferate.RememberPut` |
 | P | Hedge Shredder | `filtre:TriggeredCards` |
-| P | Liliana, Dreadhorde General | `param:ChooseCard.ChooseEach` |
 | P | Spark Double | `defini:ReplacedNewCard.Creature`, `defini:ReplacedNewCard.Planeswalker` |
 | I | Lethal Scheme | `defini:Convoked` |
 | I | Agadeem's Awakening | `param:ChangeZone.TargetsWithDifferentCMC` |
@@ -137,7 +136,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Tree of Redemption | `api:ExchangeLifeVariant`, `param:ExchangeLifeVariant.Mode` |
 | P | Case of the Locked Hothouse | `filtre:IsSolved` |
 | P | Serra's Emissary | `construction:ETBReplacement` |
-| P | Drana and Linvala | `param:Continuous.GainsValidAbilities`, `param:Continuous.ManaConversion` |
+| P | Drana and Linvala | `param:Continuous.ManaConversion` |
 | I | Drown in the Loch | `param:Counter.TargetsWithControllerProperty`, `param:Destroy.TargetsWithControllerProperty` |
 | P | Firebender Ascension | `trig:AbilityTriggered`, `param:AbilityTriggered.ValidMode`, `param:AbilityTriggered.ValidSource`, `param:AbilityTriggered.TriggeredOwnAbility` |
 | I | Tibalt's Trickery | `param:ChooseNumber.Random`, `param:DigUntil.ImprintRevealed`, `param:Counter.RememberForCounter` |
@@ -163,9 +162,8 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Battle Angels of Tyr | `expr:TriggeredTarget$Valid` |
 | P | Hunting Velociraptor | `construction:Continuous` |
 | P | All-Out Assault | `param:DelayedTrigger.AttackingPlayer` |
-| I | Emrakul, the Promised End | `api:ControlPlayer`, `param:DelayedTrigger.DelayedTriggerDefinedPlayer` |
 | P | Kozilek, the Broken Reality | `param:Manifest.Choices`, `param:Manifest.ChoiceZone` |
-| P | Professor Hojo | `trig:BecomesTargetOnce`, `param:BecomesTargetOnce.ValidTarget`, `param:BecomesTargetOnce.ValidSource`, `construction:ReduceCost` |
+| P | Professor Hojo | `trig:BecomesTargetOnce`, `param:BecomesTargetOnce.ValidTarget`, `param:BecomesTargetOnce.ValidSource` |
 | P | Call the Spirit Dragons | `param:PutCounter.RememberPut`, `param:PutCounter.ForColor` |
 | P | Angel of Destiny | `defini:Player.attackedBySourceThisTurn` |
 | P | Narci, Fable Singer | `trig:AbilityResolves`, `param:AbilityResolves.ValidSource`, `param:AbilityResolves.ValidSpellAbility` |
@@ -207,8 +205,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Chaos Dragon | `param:RollDice.RememberHighestPlayer`, `defini:Player.Opponent+IsRemembered` |
 | I | Champion of the Path | `cout:BeholdExile` |
 | P | Summon: Magus Sisters | `param:Charm.Random` |
-| P | Comet, Stellar Pup | `construction:RollDice` |
-| P | Quicksilver Elemental | `param:Continuous.GainsAbilitiesOfDefined`, `param:Effect.RememberLKI` |
+| P | Quicksilver Elemental | `param:Effect.RememberLKI` |
 | P | Katara, Water Tribe's Hope | `param:AnimateAll.XMin` |
 | I | Haunting Voyage | `expr:Count$Foretold` |
 | P | Gluntch, the Bestower | `param:ChoosePlayer.RememberChosen`, `param:PutCounter.Chooser`, `param:PutCounter.Placer` |
@@ -238,7 +235,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Atraxa, Grand Unifier | `param:RepeatEach.RepeatTypesFrom` |
 | P | Biomancer's Familiar | `stat:CanAdapt`, `param:CanAdapt.ValidCard`, `trig:Adapt`, `param:Adapt.ValidCard` … |
 | P | Avenger of the Fallen | `construction:Mobilize` |
-| P | Ojer Kaslem, Deepest Growth | `construction:DamageDone` |
 | P | Doc Aurlock, Grizzled Genius | `construction:ReduceCost` |
 | I | V.A.T.S. | `param:Destroy.TargetsWithEqualToughness` |
 | I | Hordewing Skaab | `expr:TriggeredPlayersTargets$Amount` |
@@ -250,7 +246,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Kess, Dissident Mage | `param:Continuous.ReplaceGraveyard` |
 | P | Azula, Cunning Usurper | `param:Continuous.MayPlayWithFlash` |
 | P | Hateful Eidolon | `expr:TriggeredCard$AttachedTo` |
-| P | Nicol Bolas, Dragon-God | `defini:Player.Opponent+controlsLegendary.Creature_EQ0+controlsPlaneswalker_LE0`, `param:Continuous.GainsValidAbilities` |
 | P | Celebr-8000 | `param:RollDice.SubsForEach`, `param:RollDice.NoteDoubles` |
 | P | Brudiclad, Telchor Engineer | `param:Clone.ChoiceOptional`, `param:Clone.ExcludeChosen` |
 | P | Blitzball Stadium | `expr:Count$DifferentCounterKinds` |
@@ -261,7 +256,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Tectonic Giant | `param:Attacks.ValidSource` |
 | I | Eventide's Shadow | `construction:RemoveCounter` |
 | P | Wall of Stolen Identity | `param:Clone.RememberCloneOrigin` |
-| P | Ajani, Nacatl Pariah | `param:Token.RememberOriginalTokens`, `param:ImmediateTrigger.TriggerAmount`, `param:ChooseCard.ChooseEach` |
+| P | Ajani, Nacatl Pariah | `param:Token.RememberOriginalTokens`, `param:ImmediateTrigger.TriggerAmount` |
 | I | Fade from History | `defini:Player.controlsEnchantment,controlsArtifact` |
 | P | Brutal Hordechief | `param:Continuous.DeclaresBlockers` |
 | P | Goblin Welder | `expr:SVar$CheckRemem` |
@@ -270,3 +265,8 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Felix Five-Boots | `param:Panharmonicon.ValidSource`, `param:Panharmonicon.CombatDamage`, `param:Panharmonicon.ValidTarget` |
 | P | Shadrix Silverquill | `param:PutCounterAll.Placer` |
 | P | Serra Paragon | `param:LandPlayed.ValidSA` |
+| P | Sliver Gravemother | `construction:Continuous` |
+| I | Grafted Exoskeleton | `trig:Unattached`, `param:Unattached.ValidAttachment`, `param:Unattached.ValidObject`, `defini:TriggeredObjectLKICopy` |
+| I | Spirit Water Revival | `expr:Count$OptionalGenericCostPaid` |
+| P | Collective Effort | `construction:Escalate` |
+| I | Invigorate | `cout:GainLife` |

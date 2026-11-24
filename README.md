@@ -156,6 +156,12 @@ js/                 modules, chargés dans cet ordre :
   forgeBloqueurs.js       SwitchBlock : échanger deux bloqueurs (Sorrow's Path)
   forgeManaCompteurs.js   du mana restreint payé en marqueurs de la source (Crucible of the Spirit Dragon, Throne of Makindi)
   forgeMeld.js            Meld : fusionner deux cartes en un permanent, qui les emmène ensemble
+  forgePlaneswalkers.js   des planeswalkers : sens autour de la table, choix hors cible, bouclier, marqueurs au choix, attaquer en payant de la vie
+  forgePlaneswalkersB.js  marqueurs de loyauté vus des déclencheurs, copies, quantités, crimes, perpétuel, DigMultiple
+  forgePlaneswalkersC.js  rebound donné à un sort, plusieurs pièces, emblème qui porte une capacité, nombre de mana à payer
+  forgeControle.js        diriger le tour d'un autre joueur (Mindslaver, Sorin Markov)
+  forgeRedemarrage.js     recommencer la partie (Karn Liberated)
+  forgeManaRestreint.js   du mana en réserve qui ne paie pas n'importe quoi, ou qui porte une faveur
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2291,6 +2297,31 @@ types avec eux (aucune n'a reculé). Chaque terrain avait sa propre mécanique :
   `BottomLibrary`, `nonCopiedSpell`, `NameCard | ChooseFromList$`, et `Play | CopyFromChosenName$` (la carte nommée, conjurée puis lancée gratuitement) ; `ChangeZoneAll | ValidTgts$ Opponent` ne vise plus que la bibliothèque visée.
 Ce que les filtres de mana ne savent pas : le solveur n'en choisit un que faute de mieux, et Opal Palace (« {1}, {T} : mana de l'identité de couleurs, des marqueurs sur le commandant »)
 n'est donc jamais préféré à son mana incolore. La carte est lue entièrement ; son effet ne se produit que si un joueur l'oriente (paiement manuel).
+
+**Lot F100 : les planeswalkers** (`js/forgePlaneswalkers.js`, `B`, `C`, `js/forgeControle.js`, `js/forgeRedemarrage.js`, `js/forgeManaRestreint.js`, et des retouches). Soixante planeswalkers de plus
+sur soixante-douze, dont les vingt-trois d'EDHREC : ils sont tous lus entièrement ; 6 753 → 6 791 cartes complètes d'EDHREC, 29 620 → 29 790 sur les 34 482 scripts de Forge. Chaque carte avait
+sa phrase ; ce qui revient plusieurs fois :
+- **Un bug de fond.** Une capacité de loyauté qui ajoute du mana (`AB$ Mana | Planeswalker$ True` : Chandra, Jaya Ballard, Domri) était lue comme une capacité de *mana* — une source gratuite,
+  sans coût de loyauté. C'est une capacité qui passe par la pile (`js/forgeDefinition.js`). Son mana, quand il est restreint (« only to cast instant or sorcery spells ») ou qu'il porte une faveur
+  (riot, Domri ; « when you spend this mana to cast an Aura spell », The Unluckiest Planeswalker), va dans `J.poolR` (`js/forgeManaRestreint.js`) : il se mêle à la réserve le temps d'un
+  paiement qui le permet, y passe en premier, et ce qui reste revient à sa liste.
+- **Les marqueurs de loyauté**, posés ou retirés par le coût (`marqueur` / `marqueurRetire`), que `CounterAddedOnce` / `CounterRemovedOnce` écoutent (B.O.B., Chandra, Fire Artisan) ; un
+  marqueur de **bouclier** remplace une destruction ou des dégâts ; des marqueurs d'**argent** sur une carte exilée (Karn, Scion of Urza) ; un marqueur de mot-clé **au choix dans une liste** (Elspeth Resplendent).
+- **Diriger un joueur** (`ControlPlayer` : Sorin Markov, Mindslaver) : pendant son tour, `question()` pose à celui qui dirige les questions du joueur visé. **Recommencer la partie** (Karn Liberated) : tout
+  retourne dans les bibliothèques, la source garde son identité pour que la suite de l'effet se résolve, les cartes exilées avec elle reviennent sur le champ. **Gauche ou droite** (Aminatou, Teyo) : un sens autour
+  de la table, pour faire tourner les permanents ou pour n'attaquer que le plus proche adversaire.
+- **Des emblèmes qui s'activent** (Karn, Living Legacy ; Ob Nixilis of the Black Oath) : un objet de la zone de commandement dont la capacité se joue de là. **Attaquer en payant de la vie** (`CantAttackUnless | Cost$ PayLife<2>`,
+  Sivitri) ; une capacité d'artefact moins chère (`ReduceCost | Type$ Ability`, Tezzeret, Betrayer of Flesh) ; ne pas défausser ni sacrifier sous l'effet d'un adversaire (`P.causeCtrl`, Tamiyo) ; payer de la vie remplacé
+  par l'exil du dessus de sa bibliothèque (`payeVie()`, Ashiok, Wicked Manipulator).
+- **Choisir** : un par type de permanent (`ChooseEach$`, Liliana, Dreadhorde General), parmi ce que contrôle le joueur de la boucle (`ControlledByPlayer$ Remembered`, The Eternal Wanderer, Professor Onyx), au hasard
+  (`AtRandom$`, Freyalise), parmi des cartes désignées (`DefinedCards$`), un par sorte parmi le dessus (`DigMultiple`, Kiora), un jeton Jace (`Empower`) — et des cibles qu'un adversaire choisit.
+- **Les petits compléments** : plusieurs pièces (`FlipCoin | Amount$`, Ral Zarek), le rebound donné à un sort de la pile (Narset Transcendent), `Nicol Bolas` et `Kasmina` qui ont les capacités de loyauté des autres, `The Aetherspark`,
+  copier avec une autre loyauté (`SetLoyalty$`), `Perpetual` pour une force et une endurance (Freyalise), un crime commis ce tour, la première phase de combat (Zariel), les attaquants d'un déclenchement, des cartes
+  face cachée de la force qu'on dit (Tezzeret, Cruel Machinist), quitter le champ c'est être exilé (Personal Decoy), Gideon Jura, Oko, Lord of the Fae (un planeswalker conjuré au hasard).
+Restent douze planeswalkers, tous hors d'EDHREC : l'Alchemy et ses effets « perpétuels » sur une carte (Davriel, Garruk Wrath of the Wilds, Sarkhan Wanderer to Shiv, Teyo Aegis Adept, Tibalt ×2 — `Draft`, `Spellbook`),
+les secteurs d'Unfinity (Space Beleren), `Casualty` d'un permanent (Ob Nixilis, the Adversary), le phasing d'un joueur (Teferi, Timeless Voyager), un nom choisi pour en copier une carte (Svega), un effet « avec Partner » qui
+dure le tour d'un autre (Rowan Kenrith) et les choix au hasard d'Urza, Academy Headmaster.
+Deux corrections de passage : un Spirit Guide ne se paie plus de son propre mana en se lançant (la partie bouclait), et le sort qu'on lance n'est plus une source de sa propre main (`js/forgeManaB.js`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

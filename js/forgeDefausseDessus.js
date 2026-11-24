@@ -46,3 +46,29 @@ defausseCarte = (g => function (P, id, j) {
 })(defausseCarte);
 
 forgeSait('param', 'Moved.EffectOnly', 'Moved.Discard', 'Moved.Optional', 'Reveal.RevealDefined');
+
+/* —— Payer de la vie ———————————————————————————————————————————————— */
+
+/* Payer N points de vie, d'un coût ou d'un « may pay ». Un remplacement peut en décider autrement : « if you would pay life while your library has at least that many
+   cards in it, exile that many cards from the top of your library instead » (Ashiok, Wicked Manipulator). `evt` : annoncer le paiement aux déclencheurs. */
+function payeVie(P, j, n, evt = true) {
+  const x = remplacementsEnJeu(P).find(({src, r}) => r.forme === 'payeVieExile' && src.ctrl === j && P.joueurs[j].bibliotheque.length >= n);
+  if (x) {
+    const B = P.joueurs[j].bibliotheque;
+    for (let k = 0; k < n; k++) deplace(P, B[B.length - 1], 'exil');
+    jn(P, `${P.joueurs[j].nom} exile ${n} cartes au lieu de payer ${n} PV`);
+    return;
+  }
+  P.joueurs[j].vie -= n;
+  if (evt) emet(P, {t: 'payeVie', joueur: j, n});
+}
+
+formeRemplacement = (g => function (face, r) {
+  const b = g(face, r);
+  if (b || r.Event !== 'PayLife' || r.ValidPlayer !== 'You' || !r.ReplaceWith) return b;
+  const w = forgeSousCapacite(face, r.ReplaceWith);
+  return w && forgeApi(w) === 'ChangeZoneAll' && w.Origin === 'Library' && w.Destination === 'Exile' && w.Defined === 'You' ? 'payeVieExile' : b;
+})(formeRemplacement);
+forgeSait('repl', 'PayLife');
+forgeSait('param', 'PayLife.ActiveZones', 'PayLife.ReplaceWith', 'PayLife.Amount', 'PayLife.ValidPlayer', 'ChangeZoneAll.TypeLimit', 'ChangeZoneAll.Defined');
+forgeSait('filtre', 'NotDefinedReplacedSimultaneousETB');

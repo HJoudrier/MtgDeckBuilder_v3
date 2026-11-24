@@ -128,7 +128,8 @@ function capaciteForge(def, face, t, jetons) {
   /* Un coût que le solveur ne sait pas payer ne sert pas au paiement automatique : la capacité se joue à la main
      (js/jeuManaAutre.js) — sauf si son mana est restreint : la réserve ne porte pas de restriction, la capacité vaudrait plus. */
   if (api === 'Mana' && t.RestrictValid && typeof manaSansSolveur === 'function' && manaSansSolveur(c.cout)) return false;
-  if (api === 'Mana' && (!t.SubAbility || resteEngage)) {
+  /* Une capacité de loyauté qui ajoute du mana n'est pas une capacité de mana : elle utilise la pile, et la loyauté se paie (Chandra, Jaya Ballard). */
+  if (api === 'Mana' && t.Planeswalker !== 'True' && (!t.SubAbility || resteEngage)) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */
     if (/^Combo ColorIdentity$/.test(t.Produced || '') && (t.Amount || '1') === '1' && tableJouable(t)) {

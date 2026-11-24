@@ -49,15 +49,22 @@ function* regardeForge(P, j, n, cimetiere) {
   const B = P.joueurs[j].bibliotheque, dessus = B.slice(-n).reverse();
   if (!dessus.length) return;
   const partent = yield* choisitCartes(P, j, dessus, dessus.length, cimetiere ? 'Surveiller' : 'Regard', 'scrute', 0);
-  partent.forEach(id => { if (cimetiere) deplace(P, id, 'cimetiere'); else { retireDe(B, id); B.unshift(id); } });
+  const deplaces = [];
+  partent.forEach(id => { if (cimetiere) { const n = deplace(P, id, 'cimetiere'); if (n != null) deplaces.push(n); } else { retireDe(B, id); B.unshift(id); } });
+  return deplaces;
 }
 
 forgeEffet('Scry', ['ScryNum'], function* (P, t, env) {
   for (const j of joueursForge(P, t, env)) { const n = forgeNombre(P, t.ScryNum || 1, env); yield* regardeForge(P, j, n, false); emet(P, {t: 'scry', joueur: j, n}); }
 }, (t, op) => { op.op = 'scrute'; op.n = nombreIA(t.ScryNum || 1); op.hostile = false; });
 
-forgeEffet('Surveil', ['Amount'], function* (P, t, env) {
-  for (const j of joueursForge(P, t, env)) { const n = forgeNombre(P, t.Amount || 1, env); yield* regardeForge(P, j, n, true); emet(P, {t: 'surveil', joueur: j, n}); }
+forgeEffet('Surveil', ['Amount', 'RememberMoved'], function* (P, t, env) {
+  for (const j of joueursForge(P, t, env)) {
+    const n = forgeNombre(P, t.Amount || 1, env), deplaces = yield* regardeForge(P, j, n, true);
+    /* « If you put a noncreature, nonland card into your graveyard this way » : ce qui est parti au cimetière. */
+    if (t.RememberMoved === 'True') (deplaces || []).forEach(id => retiensForge(env.ctx, id));
+    emet(P, {t: 'surveil', joueur: j, n});
+  }
 }, (t, op) => { op.op = 'scrute'; op.cimetiere = true; op.n = nombreIA(t.Amount || 1); op.hostile = false; });
 
 /* La source des dégâts : `DamageSource$`, sinon la source de la capacité. */
