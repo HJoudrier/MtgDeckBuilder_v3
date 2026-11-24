@@ -28,3 +28,15 @@ FORGE_API.ChangeZone.gen = (g => function* (P, t, env) {
   return yield* g(P, t, env);
 })(FORGE_API.ChangeZone.gen);
 forgeSait('param', 'ChangeZone.DestinationAlternative', 'ChangeZone.DestAltSVar');
+
+/* Evolve : la créature qui entre est plus forte ou plus robuste, un marqueur +1/+1 — et la source « évolue »
+   (`Evolved`, js/forgeDeclencheursF.js). */
+forgeEffet('EvolveCounter', [], function* (P, t, env) {
+  const s = env.src;
+  if (!s || s.zone !== 'champ' || forgeNombre(P, 'Count$EvolveTest', env) < 1) return;
+  poseMarqueurs(P, s, '+1/+1', 1, s);
+  emet(P, {t: 'evolue', id: s.id});
+}, (t, op) => { op.op = 'forge'; op.hostile = false; });
+
+/* « Dig » sans regarder les cartes : rien à décider pour le joueur, le moteur ne les lui montre jamais. */
+forgeSait('param', 'Dig.NoLooking');

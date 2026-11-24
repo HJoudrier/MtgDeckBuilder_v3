@@ -128,6 +128,7 @@ function* paieEquipage(P, j, o, n) {
   });
   pris.forEach(x => engageObjet(P, x));
   P.ver++;
+  emet(P, {t: 'equipe', id: o.id, joueur: j});
 }
 
 OPS.equipage = function* (P, op, ctx) {

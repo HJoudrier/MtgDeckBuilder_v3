@@ -2068,6 +2068,19 @@ spécial (Dreadship Reef, Lion's Eye Diamond), `CanBlockAmount`, et le contrôle
   plusieurs ; elle se tenait par source, et Muldrotha ne jouait qu'une seule carte du cimetière par tour au lieu d'un
   terrain et d'un permanent de chaque type. `clePermis()` (`js/jeuPermis.js`).
 
+**Lot F85 : des coûts, des évènements, des filtres** (`js/forgeCout.js`, `js/forgeDeclencheursF.js`, `js/forgeEffetsN.js`,
+et des retouches). Huit cartes de plus (6 629 → 6 637 complètes) :
+- **`untapYType<N/Valid/desc>`** (Halo Fountain) : dégager N permanents engagés qu'on contrôle pour payer — l'inverse de
+  `tapXType`. `coutAutrePossible()` les compte, `paieAutre()` les fait choisir ;
+- **`Evolved`** (Watchful Radstag) : `Evolve` passe par un effet à lui, `EvolveCounter`, qui pose le marqueur et dit que
+  la créature évolue ; **`BecomesCrewed`** (Mobilizer Mech) : `paieEquipage()` dit quel véhicule vient d'être équipé ;
+  **`LosesGame`** (Blood Tyrant) : `elimine()` dit quel joueur quitte la partie ; **`Sacrificed | Origin$ / Destination$`**
+  (Trail of Crumbs) : un sacrifice part toujours du champ ;
+- **`attacking Opponent`** (Martial Impetus, Blast-Furnace Hellkite) : une créature qui en attaque un des adversaires de qui juge,
+  directement ou par un planeswalker ; **`Dig | NoLooking$`** (Expressive Iteration), qui ne change rien à ce que voit le joueur.
+Soixante-quinze parties au hasard supplémentaires, sans une erreur du moteur. La liste de ce qui reste, par poids, est
+dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md), remesurée le 24 novembre.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

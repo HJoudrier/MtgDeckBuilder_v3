@@ -55,6 +55,11 @@ proprieteDesignee = (g => function (P, o, p, c, src, ctrl, env) {
       const d = P && P.combat && P.combat.attaquants.get(o.id);
       return !!d && (d.j != null ? d.j === joueur : !!obj(P, d.pw) && obj(P, d.pw).ctrl === joueur);
     }
+    /* Une créature qui en attaque un des adversaires de qui juge : un joueur, ou son planeswalker. */
+    case 'attacking Opponent': {
+      const d = P && P.combat && P.combat.attaquants.get(o.id);
+      return !!d && (d.j != null ? d.j !== joueur : !!obj(P, d.pw) && obj(P, d.pw).ctrl !== joueur);
+    }
     case 'attackedThisCombat': return !!P && !!P.combat && P.combat.attaquants.has(o.id);
     case 'bargained': return !!o.marchande || o.varianteLance === 'bargain';
   }
@@ -85,6 +90,6 @@ function proprieteJoueurEtendue(P, j, p, ctrl) {
 
 forgeSait('filtre', 'TargetedCard', "Urza's", 'nonChosenCard', 'ExiledWithEffectSource', 'TargetedPlayerOwn', 'RememberedPlayerOwn', 'withToxic', 'withFlashback', 'cmcEven', 'cmcOdd',
   'equalPT', 'hasManaAbility', 'hasAbility Activated.hasTapCost', 'powerNOTbasePower', 'greatestCMC_Artifact', 'sharesPermanentTypeWith', 'greatestPower',
-  'TopGraveyardCreature', 'ControllerControlsMoreLand', 'wasCastFromTheirHand', 'milledThisTurn', 'attackingYou', 'attackedThisCombat', 'dealtCombatDamageThisTurn You', 'TriggeredAttacker', 'TriggeredNewCard', 'OppNonTriggeredTarget',
+  'TopGraveyardCreature', 'ControllerControlsMoreLand', 'wasCastFromTheirHand', 'milledThisTurn', 'attackingYou', 'attacking Opponent', 'attackedThisCombat', 'dealtCombatDamageThisTurn You', 'TriggeredAttacker', 'TriggeredNewCard', 'OppNonTriggeredTarget',
   'CastSa Spell.MayPlaySource', 'CastSa Spell.ManaFromTreasure', 'CastSa Spell.ManaSpent EQ0', ...['Graveyard', 'Battlefield', 'Library', 'Hand', 'Exile'].map(z => 'ThisTurnEnteredFrom_' + z), 'bargained', 'withMoreLandsThanYou', 'withMoreCreaturesThanYou', 'Chosen', 'ChosenPlayer',
   'EnchantedBy Aura.YouCtrl', 'basePowerXX', 'baseToughnessXX', 'totalPT_XX');

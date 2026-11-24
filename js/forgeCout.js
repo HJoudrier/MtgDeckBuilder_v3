@@ -92,6 +92,11 @@ function coutForge(txt) {
         if (!nx) return null;
         cout.engageAutres = {n, desc: descForge(type)};
         break;
+      /* Dégager des permanents qu'on contrôle, engagés, pour payer (Halo Fountain). */
+      case 'untapYType':
+        if (typeof n !== 'number') return null;
+        cout.degageAutres = {n, desc: descForge(type)};
+        break;
       /* Exiler la carte, ou un permanent qu'on contrôle (« exile a creature you control »). */
       case 'Exile':
         if (soi) { cout.exileSoi = true; break; }
@@ -131,7 +136,7 @@ const X_COUTS_B = ['RemoveAnyCounter', 'Blight', 'CollectEvidence', 'Waterbend',
 
 /* `Y`, `Z`, `N` : un « unless … pays » calculé (js/jeuCoutsX.js `coutUnless()`). */
 forgeSait('cout', 'Y', 'Z', 'N');
-forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'ExileFromHand', 'Mandatory', 'XMin1', 'Forage', ...Object.keys(COUTS_B), 'SubCounter', 'AddCounter', 'tapXType', 'Exile', 'ExileFromGrave',
+forgeSait('cout', 'T', 'Q', 'Sac', 'PayLife', 'Discard', 'ExileFromHand', 'Mandatory', 'XMin1', 'Forage', ...Object.keys(COUTS_B), 'SubCounter', 'AddCounter', 'tapXType', 'untapYType', 'Exile', 'ExileFromGrave',
   'Return', 'Reveal', 'PayEnergy', 'Draw');
 
 /* Le mana reflété (js/jeuMana.js `manaReflete()`), et le déclencheur de

@@ -22,6 +22,10 @@ function* paieAutre(P, j, o, c) {
     P.engagesCout = yield* choisitCartes(P, j, ids, c.engageAutres.n, 'Engager');
     P.engagesCout.forEach(id => engageObjet(P, obj(P, id)));
   }
+  if (c.degageAutres) {
+    const ids = champDe(P, j).filter(x => x.engage && x.id !== o.id && correspond(P, x, c.degageAutres.desc, o, j)).map(x => x.id);
+    (yield* choisitCartes(P, j, ids, c.degageAutres.n, 'Dégager')).forEach(id => degageObjet(P, obj(P, id)));
+  }
   if (c.sac) {
     const ids = champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j) && !sacrificeInterdit(P, x, true)).map(x => x.id);
     (yield* choisitCartes(P, j, ids, c.sac.n, 'Sacrifier', 'sacrifice')).forEach(id => sacrifie(P, id));

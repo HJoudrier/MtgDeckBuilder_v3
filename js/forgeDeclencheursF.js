@@ -40,3 +40,13 @@ forgeDeclenche = (g => function (P, ec, e, s) {
   if (((e.t === 'zone' && e.vers === 'champ') || (e.t === 'entre')) && /^ChangesZone(All)?$/.test(ec.t.Mode) && declencheurEntreeCoupe(P, e, s)) return false;
   return g(P, ec, e, s);
 })(forgeDeclenche);
+
+/* —— Évoluer, être équipé, perdre la partie ———————————————————————————— */
+
+forgeMode('Evolved', ['ValidCard'], (P, t, e, s, env) => e.t === 'evolue' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
+forgeMode('BecomesCrewed', ['ValidCard'], (P, t, e, s, env) => e.t === 'equipe' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
+forgeMode('LosesGame', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'perdPartie' && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
+
+/* « Whenever you sacrifice a Food » : `Origin$` et `Destination$` ne disent rien de plus — un sacrifice part
+   toujours du champ. */
+forgeSait('param', 'Sacrificed.Origin', 'Sacrificed.Destination');

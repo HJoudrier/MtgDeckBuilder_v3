@@ -15,6 +15,7 @@ function elimine(P, j, raison) {
   if (J.elimine) return;
   J.elimine = true; J.raison = raison; J.tourElimine = P.tour;
   jn(P, `${J.nom} perd (${raison})`);
+  emet(P, {t: 'perdPartie', joueur: j});
   P.pile = P.pile.filter(it => {
     if (it.ctrl !== j) return true;
     if (it.sort) P.objets.delete(it.id);

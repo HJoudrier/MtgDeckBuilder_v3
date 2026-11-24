@@ -53,8 +53,7 @@ function motCleTraineB(def, k, face, jetons, tete, reste) {
       return tete === 'Riot' ? !reste.length : n != null;
     case 'Evolve':
       return synthese(def, face, jetons, 'Evolue', {Mode: 'ChangesZone', Destination: 'Battlefield', ValidCard: 'Creature.Other+YouCtrl'},
-        'DB$ PutCounter | Defined$ Self | CounterType$ P1P1 | CounterNum$ 1 | ConditionCheckSVar$ EvoX | ConditionSVarCompare$ GE1',
-        {EvoX: 'Count$EvolveTest'});
+        'DB$ EvolveCounter');
     case 'Extort':
       return synthese(def, face, jetons, 'Extorque', {Mode: 'SpellCast', ValidActivatingPlayer: 'You'},
         'DB$ LoseLife | Defined$ Player.Opponent | LifeAmount$ 1 | Cost$ W/B | SubAbility$ ExtGain', {ExtGain: 'DB$ GainLife | Defined$ You | LifeAmount$ ExtN', ExtN: 'PlayerCountOpponents$Amount'});
