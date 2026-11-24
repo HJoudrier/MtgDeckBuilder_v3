@@ -1,6 +1,6 @@
 # Détail de la couverture : toutes les cartes, et celles d'EDHREC
 
-Mesure du 24 novembre 2026 (dépôt Forge au commit `3e1fa4ed`, moteur après le lot F95). Chaque carte est lue avec son script Forge
+Mesure du 24 novembre 2026 (dépôt Forge au commit `3e1fa4ed`, moteur après le lot F98). Chaque carte est lue avec son script Forge
 par `definitionForge()`, le moteur lui-même ; ce document ne compte que les cartes qui ont un script — 34 482 cartes (les jetons, eux,
 ont leurs scripts à part). Trois états :
 
@@ -15,19 +15,19 @@ ont leurs scripts à part). Trois états :
 
 |  | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| **Toutes les cartes** | 34 482 | 29 306 (85,0 %) | 3 224 (9,3 %) | 1 952 (5,7 %) |
+| **Toutes les cartes** | 34 482 | 29 476 (85,5 %) | 3 111 (9,0 %) | 1 895 (5,5 %) |
 
 ### Par type de carte (premier type qui s'applique)
 
 | Type | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| Creature | 18 997 | 16 472 (86,7 %) | 1 936 (10,2 %) | 589 (3,1 %) |
-| Instant | 3 829 | 3 296 (86,1 %) | 54 (1,4 %) | 479 (12,5 %) |
-| Sorcery | 3 583 | 3 009 (84,0 %) | 70 (2,0 %) | 504 (14,1 %) |
-| Artifact | 2 545 | 2 119 (83,3 %) | 348 (13,7 %) | 78 (3,1 %) |
-| Enchantment | 3 498 | 2 928 (83,7 %) | 391 (11,2 %) | 179 (5,1 %) |
-| Land | 1 200 | 1 136 (94,7 %) | 55 (4,6 %) | 9 (0,8 %) |
-| Planeswalker | 337 | 259 (76,9 %) | 72 (21,4 %) | 6 (1,8 %) |
+| Creature | 18 997 | 16 539 (87,1 %) | 1 889 (9,9 %) | 569 (3,0 %) |
+| Instant | 3 829 | 3 310 (86,4 %) | 53 (1,4 %) | 466 (12,2 %) |
+| Sorcery | 3 583 | 3 024 (84,4 %) | 70 (2,0 %) | 489 (13,6 %) |
+| Artifact | 2 545 | 2 131 (83,7 %) | 337 (13,2 %) | 77 (3,0 %) |
+| Enchantment | 3 498 | 2 940 (84,0 %) | 381 (10,9 %) | 177 (5,1 %) |
+| Land | 1 200 | 1 183 (98,6 %) | 14 (1,2 %) | 3 (0,3 %) |
+| Planeswalker | 337 | 262 (77,7 %) | 69 (20,5 %) | 6 (1,8 %) |
 | Battle | 37 | 30 (81,1 %) | 7 (18,9 %) | 0 (0,0 %) |
 | Autres (Scheme, Plane, Vanguard, Attraction, Dungeon, Conspiracy…) | 456 | 57 (12,5 %) | 291 (63,8 %) | 108 (23,7 %) |
 
@@ -35,18 +35,18 @@ ont leurs scripts à part). Trois états :
 
 | Structure | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| Une face | 33 562 | 28 555 (85,1 %) | 3 076 (9,2 %) | 1 931 (5,8 %) |
-| Plusieurs faces (transformables, modales, aventures…) | 920 | 751 (81,6 %) | 148 (16,1 %) | 21 (2,3 %) |
-| Légendaires | 4 638 | 3 700 (79,8 %) | 723 (15,6 %) | 215 (4,6 %) |
-| Non légendaires | 29 844 | 25 606 (85,8 %) | 2 501 (8,4 %) | 1 737 (5,8 %) |
+| Une face | 33 562 | 28 723 (85,6 %) | 2 965 (8,8 %) | 1 874 (5,6 %) |
+| Plusieurs faces (transformables, modales, aventures…) | 920 | 753 (81,8 %) | 146 (15,9 %) | 21 (2,3 %) |
+| Légendaires | 4 638 | 3 727 (80,4 %) | 698 (15,0 %) | 213 (4,6 %) |
+| Non légendaires | 29 844 | 25 749 (86,3 %) | 2 413 (8,1 %) | 1 682 (5,6 %) |
 
 ### Par longueur du script (nombre de lignes de capacités, déclencheurs, statiques, remplacements et mots-clés)
 
 | Script | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| 0–1 ligne | 14 674 | 12 745 (86,9 %) | 930 (6,3 %) | 999 (6,8 %) |
-| 2–3 lignes | 17 994 | 15 195 (84,4 %) | 1 962 (10,9 %) | 837 (4,7 %) |
-| 4–6 lignes | 1 738 | 1 327 (76,4 %) | 298 (17,1 %) | 113 (6,5 %) |
+| 0–1 ligne | 14 674 | 12 796 (87,2 %) | 907 (6,2 %) | 971 (6,6 %) |
+| 2–3 lignes | 17 994 | 15 303 (85,0 %) | 1 882 (10,5 %) | 809 (4,5 %) |
+| 4–6 lignes | 1 738 | 1 338 (77,0 %) | 288 (16,6 %) | 112 (6,4 %) |
 | 7 lignes ou plus | 76 | 39 (51,3 %) | 34 (44,7 %) | 3 (3,9 %) |
 
 ## Sur les cartes d'EDHREC
@@ -55,44 +55,44 @@ Les cartes des pages des cent premiers commandants de l'année (`json.edhrec.com
 
 |  | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| **Cartes d'EDHREC** | 7 336 | 6 716 (91,5 %) | 384 (5,2 %) | 236 (3,2 %) |
-| Le reste du pool Forge (appariement par nom) | 27 171 | 22 614 (83,2 %) | 2 841 (10,5 %) | 1 716 (6,3 %) |
+| **Cartes d'EDHREC** | 7 336 | 6 743 (91,9 %) | 363 (4,9 %) | 230 (3,1 %) |
+| Le reste du pool Forge (appariement par nom) | 27 171 | 22 757 (83,8 %) | 2 749 (10,1 %) | 1 665 (6,1 %) |
 
 Pondérées par le nombre de decks qui les jouent (additionné sur ces cent pages, 174 459 122 places de deck) :
-**96,7 %** des places de deck sont tenues par une carte complète, 2,1 % par une partielle, 1,2 % par une injouable.
+**96,8 %** des places de deck sont tenues par une carte complète, 2,0 % par une partielle, 1,2 % par une injouable.
 
 ### Les cartes d'EDHREC, par type
 
 | Type | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| Creature | 3 270 | 2 969 (90,8 %) | 224 (6,9 %) | 77 (2,4 %) |
+| Creature | 3 270 | 2 972 (90,9 %) | 221 (6,8 %) | 77 (2,4 %) |
 | Instant | 774 | 713 (92,1 %) | 3 (0,4 %) | 58 (7,5 %) |
-| Sorcery | 790 | 711 (90,0 %) | 16 (2,0 %) | 63 (8,0 %) |
-| Artifact | 770 | 709 (92,1 %) | 42 (5,5 %) | 19 (2,5 %) |
-| Enchantment | 905 | 830 (91,7 %) | 61 (6,7 %) | 14 (1,5 %) |
-| Land | 689 | 670 (97,2 %) | 17 (2,5 %) | 2 (0,3 %) |
+| Sorcery | 790 | 715 (90,5 %) | 16 (2,0 %) | 59 (7,5 %) |
+| Artifact | 770 | 711 (92,3 %) | 40 (5,2 %) | 19 (2,5 %) |
+| Enchantment | 905 | 831 (91,8 %) | 60 (6,6 %) | 14 (1,5 %) |
+| Land | 689 | 687 (99,7 %) | 2 (0,3 %) | 0 (0,0 %) |
 | Planeswalker | 133 | 110 (82,7 %) | 20 (15,0 %) | 3 (2,3 %) |
 | Battle | 5 | 4 (80,0 %) | 1 (20,0 %) | 0 (0,0 %) |
 
 ## Ce qui manque
 
-3 078 des 5 176 cartes non complètes n'ont **qu'un seul élément** inconnu (59,5 %) ; parmi celles d'EDHREC,
-381 sur 620.
+3 041 des 5 006 cartes non complètes n'ont **qu'un seul élément** inconnu (60,7 %) ; parmi celles d'EDHREC,
+364 sur 593.
 
 ### Par famille d'élément (nombre de cartes non complètes qui en portent au moins un)
 
 | Famille | Toutes les cartes | Cartes d'EDHREC | Ce que c'est |
 |---|---|---|---|
-| `param` | 2 896 | 361 | un paramètre d'effet ou de statique |
-| `construction` | 779 | 97 | une construction refusée |
-| `api` | 751 | 47 | un effet entier |
-| `filtre` | 560 | 52 | une propriété de filtre |
-| `expr` | 530 | 66 | une quantité calculée |
+| `param` | 2 775 | 349 | un paramètre d'effet ou de statique |
+| `construction` | 772 | 90 | une construction refusée |
+| `api` | 634 | 45 | un effet entier |
+| `filtre` | 531 | 45 | une propriété de filtre |
 | `trig` | 522 | 43 | un déclencheur |
-| `kw` | 478 | 42 | un mot-clé |
-| `defini` | 226 | 42 | une désignation |
-| `kwval` | 182 | 22 | une valeur de mot-clé |
-| `stat` | 133 | 20 | une statique |
+| `expr` | 519 | 65 | une quantité calculée |
+| `kw` | 466 | 42 | un mot-clé |
+| `defini` | 206 | 41 | une désignation |
+| `kwval` | 176 | 18 | une valeur de mot-clé |
+| `stat` | 129 | 18 | une statique |
 | `cout` | 50 | 11 | un morceau de coût |
 | `repl` | 49 | 10 | un remplacement |
 
@@ -103,7 +103,7 @@ pour un seul mécanisme ici.
 
 | Mécanisme | Toutes les cartes | Cartes d'EDHREC |
 |---|---|---|
-| Alchemy (MakeCard, Seek, Draft, Empower, Spellbook…) | 399 | 4 |
+| Alchemy (MakeCard, Seek, Draft, Empower, Spellbook…) | 311 | 4 |
 | Planechase (ChaosEnsues, PlaneswalkedTo, Planar Die) | 191 | 5 |
 | Archenemy (SetInMotion, Scheme) | 84 | 0 |
 | Un-sets et attractions (Sticker, Contraption, Attraction) | 185 | 5 |
@@ -111,7 +111,7 @@ pour un seul mécanisme ici.
 | Meld | 7 | 4 |
 | Suspend (valeur de mot-clé) | 24 | 7 |
 | ControlPlayer (Mindslaver) | 8 | 5 |
-| Tout le reste | 4 243 | 572 |
+| Tout le reste | 4 161 | 545 |
 
 Les cartes de l'Alchemy, de Planechase, d'Archenemy et des Un-sets ne se jouent pas dans un deck Commander classique : elles pèsent sur le total
 de toutes les cartes, presque pas sur celui d'EDHREC.
@@ -124,32 +124,32 @@ de toutes les cartes, presque pas sur celui d'EDHREC.
 | `param:MakeCard.Zone` | 188 | A Golden Opportunity, Ace Flockbringer, Agent of Raffine |
 | `param:MakeCard.Conjure` | 172 | A Golden Opportunity, Ace Flockbringer, Agent of Raffine |
 | `trig:ChaosEnsues` | 158 | Academy at Tolaria West, Agyrem, Akoum |
-| `construction:Continuous` | 136 | Aeve, Progenitor Ooze, Aminatou, Veil Piercer, Ashes of the Fallen |
+| `construction:Continuous` | 135 | Aeve, Progenitor Ooze, Aminatou, Veil Piercer, Ashes of the Fallen |
 | `param:MakeCard.Name` | 120 | A Golden Opportunity, Anina, Natural Parallelist, Argothian Uprooting |
-| `api:Seek` | 105 | Adherent's Heirloom, Anguished Recollection, Archaeomancer's Spade |
-| `param:Seek.Type` | 102 | Adherent's Heirloom, Anguished Recollection, Archaeomancer's Spade |
 | `trig:SetInMotion` | 84 | A Display of My Dark Power, A Premonition of Your Demise, A Reckoning Approaches |
 | `param:SetInMotion.ValidCard` | 84 | A Display of My Dark Power, A Premonition of Your Demise, A Reckoning Approaches |
 | `trig:PlaneswalkedTo` | 62 | Agyrem, Amy's Home, Antarctic Research Base |
 | `param:MakeCard.RememberMade` | 60 | Ace Flockbringer, Agent of Raffine, Bind to Secrecy |
 | `param:PlaneswalkedTo.ValidCard` | 57 | Amy's Home, Antarctic Research Base, Aretopolis |
-| `construction:ChangesZone` | 53 | Ambassador of Evendo, Angel of Unity, Antique Collector |
+| `construction:ChangesZone` | 56 | Ambassador of Evendo, Angel of Unity, Antique Collector |
 | `kw:StickerSheet` | 48 | Ancestral Hot Dog Minotaur, Carnival Elephant Meteor, Contortionist Otter Storm |
 | `trig:CrankContraption` | 45 | Accessories to Murder, Applied Aeronautics, Arms Depot |
 | `param:CrankContraption.ValidCard` | 45 | Accessories to Murder, Applied Aeronautics, Arms Depot |
 | `param:MakeCard.DefinedName` | 43 | Ace Flockbringer, Agent of Raffine, Bend Mortal Limits |
 | `api:Draft` | 42 | Adaptive Armorer, Arms Scavenger, Big Spender |
 | `param:Draft.Spellbook` | 42 | Adaptive Armorer, Arms Scavenger, Big Spender |
+| `construction:Phase` | 38 | Absorbing Man, Alrund, God of the Cosmos, Arming Gala |
 | `param:ChangeZone.LibraryPositionAlternative` | 38 | Aether Gust, Arashin Sovereign, Deem Inferior |
-| `construction:Phase` | 37 | Absorbing Man, Alrund, God of the Cosmos, Arming Gala |
 | `api:Empower` | 36 | Academic Ascent, Arcane Amphisbaena, Avatar of Burgeoning Echoes |
 | `param:Empower.Type` | 36 | Academic Ascent, Arcane Amphisbaena, Avatar of Burgeoning Echoes |
 | `param:Empower.Num` | 36 | Academic Ascent, Arcane Amphisbaena, Avatar of Burgeoning Echoes |
 | `api:PutSticker` | 36 | Aerialephant, Ambassador Blorpityblorpboop, _____ _____ Rocketship |
 | `param:ChangeZone.AlternativeDecider` | 35 | Aether Gust, Deem Inferior, Desynchronize |
 | `kw:Mutate` | 34 | Archipelagore, Auspicious Starrix, Boneyard Lurker |
-| `param:Seek.RememberFound` | 33 | Archaeomancer's Spade, Arius, Flyby Trawler, Audacious Knuckleblade |
 | `construction:Effect` | 32 | Alluring Siren, Arlinn, the Pack's Hope, Blood of the Martyr |
+| `trig:Mutates` | 32 | Archipelagore, Auspicious Starrix, Boneyard Lurker |
+| `param:Mutates.ValidCard` | 32 | Archipelagore, Auspicious Starrix, Boneyard Lurker |
+| `api:Planeswalk` | 30 | Aretopolis, Bad Wolf Bay, Caught in a Parallel Universe |
 
 ### Les vingt éléments qui bloquent le plus de cartes d'EDHREC
 
@@ -158,8 +158,8 @@ de toutes les cartes, presque pas sur celui d'EDHREC.
 | `kw:Mutate` | 18 | Nethroi, Apex of Death, Gemrazer, Brokkos, Apex of Forever |
 | `trig:Mutates` | 16 | Mysterious Egg, Nethroi, Apex of Death, Gemrazer |
 | `param:Mutates.ValidCard` | 16 | Mysterious Egg, Nethroi, Apex of Death, Gemrazer |
-| `construction:Mana` | 9 | Master of Dark Rites, Titans' Nest, Jeweled Amulet |
 | `construction:Continuous` | 9 | Tyvar the Bellicose, Danny Pink, Hunting Velociraptor |
+| `construction:Mana` | 7 | Master of Dark Rites, Titans' Nest, Jeweled Amulet |
 | `kwval:suspend` | 7 | Delay, Doom's Time Platform, Jhoira of the Ghitu |
 | `api:ControlPlayer` | 5 | Sorin Markov, Mindslaver, Emrakul, the Promised End |
 | `param:ImmediateTrigger.TriggerAmount` | 5 | Earthbender Ascension, Ajani, Nacatl Pariah, Faebloom Trick |

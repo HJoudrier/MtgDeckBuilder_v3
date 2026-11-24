@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F95) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F98) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6716** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 384 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 236 |
+| complètes | 6063 | 6611 | 6552 | **6743** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 363 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 230 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, cent soixante-quatre cartes de plus complètes.
+exactement : même banc, mêmes cartes, 191 cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -22,8 +22,8 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 
 | Élément | Cartes | Exemples |
 |---|---|---|
-| `construction:Mana` | 9 | Master of Dark Rites, Opal Palace, Jade Orb of Dragonkind |
 | `param:Continuous.MayPlayDontGrantZonePermissions` | 3 | Dracogenesis, Darksteel Monolith, As Foretold |
+| `construction:Mana` | 7 | Master of Dark Rites, Jade Orb of Dragonkind, Crucible of the Spirit Dragon |
 | `construction:Continuous` | 9 | Hunting Velociraptor, Tyvar the Bellicose, Danny Pink |
 | `param:ImmediateTrigger.TriggerAmount` | 5 | Earthbender Ascension, Auron, Venerated Guardian, Ajani, Nacatl Pariah |
 | `param:MoveCounter.ValidDefined` | 1 | Forgotten Ancient |
@@ -79,7 +79,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Mutates.ValidCard` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
 | `param:ReduceCost.Relative` | 3 | Not of This World, March of Swirling Mist, Rottenmouth Viper |
 | `param:DigUntil.ImprintRevealed` | 2 | Tibalt's Trickery, Gríma, Saruman's Footman |
-| `construction:Moved` | 1 | Temple of the Dragon Queen |
 | `param:PutCounter.RememberPut` | 4 | Call the Spirit Dragons, Craig Boone, Novac Guard, Fangs of Kalonia |
 | `param:Continuous.TopCardOfLibraryIs` | 2 | Conspicuous Snoop, Vampire Nocturnus |
 | `filtre:IsSolved` | 3 | Case of the Locked Hothouse, Case of the Ransacked Lab, Case of the Uneaten Feast |
@@ -88,8 +87,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `filtre:targetedBy` | 2 | Kheru Goldkeeper, Guide of Souls |
 | `kw:Read ahead` | 4 | The Cruelty of Gix, The Weatherseed Treaty, The Elder Dragon War |
 | `param:Moved.Layer` | 3 | Grafdigger's Cage, Corrupted Shapeshifter, Xantcha, Sleeper Agent |
-| `kwval:firebending:4` | 1 | Fire Nation Palace |
-| `param:Effect.TargetsWithSameCreatureType` | 1 | Secret Tunnel |
 | `kw:MayFlashSac` | 1 | Necromancy |
 | `param:ChangeZone.ChoiceZone` | 1 | Broodcaller Scourge |
 | `param:ChangeZone.Amount` | 1 | Broodcaller Scourge |
@@ -101,7 +98,10 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `kwval:myriad` | 2 | Mass of Mysteries, Ironwill Forger |
 | `construction:ETBReplacement` | 1 | Serra's Emissary |
 | `param:Continuous.GainsAbilitiesOfDefined` | 3 | Quicksilver Elemental, Grell Philosopher, Havengul Lich |
-| `construction:ManaReflected` | 2 | Squandered Resources, The Grey Havens |
+| `trig:AbilityResolves` | 2 | Narci, Fable Singer, Tom Bombadil |
+| `param:AbilityResolves.ValidSource` | 2 | Narci, Fable Singer, Tom Bombadil |
+| `param:AbilityResolves.ValidSpellAbility` | 2 | Narci, Fable Singer, Tom Bombadil |
+| `param:Counter.TargetsWithControllerProperty` | 1 | Drown in the Loch |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -124,13 +124,10 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Promise of Loyalty | `param:PutCounter.Chooser`, `param:PutCounter.Placer`, `param:PutCounter.RememberCards` |
 | P | Echoes of Eternity | `param:Panharmonicon.ValidZone` |
 | P | Moraug, Fury of Akoum | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute`, `expr:Count$CardNumAttacksThisTurn` |
-| I | Temple of the Dragon Queen | `construction:Moved` |
 | P | Earthbender Ascension | `param:PutCounter.RememberAmount`, `param:ImmediateTrigger.TriggerAmount` |
 | P | Kambal, Profiteering Mayor | `defini:TriggeredCards` |
 | P | Descendants' Path | `param:Play.ForgetRemembered` |
 | P | Bumi, Unleashed | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute` |
-| P | Fire Nation Palace | `kwval:firebending:4` |
-| P | Secret Tunnel | `param:Effect.TargetsWithSameCreatureType` |
 | P | Necromancy | `kw:MayFlashSac` |
 | P | Broodcaller Scourge | `param:ChangeZone.ChoiceZone`, `param:ChangeZone.Amount` |
 | P | Treasure Nabber | `construction:TapsForMana` |
@@ -158,7 +155,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Opposition Agent | `param:Continuous.ControlOpponentsSearchingLibrary`, `param:Moved.FoundSearchingLibrary` |
 | P | Brave the Sands | `param:Continuous.CanBlockAmount` |
 | P | Kodama of the East Tree | `param:ChangesZone.NotThisAbility` |
-| P | Opal Palace | `construction:Mana` |
 | I | Molten Psyche | `defini:Player.Opponent+IsRemembered` |
 | P | Breena, the Demagogue | `expr:PlayerCountDefinedTriggeredAttackedTarget$HasPropertylifeGTX` |
 | I | Dance of the Manse | `param:ChangeZone.StaticEffectCheckSVar`, `param:ChangeZone.StaticEffectSVarCompare` |
@@ -191,7 +187,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Mass of Mysteries | `kwval:myriad` |
 | P | Sting, the Glinting Dagger | `filtre:blockingValid Goblin`, `filtre:blockingValid Orc`, `filtre:blockingValid Creature.EquippedBy` |
 | I | Grab the Prize | `expr:Discarded$Valid` |
-| P | Arcane Lighthouse | `param:AnimateAll.CantHaveKeyword` |
 | P | Kogla and Yidaro | `defini:DiscardedCards` |
 | P | Welcome to . . . | `construction:Chapter` |
 | P | Jade Orb of Dragonkind | `construction:Mana` |
@@ -208,7 +203,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Mardu Siegebreaker | `construction:Attacks` |
 | P | Crucible of the Spirit Dragon | `construction:Mana` |
 | P | Rammas Echor, Ancient Shield | `kwval:exalted` |
-| I | Sozin's Comet | `kwval:firebending:5` |
 | P | Thousand-Year Storm | `expr:TriggerObjectsCurrentCastSpells$Valid` |
 | P | Gollum, Obsessed Stalker | `param:Effect.Unique`, `defini:Opponent.HasCardsInCommand_Effect.namedDamaged` |
 | P | Squandered Resources | `construction:ManaReflected` |
@@ -251,7 +245,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | V.A.T.S. | `param:Destroy.TargetsWithEqualToughness` |
 | I | Hordewing Skaab | `expr:TriggeredPlayersTargets$Amount` |
 | P | Iron Mastiff | `expr:PlayerCountOpponents$HasPropertyDefending` |
-| P | The Grey Havens | `construction:ManaReflected` |
 | P | Oft-Nabbed Goat | `param:Draw.Activator`, `defini:NonTriggeredCardOwner` |
 | P | Deadpool, Trading Card | `api:ExchangeTextBox` |
 | P | Jeweled Amulet | `param:PutCounter.RememberCostMana`, `construction:Mana` |
@@ -270,3 +263,10 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Tectonic Giant | `param:Attacks.ValidSource` |
 | I | Eventide's Shadow | `construction:RemoveCounter` |
 | P | Wall of Stolen Identity | `param:Clone.RememberCloneOrigin` |
+| P | Ajani, Nacatl Pariah | `param:Token.RememberOriginalTokens`, `param:ImmediateTrigger.TriggerAmount`, `param:ChooseCard.ChooseEach` |
+| I | Fade from History | `defini:Player.controlsEnchantment,controlsArtifact` |
+| P | Brutal Hordechief | `param:Continuous.DeclaresBlockers` |
+| P | Goblin Welder | `expr:SVar$CheckRemem` |
+| P | Sephiroth, Fabled SOLDIER | `repl:Transform`, `param:Transform.ValidCard`, `param:Transform.ReplaceWith` |
+| I | Firion, Wild Rose Warrior | `construction:ChangesZone` |
+| P | Felix Five-Boots | `param:Panharmonicon.ValidSource`, `param:Panharmonicon.CombatDamage`, `param:Panharmonicon.ValidTarget` |

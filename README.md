@@ -147,7 +147,8 @@ js/                 modules, chargés dans cet ordre :
   forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
   forgeEntreesC.js  entrer engagé sauf si l'on révèle ou contrôle ; sacrifier les homonymes avant d'entrer
   forgeChaque.js    « EACH Forest & Plains » : chercher une carte par filtre
-  forgeTerrains.js  ce que les terrains font de plus : cibles de même type, rendre les créatures, mana du cimetière
+  forgeTerrains.js  ce que les terrains font de plus : cibles de même type, rendre les créatures, mana du cimetière, phasing, sauter un tour, Wastes
+  forgeSeek.js      Seek (cartes au hasard dans la bibliothèque) et GameActivationLimit (une capacité N fois la partie)
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2226,8 +2227,8 @@ treize d'EDHREC. Ce qu'ils avaient en commun : une phrase de plus que le moteur 
 - **`TargetsWithSameCreatureType`** (Secret Tunnel), **`GainControlVariant | ChangeController$ CardOwner`** (Homeward Path), et le mana d'un terrain qui
   reflète les couleurs du cimetière (**The Grey Havens**).
 
-**Lot F97 : des terrains, deuxième tour** (`js/forgeSeek.js`, `js/forgeTerrains.js`, et des retouches). Vingt-deux terrains de plus, dont quatre
-d'EDHREC (Opal Palace, Study Hall, Thran Portal, Hall of the Bandit Lord). Les capacités de mana qui s'accompagnent d'autre chose :
+**Lot F97 : des terrains, deuxième tour** (`js/forgeSeek.js`, `js/forgeTerrains.js`, et des retouches). Vingt-deux terrains de plus, dont trois
+d'EDHREC (Opal Palace, Thran Portal, Hall of the Bandit Lord). Les capacités de mana qui s'accompagnent d'autre chose :
 - **Un mana qui porte** (`js/forgeManaC.js`) : « si ce mana paie une créature, elle gagne la célérité » sans « until end of turn » (Hall of the Bandit
   Lord) reste permanent (`motsPermanents`) ; `AddsCounters$ …_ManaAddsCounterNum` compte les fois où le commandant a été lancé de la zone de
   commandement, ce lancer-ci compris (Opal Palace : `depuisCommandement`, posé avant le paiement) ; `TriggeredCard$CommanderCastFromCommandZone`
@@ -2245,7 +2246,7 @@ d'EDHREC (Opal Palace, Study Hall, Thran Portal, Hall of the Bandit Lord). Les c
 Un terrain dont la capacité de mana passe par une sous-capacité (Rainbow Vale, Gem Bazaar, Undiscovered Paradise, Tomb of Urami) est lu comme une capacité qui
 passe par la pile : son mana arrive à la résolution, il ne paie donc pas un sort tout seul — la limite du moteur, pas de la carte.
 
-**Lot F98 : des terrains, troisième tour** (`js/forgeTerrains.js` et des retouches). Cinq terrains de plus, dont deux d'EDHREC.
+**Lot F98 : des terrains, troisième tour** (`js/forgeTerrains.js` et des retouches). Cinq terrains de plus, dont un d'EDHREC (Oscorp Industries).
 - **Sacrifier tous ses terrains** (`Sac<All/Land>`, Tomb of Urami) : le coût se lit `{desc, n: 0, tout: true}` ; `activeCapacite()` paie alors le mana *avant* le
   reste, car après il n'y a plus de terrains pour le payer (la règle 601.2g-h des sorts, appliquée à ce coût-là seulement).
 - **Deux couleurs de sa main** (`ChooseColor | TwoColors$ | UpTo$ | ColorsFrom$`, Desert Cenote) : jusqu'à deux choix successifs parmi les couleurs que la main
@@ -2257,6 +2258,8 @@ Restent, parmi les terrains, ce que le moteur ne sait pas encore : un mana au no
 cast Dragon spells » avec un coût de marqueurs), des couleurs fixées en construisant le deck (Cryptic Spires, Paliano), la fusion `Meld` (Hanweir Battlements), les capacités
 d'Alchemy (`MakeCard`, `Empower`), le choix d'une cible par un autre joueur (Arena, Stardew Valley), `SwitchBlock` (Sorrow's Path) et une poignée d'effets à durée
 (`UntilUntaps` d'Ice Floe, la boon de Loch Larent).
+Les trois lots F96 à F98 : 6 716 → 6 743 cartes complètes parmi celles d'EDHREC (les terrains : 17 sur 19), 29 306 → 29 476 parmi les 34 482 scripts de Forge —
+le détail est dans [doc/couverture-detail.md](doc/couverture-detail.md) et [doc/couverture-sets.md](doc/couverture-sets.md), remesurés.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
