@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1873 fonctions**, 291 modules, 2027 Ko de JavaScript.
+**1873 fonctions**, 291 modules, 2029 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -53,7 +53,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 163 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 256 |
-| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 224 |
+| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 225 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 187 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
@@ -88,14 +88,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 147 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 214 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
-| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 244 |
+| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 247 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 208 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 208 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 143 |
 | [`forgeBatailles.js`](#jsforgebataillesjs) | Les batailles (Siege) : points de défense, | 4 | 63 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 168 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 130 |
-| [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 104 |
+| [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 105 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
 | [`forgeCopiesB.js`](#jsforgecopiesbjs) | Des copies de plus (lot F81) | 0 | 43 |
 | [`forgeCopiesC.js`](#jsforgecopiescjs) | Des copies de plus, III (lot F89) | 0 | 66 |
@@ -156,7 +156,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsO.js`](#jsforgeeffetsojs) | Poser des marqueurs de plusieurs sortes, ou les répartir | 1 | 41 |
 | [`forgeActivationsB.js`](#jsforgeactivationsbjs) | Compter les activations du tour | 5 | 95 |
 | [`forgeManaD.js`](#jsforgemanadjs) | Dépenser du mana d'une autre couleur, et en compter la dépense | 2 | 73 |
-| [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 53 |
+| [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 72 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
 | [`forgeDes.js`](#jsforgedesjs) | Des dés de plus | 0 | 45 |
@@ -1025,7 +1025,7 @@ Les gestes qui font un évènement : engager, dégager,. *4 fonctions, 55 lignes
 
 ## js/jeuHistorique.js
 
-Ce qui s'est passé ce tour. *5 fonctions, 75 lignes, 4 Ko.*
+Ce qui s'est passé ce tour. *5 fonctions, 75 lignes, 4.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1096,7 +1096,7 @@ La réserve de mana, et le paiement automatique. *13 fonctions, 256 lignes, 13 K
 
 ## js/jeuOpsA.js
 
-Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 224 lignes, 10 Ko.*
+Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 225 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1708,7 +1708,7 @@ La porte des effets de Forge : `executeForge()`. *5 fonctions, 118 lignes, 7.2 K
 
 ## js/forgeEffetsB.js
 
-Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 244 lignes, 15 Ko.*
+Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 247 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1813,7 +1813,7 @@ Les copies de Forge : un jeton copie d'un. *4 fonctions, 130 lignes, 8 Ko.*
 
 ## js/forgeTraine.js
 
-La traîne : des mots-clés et des effets moins. *2 fonctions, 104 lignes, 5.3 Ko.*
+La traîne : des mots-clés et des effets moins. *2 fonctions, 105 lignes, 5.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2673,7 +2673,7 @@ Dépenser du mana d'une autre couleur, et en compter la dépense. *2 fonctions, 
 
 ## js/forgeDeclencheursF.js
 
-Des déclencheurs de plus, III. *1 fonctions, 53 lignes, 3.2 Ko.*
+Des déclencheurs de plus, III. *1 fonctions, 72 lignes, 4.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|

@@ -50,3 +50,22 @@ forgeMode('LosesGame', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'perdPartie
 /* « Whenever you sacrifice a Food » : `Origin$` et `Destination$` ne disent rien de plus — un sacrifice part
    toujours du champ. */
 forgeSait('param', 'Sacrificed.Origin', 'Sacrificed.Destination');
+
+/* —— Lot F90 : monarque, intrigue, contre, marqueurs retirés, vie payée ———————————— */
+
+forgeMode('BecomeMonarch', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'monarque' && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
+forgeMode('Connives', ['ValidCard'], (P, t, e, s, env) => e.t === 'connive' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env));
+
+/* « Whenever a spell or ability you control counters a spell » : `ValidCause$ SpellAbility.YouCtrl`. */
+forgeMode('Countered', ['ValidCause', 'ValidSA', 'ValidCard'], (P, t, e, s, env) => e.t === 'contre' &&
+  (!t.ValidCause || (/YouCtrl/.test(t.ValidCause) ? e.cause === s.ctrl : /OppCtrl/.test(t.ValidCause) ? e.cause !== s.ctrl : true)) &&
+  (!t.ValidCard || forgeValideObjet(P, e.lki, t.ValidCard, s, s.ctrl, env)));
+
+forgeMode('CounterRemoved', ['ValidCard', 'CounterType'], (P, t, e, s, env) => e.t === 'marqueurRetire' && valideOuRien(P, obj(P, e.id), t.ValidCard, s, env) &&
+  (!t.CounterType || genreMarqueur(t.CounterType) === e.genre));
+
+forgeMode('PayLife', ['ValidPlayer'], (P, t, e, s, env) => e.t === 'payeVie' && joueurOuRien(P, e.joueur, t.ValidPlayer, s, env));
+
+forgeMode('TokenCreatedOnce', ['ValidPlayer', 'ValidToken'], (P, t, e, s, env) => FORGE_MODES.TokenCreated(P, t, e, s, env) && unSeulParLot(P, s, t, 'TO'));
+forgeSait('param', 'TokenCreatedOnce.ValidPlayer', 'TokenCreatedOnce.ValidToken');
+forgeMode('MilledOnce', ['ValidPlayer', 'ValidCard'], (P, t, e, s, env) => FORGE_MODES.Milled(P, t, e, s, env) && unSeulParLot(P, s, t, 'MO'));

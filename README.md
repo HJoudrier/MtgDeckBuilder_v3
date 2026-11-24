@@ -2126,6 +2126,17 @@ one and ignore the lowest », deux quantités à remplacer à la fois) et les d�
 Restent les copies d'un nom (`DefinedName$`, Mutable Explorer), d'un sort permanent (`CopySpellAbility | NonLegendary`) et
 la copie au choix facultatif (Brudiclad).
 
+**Lot F90 : sept évènements de plus** (`js/forgeDeclencheursF.js`, et des évènements émis par les effets). Dix cartes de plus
+(6 671 → 6 681) :
+- **`BecomeMonarch`** (Custodi Lich) : `monarque`, émis par l'effet comme par le vol de la couronne au combat ;
+  **`Connives`** (Iron Monger, Ultron) : `connive`, émis par `Connive` ; **`Countered`** (Baral, Lullmage Mentor) : `contre`,
+  émis par `Counter` et `OPS.contre`, avec le contrôleur de ce qui contre — `ValidCause$ SpellAbility.YouCtrl` ;
+- **`CounterRemoved`** (Protean Hydra, Dinosaurs on a Spaceship) : `marqueurRetire`, émis par `RemoveCounter` et par le coût
+  « retirer des marqueurs » ; **`PayLife`** (Font of Agonies) : `payeVie`, émis par le coût en vie ;
+- **`TokenCreatedOnce`** (Staff of the Storyteller) et **`MilledOnce`** (Zellix) : une fois par lot (`unSeulParLot()`).
+Restent `BecomeMonarch | BeginTurn$` (Knights of the Black Rose : « si vous étiez le monarque au début du tour »),
+`DamagePreventedOnce`, `Destroyed | ValidCauser$`, `Exiled` et les évènements du lancer de pièce.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

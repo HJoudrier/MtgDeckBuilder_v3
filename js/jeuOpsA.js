@@ -187,6 +187,7 @@ OPS.contre = function* (P, op, ctx) {
     retireDeLaPile(P, o.id);
     deplace(P, o.id, 'cimetiere');
     jn(P, `${o.def.nom} est contrecarré`);
+    emet(P, {t: 'contre', joueur: o.ctrl, cause: ctx.ctrl, lki: o});
   });
 };
 OPS.sacrifie = function* (P, op, ctx) {

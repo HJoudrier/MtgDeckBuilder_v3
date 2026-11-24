@@ -14,8 +14,8 @@ function* paieAutre(P, j, o, c) {
   let lki = null;
   if (c.engage) engageObjet(P, o);
   if (c.degage) degageObjet(P, o);
-  if (c.vie) P.joueurs[j].vie -= c.vie;
-  if (c.retire) { o.marq[c.retire.genre] -= c.retire.n; P.ver++; }
+  if (c.vie) { P.joueurs[j].vie -= c.vie; emet(P, {t: 'payeVie', joueur: j, n: c.vie}); }
+  if (c.retire) { o.marq[c.retire.genre] -= c.retire.n; P.ver++; emet(P, {t: 'marqueurRetire', id: o.id, genre: c.retire.genre, n: c.retire.n}); }
   if (c.engageAutres) {
     const ids = champDe(P, j).filter(x => !x.engage && x.id !== o.id && correspond(P, x, c.engageAutres.desc, o, j)).map(x => x.id);
     /* Les créatures engagées : Station compte leur force (js/forgePaliers.js). */

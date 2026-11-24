@@ -33,7 +33,7 @@ function noteHistorique(P, e) {
       if (P.vitesses) vitesseMonte(P, e);
       if (e.t === 'degatsJoueur' && e.combat && P.initiative === e.joueur) initiativeVolee(P, e);
       /* Infliger des dégâts de combat au monarque prend la couronne. */
-      if (e.t === 'degatsJoueur' && e.combat && P.monarque === e.joueur) { const s = obj(P, e.source) || P.lkis.get(e.source); if (s && s.ctrl != null) P.monarque = s.ctrl; }
+      if (e.t === 'degatsJoueur' && e.combat && P.monarque === e.joueur) { const s = obj(P, e.source) || P.lkis.get(e.source); if (s && s.ctrl != null && s.ctrl !== P.monarque) { const avant = P.monarque; P.monarque = s.ctrl; emet(P, {t: 'monarque', joueur: s.ctrl, avant}); } }
       break;
     case 'sacrifie': plusUn(h.sacrifies, e.joueur); break;
     case 'defausse': plusUn(h.defausses, e.joueur); break;

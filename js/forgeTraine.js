@@ -84,6 +84,7 @@ forgeEffet('Connive', ['Num'], function* (P, t, env) {
     const nonTerrains = pris.filter(id => !estType(obj(P, id), 'land')).length;
     pris.forEach(id => defausseCarte(P, id, j));
     if (nonTerrains && obj(P, o.id)) poseMarqueurs(P, o, '+1/+1', nonTerrains, o);
+    emet(P, {t: 'connive', id: o.id, joueur: j});
   }
 }, (t, op) => { op.op = 'pioche'; op.n = 1; op.qui = {vous: 1}; op.hostile = false; });
 

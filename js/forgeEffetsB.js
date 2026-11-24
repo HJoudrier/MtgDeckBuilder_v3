@@ -176,6 +176,7 @@ forgeEffet('Counter', ['Destination'], function* (P, t, env) {
       caps: null, manaSort: o.manaSort, manaDe: o.manaDe, lance: o.lance, x: o.x || 0});
     retireDeLaPile(P, o.id);
     deplace(P, o.id, dest === 'bibliotheque' ? 'dessus' : dest);
+    emet(P, {t: 'contre', joueur: o.ctrl, cause: env.ctrl, lki: P.lkis.get(o.id)});
     jn(P, `${o.def.nom} est contrecarré`);
   }
 }, (t, op) => { op.op = 'contre'; op.a = op.slot != null ? {cible: op.slot} : null; op.hostile = true; });
@@ -233,7 +234,9 @@ forgeEffet('RemoveCounter', ['CounterType', 'CounterNum'], function* (P, t, env)
   const g = genreMarqueur(t.CounterType);
   objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki).forEach(o => {
     const n = t.CounterNum === 'All' ? (o.marq[g] || 0) : forgeNombre(P, t.CounterNum || 1, env);
-    o.marq[g] = Math.max(0, (o.marq[g] || 0) - n); P.ver++;
+    const avant = o.marq[g] || 0;
+    o.marq[g] = Math.max(0, avant - n); P.ver++;
+    if (avant > o.marq[g]) emet(P, {t: 'marqueurRetire', id: o.id, genre: g, n: avant - o.marq[g]});
   });
 }, (t, op) => { op.op = 'forge'; op.hostile = op.slot != null; });
 

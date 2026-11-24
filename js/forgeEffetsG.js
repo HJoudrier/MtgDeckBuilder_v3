@@ -118,7 +118,7 @@ forgeEffet('FlipCoin', ['WinSubAbility', 'LoseSubAbility', 'HeadsSubAbility', 'T
 
 forgeEffet('BecomeMonarch', [], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
-  if (j != null) { P.monarque = j; jn(P, `${P.joueurs[j].nom} devient le monarque`); }
+  if (j != null) { const avant = P.monarque; P.monarque = j; jn(P, `${P.joueurs[j].nom} devient le monarque`); if (avant !== j) emet(P, {t: 'monarque', joueur: j, avant}); }
 }, (t, op) => { op.op = 'pioche'; op.n = 1; op.qui = {vous: 1}; op.hostile = false; });
 
 /* Le monarque pioche à son étape de fin (js/jeuTour.js). */
