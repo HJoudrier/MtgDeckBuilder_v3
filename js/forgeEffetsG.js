@@ -153,7 +153,9 @@ forgeEffet('Goad', ['Duration'], function* (P, t, env) {
 }, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration || /^(UntilYourNextTurn|Permanent)$/.test(t.Duration)});
 /* Ce que la protection gagnée sait lire : des couleurs, nommées ou au
    choix ; pas encore « protection from artifacts ». */
-function gainsProtection(t) { return /^(Choice|ChosenColor)$/.test(t.Gains || '') || String(t.Gains || '').split(',').every(c => FORGE_COULEURS[majuscule(c.trim())]); }
+function gainsProtection(t) { return /^(Choice|ChosenColor)$/.test(t.Gains || '') || String(t.Gains || '').split(',').every(c => FORGE_COULEURS[majuscule(c.trim())] || typeProtege(c)); }
+/* « Protection from artifacts » (Tower of the Magistrate) : un type de carte, jugé comme un filtre sur la source. */
+const typeProtege = c => !!FORGE_TYPES_CARTE[majuscule(c.trim())];
 function goadActif(P, o) { return !!o.goad && (o.goad.permanent || !(P.actif === o.goad.par && P.tour > o.goad.tour)); }
 
 /* Les couleurs d'une protection gagnée : nommées (`Gains$ Red,Blue`), ou
@@ -173,14 +175,17 @@ function* couleursProtection(P, t, env) {
 forgeEffet('Protection', ['Gains', 'Choices'], function* (P, t, env) {
   const objets = objetsForge(P, t, env).filter(o => o.zone === 'champ' && !o.lki);
   const couleurs = yield* couleursProtection(P, t, env);
-  objets.forEach(o => { o.protTemp = [...(o.protTemp || []), ...couleurs]; P.ver++; });
+  const types = /^(Choice|ChosenColor)$/.test(t.Gains || '') ? [] : String(t.Gains || '').split(',').map(c => majuscule(c.trim())).filter(typeProtege);
+  objets.forEach(o => { o.protTemp = [...(o.protTemp || []), ...couleurs]; if (types.length) o.protFiltresTemp = [...(o.protFiltresTemp || []), ...types]; P.ver++; });
 }, (t, op) => { op.op = 'pompe'; op.f = 0; op.e = 0; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = false; },
 {prepare: t => !t.Duration && !t.Radiance && gainsProtection(t)});
 
-forgeEffet('Debuff', ['Keywords'], function* (P, t, env) {
+forgeEffet('Debuff', ['Keywords', 'AllSuffixKeywords'], function* (P, t, env) {
   const m = motsForge(t.Keywords);
-  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f: 0, e: 0, mots: 0, retire: m, fin: 'tour'}); P.ver++; });
-}, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration});
+  /* « Loses all landwalk abilities » (Hammerheim) : la traversée est un paramètre, pas un mot-clé. */
+  const marche = t.AllSuffixKeywords === 'walk';
+  objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f: 0, e: 0, mots: 0, retire: m, ...(marche ? {sansPassage: true} : {}), fin: 'tour'}); P.ver++; });
+}, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration && (!t.AllSuffixKeywords || t.AllSuffixKeywords === 'walk')});
 
 /* Le phasing : hors du champ sans le quitter — ni départ ni entrée — et
    de retour au prochain dégagement de son contrôleur. */

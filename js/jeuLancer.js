@@ -251,6 +251,7 @@ function restreintCibles(P, sl, l) {
   for (const c of l) {
     const o = typeof c === 'number' ? obj(P, c) : null;
     if (sl.restr.meme && r.length && qui(c) !== qui(r[0])) continue;
+    if (sl.restr.type && o && r.length && typeof r[0] === 'number' && !partageTypeCreature(P, o, obj(P, r[0]))) continue;
     if (sl.restr.noms && o && r.some(x => typeof x === 'number' && obj(P, x) && obj(P, x).def.nom === o.def.nom)) continue;
     if (sl.restr.parJoueur && r.some(x => qui(x) === qui(c))) continue;
     r.push(c);

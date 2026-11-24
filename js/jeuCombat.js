@@ -24,7 +24,8 @@ function peutBloquer(P, b, a) {
      créature noire — ou partageant une couleur — bloquent. */
   if ((a.def.params.peur || a.mods.some(m => m.peur)) && !estType(b, 'artifact') && !cb.couleurs.includes('B')) return false;
   if ((a.def.params.intimidation || a.mods.some(m => m.intimidation)) && !estType(b, 'artifact') && !cb.couleurs.some(k => ca.couleurs.includes(k))) return false;
-  const passe = a.def.params.passage;
+  /* La traversée imprimée, celle qu'une pompe accorde (Fabled Path of Searo Point), celle qu'un effet ôte (Hammerheim). */
+  const passe = a.mods.some(m => m.sansPassage) ? null : [...(a.def.params.passage || []), ...a.mods.flatMap(m => m.passage || [])];
   if (passe && champDe(P, b.ctrl).some(l => estType(l, 'land') && passe.some(f => forgeValideObjet(P, l, f, null, b.ctrl, null, true)))) return false;
   if (ca.pasPar && ca.pasPar.some(x => forgeValideObjet(P, b, x.v, x.src, x.src.ctrl, null, true))) return false;
   if ((ca.mots & MOT.VOL) && !(cb.mots & (MOT.VOL | MOT.PORTEE))) return false;

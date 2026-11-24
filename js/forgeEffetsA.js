@@ -117,7 +117,7 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
     if (j == null) return;
     const zones = String((t.Origin || 'Library') + (t.OriginAlternative ? ',' + t.OriginAlternative : '')).split(',').map(z => ZONES_FORGE[z.trim()]).filter(Boolean);
     const ids = [].concat(...zones.map(z => z === 'champ' ? P.champ.filter(id => obj(P, id).ctrl === j) : P.joueurs[j][z].slice()))
-      .filter(id => !t.ChangeType || forgeValideObjet(P, obj(P, id), t.ChangeType, env.src, env.ctrl, env));
+      .filter(id => !t.ChangeType || chaqueFiltres(t.ChangeType) ? true : forgeValideObjet(P, obj(P, id), t.ChangeType, env.src, env.ctrl, env));
     const n = t.ChangeNum === 'All' ? ids.length : forgeNombre(P, t.ChangeNum || 1, env);
     const qui = t.Chooser ? env.ctrl : j;
     let pris;
@@ -129,7 +129,8 @@ forgeEffet('ChangeZone', ['Origin', 'Destination', 'ChangeType', 'ChangeNum', 'S
         const type = id => (obj(P, id).def.sousTypes || []).find(x => TERRAINS_DE_BASE.includes(x));
         pris = pris.concat(yield* choisitCartes(P, qui, ids.filter(id => id !== pris[0] && type(id) === type(pris[0])), n - 1, 'Chercher', 'cartes', 0));
       }
-    } else pris = yield* choisitCartes(P, qui, ids, n, 'Chercher', 'cartes', t.Mandatory === 'True' ? n : 0);
+    } else if (chaqueFiltres(t.ChangeType)) pris = yield* choisitChacun(P, qui, ids, chaqueFiltres(t.ChangeType), env);
+    else pris = yield* choisitCartes(P, qui, ids, n, 'Chercher', 'cartes', t.Mandatory === 'True' ? n : 0);
     objets = pris.map(id => obj(P, id));
     if (zones.includes('bibliotheque') && t.Shuffle !== 'False' && t.NoShuffle !== 'True') ctx._melange = j;
   } else objets = objetsForge(P, t, env).filter(o => dansOrigine(o, t.Origin));

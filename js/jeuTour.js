@@ -46,6 +46,7 @@ function* nettoyage(P) {
     o.bless = 0; o.toucheMortel = false; o.regen = 0;
     if (o.mods.length) { o.mods = o.mods.filter(m => m.fin !== 'tour'); P.ver++; }
     if (o.protTemp) { o.protTemp = null; P.ver++; }
+    if (o.protFiltresTemp) { o.protFiltresTemp = null; P.ver++; }
     if (o.hexTemp) { o.hexTemp = null; P.ver++; }
     if (o.anime && o.anime.length) { o.anime = o.anime.filter(m => m.fin !== 'tour'); P.ver++; }
     o.prevention = 0;

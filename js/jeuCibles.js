@@ -103,7 +103,7 @@ function ciblable(P, o, ctrl, couleurs, src) {
   if (o.zone !== 'champ') return true;
   const m = car(P, o).mots;
   if (m & MOT.INTOUCHABLE) return false;
-  if ((m & MOT.LINCEUL) && o.ctrl !== ctrl) return false;
+  if ((m & MOT.LINCEUL) && o.ctrl !== ctrl && !hexproofIgnore(P, o, ctrl)) return false;
   if ((m & MOT.PROTECTION) && couleurs && protectionsDe(o).some(k => couleurs.includes(k))) return false;
   if (src && protegeFiltre(P, o, src)) return false;
   if (src && cibleInterdite(P, o, src, ctrl)) return false;
@@ -117,8 +117,8 @@ function protectionsDe(o) { return o.protTemp && o.protTemp.length ? [...(o.def.
 /* La protection par filtre (« protection from artifacts ») : la source
    répond-elle à l'un des filtres de l'objet protégé ? */
 function protegeFiltre(P, o, src) {
-  const f = o.def.params && o.def.params.protectionFiltres;
-  return !!f && !!src && src.j == null && f.some(v => forgeValideObjet(P, src, v, o, o.ctrl, null, true));
+  const f = [...((o.def.params && o.def.params.protectionFiltres) || []), ...(o.protFiltresTemp || [])];
+  return f.length > 0 && !!src && src.j == null && f.some(v => forgeValideObjet(P, src, v, o, o.ctrl, null, true));
 }
 
 /* Les candidats légaux d'un emplacement de cible : des identifiants

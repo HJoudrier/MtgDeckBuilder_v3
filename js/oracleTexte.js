@@ -116,6 +116,7 @@ function lisTypeLigne(type) {
   return {
     supers: mots.filter(m => SUPERS.includes(m)),
     types: mots.filter(m => TYPES.includes(m)).map(m => m === 'tribal' ? 'kindred' : m),
-    sousTypes: (apres || '').trim().split(/\s+/).filter(Boolean)
+    /* « Time Lord » est un seul sous-type, que les scripts Forge écrivent avec une espace. */
+    sousTypes: (apres || '').trim().replace(/\btime lord\b/g, 'time-lord').split(/\s+/).filter(Boolean).map(m => m === 'time-lord' ? 'time lord' : m)
   };
 }

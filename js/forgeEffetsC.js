@@ -43,7 +43,7 @@ const CACHES_DU_TOUR = {
   'prevent all damage that would be dealt by cardname.': {prevPar: true},
   'prevent all damage that would be dealt to and dealt by cardname.': {prevPar: true, prevVers: true}
 };
-forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, ...Object.keys(CACHES_DU_TOUR), 'flashback');
+forgeSait('kwval', ...Object.keys(MOTS_ANGLAIS), KW_SANS_DEGAGER, ...Object.keys(CACHES_DU_TOUR), 'flashback', 'landwalk:land', ...[1, 2, 3, 4, 5, 6].map(n => 'firebending:' + n));
 
 /* Un `+3` ou un `-X` de Forge, pour l'IA. */
 function bonusIA(v) { const s = String(v == null ? '0' : v); return /^[+-]?\d+$/.test(s) ? +s : /^-/.test(s) ? -2 : 2; }
@@ -57,10 +57,17 @@ function pompeForge(P, objets, t, env) {
   if (sansDegager) vivants.forEach(o => { o.exerce = true; P.ver++; });
   if (sansDegager && !mots && !f && !e) return;
   const drapeaux = Object.assign({}, ...String(t.KW || '').split('&').map(k => CACHES_DU_TOUR[k.trim().toLowerCase()]).filter(Boolean));
+  /* « Creatures you control gain landwalk » : un filtre de terrain que le bloqueur ne doit pas contrôler. */
+  const marche = String(t.KW || '').split('&').map(k => /^Landwalk:(Land)$/.exec(k.trim())).filter(Boolean).map(m => m[1]);
+  if (marche.length) drapeaux.passage = marche;
   /* La durée (js/forgeDurees.js) ; une durée qu'on ne sait pas tenir finit au nettoyage. */
   const fd = finForge(t, env) || {fin: 'tour'};
   if (fd.fin === 'hote') P.hotesSuivis = true;
   vivants.forEach(o => { o.mods.push({f, e, mots, ...drapeaux, ...fd}); P.ver++; });
+  /* « Gains firebending 4 until end of turn » (Fire Nation Palace) : le déclencheur d'attaque, accordé pour la durée. */
+  const feu = String(t.KW || '').split('&').map(k => /^Firebending:(\d+)$/.exec(k.trim())).filter(Boolean).map(m => +m[1]);
+  if (feu.length) vivants.forEach(o => (o.anime = o.anime || []).push({fin: fd.fin, capacites: feu.map(n => ({genre: 'declenchee', ecoutes: [{evt: 'attaque', sujet: 'soi'}],
+    texte: 'Firebending ' + n, effet: {ops: [{op: 'feu', n, hostile: false}], cibles: [], modes: null}}))}));
 }
 
 forgeEffet('Pump', ['NumAtt', 'NumDef', 'KW', 'Duration', 'PumpZone'], function* (P, t, env) {

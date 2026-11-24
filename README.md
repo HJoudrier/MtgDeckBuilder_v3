@@ -2200,6 +2200,27 @@ les déclencheurs et les statiques restent à leur porteur. Les capacités accor
 Restent `GainsValidAbilities$` (Drana and Linvala, Nicol Bolas, Dragon-God : « toutes les capacités activées des créatures adverses
 qui... »), `GainsAbilitiesOfDefined$` (Quicksilver Elemental) et la couverture du dessus de la bibliothèque (Conspicuous Snoop).
 
+**Lot F96 : des terrains, premier tour** (`js/forgeChaque.js`, `js/forgeEntreesC.js`, `js/forgeTerrains.js`). Vingt terrains de plus, dont
+treize d'EDHREC. Ce qu'ils avaient en commun : une phrase de plus que le moteur ne lisait pas.
+- **`EACH Forest & Plains`** (Krosan Verge, Axgard Armory) : une carte par filtre, jusqu'à une chacune, sans qu'une même carte serve deux
+  filtres ; `famillesFiltre()` lit chaque morceau pour la couverture.
+- **Entrer engagé, sauf…** : « révélez un Dragon de votre main, ou contrôlez-en un » (Temple of the Dragon Queen, Fortified Beachhead) se lit
+  comme `saufRevele` et `sauf` ; « engagé s'il a été posé depuis la main » (Fetching Garden) comme `siJouee`, que seul `joueTerrain()` annonce
+  (`terrainJoue`) ; « sacrifiez les autres permanents du même nom » (Sheltered Valley) comme `sacMemeNom`.
+- **Sous-types composés** : `Assembly-Worker` (Mishra's Factory et Foundry) et `Time Lord` (Trenzalore Clocktower) ; `lisTypeLigne()` garde « time lord »
+  d'un seul tenant.
+- **Ce qu'une animation interdit** : `AnimateAll | CantHaveKeyword$` (Arcane Lighthouse) retire le mot-clé *et* le garde retiré, après les mods.
+- **Protection contre un type** : `Protection | Gains$ Artifact` (Tower of the Magistrate) pose `protFiltresTemp`, que `protegeFiltre()` lit comme la
+  protection imprimée : blocage et dégâts y passent déjà.
+- **Traversée accordée ou ôtée** : `KW$ Landwalk:Land` (Fabled Path of Searo Point) et `Debuff | AllSuffixKeywords$ walk` (Hammerheim), par des mods
+  que `peutBloquer()` lit à côté de la traversée imprimée.
+- **`KW$ Firebending:4`** accordé pour le tour (Fire Nation Palace) : le déclencheur d'attaque du mot-clé, posé en animation.
+- **`IgnoreHexproof`** (Detection Tower) : une statique d'effet que lit `ciblable()` ; les joueurs, eux, ne se protègent que par couleur.
+- **`Activator$ You.!Active`** (Ghost Town) et `PlayerTurn$ True` : des restrictions d'activation, jugées avec `OpponentTurn` (`restrictionSort()`).
+  `forgeValeurs(nom, valeurs)` borne un paramètre à des valeurs : toute autre reste inconnue (`param:ChangeZone.Activator=Opponent`).
+- **`TargetsWithSameCreatureType`** (Secret Tunnel), **`GainControlVariant | ChangeController$ CardOwner`** (Homeward Path), et le mana d'un terrain qui
+  reflète les couleurs du cimetière (**The Grey Havens**).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -228,7 +228,7 @@ function* joueTerrain(P, j, a) {
   P.joueurs[j].terrainsJoues++;
   if (a.depuis) permisUtilise(P, j, obj(P, a.id));
   jn(P, `${P.joueurs[j].nom} joue ${nomObj(P, a.id)}`);
-  const n = yield* metEnJeu(P, a.id, j, a.variante === 'dos' ? {face: obj(P, a.id).def.dos} : {});
+  const n = yield* metEnJeu(P, a.id, j, a.variante === 'dos' ? {face: obj(P, a.id).def.dos, terrainJoue: true} : {terrainJoue: true});
   emet(P, {t: 'terrainJoue', id: n, joueur: j, depuis: a.depuis || 'main'});
   return true;
 }

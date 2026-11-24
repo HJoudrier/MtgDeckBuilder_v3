@@ -201,6 +201,12 @@ function entreeForge(def, face, r) {
   const w = forgeSousCapacite(face, r.ReplaceWith);
   if (!w || w.Defined !== 'Self' || w.ETB !== 'True') return false;
   const ent = def.entree = def.entree || {};
+  /* « Enters tapped if it was played from your hand » (Fetching Garden) : seul le terrain posé l'est (js/forgeEntreesC.js). */
+  if (r.ValidCause) {
+    if (r.ValidCause !== 'LandAbility.YouCtrl' || r.Origin !== 'Hand' || w.DB !== 'Tap' || w.UnlessCost || w.SubAbility || w.ConditionCheckSVar || v[2]) return false;
+    ent.siJouee = true;
+    return true;
+  }
   if (w.DB === 'Tap' && !v[2]) {
     ent.engagee = true;
     if (w.UnlessCost) {

@@ -154,7 +154,7 @@ function animeForge(P, objets, t, env) {
     /* « Gains all creature types » : un changelin, le temps de l'animation. */
     changelin: t.AddAllCreatureTypes === 'True',
     retireTypes: t.RemoveCardTypes === 'True', retireTerrains: t.RemoveLandTypes === 'True', perdTout: t.RemoveAllAbilities === 'True',
-    retireMots: t.RemoveKeywords ? motsForge(t.RemoveKeywords) : 0,
+    retireMots: t.RemoveKeywords ? motsForge(t.RemoveKeywords) : 0, interdits: t.CantHaveKeyword ? motsForge(t.CantHaveKeyword) : 0,
     capacites: ((env.op && env.op.accorde) || {}).capacites || null, statiques: ((env.op && env.op.accorde) || {}).statiques || null};
   objets.filter(o => o && o.j == null && o.zone === 'champ' && !o.lki).forEach(o => {
     (o.anime = o.anime || []).push({...a});
@@ -184,7 +184,7 @@ function animationTenable(t, op) {
 }
 
 const PARAMS_ANIME = ['Power', 'Toughness', 'Types', 'Keywords', 'Colors', 'OverwriteColors', 'Duration', 'RemoveCreatureTypes', 'RemoveCardTypes',
-  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT', 'AddAllCreatureTypes'];
+  'RemoveLandTypes', 'RemoveAllAbilities', 'RemoveKeywords', 'CantHaveKeyword', 'Abilities', 'Triggers', 'staticAbilities', 'AtEOT', 'AddAllCreatureTypes'];
 
 forgeEffet('Animate', PARAMS_ANIME, function* (P, t, env) { animeForge(P, objetsForge(P, t, env), t, env); },
   (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: animationTenable});

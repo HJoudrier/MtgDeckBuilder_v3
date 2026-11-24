@@ -103,6 +103,8 @@ function car(P, o) {
     /* Ce qu'un effet retire (« loses flying until end of turn »), après ce
        qu'on ajoute ; la protection gagnée compte comme un mot-clé. */
     for (const m of o.mods) if (m.retire) mots &= ~m.retire;
+    /* « Can't have hexproof » : rien ne le rend, ni avant ni après (Arcane Lighthouse). */
+    if (a.interdits) mots &= ~a.interdits;
     if (o.protTemp && o.protTemp.length) mots |= MOT.PROTECTION;
     if (o.suspect) { mots |= MOT.MENACE; nePeutBloquer = true; }
     if (d.params && d.params.dechaine && (o.marq['+1/+1'] || 0) > 0) nePeutBloquer = true;
@@ -135,6 +137,7 @@ function animation(o) {
     if (a.changelin) r.changelin = true;
     if (a.perdTout) r.mots = 0;
     if (a.retireMots) r.mots &= ~a.retireMots;
+    if (a.interdits) r.interdits = (r.interdits || 0) | a.interdits;
     if (a.force != null) r.force = a.force;
     if (a.endurance != null) r.endurance = a.endurance;
     if (a.retireSousTypes) r.sousTypes = [];

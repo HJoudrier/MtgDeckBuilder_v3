@@ -26,6 +26,10 @@ const FORGE_SAIT = {api: new Set(), trig: new Set(), stat: new Set(), repl: new 
 const FORGE_CLES_FILTRE = /^(ValidTgts|ValidCards?|Affected|ChangeType|ChangeValid|SacValid|ValidTarget|ValidSource|ValidPlayers?|ValidActivatingPlayer|ValidAttacker|ValidBlocker|IsPresent|ValidDefender)$/;
 const FORGE_CLES_DEFINI = /^(Defined(Player|Cards)?|RememberObjects|ForgetDefined|AttachedTo|TokenOwner|NewController|DamageSource|Controller)$/;
 
+/* Les paramètres qu'on ne lit que pour certaines valeurs : `forgeValeurs('ChangeZone.Activator', ['You.!Active'])`. */
+const FORGE_VALEURS = {};
+function forgeValeurs(nom, valeurs) { FORGE_VALEURS[nom] = valeurs; }
+
 /* Inscrire ce qu'un module du moteur sait faire. */
 function forgeSait(genre, ...noms) { noms.forEach(n => FORGE_SAIT[genre].add(n)); }
 
@@ -92,7 +96,11 @@ function elementsTable(face, t, genre, out, vus) {
     if (k === 'SP' || k === 'AB' || k === 'DB') out.add('api:' + t[k]);
     else if ((k === 'Mode' || k === 'Event') && !forgeApi(t)) { if (!genre) out.add('trig:' + t[k]); }
     else if (k === 'Cost' || k === 'UnlessCost') morceauxCout(t[k]).forEach(c => out.add(c));
-    else if (!FORGE_DESCRIPTIFS.test(k)) out.add('param:' + (FORGE_COMMUNS.has(k) || !famille ? k : famille + '.' + k));
+    else if (!FORGE_DESCRIPTIFS.test(k)) {
+      const nom = FORGE_COMMUNS.has(k) || !famille ? k : famille + '.' + k;
+      /* Un paramètre lu pour certaines valeurs seulement : une autre reste inconnue. */
+      out.add('param:' + (FORGE_VALEURS[nom] && !FORGE_VALEURS[nom].includes(t[k]) ? nom + '=' + t[k] : nom));
+    }
     /* Les mots-clés d'une pompe : chacun est une valeur à reconnaître. */
     if (k === 'KW') String(t[k]).split('&').map(x => x.trim().toLowerCase()).filter(Boolean).forEach(x => out.add('kwval:' + x));
     if (FORGE_CLES_FILTRE.test(k) && typeof famillesFiltre === 'function') famillesFiltre(t[k]).forEach(e => out.add(e));

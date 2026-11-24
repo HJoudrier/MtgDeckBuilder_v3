@@ -58,6 +58,8 @@ function forgeFiltre(txt) {
    sous leur famille. */
 function famillesFiltre(txt) {
   const r = [];
+  /* « EACH Aura & Equipment » : chaque morceau est un filtre (js/forgeChaque.js). */
+  if (/^EACH /.test(txt || '')) return [].concat(...txt.slice(5).split(/\s*&\s*/).map(famillesFiltre));
   forgeFiltre(txt).forEach(a => {
     if (!teteConnue(a.tete)) r.push('filtre:' + a.tete);
     a.props.forEach(p => {
@@ -76,7 +78,11 @@ const FORGE_PAS_SOUSTYPES = new Set(['Enchanted', 'Equipped', 'Historic', 'Modif
   'Foretold', 'Renowned', 'Monstrous', 'Transformed', 'Bargained', 'Harnessed', 'Solved', 'Unearthed', 'Hellbent',
   'Attached', 'Remembered', 'Imprinted', 'Chosen', 'Token', 'Creatures', 'Permanents', 'Cards']);
 
+/* Les sous-types qui ne s'écrivent pas en un mot simple : un trait d'union (Assembly-Worker) ou une espace (Time Lord). */
+const SOUSTYPES_COMPOSES = new Set(['Assembly-Worker', 'Time Lord']);
+
 function sousTypeProbable(p) {
+  if (SOUSTYPES_COMPOSES.has(p)) return true;
   return /^[A-Z][a-z]+(?:'s)?$/.test(p) && !FORGE_PAS_SOUSTYPES.has(p) && FORGE_TYPES_CARTE[p] == null && FORGE_COULEURS[p] == null &&
     FORGE_SUPERS[p] == null && !FORGE_PROPS.includes(p);
 }

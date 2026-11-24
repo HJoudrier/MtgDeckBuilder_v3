@@ -109,7 +109,9 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   const ent = d0.entree || {};
   /* Payer avant d'entrer, sinon le cimetière (js/forgeEntrees.js). */
   if (ent.payeAvant && !(yield* payeAvantEntree(P, id, ctrl, ent.payeAvant))) { deplace(P, id, 'cimetiere'); return null; }
-  let engage = !!opts.engage || !!ent.engagee;
+  let engage = !!opts.engage || !!ent.engagee || (!!ent.siJouee && !!opts.terrainJoue);
+  /* « Instead sacrifice each other permanent named… » (Sheltered Valley). */
+  if (ent.sacMemeNom) champDe(P, ctrl).filter(x => x.id !== id && x.def.nom === d0.nom).forEach(x => sacrifie(P, x.id));
   if (ent.engagee && ent.sauf && ent.sauf.some(d => champDe(P, ctrl).some(x => correspondBase(P, x, d, null, ctrl)))) engage = false;
   if (ent.engagee && ent.condForge && !opts.engage) {
     const env = {face: ent.condForge.face, ctx: {cibles: [], memo: [], memoJ: []}, src: o, ctrl, op: {}};

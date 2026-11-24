@@ -10,7 +10,9 @@
      pas sacrifier ce que la statique désigne — payer un coût, ou toute autre
      façon si elle n'est pas « `ForCost$ True` » ;
    - `AttackRestrict` (Crawlspace, Mirri, The Eternal Wanderer) : au plus N
-     créatures attaquent un défenseur par combat.
+     créatures attaquent un défenseur par combat ;
+   - `IgnoreHexproof` (Detection Tower) : ce que la statique désigne se cible
+     comme s'il n'avait pas de défense talismanique.
    ===================================================================== */
 
 /* —— Activer comme si elle avait la célérité ——————————————————————— */
@@ -130,3 +132,14 @@ gardeAutre = (g => function (P, j, effets) {
 
 forgeSait('param', 'RaiseCost.Activator', 'RaiseCost.Type');
 forgeSait('param', 'Continuous.MayPlayText');
+
+/* —— Cibler malgré la défense talismanique ———————————————————————— */
+
+forgeStatique('IgnoreHexproof', ['Activator', 'ValidEntity'], () => {});
+
+/* Qui cible (`ctrl`) peut-il ignorer la défense talismanique de cet objet ? Seuls les objets sont jugés : le linceul d'un joueur
+   ne vient que d'effets d'un tour (js/forgeProtections.js), que cette statique ne touche pas. */
+function hexproofIgnore(P, o, ctrl) {
+  return !!statiqueQui(P, 'IgnoreHexproof', (t, src, env) => (!t.Activator || joueurStatique(P, ctrl, t.Activator, src, env)) &&
+    objetOuRien(P, o, t.ValidEntity, src, env));
+}

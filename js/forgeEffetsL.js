@@ -96,15 +96,18 @@ degagement = (g => function (P) {
 function restrictionSort(t) {
   const r = {};
   if (t.ActivationPhases) r.phases = t.ActivationPhases;
-  if (t.OpponentTurn === 'True') r.adverse = true;
+  /* « Activate only if it's not your turn » s'écrit aussi `Activator$ You.!Active` (Ghost Town) ; « only during your turn », `PlayerTurn$ True`. */
+  if (t.OpponentTurn === 'True' || t.Activator === 'You.!Active') r.adverse = true;
+  if (t.PlayerTurn === 'True') r.mien = true;
   if (t.ActivationFirstCombat === 'True') r.premierCombat = true;
   return Object.keys(r).length ? r : null;
 }
 function restrictionTenue(P, j, r) {
-  return (!r.phases || dansPhases(P, r.phases)) && (!r.adverse || P.actif !== j) && (!r.premierCombat || (P.combatsTour || 0) <= 1);
+  return (!r.phases || dansPhases(P, r.phases)) && (!r.adverse || P.actif !== j) && (!r.mien || P.actif === j) && (!r.premierCombat || (P.combatsTour || 0) <= 1);
 }
 /* Inscrites par effet : un déclencheur qui porte `OpponentTurn$` doit la lire lui-même (SpellCast le fait). */
-forgeSait('param', 'Tap.OpponentTurn', 'Pump.ActivationFirstCombat');
+forgeSait('param', 'Tap.OpponentTurn', 'Pump.ActivationFirstCombat', 'ChangeZone.Activator');
+forgeValeurs('ChangeZone.Activator', ['You.!Active']);
 
 activationInterdite = (g => function (P, j, o, k) {
   if (k.restr && !restrictionTenue(P, j, k.restr)) return true;
