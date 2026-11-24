@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F85) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F95) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6637** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 434 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 265 |
+| complètes | 6063 | 6611 | 6552 | **6716** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 384 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 236 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, quatre-vingt-cinq cartes de plus complètes.
+exactement : même banc, mêmes cartes, cent soixante-quatre cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -22,12 +22,9 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 
 | Élément | Cartes | Exemples |
 |---|---|---|
-| `construction:Mana` | 17 | Lion's Eye Diamond, Skirge Familiar, Opal Palace |
-| `param:Continuous.GainsAbilitiesOf` | 10 | Drana and Linvala, Hazel's Brewmaster, Conspicuous Snoop |
-| `param:Continuous.GainsAbilitiesOfZones` | 7 | Hazel's Brewmaster, Conspicuous Snoop, Agatha's Soul Cauldron |
+| `construction:Mana` | 9 | Master of Dark Rites, Opal Palace, Jade Orb of Dragonkind |
 | `param:Continuous.MayPlayDontGrantZonePermissions` | 3 | Dracogenesis, Darksteel Monolith, As Foretold |
 | `construction:Continuous` | 9 | Hunting Velociraptor, Tyvar the Bellicose, Danny Pink |
-| `expr:Count$ThisTurnActivated` | 6 | Forge Anew, Professor Hojo, The Chain Veil |
 | `param:ImmediateTrigger.TriggerAmount` | 5 | Earthbender Ascension, Auron, Venerated Guardian, Ajani, Nacatl Pariah |
 | `param:MoveCounter.ValidDefined` | 1 | Forgotten Ancient |
 | `param:PutCounter.Placer` | 4 | Promise of Loyalty, Gluntch, the Bestower, Alexios, Deimos of Kosmos |
@@ -40,13 +37,13 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `api:ExchangeLifeVariant` | 2 | Tree of Redemption, Tree of Perdition |
 | `param:ExchangeLifeVariant.Mode` | 2 | Tree of Redemption, Tree of Perdition |
 | `param:PutCounter.Chooser` | 2 | Promise of Loyalty, Gluntch, the Bestower |
-| `expr:Count$ValidAll` | 2 | Mangara, the Diplomat, Kefka, Dancing Mad |
 | `param:PutCounter.RememberAmount` | 3 | Earthbender Ascension, Auron, Venerated Guardian, Cosima, God of the Voyage |
 | `trig:AbilityTriggered` | 3 | Firebender Ascension, Aboleth Spawn, Historian's Boon |
 | `param:AbilityTriggered.ValidMode` | 3 | Firebender Ascension, Aboleth Spawn, Historian's Boon |
 | `param:AbilityTriggered.ValidSource` | 3 | Firebender Ascension, Aboleth Spawn, Historian's Boon |
 | `param:Animate.sVars` | 3 | Summon: Primal Odin, Whip of Erebos, Vorpal Sword |
 | `param:PutCounter.RememberCards` | 2 | Promise of Loyalty, Season of Gathering |
+| `construction:ReduceCost` | 4 | Professor Hojo, Doc Aurlock, Grizzled Genius, Tezzeret, Betrayer of Flesh |
 | `filtre:TriggeredCards` | 1 | Hedge Shredder |
 | `kw:Mutate` | 18 | Nethroi, Apex of Death, Gemrazer, Brokkos, Apex of Forever |
 | `defini:ReplacedNewCard.Creature` | 1 | Spark Double |
@@ -65,11 +62,7 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Activations.ValidSA` | 1 | Birgi, God of Storytelling |
 | `param:Activations.ValidPlayer` | 1 | Birgi, God of Storytelling |
 | `param:Activations.MinLimit` | 1 | Birgi, God of Storytelling |
-| `trig:SearchedLibrary` | 3 | Wan Shi Tong, Librarian, Ob Nixilis, Unshackled, Archivist of Oghma |
-| `param:SearchedLibrary.ValidPlayer` | 3 | Wan Shi Tong, Librarian, Ob Nixilis, Unshackled, Archivist of Oghma |
-| `param:SearchedLibrary.SearchOwnLibrary` | 3 | Wan Shi Tong, Librarian, Ob Nixilis, Unshackled, Archivist of Oghma |
 | `param:Counter.RememberForCounter` | 3 | Tibalt's Trickery, Mana Sculpt, Ertai Resurrected |
-| `construction:Attacks` | 2 | Delina, Wild Mage, Mardu Siegebreaker |
 | `repl:RollDice` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
 | `param:RollDice.ActiveZones` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
 | `param:RollDice.ValidPlayer` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
@@ -86,22 +79,29 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Mutates.ValidCard` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
 | `param:ReduceCost.Relative` | 3 | Not of This World, March of Swirling Mist, Rottenmouth Viper |
 | `param:DigUntil.ImprintRevealed` | 2 | Tibalt's Trickery, Gríma, Saruman's Footman |
-| `param:PutCounter.CounterTypes` | 4 | Arwen, Mortal Queen, Qarsi Revenant, Elspeth Resplendent |
 | `construction:Moved` | 1 | Temple of the Dragon Queen |
-| `stat:NumLoyaltyAct` | 3 | Oath of Teferi, The Chain Veil, Kaito, Dancing Shadow |
-| `param:NumLoyaltyAct.ValidCard` | 3 | Oath of Teferi, The Chain Veil, Kaito, Dancing Shadow |
 | `param:PutCounter.RememberPut` | 4 | Call the Spirit Dragons, Craig Boone, Novac Guard, Fangs of Kalonia |
 | `param:Continuous.TopCardOfLibraryIs` | 2 | Conspicuous Snoop, Vampire Nocturnus |
 | `filtre:IsSolved` | 3 | Case of the Locked Hothouse, Case of the Ransacked Lab, Case of the Uneaten Feast |
 | `defini:TriggeredCards` | 1 | Kambal, Profiteering Mayor |
 | `param:Play.ForgetRemembered` | 1 | Descendants' Path |
-| `construction:CantAttack` | 4 | Bloodthirster, Alexios, Deimos of Kosmos, Xantcha, Sleeper Agent |
 | `filtre:targetedBy` | 2 | Kheru Goldkeeper, Guide of Souls |
 | `kw:Read ahead` | 4 | The Cruelty of Gix, The Weatherseed Treaty, The Elder Dragon War |
 | `param:Moved.Layer` | 3 | Grafdigger's Cage, Corrupted Shapeshifter, Xantcha, Sleeper Agent |
-| `param:DigMultiple.SourceZone` | 2 | Kaalia, Zenith Seeker, Ojer Kaslem, Deepest Growth |
-| `filtre:attackingYouOrYourPWLKI` | 1 | Mangara, the Diplomat |
 | `kwval:firebending:4` | 1 | Fire Nation Palace |
+| `param:Effect.TargetsWithSameCreatureType` | 1 | Secret Tunnel |
+| `kw:MayFlashSac` | 1 | Necromancy |
+| `param:ChangeZone.ChoiceZone` | 1 | Broodcaller Scourge |
+| `param:ChangeZone.Amount` | 1 | Broodcaller Scourge |
+| `construction:TapsForMana` | 1 | Treasure Nabber |
+| `param:CanAttackDefender.ValidAttacked` | 1 | Weathered Sentinels |
+| `kwval:hexproof:chosencolor` | 1 | Skrelv, Defector Mite |
+| `kwval:toxic:1` | 1 | Skrelv, Defector Mite |
+| `param:Pump.DefinedKW` | 1 | Skrelv, Defector Mite |
+| `kwval:myriad` | 2 | Mass of Mysteries, Ironwill Forger |
+| `construction:ETBReplacement` | 1 | Serra's Emissary |
+| `param:Continuous.GainsAbilitiesOfDefined` | 3 | Quicksilver Elemental, Grell Philosopher, Havengul Lich |
+| `construction:ManaReflected` | 2 | Squandered Resources, The Grey Havens |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -124,25 +124,23 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Promise of Loyalty | `param:PutCounter.Chooser`, `param:PutCounter.Placer`, `param:PutCounter.RememberCards` |
 | P | Echoes of Eternity | `param:Panharmonicon.ValidZone` |
 | P | Moraug, Fury of Akoum | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute`, `expr:Count$CardNumAttacksThisTurn` |
-| P | Lion's Eye Diamond | `construction:Mana` |
 | I | Temple of the Dragon Queen | `construction:Moved` |
 | P | Earthbender Ascension | `param:PutCounter.RememberAmount`, `param:ImmediateTrigger.TriggerAmount` |
 | P | Kambal, Profiteering Mayor | `defini:TriggeredCards` |
 | P | Descendants' Path | `param:Play.ForgetRemembered` |
 | P | Bumi, Unleashed | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute` |
-| P | Mangara, the Diplomat | `expr:Count$ValidAll`, `filtre:attackingYouOrYourPWLKI` |
 | P | Fire Nation Palace | `kwval:firebending:4` |
 | P | Secret Tunnel | `param:Effect.TargetsWithSameCreatureType` |
 | P | Necromancy | `kw:MayFlashSac` |
 | P | Broodcaller Scourge | `param:ChangeZone.ChoiceZone`, `param:ChangeZone.Amount` |
 | P | Treasure Nabber | `construction:TapsForMana` |
+| P | Master of Dark Rites | `construction:Mana` |
 | P | Weathered Sentinels | `param:CanAttackDefender.ValidAttacked` |
-| I | Wan Shi Tong, Librarian | `trig:SearchedLibrary`, `param:SearchedLibrary.ValidPlayer`, `param:SearchedLibrary.SearchOwnLibrary` |
 | P | Skrelv, Defector Mite | `kwval:hexproof:chosencolor`, `kwval:toxic:1`, `param:Pump.DefinedKW` |
 | P | Tree of Redemption | `api:ExchangeLifeVariant`, `param:ExchangeLifeVariant.Mode` |
 | P | Case of the Locked Hothouse | `filtre:IsSolved` |
 | P | Serra's Emissary | `construction:ETBReplacement` |
-| P | Drana and Linvala | `param:Continuous.GainsAbilitiesOf`, `param:Continuous.GainsValidAbilities`, `param:Continuous.ManaConversion` |
+| P | Drana and Linvala | `param:Continuous.GainsValidAbilities`, `param:Continuous.ManaConversion` |
 | I | Drown in the Loch | `param:Counter.TargetsWithControllerProperty`, `param:Destroy.TargetsWithControllerProperty` |
 | P | Gisela, the Broken Blade | `param:Phase.IsPresent2`, `api:Meld`, `param:Meld.Name`, `param:Meld.Primary` … |
 | P | Firebender Ascension | `trig:AbilityTriggered`, `param:AbilityTriggered.ValidMode`, `param:AbilityTriggered.ValidSource`, `param:AbilityTriggered.TriggeredOwnAbility` |
@@ -155,35 +153,25 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Darksteel Monolith | `param:Continuous.MayPlayDontGrantZonePermissions` |
 | P | Kheru Goldkeeper | `filtre:targetedBy` |
 | I | Archangel of Tithes | `stat:CantBlockUnless`, `param:CantBlockUnless.ValidCard` |
-| P | Hazel's Brewmaster | `param:Continuous.GainsAbilitiesOf`, `param:Continuous.GainsAbilitiesOfZones` |
-| P | Conspicuous Snoop | `param:Continuous.TopCardOfLibraryIs`, `param:Continuous.GainsAbilitiesOf`, `param:Continuous.GainsAbilitiesOfZones` |
+| P | Conspicuous Snoop | `param:Continuous.TopCardOfLibraryIs` |
 | I | As Foretold | `param:Continuous.MayPlayDontGrantZonePermissions` |
 | I | Opposition Agent | `param:Continuous.ControlOpponentsSearchingLibrary`, `param:Moved.FoundSearchingLibrary` |
-| P | Skirge Familiar | `construction:Mana` |
 | P | Brave the Sands | `param:Continuous.CanBlockAmount` |
 | P | Kodama of the East Tree | `param:ChangesZone.NotThisAbility` |
-| P | Delina, Wild Mage | `construction:Attacks` |
 | P | Opal Palace | `construction:Mana` |
 | I | Molten Psyche | `defini:Player.Opponent+IsRemembered` |
-| P | Hazel of the Rootbloom | `construction:Mana` |
-| P | Marvin, Murderous Mimic | `param:Continuous.GainsAbilitiesOf` |
-| I | Kozilek's Command | `param:Charm.Announce` |
 | P | Breena, the Demagogue | `expr:PlayerCountDefinedTriggeredAttackedTarget$HasPropertylifeGTX` |
 | I | Dance of the Manse | `param:ChangeZone.StaticEffectCheckSVar`, `param:ChangeZone.StaticEffectSVarCompare` |
-| I | Forge Anew | `construction:CastWithFlash`, `expr:Count$ThisTurnActivated` |
 | P | Not of This World | `expr:TargetedByTarget$Valid`, `param:ReduceCost.Relative` |
 | I | Ringsight | `filtre:SharesColorWith Valid Creature.Legendary` |
-| P | Kefka, Dancing Mad | `expr:Count$ValidAll` |
 | I | Master of Cruelties | `param:AttackerUnblocked.ValidDefender`, `kw:CARDNAME can only attack alone.` |
 | I | Battle Angels of Tyr | `expr:TriggeredTarget$Valid` |
-| P | Zellix, Sanity Flayer | `trig:MilledOnce`, `param:MilledOnce.ValidPlayer`, `param:MilledOnce.ValidCard` |
 | P | Hunting Velociraptor | `construction:Continuous` |
 | P | All-Out Assault | `param:DelayedTrigger.AttackingPlayer` |
 | I | Emrakul, the Promised End | `api:ControlPlayer`, `param:DelayedTrigger.DelayedTriggerDefinedPlayer` |
 | P | Kozilek, the Broken Reality | `param:Manifest.Choices`, `param:Manifest.ChoiceZone` |
-| P | Professor Hojo | `trig:BecomesTargetOnce`, `param:BecomesTargetOnce.ValidTarget`, `param:BecomesTargetOnce.ValidSource`, `expr:Count$ThisTurnActivated` |
+| P | Professor Hojo | `trig:BecomesTargetOnce`, `param:BecomesTargetOnce.ValidTarget`, `param:BecomesTargetOnce.ValidSource`, `construction:ReduceCost` |
 | P | Call the Spirit Dragons | `param:PutCounter.RememberPut`, `param:PutCounter.ForColor` |
-| P | Wall of Roots | `construction:Mana` |
 | P | Angel of Destiny | `defini:Player.attackedBySourceThisTurn` |
 | P | Narci, Fable Singer | `trig:AbilityResolves`, `param:AbilityResolves.ValidSource`, `param:AbilityResolves.ValidSpellAbility` |
 | I | Topography Tracker | `repl:Explore`, `param:Explore.ActiveZones`, `param:Explore.ValidExplorer`, `param:Explore.ReplaceWith` |
@@ -194,7 +182,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Wyll, Blade of Frontiers | `repl:RollDice`, `param:RollDice.ActiveZones`, `param:RollDice.ValidPlayer`, `param:RollDice.ReplaceWith` … |
 | P | The Lord of Pain | `filtre:TriggeredActivator` |
 | I | Will of the Abzan | `param:RepeatEach.RepeatTargeted` |
-| I | Lim-Dûl's Vault | `param:StoreSVar.UnlessAI` |
 | P | The Skullspore Nexus | `expr:TriggerObjectsCards$CardPower` |
 | P | Summon: Esper Valigarmanda | `param:Play.ManaConversion` |
 | P | The Book of Exalted Deeds | `param:Animate.Replacements` |
@@ -202,16 +189,10 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Rith, Liberated Primeval | `expr:Count$NumDamageThisTurn` |
 | I | Norn's Annex | `construction:CantAttackUnless` |
 | I | Mass of Mysteries | `kwval:myriad` |
-| P | Oath of Teferi | `stat:NumLoyaltyAct`, `param:NumLoyaltyAct.ValidCard`, `param:NumLoyaltyAct.Twice` |
-| P | Imposter Mech | `param:Clone.RemoveCardTypes`, `param:Clone.RemoveSubTypes` |
-| P | Dihada, Binder of Wills | `param:Dig.RememberRevealed` |
 | P | Sting, the Glinting Dagger | `filtre:blockingValid Goblin`, `filtre:blockingValid Orc`, `filtre:blockingValid Creature.EquippedBy` |
-| P | Kaalia, Zenith Seeker | `param:DigMultiple.SourceZone`, `param:DigMultiple.LibraryPosition` |
-| P | Agatha's Soul Cauldron | `param:Continuous.GainsAbilitiesOf`, `param:Continuous.GainsAbilitiesOfZones` |
 | I | Grab the Prize | `expr:Discarded$Valid` |
 | P | Arcane Lighthouse | `param:AnimateAll.CantHaveKeyword` |
 | P | Kogla and Yidaro | `defini:DiscardedCards` |
-| P | Dinosaurs on a Spaceship | `trig:CounterRemoved`, `param:CounterRemoved.ValidCard`, `param:CounterRemoved.CounterType` |
 | P | Welcome to . . . | `construction:Chapter` |
 | P | Jade Orb of Dragonkind | `construction:Mana` |
 | P | Unbound Flourishing | `api:ChangeX`, `param:ChangeX.Value`, `param:SpellCast.HasXManaCost`, `trig:SpellAbilityCast` … |
@@ -241,7 +222,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Gluntch, the Bestower | `param:ChoosePlayer.RememberChosen`, `param:PutCounter.Chooser`, `param:PutCounter.Placer` |
 | I | Zurgo, Thunder's Decree | `param:Continuous.Phases` |
 | I | Final Fortune | `param:AddTurn.ExtraTurnDelayedTrigger`, `param:AddTurn.ExtraTurnDelayedTriggerExecute` |
-| I | Benthic Anomaly | `param:CopyPermanent.RemoveSubTypes` |
 | I | Grafdigger's Cage | `param:Moved.Prevent`, `param:Moved.Layer` |
 | I | Twinning Staff | `repl:CopySpell`, `param:CopySpell.ActiveZones`, `param:CopySpell.ValidPlayer`, `param:CopySpell.ValidSpell` … |
 | P | Zuko, Firebending Master | `param:SpellCast.Phase`, `construction:Firebending` |
@@ -261,12 +241,32 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Marisi, Breaker of the Coil | `param:CantBeCast.Phases` |
 | P | Goldberry, River-Daughter | `param:MoveCounter.RememberPut`, `param:MoveCounter.NonZero` |
 | P | Wedding Ring | `filtre:controlsArtifact.namedWedding Ring` |
-| P | Arwen, Mortal Queen | `param:Pump.CounterNum`, `param:PutCounter.CounterTypes` |
-| P | Estrid's Invocation | `param:Clone.AddTriggers` |
+| P | Arwen, Mortal Queen | `param:Pump.CounterNum` |
 | P | Auron, Venerated Guardian | `param:PutCounter.RememberAmount`, `defini:Spawner>TriggeredDefendingPlayer`, `param:ImmediateTrigger.TriggerAmount` |
 | P | Atraxa, Grand Unifier | `param:RepeatEach.RepeatTypesFrom` |
 | P | Biomancer's Familiar | `stat:CanAdapt`, `param:CanAdapt.ValidCard`, `trig:Adapt`, `param:Adapt.ValidCard` … |
 | P | Avenger of the Fallen | `construction:Mobilize` |
-| P | Ojer Kaslem, Deepest Growth | `param:DigMultiple.SourceZone` |
-| P | Luck Bobblehead | `param:RollDice.MaxRollsResults`, `expr:SVar$EvenResults` |
+| P | Ojer Kaslem, Deepest Growth | `construction:DamageDone` |
 | P | Doc Aurlock, Grizzled Genius | `construction:ReduceCost` |
+| I | V.A.T.S. | `param:Destroy.TargetsWithEqualToughness` |
+| I | Hordewing Skaab | `expr:TriggeredPlayersTargets$Amount` |
+| P | Iron Mastiff | `expr:PlayerCountOpponents$HasPropertyDefending` |
+| P | The Grey Havens | `construction:ManaReflected` |
+| P | Oft-Nabbed Goat | `param:Draw.Activator`, `defini:NonTriggeredCardOwner` |
+| P | Deadpool, Trading Card | `api:ExchangeTextBox` |
+| P | Jeweled Amulet | `param:PutCounter.RememberCostMana`, `construction:Mana` |
+| P | Ob Nixilis, Captive Kingpin | `param:LifeLostAll.ValidAmountEach` |
+| P | Kess, Dissident Mage | `param:Continuous.ReplaceGraveyard` |
+| P | Azula, Cunning Usurper | `param:Continuous.MayPlayWithFlash` |
+| P | Hateful Eidolon | `expr:TriggeredCard$AttachedTo` |
+| P | Nicol Bolas, Dragon-God | `defini:Player.Opponent+controlsLegendary.Creature_EQ0+controlsPlaneswalker_LE0`, `param:Continuous.GainsValidAbilities` |
+| P | Celebr-8000 | `param:RollDice.SubsForEach`, `param:RollDice.NoteDoubles` |
+| P | Brudiclad, Telchor Engineer | `param:Clone.ChoiceOptional`, `param:Clone.ExcludeChosen` |
+| P | Blitzball Stadium | `expr:Count$DifferentCounterKinds` |
+| P | Aboleth Spawn | `trig:AbilityTriggered`, `param:AbilityTriggered.ValidDestination`, `param:AbilityTriggered.ValidMode`, `param:AbilityTriggered.ValidSource` … |
+| I | Tranquil Frillback | `cout:Mana`, `param:ImmediateTrigger.Announce`, `param:ImmediateTrigger.AnnounceMax` |
+| P | Historian's Boon | `trig:AbilityTriggered`, `param:AbilityTriggered.ValidMode`, `param:AbilityTriggered.ValidSource`, `param:AbilityTriggered.ValidSpellAbility` |
+| I | Misleading Signpost | `api:ChangeCombatants`, `param:ChangeCombatants.Attacking` |
+| P | Tectonic Giant | `param:Attacks.ValidSource` |
+| I | Eventide's Shadow | `construction:RemoveCounter` |
+| P | Wall of Stolen Identity | `param:Clone.RememberCloneOrigin` |
