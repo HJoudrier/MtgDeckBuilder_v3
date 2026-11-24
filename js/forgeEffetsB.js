@@ -34,6 +34,8 @@ function* fouilleForge(P, t, env, j) {
     if (nid != null && t.Imprint === 'True') retiensEmpreinte(empreinteDe(P, env.ctx, env.src), nid);
   }
   for (const id of dessus.filter(x => !pris.includes(x))) {
+    /* `DestZone2Optional$` : l'autre destination n'est qu'une permission (« otherwise, you may put it into your graveyard »). */
+    if (t.DestZone2Optional === 'True' && d2 !== 'bibliotheque' && (yield question(P, env.ctrl, 'oui', ['non', 'oui'], {texte: `Mettre ${obj(P, id).def.nom} dans ${d2 === 'cimetiere' ? 'le cimetière' : 'l\'autre zone'} ?`, source: env.ctx.source})) !== 1) continue;
     if (d2 === 'bibliotheque') { if (t.LibraryPosition2 !== '0') { retireDe(B, id); B.unshift(id); } }
     else yield* deplaceForge(P, obj(P, id), d2, env, {});
   }

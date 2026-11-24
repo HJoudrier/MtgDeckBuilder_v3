@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1873 fonctions**, 291 modules, 2029 Ko de JavaScript.
+**1873 fonctions**, 292 modules, 2032 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -88,7 +88,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 147 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 214 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
-| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 247 |
+| [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 249 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 208 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 208 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 143 |
@@ -159,6 +159,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 72 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
+| [`forgeFouilles.js`](#jsforgefouillesjs) | Fouiller, chercher : ce que le moteur en dit | 0 | 38 |
 | [`forgeDes.js`](#jsforgedesjs) | Des dés de plus | 0 | 45 |
 | [`forgeEffetsJ.js`](#jsforgeeffetsjjs) | Des effets durables : un nombre retenu | 0 | 16 |
 | [`forgeEffetsK.js`](#jsforgeeffetskjs) | Des effets de plus (lot F80) | 1 | 21 |
@@ -1708,7 +1709,7 @@ La porte des effets de Forge : `executeForge()`. *5 fonctions, 118 lignes, 7.2 K
 
 ## js/forgeEffetsB.js
 
-Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 247 lignes, 16 Ko.*
+Les effets de Forge : regarder la bibliothèque,. *7 fonctions, 249 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2690,6 +2691,10 @@ Les mots-clés, IV. *0 fonctions, 73 lignes, 4.6 Ko.*
 ## js/forgeMarqueursC.js
 
 Marqueurs et dés : des paramètres de plus. *0 fonctions, 56 lignes, 2.9 Ko.*
+
+## js/forgeFouilles.js
+
+Fouiller, chercher : ce que le moteur en dit. *0 fonctions, 38 lignes, 2.1 Ko.*
 
 ## js/forgeDes.js
 

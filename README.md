@@ -2137,6 +2137,16 @@ la copie au choix facultatif (Brudiclad).
 Restent `BecomeMonarch | BeginTurn$` (Knights of the Black Rose : « si vous étiez le monarque au début du tour »),
 `DamagePreventedOnce`, `Destroyed | ValidCauser$`, `Exiled` et les évènements du lancer de pièce.
 
+**Lot F91 : fouiller, chercher** (`js/forgeFouilles.js`). Neuf cartes de plus (6 681 → 6 690) :
+- **`SearchedLibrary`** (Archivist of Oghma, Ob Nixilis Unshackled, Wan Shi Tong) : toute recherche pose la question « Chercher »
+  (`choisitCartes()`) ; elle dit désormais, par l'évènement `cherche`, quel joueur cherche. Une recherche dans la bibliothèque
+  d'un autre n'existe pas dans le moteur : `SearchOwnLibrary$` vaut toujours ;
+- **`Dig | RememberRevealed$`** (Dihada, Binder of Wills) : les cartes révélées se retiennent, là où elles sont allées ;
+  **`DestZone2Optional$`** (Nylea, Keen-Eyed) : on peut refuser l'autre destination ;
+- **`ForceRevealToController$`, `PromptToSkipOptionalAbility$`, `OptionalAbilityPrompt$`** (Explorer's Scope, Raiders' Karve, Nissa,
+  Steward of Elements) : ce qu'on dit au joueur, non ce qui se joue ; **`DigMultiple | SourceZone$`, `LibraryPosition$`**
+  (Kaalia, Zenith Seeker) : la bibliothèque, la seule zone que fouille `DigMultiple`.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.
