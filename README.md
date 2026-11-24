@@ -162,6 +162,13 @@ js/                 modules, chargés dans cet ordre :
   forgeControle.js        diriger le tour d'un autre joueur (Mindslaver, Sorin Markov)
   forgeRedemarrage.js     recommencer la partie (Karn Liberated)
   forgeManaRestreint.js   du mana en réserve qui ne paie pas n'importe quoi, ou qui porte une faveur
+  forgeInstants.js        conditions de phase, cibles dont la valeur de mana tient dans un cimetière, quantités (pile, recherches, force au lancement)
+  forgeInstantsB.js       contrecarrer et se souvenir, hasard, prolifération puis phasing, convoqué, jetons et déclencheurs réflexes, tours en plus
+  forgeInstantsC.js       prendre le contrôle d'un sort, copier un sort de permanent, coûts facultatifs lus, coût de couleur en moins
+  forgeInstantsD.js       mots accordés, suspension donnée, vie qu'on ne perd pas, Hellish Rebuke, déclarations dirigées, votes dirigés
+  forgeInstantsE.js       endurance égale, marqueur de plus ou de moins, cibles de la cible, listes désignées, filtres de blocage, cleave, X annoncé
+  forgeInstantsF.js       dégâts d'un sort visé, Storyweave, réserve vidée, mana dépensé, dessus ou dessous au choix du propriétaire
+  forgeInstantsG.js       X annoncé avant les cibles, exiler des cartes bleues pour payer moins
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2322,6 +2329,32 @@ Restent douze planeswalkers, tous hors d'EDHREC : l'Alchemy et ses effets « per
 les secteurs d'Unfinity (Space Beleren), `Casualty` d'un permanent (Ob Nixilis, the Adversary), le phasing d'un joueur (Teferi, Timeless Voyager), un nom choisi pour en copier une carte (Svega), un effet qui dure jusqu'à la fin du tour d'un autre joueur et se défait au nettoyage
 (Rowan Kenrith) et les choix au hasard d'Urza, Academy Headmaster.
 Deux corrections de passage : un Spirit Guide ne se paie plus de son propre mana en se lançant (la partie bouclait), et le sort qu'on lance n'est plus une source de sa propre main (`js/forgeManaB.js`).
+
+**Lot F101 : les instants d'EDHREC** (`js/forgeInstants.js` à `G`, et des retouches de `js/jeuActions.js`, `js/jeuLancer.js`, `js/jeuPartie.js`, `js/forgeExecute.js`). Les cinquante-huit instants d'EDHREC qui ne se jouaient
+pas entièrement se jouent tous ; 6 791 → 6 868 cartes complètes d'EDHREC (les autres cartes qui partagent leurs pièces suivent). Ce qui revient :
+- **La pile.** `Count$ValidStack` (Mindbreak Trap : « any number of target spells » vaut le nombre de sorts présents) ; prendre le contrôle d'un sort (`ControlSpell`, Commandeer) ; contrecarrer tout ce que les adversaires ont
+  sur la pile, capacités comprises (`Defined$ ValidStack …`, Glen Elendra's Answer) ; se souvenir du sort contrecarré (`RememberForCounter`) et du mana qu'il a coûté (Mana Sculpt) ; n'être incontrecarrable que contre
+  certaines couleurs (`ValidCause$`, Autumn's Veil, lue dans `P.causeContre`) ; copier un sort de permanent, qui devient un jeton à la résolution (Double Major, `NonLegendary`) ; empêcher les dégâts d'un sort visé (Dromoka's Command,
+  une marque `prevPar` sur l'objet de la pile).
+- **Les cibles.** `TargetsWithControllerProperty$ cmcLECardsInGraveyard` (Drown in the Loch, jugé dans `ciblesLegales()` : le lancement le sait) ; `TargetsWithEqualToughness` (V.A.T.S.) ; deux créatures qui partagent un type
+  (Unbury) ; le filtre `blockedValidThisTurn` (You Cannot Pass!, l'historique des blocages du tour) et `greatestPowerControlledBy…` (Consumed by Greed, Olórin's Searing Light) ; `TargetedByTarget$Valid` et la réduction
+  « relative » d'après ce que la cible vise (Not of This World : gratuit si le sort adverse vise une créature de force 7 — `reductionPossible()` le dit au moment de juger si on peut le lancer).
+- **X annoncé avant les cibles.** Quand un sort porte `Announce$` et compte ses cibles en X (Waterbender's Restoration : exactement X ; March of Swirling Mist : jusqu'à X), X se choisit avant elles (`s.xAnnonce`, `js/forgeInstantsG.js`).
+  March propose aussi, pour chaque nombre de cartes bleues qu'on peut exiler de sa main, une façon de le lancer (`exileN`), deux mana de moins par carte. Disrupting Shoal : une variante par valeur de mana que la main offre
+  (`altX3`), dont le nom porte X, que `lanceSort()` reprend. **Cleave** (Winged Portent) : un second sort sur la même carte (`def.cleave`), proposé comme variante.
+- **Les coûts.** `Behold` / `RevealOrChoose` retiennent la plus grande force montrée (Dragon's Fire), et `Count$OptionalGenericCostPaid.A.B` lit si le coût facultatif a été payé (Dispelling Exhale) ; `GainLife<3/Player.Opponent>`
+  (Invigorate) ; un coût `UnlessCost$ XX` double (Thassa's Intervention) ; une réduction de **mana de couleur** (`ReduceCost | Color$`, Even the Score) ; `ConditionManaSpent$ W` (Batwing Brume) ; `ConditionPhases$ Main1,Main2`
+  (l'« addendum » d'Unbreakable Formation) ; l'état du lancement relevé au moment de lancer (`s.lanceeEn.forces`, Lifestream's Blessing).
+- **Mémoires et marqueurs.** `Proliferate | RememberPut` puis `Phases | AnyNumber` (Ripples of Potential) ; les créatures qui ont convoqué le sort (`Convoked`, Lethal Scheme : `o.convoquees`) ; des jetons « d'origine » et un
+  déclencheur réflexe répété (Faebloom Trick, `TriggerAmount`) ; `ChooseNumber | Random` et `DigUntil | ImprintRevealed` (Tibalt's Trickery) ; `AddOrRemoveCounter` (Clockspinning, la suspension comprise) ; un marqueur d'une
+  sorte sur chacune des autres créatures (Contractual Safeguard) ; `ChangeZoneAll | RememberLKI` et `AtEOT$ YourExileUpkeep` (Olórin's Searing Light, Rally the Ancestors) ; la suspension donnée par un sort (Delay).
+- **Tours, déclarations, votes.** Un tour en plus qui porte un déclencheur retardé (Final Fortune : `toursEnPlus` garde un objet, `demarreTourEnPlus()`) ; celui qui lance Master Warcraft répond aux questions « attaquants » et
+  « bloqueurs » ; celui qui lance Illusion of Choice vote pour tous. **Vie** : `CantLoseLife` (Everybody Lives!). Hellish Rebuke : un permanent adverse qui blesse le lanceur est sacrifié et son contrôleur perd 2 points de vie.
+  Storyweave : les prochains « enchantement créature » du tour entrent avec deux marqueurs, une fois (`P.entreesPlus`). Power Sink : `TapAll | Defined$`, `DrainMana`.
+- **Une correction de fond.** `TargetedPlayer$Valid Artifact.YouCtrl` se lisait du côté du joueur qui lance ; « you » est le joueur visé (Curious Herd). Un `P.rng()` mal appelé (choix d'un nom au hasard) lève maintenant
+  `entierHasard()`. Un tour en plus avec `SkipUntap` (Savor the Moment) reste accepté.
+Limites : Waterbend ne se paie qu'en mana (on ne tape pas d'artefact ni de créature pour y aider) ; Master Warcraft et Illusion of Choice font répondre le lanceur, mais un automate répond avec ses propres yeux, non ceux du joueur
+qu'il dirige ; Critical Hit lit tout jet de dé comme naturel (le moteur ne modifie aucun jet) ; une capacité sur la pile n'est pas une cible que le moteur propose (Not of This World ne contrecarre que des sorts).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

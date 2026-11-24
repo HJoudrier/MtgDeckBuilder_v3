@@ -95,6 +95,19 @@ reductionParCibles = (g => function (P, j, o, effets) {
   }
   return n;
 })(reductionParCibles);
+/* La plus grande réduction qu'une cible présente sur la pile pourrait donner : de quoi juger si le sort se lance. */
+reductionPossible = (g => function (P, j, o) {
+  let n = g(P, j, o);
+  for (const s of o.def.statiques || []) {
+    const t = s.t;
+    if (s.s !== 'forge' || !t || t.Mode !== 'ReduceCost' || t.Relative !== 'True' || t.ValidTarget || t.ValidCard !== 'Card.Self') continue;
+    for (const it of P.pile.filter(x => x.sort)) {
+      const env = {face: s.face, ctx: {cibles: [[it.id]], memo: [], memoJ: []}, src: o, ctrl: j, op: {slot: 0}, base: true};
+      if (conditionForge(P, t, env)) n = Math.max(n, forgeNombre(P, t.Amount || 1, env));
+    }
+  }
+  return n;
+})(reductionPossible);
 forgeSait('param', 'ReduceCost.Relative');
 
 /* —— Des désignations de plus ————————————————————————————————————————— */

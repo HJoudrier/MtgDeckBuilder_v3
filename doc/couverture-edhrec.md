@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F100) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F101) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6791** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 329 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 216 |
+| complètes | 6063 | 6611 | 6552 | **6868** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 315 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 153 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, 239 cartes de plus complètes.
+exactement : même banc, mêmes cartes, 316 cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -24,15 +24,11 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 |---|---|---|
 | `param:Continuous.MayPlayDontGrantZonePermissions` | 3 | Dracogenesis, Darksteel Monolith, As Foretold |
 | `construction:Continuous` | 9 | Hunting Velociraptor, Tyvar the Bellicose, Danny Pink |
-| `param:ImmediateTrigger.TriggerAmount` | 5 | Earthbender Ascension, Auron, Venerated Guardian, Ajani, Nacatl Pariah |
 | `param:MoveCounter.ValidDefined` | 1 | Forgotten Ancient |
 | `construction:Mana` | 6 | Master of Dark Rites, Jade Orb of Dragonkind, Jeweled Amulet |
 | `param:PutCounter.Placer` | 4 | Promise of Loyalty, Gluntch, the Bestower, Alexios, Deimos of Kosmos |
 | `param:AddPhase.ExtraPhaseDelayedTrigger` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
 | `param:AddPhase.ExtraPhaseDelayedTriggerExecute` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
-| `expr:Count$ValidStack` | 1 | Mindbreak Trap |
-| `param:Phases.AnyNumber` | 1 | Ripples of Potential |
-| `param:Proliferate.RememberPut` | 1 | Ripples of Potential |
 | `api:ExchangeLifeVariant` | 2 | Tree of Redemption, Tree of Perdition |
 | `param:ExchangeLifeVariant.Mode` | 2 | Tree of Redemption, Tree of Perdition |
 | `param:PutCounter.Chooser` | 2 | Promise of Loyalty, Gluntch, the Bestower |
@@ -46,8 +42,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `kw:Mutate` | 18 | Nethroi, Apex of Death, Gemrazer, Brokkos, Apex of Forever |
 | `defini:ReplacedNewCard.Creature` | 1 | Spark Double |
 | `defini:ReplacedNewCard.Planeswalker` | 1 | Spark Double |
-| `param:ReduceCost.Color` | 2 | Morophon, the Boundless, Even the Score |
-| `defini:Convoked` | 1 | Lethal Scheme |
 | `cout:BeholdExile` | 3 | Champions of the Perfect, Champion of the Path, Champion of the Weird |
 | `param:ChangeZone.TargetsWithDifferentCMC` | 1 | Agadeem's Awakening |
 | `param:ReduceCost.IgnoreGeneric` | 1 | Morophon, the Boundless |
@@ -56,7 +50,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Activations.ValidSA` | 1 | Birgi, God of Storytelling |
 | `param:Activations.ValidPlayer` | 1 | Birgi, God of Storytelling |
 | `param:Activations.MinLimit` | 1 | Birgi, God of Storytelling |
-| `param:Counter.RememberForCounter` | 3 | Tibalt's Trickery, Mana Sculpt, Ertai Resurrected |
 | `repl:RollDice` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
 | `param:RollDice.ActiveZones` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
 | `param:RollDice.ValidPlayer` | 2 | Barbarian Class, Wyll, Blade of Frontiers |
@@ -69,8 +62,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Continuous.ManaConversion` | 2 | Drana and Linvala, Grell Philosopher |
 | `trig:Mutates` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
 | `param:Mutates.ValidCard` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
-| `param:ReduceCost.Relative` | 3 | Not of This World, March of Swirling Mist, Rottenmouth Viper |
-| `param:DigUntil.ImprintRevealed` | 2 | Tibalt's Trickery, Gríma, Saruman's Footman |
 | `param:PutCounter.RememberPut` | 4 | Call the Spirit Dragons, Craig Boone, Novac Guard, Fangs of Kalonia |
 | `param:Continuous.TopCardOfLibraryIs` | 2 | Conspicuous Snoop, Vampire Nocturnus |
 | `filtre:IsSolved` | 3 | Case of the Locked Hothouse, Case of the Ransacked Lab, Case of the Uneaten Feast |
@@ -92,16 +83,25 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `trig:AbilityResolves` | 2 | Narci, Fable Singer, Tom Bombadil |
 | `param:AbilityResolves.ValidSource` | 2 | Narci, Fable Singer, Tom Bombadil |
 | `param:AbilityResolves.ValidSpellAbility` | 2 | Narci, Fable Singer, Tom Bombadil |
-| `param:Counter.TargetsWithControllerProperty` | 1 | Drown in the Loch |
-| `param:Destroy.TargetsWithControllerProperty` | 1 | Drown in the Loch |
 | `defini:TriggeredObjectLKICopy` | 2 | Rikku, Resourceful Guardian, Grafted Exoskeleton |
-| `expr:Count$OptionalGenericCostPaid` | 4 | Spirit Water Revival, Burning Curiosity, Dragon's Fire |
-| `param:ChooseNumber.Random` | 1 | Tibalt's Trickery |
-| `param:PumpAll.ConditionPhases` | 1 | Unbreakable Formation |
-| `param:PutCounterAll.ConditionPhases` | 1 | Unbreakable Formation |
 | `param:ChangeZoneAll.DefinedPlayer` | 1 | Teferi's Puzzle Box |
 | `stat:CantBlockUnless` | 1 | Archangel of Tithes |
 | `param:CantBlockUnless.ValidCard` | 1 | Archangel of Tithes |
+| `construction:Chapter` | 2 | Welcome to . . ., Terra, Magical Adept |
+| `param:Continuous.ControlOpponentsSearchingLibrary` | 1 | Opposition Agent |
+| `param:Moved.FoundSearchingLibrary` | 1 | Opposition Agent |
+| `param:Continuous.CanBlockAmount` | 1 | Brave the Sands |
+| `repl:Explore` | 2 | Topography Tracker, Twists and Turns |
+| `param:Explore.ActiveZones` | 2 | Topography Tracker, Twists and Turns |
+| `param:Explore.ValidExplorer` | 2 | Topography Tracker, Twists and Turns |
+| `param:Explore.ReplaceWith` | 2 | Topography Tracker, Twists and Turns |
+| `param:Effect.RememberLKI` | 2 | Quicksilver Elemental, Grell Philosopher |
+| `param:ChangesZone.NotThisAbility` | 1 | Kodama of the East Tree |
+| `param:Animate.Replacements` | 3 | The Book of Exalted Deeds, Sokrates, Athenian Teacher, Realmbreaker, the Invasion Tree |
+| `trig:BecomesTargetOnce` | 3 | Professor Hojo, Leyline of Combustion, Chira, All In |
+| `param:ChoosePlayer.RememberChosen` | 3 | Gluntch, the Bestower, Sower of Discord, Dack Fayden, Helping Hand |
+| `param:BecomesTargetOnce.ValidTarget` | 2 | Professor Hojo, Leyline of Combustion |
+| `param:BecomesTargetOnce.ValidSource` | 2 | Professor Hojo, Leyline of Combustion |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -111,19 +111,16 @@ un seul élément est celle que le prochain lot rendra complète.
 | | Carte | Ce qui manque |
 |---|---|---|
 | P | Forgotten Ancient | `param:MoveCounter.ValidDefined` |
-| I | Mindbreak Trap | `expr:Count$ValidStack` |
-| I | Ripples of Potential | `param:Phases.AnyNumber`, `param:Proliferate.RememberPut` |
 | P | Hedge Shredder | `filtre:TriggeredCards` |
 | P | Spark Double | `defini:ReplacedNewCard.Creature`, `defini:ReplacedNewCard.Planeswalker` |
-| I | Lethal Scheme | `defini:Convoked` |
 | I | Agadeem's Awakening | `param:ChangeZone.TargetsWithDifferentCMC` |
-| I | Morophon, the Boundless | `param:ReduceCost.Color`, `param:ReduceCost.IgnoreGeneric` |
+| I | Morophon, the Boundless | `param:ReduceCost.IgnoreGeneric` |
 | P | Birgi, God of Storytelling | `stat:Activations`, `param:Activations.ValidCard`, `param:Activations.ValidSA`, `param:Activations.ValidPlayer` … |
 | P | Dracogenesis | `param:Continuous.MayPlayDontGrantZonePermissions` |
 | I | Promise of Loyalty | `param:PutCounter.Chooser`, `param:PutCounter.Placer`, `param:PutCounter.RememberCards` |
 | P | Echoes of Eternity | `param:Panharmonicon.ValidZone` |
 | P | Moraug, Fury of Akoum | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute`, `expr:Count$CardNumAttacksThisTurn` |
-| P | Earthbender Ascension | `param:PutCounter.RememberAmount`, `param:ImmediateTrigger.TriggerAmount` |
+| P | Earthbender Ascension | `param:PutCounter.RememberAmount` |
 | P | Kambal, Profiteering Mayor | `defini:TriggeredCards` |
 | P | Descendants' Path | `param:Play.ForgetRemembered` |
 | P | Bumi, Unleashed | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute` |
@@ -137,12 +134,9 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Case of the Locked Hothouse | `filtre:IsSolved` |
 | P | Serra's Emissary | `construction:ETBReplacement` |
 | P | Drana and Linvala | `param:Continuous.ManaConversion` |
-| I | Drown in the Loch | `param:Counter.TargetsWithControllerProperty`, `param:Destroy.TargetsWithControllerProperty` |
 | P | Firebender Ascension | `trig:AbilityTriggered`, `param:AbilityTriggered.ValidMode`, `param:AbilityTriggered.ValidSource`, `param:AbilityTriggered.TriggeredOwnAbility` |
-| I | Tibalt's Trickery | `param:ChooseNumber.Random`, `param:DigUntil.ImprintRevealed`, `param:Counter.RememberForCounter` |
 | P | Summon: Primal Odin | `param:Animate.sVars` |
 | P | Tree of Perdition | `api:ExchangeLifeVariant`, `param:ExchangeLifeVariant.Mode` |
-| I | Unbreakable Formation | `param:PumpAll.ConditionPhases`, `param:PutCounterAll.ConditionPhases` |
 | I | Champions of the Perfect | `cout:BeholdExile` |
 | I | Teferi's Puzzle Box | `param:ChangeZoneAll.DefinedPlayer` |
 | I | Darksteel Monolith | `param:Continuous.MayPlayDontGrantZonePermissions` |
@@ -156,7 +150,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Molten Psyche | `defini:Player.Opponent+IsRemembered` |
 | P | Breena, the Demagogue | `expr:PlayerCountDefinedTriggeredAttackedTarget$HasPropertylifeGTX` |
 | I | Dance of the Manse | `param:ChangeZone.StaticEffectCheckSVar`, `param:ChangeZone.StaticEffectSVarCompare` |
-| P | Not of This World | `expr:TargetedByTarget$Valid`, `param:ReduceCost.Relative` |
 | I | Ringsight | `filtre:SharesColorWith Valid Creature.Legendary` |
 | I | Master of Cruelties | `param:AttackerUnblocked.ValidDefender`, `kw:CARDNAME can only attack alone.` |
 | I | Battle Angels of Tyr | `expr:TriggeredTarget$Valid` |
@@ -168,10 +161,8 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Angel of Destiny | `defini:Player.attackedBySourceThisTurn` |
 | P | Narci, Fable Singer | `trig:AbilityResolves`, `param:AbilityResolves.ValidSource`, `param:AbilityResolves.ValidSpellAbility` |
 | I | Topography Tracker | `repl:Explore`, `param:Explore.ActiveZones`, `param:Explore.ValidExplorer`, `param:Explore.ReplaceWith` |
-| I | The Last Agni Kai | `param:Fight.ExcessSVar`, `param:Fight.ExcessSVarCondition` |
 | I | Barbarian Class | `repl:RollDice`, `param:RollDice.ActiveZones`, `param:RollDice.ValidPlayer`, `param:RollDice.ReplaceWith` … |
 | P | Whip of Erebos | `param:Animate.LeaveBattlefield`, `param:Animate.sVars` |
-| I | Commandeer | `api:ControlSpell`, `param:ControlSpell.Mode` |
 | I | Wyll, Blade of Frontiers | `repl:RollDice`, `param:RollDice.ActiveZones`, `param:RollDice.ValidPlayer`, `param:RollDice.ReplaceWith` … |
 | P | The Lord of Pain | `filtre:TriggeredActivator` |
 | I | Will of the Abzan | `param:RepeatEach.RepeatTargeted` |
@@ -210,33 +201,28 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Haunting Voyage | `expr:Count$Foretold` |
 | P | Gluntch, the Bestower | `param:ChoosePlayer.RememberChosen`, `param:PutCounter.Chooser`, `param:PutCounter.Placer` |
 | I | Zurgo, Thunder's Decree | `param:Continuous.Phases` |
-| I | Final Fortune | `param:AddTurn.ExtraTurnDelayedTrigger`, `param:AddTurn.ExtraTurnDelayedTriggerExecute` |
 | I | Grafdigger's Cage | `param:Moved.Prevent`, `param:Moved.Layer` |
 | I | Twinning Staff | `repl:CopySpell`, `param:CopySpell.ActiveZones`, `param:CopySpell.ValidPlayer`, `param:CopySpell.ValidSpell` … |
 | P | Zuko, Firebending Master | `param:SpellCast.Phase`, `construction:Firebending` |
-| I | Lifestream's Blessing | `expr:Count$LastStateBattlefieldWithFallback` |
 | P | Tyvar the Bellicose | `construction:Continuous` |
 | I | Notorious Throng | `expr:Count$BloodthirstAmount`, `kw:Prowl` |
-| I | Illusionist's Gambit | `param:RemoveFromCombat.OpponentTurn`, `param:RemoveFromCombat.RememberRemovedFromCombat` |
 | P | Vault 12: The Necropolis | `expr:PlayerCountPlayers$Counters` |
 | P | Sigurd, Jarl of Ravensthorpe | `param:AddOrRemoveCounter.Boast` |
 | P | Danny Pink | `construction:Continuous` |
 | P | Wastescape Battlemage | `filtre:kicked 1`, `filtre:kicked 2`, `construction:Kicker` |
 | P | Summons of Saruman | `construction:Flashback` |
 | P | Food Chain | `expr:Exiled$CardManaCost` |
-| I | Sauron's Ransom | `defini:Top_4_OfLibrary` |
 | P | The Cruelty of Gix | `kw:Read ahead` |
 | P | Y'shtola Rhul | `expr:Count$FinishedEndOfTurnsThisTurn` |
 | I | Marisi, Breaker of the Coil | `param:CantBeCast.Phases` |
 | P | Goldberry, River-Daughter | `param:MoveCounter.RememberPut`, `param:MoveCounter.NonZero` |
 | P | Wedding Ring | `filtre:controlsArtifact.namedWedding Ring` |
 | P | Arwen, Mortal Queen | `param:Pump.CounterNum` |
-| P | Auron, Venerated Guardian | `param:PutCounter.RememberAmount`, `defini:Spawner>TriggeredDefendingPlayer`, `param:ImmediateTrigger.TriggerAmount` |
+| P | Auron, Venerated Guardian | `param:PutCounter.RememberAmount`, `defini:Spawner>TriggeredDefendingPlayer` |
 | P | Atraxa, Grand Unifier | `param:RepeatEach.RepeatTypesFrom` |
 | P | Biomancer's Familiar | `stat:CanAdapt`, `param:CanAdapt.ValidCard`, `trig:Adapt`, `param:Adapt.ValidCard` … |
 | P | Avenger of the Fallen | `construction:Mobilize` |
 | P | Doc Aurlock, Grizzled Genius | `construction:ReduceCost` |
-| I | V.A.T.S. | `param:Destroy.TargetsWithEqualToughness` |
 | I | Hordewing Skaab | `expr:TriggeredPlayersTargets$Amount` |
 | P | Iron Mastiff | `expr:PlayerCountOpponents$HasPropertyDefending` |
 | P | Oft-Nabbed Goat | `param:Draw.Activator`, `defini:NonTriggeredCardOwner` |
@@ -256,9 +242,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Tectonic Giant | `param:Attacks.ValidSource` |
 | I | Eventide's Shadow | `construction:RemoveCounter` |
 | P | Wall of Stolen Identity | `param:Clone.RememberCloneOrigin` |
-| P | Ajani, Nacatl Pariah | `param:Token.RememberOriginalTokens`, `param:ImmediateTrigger.TriggerAmount` |
 | I | Fade from History | `defini:Player.controlsEnchantment,controlsArtifact` |
-| P | Brutal Hordechief | `param:Continuous.DeclaresBlockers` |
 | P | Goblin Welder | `expr:SVar$CheckRemem` |
 | P | Sephiroth, Fabled SOLDIER | `repl:Transform`, `param:Transform.ValidCard`, `param:Transform.ReplaceWith` |
 | I | Firion, Wild Rose Warrior | `construction:ChangesZone` |
@@ -267,6 +251,22 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Serra Paragon | `param:LandPlayed.ValidSA` |
 | P | Sliver Gravemother | `construction:Continuous` |
 | I | Grafted Exoskeleton | `trig:Unattached`, `param:Unattached.ValidAttachment`, `param:Unattached.ValidObject`, `defini:TriggeredObjectLKICopy` |
-| I | Spirit Water Revival | `expr:Count$OptionalGenericCostPaid` |
 | P | Collective Effort | `construction:Escalate` |
-| I | Invigorate | `cout:GainLife` |
+| I | Wheel of Misfortune | `param:ChooseNumber.Secretly`, `param:ChooseNumber.Highest`, `param:ChooseNumber.NotLowest` |
+| I | Night Shift of the Living Dead | `trig:TurnBegin`, `kw:After you roll a die, you may pay 1 life. If you do, increase or decrease the result by 1. Do this only once each turn.` |
+| P | Songbirds' Blessing | `param:DigUntil.OptionalFoundMove`, `param:DigUntil.OptionalNoDestination` |
+| P | Ironwill Forger | `kwval:myriad` |
+| I | Grell Philosopher | `param:Continuous.ManaConversion`, `param:Effect.RememberLKI` |
+| P | Sunforger | `cout:Unattach` |
+| P | Carth the Lion | `construction:RaiseCost` |
+| I | Leyline Tyrant | `param:ImmediateTrigger.XColor`, `param:ImmediateTrigger.XAnnounceTitle` |
+| P | Tawnos, the Toymaker | `param:CopySpellAbility.AddTypes` |
+| P | Squee, Dubious Monarch | `construction:AlternativeCost` |
+| I | Mog, Moogle Warrior | `param:Bookkeeping.NoteCards`, `param:Bookkeeping.NoteCardsFor`, `defini:Player.NotedForDiscard`, `param:Bookkeeping.ClearNotedCardsFor` |
+| P | Light-Paws, Emperor's Voice | `filtre:CanEnchantSource`, `filtre:doesNotShareNameWith Aura.YouCtrl` |
+| P | Myr Superion | `stat:ManaRestriction`, `param:ManaRestriction.ValidSource`, `param:ManaRestriction.EffectZone` |
+| I | Corrupted Shapeshifter | `param:Moved.Layer` |
+| I | Season of Gathering | `param:PutCounter.Pawprint`, `param:PutCounter.RememberCards`, `param:GenericChoice.Pawprint`, `param:Draw.Pawprint` … |
+| P | Wall of Glare | `param:Continuous.CanBlockAny` |
+| P | The Weatherseed Treaty | `kw:Read ahead` |
+| P | Blast-Furnace Hellkite | `kw:Offering` |

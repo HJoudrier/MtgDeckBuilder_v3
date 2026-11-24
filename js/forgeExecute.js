@@ -88,7 +88,8 @@ function* executeForge(P, op, ctx) {
     if (paye === (t.UnlessSwitched !== 'True')) return;
   }
   /* Oublier avant de retenir : « forget all other remembered ». */
-  if (t.ForgetOtherRemembered === 'True' || t.ForgetOtherTargets === 'True') { ctx.memo.length = 0; ctx.memoJ.length = 0; }
+  /* Un effet de masse qui filtre sur la mémoire (`Card.IsRemembered`) l'oublie lui-même, une fois ses objets trouvés (js/forgeInstantsE.js). */
+  if ((t.ForgetOtherRemembered === 'True' || t.ForgetOtherTargets === 'True') && !(api.oubliApres && /IsRemembered/.test(t.ChangeType || ''))) { ctx.memo.length = 0; ctx.memoJ.length = 0; }
   if (t.RememberObjects) forgeDefinis(P, t.RememberObjects, env).forEach(x => retiensForge(ctx, x));
   if (t.RememberTargets) ciblesForge(P, env, false).forEach(x => retiensForge(ctx, x));
   /* « Remember the destroyed / the damaged / the countered » : ce qui a
