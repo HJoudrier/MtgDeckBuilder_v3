@@ -2103,6 +2103,15 @@ Kíli the Resourceful reste partielle (« an enduring story » et `Storied` ne s
 `Waterbend<X>` (Crashing Wave) se lit comme {X} de mana : les artefacts et créatures qu'on pourrait engager pour le payer
 ne sont pas proposés.
 
+**Lot F88 : des dés qui ne se résument pas à une somme** (`js/forgeDes.js`). Sept cartes de plus (6 649 → 6 656) :
+`RollDice` lance maintenant chaque dé à part quand le script le demande — `IgnoreLower$ N` (Berserker's Frenzy : on ignore
+les N plus bas), `UseHighestRoll$`, `ChosenSVar$ X | OtherSVar$ Y` (Grave, Reckless et Valiant Endeavor : on choisit
+l'un des résultats, qui devient X, l'autre devient Y ; un automate prend le plus haut), `EvenOddResults$` (Attempted
+Murder, Luck Bobblehead : `EvenResults`, `OddResults`), `DifferentResults$` (Circuits Act) et `MaxRollsResults$`. Le lot
+reprend le cas pair-impair de `js/forgeMarqueursC.js` (Clown Car) ; `forgeDes.js` se charge après lui, pour que sa
+version s'applique la première. Restent le remplacement d'un lancer (Wyll, Barbarian Class : « roll that many dice plus
+one and ignore the lowest », deux quantités à remplacer à la fois) et les dés d'une attaque (Iron Mastiff).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.
