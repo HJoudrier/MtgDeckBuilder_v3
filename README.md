@@ -2186,6 +2186,17 @@ les lots et les essais d'IA ne la proposent pas.
 Restent le mana qu'une capacité confie à un sort (Jade Orb, Hall of the Bandit Lord, Opal Palace) et les capacités de mana d'un
 terrain qui double la réserve (Doubling Cube).
 
+**Lot F95 : avoir les capacités des autres** (`js/forgeCapacitesAccordees.js`). Sept cartes de plus (6 709 → 6 716) :
+`Continuous | GainsAbilitiesOf$ <filtre>` — Marvin, Murderous Mimic (celles des créatures qu'on contrôle), Necrotic Ooze (celles des
+créatures de tous les cimetières), Myr Welder, Steward of the Harvest, Hazel's Brewmaster, Agatha's Soul Cauldron, Thranduil
+(celles des cartes exilées par la source) : `capacitesAccordees()` y ajoute les capacités activées et de mana des objets que le filtre
+retient, dans les zones de `GainsAbilitiesOfZones$` (le champ par défaut). Ce ne sont pas des copies : la capacité s'exécute avec
+le permanent qui la reçoit pour source, comme le veut la règle — « sacrifice CARDNAME » le sacrifie, lui. Les capacités de loyauté,
+les déclencheurs et les statiques restent à leur porteur. Les capacités accordées se rangent après celles de la carte, et
+`capacitesDe()` garde la liste jusqu'au prochain changement de la partie.
+Restent `GainsValidAbilities$` (Drana and Linvala, Nicol Bolas, Dragon-God : « toutes les capacités activées des créatures adverses
+qui... »), `GainsAbilitiesOfDefined$` (Quicksilver Elemental) et la couverture du dessus de la bibliothèque (Conspicuous Snoop).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1877 fonctions**, 293 modules, 2039 Ko de JavaScript.
+**1877 fonctions**, 294 modules, 2041 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -156,6 +156,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsN.js`](#jsforgeeffetsnjs) | Des paramètres d'effets de plus | 0 | 43 |
 | [`forgeEffetsO.js`](#jsforgeeffetsojs) | Poser des marqueurs de plusieurs sortes, ou les répartir | 1 | 41 |
 | [`forgeActivationsB.js`](#jsforgeactivationsbjs) | Compter les activations du tour | 5 | 95 |
+| [`forgeCapacitesAccordees.js`](#jsforgecapacitesaccordeesjs) | Avoir les capacités des autres | 0 | 39 |
 | [`forgeManaD.js`](#jsforgemanadjs) | Dépenser du mana d'une autre couleur, et en compter la dépense | 2 | 73 |
 | [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 72 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
@@ -2670,6 +2671,10 @@ Compter les activations du tour. *5 fonctions, 95 lignes, 4.7 Ko.*
 | `loyauteEpuisee(P, o)` | A-t-il épuisé ses activations de loyauté ? |
 | `noteLoyaute(P, o)` | Une activation de loyauté de plus a eu lieu. |
 | `equipEclair(P, j, o)` | Peut-on équiper maintenant, hors d'une phase principale ? |
+
+## js/forgeCapacitesAccordees.js
+
+Avoir les capacités des autres. *0 fonctions, 39 lignes, 2 Ko.*
 
 ## js/forgeManaD.js
 
