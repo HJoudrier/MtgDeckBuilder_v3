@@ -137,7 +137,7 @@ function capaciteForge(def, face, t, jetons) {
     }
     /* La couleur choisie (« add one mana of the chosen color »), une
        quantité calculée : js/jeuMana.js les lit au moment de payer. */
-    const choisie = t.Produced === 'Chosen';
+    const choisie = t.Produced === 'Chosen' || t.Produced === 'Combo Chosen';
     /* « For each color among permanents you control, add one mana of that color ». */
     const parmi = (/^Special EachColorAmong_Valid (.+)$/.exec(t.Produced || '') || [])[1];
     const n = /^\d+$/.test(t.Amount || '1') ? +(t.Amount || 1) : 1;
@@ -145,7 +145,7 @@ function capaciteForge(def, face, t, jetons) {
     if ((!options.length && !choisie && !parmi) || !tableJouable(t)) return false;
     def.capacites.push({genre: 'mana', cout: c.cout, options, texte: texteForge(face, t), ...(t.RestrictValid ? {restreint: t.RestrictValid} : {}),
       ...(t.SorcerySpeed === 'True' ? {vitesse: 'rituel'} : {}),
-      ...(choisie ? {choisie: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face}),
+      ...(choisie ? {choisie: true} : {}), ...(t.Produced === 'Combo Chosen' ? {combo: true} : {}), ...(/^\d+$/.test(t.Amount || '1') ? {} : {montant: t.Amount, face}),
       ...(parmi ? {couleursParmi: parmi} : {}), ...(resteEngage ? {resteEngage: true} : {}), ...cond});
     return true;
   }

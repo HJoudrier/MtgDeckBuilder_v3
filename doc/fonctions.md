@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1889 fonctions**, 298 modules, 2062 Ko de JavaScript.
+**1889 fonctions**, 298 modules, 2065 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -58,7 +58,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 261 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 255 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 261 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 301 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -82,11 +82,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 306 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 75 |
-| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 171 |
-| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 158 |
+| [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 173 |
+| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 160 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 154 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 117 |
-| [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 149 |
+| [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 151 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 215 |
 | [`forgeChaque.js`](#jsforgechaquejs) | « Search for a Forest card and a Plains card » | 2 | 26 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
@@ -95,7 +95,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 208 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 143 |
 | [`forgeBatailles.js`](#jsforgebataillesjs) | Les batailles (Siege) : points de défense, | 4 | 63 |
-| [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 170 |
+| [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 184 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 132 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 105 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
@@ -132,7 +132,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 169 |
 | [`forgeManaC.js`](#jsforgemanacjs) | Le mana qui porte quelque chose | 2 | 95 |
 | [`forgeEmpreinte.js`](#jsforgeempreintejs) | L'empreinte | 6 | 150 |
-| [`forgeTerrains.js`](#jsforgeterrainsjs) | Ce que les terrains font de plus | 3 | 125 |
+| [`forgeTerrains.js`](#jsforgeterrainsjs) | Ce que les terrains font de plus | 3 | 134 |
 | [`forgeSeek.js`](#jsforgeseekjs) | Chercher au hasard, et ne le faire qu'une fois la partie | 2 | 42 |
 | [`forgeMemoire.js`](#jsforgememoirejs) | La mémoire, II | 4 | 202 |
 | [`forgeModes.js`](#jsforgemodesjs) | Les modes qu'on paie, le mode qu'on retient | 3 | 87 |
@@ -1192,7 +1192,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 261 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 255 lignes, 13 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 261 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1612,7 +1612,7 @@ Ce que les filtres de Forge deviennent pour. *4 fonctions, 75 lignes, 5.2 Ko.*
 
 ## js/forgeExpr.js
 
-Les quantités de Forge. *8 fonctions, 171 lignes, 10 Ko.*
+Les quantités de Forge. *8 fonctions, 173 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1631,7 +1631,7 @@ Les quantités de Forge. *8 fonctions, 171 lignes, 10 Ko.*
 
 ## js/forgeExprB.js
 
-Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 158 lignes, 10 Ko.*
+Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 160 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1678,7 +1678,7 @@ Ce que Forge désigne encore : des joueurs. *5 fonctions, 117 lignes, 7.6 Ko.*
 
 ## js/forgeCout.js
 
-Lire un coût de Forge. *3 fonctions, 149 lignes, 8.5 Ko.*
+Lire un coût de Forge. *3 fonctions, 151 lignes, 8.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1814,7 +1814,7 @@ Les batailles (Siege) : points de défense,. *4 fonctions, 63 lignes, 2.7 Ko.*
 
 ## js/forgeChoix.js
 
-Les choix de Forge : une couleur, un type, une. *7 fonctions, 170 lignes, 9.7 Ko.*
+Les choix de Forge : une couleur, un type, une. *7 fonctions, 184 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2438,7 +2438,7 @@ L'empreinte. *6 fonctions, 150 lignes, 7.9 Ko.*
 
 ## js/forgeTerrains.js
 
-Ce que les terrains font de plus. *3 fonctions, 125 lignes, 6.8 Ko.*
+Ce que les terrains font de plus. *3 fonctions, 134 lignes, 7.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|

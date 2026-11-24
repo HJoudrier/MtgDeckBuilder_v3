@@ -2245,6 +2245,19 @@ d'EDHREC (Opal Palace, Study Hall, Thran Portal, Hall of the Bandit Lord). Les c
 Un terrain dont la capacité de mana passe par une sous-capacité (Rainbow Vale, Gem Bazaar, Undiscovered Paradise, Tomb of Urami) est lu comme une capacité qui
 passe par la pile : son mana arrive à la résolution, il ne paie donc pas un sort tout seul — la limite du moteur, pas de la carte.
 
+**Lot F98 : des terrains, troisième tour** (`js/forgeTerrains.js` et des retouches). Cinq terrains de plus, dont deux d'EDHREC.
+- **Sacrifier tous ses terrains** (`Sac<All/Land>`, Tomb of Urami) : le coût se lit `{desc, n: 0, tout: true}` ; `activeCapacite()` paie alors le mana *avant* le
+  reste, car après il n'y a plus de terrains pour le payer (la règle 601.2g-h des sorts, appliquée à ce coût-là seulement).
+- **Deux couleurs de sa main** (`ChooseColor | TwoColors$ | UpTo$ | ColorsFrom$`, Desert Cenote) : jusqu'à deux choix successifs parmi les couleurs que la main
+  porte, rangés dans `choixDe().couleurs` ; `Produced$ Combo Chosen` les offre comme options de mana (`combo`).
+- **Mayhem sans coût** sur un terrain (Oscorp Industries) : `cartesPermises()` offre le terrain du cimetière le tour où il a été défaussé (`defausseTour`).
+- **Deux quantités** : `PlayerCountPlayers$LowestValid<Zone>` — la plus petite bibliothèque de la table (Shelldock Isle) — et le suffixe `$CreatureType`, le nombre de types
+  de créature réunis (Starfleet Academy).
+Restent, parmi les terrains, ce que le moteur ne sait pas encore : un mana au nombre restreint (Crucible of the Spirit Dragon, Throne of Makindi : « spend this mana only to
+cast Dragon spells » avec un coût de marqueurs), des couleurs fixées en construisant le deck (Cryptic Spires, Paliano), la fusion `Meld` (Hanweir Battlements), les capacités
+d'Alchemy (`MakeCard`, `Empower`), le choix d'une cible par un autre joueur (Arena, Stardew Valley), `SwitchBlock` (Sorrow's Path) et une poignée d'effets à durée
+(`UntilUntaps` d'Ice Floe, la boon de Loch Larent).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

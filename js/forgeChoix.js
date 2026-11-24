@@ -43,9 +43,23 @@ function typesFrequents(P, j) {
 
 const majuscule = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-forgeEffet('ChooseColor', ['Exclude', 'Random', 'InstantSpeed'], function* (P, t, env) {
+forgeEffet('ChooseColor', ['Exclude', 'Random', 'InstantSpeed', 'TwoColors', 'UpTo', 'ColorsFrom'], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
   if (j == null) return;
+  /* « Choose up to two colors from among cards in your hand » (Desert Cenote) : jusqu'à deux couleurs que la main porte. */
+  if (t.TwoColors === 'True') {
+    const J = P.joueurs[j], dans = c => J.main.some(id => (obj(P, id).def.couleurs || []).includes(c));
+    const choisies = [];
+    for (let k = 0; k < 2; k++) {
+      const dispo = ['W', 'U', 'B', 'R', 'G'].filter(c => !choisies.includes(c) && dans(c));
+      if (!dispo.length) break;
+      const i = yield* choisitUn(P, j, [...dispo.map(c => NOMS_COULEURS[c]), 'Aucune de plus'], 'Choisir une couleur de votre main', 0, env.ctx.source);
+      if (i >= dispo.length) break;
+      choisies.push(dispo[i]);
+    }
+    const c = choixDe(P, env.src); c.couleurs = choisies; c.couleur = choisies[0];
+    return;
+  }
   /* « Choose a color at random » (Gem Bazaar) : le hasard décide, pas le joueur. */
   if (t.Random === 'True') { choixDe(P, env.src).couleur = ['W', 'U', 'B', 'R', 'G'][entierHasard(P.rng, 5)]; return; }
   /* « MostProminentAttackers » : la couleur de qui attaque, l'adversaire. */

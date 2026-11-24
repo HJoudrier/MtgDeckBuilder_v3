@@ -92,6 +92,8 @@ function agregeForge(P, l, agg) {
   let m;
   if ((m = /^Greatest(Card\w+)$/.exec(agg))) return l.reduce((s, o) => Math.max(s, caracForge(P, o, m[1])), 0);
   if ((m = /^Different(Card\w+)$/.exec(agg))) return new Set(l.map(o => m[1] === 'CardNames' ? o.def.nom : caracForge(P, o, m[1]))).size;
+  /* Le nombre de types de créature réunis (Starfleet Academy). */
+  if (agg === 'CreatureType') return new Set([].concat(...l.map(o => sousTypesCreature(o.zone === 'champ' ? car(P, o) : o.def)))).size;
   if (agg === 'DifferentCardNames') return new Set(l.map(o => o.def.nom)).size;
   if (agg === 'Colors') return new Set([].concat(...l.map(o => (o.lki ? o.couleurs : o.zone === 'champ' ? car(P, o).couleurs : o.def.couleurs) || []))).size;
   return 0;

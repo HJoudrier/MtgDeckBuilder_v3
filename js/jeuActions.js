@@ -28,7 +28,7 @@ function* paieAutre(P, j, o, c) {
   }
   if (c.sac) {
     const ids = champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j) && !sacrificeInterdit(P, x, true)).map(x => x.id);
-    (yield* choisitCartes(P, j, ids, c.sac.n, 'Sacrifier', 'sacrifice')).forEach(id => sacrifie(P, id));
+    (c.sac.tout ? ids : yield* choisitCartes(P, j, ids, c.sac.n, 'Sacrifier', 'sacrifice')).forEach(id => sacrifie(P, id));
   }
   if (c.defausse) {
     const ids = P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j)));
@@ -190,8 +190,14 @@ function* activeCapacite(P, j, a) {
     retires = cout.retire ? cout.retire.n : 0;
     if (!coutAutrePossible(P, j, o, cout) || !planPaiement(P, j, cout.mana, x, {capacite: o})) return false;
     P.engagesCout = null;
-    lki = yield* paieAutre(P, j, o, cout);
-    if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
+    /* « Sacrifice all lands » : le mana d'abord, avec ces terrains-là — après, il n'y en a plus (Tomb of Urami). */
+    if (cout.sac && cout.sac.tout) {
+      if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
+      lki = yield* paieAutre(P, j, o, cout);
+    } else {
+      lki = yield* paieAutre(P, j, o, cout);
+      if (!paieMana(P, j, k.cout.mana, x, {capacite: o})) return false;
+    }
     if (k.unefois) P.unefois.add(a.id + '|a' + a.i);
     noteLimitePartie(P, o, k);
     /* Un cycle s'entend : « when you cycle ~ » écoute à travers

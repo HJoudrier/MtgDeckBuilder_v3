@@ -67,6 +67,8 @@ function suivantNonSaute(P, j) {
    deux se font ensemble : ce qui revient ne ressort pas aussitôt. Ce qui lui est attaché part avec lui, comme pour l'effet. */
 motCleLancementB = (g => function (def, face, jetons, tete, reste) {
   if (tete === 'Phasing' && !reste.length) { def.params.phasing = true; return true; }
+  /* Mayhem sans coût, sur un terrain (Oscorp Industries) : on le joue du cimetière le tour où on l'a défaussé. */
+  if (tete === 'Mayhem' && !reste.length && def.types.includes('land')) { def.mayhemTerrain = true; return true; }
   return g(def, face, jetons, tete, reste);
 })(motCleLancementB);
 forgeSait('kw', 'Phasing');
@@ -122,3 +124,10 @@ phasesEntrent = (g => function (P) {
   g(P);
   l.forEach(id => { if (obj(P, id) && P.champ.includes(id)) { jn(P, `${obj(P, id).def.nom} retourne en main`); deplace(P, id, 'main'); } });
 })(phasesEntrent);
+
+/* Les terrains défaussés ce tour, jouables du cimetière (Mayhem). */
+cartesPermises = (g => function (P, j) {
+  const r = g(P, j);
+  P.joueurs[j].cimetiere.map(id => obj(P, id)).filter(o => o && o.def.mayhemTerrain && o.defausseTour === P.tour && !r.some(x => x.o.id === o.id)).forEach(o => r.push({o, depuis: 'cimetiere'}));
+  return r;
+})(cartesPermises);

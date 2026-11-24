@@ -128,9 +128,11 @@ function compteJoueurs(P, tete, q, env) {
   const max = f => Math.max(0, ...qui.map(f)), min = f => Math.min(...qui.map(f));
   /* `HighestValidGraveyard,Library,Exile Card.IsRemembered+YouOwn` (Windfall) :
      les zones se comptent ensemble, pour chaque joueur. */
-  if ((k = /^HighestValid((?:Graveyard|Hand|Library|Exile)(?:,(?:Graveyard|Hand|Library|Exile))*)? (.+)$/.exec(q))) {
-    const zones = k[1] ? k[1].split(',').map(z => ZONES_FORGE[z]) : ['champ'];
-    return max(i => zones.reduce((n, z) => n + objetsZone(P, z).filter(o => forgeValideObjet(P, o, k[2], env.src, i, env)).length, 0));
+  if ((k = /^(Highest|Lowest)Valid((?:Graveyard|Hand|Library|Exile)(?:,(?:Graveyard|Hand|Library|Exile))*)? (.+)$/.exec(q))) {
+    const zones = k[2] ? k[2].split(',').map(z => ZONES_FORGE[z]) : ['champ'];
+    const compte = i => zones.reduce((n, z) => n + objetsZone(P, z).filter(o => forgeValideObjet(P, o, k[3], env.src, i, env)).length, 0);
+    /* « Lowest » : la plus petite bibliothèque de la table (Shelldock Isle). */
+    return k[1] === 'Lowest' ? min(compte) : max(compte);
   }
   if ((k = /^HighestCounters\.(\w+)$/.exec(q))) return max(i => k[1] === 'Poison' ? P.joueurs[i].poison : 0);
   if (q === 'HighestCardsInGraveyard') return max(i => P.joueurs[i].cimetiere.length);
@@ -144,7 +146,7 @@ forgeSait('expr', 'Count$Devotion', 'Count$DevotionDual', 'Count$Party', 'Count$
   'Count$YouDrewThisTurn', 'Count$LifeOppsLostThisTurn', 'Count$ResolvedThisTurn', 'Count$CountersAddedThisTurn', 'Count$Delirium',
   'Count$Threshold', 'Count$Void', 'Count$LeftGraveyardThisTurn', 'Count$ValidBattlefield', 'Count$MostProminentCreatureType',
   'PlayerCountOpponents$HighestValid', 'PlayerCountOpponents$HighestValidGraveyard', 'PlayerCountPlayers$HighestValidGraveyard', 'Count$UrzaLands', 'PlayerCountOpponents$HighestCounters',
-  'PlayerCountOpponents$HighestCardsInGraveyard', 'PlayerCountPlayers$Amount', 'PlayerCountPlayers$LowestLifeTotal',
+  'PlayerCountOpponents$HighestCardsInGraveyard', 'PlayerCountPlayers$Amount', 'PlayerCountPlayers$LowestLifeTotal', 'PlayerCountPlayers$LowestValidLibrary', '$CreatureType',
   'PlayerCountPlayers$HighestLifeTotal', 'PlayerCountOpponents$HighestLifeTotal', 'PlayerCountOpponents$HighestCardsInHand',
   'PlayerCountPropertyYou$SacrificedThisTurn', 'PlayerCountPropertyYou$CardsDiscardedThisTurn', 'TriggeredCard$CastTotalManaSpent',
   '$GreatestCardPower', '$GreatestCardToughness', '$GreatestCardManaCost', '$DifferentCardPower', '$DifferentCardToughness',

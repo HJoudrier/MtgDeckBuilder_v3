@@ -51,6 +51,8 @@ function coutForge(txt) {
     switch (k[1]) {
       case 'Sac':
         if (soi) cout.sacSoi = true;
+        /* `Sac<All/Land>` (Tomb of Urami) : tout ce qui répond au filtre. */
+        else if (n === 'All' && type) cout.sac = {desc: descForge(type), n: 0, tout: true};
         else if (nx) cout.sac = {desc: descForge(type), n};
         else return null;
         break;
