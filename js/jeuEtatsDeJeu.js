@@ -69,7 +69,7 @@ function appliqueSBA(P) {
       const m = Math.min(o.marq['+1/+1'], o.marq['-1/-1']);
       o.marq['+1/+1'] -= m; o.marq['-1/-1'] -= m; P.ver++; change = true;
     }
-    if (c.supers.includes('legendary')) {
+    if (c.supers.includes('legendary') && !legendeIgnoree(P, o)) {
       const cle = o.ctrl + '|' + o.def.nom;
       const autre = legendes.get(cle);
       if (autre) auCimetiere.add(obj(P, autre).ts < o.ts ? autre : id);

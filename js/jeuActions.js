@@ -23,7 +23,7 @@ function* paieAutre(P, j, o, c) {
     P.engagesCout.forEach(id => engageObjet(P, obj(P, id)));
   }
   if (c.sac) {
-    const ids = champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j)).map(x => x.id);
+    const ids = champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j) && !sacrificeInterdit(P, x, true)).map(x => x.id);
     (yield* choisitCartes(P, j, ids, c.sac.n, 'Sacrifier', 'sacrifice')).forEach(id => sacrifie(P, id));
   }
   if (c.defausse) {

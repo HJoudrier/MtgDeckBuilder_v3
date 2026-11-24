@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1856 fonctions**, 282 modules, 1990 Ko de JavaScript.
+**1862 fonctions**, 284 modules, 2000 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -52,7 +52,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 73 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 161 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 255 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 256 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 224 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 187 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
@@ -71,7 +71,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 152 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 13 | 226 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 13 | 227 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 132 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
@@ -86,16 +86,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 154 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 142 |
-| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 212 |
+| [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 214 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 244 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 208 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 208 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 143 |
 | [`forgeBatailles.js`](#jsforgebataillesjs) | Les batailles (Siege) : points de défense, | 4 | 63 |
-| [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 166 |
+| [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 168 |
 | [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 130 |
-| [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 103 |
+| [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 104 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
 | [`forgeCopiesB.js`](#jsforgecopiesbjs) | Des copies de plus (lot F81) | 0 | 43 |
 | [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 300 |
@@ -113,7 +113,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 10 | 170 |
 | [`forgeEntreesB.js`](#jsforgeentreesbjs) | « Ce sort entre avec des marqueurs de plus » | 1 | 38 |
 | [`forgeRemplacementsB.js`](#jsforgeremplacementsbjs) | Les remplacements de Forge, suite, et | 4 | 49 |
-| [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 160 |
+| [`forgePaliers.js`](#jsforgepaliersjs) | Les paliers : Station, classes, Rooms, vitesse | 6 | 161 |
 | [`forgeMotsCles.js`](#jsforgemotsclesjs) | Les mots-clés de Forge (`K:`) | 4 | 223 |
 | [`forgeMotsClesB.js`](#jsforgemotsclesbjs) | Les mots-clés des permanents, suite | 5 | 171 |
 | [`forgeMotsClesC.js`](#jsforgemotsclescjs) | Les mots-clés de lancement, suite | 14 | 219 |
@@ -149,6 +149,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExprD.js`](#jsforgeexprdjs) | Des quantités sur les joueurs | 3 | 141 |
 | [`forgeDefiniC.js`](#jsforgedefinicjs) | Ce que `Defined$` désigne encore | 0 | 63 |
 | [`forgeStatiquesC.js`](#jsforgestatiquescjs) | Des statiques que la construction refusait | 1 | 55 |
+| [`forgeStatiquesD.js`](#jsforgestatiquesdjs) | Des statiques que le moteur ne connaissait pas | 6 | 106 |
+| [`forgeEffetsM.js`](#jsforgeeffetsmjs) | Des effets et des déclencheurs de plus | 0 | 57 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
 | [`forgeEffetsJ.js`](#jsforgeeffetsjjs) | Des effets durables : un nombre retenu | 0 | 16 |
@@ -1063,7 +1065,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.8 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *13 fonctions, 255 lignes, 12 Ko.*
+La réserve de mana, et le paiement automatique. *13 fonctions, 256 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1408,7 +1410,7 @@ La priorité, la pile, la résolution. *5 fonctions, 152 lignes, 8.2 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 226 lignes, 12 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 227 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1662,7 +1664,7 @@ Lire un coût de Forge. *3 fonctions, 142 lignes, 8.1 Ko.*
 
 ## js/forgeEffetsA.js
 
-Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 212 lignes, 13 Ko.*
+Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 214 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1774,7 +1776,7 @@ Les batailles (Siege) : points de défense,. *4 fonctions, 63 lignes, 2.7 Ko.*
 
 ## js/forgeChoix.js
 
-Les choix de Forge : une couleur, un type, une. *7 fonctions, 166 lignes, 9.3 Ko.*
+Les choix de Forge : une couleur, un type, une. *7 fonctions, 168 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1803,7 +1805,7 @@ Les copies de Forge : un jeton copie d'un. *4 fonctions, 130 lignes, 8 Ko.*
 
 ## js/forgeTraine.js
 
-La traîne : des mots-clés et des effets moins. *2 fonctions, 103 lignes, 5.2 Ko.*
+La traîne : des mots-clés et des effets moins. *2 fonctions, 104 lignes, 5.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2137,7 +2139,7 @@ Les remplacements de Forge, suite, et. *4 fonctions, 49 lignes, 3 Ko.*
 
 ## js/forgePaliers.js
 
-Les paliers : Station, classes, Rooms, vitesse. *6 fonctions, 160 lignes, 8.9 Ko.*
+Les paliers : Station, classes, Rooms, vitesse. *6 fonctions, 161 lignes, 9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2597,6 +2599,23 @@ Des statiques que la construction refusait. *1 fonctions, 55 lignes, 2.8 Ko.*
 | Fonction | Rôle |
 |---|---|
 | `piocheInterdite(P, j)` | Le joueur `j` ne peut-il pas piocher une carte de plus ? |
+
+## js/forgeStatiquesD.js
+
+Des statiques que le moteur ne connaissait pas. *6 fonctions, 106 lignes, 5.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `legendeIgnoree(P, o)` | La règle des légendes laisse-t-elle ce permanent tranquille ? (js/jeuEtatsDeJeu.js) |
+| `sacrificeInterdit(P, o, pourCout)` | Ce permanent ne peut-il pas être sacrifié ? `pourCout` : c'est pour payer un coût. |
+| `defenseurRestreint(P, d, t, src, env)` | Le défenseur désigné par la statique : un joueur (`You`) ou une carte (`Card.Self`). |
+| `limiteAttaquants(P, choisis)` | Les attaques déclarées, ramenées à ce que les restrictions permettent : les premières, dans l'ordre où l'attaquant les a déclarées, restent. |
+| `blocageRestreint(P, cb, d)` | Le défenseur `d` ne peut-il plus poser de bloqueur ? Sans `ValidDefender$`, la limite vaut pour tout le combat (Silent Arbiter) ; avec, pour les bloqueurs du défenseur désigné (Mirri). |
+| `payerVieInterdit(P, j)` | `j` ne peut-il pas payer de vie pour un coût ? (Angel of Jubilation) |
+
+## js/forgeEffetsM.js
+
+Des effets et des déclencheurs de plus. *0 fonctions, 57 lignes, 3.2 Ko.*
 
 ## js/forgeMotsClesG.js
 

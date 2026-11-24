@@ -54,7 +54,8 @@ function sourcesMana(P, j, pour) {
       if (c.sac || c.defausse || c.engageAutres || c.retire || c.degage || c.energie || c.exileCimetiere || c.renvoie ||
         c.defausseSoi || c.exileSoi || c.revele || c.pioche || c.equipage || c.renvoieSoi || coutSpecial(c)) continue;
       if (c.engage && !peutEngagerSoi(P, o)) continue;
-      if (c.vie && P.joueurs[j].vie <= c.vie) continue;
+      if (c.sacSoi && sacrificeInterdit(P, o, true)) continue;
+      if (c.vie && (P.joueurs[j].vie <= c.vie || payerVieInterdit(P, j))) continue;
       let opts = k.identite ? identiteJoueur(P, j) : k.choisie ? [choixDe(P, o).couleur].filter(Boolean) : k.reflete ? manaReflete(P, j, o, k)
         : k.couleursParmi ? [couleursParmi(P, j, o, k.couleursParmi)].filter(Boolean) : k.options;
       if (!opts.length) continue;

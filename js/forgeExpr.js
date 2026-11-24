@@ -115,7 +115,7 @@ function forgeExpression(P, expr, env, prof) {
   if (tete === 'Number') return +q || 0;
   if (tete === 'SVar' && ctx.vars && ctx.vars[q] != null) return ctx.vars[q];
   if (tete === 'SVar') return prof < 4 ? forgeExpression(P, env.face.svars[q] || '0', env, prof + 1) : 0;
-  if (tete === 'TriggerCount') return q === 'DamageAmount' || q === 'Amount' ? (ctx.evt && ctx.evt.n) || 0 : 0;
+  if (tete === 'TriggerCount') return q === 'DamageAmount' || q === 'Amount' || q === 'Result' ? (ctx.evt && ctx.evt.n) || 0 : 0;
   if (tete === 'TriggeredCard') return caracForge(P, objetEvt(P, ctx), q);
   if (tete === 'Targeted' || tete === 'ParentTargeted') return caracForge(P, cibleForge(P, env, tete === 'ParentTargeted'), q);
   if (tete === 'Remembered') return q === 'Amount' ? (ctx.memo || []).length : caracForge(P, passeOuPresent(P, (ctx.memo || [])[0]), q);
@@ -162,7 +162,7 @@ function forgeExpression(P, expr, env, prof) {
 forgeSait('expr', 'Count$xPaid', 'Count$Valid', 'Count$ValidGraveyard', 'Count$ValidHand', 'Count$ValidExile',
   'Count$ValidLibrary', 'Count$CardCounters', 'Count$CardPower', 'Count$CardToughness', 'Count$CardManaCost',
   'Count$YourLifeTotal', 'Count$CardsInYourHand', 'Count$InYourHand', 'Count$InYourGraveyard', 'TriggerCount$DamageAmount',
-  'TriggerCount$Amount', 'TriggeredCard$CardPower', 'TriggeredCard$CardToughness', 'TriggeredCard$CardManaCost',
+  'TriggerCount$Amount', 'TriggerCount$Result', 'TriggeredCard$CardPower', 'TriggeredCard$CardToughness', 'TriggeredCard$CardManaCost',
   'Targeted$CardPower', 'Targeted$CardToughness', 'Targeted$CardManaCost', 'Targeted$CastTotalManaSpent', 'ParentTargeted$CastTotalManaSpent', 'ParentTargeted$CardPower',
   'ParentTargeted$CardToughness', 'ParentTargeted$CardManaCost', 'Remembered$Amount', 'Remembered$CardPower',
   'Remembered$CardManaCost', 'Remembered$CardToughness', 'Sacrificed$CardPower', 'Sacrificed$CardToughness',

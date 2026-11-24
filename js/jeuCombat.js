@@ -68,6 +68,7 @@ function* declareAttaquants(P) {
     const def = defenseurIncite(P, obj(P, id), libres, libres[0]);
     if (def) choisis.set(id, def);
   });
+  limiteAttaquants(P, choisis);
   yield* paieTaxesAttaque(P, j, choisis);
   yield* exertsAttaque(P, j, choisis);
   for (const [id, def] of choisis) {
@@ -127,7 +128,7 @@ function* declareBloqueurs(P) {
     if (!blqs.length) continue;
     const r = yield question(P, d, 'bloqueurs', blqs, {min: 0, max: blqs.length, multi: true, defaut: [], extra: {attaquants: atts}});
     const pose = (b, a) => {
-      if (b == null || a == null || cb.bloqueurs.has(b) || !peutBloquer(P, obj(P, b), obj(P, a))) return;
+      if (b == null || a == null || cb.bloqueurs.has(b) || !peutBloquer(P, obj(P, b), obj(P, a)) || blocageRestreint(P, cb, d)) return;
       if ((cb.bloquesPar.get(a) || []).length >= bornesBlocage(P, obj(P, a)).max) return;
       cb.bloqueurs.set(b, a);
       if (!cb.bloquesPar.has(a)) cb.bloquesPar.set(a, []);

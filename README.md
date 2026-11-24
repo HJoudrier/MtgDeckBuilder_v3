@@ -139,6 +139,7 @@ js/                 modules, chargés dans cet ordre :
   forgeRadiation.js  les marqueurs de radiation : meuler puis perdre de la vie, au début de la première principale
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
   forgeEffetsL.js   des effets et conditions de plus : finir le tour, excès de dégâts, jeton bloquant, restrictions de moment
+  forgeEffetsM.js   Blight, Exploit, et les déclencheurs d'exploration, d'exploitation et de dés
   forgeCopiesB.js   ce que la copie reçoit de plus : couleurs, types ôtés, mot-clé du tour, entrée engagée
   forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -147,6 +148,7 @@ js/                 modules, chargés dans cet ordre :
   forgeMarqueursC.js  marqueurs et dés : retenir l'armée, N fois, par objet désigné, au plus N, pairs et impairs
   forgeMotsClesG.js les mots-clés, IV : évasions du tour, prévention, Training, Undaunted, Gravestorm, règles de deck sans effet en jeu
   forgeStatiquesC.js  des statiques refusées : hexproof contre un genre de sources, jouer d'en haut sous condition, ne plus piocher
+  forgeStatiquesD.js  activer comme avec la célérité, ignorer la règle des légendes, ne pas sacrifier ni payer de vie, limiter attaquants et bloqueurs
   forgeDefiniC.js   ce que Defined$ désigne encore : défenseur adversaire, sacrifié, joueurs par propriétés, bibliothèque, pile
   forgeExprD.js     des quantités sur les joueurs : vie perdue ce tour, groupes de joueurs, combien en ont la propriété
   forgeFiltresD.js  des propriétés de filtre, II : choisi, retenu, visé, cmc pair, force égale à l'endurance, plus de terrains que vous
@@ -2008,6 +2010,35 @@ cherche pas une carte par son nom hors du deck), les statiques ajoutées à une 
 Restent : prendre le contrôle d'un joueur (`ControlPlayer`, Mindslaver, Sorin Markov), les attractions (`OpenAttraction`),
 `Recruit`, `ExchangeTextBox` (Deadpool), `ExchangeLife`, les paramètres de pioche `NonBasicSpell` et `Forecast`, et
 une dizaine de paramètres isolés (`Token.Boast`, `Tap.Tapper`, `Counter.ValidCause`, `Surveil.RememberMoved`…).
+
+**Lot F83 : des statiques, des paliers et quatre mécaniques** (`js/forgeStatiquesD.js`, `js/forgeEffetsM.js`). Le banc
+est reconstruit sur les cent premiers commandants d'EDHREC du 24 novembre (7 336 cartes avec leur script, dépôt Forge au
+commit `3e1fa4ed`) : 6 552 complètes au départ, 6 603 après ce lot. Cinquante et une cartes de plus :
+- **`Station$ N`** (vingt-quatre vaisseaux : Exploration Broodship, Evendo, Void Altar…) : la statique de palier n'agit
+  qu'avec N marqueurs charge ou plus sur sa source — `conditionForge()` le lit comme `IsPresent`. Le mot-clé et la pose
+  des marqueurs existaient (`js/forgePaliers.js`) ; sans le seuil, les vaisseaux restaient des artefacts inertes ;
+- **`ActivateAbilityAsIfHaste`** (Thousand-Year Elixir, Tyvar) : `peutEngagerSoi()` laisse une créature qui vient d'arriver
+  payer un coût {T}. Elle ne vaut ni pour l'attaque, que `peutAttaquer()` juge à part, ni au delà des capacités ;
+- **`IgnoreLegendRule`** (Mirror Box, Cadric, Hall of Echoes) : l'action d'état des légendes saute les permanents désignés ;
+- **`CantSacrifice`** et **`CantPayLife`** (Angel of Jubilation, Quark, Hithlain Rope) : `sacrificeInterdit()` et
+  `payerVieInterdit()` sont lus par `coutAutrePossible()`, par le choix du sacrifice (`paieAutre()`) et par les sources
+  de mana ; `sacrifie()` refuse aussi les effets, sauf pour une statique « `ForCost$ True` ». Une cause précise
+  (« les sorts de vos adversaires », Tamiyo) n'est pas lue : la statique ne retient alors rien — jamais plus de garde que
+  la carte n'en donne ;
+- **`AttackRestrict`** (Crawlspace, The Eternal Wanderer, Mirri) et **`BlockRestrict`** (Silent Arbiter) : au plus N
+  attaquants par défenseur, N bloqueurs par combat ou par défenseur. Les premiers déclarés restent
+  (`limiteAttaquants()`, `blocageRestreint()`) ;
+- **`Blight | Num$`** (High Perfect Morcant, Shadow Urchin) : l'effet dont le coût `Blight<N>` était déjà la moitié ;
+- **`K:Exploit`** et **`Exploited`** (Sidisi, Colonel Autumn…) : à l'entrée, sacrifier une créature, si l'on veut ;
+  l'évènement `exploite` garde l'instantané du sacrifié et celui de l'exploitant, qui a pu se sacrifier lui-même ;
+- **`Explores`** (Nicanzil, Merfolk Cave-Diver) : l'évènement `explore` dit si la carte révélée était un terrain ;
+  **`RolledDieOnce`** et `TriggerCount$Result` (Wyll, Vexing Puzzlebox) : un lancer, une fois, de total `n` ;
+- **`ChooseCard | MinAmount$ 0`** (Archfiend of Depravity) : « jusqu'à N ».
+Chaque famille a été jouée, non seulement comptée : un vaisseau à 3 puis 8 marqueurs gagne un terrain par tour, puis devient
+une créature 4/4 volante ; Crawlspace ramène trois attaquants à deux ; Archfiend ne laisse que deux créatures à l'adversaire.
+Soixante parties au hasard — des decks de cartes complètes, plus les cartes de ce lot — se jouent sans une erreur du moteur.
+Restent, parmi les plus jouées : Mutate, `Continuous.GainsAbilitiesOf`, `ManaConvert`, les capacités de mana à coût
+spécial (Dreadship Reef, Lion's Eye Diamond), `CanBlockAmount`, et le contrôle d'un joueur.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

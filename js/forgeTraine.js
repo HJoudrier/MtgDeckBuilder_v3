@@ -94,6 +94,7 @@ forgeEffet('Explore', [], function* (P, t, env) {
     const j = o.ctrl, B = P.joueurs[j].bibliotheque;
     if (!B.length) continue;
     const c = obj(P, B[B.length - 1]);
+    emet(P, {t: 'explore', id: o.id, joueur: j, terrain: estType(c, 'land')});
     if (estType(c, 'land')) { deplace(P, c.id, 'main'); continue; }
     poseMarqueurs(P, o, '+1/+1', 1, o);
     const r = yield question(P, j, 'oui', ['non', 'oui'], {texte: `Mettre ${c.def.nom} au cimetière ?`, source: o.id});

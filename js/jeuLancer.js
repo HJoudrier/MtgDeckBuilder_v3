@@ -73,12 +73,12 @@ function coutAutrePossible(P, j, o, c) {
   if (aCoutX(c)) c = coutResolu(c, 0, o);
   if (c.engage && !peutEngagerSoi(P, o)) return false;
   if (c.degage && !o.engage) return false;
-  if (c.vie && P.joueurs[j].vie < c.vie) return false;
-  if (c.sac && champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j)).length < c.sac.n) return false;
+  if (c.vie && (P.joueurs[j].vie < c.vie || payerVieInterdit(P, j))) return false;
+  if (c.sac && champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j) && !sacrificeInterdit(P, x, true)).length < c.sac.n) return false;
   if (c.defausse && P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j))).length < c.defausse.n) return false;
   if (c.retire && (o.marq[c.retire.genre] || 0) < c.retire.n) return false;
   if (c.engageAutres && champDe(P, j).filter(x => !x.engage && x.id !== o.id && correspond(P, x, c.engageAutres.desc, o, j)).length < c.engageAutres.n) return false;
-  if ((c.sacSoi && o.zone !== 'champ') || (c.defausseSoi && o.zone !== 'main')) return false;
+  if ((c.sacSoi && (o.zone !== 'champ' || sacrificeInterdit(P, o, true))) || (c.defausseSoi && o.zone !== 'main')) return false;
   const J = P.joueurs[j], compte = (ids, d) => ids.filter(id => id !== o.id && correspond(P, obj(P, id), d, o, j)).length;
   if (c.exileCimetiere && compte(J.cimetiere, c.exileCimetiere.desc) < c.exileCimetiere.n) return false;
   if (c.renvoie && champDe(P, j).filter(x => correspond(P, x, c.renvoie.desc, o, j)).length < c.renvoie.n) return false;

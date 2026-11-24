@@ -51,6 +51,8 @@ function conditionForge(P, t, env) {
   if (t.Condition && !(FORGE_CONDITIONS[t.Condition] && FORGE_CONDITIONS[t.Condition](P, env))) return false;
   if (t.ConditionPlayerTurn && (P.actif === env.ctrl) !== (t.ConditionPlayerTurn === 'True')) return false;
   if (t.PlayerTurn === 'True' && P.actif !== env.ctrl) return false;
+  /* « STATION N+ » : la statique n'agit qu'avec N marqueurs charge ou plus sur sa source (js/forgePaliers.js). */
+  if (t.Station && !(env.src && (env.src.marq || {}).charge >= +t.Station)) return false;
   if (t.ConditionCheckSVar && !seuilForge(P, forgeNombre(P, t.ConditionCheckSVar, env), t.ConditionSVarCompare, env)) return false;
   if (t.CheckSVar && !seuilForge(P, forgeNombre(P, t.CheckSVar, env), t.SVarCompare, env)) return false;
   if (t.ConditionDefined || t.ConditionPresent) {

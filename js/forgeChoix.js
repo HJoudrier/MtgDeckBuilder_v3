@@ -93,13 +93,15 @@ forgeEffet('ChooseNumber', ['Max', 'Min'], function* (P, t, env) {
   choixDe(P, env.src).nombre = min + (yield* choisitUn(P, j, options, 'Choisir un nombre', options.length - 1, env.ctx.source));
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });
 
-forgeEffet('ChooseCard', ['Choices', 'ChoiceZone', 'Amount', 'Mandatory', 'RememberChosen'], function* (P, t, env) {
+forgeEffet('ChooseCard', ['Choices', 'ChoiceZone', 'Amount', 'Mandatory', 'RememberChosen', 'MinAmount'], function* (P, t, env) {
   const j = joueursForge(P, t, env)[0];
   if (j == null) return;
   const zone = ZONES_FORGE[t.ChoiceZone] || 'champ';
   const ids = objetsZone(P, zone).filter(o => forgeValideObjet(P, o, t.Choices || 'Card', env.src, env.ctrl, env)).map(o => o.id);
   const n = forgeNombre(P, t.Amount || 1, env);
-  const pris = yield* choisitCartes(P, j, ids, n, 'Choisir', 'cartes', n);
+  /* `MinAmount$ 0` : « jusqu'à N » — on peut en choisir moins. */
+  const min = t.MinAmount != null ? Math.min(n, forgeNombre(P, t.MinAmount, env)) : n;
+  const pris = yield* choisitCartes(P, j, ids, n, 'Choisir', 'cartes', min);
   choixDe(P, env.src).cartes = pris;
   if (t.RememberChosen === 'True') pris.forEach(id => retiensForge(env.ctx, id));
 }, (t, op) => { op.op = 'forge'; op.hostile = false; });

@@ -156,4 +156,5 @@ function vitesseMonte(P, e) {
 FORGE_CONDITIONS.MaxSpeed = (P, env) => P.joueurs[env.ctrl].vitesse === 4;
 
 forgeSait('kw', 'Station', 'Class', 'Start your engines');
+forgeSait('param', 'Continuous.Station');
 forgeSait('expr', 'Count$YourSpeed');
