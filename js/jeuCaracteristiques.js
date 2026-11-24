@@ -78,6 +78,11 @@ function car(P, o) {
     }
     const p = (o.marq['+1/+1'] || 0) - (o.marq['-1/-1'] || 0);
     force += p; endurance += p;
+    /* Les marqueurs de force et d'endurance d'autres sortes (-0/-1, +1/+0, +2/+2…). */
+    for (const k in o.marq) {
+      const m = o.marq[k] > 0 && /^([pm])(\d+)([pm])(\d+)$/.exec(k);
+      if (m) { force += (m[1] === 'p' ? 1 : -1) * +m[2] * o.marq[k]; endurance += (m[3] === 'p' ? 1 : -1) * +m[4] * o.marq[k]; }
+    }
     /* Un marqueur de mot-clé (flying, reach, deathtouch…) donne ce mot-clé. */
     for (const k in o.marq) if (o.marq[k] > 0 && MOTS_ANGLAIS[k.replace(/_/g, ' ')] != null) mots |= MOTS_ANGLAIS[k.replace(/_/g, ' ')];
     for (const {src, s} of statiquesEnJeu(P)) {

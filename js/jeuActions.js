@@ -36,6 +36,7 @@ function* paieAutre(P, j, o, c) {
       .forEach(id => { if (c.defausse.exil) deplace(P, id, 'exil'); else defausseCarte(P, id, j); });
   }
   const J = P.joueurs[j];
+  if (c.defausseTout) J.main.slice().forEach(id => defausseCarte(P, id, j));
   if (c.exileCimetiere) {
     const ids = J.cimetiere.filter(id => id !== o.id && correspond(P, obj(P, id), c.exileCimetiere.desc, o, j));
     (yield* choisitCartes(P, j, ids, c.exileCimetiere.n, 'Exiler du cimetière')).forEach(id => deplace(P, id, 'exil'));
@@ -245,6 +246,7 @@ function* executeAction(P, j, a) {
   if (a.k === 'retourner') return yield* retourne(P, j, a);
   if (a.k === 'mana') return activeManaManuel(P, j, a);
   if (a.k === 'manaFiltre') return yield* activeManaFiltre(P, j, a);
+  if (a.k === 'manaAutre') return yield* activeManaAutre(P, j, a);
   if (a.k === 'reglage') return basculeReglage(P, j, a);
   return false;
 }

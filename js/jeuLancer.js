@@ -162,7 +162,7 @@ function actionsLegales(P, j) {
     if (o.def.equipe && (rituel || equipEclair(P, j, o)) && planPaiement(P, j, coutEquipement(P, j, o), 0, {capacite: o}) && (!o.def.equipeAutre || coutAutrePossible(P, j, o, o.def.equipeAutre)) &&
         champDe(P, j).some(c => estCreature(c) && c.id !== o.att)) r.push({k: 'equiper', id});
   }
-  r.push(...actionsManuelles(P, j), ...actionsManaFiltre(P, j), PASSE);
+  r.push(...actionsManuelles(P, j), ...actionsManaFiltre(P, j), ...actionsManaAutre(P, j), PASSE);
   return r;
 }
 

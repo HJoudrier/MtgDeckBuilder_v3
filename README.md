@@ -2168,6 +2168,24 @@ Command), où le {X} du coût fait déjà choisir X au lancement. `Announce$ X` 
 Les modes en « empreintes » (`Pawprint$`, les quatre Season of…) et au hasard (`Charm | Random$`) restent à faire :
 les modes se choisissent à la construction, non à la résolution.
 
+**Lot F94 : les capacités de mana qu'on ne paie pas qu'en mana** (`js/jeuManaAutre.js`). Huit cartes de plus (6 701 → 6 709) :
+Lion's Eye Diamond, Diamond Lion, Skirge Familiar, Bog Witch, Overeager Apprentice, Wall of Roots, Dreadship Reef et les autres
+terres de stockage, Mage-Ring Network. Le solveur de `js/jeuMana.js` n'engage que des sources dont le coût est {T}, du mana,
+de la vie, ou le sacrifice de la source ; la construction refusait donc toute capacité de mana qui exige autre chose — défausser,
+retirer des marqueurs, en poser un. Elles se construisent maintenant, et ne servent pas au paiement automatique : **à la table**
+(`P.montre`), elles se proposent comme une action `{k: 'manaAutre'}`, qui paie le coût (X compris : on choisit combien de
+marqueurs retirer), verse le mana dans la réserve, et le laisse au prochain sort de l'étape. L'IA ne note pas cette action ;
+les lots et les essais d'IA ne la proposent pas.
+- **`Discard<0/Hand>`** (Lion's Eye Diamond) : défausser toute la main, `defausseTout`. `paieAutre()` ne le faisait pas : le
+  coût se lisait comme « défausser 0 carte » ;
+- **les marqueurs de force** `+1/+0`, `-0/-1`, `+2/+2`… (Wall of Roots) : `car()` les applique — une carte qui s'en met
+  un à chaque activation ne devenait jamais plus fragile ;
+- **un mana restreint** (Crucible of the Spirit Dragon : « only for Dragon spells ») reste refusé : la réserve ne porte pas de
+  restriction, et la capacité vaudrait plus que la carte.
+« Toute combinaison de couleurs » d'une quantité X se choisit en bloc (« deux bleus et un noir » se compte par multi-ensembles).
+Restent le mana qu'une capacité confie à un sort (Jade Orb, Hall of the Bandit Lord, Opal Palace) et les capacités de mana d'un
+terrain qui double la réserve (Doubling Cube).
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

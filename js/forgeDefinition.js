@@ -125,7 +125,9 @@ function capaciteForge(def, face, t, jetons) {
      drapeau de la source, que le paiement pose (js/jeuMana.js). */
   const resteEngage = api === 'Mana' && t.SubAbility && /^DB\$ Effect \| ReplacementEffects\$ DontUntap \| RememberObjects\$ Self\b/.test(face.svars[t.SubAbility] || '');
   /* Le planificateur de paiement ne sait ni choisir X ni payer ces morceaux. */
-  if (api === 'Mana' && (aCoutX(c.cout) || c.cout.ajoute || c.cout.exileChamp || c.cout.defausse || c.cout.defausseSoi)) return false;
+  /* Un coût que le solveur ne sait pas payer ne sert pas au paiement automatique : la capacité se joue à la main
+     (js/jeuManaAutre.js) — sauf si son mana est restreint : la réserve ne porte pas de restriction, la capacité vaudrait plus. */
+  if (api === 'Mana' && t.RestrictValid && typeof manaSansSolveur === 'function' && manaSansSolveur(c.cout)) return false;
   if (api === 'Mana' && (!t.SubAbility || resteEngage)) {
     /* Le mana de l'identité du commandant : calculé par le moteur, qui
        sait qui commande (js/jeuMana.js). */

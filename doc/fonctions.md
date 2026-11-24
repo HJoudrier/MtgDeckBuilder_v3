@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1873 fonctions**, 292 modules, 2034 Ko de JavaScript.
+**1877 fonctions**, 293 modules, 2039 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -50,7 +50,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 235 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 77 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 163 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 168 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 256 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 225 |
@@ -58,13 +58,14 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 144 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 260 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 251 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 253 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 301 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
 | [`jeuCoutsX.js`](#jsjeucoutsxjs) | Les coûts dont la quantité est X, et ceux qui | 11 | 138 |
 | [`jeuManaFiltres.js`](#jsjeumanafiltresjs) | Le mana qui coûte du mana : les filtres | 6 | 139 |
 | [`jeuManaManuel.js`](#jsjeumanamanueljs) | Engager son mana soi-même, et choisir sa couleur | 9 | 113 |
+| [`jeuManaAutre.js`](#jsjeumanaautrejs) | Les capacités de mana qu'on paie autrement qu'en mana | 4 | 77 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 160 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 140 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
@@ -76,7 +77,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 74 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
 | [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
-| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 131 |
+| [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 132 |
 | [`jeuPileExplique.js`](#jsjeupileexpliquejs) | Dire ce qui est sur la pile, et ce qui se résout | 7 | 96 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 300 |
@@ -85,7 +86,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 158 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 154 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 115 |
-| [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 147 |
+| [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 149 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 214 |
 | [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 118 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 249 |
@@ -122,7 +123,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMotsClesE.js`](#jsforgemotsclesejs) | Les mots-clés de lancement, II | 10 | 279 |
 | [`forgeEffetsI.js`](#jsforgeeffetsijs) | Les effets nouveaux, II | 4 | 287 |
 | [`forgeAuras.js`](#jsforgeaurasjs) | Les auras de joueur, Bestow, Reconfigure | 3 | 103 |
-| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 314 |
+| [`forgeDefinition.js`](#jsforgedefinitionjs) | D'un script de Forge à une définition de jeu | 13 | 316 |
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 94 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
@@ -1038,7 +1039,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 77 lignes, 4.4 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 163 lignes, 8.7 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 168 lignes, 9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1184,7 +1185,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 260 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 251 lignes, 13 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 253 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1316,6 +1317,17 @@ Engager son mana soi-même, et choisir sa couleur. *9 fonctions, 113 lignes, 5.6
 | Donnée | Rôle |
 |---|---|
 | `NOMS_COULEURS_MANA` | — |
+
+## js/jeuManaAutre.js
+
+Les capacités de mana qu'on paie autrement qu'en mana. *4 fonctions, 77 lignes, 4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `manaSansSolveur(c)` | Cette capacité de mana a-t-elle un coût que le solveur ne sait pas payer ? |
+| `actionsManaAutre(P, j)` | Les actions : chaque capacité de mana de ce genre qu'on peut payer maintenant. |
+| `optionsManaAutre(k, n)` | Les options d'une quantité calculée : n manaux de n'importe quelle combinaison des lettres que la capacité offre. |
+| `activeManaAutre(P, j, a)` | Payer, puis verser le mana. |
 
 ## js/jeuDurees.js
 
@@ -1498,7 +1510,7 @@ Copier une partie, et la reprendre. *7 fonctions, 117 lignes, 5.2 Ko.*
 
 ## js/jeuVue.js
 
-Ce qu'un joueur voit de la partie. *8 fonctions, 131 lignes, 8.5 Ko.*
+Ce qu'un joueur voit de la partie. *8 fonctions, 132 lignes, 8.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1658,7 +1670,7 @@ Ce que Forge désigne encore : des joueurs. *5 fonctions, 115 lignes, 7.2 Ko.*
 
 ## js/forgeCout.js
 
-Lire un coût de Forge. *3 fonctions, 147 lignes, 8.3 Ko.*
+Lire un coût de Forge. *3 fonctions, 149 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2298,7 +2310,7 @@ Les auras de joueur, Bestow, Reconfigure. *3 fonctions, 103 lignes, 5.6 Ko.*
 
 ## js/forgeDefinition.js
 
-D'un script de Forge à une définition de jeu. *13 fonctions, 314 lignes, 18 Ko.*
+D'un script de Forge à une définition de jeu. *13 fonctions, 316 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|

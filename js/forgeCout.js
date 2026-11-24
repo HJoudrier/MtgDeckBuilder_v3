@@ -58,6 +58,8 @@ function coutForge(txt) {
       case 'Discard':
         if (!nx) return null;
         if (soi) { if (n !== 1) return null; cout.defausseSoi = true; break; }
+        /* `Discard<0/Hand>` : toute la main (Lion's Eye Diamond). */
+        if (n === 0 && type === 'Hand') { cout.defausseTout = true; break; }
         cout.defausse = type === 'Card' || !type ? {n} : {n, desc: {...descForge(type), genre: 'carte', zone: 'main'}};
         break;
       /* Exiler une carte de sa main (Force of Will) : comme une défausse,
