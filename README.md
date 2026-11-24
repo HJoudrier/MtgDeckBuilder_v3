@@ -140,6 +140,9 @@ js/                 modules, chargés dans cet ordre :
   forgeAnneau.js    l'Anneau vous tente, aux niveaux 2 à 4
   forgeEffetsL.js   des effets et conditions de plus : finir le tour, excès de dégâts, jeton bloquant, restrictions de moment
   forgeEffetsM.js   Blight, Exploit, et les déclencheurs d'exploration, d'exploitation et de dés
+  forgeEffetsN.js   la seconde paire de PutCounterAll, une destination de rechange pour ChangeZone
+  forgeManaD.js     dépenser du mana d'une autre couleur (ManaConvert), compter la dépense du tour (ManaExpend)
+  forgeDeclencheursF.js  marqueurs posés par lot, vie à l'entretien, déclencheurs d'entrée coupés
   forgeCopiesB.js   ce que la copie reçoit de plus : couleurs, types ôtés, mot-clé du tour, entrée engagée
   forgeEntreesB.js  « ce sort entre avec des marqueurs de plus / engagé » : un effet qui retient le sort lancé
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2039,6 +2042,31 @@ une créature 4/4 volante ; Crawlspace ramène trois attaquants à deux ; Archfi
 Soixante parties au hasard — des decks de cartes complètes, plus les cartes de ce lot — se jouent sans une erreur du moteur.
 Restent, parmi les plus jouées : Mutate, `Continuous.GainsAbilitiesOf`, `ManaConvert`, les capacités de mana à coût
 spécial (Dreadship Reef, Lion's Eye Diamond), `CanBlockAmount`, et le contrôle d'un joueur.
+
+**Lot F84 : mana converti, dépense, compteurs, entrées coupées** (`js/forgeManaD.js`, `js/forgeEffetsN.js`,
+`js/forgeDeclencheursF.js`, et des retouches). Vingt-six cartes de plus (6 603 → 6 629 complètes) :
+- **`ManaConvert | ManaConversion$ AnyType->AnyColor`** (Chromatic Orrery, Mycosynth Lattice, Oath of Nissa) et
+  `C->AnyColor` : le solveur de `js/jeuMana.js` apparie des sources à des couleurs ; `sourcesMana()` offre alors à
+  chaque source toutes les couleurs, aux longueurs qu'elle produit, en gardant les siennes. `ValidPlayer$`, `ValidSA$
+  Spell` et le type du sort (`ValidCard$ Planeswalker.YouCtrl`) bornent la conversion. Limite : le mana déjà en
+  réserve garde sa couleur ;
+- **`ManaExpend`** (Pyreswipe Hawk, Trailtracker Scout, Wandertale Mentor, Teapot Slinger) : « you expend N » à l'instant
+  où le N-ième mana du tour se dépense pour lancer des sorts. `paieMana()` tient le décompte par joueur et par tour
+  (`J.depenseTour`) et dit d'où il part et où il arrive ; seuls les sorts comptent ;
+- **`CounterPlayerAddedAll`** (All Will Be One, The Great Goblin, Generous Patron) : une fois par lot de marqueurs posés,
+  `ValidSource$ You` étant le contrôleur de ce qui les pose. Les marqueurs posés sur un joueur ne passent pas par
+  `poseMarqueurs()` ; seuls ceux des permanents sont dits ;
+- **`PutCounterAll`, seconde paire** (`ValidCards2`, `CounterType2`) : Ajani Steadfast, Brokers Ascendancy ;
+  **`ChangeZone | DestinationAlternative$`** (Dina's Guidance, Emeria Shepherd) : le joueur choisit la destination avant la
+  recherche, `DestAltSVar$` dit si l'autre est offerte ; un automate garde la première ;
+- **`Phase | LifeTotal$ / LifeAmount$`** (Felidar Sovereign, Test of Endurance) : la condition de vie d'un déclencheur de phase ;
+- **`DisableTriggers`** (Torpor Orb, Elesh Norn, Mother of Machines) : `forgeDeclenche()` écarte un déclencheur d'entrée en
+  jeu quand la statique juge ce qui entre (`ValidCause$`) et le permanent qui porte le déclencheur (`ValidCard$`) ;
+- **`RaiseCost | ValidTarget$ … | Cost$ PayLife<3>`** (Terror of the Peaks) : un sort qui vise ce permanent coûte de la vie
+  de plus, par la garde non-mana des cibles (`gardeAutre()`) ;
+- **`MayPlayText`** (Muldrotha) : une permission « une fois par tour » se tient par statique quand la source en porte
+  plusieurs ; elle se tenait par source, et Muldrotha ne jouait qu'une seule carte du cimetière par tour au lieu d'un
+  terrain et d'un permanent de chaque type. `clePermis()` (`js/jeuPermis.js`).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

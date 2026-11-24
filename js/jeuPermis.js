@@ -25,10 +25,14 @@ function dansZonesForge(o, zones) {
   return String(zones || '').split(',').some(z => ZONES_FORGE[z.trim()] === o.zone);
 }
 
+/* La clé de la limite d'une permission : celle de sa source — et, quand la source en porte plusieurs avec leur
+   `MayPlayText$` (Muldrotha : un terrain, et un permanent de chaque type), la sienne. */
+function clePermis(x) { return 'permis|' + x.src.id + (x.s.t.MayPlayText ? '|' + x.s.t.MayPlayText : ''); }
+
 /* La permission qui laisse `j` jouer `o` depuis sa zone : `{src, s}`, ou
    `null`. La limite « une fois par tour » se tient dans `P.unefois`. */
 function permisDeJouer(P, j, o) {
-  const libre = x => !(x.s.t.MayPlayLimit && P.unefois.has('permis|' + x.src.id));
+  const libre = x => !(x.s.t.MayPlayLimit && P.unefois.has(clePermis(x)));
   for (const x of statiquesPermis(P)) {
     if (x.src.ctrl !== j || !dansZonesForge(o, x.s.t.AffectedZone) || !libre(x)) continue;
     if (viseForge(P, x.src, x.s, o)) return x;
@@ -84,7 +88,7 @@ function autrePermis(d, x) {
 /* Une permission « une fois par tour » a servi. */
 function permisUtilise(P, j, o) {
   const x = permisDeJouer(P, j, o);
-  if (x && x.s.t.MayPlayLimit) P.unefois.add('permis|' + x.src.id);
+  if (x && x.s.t.MayPlayLimit) P.unefois.add(clePermis(x));
 }
 
 const ZONES_DEPUIS = {exil: "l'exil", cimetiere: 'le cimetière', bibliotheque: 'la bibliothèque'};

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1862 fonctions**, 284 modules, 2000 Ko de JavaScript.
+**1867 fonctions**, 287 modules, 2010 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -68,7 +68,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 160 |
 | [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 139 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
-| [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 7 | 91 |
+| [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 8 | 95 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 152 |
 | [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 13 | 227 |
@@ -149,8 +149,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeExprD.js`](#jsforgeexprdjs) | Des quantités sur les joueurs | 3 | 141 |
 | [`forgeDefiniC.js`](#jsforgedefinicjs) | Ce que `Defined$` désigne encore | 0 | 63 |
 | [`forgeStatiquesC.js`](#jsforgestatiquescjs) | Des statiques que la construction refusait | 1 | 55 |
-| [`forgeStatiquesD.js`](#jsforgestatiquesdjs) | Des statiques que le moteur ne connaissait pas | 6 | 106 |
+| [`forgeStatiquesD.js`](#jsforgestatiquesdjs) | Des statiques que le moteur ne connaissait pas | 7 | 133 |
 | [`forgeEffetsM.js`](#jsforgeeffetsmjs) | Des effets et des déclencheurs de plus | 0 | 57 |
+| [`forgeEffetsN.js`](#jsforgeeffetsnjs) | Des paramètres d'effets de plus | 0 | 31 |
+| [`forgeManaD.js`](#jsforgemanadjs) | Dépenser du mana d'une autre couleur, et en compter la dépense | 2 | 73 |
+| [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 43 |
 | [`forgeMotsClesG.js`](#jsforgemotsclesgjs) | Les mots-clés, IV | 0 | 73 |
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
 | [`forgeEffetsJ.js`](#jsforgeeffetsjjs) | Des effets durables : un nombre retenu | 0 | 16 |
@@ -1367,12 +1370,13 @@ Les faces, suite : jour et nuit, loups-garous,. *7 fonctions, 75 lignes, 3.3 Ko.
 
 ## js/jeuPermis.js
 
-Jouer une carte depuis une autre zone. *7 fonctions, 91 lignes, 4.2 Ko.*
+Jouer une carte depuis une autre zone. *8 fonctions, 95 lignes, 4.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `statiquesPermis(P)` | Les statiques de permission en jeu, relevées une fois par version. |
 | `dansZonesForge(o, zones)` | — |
+| `clePermis(x)` | La clé de la limite d'une permission : celle de sa source — et, quand la source en porte plusieurs avec leur `MayPlayText$` (Muldrotha : un terrain, et un permanent de chaque type), la… |
 | `permisDeJouer(P, j, o)` | La permission qui laisse `j` jouer `o` depuis sa zone : `{src, s}`, ou `null`. |
 | `cartesPermises(P, j)` | Les cartes qu'un joueur peut jouer d'ailleurs que sa main : l'exil de tous (une carte adverse exilée par un de ses permanents), son cimetière, le dessus de sa bibliothèque. |
 | `coutPermis(P, j, o, depuis, x)` | Le coût d'un sort joué avec une permission. |
@@ -2602,7 +2606,7 @@ Des statiques que la construction refusait. *1 fonctions, 55 lignes, 2.8 Ko.*
 
 ## js/forgeStatiquesD.js
 
-Des statiques que le moteur ne connaissait pas. *6 fonctions, 106 lignes, 5.4 Ko.*
+Des statiques que le moteur ne connaissait pas. *7 fonctions, 133 lignes, 6.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2612,10 +2616,36 @@ Des statiques que le moteur ne connaissait pas. *6 fonctions, 106 lignes, 5.4 Ko
 | `limiteAttaquants(P, choisis)` | Les attaques déclarées, ramenées à ce que les restrictions permettent : les premières, dans l'ordre où l'attaquant les a déclarées, restent. |
 | `blocageRestreint(P, cb, d)` | Le défenseur `d` ne peut-il plus poser de bloqueur ? Sans `ValidDefender$`, la limite vaut pour tout le combat (Silent Arbiter) ; avec, pour les bloqueurs du défenseur désigné (Mirri). |
 | `payerVieInterdit(P, j)` | `j` ne peut-il pas payer de vie pour un coût ? (Angel of Jubilation) |
+| `hausseVieTenable(t)` | `RaiseCost \| ValidTarget$ Card.Self \| Activator$ Player.Opponent \| Cost$ PayLife<3>` (Terror of the Peaks) : un sort qui vise ce permanent coûte de la vie de plus à son lanceur. |
 
 ## js/forgeEffetsM.js
 
 Des effets et des déclencheurs de plus. *0 fonctions, 57 lignes, 3.2 Ko.*
+
+## js/forgeEffetsN.js
+
+Des paramètres d'effets de plus. *0 fonctions, 31 lignes, 2 Ko.*
+
+## js/forgeManaD.js
+
+Dépenser du mana d'une autre couleur, et en compter la dépense. *2 fonctions, 73 lignes, 4.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `conversionsMana(P, j, pour)` | Ce que la conversion permet à `j` pour ce paiement : tout, ou seulement l'incolore. |
+| `sourceConvertie(s)` | Une source qui offre, en plus des siennes, chaque couleur à chaque longueur qu'elle produit. |
+
+| Donnée | Rôle |
+|---|---|
+| `TOUTES_COULEURS_MANA` | — |
+
+## js/forgeDeclencheursF.js
+
+Des déclencheurs de plus, III. *1 fonctions, 43 lignes, 2.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `declencheurEntreeCoupe(P, e, s)` | Un déclencheur d'entrée en jeu — `ChangesZone` ou `ChangesZoneAll` — est-il coupé par une statique `DisableTriggers` ? `ValidCause$` juge ce qui entre, `ValidCard$` le permanent qui… |
 
 ## js/forgeMotsClesG.js
 

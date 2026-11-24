@@ -54,7 +54,7 @@ function statiqueTenable(t) {
   if (t.AffectedZone && !zoneChamp(t)) return horsChampTenable(t);
   if (t.Mode === 'OptionalCost') return optionnelTenable(t);
   if (t.Mode === 'OptionalAttackCost') return exertTenable(t);
-  if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t);
+  if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t) || hausseVieTenable(t);
   if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip') && !capacitesLisibles(t)) return false;
   if (t.Mode === 'MustAttack' && t.MustAttack && !/^(Player\.Other|Player|Opponent)$/.test(t.MustAttack)) return false;
   if (t.RemoveType && !typesForge(t.RemoveType).types.length) return false;

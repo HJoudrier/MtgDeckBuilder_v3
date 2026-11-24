@@ -81,6 +81,8 @@ function limiteAttaquants(P, choisis) {
   }
 }
 
+forgeStatique('DisableTriggers', ['ValidCause', 'ValidMode', 'Destination', 'ValidCard'], () => {});
+
 /* —— Au plus N bloqueurs ————————————————————————————————————————— */
 
 forgeStatique('BlockRestrict', ['MaxBlockers', 'ValidDefender'], () => {});
@@ -103,3 +105,28 @@ forgeStatique('CantPayLife', ['ValidPlayer', 'ValidCause', 'ForCost'], () => {})
 function payerVieInterdit(P, j) {
   return !!statiqueQui(P, 'CantPayLife', (t, src, env) => t.ForCost !== 'False' && joueurStatique(P, j, t.ValidPlayer, src, env));
 }
+
+/* —— Un sort qui nous vise coûte de la vie ————————————————————————— */
+
+/* `RaiseCost | ValidTarget$ Card.Self | Activator$ Player.Opponent | Cost$ PayLife<3>` (Terror of the Peaks) : un
+   sort qui vise ce permanent coûte de la vie de plus à son lanceur. Lu avec la garde non-mana des permanents ciblés
+   (js/jeuCoutsX.js `gardeAutre()`), à qui elle s'ajoute. */
+const hausseVieTenable = t => !!t.ValidTarget && /^PayLife<\d+>$/.test(t.Cost || '') && (!t.Type || t.Type === 'Spell');
+
+gardeAutre = (g => function (P, j, effets) {
+  let r = g(P, j, effets);
+  const cibles = [].concat(...effets.map(ef => [].concat(...ef.cibles))).map(c => typeof c === 'number' ? obj(P, c) : c).filter(Boolean);
+  if (!cibles.length) return r;
+  for (const x of statiquesMode(P, 'RaiseCost')) {
+    const t = x.s.t;
+    if (!hausseVieTenable(t)) continue;
+    const env = envStatique(x.src, x.s);
+    if (!conditionForge(P, t, env) || (t.Activator && !joueurStatique(P, j, t.Activator, x.src, env))) continue;
+    if (!cibles.some(c => c.j != null ? forgeValideJoueur(P, c.j, t.ValidTarget, x.src.ctrl, env) : forgeValideObjet(P, c, t.ValidTarget, x.src, x.src.ctrl, env, true))) continue;
+    r = {...(r || {}), vie: ((r || {}).vie || 0) + +/\d+/.exec(t.Cost)[0]};
+  }
+  return r;
+})(gardeAutre);
+
+forgeSait('param', 'RaiseCost.Activator', 'RaiseCost.Type');
+forgeSait('param', 'Continuous.MayPlayText');
