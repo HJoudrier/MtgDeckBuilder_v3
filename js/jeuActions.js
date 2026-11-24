@@ -87,12 +87,19 @@ function* lanceSort(P, j, a) {
   s.varianteLance = a.variante || null;
   s.kicked = a.variante === 'kicker';
   /* Quand elle a été lancée : « if you cast it during your main phase » (Return to Dust). */
-  s.lanceeEn = {etape: P.etape, actif: P.actif};
+  s.lanceeEn = {etape: P.etape, actif: P.actif, forces: forcesAuLancement(P, j)};
   const annule = () => {
     const r = deplace(P, nid, a.depuis === 'commandement' ? 'commandement' : a.depuis);
     if (r != null && presageTour != null) obj(P, r).presageTour = presageTour;
     return false;
   };
+  /* Un sort dont les cibles se comptent en X : X se choisit avant elles (js/forgeInstantsG.js). */
+  let xAvant = null;
+  if (d.sort && (d.cout.x || cout0.x) && sortXCibles(d.sort)) {
+    xAvant = yield* choisitXAvant(P, j, s, d, cout0, nid);
+    if (xAvant == null) return annule();
+    s.xAnnonce = xAvant;
+  }
   let effets = [];
   if (d.sort) effets = yield* prepareEffets(P, j, s, d.sort, d.couleurs);
   /* Splice : des cartes de la main greffent leurs effets (js/forgeMotsClesE.js). */
@@ -105,11 +112,12 @@ function* lanceSort(P, j, a) {
   let x = 0;
   /* X se choisit une fois, pour le mana comme pour le reste du coût
      (« pay X life », « sacrifice X Spirits »). */
-  const autreX = aCoutX(v.autre);
-  if (d.cout.x || autreX) {
-    let max = d.cout.x ? maxX(P, j, cout0) : 30;
+  const autreX = aCoutX(v.autre), coutX = d.cout.x || cout0.x;
+  if (xAvant != null) x = xAvant;
+  else if (coutX || autreX) {
+    let max = coutX ? maxX(P, j, cout0) : 30;
     if (autreX) max = Math.min(max, maxXAutre(P, j, s, v.autre));
-    if (!d.cout.x) x = yield* choisitXAutre(P, j, s, v.autre, max, nid);
+    if (!coutX) x = yield* choisitXAutre(P, j, s, v.autre, max, nid);
     else {
       const opts = Array.from({length: max + 1}, (_, i) => i);
       x = opts[(yield question(P, j, 'x', opts, {defaut: max, source: nid}))] || 0;
@@ -138,6 +146,9 @@ function* lanceSort(P, j, a) {
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
   if (autre) yield* paieAutre(P, j, s, autre);
   if (ga) yield* paieAutre(P, j, s, ga);
+  /* Une façon de lancer qui annonce X (Disrupting Shoal : la variante porte la valeur, js/forgeInstantsE.js). */
+  const annonce = /^altX(\d+)$/.exec(a.variante || '');
+  if (annonce) x = +annonce[1];
   s.x = x;
   s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,

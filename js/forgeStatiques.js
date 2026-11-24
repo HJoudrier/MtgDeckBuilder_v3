@@ -54,7 +54,7 @@ function statiqueTenable(t) {
   if (t.AffectedZone && !zoneChamp(t) && !(t.Mode === 'CastWithFlash' && t.AffectedZone === ZONES_LANCEMENT)) return horsChampTenable(t);
   if (t.Mode === 'OptionalCost') return optionnelTenable(t);
   if (t.Mode === 'OptionalAttackCost') return exertTenable(t);
-  if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t) || hausseVieTenable(t) || hausseManaVieTenable(t);
+  if (t.Mode === 'RaiseCost' && t.Cost) return hausseTenable(t) || hausseVieTenable(t) || hausseManaVieTenable(t) || exileFacultatif(t);
   /* « The first activated ability of an artifact you activate each turn costs {2} less » (Tezzeret) : js/forgePlaneswalkers.js. */
   if (t.Mode === 'ReduceCost' && reduitCapaciteTenable(t)) return true;
   if (t.ValidSpell && !(t.Mode === 'ReduceCost' && t.ValidSpell === 'Activated.Equip') && !capacitesLisibles(t)) return false;
@@ -179,7 +179,8 @@ function coutsForge(P, j, o) {
   for (const {src, s} of [...statiquesEnJeu(P).filter(x => x.src.id !== o.id || !x.s.t || !x.s.t.EffectZone), ...siennes]) {
     if (s.s !== 'forge' || (s.t.Mode !== 'ReduceCost' && s.t.Mode !== 'RaiseCost')) continue;
     const t = s.t;
-    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget || t.Cost || (t.ValidSpell && !/^Spell/.test(t.ValidSpell))) continue;
+    /* Une réduction de mana de couleur se juge à part (js/forgeInstantsC.js `coutSort()`). */
+    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget || t.Cost || t.Color || (t.ValidSpell && !/^Spell/.test(t.ValidSpell))) continue;
     if (t.Activator === 'You' && j !== src.ctrl) continue;
     if (t.Activator === 'Opponent' && j === src.ctrl) continue;
     if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id, P, src)) continue;

@@ -169,6 +169,8 @@ function* paieReductions(P, j, o, mana, x) {
   const final = moinsGenerique(reste, exiles.length);
   if (!planPaiement(P, j, final, x, pour)) return null;
   pris.forEach(c => engageObjet(P, c));
+  /* Ce que « each creature that convoked » désigne ensuite (js/forgeInstantsB.js). */
+  o.convoquees = pris.map(c => c.id);
   exiles.forEach(id => deplace(P, id, 'exil'));
   P.ver++;
   return final;

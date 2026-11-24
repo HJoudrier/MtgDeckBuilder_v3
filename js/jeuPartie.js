@@ -57,9 +57,13 @@ function* suiteDesTours(P) {
   while (!P.fin) {
     if (P.tour >= P.plafondTours * P.nb) { P.fin = {nulle: true, raison: 'plafond'}; break; }
     /* Un tour supplémentaire passe devant le suivant (js/forgeEffetsG.js). */
-    const enPlus = (P.toursEnPlus || []).shift();
+    const entree = (P.toursEnPlus || []).shift();
+    /* Un tour en plus peut porter un déclencheur retardé : l'entrée est alors un objet (js/forgeInstantsB.js). */
+    const enPlus = entree != null && typeof entree === 'object' ? entree.j : entree;
     /* Un tour en plus qu'un remplacement saute n'a pas lieu (js/forgeRemplacementsD.js). */
-    P.actif = enPlus != null && !P.joueurs[enPlus].elimine && !tourEnPlusSaute(P, enPlus) ? enPlus : suivantNonSaute(P, P.actif);
+    const vrai = enPlus != null && !P.joueurs[enPlus].elimine && !tourEnPlusSaute(P, enPlus);
+    P.actif = vrai ? enPlus : suivantNonSaute(P, P.actif);
+    if (vrai) demarreTourEnPlus(P, entree);
     yield* tour(P);
   }
 }

@@ -104,7 +104,7 @@ function gardeAutre(P, j, effets) {
    (« pay X life ») se résout de même. */
 function coutUnless(P, v, env) {
   const s = String(v || '').trim();
-  if (/^[A-Z]$/.test(s) && (s === 'X' || (env.face && env.face.svars[s] != null))) {
+  if (/^[A-Z]{1,2}$/.test(s) && (s === 'X' || (env.face && env.face.svars[s] != null))) {
     const n = Math.max(0, forgeNombre(P, s, env));
     return {cout: {mana: {...coutManaVide(), sym: n ? ['{' + n + '}'] : [], generique: n, total: n}}};
   }

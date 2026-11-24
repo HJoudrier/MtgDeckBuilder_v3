@@ -197,9 +197,11 @@ function* choisitCibles(P, j, src, slots, couleurs, extra) {
       .filter(c => !sl.choisisseur || !sl.controle || (typeof c === 'number' ? (obj(P, c) || {}).ctrl : c.j) === qui);
     if (cands.length < sl.min) return null;
     if (!cands.length) { choix.push([]); continue; }
-    const plafond = sl.maxExpr ? Math.max(sl.min, forgeNombre(P, sl.maxExpr, {face: sl.maxFace || {svars: {}}, ctx: {cibles: [], memo: [], memoJ: []}, src, ctrl: j, op: {}})) : sl.max;
+    const plafond = sl.maxExpr ? Math.max(sl.min, forgeNombre(P, sl.maxExpr, {face: sl.maxFace || {svars: {}}, ctx: {cibles: [], memo: [], memoJ: [], x: (src && src.xAnnonce) || 0}, src, ctrl: j, op: {}})) : sl.max;
     const max = Math.min(plafond, cands.length);
-    const r = yield question(P, qui, 'cibles', cands, {min: sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
+    /* « Exactly X targets » : X est annoncé avant les cibles (js/forgeInstantsG.js). */
+    if (sl.minX && cands.length < plafond) return null;
+    const r = yield question(P, qui, 'cibles', cands, {min: sl.minX ? plafond : sl.min, max, multi: true, source: src && src.id, extra: {slot: sl, indice: si, ...extra}});
     const pris = restreintCibles(P, sl, (Array.isArray(r) ? r : [r]).map(i => cands[i]).filter(x => x != null));
     /* Un choix que la restriction a réduit sous le minimum n'est pas un choix. */
     if (pris.length < sl.min) return null;

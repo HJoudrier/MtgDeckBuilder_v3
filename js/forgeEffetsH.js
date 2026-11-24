@@ -117,7 +117,7 @@ forgeEffet('NameCard', ['ValidCards', 'ValidDescription', 'AtRandom'], function*
   if (j == null) return;
   const noms = nomsDesignables(P, j, t.ValidCards);
   if (!noms.length) return;
-  const i = t.AtRandom === 'True' ? Math.floor(P.rng() * noms.length) : yield* choisitUn(P, j, noms, 'Nommer une carte', 0, env.ctx.source);
+  const i = t.AtRandom === 'True' ? entierHasard(P.rng, noms.length) : yield* choisitUn(P, j, noms, 'Nommer une carte', 0, env.ctx.source);
   choixDe(P, env.src).nom = noms[i];
   jn(P, `${P.joueurs[j].nom} nomme ${noms[i]}`);
 }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {prepare: t => !t.Defined || /^(You|Player\.\w+|Targeted|TargetedPlayer)$/.test(t.Defined)});

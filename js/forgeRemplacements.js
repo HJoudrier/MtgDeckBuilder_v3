@@ -119,6 +119,8 @@ function degagementEmpeche(P, o) {
 function incontrecarrable(P, o) {
   return [...(o.def.remplacements || []).map(r => ({src: o, r})), ...remplacementsEnJeu(P)].some(({src, r}) => {
     if (r.forme !== 'contre') return false;
+    /* « … by blue or black spells » : la protection ne vaut que contre ces sorts-là (`P.causeContre`, js/forgeInstantsC.js). */
+    if (r.t.ValidCause && !(P.causeContre && forgeValideObjet(P, P.causeContre, r.t.ValidCause.replace(/Spell\.?/g, m => m === 'Spell' ? 'Card' : 'Card.'), src, src.ctrl))) return false;
     if (r.t.ValidCard) return src === o && /Self/.test(r.t.ValidCard);
     const reste = r.t.ValidSA.replace(/^Spell\.?/, '');
     return forgeValideDef(o.def, 'Card' + (reste ? '.' + reste : ''), src.ctrl, o.ctrl, o.id);
