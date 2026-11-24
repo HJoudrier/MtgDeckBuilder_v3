@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1872 fonctions**, 288 modules, 2017 Ko de JavaScript.
+**1873 fonctions**, 289 modules, 2020 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -50,7 +50,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 235 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 75 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 161 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 163 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 256 |
 | [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 224 |
@@ -152,6 +152,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeStatiquesD.js`](#jsforgestatiquesdjs) | Des statiques que le moteur ne connaissait pas | 7 | 133 |
 | [`forgeEffetsM.js`](#jsforgeeffetsmjs) | Des effets et des déclencheurs de plus | 0 | 57 |
 | [`forgeEffetsN.js`](#jsforgeeffetsnjs) | Des paramètres d'effets de plus | 0 | 43 |
+| [`forgeEffetsO.js`](#jsforgeeffetsojs) | Poser des marqueurs de plusieurs sortes, ou les répartir | 1 | 41 |
 | [`forgeActivationsB.js`](#jsforgeactivationsbjs) | Compter les activations du tour | 5 | 95 |
 | [`forgeManaD.js`](#jsforgemanadjs) | Dépenser du mana d'une autre couleur, et en compter la dépense | 2 | 73 |
 | [`forgeDeclencheursF.js`](#jsforgedeclencheursfjs) | Des déclencheurs de plus, III | 1 | 53 |
@@ -1034,7 +1035,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 75 lignes, 4 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 161 lignes, 8.4 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 163 lignes, 8.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2626,6 +2627,14 @@ Des effets et des déclencheurs de plus. *0 fonctions, 57 lignes, 3.2 Ko.*
 ## js/forgeEffetsN.js
 
 Des paramètres d'effets de plus. *0 fonctions, 43 lignes, 2.6 Ko.*
+
+## js/forgeEffetsO.js
+
+Poser des marqueurs de plusieurs sortes, ou les répartir. *1 fonctions, 41 lignes, 2.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `repartitCompteurs(P, t, env)` | — |
 
 ## js/forgeActivationsB.js
 

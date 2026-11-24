@@ -2093,6 +2093,16 @@ dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md), remesurée le 24 nove
 - **`Taps | ValidActivatingPlayer$`** (Tezzeret) : le contrôleur du permanent qui s'engage.
 Kíli the Resourceful reste partielle (« an enduring story » et `Storied` ne sont pas lus).
 
+**Lot F87 : des marqueurs de plusieurs sortes, ou répartis** (`js/forgeEffetsO.js`). Sept cartes de plus (6 642 → 6 649) :
+- **`PutCounter | CounterTypes$`** (Qarsi Revenant, Gift of the Viper) : un marqueur de chaque sorte, de la liste. Les marqueurs
+  de mot-clé — `flying`, `reach`, `deathtouch`, `first strike` — donnent désormais ce mot-clé : `car()` les lit sur
+  `o.marq`, de façon qu'une créature qui en porte vole, tue au contact, etc. ;
+- **`DividedAsYouChoose$ N`** (Vastwood Hydra, Lathiel, Invoke Justice, SOLDIER Military Program, Crashing Wave) : N marqueurs
+  répartis entre des créatures — celles que le joueur choisit parmi `Choices$` (jusqu'à `ChoiceAmount$`, au moins
+  `MinChoiceAmount$`), ou les cibles. La part de chacune n'est pas demandée : parts égales, la première gardant le reste.
+`Waterbend<X>` (Crashing Wave) se lit comme {X} de mana : les artefacts et créatures qu'on pourrait engager pour le payer
+ne sont pas proposés.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

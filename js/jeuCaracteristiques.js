@@ -78,6 +78,8 @@ function car(P, o) {
     }
     const p = (o.marq['+1/+1'] || 0) - (o.marq['-1/-1'] || 0);
     force += p; endurance += p;
+    /* Un marqueur de mot-clé (flying, reach, deathtouch…) donne ce mot-clé. */
+    for (const k in o.marq) if (o.marq[k] > 0 && MOTS_ANGLAIS[k.replace(/_/g, ' ')] != null) mots |= MOTS_ANGLAIS[k.replace(/_/g, ' ')];
     for (const {src, s} of statiquesEnJeu(P)) {
       if (s.s !== 'bonus' && s.s !== 'interdit') continue;
       if (!statiqueVise(P, src, s, o)) continue;
