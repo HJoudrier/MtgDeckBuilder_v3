@@ -2082,6 +2082,7 @@ Soixante-quinze parties au hasard supplémentaires, sans une erreur du moteur. L
 dans [doc/couverture-edhrec.md](doc/couverture-edhrec.md), remesurée le 24 novembre.
 Le détail — par type de carte, par structure, par mécanisme, sur tout le pool Forge (34 482 cartes) comme sur les cartes d'EDHREC — est dans
 [doc/couverture-detail.md](doc/couverture-detail.md).
+Le même détail, set par set (éditions de Forge, un tableau par sorte de set), est dans [doc/couverture-sets.md](doc/couverture-sets.md).
 
 **Lot F86 : les activations du tour** (`js/forgeActivationsB.js`). Cinq cartes de plus (6 637 → 6 642) :
 - **`Count$ThisTurnActivated_Activated.<filtre>`** (The Chain Veil, Bruenor Battlehammer, Forge Anew) : chaque activation
