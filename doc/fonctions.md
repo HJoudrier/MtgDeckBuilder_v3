@@ -2474,7 +2474,7 @@ Des cartes qui n'existent que dans la partie. *4 fonctions, 112 lignes, 6.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `ficheDeScriptForge(nom, script)` | La fiche qu'un script Forge dit de sa propre carte, quand l'atelier n'en connaît pas d'autre. |
+| `ficheConjuree(nom, script)` | La fiche qu'un script Forge dit de sa propre carte, quand l'atelier n'en connaît pas d'autre. |
 | `defNommee(nom)` | — |
 | `conjure(P, j, def)` | Une carte neuve, possédée par `j`, dans sa main. |
 | `defJace()` | — |

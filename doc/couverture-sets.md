@@ -1,6 +1,6 @@
 # Détail de la couverture, set par set
 
-Mesure du 24 novembre 2026 (moteur après le lot F98, scripts Forge au commit `3e1fa4ed`). Même mesure que [couverture-detail.md](couverture-detail.md),
+Mesure du 24 novembre 2026 (moteur après le lot F99, scripts Forge au commit `3e1fa4ed`). Même mesure que [couverture-detail.md](couverture-detail.md),
 rangée cette fois selon les éditions de Forge (`res/editions`) : **658 sets** ayant au moins une carte à script, dont 409 hors promotionnels.
 
 Règles de lecture :
@@ -16,20 +16,20 @@ Cartes distinctes de l'ensemble des sets de la sorte (une carte réimprimée dix
 
 | Sorte | Sets | Cartes distinctes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|---|
-| Bases | 22 | 3 572 | 3 333 (93,3 %) | 120 (3,4 %) | 119 (3,3 %) |
-| Extensions | 123 | 25 312 | 22 587 (89,2 %) | 1 592 (6,3 %) | 1 133 (4,5 %) |
-| Sets de draft | 19 | 5 665 | 5 127 (90,5 %) | 308 (5,4 %) | 230 (4,1 %) |
-| Commander | 49 | 6 533 | 5 637 (86,3 %) | 542 (8,3 %) | 354 (5,4 %) |
-| Rééditions et Masters | 16 | 3 348 | 3 111 (92,9 %) | 127 (3,8 %) | 110 (3,3 %) |
-| Humoristiques (Un-sets) | 24 | 852 | 486 (57,0 %) | 280 (32,9 %) | 86 (10,1 %) |
+| Bases | 22 | 3 572 | 3 336 (93,4 %) | 117 (3,3 %) | 119 (3,3 %) |
+| Extensions | 123 | 25 312 | 22 653 (89,5 %) | 1 544 (6,1 %) | 1 115 (4,4 %) |
+| Sets de draft | 19 | 5 665 | 5 130 (90,6 %) | 305 (5,4 %) | 230 (4,1 %) |
+| Commander | 49 | 6 533 | 5 641 (86,3 %) | 538 (8,2 %) | 354 (5,4 %) |
+| Rééditions et Masters | 16 | 3 348 | 3 115 (93,0 %) | 123 (3,7 %) | 110 (3,3 %) |
+| Humoristiques (Un-sets) | 24 | 852 | 497 (58,3 %) | 270 (31,7 %) | 85 (10,0 %) |
 | Duel Decks | 27 | 1 303 | 1 241 (95,2 %) | 31 (2,4 %) | 31 (2,4 %) |
 | Initiation | 10 | 565 | 520 (92,0 %) | 25 (4,4 %) | 20 (3,5 %) |
 | Multijoueur | 10 | 740 | 639 (86,4 %) | 62 (8,4 %) | 39 (5,3 %) |
 | Coffrets | 10 | 677 | 630 (93,1 %) | 15 (2,2 %) | 32 (4,7 %) |
-| Éditions collector | 40 | 2 795 | 2 528 (90,4 %) | 133 (4,8 %) | 134 (4,8 %) |
-| En ligne | 57 | 6 565 | 5 342 (81,4 %) | 785 (12,0 %) | 438 (6,7 %) |
+| Éditions collector | 40 | 2 795 | 2 531 (90,6 %) | 130 (4,7 %) | 134 (4,8 %) |
+| En ligne | 57 | 6 565 | 5 412 (82,4 %) | 731 (11,1 %) | 422 (6,4 %) |
 | Autres | 2 | 106 | 54 (50,9 %) | 42 (39,6 %) | 10 (9,4 %) |
-| Promotionnels | 249 | 1 568 | 1 415 (90,2 %) | 101 (6,4 %) | 52 (3,3 %) |
+| Promotionnels | 249 | 1 568 | 1 417 (90,4 %) | 99 (6,3 %) | 52 (3,3 %) |
 
 ## Les sets les moins bien couverts
 
@@ -37,31 +37,31 @@ Sets de cinquante cartes ou plus, hors promotionnels, classés par part de carte
 
 | Set | Code | Date | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|---|---|
-| Alchemy: Innistrad | YMID | 2021-12 | 63 | 12 (19,0 %) | 29 | 22 |
-| Unfinity | UNF | 2022-10 | 135 | 31 (23,0 %) | 94 | 10 |
+| Unfinity | UNF | 2022-10 | 135 | 32 (23,7 %) | 93 | 10 |
+| Alchemy: Innistrad | YMID | 2021-12 | 63 | 17 (27,0 %) | 26 | 20 |
 | Unstable | UST | 2017-12 | 117 | 44 (37,6 %) | 54 | 19 |
 | Magic Online Avatars | PMOA | 2003-01 | 74 | 36 (48,6 %) | 31 | 7 |
-| Mystery Booster Commander Edition | MBC | 2026-10 | 80 | 47 (58,8 %) | 27 | 6 |
+| Mystery Booster Commander Edition | MBC | 2026-10 | 80 | 49 (61,3 %) | 25 | 6 |
 | Doctor Who | WHO | 2023-10 | 353 | 228 (64,6 %) | 70 | 55 |
 | Mystery Booster Playtest Cards | CMB1 | 2019-11 | 59 | 40 (67,8 %) | 11 | 8 |
-| Alchemy Horizons: Baldur's Gate | HBG | 2022-07 | 284 | 205 (72,2 %) | 55 | 24 |
+| Alchemy Horizons: Baldur's Gate | HBG | 2022-07 | 284 | 207 (72,9 %) | 55 | 22 |
 | March of the Machine: The Aftermath | MAT | 2023-05 | 50 | 37 (74,0 %) | 6 | 7 |
-| Unknown Event | UNK | 2023-02 | 122 | 92 (75,4 %) | 23 | 7 |
-| Alliances | ALL | 1996-06 | 144 | 109 (75,7 %) | 21 | 14 |
 | Coldsnap | CSP | 2006-07 | 150 | 114 (76,0 %) | 25 | 11 |
-| The Dark | DRK | 1994-08 | 119 | 91 (76,5 %) | 17 | 11 |
 | Arabian Nights | ARN | 1993-12 | 77 | 59 (76,6 %) | 10 | 8 |
+| Alliances | ALL | 1996-06 | 144 | 111 (77,1 %) | 19 | 14 |
+| The Dark | DRK | 1994-08 | 119 | 92 (77,3 %) | 16 | 11 |
 | Ikoria: Lair of Behemoths | IKO | 2020-04 | 260 | 203 (78,1 %) | 42 | 15 |
 | March of the Machine Commander | MOC | 2023-04 | 388 | 307 (79,1 %) | 55 | 26 |
-| Ice Age | ICE | 1995-06 | 363 | 289 (79,6 %) | 37 | 37 |
 | Conspiracy: Take the Crown | CN2 | 2016-08 | 221 | 176 (79,6 %) | 29 | 16 |
 | Legends | LEG | 1994-06 | 310 | 247 (79,7 %) | 32 | 31 |
-| Reality Fracture | FRA | 2026-10 | 280 | 224 (80,0 %) | 36 | 20 |
+| Ice Age | ICE | 1995-06 | 363 | 291 (80,2 %) | 35 | 37 |
 | Duskmourn: House of Horror Commander | DSC | 2024-09 | 345 | 277 (80,3 %) | 54 | 14 |
+| Unknown Event | UNK | 2023-02 | 122 | 98 (80,3 %) | 18 | 6 |
 | Dominaria United | DMU | 2022-09 | 266 | 215 (80,8 %) | 41 | 10 |
 | Betrayers of Kamigawa | BOK | 2005-02 | 165 | 134 (81,2 %) | 15 | 16 |
 | Murders at Karlov Manor | MKM | 2024-02 | 274 | 223 (81,4 %) | 31 | 20 |
-| Mirage | MIR | 1996-10 | 330 | 269 (81,5 %) | 30 | 31 |
+| Dissension | DIS | 2006-05 | 180 | 147 (81,7 %) | 13 | 20 |
+| Mirage | MIR | 1996-10 | 330 | 270 (81,8 %) | 29 | 31 |
 
 ## Les sets les mieux couverts, parmi les grands
 
@@ -106,7 +106,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 
 | Set | Code | Cartes d'EDHREC | Complètes |
 |---|---|---|---|
-| Secret Lair Drop | SLD | 1 291 | 1 214 (94,0 %) |
+| Secret Lair Drop | SLD | 1 291 | 1 215 (94,1 %) |
 | Magic Online Promos | PRM | 1 206 | 1 109 (92,0 %) |
 | Commander Masters | CMM | 502 | 479 (95,4 %) |
 | Tarkir: Dragonstorm Commander | TDC | 345 | 334 (96,8 %) |
@@ -143,8 +143,8 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Unlimited Edition | 2ED | 1993-12 | 287 | 242 (84,3 %) | 17 | 28 |
 | Revised Edition | 3ED | 1994-04 | 291 | 253 (86,9 %) | 15 | 23 |
 | Fourth Edition | 4ED | 1995-04 | 363 | 320 (88,2 %) | 22 | 21 |
-| Fifth Edition | 5ED | 1997-03 | 429 | 377 (87,9 %) | 31 | 21 |
-| Classic Sixth Edition | 6ED | 1999-04 | 330 | 310 (93,9 %) | 6 | 14 |
+| Fifth Edition | 5ED | 1997-03 | 429 | 379 (88,3 %) | 29 | 21 |
+| Classic Sixth Edition | 6ED | 1999-04 | 330 | 311 (94,2 %) | 5 | 14 |
 | Seventh Edition | 7ED | 2001-04 | 330 | 318 (96,4 %) | 4 | 8 |
 | Eighth Edition | 8ED | 2003-07 | 330 | 319 (96,7 %) | 5 | 6 |
 | Ninth Edition | 9ED | 2005-07 | 330 | 319 (96,7 %) | 2 | 9 |
@@ -166,24 +166,24 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Set | Code | Date | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|---|---|
 | Arabian Nights | ARN | 1993-12 | 77 | 59 (76,6 %) | 10 | 8 |
-| Antiquities | ATQ | 1994-03 | 85 | 70 (82,4 %) | 11 | 4 |
+| Antiquities | ATQ | 1994-03 | 85 | 71 (83,5 %) | 10 | 4 |
 | Legends | LEG | 1994-06 | 310 | 247 (79,7 %) | 32 | 31 |
-| The Dark | DRK | 1994-08 | 119 | 91 (76,5 %) | 17 | 11 |
+| The Dark | DRK | 1994-08 | 119 | 92 (77,3 %) | 16 | 11 |
 | Fallen Empires | FEM | 1994-11 | 102 | 86 (84,3 %) | 14 | 2 |
-| Ice Age | ICE | 1995-06 | 363 | 289 (79,6 %) | 37 | 37 |
-| Homelands | HML | 1995-10 | 115 | 94 (81,7 %) | 19 | 2 |
-| Alliances | ALL | 1996-06 | 144 | 109 (75,7 %) | 21 | 14 |
-| Mirage | MIR | 1996-10 | 330 | 269 (81,5 %) | 30 | 31 |
+| Ice Age | ICE | 1995-06 | 363 | 291 (80,2 %) | 35 | 37 |
+| Homelands | HML | 1995-10 | 115 | 95 (82,6 %) | 18 | 2 |
+| Alliances | ALL | 1996-06 | 144 | 111 (77,1 %) | 19 | 14 |
+| Mirage | MIR | 1996-10 | 330 | 270 (81,8 %) | 29 | 31 |
 | Visions | VIS | 1997-02 | 167 | 137 (82,0 %) | 13 | 17 |
 | Weatherlight | WTH | 1997-06 | 167 | 145 (86,8 %) | 12 | 10 |
-| Tempest | TMP | 1997-10 | 330 | 293 (88,8 %) | 23 | 14 |
+| Tempest | TMP | 1997-10 | 330 | 294 (89,1 %) | 23 | 13 |
 | Stronghold | STH | 1998-03 | 143 | 125 (87,4 %) | 13 | 5 |
-| Exodus | EXO | 1998-06 | 143 | 120 (83,9 %) | 14 | 9 |
-| Urza's Saga | USG | 1998-10 | 330 | 304 (92,1 %) | 11 | 15 |
+| Exodus | EXO | 1998-06 | 143 | 121 (84,6 %) | 14 | 8 |
+| Urza's Saga | USG | 1998-10 | 330 | 306 (92,7 %) | 10 | 14 |
 | Urza's Legacy | ULG | 1999-02 | 143 | 135 (94,4 %) | 6 | 2 |
 | Urza's Destiny | UDS | 1999-06 | 143 | 135 (94,4 %) | 2 | 6 |
-| Mercadian Masques | MMQ | 1999-10 | 330 | 297 (90,0 %) | 20 | 13 |
-| Nemesis | NMS | 2000-02 | 143 | 127 (88,8 %) | 9 | 7 |
+| Mercadian Masques | MMQ | 1999-10 | 330 | 298 (90,3 %) | 19 | 13 |
+| Nemesis | NMS | 2000-02 | 143 | 128 (89,5 %) | 8 | 7 |
 | Prophecy | PCY | 2000-06 | 143 | 122 (85,3 %) | 15 | 6 |
 | Invasion | INV | 2000-10 | 330 | 285 (86,4 %) | 20 | 25 |
 | Planeshift | PLS | 2001-02 | 143 | 125 (87,4 %) | 8 | 10 |
@@ -197,7 +197,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Mirrodin | MRD | 2003-10 | 286 | 260 (90,9 %) | 13 | 13 |
 | Darksteel | DST | 2004-02 | 165 | 146 (88,5 %) | 9 | 10 |
 | Fifth Dawn | 5DN | 2004-06 | 165 | 156 (94,5 %) | 4 | 5 |
-| Champions of Kamigawa | CHK | 2004-10 | 286 | 263 (92,0 %) | 13 | 10 |
+| Champions of Kamigawa | CHK | 2004-10 | 286 | 264 (92,3 %) | 12 | 10 |
 | Betrayers of Kamigawa | BOK | 2005-02 | 165 | 134 (81,2 %) | 15 | 16 |
 | Saviors of Kamigawa | SOK | 2005-06 | 165 | 147 (89,1 %) | 13 | 5 |
 | Ravnica: City of Guilds | RAV | 2005-10 | 286 | 248 (86,7 %) | 11 | 27 |
@@ -205,8 +205,8 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Dissension | DIS | 2006-05 | 180 | 147 (81,7 %) | 13 | 20 |
 | Coldsnap | CSP | 2006-07 | 150 | 114 (76,0 %) | 25 | 11 |
 | Time Spiral | TSP | 2006-10 | 281 | 256 (91,1 %) | 15 | 10 |
-| Time Spiral Timeshifted | TSB | 2006-10 | 121 | 103 (85,1 %) | 14 | 4 |
-| Planar Chaos | PLC | 2007-02 | 165 | 141 (85,5 %) | 13 | 11 |
+| Time Spiral Timeshifted | TSB | 2006-10 | 121 | 105 (86,8 %) | 12 | 4 |
+| Planar Chaos | PLC | 2007-02 | 165 | 142 (86,1 %) | 12 | 11 |
 | Future Sight | FUT | 2007-05 | 180 | 149 (82,8 %) | 16 | 15 |
 | Lorwyn | LRW | 2007-10 | 281 | 259 (92,2 %) | 16 | 6 |
 | Morningtide | MOR | 2008-02 | 150 | 131 (87,3 %) | 13 | 6 |
@@ -218,7 +218,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Zendikar | ZEN | 2009-10 | 229 | 215 (93,9 %) | 6 | 8 |
 | Worldwake | WWK | 2010-02 | 145 | 138 (95,2 %) | 2 | 5 |
 | Rise of the Eldrazi | ROE | 2010-04 | 228 | 215 (94,3 %) | 7 | 6 |
-| Scars of Mirrodin | SOM | 2010-10 | 229 | 214 (93,4 %) | 8 | 7 |
+| Scars of Mirrodin | SOM | 2010-10 | 229 | 215 (93,9 %) | 7 | 7 |
 | Mirrodin Besieged | MBS | 2011-02 | 145 | 139 (95,9 %) | 2 | 4 |
 | New Phyrexia | NPH | 2011-05 | 165 | 152 (92,1 %) | 8 | 5 |
 | Innistrad | ISD | 2011-09 | 249 | 237 (95,2 %) | 9 | 3 |
@@ -229,14 +229,14 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Dragon's Maze | DGM | 2013-05 | 156 | 145 (92,9 %) | 7 | 4 |
 | Theros | THS | 2013-09 | 229 | 219 (95,6 %) | 6 | 4 |
 | Born of the Gods | BNG | 2014-02 | 165 | 138 (83,6 %) | 15 | 12 |
-| Journey into Nyx | JOU | 2014-05 | 165 | 151 (91,5 %) | 6 | 8 |
+| Journey into Nyx | JOU | 2014-05 | 165 | 152 (92,1 %) | 5 | 8 |
 | Khans of Tarkir | KTK | 2014-09 | 249 | 236 (94,8 %) | 8 | 5 |
-| Fate Reforged | FRF | 2015-01 | 175 | 161 (92,0 %) | 8 | 6 |
+| Fate Reforged | FRF | 2015-01 | 175 | 162 (92,6 %) | 7 | 6 |
 | Dragons of Tarkir | DTK | 2015-03 | 249 | 234 (94,0 %) | 10 | 5 |
 | Battle for Zendikar | BFZ | 2015-10 | 249 | 231 (92,8 %) | 14 | 4 |
 | Oath of the Gatewatch | OGW | 2016-01 | 182 | 174 (95,6 %) | 7 | 1 |
 | Shadows over Innistrad | SOI | 2016-04 | 282 | 266 (94,3 %) | 5 | 11 |
-| Eldritch Moon | EMN | 2016-07 | 205 | 185 (90,2 %) | 8 | 12 |
+| Eldritch Moon | EMN | 2016-07 | 205 | 189 (92,2 %) | 5 | 11 |
 | Kaladesh | KLD | 2016-09 | 259 | 248 (95,8 %) | 8 | 3 |
 | Aether Revolt | AER | 2017-01 | 194 | 179 (92,3 %) | 8 | 7 |
 | Amonkhet | AKH | 2017-04 | 267 | 254 (95,1 %) | 5 | 8 |
@@ -248,18 +248,18 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Ravnica Allegiance | RNA | 2019-01 | 263 | 244 (92,8 %) | 8 | 11 |
 | War of the Spark | WAR | 2019-05 | 260 | 242 (93,1 %) | 8 | 10 |
 | Throne of Eldraine | ELD | 2019-10 | 280 | 269 (96,1 %) | 7 | 4 |
-| Theros Beyond Death | THB | 2020-01 | 268 | 249 (92,9 %) | 11 | 8 |
+| Theros Beyond Death | THB | 2020-01 | 268 | 250 (93,3 %) | 10 | 8 |
 | Ikoria: Lair of Behemoths | IKO | 2020-04 | 260 | 203 (78,1 %) | 42 | 15 |
-| Zendikar Rising | ZNR | 2020-09 | 265 | 250 (94,3 %) | 10 | 5 |
+| Zendikar Rising | ZNR | 2020-09 | 265 | 251 (94,7 %) | 9 | 5 |
 | Kaldheim | KHM | 2021-02 | 295 | 245 (83,1 %) | 35 | 15 |
 | Strixhaven: School of Mages | STX | 2021-04 | 275 | 245 (89,1 %) | 18 | 12 |
 | Dungeons & Dragons: Adventures in the Forgotten Realms | AFR | 2021-07 | 261 | 232 (88,9 %) | 19 | 10 |
 | Innistrad: Midnight Hunt | MID | 2021-09 | 267 | 229 (85,8 %) | 9 | 29 |
 | Innistrad: Crimson Vow | VOW | 2021-11 | 267 | 235 (88,0 %) | 15 | 17 |
-| Kamigawa: Neon Dynasty | NEO | 2022-02 | 282 | 247 (87,6 %) | 15 | 20 |
+| Kamigawa: Neon Dynasty | NEO | 2022-02 | 282 | 249 (88,3 %) | 13 | 20 |
 | Streets of New Capenna | SNC | 2022-04 | 261 | 226 (86,6 %) | 19 | 16 |
 | Dominaria United | DMU | 2022-09 | 266 | 215 (80,8 %) | 41 | 10 |
-| The Brothers' War | BRO | 2022-11 | 272 | 247 (90,8 %) | 15 | 10 |
+| The Brothers' War | BRO | 2022-11 | 272 | 250 (91,9 %) | 12 | 10 |
 | Phyrexia: All Will Be One | ONE | 2023-02 | 266 | 245 (92,1 %) | 14 | 7 |
 | March of the Machine | MOM | 2023-04 | 291 | 258 (88,7 %) | 24 | 9 |
 | March of the Machine: The Aftermath | MAT | 2023-05 | 50 | 37 (74,0 %) | 6 | 7 |
@@ -272,7 +272,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Duskmourn: House of Horror | DSK | 2024-09 | 271 | 233 (86,0 %) | 27 | 11 |
 | Aetherdrift | DFT | 2025-02 | 271 | 241 (88,9 %) | 22 | 8 |
 | Tarkir: Dragonstorm | TDM | 2025-04 | 271 | 250 (92,3 %) | 14 | 7 |
-| Final Fantasy | FIN | 2025-06 | 305 | 286 (93,8 %) | 11 | 8 |
+| Final Fantasy | FIN | 2025-06 | 305 | 287 (94,1 %) | 11 | 7 |
 | Edge of Eternities | EOE | 2025-08 | 261 | 242 (92,7 %) | 9 | 10 |
 | Marvel's Spider-Man | SPM | 2025-09 | 188 | 169 (89,9 %) | 14 | 5 |
 | Marvel's Spider-Man Eternal | SPE | 2025-09 | 26 | 25 (96,2 %) | 1 | 0 |
@@ -284,8 +284,8 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Secrets of Strixhaven | SOS | 2026-04 | 266 | 248 (93,2 %) | 13 | 5 |
 | Marvel Super Heroes | MSH | 2026-06 | 276 | 227 (82,2 %) | 27 | 22 |
 | The Hobbit | HOB | 2026-08 | 188 | 157 (83,5 %) | 18 | 13 |
-| Reality Fracture | FRA | 2026-10 | 280 | 224 (80,0 %) | 36 | 20 |
-| Star Trek | TRK | 2026-11 | 306 | 263 (85,9 %) | 32 | 11 |
+| Reality Fracture | FRA | 2026-10 | 280 | 257 (91,8 %) | 16 | 7 |
+| Star Trek | TRK | 2026-11 | 306 | 264 (86,3 %) | 31 | 11 |
 | Nauctis: The Sunken Realm | NAU | 2027-02 | 7 | 5 (71,4 %) | 1 | 1 |
 | Marvel: Darkhold Destiny | MDD | 2027-04 | 6 | 4 (66,7 %) | 1 | 1 |
 
@@ -293,7 +293,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 
 | Set | Code | Date | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|---|---|
-| Conspiracy | CNS | 2014-06 | 210 | 179 (85,2 %) | 25 | 6 |
+| Conspiracy | CNS | 2014-06 | 210 | 180 (85,7 %) | 24 | 6 |
 | Conspiracy: Take the Crown | CN2 | 2016-08 | 221 | 176 (79,6 %) | 29 | 16 |
 | Battlebond | BBD | 2018-06 | 249 | 229 (92,0 %) | 8 | 12 |
 | Modern Horizons | MH1 | 2019-06 | 250 | 239 (95,6 %) | 7 | 4 |
@@ -311,7 +311,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Modern Horizons 3 | MH3 | 2024-06 | 303 | 275 (90,8 %) | 17 | 11 |
 | Assassin's Creed | ACR | 2024-07 | 133 | 116 (87,2 %) | 11 | 6 |
 | Foundations Jumpstart | J25 | 2024-11 | 763 | 734 (96,2 %) | 13 | 16 |
-| Mystery Booster Commander Edition | MBC | 2026-10 | 80 | 47 (58,8 %) | 27 | 6 |
+| Mystery Booster Commander Edition | MBC | 2026-10 | 80 | 49 (61,3 %) | 25 | 6 |
 
 ### Commander
 
@@ -319,12 +319,12 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 |---|---|---|---|---|---|---|
 | Commander 2011 | CMD | 2011-06 | 298 | 266 (89,3 %) | 9 | 23 |
 | Commander's Arsenal | CM1 | 2012-11 | 18 | 15 (83,3 %) | 3 | 0 |
-| Commander 2013 | C13 | 2013-11 | 336 | 315 (93,8 %) | 12 | 9 |
+| Commander 2013 | C13 | 2013-11 | 336 | 316 (94,0 %) | 11 | 9 |
 | Commander 2014 | C14 | 2014-11 | 317 | 297 (93,7 %) | 10 | 10 |
 | Commander 2015 | C15 | 2015-11 | 322 | 305 (94,7 %) | 8 | 9 |
 | Commander 2016 | C16 | 2016-11 | 336 | 317 (94,3 %) | 8 | 11 |
 | Commander Anthology | CMA | 2017-06 | 284 | 268 (94,4 %) | 8 | 8 |
-| Commander 2017 | C17 | 2017-08 | 294 | 273 (92,9 %) | 11 | 10 |
+| Commander 2017 | C17 | 2017-08 | 294 | 274 (93,2 %) | 10 | 10 |
 | Commander Anthology Volume II | CM2 | 2018-06 | 274 | 255 (93,1 %) | 10 | 9 |
 | Commander 2018 | C18 | 2018-08 | 292 | 268 (91,8 %) | 14 | 10 |
 | Commander 2019 | C19 | 2019-08 | 287 | 256 (89,2 %) | 18 | 13 |
@@ -332,7 +332,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Zendikar Rising Commander | ZNC | 2020-09 | 140 | 135 (96,4 %) | 3 | 2 |
 | Kaldheim Commander | KHC | 2021-02 | 119 | 114 (95,8 %) | 5 | 0 |
 | Commander 2021 | C21 | 2021-04 | 329 | 295 (89,7 %) | 23 | 11 |
-| Dungeons & Dragons: Adventures in the Forgotten Realms Commander | AFC | 2021-07 | 275 | 257 (93,5 %) | 11 | 7 |
+| Dungeons & Dragons: Adventures in the Forgotten Realms Commander | AFC | 2021-07 | 275 | 259 (94,2 %) | 9 | 7 |
 | Innistrad: Midnight Hunt Commander | MIC | 2021-09 | 149 | 134 (89,9 %) | 8 | 7 |
 | Innistrad: Crimson Vow Commander | VOC | 2021-11 | 150 | 137 (91,3 %) | 6 | 7 |
 | Kamigawa: Neon Dynasty Commander | NEC | 2022-02 | 140 | 133 (95,0 %) | 5 | 2 |
@@ -350,7 +350,7 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Murders at Karlov Manor Commander | MKC | 2024-02 | 304 | 264 (86,8 %) | 28 | 12 |
 | Fallout | PIP | 2024-03 | 331 | 306 (92,4 %) | 16 | 9 |
 | Outlaws of Thunder Junction Commander | OTC | 2024-04 | 306 | 293 (95,8 %) | 4 | 9 |
-| Modern Horizons 3 Commander | M3C | 2024-06 | 319 | 298 (93,4 %) | 14 | 7 |
+| Modern Horizons 3 Commander | M3C | 2024-06 | 319 | 299 (93,7 %) | 13 | 7 |
 | Bloomburrow Commander | BLC | 2024-08 | 312 | 298 (95,5 %) | 7 | 7 |
 | Duskmourn: House of Horror Commander | DSC | 2024-09 | 345 | 277 (80,3 %) | 54 | 14 |
 | Foundations Commander | FDC | 2024-11 | 317 | 309 (97,5 %) | 2 | 6 |
@@ -380,13 +380,13 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Masters 25 | A25 | 2018-03 | 249 | 232 (93,2 %) | 10 | 7 |
 | Ultimate Masters | UMA | 2018-12 | 254 | 244 (96,1 %) | 5 | 5 |
 | Double Masters | 2XM | 2020-08 | 332 | 311 (93,7 %) | 13 | 8 |
-| The List | PLST | 2020-09 | 96 | 84 (87,5 %) | 9 | 3 |
+| The List | PLST | 2020-09 | 96 | 85 (88,5 %) | 8 | 3 |
 | Time Spiral Remastered | TSR | 2021-03 | 409 | 370 (90,5 %) | 22 | 17 |
-| Double Masters 2022 | 2X2 | 2022-07 | 332 | 309 (93,1 %) | 12 | 11 |
+| Double Masters 2022 | 2X2 | 2022-07 | 332 | 310 (93,4 %) | 11 | 11 |
 | Dominaria Remastered | DMR | 2023-01 | 261 | 241 (92,3 %) | 9 | 11 |
 | Ravnica Remastered | RVR | 2024-01 | 313 | 289 (92,3 %) | 14 | 10 |
 | Pioneer Masters | PIO | 2024-12 | 398 | 373 (93,7 %) | 14 | 11 |
-| Innistrad Remastered | INR | 2025-01 | 292 | 278 (95,2 %) | 5 | 9 |
+| Innistrad Remastered | INR | 2025-01 | 292 | 281 (96,2 %) | 2 | 9 |
 
 ### Humoristiques (Un-sets)
 
@@ -408,13 +408,13 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Unsanctioned | UND | 2020-02 | 32 | 22 (68,8 %) | 5 | 5 |
 | 2019 Heroes of the Realm | PH19 | 2020-08 | 4 | 2 (50,0 %) | 2 | 0 |
 | 2020 Heroes of the Realm | PH20 | 2021-08 | 2 | 2 (100,0 %) | 0 | 0 |
-| 2021 Heroes of the Realm | PH21 | 2022-08 | 3 | 1 (33,3 %) | 2 | 0 |
-| Unfinity | UNF | 2022-10 | 135 | 31 (23,0 %) | 94 | 10 |
+| 2021 Heroes of the Realm | PH21 | 2022-08 | 3 | 2 (66,7 %) | 1 | 0 |
+| Unfinity | UNF | 2022-10 | 135 | 32 (23,7 %) | 93 | 10 |
 | Unfinity Sticker Sheets | SUNF | 2022-10 | 48 | 0 (0,0 %) | 48 | 0 |
-| Unknown Event | UNK | 2023-02 | 122 | 92 (75,4 %) | 23 | 7 |
+| Unknown Event | UNK | 2023-02 | 122 | 98 (80,3 %) | 18 | 6 |
 | 2022 Heroes of the Realm | PH22 | 2023-08 | 1 | 0 (0,0 %) | 1 | 0 |
 | Black Lotus Unknown Planechase | OUNK | 2024-02 | 22 | 1 (4,5 %) | 13 | 8 |
-| Mystery Booster 2 | MB2 | 2024-08 | 258 | 222 (86,0 %) | 15 | 21 |
+| Mystery Booster 2 | MB2 | 2024-08 | 258 | 225 (87,2 %) | 12 | 21 |
 | 2023 Heroes of the Realm | PH23 | 2025-08 | 1 | 1 (100,0 %) | 0 | 0 |
 
 ### Duel Decks
@@ -513,10 +513,10 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | From the Vault: Lore | V16 | 2016-08 | 15 | 14 (93,3 %) | 0 | 1 |
 | Kaladesh Inventions | MPS_KLD | 2016-09 | 54 | 49 (90,7 %) | 5 | 0 |
 | Amonkhet Invocations | MP2 | 2017-04 | 54 | 52 (96,3 %) | 1 | 1 |
-| From the Vault: Transform | V17 | 2017-11 | 15 | 12 (80,0 %) | 3 | 0 |
+| From the Vault: Transform | V17 | 2017-11 | 15 | 13 (86,7 %) | 2 | 0 |
 | Signature Spellbook: Jace | SS1 | 2018-06 | 8 | 8 (100,0 %) | 0 | 0 |
 | Signature Spellbook: Gideon | SS2 | 2019-06 | 8 | 6 (75,0 %) | 2 | 0 |
-| Secret Lair Drop | SLD | 2019-12 | 1 804 | 1 639 (90,9 %) | 82 | 83 |
+| Secret Lair Drop | SLD | 2019-12 | 1 804 | 1 642 (91,0 %) | 79 | 83 |
 | Secret Lair: Ultimate Edition | SLU | 2020-05 | 16 | 16 (100,0 %) | 0 | 0 |
 | Signature Spellbook: Chandra | SS3 | 2020-06 | 8 | 8 (100,0 %) | 0 | 0 |
 | Zendikar Rising Expeditions | ZNE | 2020-09 | 30 | 30 (100,0 %) | 0 | 0 |
@@ -543,13 +543,13 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 
 | Set | Code | Date | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|---|---|
-| Magic Online Promos | PRM | 2002-06 | 2 692 | 2 299 (85,4 %) | 250 | 143 |
-| Promo set for Gatherer | MBP | 2002-06 | 27 | 20 (74,1 %) | 5 | 2 |
-| Masters Edition | ME1 | 2007-09 | 180 | 155 (86,1 %) | 19 | 6 |
-| Masters Edition II | ME2 | 2008-09 | 240 | 199 (82,9 %) | 25 | 16 |
-| Masters Edition III | ME3 | 2009-09 | 215 | 182 (84,7 %) | 20 | 13 |
+| Magic Online Promos | PRM | 2002-06 | 2 692 | 2 303 (85,5 %) | 246 | 143 |
+| Promo set for Gatherer | MBP | 2002-06 | 27 | 21 (77,8 %) | 4 | 2 |
+| Masters Edition | ME1 | 2007-09 | 180 | 156 (86,7 %) | 18 | 6 |
+| Masters Edition II | ME2 | 2008-09 | 240 | 200 (83,3 %) | 24 | 16 |
+| Masters Edition III | ME3 | 2009-09 | 215 | 183 (85,1 %) | 19 | 13 |
 | Masters Edition IV | ME4 | 2011-01 | 260 | 221 (85,0 %) | 16 | 23 |
-| Vintage Masters | VMA | 2014-06 | 325 | 297 (91,4 %) | 15 | 13 |
+| Vintage Masters | VMA | 2014-06 | 325 | 298 (91,7 %) | 14 | 13 |
 | Tempest Remastered | TPR | 2015-05 | 249 | 230 (92,4 %) | 10 | 9 |
 | Legendary Cube Prize Pack | PZ1 | 2015-11 | 149 | 135 (90,6 %) | 8 | 6 |
 | Treasure Chest | PZ2 | 2016-11 | 266 | 228 (85,7 %) | 22 | 16 |
@@ -566,40 +566,40 @@ Les vingt-cinq sets qui comptent le plus de cartes des cent commandants d'EDHREC
 | Kaladesh Remastered | KLR | 2020-11 | 287 | 271 (94,4 %) | 10 | 6 |
 | Historic Anthology 4 | HA4 | 2021-03 | 25 | 23 (92,0 %) | 0 | 2 |
 | Historic Anthology 5 | HA5 | 2021-05 | 25 | 24 (96,0 %) | 0 | 1 |
-| Jumpstart: Historic Horizons | J21 | 2021-08 | 389 | 349 (89,7 %) | 30 | 10 |
-| Alchemy: Innistrad | YMID | 2021-12 | 63 | 12 (19,0 %) | 29 | 22 |
-| Alchemy: Kamigawa | YNEO | 2022-03 | 30 | 8 (26,7 %) | 16 | 6 |
-| Alchemy: New Capenna | YSNC | 2022-06 | 30 | 6 (20,0 %) | 17 | 7 |
-| Alchemy Horizons: Baldur's Gate | HBG | 2022-07 | 284 | 205 (72,2 %) | 55 | 24 |
+| Jumpstart: Historic Horizons | J21 | 2021-08 | 389 | 351 (90,2 %) | 28 | 10 |
+| Alchemy: Innistrad | YMID | 2021-12 | 63 | 17 (27,0 %) | 26 | 20 |
+| Alchemy: Kamigawa | YNEO | 2022-03 | 30 | 9 (30,0 %) | 15 | 6 |
+| Alchemy: New Capenna | YSNC | 2022-06 | 30 | 8 (26,7 %) | 16 | 6 |
+| Alchemy Horizons: Baldur's Gate | HBG | 2022-07 | 284 | 207 (72,9 %) | 55 | 22 |
 | Explorer Anthology 1 | EA1 | 2022-07 | 20 | 17 (85,0 %) | 1 | 2 |
 | Historic Anthology 6 | HA6 | 2022-07 | 20 | 20 (100,0 %) | 0 | 0 |
-| Alchemy: Dominaria | YDMU | 2022-10 | 39 | 12 (30,8 %) | 22 | 5 |
-| Alchemy: The Brothers' War | YBRO | 2022-12 | 31 | 11 (35,5 %) | 12 | 8 |
+| Alchemy: Dominaria | YDMU | 2022-10 | 39 | 13 (33,3 %) | 22 | 4 |
+| Alchemy: The Brothers' War | YBRO | 2022-12 | 31 | 13 (41,9 %) | 10 | 8 |
 | Explorer Anthology 2 | EA2 | 2022-12 | 24 | 24 (100,0 %) | 0 | 0 |
-| Alchemy: Phyrexia | YONE | 2023-02 | 31 | 7 (22,6 %) | 20 | 4 |
+| Alchemy: Phyrexia | YONE | 2023-02 | 31 | 13 (41,9 %) | 14 | 4 |
 | Shadows of the Past | SIS | 2023-03 | 76 | 73 (96,1 %) | 2 | 1 |
-| Shadows over Innistrad Remastered | SIR | 2023-03 | 276 | 251 (90,9 %) | 10 | 15 |
+| Shadows over Innistrad Remastered | SIR | 2023-03 | 276 | 254 (92,0 %) | 7 | 15 |
 | Explorer Anthology 3 | EA3 | 2023-07 | 25 | 25 (100,0 %) | 0 | 0 |
 | Historic Anthology 7 | HA7 | 2023-07 | 25 | 25 (100,0 %) | 0 | 0 |
-| Alchemy: Wilds of Eldraine | YWOE | 2023-10 | 31 | 5 (16,1 %) | 22 | 4 |
-| Alchemy: Ixalan | YLCI | 2023-12 | 31 | 7 (22,6 %) | 14 | 10 |
-| Alchemy: Murders at Karlov Manor | YMKM | 2024-03 | 30 | 4 (13,3 %) | 19 | 7 |
+| Alchemy: Wilds of Eldraine | YWOE | 2023-10 | 31 | 10 (32,3 %) | 18 | 3 |
+| Alchemy: Ixalan | YLCI | 2023-12 | 31 | 10 (32,3 %) | 12 | 9 |
+| Alchemy: Murders at Karlov Manor | YMKM | 2024-03 | 30 | 7 (23,3 %) | 16 | 7 |
 | Alchemy: Outlaws of Thunder Junction | YOTJ | 2024-05 | 30 | 6 (20,0 %) | 14 | 10 |
-| Alchemy: Bloomburrow | YBLB | 2024-08 | 30 | 7 (23,3 %) | 18 | 5 |
-| Alchemy: Duskmourn | YDSK | 2024-10 | 30 | 9 (30,0 %) | 15 | 6 |
-| Alchemy: Aetherdrift | YDFT | 2025-03 | 31 | 9 (29,0 %) | 16 | 6 |
-| Alchemy: Tarkir | YTDM | 2025-04 | 29 | 8 (27,6 %) | 14 | 7 |
+| Alchemy: Bloomburrow | YBLB | 2024-08 | 30 | 10 (33,3 %) | 15 | 5 |
+| Alchemy: Duskmourn | YDSK | 2024-10 | 30 | 11 (36,7 %) | 13 | 6 |
+| Alchemy: Aetherdrift | YDFT | 2025-03 | 31 | 13 (41,9 %) | 13 | 5 |
+| Alchemy: Tarkir | YTDM | 2025-04 | 29 | 10 (34,5 %) | 13 | 6 |
 | Pioneer Anthology 1 | PA1 | 2025-05 | 11 | 11 (100,0 %) | 0 | 0 |
-| Alchemy: Edge of Eternities | YEOE | 2025-08 | 40 | 14 (35,0 %) | 17 | 9 |
+| Alchemy: Edge of Eternities | YEOE | 2025-08 | 40 | 16 (40,0 %) | 15 | 9 |
 | Arena Anthology 1 | AA1 | 2025-08 | 26 | 26 (100,0 %) | 0 | 0 |
 | Arena Anthology 2 | AA2 | 2025-08 | 25 | 24 (96,0 %) | 1 | 0 |
 | Arena Anthology 3 | AA3 | 2025-09 | 25 | 23 (92,0 %) | 2 | 0 |
 | Arena Anthology 4 | AA4 | 2025-09 | 28 | 28 (100,0 %) | 0 | 0 |
 | Through the Omenpaths | OM1 | 2025-09 | 35 | 34 (97,1 %) | 0 | 1 |
 | Through the Omenpaths Bonus Sheet | OMB | 2025-09 | 40 | 37 (92,5 %) | 1 | 2 |
-| Alchemy: Lorwyn Eclipsed | YECL | 2026-02 | 31 | 8 (25,8 %) | 15 | 8 |
-| Alchemy: Secrets of Strixhaven | YSOS | 2026-05 | 30 | 8 (26,7 %) | 15 | 7 |
-| Alchemy: Reality Fracture | YFRA | 2026-10 | 23 | 5 (21,7 %) | 14 | 4 |
+| Alchemy: Lorwyn Eclipsed | YECL | 2026-02 | 31 | 12 (38,7 %) | 13 | 6 |
+| Alchemy: Secrets of Strixhaven | YSOS | 2026-05 | 30 | 13 (43,3 %) | 12 | 5 |
+| Alchemy: Reality Fracture | YFRA | 2026-10 | 23 | 13 (56,5 %) | 8 | 2 |
 
 ### Autres
 

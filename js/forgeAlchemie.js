@@ -20,7 +20,7 @@ const SCRIPT_JACE = [
   'Oracle:[-1]: Surveil 1.\\n[-3]: Draw a card.'].join('\n');
 
 /* La fiche qu'un script Forge dit de sa propre carte, quand l'atelier n'en connaît pas d'autre. */
-function ficheDeScriptForge(nom, script) {
+function ficheConjuree(nom, script) {
   const L = k => { const m = new RegExp('^' + k + ':(.*)$', 'm').exec(script); return m ? m[1].trim() : ''; };
   const mc = L('ManaCost'), pt = /^(\S+)\/(\S+)$/.exec(L('PT')) || [], nb = x => /^\d+$/.test(x || '') ? +x : undefined;
   return {nom, cout: !mc || mc === 'no cost' ? '' : mc.split(/\s+/).map(x => '{' + x + '}').join(''), type: L('Types'), texte: L('Oracle').replace(/\\n/g, ' // '),
@@ -34,7 +34,7 @@ function defNommee(nom) {
   if (DEFS_CONJUREES.has(nom)) return DEFS_CONJUREES.get(nom);
   let f = typeof ficheParNom === 'function' ? ficheParNom(nom) : null;
   const s = typeof scriptForgeDe === 'function' ? scriptForgeDe(nom) : null;
-  if ((!f || !f.forge) && s) f = ficheDeScriptForge(nom, s);
+  if ((!f || !f.forge) && s) f = ficheConjuree(nom, s);
   const d = f ? definitionDe(f, typeof comportementDe === 'function' ? comportementDe(f.nom) : undefined) : null;
   if (d) DEFS_CONJUREES.set(nom, d);
   return d;
@@ -65,7 +65,7 @@ forgeEffet('MakeCard', ['Name', 'Zone', 'Conjure', 'RememberMade'], function* (P
 
 let DEF_JACE = null;
 function defJace() {
-  return DEF_JACE || (DEF_JACE = definitionForge(ficheDeScriptForge('Jace Token', SCRIPT_JACE)));
+  return DEF_JACE || (DEF_JACE = definitionForge(ficheConjuree('Jace Token', SCRIPT_JACE)));
 }
 
 forgeEffet('Empower', ['Type', 'Num'], function* (P, t, env) {

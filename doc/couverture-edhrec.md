@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F98) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F99) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6743** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 363 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 230 |
+| complètes | 6063 | 6611 | 6552 | **6753** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 354 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 229 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, 191 cartes de plus complètes.
+exactement : même banc, mêmes cartes, 201 cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -23,10 +23,10 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | Élément | Cartes | Exemples |
 |---|---|---|
 | `param:Continuous.MayPlayDontGrantZonePermissions` | 3 | Dracogenesis, Darksteel Monolith, As Foretold |
-| `construction:Mana` | 7 | Master of Dark Rites, Jade Orb of Dragonkind, Crucible of the Spirit Dragon |
 | `construction:Continuous` | 9 | Hunting Velociraptor, Tyvar the Bellicose, Danny Pink |
 | `param:ImmediateTrigger.TriggerAmount` | 5 | Earthbender Ascension, Auron, Venerated Guardian, Ajani, Nacatl Pariah |
 | `param:MoveCounter.ValidDefined` | 1 | Forgotten Ancient |
+| `construction:Mana` | 6 | Master of Dark Rites, Jade Orb of Dragonkind, Jeweled Amulet |
 | `param:PutCounter.Placer` | 4 | Promise of Loyalty, Gluntch, the Bestower, Alexios, Deimos of Kosmos |
 | `param:AddPhase.ExtraPhaseDelayedTrigger` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
 | `param:AddPhase.ExtraPhaseDelayedTriggerExecute` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
@@ -51,10 +51,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:ReduceCost.Color` | 2 | Morophon, the Boundless, Even the Score |
 | `defini:Convoked` | 1 | Lethal Scheme |
 | `cout:BeholdExile` | 3 | Champions of the Perfect, Champion of the Path, Champion of the Weird |
-| `api:Meld` | 4 | Gisela, the Broken Blade, Mishra, Claimed by Gix, Hanweir Battlements |
-| `param:Meld.Name` | 4 | Gisela, the Broken Blade, Mishra, Claimed by Gix, Hanweir Battlements |
-| `param:Meld.Primary` | 4 | Gisela, the Broken Blade, Mishra, Claimed by Gix, Hanweir Battlements |
-| `construction:Meld` | 4 | Gisela, the Broken Blade, Mishra, Claimed by Gix, Hanweir Battlements |
 | `param:ChangeZone.TargetsWithDifferentCMC` | 1 | Agadeem's Awakening |
 | `param:ReduceCost.IgnoreGeneric` | 1 | Morophon, the Boundless |
 | `stat:Activations` | 1 | Birgi, God of Storytelling |
@@ -102,6 +98,10 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:AbilityResolves.ValidSource` | 2 | Narci, Fable Singer, Tom Bombadil |
 | `param:AbilityResolves.ValidSpellAbility` | 2 | Narci, Fable Singer, Tom Bombadil |
 | `param:Counter.TargetsWithControllerProperty` | 1 | Drown in the Loch |
+| `param:Destroy.TargetsWithControllerProperty` | 1 | Drown in the Loch |
+| `defini:TriggeredObjectLKICopy` | 2 | Rikku, Resourceful Guardian, Grafted Exoskeleton |
+| `expr:Count$OptionalGenericCostPaid` | 4 | Spirit Water Revival, Burning Curiosity, Dragon's Fire |
+| `param:ChooseNumber.Random` | 1 | Tibalt's Trickery |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -139,7 +139,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Serra's Emissary | `construction:ETBReplacement` |
 | P | Drana and Linvala | `param:Continuous.GainsValidAbilities`, `param:Continuous.ManaConversion` |
 | I | Drown in the Loch | `param:Counter.TargetsWithControllerProperty`, `param:Destroy.TargetsWithControllerProperty` |
-| P | Gisela, the Broken Blade | `param:Phase.IsPresent2`, `api:Meld`, `param:Meld.Name`, `param:Meld.Primary` … |
 | P | Firebender Ascension | `trig:AbilityTriggered`, `param:AbilityTriggered.ValidMode`, `param:AbilityTriggered.ValidSource`, `param:AbilityTriggered.TriggeredOwnAbility` |
 | I | Tibalt's Trickery | `param:ChooseNumber.Random`, `param:DigUntil.ImprintRevealed`, `param:Counter.RememberForCounter` |
 | P | Summon: Primal Odin | `param:Animate.sVars` |
@@ -190,7 +189,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Kogla and Yidaro | `defini:DiscardedCards` |
 | P | Welcome to . . . | `construction:Chapter` |
 | P | Jade Orb of Dragonkind | `construction:Mana` |
-| P | Unbound Flourishing | `api:ChangeX`, `param:ChangeX.Value`, `param:SpellCast.HasXManaCost`, `trig:SpellAbilityCast` … |
+| P | Unbound Flourishing | `api:ChangeX`, `param:ChangeX.Value`, `param:SpellCast.HasXManaCost`, `param:SpellAbilityCast.HasXManaCost` |
 | I | Jinnie Fay, Jetmir's Second | `construction:CreateToken` |
 | I | Rikku, Resourceful Guardian | `defini:TriggeredObjectLKICopy` |
 | P | Everlasting Torment | `stat:WitherDamage` |
@@ -201,7 +200,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Deeproot Pilgrimage | `trig:TapAll` |
 | I | New Blood | `api:ChangeText`, `param:ChangeText.ChangeTypeWord`, `param:ChangeText.Duration` |
 | I | Mardu Siegebreaker | `construction:Attacks` |
-| P | Crucible of the Spirit Dragon | `construction:Mana` |
 | P | Rammas Echor, Ancient Shield | `kwval:exalted` |
 | P | Thousand-Year Storm | `expr:TriggerObjectsCurrentCastSpells$Valid` |
 | P | Gollum, Obsessed Stalker | `param:Effect.Unique`, `defini:Opponent.HasCardsInCommand_Effect.namedDamaged` |
@@ -270,3 +268,5 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Sephiroth, Fabled SOLDIER | `repl:Transform`, `param:Transform.ValidCard`, `param:Transform.ReplaceWith` |
 | I | Firion, Wild Rose Warrior | `construction:ChangesZone` |
 | P | Felix Five-Boots | `param:Panharmonicon.ValidSource`, `param:Panharmonicon.CombatDamage`, `param:Panharmonicon.ValidTarget` |
+| P | Shadrix Silverquill | `param:PutCounterAll.Placer` |
+| P | Serra Paragon | `param:LandPlayed.ValidSA` |

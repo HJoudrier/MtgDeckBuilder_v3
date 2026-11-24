@@ -149,6 +149,13 @@ js/                 modules, chargés dans cet ordre :
   forgeChaque.js    « EACH Forest & Plains » : chercher une carte par filtre
   forgeTerrains.js  ce que les terrains font de plus : cibles de même type, rendre les créatures, mana du cimetière, phasing, sauter un tour, Wastes
   forgeSeek.js      Seek (cartes au hasard dans la bibliothèque) et GameActivationLimit (une capacité N fois la partie)
+  forgeAlchemie.js MakeCard (conjurer une carte d'après son script), Empower (le jeton Jace), NameCard et Play d'une copie nommée
+  forgeDefausseDessus.js  Nephalia Academy : remettre sur sa bibliothèque la carte qu'un adversaire fait défausser
+  forgeCopiesAbilite.js   SpellAbilityCast et la copie d'une capacité activée (Sunken Palace)
+  forgeChoisisseur.js     la cible qu'un adversaire choisit (Arena), le joueur choisi qui prend le contrôle (Stardew Valley)
+  forgeBloqueurs.js       SwitchBlock : échanger deux bloqueurs (Sorrow's Path)
+  forgeManaCompteurs.js   du mana restreint payé en marqueurs de la source (Crucible of the Spirit Dragon, Throne of Makindi)
+  forgeMeld.js            Meld : fusionner deux cartes en un permanent, qui les emmène ensemble
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2254,11 +2261,11 @@ passe par la pile : son mana arrive à la résolution, il ne paie donc pas un so
 - **Mayhem sans coût** sur un terrain (Oscorp Industries) : `cartesPermises()` offre le terrain du cimetière le tour où il a été défaussé (`defausseTour`).
 - **Deux quantités** : `PlayerCountPlayers$LowestValid<Zone>` — la plus petite bibliothèque de la table (Shelldock Isle) — et le suffixe `$CreatureType`, le nombre de types
   de créature réunis (Starfleet Academy).
-Restent, parmi les terrains, ce que le moteur ne sait pas encore : un mana au nombre restreint (Crucible of the Spirit Dragon, Throne of Makindi : « spend this mana only to
+Restaient, parmi les terrains (tous traités au lot F99), ce que le moteur ne savait pas encore : un mana au nombre restreint (Crucible of the Spirit Dragon, Throne of Makindi : « spend this mana only to
 cast Dragon spells » avec un coût de marqueurs), des couleurs fixées en construisant le deck (Cryptic Spires, Paliano), la fusion `Meld` (Hanweir Battlements), les capacités
 d'Alchemy (`MakeCard`, `Empower`), le choix d'une cible par un autre joueur (Arena, Stardew Valley), `SwitchBlock` (Sorrow's Path) et une poignée d'effets à durée
 (`UntilUntaps` d'Ice Floe, la boon de Loch Larent).
-Les trois lots F96 à F98 : 6 716 → 6 743 cartes complètes parmi celles d'EDHREC (les terrains : 17 sur 19), 29 306 → 29 476 parmi les 34 482 scripts de Forge —
+Les quatre lots F96 à F99 : 6 716 → 6 753 cartes complètes parmi celles d'EDHREC (tous les terrains), 29 306 → 29 620 parmi les 34 482 scripts de Forge —
 le détail est dans [doc/couverture-detail.md](doc/couverture-detail.md) et [doc/couverture-sets.md](doc/couverture-sets.md), remesurés.
 
 **Lot F99 : les derniers terrains** (`js/forgeAlchemie.js`, `js/forgeDefausseDessus.js`, `js/forgeCopiesAbilite.js`, `js/forgeChoisisseur.js`, `js/forgeBloqueurs.js`,
