@@ -23,8 +23,8 @@ const FORGE_SAIT = {api: new Set(), trig: new Set(), stat: new Set(), repl: new 
 /* Les paramètres dont la valeur est un filtre (js/forgeValide.js), et ceux
    qui désignent (js/forgeDefini.js) : leurs propriétés et leurs valeurs
    comptent dans la couverture comme des éléments à part entière. */
-const FORGE_CLES_FILTRE = /^(ValidTgts|ValidCards?|Affected|ChangeType|ChangeValid|SacValid|ValidTarget|ValidSource|ValidPlayers?|ValidActivatingPlayer|ValidAttacker|ValidBlocker|IsPresent|IsPresent2|ValidDefender)$/;
-const FORGE_CLES_DEFINI = /^(Defined(Player|Cards)?|RememberObjects|ForgetDefined|AttachedTo|TokenOwner|NewController|DamageSource|Controller)$/;
+const FORGE_CLES_FILTRE = /^(ValidTgts|ValidCards?|Affected|ChangeType|ChangeValid|SacValid|ValidTarget|ValidSource|ValidPlayers?|ValidActivatingPlayer|ValidAttacker|ValidBlocker|IsPresent|IsPresent2|ValidDefender|Valid|ConditionPresent|ValidCause)$/;
+const FORGE_CLES_DEFINI = /^(Defined(Player|Cards)?|RememberObjects|ForgetDefined|AttachedTo|TokenOwner|NewController|DamageSource|Controller|AffectedDefined|ConditionDefined|ChooseFromDefined|Object|PresentDefined)$/;
 
 /* Les paramètres qu'on ne lit que pour certaines valeurs : `forgeValeurs('ChangeZone.Activator', ['You.!Active'])`. */
 const FORGE_VALEURS = {};
@@ -106,6 +106,8 @@ function elementsTable(face, t, genre, out, vus) {
     /* Les mots-clés d'une pompe : chacun est une valeur à reconnaître. */
     if (k === 'KW') String(t[k]).split('&').map(x => x.trim().toLowerCase()).filter(Boolean).forEach(x => out.add('kwval:' + x));
     if (FORGE_CLES_FILTRE.test(k) && typeof famillesFiltre === 'function') famillesFiltre(t[k]).forEach(e => out.add(e));
+    /* `Choices$` : des SVars (un mode à choisir) ou un filtre de cartes (« Creature.YouCtrl »). */
+    if (k === 'Choices' && typeof famillesFiltre === 'function' && String(t[k]).split(',').every(n => face.svars[n.trim()] == null)) famillesFiltre(t[k]).forEach(e => out.add(e));
     if (FORGE_CLES_DEFINI.test(k)) String(t[k]).split(' & ').forEach(d => out.add('defini:' + d.trim().split(' ')[0]));
     if (FORGE_RENVOIS.includes(k)) String(t[k]).split(',').forEach(nom => {
       const n = nom.trim();

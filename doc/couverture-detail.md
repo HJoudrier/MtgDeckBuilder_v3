@@ -1,6 +1,6 @@
 # Détail de la couverture : toutes les cartes, et celles d'EDHREC
 
-Mesure du 24 novembre 2026 (dépôt Forge au commit `3e1fa4ed`, moteur après le lot F101). Chaque carte est lue avec son script Forge
+Mesure du 24 novembre 2026 (dépôt Forge au commit `3e1fa4ed`, moteur après le lot F103). Chaque carte est lue avec son script Forge
 par `definitionForge()`, le moteur lui-même ; ce document ne compte que les cartes qui ont un script — 34 482 cartes (les jetons, eux,
 ont leurs scripts à part). Trois états :
 
@@ -15,17 +15,17 @@ ont leurs scripts à part). Trois états :
 
 |  | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| **Toutes les cartes** | 34 482 | 30 036 (87,1 %) | 2 826 (8,2 %) | 1 620 (4,7 %) |
+| **Toutes les cartes** | 34 482 | 30 069 (87,2 %) | 2 803 (8,1 %) | 1 610 (4,7 %) |
 
 ### Par type de carte (premier type qui s'applique)
 
 | Type | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| Creature | 18 997 | 16 722 (88,0 %) | 1 736 (9,1 %) | 539 (2,8 %) |
-| Instant | 3 829 | 3 461 (90,4 %) | 46 (1,2 %) | 322 (8,4 %) |
-| Sorcery | 3 583 | 3 101 (86,5 %) | 66 (1,8 %) | 416 (11,6 %) |
-| Artifact | 2 545 | 2 151 (84,5 %) | 321 (12,6 %) | 73 (2,9 %) |
-| Enchantment | 3 498 | 2 989 (85,4 %) | 347 (9,9 %) | 162 (4,6 %) |
+| Creature | 18 997 | 16 739 (88,1 %) | 1 721 (9,1 %) | 537 (2,8 %) |
+| Instant | 3 829 | 3 464 (90,5 %) | 46 (1,2 %) | 319 (8,3 %) |
+| Sorcery | 3 583 | 3 106 (86,7 %) | 65 (1,8 %) | 412 (11,5 %) |
+| Artifact | 2 545 | 2 152 (84,6 %) | 319 (12,5 %) | 74 (2,9 %) |
+| Enchantment | 3 498 | 2 996 (85,6 %) | 342 (9,8 %) | 160 (4,6 %) |
 | Land | 1 200 | 1 200 (100,0 %) | 0 (0,0 %) | 0 (0,0 %) |
 | Planeswalker | 337 | 325 (96,4 %) | 12 (3,6 %) | 0 (0,0 %) |
 | Battle | 37 | 30 (81,1 %) | 7 (18,9 %) | 0 (0,0 %) |
@@ -35,18 +35,18 @@ ont leurs scripts à part). Trois états :
 
 | Structure | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| Une face | 33 562 | 29 261 (87,2 %) | 2 700 (8,0 %) | 1 601 (4,8 %) |
+| Une face | 33 562 | 29 294 (87,3 %) | 2 677 (8,0 %) | 1 591 (4,7 %) |
 | Plusieurs faces (transformables, modales, aventures…) | 920 | 775 (84,2 %) | 126 (13,7 %) | 19 (2,1 %) |
-| Légendaires | 4 638 | 3 870 (83,4 %) | 573 (12,4 %) | 195 (4,2 %) |
-| Non légendaires | 29 844 | 26 166 (87,7 %) | 2 253 (7,5 %) | 1 425 (4,8 %) |
+| Légendaires | 4 638 | 3 877 (83,6 %) | 566 (12,2 %) | 195 (4,2 %) |
+| Non légendaires | 29 844 | 26 192 (87,8 %) | 2 237 (7,5 %) | 1 415 (4,7 %) |
 
 ### Par longueur du script (nombre de lignes de capacités, déclencheurs, statiques, remplacements et mots-clés)
 
 | Script | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| 0–1 ligne | 14 674 | 13 032 (88,8 %) | 853 (5,8 %) | 789 (5,4 %) |
-| 2–3 lignes | 17 994 | 15 568 (86,5 %) | 1 697 (9,4 %) | 729 (4,1 %) |
-| 4–6 lignes | 1 738 | 1 393 (80,1 %) | 245 (14,1 %) | 100 (5,8 %) |
+| 0–1 ligne | 14 674 | 13 044 (88,9 %) | 850 (5,8 %) | 780 (5,3 %) |
+| 2–3 lignes | 17 994 | 15 587 (86,6 %) | 1 678 (9,3 %) | 729 (4,1 %) |
+| 4–6 lignes | 1 738 | 1 395 (80,3 %) | 244 (14,0 %) | 99 (5,7 %) |
 | 7 lignes ou plus | 76 | 43 (56,6 %) | 31 (40,8 %) | 2 (2,6 %) |
 
 ## Sur les cartes d'EDHREC
@@ -55,42 +55,42 @@ Les cartes des pages des cent premiers commandants de l'année (`json.edhrec.com
 
 |  | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| **Cartes d'EDHREC** | 7 336 | 6 868 (93,6 %) | 315 (4,3 %) | 153 (2,1 %) |
-| Le reste du pool Forge (appariement par nom) | 27 171 | 23 192 (85,4 %) | 2 512 (9,2 %) | 1 467 (5,4 %) |
+| **Cartes d'EDHREC** | 7 336 | 6 874 (93,7 %) | 310 (4,2 %) | 152 (2,1 %) |
+| Le reste du pool Forge (appariement par nom) | 27 171 | 23 219 (85,5 %) | 2 494 (9,2 %) | 1 458 (5,4 %) |
 
 Pondérées par le nombre de decks qui les jouent (additionné sur ces cent pages, 174 459 122 places de deck) :
-**97,4 %** des places de deck sont tenues par une carte complète, 1,8 % par une partielle, 0,8 % par une injouable.
+**97,5 %** des places de deck sont tenues par une carte complète, 1,7 % par une partielle, 0,8 % par une injouable.
 
 ### Les cartes d'EDHREC, par type
 
 | Type | Cartes | Complètes | Partielles | Injouables |
 |---|---|---|---|---|
-| Creature | 3 270 | 2 990 (91,4 %) | 206 (6,3 %) | 74 (2,3 %) |
+| Creature | 3 270 | 2 994 (91,6 %) | 203 (6,2 %) | 73 (2,2 %) |
 | Instant | 774 | 774 (100,0 %) | 0 (0,0 %) | 0 (0,0 %) |
 | Sorcery | 790 | 726 (91,9 %) | 16 (2,0 %) | 48 (6,1 %) |
-| Artifact | 770 | 716 (93,0 %) | 36 (4,7 %) | 18 (2,3 %) |
-| Enchantment | 905 | 836 (92,4 %) | 56 (6,2 %) | 13 (1,4 %) |
+| Artifact | 770 | 717 (93,1 %) | 35 (4,5 %) | 18 (2,3 %) |
+| Enchantment | 905 | 837 (92,5 %) | 55 (6,1 %) | 13 (1,4 %) |
 | Land | 689 | 689 (100,0 %) | 0 (0,0 %) | 0 (0,0 %) |
 | Planeswalker | 133 | 133 (100,0 %) | 0 (0,0 %) | 0 (0,0 %) |
 | Battle | 5 | 4 (80,0 %) | 1 (20,0 %) | 0 (0,0 %) |
 
 ## Ce qui manque
 
-2 864 des 4 446 cartes non complètes n'ont **qu'un seul élément** inconnu (64,4 %) ; parmi celles d'EDHREC,
-289 sur 468.
+2 825 des 4 413 cartes non complètes n'ont **qu'un seul élément** inconnu (64,0 %) ; parmi celles d'EDHREC,
+283 sur 462.
 
 ### Par famille d'élément (nombre de cartes non complètes qui en portent au moins un)
 
 | Famille | Toutes les cartes | Cartes d'EDHREC | Ce que c'est |
 |---|---|---|---|
-| `param` | 2 320 | 269 | un paramètre d'effet ou de statique |
+| `param` | 2 336 | 268 | un paramètre d'effet ou de statique |
 | `construction` | 726 | 70 | une construction refusée |
 | `trig` | 511 | 41 | un déclencheur |
-| `filtre` | 492 | 40 | une propriété de filtre |
 | `expr` | 475 | 53 | une quantité calculée |
+| `filtre` | 472 | 39 | une propriété de filtre |
 | `kw` | 465 | 42 | un mot-clé |
 | `api` | 382 | 27 | un effet entier |
-| `defini` | 182 | 31 | une désignation |
+| `defini` | 164 | 29 | une désignation |
 | `kwval` | 145 | 9 | une valeur de mot-clé |
 | `stat` | 126 | 16 | une statique |
 | `repl` | 48 | 10 | un remplacement |
@@ -109,9 +109,9 @@ pour un seul mécanisme ici.
 | Un-sets et attractions (Sticker, Contraption, Attraction) | 185 | 5 |
 | Mutate | 38 | 19 |
 | Meld | 0 | 0 |
-| Suspend (valeur de mot-clé) | 7 | 1 |
+| Suspend (valeur de mot-clé) | 6 | 1 |
 | ControlPlayer (Mindslaver) | 2 | 1 |
-| Tout le reste | 3 751 | 438 |
+| Tout le reste | 3 719 | 432 |
 
 Les cartes de l'Alchemy, de Planechase, d'Archenemy et des Un-sets ne se jouent pas dans un deck Commander classique : elles pèsent sur le total
 de toutes les cartes, presque pas sur celui d'EDHREC.

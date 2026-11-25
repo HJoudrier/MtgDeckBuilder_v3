@@ -180,7 +180,7 @@ function hausseDeCout(def) {
     if (s.s !== 'forge' || s.t.Mode !== 'RaiseCost' || !s.t.Cost) continue;
     const c = coutForge(s.t.Cost);
     def.coutSup = fusionAutres(def.coutSup, autresCout(c.cout)) || def.coutSup;
-    if (c.cout.mana.total) def.hausseMana = def.hausseMana ? sommeMana(def.hausseMana, c.cout.mana) : c.cout.mana;
+    if (c.cout.mana.total || c.cout.mana.x) def.hausseMana = def.hausseMana ? sommeMana(def.hausseMana, c.cout.mana) : c.cout.mana;
   }
 }
 

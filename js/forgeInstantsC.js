@@ -31,8 +31,7 @@ forgeSait('param', 'ControlSpell.Mode');
 
 /* —— Incontrecarrable contre certaines causes —————————————————————————— */
 
-FORGE_COMMUNS.add('ValidCause');
-forgeSait('param', 'ValidCause', 'Counter.ValidCause');
+forgeSait('param', 'Counter.ValidCause');
 /* Le sort qui contrecarre, le temps du `Counter` : `incontrecarrable()` (js/forgeRemplacements.js) le lit. */
 FORGE_API.Counter.gen = (g => function* (P, t, env) {
   const avant = P.causeContre;

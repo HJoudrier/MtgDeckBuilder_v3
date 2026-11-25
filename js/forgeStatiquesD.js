@@ -104,8 +104,10 @@ function blocageRestreint(P, cb, d) {
 forgeStatique('CantPayLife', ['ValidPlayer', 'ValidCause', 'ForCost'], () => {});
 
 /* `j` ne peut-il pas payer de vie pour un coût ? (Angel of Jubilation) */
-function payerVieInterdit(P, j) {
-  return !!statiqueQui(P, 'CantPayLife', (t, src, env) => t.ForCost !== 'False' && joueurStatique(P, j, t.ValidPlayer, src, env));
+function payerVieInterdit(P, j, capaciteDeMana) {
+  /* `ValidCause$ Spell,Activated.!ManaAbility` (Karn's Sylex) : une capacité de mana peut encore payer de la vie. */
+  return !!statiqueQui(P, 'CantPayLife', (t, src, env) => t.ForCost !== 'False' && joueurStatique(P, j, t.ValidPlayer, src, env) &&
+    !(capaciteDeMana && /^Spell,Activated\.!ManaAbility$/.test(t.ValidCause || '')));
 }
 
 /* —— Un sort qui nous vise coûte de la vie ————————————————————————— */

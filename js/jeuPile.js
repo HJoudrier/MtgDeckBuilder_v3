@@ -92,7 +92,7 @@ function* resoudre(P, item) {
   }
   const ctx = {source: item.sort ? item.id : item.source, lki: item.lki, ctrl: item.ctrl, x: item.x,
     evt: item.evt, cibles: [], trouves: [], fait: undefined, kicked: !!item.kicked, memo: item.memo, memoJ: item.memoJ, nombre: item.nombre || 0,
-    optionnel: item.variante === 'optionnel', retires: item.retires || 0, engages: item.engages || null, variante: item.variante || null};
+    optionnel: item.variante === 'optionnel', retires: item.retires || 0, engages: item.engages || null, coutPaye: item.coutPaye || null, variante: item.variante || null};
   /* Le cadeau promis se donne avant le reste du sort (js/forgeMotsClesE.js). */
   if (item.sort && item.variante === 'gift') yield* donneCadeau(P, item.def, item.id, ctx);
   for (const ef of item.effets) {

@@ -174,6 +174,7 @@ js/                 modules, chargés dans cet ordre :
   jeuManaChoix.js         choisir quel mana de la réserve paie le générique
   jeuRevelations.js       montrer toutes les cartes révélées, les non choisissables grisées
   tableAnnuler.js         « Annuler » : rejouer la partie sans la dernière réponse
+  forgeFiltresE.js        filtres et désignations qui n'étaient lus de personne : extrêmes, ce tour, lot d'un déclencheur, ce que le coût a payé, protection au choix
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2378,6 +2379,25 @@ qu'il dirige ; Critical Hit lit tout jet de dé comme naturel (le moteur ne modi
 
 **Correctif : les Umbra** (`js/forgeInstantsE.js`). `AffectedDefined$ AttachedBy Self`, qu'écrivent une cinquantaine de cartes (Snake Umbra, Hyena Umbra…), n'était pas une désignation que le moteur sût lire : la
 statique n'atteignait personne, et l'aura passait pour complète sans rien faire — ni +1/+1, ni capacité accordée. Elle désigne maintenant la créature à laquelle la source est attachée.
+
+**Lot F103 : ce que la couverture disait complet sans l'être** (`js/forgeFiltresE.js`, `js/forgeCouverture.js`, et des retouches de `js/jeuEtat.js`, `js/jeuActions.js`, `js/jeuPile.js`, `js/jeuCoutsB.js`, `js/jeuFaces.js`, `js/jeuDeclencheurs.js`, `js/forgeDeclencheurs.js`, `js/forgeStatiquesB.js`, `js/forgeStatiquesD.js`). Les Umbra
+l'ont montré : une désignation ou un filtre inconnu ne laisse rien passer, et la carte qui s'en sert passait pour complète sans rien faire. La couverture ne lisait pas toutes les clés où ils se glissent ; elle lit
+désormais `AffectedDefined$`, `ConditionDefined$`, `ChooseFromDefined$`, `Object$`, `PresentDefined$` (désignations), `Valid$`, `ConditionPresent$`, `ValidCause$`, et `Choices$` quand ce n'est pas une liste de SVars (filtres).
+Cet audit a retrouvé cent vingt cartes « complètes » à tort ; la plupart sont maintenant lues pour de bon, les autres sont honnêtement partielles :
+- **Ce qui s'est passé ce tour** : `DrawnThisTurn` (Sylvan Library : la carte piochée se souvient de son tour, `o.piocheTour`), `blockedThisTurn`, `SaddledThisTurn` (l'équipage retient qui l'a payé),
+  `sneaked`, `spectacle`, `firstTurnControlled`, `ManaSpent EQ0` (Nix), `CastSa Spell.OppCtrl|Warp|Mayhem`.
+- **Les extrêmes** : `leastPower`, `leastToughness`, `…ControlledByOpponent` (Penregon Besieged), `greatestCMC_…ControlledByRemembered` (Summon: Valefor, Discovery), `greatestRememberedCMC` (Cait),
+  `yardGreatestPower` ; pour les joueurs, `withMostLife` (The Black Gate), `withLowestLife` (Loxodon Peacekeeper), `lifeEQX`, `OpponentOf Remembered`.
+- **Le lot d'un déclencheur « one or more »** : `TriggeredCards` et `TriggeredSources` (Colossal Grave-Reaver, Twilight Diviner, Zurgo and Ojutai) — la collecte garde tous les évènements du lot
+  (`P._evtsLot`), et chaque déclenchement retient ceux qui le satisfont (`e.lotIds`).
+- **Ce que le coût a payé** : `Collected` (cartes exilées pour collecter des indices), `Discarded`, `Returned`, `Tapped` (`P.coutPaye`, `ctx.engages`) ; `TopThirdOfLibrary` (Assemble the Team).
+- **Parenté** : `sharesControllerWith`, `sharesCardTypeWith …`, `sharesNameWith Battlefield|ThisTurnCast`, `doesNotShareNameWith Remembered`, `SharesColorWith ChosenCard|Imprinted|Valid …`, `IsTargeting …`,
+  `CanBeEnchantedBy`, `CanBeSacrificedBy`, `targetedBy`, `AllColors`, `hasANonBasicLandType`, `withSuspend`, `DoubleFaced`.
+- **Une protection au choix** : l'incolore (Giver of Runes) et un type de carte (Pippin) s'ajoutent aux couleurs.
+- **Karn's Sylex** : « can't pay life… that aren't mana abilities » — une capacité de mana peut encore payer de la vie. **Waterbend {X}** : le coût additionnel `X` se perdait (`hausseDeCout()`), le sort partait avec X = 0.
+- **Une erreur de ma façon, défaite** : au lot F101 j'avais déclaré `ValidCause` connu partout pour qu'Autumn's Veil passe ; les remplacements `Moved` et les déclencheurs `Discarded` de plusieurs cartes
+  (Ajani's Last Stand, Uphill Battle…) passaient alors pour complets. Il n'est connu que de `Counter` ; `Moved.ValidCause` reste borné à ses deux valeurs lues.
+Restent honnêtement partiels : `An Unearthly Child` (compagnon du Docteur), `Protective Sphere` (la couleur de l'activation), `Silumgar Scavenger` (exploité), `Uphill Battle`, `Jorn, God of Winter` (une cause de déplacement).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

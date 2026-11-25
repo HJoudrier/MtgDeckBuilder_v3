@@ -62,7 +62,7 @@ function* paieAutreB(P, j, o, c) {
     /* Les moins chères d'abord, jusqu'à la valeur demandée. */
     let total = 0;
     J.cimetiere.filter(id => id !== o.id).sort((a, b) => mvDe(obj(P, a)) - mvDe(obj(P, b))).forEach(id => {
-      if (total < c.indices) { total += mvDe(obj(P, id)); deplace(P, id, 'exil'); }
+      if (total < c.indices) { total += mvDe(obj(P, id)); (o.collectees = o.collectees || []).push(deplace(P, id, 'exil')); }
     });
   }
   if (c.exilVersCim) {

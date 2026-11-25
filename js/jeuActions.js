@@ -32,8 +32,9 @@ function* paieAutre(P, j, o, c) {
   }
   if (c.defausse) {
     const ids = P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j)));
-    (yield* choisitCartes(P, j, ids, c.defausse.n, c.defausse.exil ? 'Exiler de la main' : 'Défausser', 'defausse'))
-      .forEach(id => { if (c.defausse.exil) deplace(P, id, 'exil'); else defausseCarte(P, id, j); });
+    const pris = yield* choisitCartes(P, j, ids, c.defausse.n, c.defausse.exil ? 'Exiler de la main' : 'Défausser', 'defausse');
+    /* « If the discarded card was a creature card » : ce que le coût a défaussé se lit à la résolution (`Discarded`, js/forgeFiltresE.js). */
+    P.coutPaye = {...(P.coutPaye || {}), defausses: pris.map(id => { if (c.defausse.exil) return deplace(P, id, 'exil'); return defausseCarte(P, id, j); })};
   }
   const J = P.joueurs[j];
   if (c.defausseTout) J.main.slice().forEach(id => defausseCarte(P, id, j));
@@ -43,7 +44,8 @@ function* paieAutre(P, j, o, c) {
   }
   if (c.renvoie) {
     const ids = champDe(P, j).filter(x => correspond(P, x, c.renvoie.desc, o, j)).map(x => x.id);
-    (yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main')).forEach(id => deplace(P, id, 'main'));
+    const rendues = yield* choisitCartes(P, j, ids, c.renvoie.n, 'Renvoyer en main');
+    P.coutPaye = {...(P.coutPaye || {}), renvoyes: rendues.map(id => deplace(P, id, 'main'))};
   }
   if (c.energie) J.energie -= c.energie;
   if (c.pioche) yield* pioche(P, j, c.pioche);
@@ -151,7 +153,7 @@ function* lanceSort(P, j, a) {
   const annonce = /^altX(\d+)$/.exec(a.variante || '');
   if (annonce) x = +annonce[1];
   s.x = x;
-  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort};
+  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort, collectees: s.collectees || null, sneaked: a.variante === 'sneak'};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
     kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension',
     variante: a.variante || null};
@@ -206,7 +208,7 @@ function* activeCapacite(P, j, a) {
     retires = cout.retire ? cout.retire.n : 0;
     /* Les sources dont le mana a payé la capacité (« when you spend this mana to activate an ability », Sunken Palace). */
     if (!coutAutrePossible(P, j, o, cout) || !planPaiement(P, j, cout.mana, x, {capacite: o})) return false;
-    P.engagesCout = null;
+    P.engagesCout = null; P.coutPaye = null;
     pourC = {capacite: o, sources: []};
     /* « Sacrifice all lands » : le mana d'abord, avec ces terrains-là — après, il n'y en a plus (Tomb of Urami). */
     yield* choisitManaPaye(P, j, k.cout.mana, x);
@@ -223,7 +225,7 @@ function* activeCapacite(P, j, a) {
        l'instantané de la carte, partie au cimetière. */
     if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }
   }
-  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null, manaDeSources: pourC ? pourC.sources : null});
+  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null, coutPaye: P.coutPaye || null, manaDeSources: pourC ? pourC.sources : null});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
   emet(P, {t: 'active', id: o.id, joueur: j, loyaute: k.genre === 'loyaute', lki});
   emetCibles(P, j, o, effets);

@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F101) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F103) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6868** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 315 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 153 |
+| complètes | 6063 | 6611 | 6552 | **6874** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 310 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 152 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, 316 cartes de plus complètes.
+exactement : même banc, mêmes cartes, 322 cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -38,7 +38,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:AbilityTriggered.ValidSource` | 3 | Firebender Ascension, Aboleth Spawn, Historian's Boon |
 | `param:Animate.sVars` | 3 | Summon: Primal Odin, Whip of Erebos, Vorpal Sword |
 | `param:PutCounter.RememberCards` | 2 | Promise of Loyalty, Season of Gathering |
-| `filtre:TriggeredCards` | 1 | Hedge Shredder |
 | `kw:Mutate` | 18 | Nethroi, Apex of Death, Gemrazer, Brokkos, Apex of Forever |
 | `defini:ReplacedNewCard.Creature` | 1 | Spark Double |
 | `defini:ReplacedNewCard.Planeswalker` | 1 | Spark Double |
@@ -65,9 +64,8 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:PutCounter.RememberPut` | 4 | Call the Spirit Dragons, Craig Boone, Novac Guard, Fangs of Kalonia |
 | `param:Continuous.TopCardOfLibraryIs` | 2 | Conspicuous Snoop, Vampire Nocturnus |
 | `filtre:IsSolved` | 3 | Case of the Locked Hothouse, Case of the Ransacked Lab, Case of the Uneaten Feast |
-| `defini:TriggeredCards` | 1 | Kambal, Profiteering Mayor |
 | `param:Play.ForgetRemembered` | 1 | Descendants' Path |
-| `filtre:targetedBy` | 2 | Kheru Goldkeeper, Guide of Souls |
+| `filtre:sharesCreatureTypeWith Valid Creature.YouCtrl` | 1 | Descendants' Path |
 | `kw:Read ahead` | 4 | The Cruelty of Gix, The Weatherseed Treaty, The Elder Dragon War |
 | `param:Moved.Layer` | 3 | Grafdigger's Cage, Corrupted Shapeshifter, Xantcha, Sleeper Agent |
 | `kw:MayFlashSac` | 1 | Necromancy |
@@ -102,6 +100,8 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:ChoosePlayer.RememberChosen` | 3 | Gluntch, the Bestower, Sower of Discord, Dack Fayden, Helping Hand |
 | `param:BecomesTargetOnce.ValidTarget` | 2 | Professor Hojo, Leyline of Combustion |
 | `param:BecomesTargetOnce.ValidSource` | 2 | Professor Hojo, Leyline of Combustion |
+| `param:ChangeZone.MaxTotalTargetPower` | 2 | Reunion of the House, Nethroi, Apex of Death |
+| `expr:PlayerCountDefinedTriggeredAttackedTarget$HasPropertylifeGTX` | 1 | Breena, the Demagogue |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -111,7 +111,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | | Carte | Ce qui manque |
 |---|---|---|
 | P | Forgotten Ancient | `param:MoveCounter.ValidDefined` |
-| P | Hedge Shredder | `filtre:TriggeredCards` |
 | P | Spark Double | `defini:ReplacedNewCard.Creature`, `defini:ReplacedNewCard.Planeswalker` |
 | I | Agadeem's Awakening | `param:ChangeZone.TargetsWithDifferentCMC` |
 | I | Morophon, the Boundless | `param:ReduceCost.IgnoreGeneric` |
@@ -121,8 +120,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Echoes of Eternity | `param:Panharmonicon.ValidZone` |
 | P | Moraug, Fury of Akoum | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute`, `expr:Count$CardNumAttacksThisTurn` |
 | P | Earthbender Ascension | `param:PutCounter.RememberAmount` |
-| P | Kambal, Profiteering Mayor | `defini:TriggeredCards` |
-| P | Descendants' Path | `param:Play.ForgetRemembered` |
+| P | Descendants' Path | `param:Play.ForgetRemembered`, `filtre:sharesCreatureTypeWith Valid Creature.YouCtrl` |
 | P | Bumi, Unleashed | `param:AddPhase.ExtraPhaseDelayedTrigger`, `param:AddPhase.ExtraPhaseDelayedTriggerExecute` |
 | P | Necromancy | `kw:MayFlashSac` |
 | P | Broodcaller Scourge | `param:ChangeZone.ChoiceZone`, `param:ChangeZone.Amount` |
@@ -140,7 +138,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Champions of the Perfect | `cout:BeholdExile` |
 | I | Teferi's Puzzle Box | `param:ChangeZoneAll.DefinedPlayer` |
 | I | Darksteel Monolith | `param:Continuous.MayPlayDontGrantZonePermissions` |
-| P | Kheru Goldkeeper | `filtre:targetedBy` |
 | I | Archangel of Tithes | `stat:CantBlockUnless`, `param:CantBlockUnless.ValidCard` |
 | P | Conspicuous Snoop | `param:Continuous.TopCardOfLibraryIs` |
 | I | As Foretold | `param:Continuous.MayPlayDontGrantZonePermissions` |
@@ -205,7 +202,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Twinning Staff | `repl:CopySpell`, `param:CopySpell.ActiveZones`, `param:CopySpell.ValidPlayer`, `param:CopySpell.ValidSpell` … |
 | P | Zuko, Firebending Master | `param:SpellCast.Phase`, `construction:Firebending` |
 | P | Tyvar the Bellicose | `construction:Continuous` |
-| I | Notorious Throng | `expr:Count$BloodthirstAmount`, `kw:Prowl` |
+| I | Notorious Throng | `expr:Count$BloodthirstAmount`, `filtre:prowled`, `kw:Prowl` |
 | P | Vault 12: The Necropolis | `expr:PlayerCountPlayers$Counters` |
 | P | Sigurd, Jarl of Ravensthorpe | `param:AddOrRemoveCounter.Boast` |
 | P | Danny Pink | `construction:Continuous` |
@@ -241,7 +238,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Misleading Signpost | `api:ChangeCombatants`, `param:ChangeCombatants.Attacking` |
 | P | Tectonic Giant | `param:Attacks.ValidSource` |
 | I | Eventide's Shadow | `construction:RemoveCounter` |
-| P | Wall of Stolen Identity | `param:Clone.RememberCloneOrigin` |
 | I | Fade from History | `defini:Player.controlsEnchantment,controlsArtifact` |
 | P | Goblin Welder | `expr:SVar$CheckRemem` |
 | P | Sephiroth, Fabled SOLDIER | `repl:Transform`, `param:Transform.ValidCard`, `param:Transform.ReplaceWith` |
@@ -270,3 +266,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Wall of Glare | `param:Continuous.CanBlockAny` |
 | P | The Weatherseed Treaty | `kw:Read ahead` |
 | P | Blast-Furnace Hellkite | `kw:Offering` |
+| I | Season of the Burrow | `param:Token.Pawprint`, `param:ChangeZone.Pawprint`, `defini:ParentTargetedController`, `param:Charm.Pawprint` |
+| P | Jhoira of the Ghitu | `defini:ExiledCards`, `defini:ExiledCards.withoutSuspend` |
+| I | Gonti, Night Minister | `param:Dig.ForceReveal`, `param:Dig.DefinedExiler` |
+| I | Alexios, Deimos of Kosmos | `param:PutCounter.Placer` |

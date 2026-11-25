@@ -211,6 +211,8 @@ function piocheN(P, j, n) {
     const id = J.bibliotheque.pop();
     const o = obj(P, id);
     o.zone = 'main';
+    /* « Drawn this turn » (Sylvan Library) : la carte se souvient du tour de sa pioche. */
+    o.piocheTour = P.tour;
     J.main.push(id);
     const st = P.cartes[o.cid].st;
     if (!st.piochee) st.piochee = Math.max(1, J.tours);

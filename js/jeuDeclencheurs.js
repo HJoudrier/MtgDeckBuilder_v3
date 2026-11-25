@@ -86,6 +86,8 @@ function collecteDeclencheurs(P) {
   const evts = P.evts, partis = P.partis;
   P.evts = []; P.partis = [];
   P._lot = new Set();
+  /* Tout le lot : « the cards that entered », « the sources that dealt damage » se lisent dans l'ensemble (js/forgeFiltresE.js). */
+  P._evtsLot = evts;
   const sources = [];
   for (const id of P.champ) { const o = obj(P, id); if (ecoute(o.def) || capacitesDe(P, o) !== o.def.capacites) sources.push(o); }
   for (const l of partis) if (ecoute(l.def) || l.caps) sources.push(l);

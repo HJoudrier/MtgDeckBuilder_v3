@@ -142,6 +142,7 @@ function forgeDeclenche(P, ec, e, s) {
   const env = {face: ec.face, ctx: {evt: e, cibles: [], memo: [], memoJ: []}, src: s, ctrl: s.ctrl, op: {}};
   if (!juge(P, t, e, s, env) || !conditionForge(P, t, env)) return false;
   if (limite) P.declTour.m.set(cle, (P.declTour.m.get(cle) || 0) + 1);
+  if (MODES_PAR_LOT.has(t.Mode)) noteLotDeclencheur(P, t, e, s, env, juge);
   if (P._lot) P._lot.add(cle);
   return true;
 }

@@ -127,6 +127,8 @@ function* paieEquipage(P, j, o, n) {
     if (total < n) { pris.push(x); total += Math.max(0, car(P, x).force); }
   });
   pris.forEach(x => engageObjet(P, x));
+  /* Ceux qui ont payé l'équipage ou l'enfourchement (`SaddledThisTurn`, js/forgeFiltresE.js). */
+  P.engagesCout = pris.map(x => x.id);
   P.ver++;
   emet(P, {t: 'equipe', id: o.id, joueur: j});
 }
