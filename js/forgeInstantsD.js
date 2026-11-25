@@ -34,8 +34,11 @@ forgeSait('kwval', ...[1, 2, 3, 4].map(n => 'afterlife:' + n));
 /* Les marqueurs de temps d'une carte exilée sont le décompte de sa suspension (`o.temps`, js/jeuVariantes.js). */
 FORGE_API.PutCounter.gen = (g => function* (P, t, env) {
   if (String(t.CounterType).toUpperCase() !== 'TIME') return yield* g(P, t, env);
-  for (const o of objetsForge(P, t, env, 'Defined').filter(x => x && x.j == null && x.zone === 'exil')) o.temps = (o.temps || 0) + forgeNombre(P, t.CounterNum || 1, env);
+  const cibles = (env.op.slot != null ? ciblesForge(P, env, false) : forgeDefinis(P, t.Defined || 'Self', env)).filter(x => x && x.j == null);
+  for (const o of cibles.filter(x => x.zone === 'exil')) o.temps = (o.temps || 0) + forgeNombre(P, t.CounterNum || 1, env);
   P.ver++;
+  /* Des marqueurs « time » sur le champ sont des marqueurs ordinaires (The Millennium Calendar). */
+  if (cibles.some(x => x.zone === 'champ')) yield* g(P, t, env);
 })(FORGE_API.PutCounter.gen);
 forgeSait('param', 'PutCounter.CounterType');
 FORGE_API.Pump.gen = (g => function* (P, t, env) {

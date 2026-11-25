@@ -238,6 +238,8 @@ function paieMana(P, j, cout, x, pour) {
   if (!paye) return false;
   J.stats.manaDepense += avant - LETTRES_MANA.reduce((s, k) => s + J.pool[k], 0);
   /* Le mana dépensé pour un sort, couleur par couleur (convergence). */
+  /* Le mana dépensé pour une capacité, couleur par couleur (« note the type of mana spent », js/forgeArtefactsE.js). */
+  if (pour && !pour.sort) pour.depense = Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]]));
   if (pour && pour.sort) { pour.sort.manaSort = manaSortSansFiltres(Object.fromEntries(LETTRES_MANA.map(k => [k, reserve[k] - J.pool[k]])), sup); pour.sort.manaDe = de; }
   return true;
 }

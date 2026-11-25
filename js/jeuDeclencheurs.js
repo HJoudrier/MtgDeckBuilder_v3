@@ -95,7 +95,7 @@ function collecteDeclencheurs(P) {
   for (const e of evts) {
     collecteRetardes(P, e);
     for (const s of sources) {
-      if (s.lki && e.t !== 'meurt' && e.t !== 'sacrifie' && e.t !== 'zone' && e.t !== 'cycle') continue;
+      if (s.lki && e.t !== 'meurt' && e.t !== 'sacrifie' && e.t !== 'zone' && e.t !== 'cycle' && e.t !== 'detache') continue;
       if (P.joueurs[s.ctrl].elimine) continue;
       if (e.t === 'lance' && !s.lki && (s.def.mots & MOT.PROUESSE) && s.ctrl === e.joueur && !e.def.types.includes('creature'))
         P.enAttente.push({src: s.id, ctrl: s.ctrl, cap: CAP_PROUESSE, evt: e});

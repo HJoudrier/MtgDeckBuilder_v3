@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1943 fonctions**, 332 modules, 2321 Ko de JavaScript.
+**1953 fonctions**, 340 modules, 2382 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -52,9 +52,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 79 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 171 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
-| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 283 |
+| [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 285 |
 | [`jeuManaChoix.js`](#jsjeumanachoixjs) | Choisir quel mana de la réserve paie le générique | 2 | 48 |
-| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 226 |
+| [`jeuOpsA.js`](#jsjeuopsajs) | Exécuter les opérations : références, dégâts, vie, | 10 | 228 |
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 189 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 150 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
@@ -110,7 +110,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPioche.js`](#jsjeupiochejs) | La pioche remplacée, Dredge, Miracle | 7 | 126 |
 | [`forgeDeclencheurs.js`](#jsforgedeclencheursjs) | Quand une capacité déclenchée de Forge se | 10 | 149 |
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 127 |
-| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 231 |
+| [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 232 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 297 |
 | [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
@@ -190,7 +190,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeInstants.js`](#jsforgeinstantsjs) | Les instants : conditions, cibles, quantités | 2 | 100 |
 | [`forgeInstantsB.js`](#jsforgeinstantsbjs) | Les instants : mémoires, tours en plus, combats | 5 | 229 |
 | [`forgeInstantsC.js`](#jsforgeinstantscjs) | Les instants : la pile, les coûts facultatifs | 0 | 131 |
-| [`forgeInstantsD.js`](#jsforgeinstantsdjs) | Les instants : mots accordés, vie, déclarations | 3 | 124 |
+| [`forgeInstantsD.js`](#jsforgeinstantsdjs) | Les instants : mots accordés, vie, déclarations | 3 | 127 |
 | [`forgeInstantsE.js`](#jsforgeinstantsejs) | Les instants : filtres, marqueurs, piles, coûts | 0 | 233 |
 | [`forgeInstantsF.js`](#jsforgeinstantsfjs) | Les instants : la pile, la réserve, les dés | 1 | 127 |
 | [`forgeInstantsG.js`](#jsforgeinstantsgjs) | Les instants : un nombre de cibles annoncé | 3 | 69 |
@@ -198,13 +198,21 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeClones.js`](#jsforgeclonesjs) | Un clone qui garde les marqueurs de son modèle | 0 | 34 |
 | [`forgeFiltresE.js`](#jsforgefiltresejs) | Des filtres et des désignations qui n'étaient lus de personne | 6 | 242 |
 | [`forgeRituels.js`](#jsforgerituelsjs) | Les rituels d'EDHREC | 0 | 187 |
-| [`forgeRituelsB.js`](#jsforgerituelsbjs) | Les rituels d'EDHREC : boucles, votes, saisons | 1 | 189 |
+| [`forgeRituelsB.js`](#jsforgerituelsbjs) | Les rituels d'EDHREC : boucles, votes, saisons | 2 | 190 |
 | [`forgeArtefacts.js`](#jsforgeartefactsjs) | Les artefacts d'EDHREC | 0 | 79 |
 | [`forgeArtefactsB.js`](#jsforgeartefactsbjs) | Les artefacts d'EDHREC : coûts, joueurs, mots-clés | 1 | 138 |
-| [`forgeRituelsC.js`](#jsforgerituelscjs) | Les rituels d'EDHREC : les derniers, premier lot | 0 | 61 |
+| [`forgeRituelsC.js`](#jsforgerituelscjs) | Les rituels d'EDHREC : les derniers, premier lot | 1 | 64 |
 | [`forgeRituelsD.js`](#jsforgerituelsdjs) | Les rituels d'EDHREC : votes, groupes, choix secrets | 0 | 178 |
 | [`forgeRituelsE.js`](#jsforgerituelsejs) | Les rituels d'EDHREC : les mots-clés qui changent le coût | 4 | 156 |
 | [`forgeRituelsF.js`](#jsforgerituelsfjs) | Les rituels d'EDHREC : les derniers choix | 2 | 161 |
+| [`forgeArtefactsC.js`](#jsforgeartefactscjs) | Les artefacts d'EDHREC : de petites pièces | 0 | 102 |
+| [`forgeArtefactsD.js`](#jsforgeartefactsdjs) | Les artefacts d'EDHREC : l'équipage | 1 | 80 |
+| [`forgeArtefactsE.js`](#jsforgeartefactsejs) | Les artefacts d'EDHREC : le mana et les sorts lancés | 2 | 198 |
+| [`forgeArtefactsF.js`](#jsforgeartefactsfjs) | Les artefacts d'EDHREC : des cartes qui changent de règle | 2 | 119 |
+| [`forgeArtefactsG.js`](#jsforgeartefactsgjs) | Les artefacts d'EDHREC : l'équipement | 0 | 82 |
+| [`forgeArtefactsH.js`](#jsforgeartefactshjs) | Les artefacts d'EDHREC : dés, jetons, début de tour | 0 | 97 |
+| [`forgeArtefactsI.js`](#jsforgeartefactsijs) | Les artefacts d'EDHREC : le combat | 0 | 96 |
+| [`forgeArtefactsJ.js`](#jsforgeartefactsjjs) | Les artefacts d'EDHREC : les remplacements | 3 | 175 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
@@ -1115,7 +1123,7 @@ Juger un objet contre un descripteur. *12 fonctions, 164 lignes, 7.9 Ko.*
 
 ## js/jeuMana.js
 
-La réserve de mana, et le paiement automatique. *13 fonctions, 283 lignes, 15 Ko.*
+La réserve de mana, et le paiement automatique. *13 fonctions, 285 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1153,7 +1161,7 @@ Choisir quel mana de la réserve paie le générique. *2 fonctions, 48 lignes, 2
 
 ## js/jeuOpsA.js
 
-Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 226 lignes, 11 Ko.*
+Exécuter les opérations : références, dégâts, vie,. *10 fonctions, 228 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1470,7 +1478,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 153 lignes, 8.6 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 153 lignes, 8.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2084,7 +2092,7 @@ Les déclencheurs de Forge, suite : engager,. *6 fonctions, 127 lignes, 8.1 Ko.*
 
 ## js/forgeStatiques.js
 
-Les capacités statiques de Forge. *10 fonctions, 231 lignes, 14 Ko.*
+Les capacités statiques de Forge. *10 fonctions, 232 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2996,7 +3004,7 @@ Les instants : la pile, les coûts facultatifs. *0 fonctions, 131 lignes, 6.9 Ko
 
 ## js/forgeInstantsD.js
 
-Les instants : mots accordés, vie, déclarations. *3 fonctions, 124 lignes, 7.4 Ko.*
+Les instants : mots accordés, vie, déclarations. *3 fonctions, 127 lignes, 7.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3070,10 +3078,11 @@ Les rituels d'EDHREC. *0 fonctions, 187 lignes, 12 Ko.*
 
 ## js/forgeRituelsB.js
 
-Les rituels d'EDHREC : boucles, votes, saisons. *1 fonctions, 189 lignes, 12 Ko.*
+Les rituels d'EDHREC : boucles, votes, saisons. *2 fonctions, 190 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `animeRevenus(P, t, env, touches, nouveaux)` | `StaticEffect$ Animate` (Dance of the Manse : des créatures 4/4 si X vaut 6 ou plus ; Ghouls' Night Out : des Zombies noirs). |
 | `plafondXEclair(P, j, d)` | Silver Scrutiny : « as though it had flash if X is 3 or less » — hors de la vitesse d'un rituel, X ne passe pas le plafond. |
 
 ## js/forgeArtefacts.js
@@ -3090,7 +3099,11 @@ Les artefacts d'EDHREC : coûts, joueurs, mots-clés. *1 fonctions, 138 lignes, 
 
 ## js/forgeRituelsC.js
 
-Les rituels d'EDHREC : les derniers, premier lot. *0 fonctions, 61 lignes, 3.8 Ko.*
+Les rituels d'EDHREC : les derniers, premier lot. *1 fonctions, 64 lignes, 4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `metFaceCachee(P, o, force, endurance, typesTxt)` | Une créature face cachée : 2/2 sans nom (ou ce que l'effet dit), ses types et sa force à elle (Illithid Harvester, Cybership). |
 
 ## js/forgeRituelsD.js
 
@@ -3119,6 +3132,66 @@ Les rituels d'EDHREC : les derniers choix. *2 fonctions, 161 lignes, 9.9 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `ETAPES_COMBAT_DIRIGE` | —— Diriger un adversaire, le temps d'un combat —————————————————————————— |
+
+## js/forgeArtefactsC.js
+
+Les artefacts d'EDHREC : de petites pièces. *0 fonctions, 102 lignes, 6.6 Ko.*
+
+## js/forgeArtefactsD.js
+
+Les artefacts d'EDHREC : l'équipage. *1 fonctions, 80 lignes, 4.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `valeurEquipage(P, x)` | — |
+
+## js/forgeArtefactsE.js
+
+Les artefacts d'EDHREC : le mana et les sorts lancés. *2 fonctions, 198 lignes, 13 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `rippleTenable(t)` | « Spells you cast have ripple 4 » : à chaque sort lancé, on peut révéler le dessus et lancer gratuitement les cartes de même nom ; le reste file sous la bibliothèque. |
+| `CAP_RIPPLE(n)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `statiqueSansRipple` | — |
+
+## js/forgeArtefactsF.js
+
+Les artefacts d'EDHREC : des cartes qui changent de règle. *2 fonctions, 119 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `remplAnime(op, t)` | — |
+| `CAP_PERSIST(id)` | —— Persist ————————————————————————————————————————————————— |
+
+| Donnée | Rôle |
+|---|---|
+| `REMPL_ANIME` | —— Des remplacements portés par la carte ——————————————————————————— |
+
+## js/forgeArtefactsG.js
+
+Les artefacts d'EDHREC : l'équipement. *0 fonctions, 82 lignes, 5.1 Ko.*
+
+## js/forgeArtefactsH.js
+
+Les artefacts d'EDHREC : dés, jetons, début de tour. *0 fonctions, 97 lignes, 5.9 Ko.*
+
+## js/forgeArtefactsI.js
+
+Les artefacts d'EDHREC : le combat. *0 fonctions, 96 lignes, 5.9 Ko.*
+
+## js/forgeArtefactsJ.js
+
+Les artefacts d'EDHREC : les remplacements. *3 fonctions, 175 lignes, 11 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `aForme(P, forme, j)` | — |
+| `lotDeCopies(f)` | Un lot de copies : la boucle d'un mot-clé, ou l'effet d'une carte ; s'il y en a eu, une de plus. |
+| `vivifie(P, o)` | « During your turn, this Vehicle is also an artifact creature » : à l'entrée et au début de chaque tour de son contrôleur. |
 
 ## js/iaValeur.js
 

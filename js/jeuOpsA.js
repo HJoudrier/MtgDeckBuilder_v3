@@ -109,7 +109,9 @@ function infligeUnePart(P, src, cible, n, combat) {
     if (combat && src.cmd) J.degatsCmd[src.cid] = (J.degatsCmd[src.cid] || 0) + n;
     if (P.joueurs[ctrl]) P.joueurs[ctrl].stats.degats += n;
     emet(P, {t: 'degatsJoueur', source: src.id, joueur: cible.j, n, combat, ctrl});
-    if (combat && src.def && src.def.params && src.def.params.toxique) P.joueurs[cible.j].poison += src.def.params.toxique;
+    /* Le toxique imprimé, et celui qu'une altération du tour accorde (Skrelv, js/forgeArtefactsG.js). */
+    const tox = ((src.def && src.def.params && src.def.params.toxique) || 0) + (src.mods || []).reduce((t, m) => t + (m.toxique || 0), 0);
+    if (combat && tox) P.joueurs[cible.j].poison += tox;
   } else {
     const o = cible;
     if (!o || o.zone !== 'champ') return 0;

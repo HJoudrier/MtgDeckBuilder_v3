@@ -31,16 +31,19 @@ motCleForge = (g => function (def, k, face, jetons) {
 
 forgeSait('param', 'SetState.FaceDownPower', 'SetState.FaceDownToughness', 'SetState.FaceDownSetType');
 FORGE_API.SetState.prepare = (p => function (t, op) { return t.Mode === 'TurnFaceDown' || !p || p.call(this, t, op); })(FORGE_API.SetState.prepare);
+/* Une créature face cachée : 2/2 sans nom (ou ce que l'effet dit), ses types et sa force à elle (Illithid Harvester, Cybership). */
+function metFaceCachee(P, o, force, endurance, typesTxt) {
+  const vraie = o.def, ty = typesForge(typesTxt || '');
+  o.vraieDef = vraie; o.faceCachee = true;
+  o.def = {...defFaceCachee(vraie), force, endurance, types: ty.types.length ? ty.types : ['creature'], sousTypes: ty.sousTypes};
+  P.ver++;
+}
 FORGE_API.SetState.gen = (g => function* (P, t, env) {
   if (t.Mode !== 'TurnFaceDown') return yield* g(P, t, env);
-  const ty = typesForge(t.FaceDownSetType || '');
   for (const o of objetsForge(P, t, env).filter(x => x.zone === 'champ' && !x.lki && !x.faceCachee)) {
-    const vraie = o.def;
-    o.vraieDef = vraie; o.faceCachee = true;
-    o.def = {...defFaceCachee(vraie), force: forgeNombre(P, t.FaceDownPower || 2, env), endurance: forgeNombre(P, t.FaceDownToughness || 2, env),
-      sousTypes: ty.sousTypes};
-    P.ver++;
-    jn(P, `${vraie.nom} est retourné face cachée`);
+    const nom = o.def.nom;
+    metFaceCachee(P, o, forgeNombre(P, t.FaceDownPower || 2, env), forgeNombre(P, t.FaceDownToughness || 2, env), t.FaceDownSetType);
+    jn(P, `${nom} est retourné face cachée`);
   }
 })(FORGE_API.SetState.gen);
 

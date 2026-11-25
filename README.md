@@ -183,6 +183,14 @@ js/                 modules, chargés dans cet ordre :
   forgeRituelsD.js       votes (EachVote, VotePlayer), nombre secret, ami ou ennemi (AssignGroup), joueurs notés, moitié de la vie
   forgeRituelsE.js       Escalate et Replicate en engageant, Forecast, Demonstrate, Prowl, Decayed, RememberPut
   forgeRituelsF.js       diriger un combat, type de créature choisi au coût, DigMultiple différé, ChooseEach, ChangeText
+  forgeArtefactsC.js     artefacts d'EDHREC : marqueur au hasard, dévotion, dégagement compté, perte de partie remplacée, Animate | Name
+  forgeArtefactsD.js     l'équipage : valeur d'un équipier, BecomesCrewed, TriggeredCrew, CrewSize
+  forgeArtefactsE.js     le mana qui change le sort : Jade Orb, ManaFromCard, mana noté ou doublé, ManaRestriction, Ripple, mana persistant
+  forgeArtefactsF.js     Animate | Replacements, embaumement et persistance donnés, Dig face cachée, une carte du cimetière du joueur visé
+  forgeArtefactsG.js     l'équipement : blockingValid, Unattach, Unattached, ChangesController, toxique et hexproof from
+  forgeArtefactsH.js     dés par résultat, type commun avec chaque engagée, début de tour, Clone | CloneTarget, déclencheur donné à une carte exilée
+  forgeArtefactsI.js     le combat : AttackerUnblockedOnce, ChangeCombatants, VillainousChoice, GainControl | Choices
+  forgeArtefactsJ.js     les remplacements : Moved | Prevent, défausse remplacée, CopySpell, copie de jeton, Damping Sphere, Mechtitan Core, Ratchet
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2472,6 +2480,21 @@ simplification assumée (en dernier). Ce qu'il a fallu écrire :
 
 Les simplifications : **New Blood** remplace le mot du type choisi partout dans la définition recopiée de la créature (types, filtres des capacités), pas dans l'oracle qu'on lit à l'écran. **Step Right Up** et **Path of the Pyromancer** jouent leur part sans attractions ni plans :
 c'est la règle quand on n'a pas de pioche d'attractions ou de deck de plans, et le moteur n'en tient aucun. **Skyscribing** : le sort lui-même et sa prévision de la main sont joués ; la révélation de la carte que la prévision demande est sans objet (la main n'est cachée à personne dans l'atelier).
+
+**Lot F108 : les derniers artefacts d'EDHREC** (`js/forgeArtefactsC.js` à `js/forgeArtefactsJ.js`, et des retouches de `js/forgeInstantsD.js`, `js/forgeStatiques.js`, `js/forgeRituelsB.js`, `js/forgeRituelsC.js`, `js/jeuMana.js`, `js/jeuActions.js`, `js/jeuPile.js`, `js/jeuOpsA.js`, `js/jeuCoutsX.js`, `js/jeuDeclencheurs.js`). Les 49 artefacts qui restaient sont tous lus entièrement. Un mécanisme chacun, par fichier :
+- **Petites pièces** (`C`). `PutCounter | RandomType | UniqueType` (Crystalline Giant), le coût d'une SVar (Draco : `coutUnless()` lit tout nom), `Mode$ Devotion` (Altar of the Pantheon), `UntapAll` (The Millennium Calendar : les marqueurs « time » sur le champ sont des marqueurs ordinaires, `forgeInstantsD.js` ne les prenait que sur une carte exilée), `GameLoss | ReplaceWith` (The Golden Throne : exiler la source, vie à 1),
+  `Animate | Name` (The Irencrag devient Everflame, équipement légendaire à 3).
+- **L'équipage** (`D`). `TapPowerValue` (Interface Ace équipe par sa solidité, Hotshot Mechanic avec deux de plus), `BecomesCrewed` (la première fois du tour, le nombre exact d'équipiers : Mighty Servant of Leuk-o), `TriggeredCrew` et l'évènement lisible quand on choisit les cibles d'une capacité déclenchée (`P.evtCible` : Mindlink Mech), `Count$CrewSize` et `Crew:N:ActivationLimit$ 1`.
+- **Le mana** (`E`). Le mana d'une source qui change le sort (Jade Orb of Dragonkind : un marqueur et le mauvais œil jusqu'au prochain tour ; Coin of Mastery : un marqueur par mana d'artefact, d'après `lance.manaDe`), `Spell.ManaFromCard.StrictlySelf` (Thousand Moons Smithy, Brass's Tunnel-Grinder), `ManaRestriction` (Myr Superion : seules les sources voulues paient ; le mana déjà flottant n'est pas jugé),
+  les capacités de mana « spéciales » qui passent par la pile — noter la couleur dépensée (Jeweled Amulet), doubler la réserve (Doubling Cube) —, `Ripple` (Thrumming Stone), « you descended », deux couleurs choisies (Tablet of the Guilds), `HasXManaCost` (Brass Infiniscope), le mana qui dure tout le tour (`PersistentMana`, Birgi).
+- **Des cartes qui changent de règle** (`F`). `Animate | Replacements` (Realmbreaker : un terrain volé s'exile s'il part ; The Book of Exalted Deeds : « you can't lose the game »), l'embaumement donné à une carte du cimetière (Cursecloth Wrappings), `Persist` accordé pour le tour (Cauldron of Souls), `Dig | FaceDown | GainControl` (Cybership), les créatures de Grimoire of the Dead qui reviennent Zombies noirs.
+- **L'équipement** (`G`). `blockingValid` (Sting), `Unattach` en coût (Sunforger), `Unattached` et `TriggeredObjectLKICopy` (Grafted Exoskeleton : la créature est sacrifiée quand l'équipement se rattache ailleurs ou quitte le champ), `ChangesController` (Gustha's Scepter), toxique et « hexproof from » une couleur choisie (Skrelv).
+- **Dés, jetons, début de tour** (`H`). `RollDice | SubsForEach | NoteDoubles` (Celebr-8000), `sharesCreatureTypeWithAll Tapped` (Cryptic Gateway), `TurnBegin` (Planetarium of Wan Shi Tong), `Clone | CloneTarget` (Brudiclad), une carte exilée qui reçoit un déclencheur et des marqueurs (Cosima : `o.animeExil`, lu par `capacitesDe()` et `sourcesHorsChamp()`).
+- **Le combat** (`I`). `AttackerUnblockedOnce` (Coveted Jewel), `ChangeCombatants` (Misleading Signpost : l'attaquant change de cible ; Midnight Crusader Shuttle : une créature volée entre au combat), `VillainousChoice`, `GainControl | Choices`.
+- **Les remplacements** (`J`). `Moved | Prevent` (Grafdigger's Cage), la défausse remplacée par la bibliothèque (Library of Leng), `CopySpell` (Twinning Staff : une copie de plus par lot de copies — tempête, réplication, copie d'un sort), `CreateToken | Layer$ Copy` (Mirrormind Crown), `ProduceMana` et `RaiseCost | Relative` (Damping Sphere), les cartes exilées en payant rendues quand le jeton part (Mechtitan Core), `More Than Meets the Eye` et `Living metal` (Ratchet).
+
+Les écarts : **Library of Leng** propose de remettre la carte au dessus après la défausse (les déclencheurs de la défausse ont donc déjà eu lieu). **Myr Superion** ne juge pas le mana qui flotte déjà dans la réserve. **Damping Sphere** ne change que le mana produit par le paiement automatique, pas celui qu'un joueur tire d'un terrain à la main. **Twinning Staff** compte un lot par mot-clé ou par effet de copie, jamais par copie isolée.
+**Market Gnome** : son second déclencheur (exilé pendant un « craft ») ne sert à rien, le moteur n'a pas de carte jouable qui lance un craft. **Birgi** : la statique des « boast » ne change rien, le moteur n'a pas de capacité de ce genre ; son mana persistant, lui, joue.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

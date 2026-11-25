@@ -161,7 +161,7 @@ function* lanceSort(P, j, a) {
   if (annonce) x = +annonce[1];
   s.x = x;
   (J.lancesNom = J.lancesNom || {})[d.nom] = (J.lancesNom[d.nom] || 0) + 1;
-  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort, collectees: s.collectees || null, coutPaye: P.coutPaye || null, sneaked: a.variante === 'sneak'};
+  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort, manaDe: s.manaDe || null, collectees: s.collectees || null, coutPaye: P.coutPaye || null, sneaked: a.variante === 'sneak'};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
     kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension',
     variante: a.variante || null};
@@ -233,7 +233,7 @@ function* activeCapacite(P, j, a) {
        l'instantané de la carte, partie au cimetière. */
     if (k.cycle) { if (lki) P.partis.push(lki); emet(P, {t: 'cycle', joueur: j, lki}); }
   }
-  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null, coutPaye: P.coutPaye || null, manaDeSources: pourC ? pourC.sources : null});
+  P.pile.push({id: P.prochainId++, capacite: true, source: o.id, lki, ctrl: j, effets, x, nom: o.def.nom, texte: k.texte || '', retires, engages: P.engagesCout || null, coutPaye: P.coutPaye || null, manaDeSources: pourC ? pourC.sources : null, manaDepense: pourC ? pourC.depense || null : null});
   jn(P, `${P.joueurs[j].nom} active ${o.def.nom}`);
   emet(P, {t: 'active', id: o.id, joueur: j, loyaute: k.genre === 'loyaute', lki});
   emetCibles(P, j, o, effets);

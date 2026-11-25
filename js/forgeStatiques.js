@@ -73,7 +73,7 @@ function statiqueTenable(t) {
   const cimetiere = t.EffectZone === 'Graveyard' && t.Mode === 'Continuous' && t.Affected && t.Affected !== 'Card.Self';
   /* Une caractéristique qui se définit dans toutes les zones : seul le champ compte ici. */
   if (t.EffectZone === 'All' && t.CharacteristicDefining === 'True' && t.Mode === 'Continuous') return true;
-  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(t.EffectZone === 'Battlefield,Command' && /^(ReduceCost|RaiseCost)$/.test(t.Mode)) && !cimetiere && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
+  if (t.EffectZone && t.EffectZone !== 'Battlefield' && !(t.EffectZone === 'Battlefield,Command' && /^(ReduceCost|RaiseCost)$/.test(t.Mode)) && !cimetiere && !(t.Mode === 'ManaRestriction' && t.EffectZone === 'All') && !(/^(ReduceCost|CastWithFlash|CantBeCast)$/.test(t.Mode) && /^(All|Hand)$/.test(t.EffectZone) && t.ValidCard === 'Card.Self')) return false;
   if ((t.SetColor || t.AddColor) && !couleursMots(t.SetColor || t.AddColor).length && !/^(Colorless|All|ChosenColor)$/.test(t.SetColor || t.AddColor)) return false;
   return true;
 }
@@ -180,7 +180,8 @@ function coutsForge(P, j, o) {
     if (s.s !== 'forge' || (s.t.Mode !== 'ReduceCost' && s.t.Mode !== 'RaiseCost')) continue;
     const t = s.t;
     /* Une réduction de mana de couleur se juge à part (js/forgeInstantsC.js `coutSort()`). */
-    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget || t.Cost || t.Color || (t.ValidSpell && !/^Spell/.test(t.ValidSpell))) continue;
+    /* `Relative$ True` (Damping Sphere) : un coût qui dépend des sorts déjà lancés par celui qui lance (js/forgeArtefactsJ.js). */
+    if ((t.Type && t.Type !== 'Spell') || t.ValidTarget || t.Cost || t.Color || t.Relative === 'True' || (t.ValidSpell && !/^Spell/.test(t.ValidSpell))) continue;
     if (t.Activator === 'You' && j !== src.ctrl) continue;
     if (t.Activator === 'Opponent' && j === src.ctrl) continue;
     if (t.ValidCard && !forgeValideDef(o.def, t.ValidCard, src.ctrl, j, o.id, P, src)) continue;

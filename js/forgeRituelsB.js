@@ -60,7 +60,7 @@ forgeSait('expr', 'PlayerCountRemembered$CardsDrawn');
 /* —— Une animation donnée aux cartes revenues, un exil au lieu de quitter ————————————————— */
 
 /* `StaticEffect$ Animate` (Dance of the Manse : des créatures 4/4 si X vaut 6 ou plus ; Ghouls' Night Out : des Zombies noirs). */
-etendEffet('ChangeZone', ['StaticEffect', 'StaticEffectCheckSVar', 'StaticEffectSVarCompare', 'LeaveBattlefield'], null, function* (P, t, env, touches, nouveaux) {
+function* animeRevenus(P, t, env, touches, nouveaux) {
   if (t.LeaveBattlefield === 'Exile') nouveaux.forEach(o => { o.exilSiQuitte = true; });
   if (!t.StaticEffect || !env.face.svars[t.StaticEffect]) return;
   if (t.StaticEffectCheckSVar && !conditionForge(P, {CheckSVar: t.StaticEffectCheckSVar, SVarCompare: t.StaticEffectSVarCompare}, env)) return;
@@ -70,7 +70,8 @@ etendEffet('ChangeZone', ['StaticEffect', 'StaticEffectCheckSVar', 'StaticEffect
       endurance: st.SetToughness != null ? +st.SetToughness : null, couleurs: st.AddColor ? couleursMots(st.AddColor) : null, ecrase: false, retireSousTypes: false});
     P.ver++;
   });
-});
+}
+etendEffet('ChangeZone', ['StaticEffect', 'StaticEffectCheckSVar', 'StaticEffectSVarCompare', 'LeaveBattlefield'], null, animeRevenus);
 /* « If it would leave the battlefield, exile it instead » (From the Catacombs). */
 destinationRemplacee = (g => function (P, o, depuis, vers) {
   if (depuis === 'champ' && o.exilSiQuitte && vers !== 'exil' && vers !== 'champ') return 'exil';
