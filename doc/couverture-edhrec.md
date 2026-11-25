@@ -5,16 +5,16 @@ l'année chez EDHREC (`json.edhrec.com`), chacune lue avec son script Forge (dé
 sa couverture calculée par le moteur lui-même (`definitionForge()`). Le poids d'une carte est le nombre de decks qui la
 jouent, additionné sur ces cent pages : il classe, il ne mesure pas une part de marché.
 
-| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F106) |
+| | au départ (lot F60) | au 18 novembre | 24 novembre, avant le lot F83 | aujourd'hui (lots F83 à F107) |
 |---|---|---|---|---|
-| complètes | 6063 | 6611 | 6552 | **6940** |
-| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 282 |
-| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 114 |
+| complètes | 6063 | 6611 | 6552 | **6973** |
+| partielles (une partie du texte est jouée) | 830 | 486 | 503 | 269 |
+| injouables (le sort ou une contrepartie manque) | 484 | 280 | 281 | 94 |
 
 Le banc a été reconstruit pour la mesure du 24 novembre : la liste des cartes diffère de quelques unités de celle du 18
 (7 336 contre 7 379 — des commandants ont bougé dans le classement), et les cartes sont lues sans catalogue, depuis leur seul
 script. Les deux mesures se comparent donc à quelques cartes près ; seule la dernière colonne se compare à l'avant-dernière
-exactement : même banc, mêmes cartes, 388 cartes de plus complètes.
+exactement : même banc, mêmes cartes, 421 cartes de plus complètes.
 
 ## Ce qui manque le plus
 
@@ -22,7 +22,7 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 
 | Élément | Cartes | Exemples |
 |---|---|---|
-| `construction:Continuous` | 11 | Dracogenesis, As Foretold, Hunting Velociraptor |
+| `construction:Continuous` | 10 | Dracogenesis, As Foretold, Tyvar the Bellicose |
 | `param:MoveCounter.ValidDefined` | 1 | Forgotten Ancient |
 | `construction:Mana` | 6 | Master of Dark Rites, Jade Orb of Dragonkind, Jeweled Amulet |
 | `param:AddPhase.ExtraPhaseDelayedTrigger` | 2 | Moraug, Fury of Akoum, Bumi, Unleashed |
@@ -54,7 +54,6 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Continuous.ManaConversion` | 2 | Drana and Linvala, Grell Philosopher |
 | `trig:Mutates` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
 | `param:Mutates.ValidCard` | 16 | Nethroi, Apex of Death, Gemrazer, Sawtusk Demolisher |
-| `param:PutCounter.RememberPut` | 4 | Call the Spirit Dragons, Craig Boone, Novac Guard, Fangs of Kalonia |
 | `param:Continuous.TopCardOfLibraryIs` | 2 | Conspicuous Snoop, Vampire Nocturnus |
 | `filtre:IsSolved` | 3 | Case of the Locked Hothouse, Case of the Ransacked Lab, Case of the Uneaten Feast |
 | `param:Play.ForgetRemembered` | 1 | Descendants' Path |
@@ -102,6 +101,7 @@ Les éléments que le moteur ne sait pas lire, par poids décroissant (nombre de
 | `param:Draw.Activator` | 2 | Oft-Nabbed Goat, Xantcha, Sleeper Agent |
 | `filtre:TriggeredActivator` | 1 | The Lord of Pain |
 | `param:SpellCast.HasXManaCost` | 2 | Unbound Flourishing, Brass Infiniscope |
+| `param:Play.ManaConversion` | 1 | Summon: Esper Valigarmanda |
 
 ## Les cartes, de la plus jouée à la moins jouée
 
@@ -141,11 +141,10 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Breena, the Demagogue | `expr:PlayerCountDefinedTriggeredAttackedTarget$HasPropertylifeGTX` |
 | I | Master of Cruelties | `param:AttackerUnblocked.ValidDefender`, `kw:CARDNAME can only attack alone.` |
 | I | Battle Angels of Tyr | `expr:TriggeredTarget$Valid` |
-| P | Hunting Velociraptor | `construction:Continuous` |
 | P | All-Out Assault | `param:DelayedTrigger.AttackingPlayer` |
 | P | Kozilek, the Broken Reality | `param:Manifest.Choices`, `param:Manifest.ChoiceZone` |
 | P | Professor Hojo | `trig:BecomesTargetOnce`, `param:BecomesTargetOnce.ValidTarget`, `param:BecomesTargetOnce.ValidSource` |
-| P | Call the Spirit Dragons | `param:PutCounter.RememberPut`, `param:PutCounter.ForColor` |
+| P | Call the Spirit Dragons | `param:PutCounter.ForColor` |
 | P | Angel of Destiny | `defini:Player.attackedBySourceThisTurn` |
 | P | Narci, Fable Singer | `trig:AbilityResolves`, `param:AbilityResolves.ValidSource`, `param:AbilityResolves.ValidSpellAbility` |
 | I | Topography Tracker | `repl:Explore`, `param:Explore.ActiveZones`, `param:Explore.ValidExplorer`, `param:Explore.ReplaceWith` |
@@ -169,7 +168,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Strong, the Brutish Thespian | `stat:GainLifeRadiation`, `param:GainLifeRadiation.ValidPlayer` |
 | I | Nightkin Ambusher | `param:CantBlockBy.ValidDefender`, `filtre:Condition Counters.RAD` |
 | P | Deeproot Pilgrimage | `trig:TapAll` |
-| I | New Blood | `api:ChangeText`, `param:ChangeText.ChangeTypeWord`, `param:ChangeText.Duration` |
 | P | Thousand-Year Storm | `expr:TriggerObjectsCurrentCastSpells$Valid` |
 | P | Gollum, Obsessed Stalker | `param:Effect.Unique`, `defini:Opponent.HasCardsInCommand_Effect.namedDamaged` |
 | P | Squandered Resources | `construction:ManaReflected` |
@@ -184,12 +182,10 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Twinning Staff | `repl:CopySpell`, `param:CopySpell.ActiveZones`, `param:CopySpell.ValidPlayer`, `param:CopySpell.ValidSpell` … |
 | P | Zuko, Firebending Master | `param:SpellCast.Phase`, `construction:Firebending` |
 | P | Tyvar the Bellicose | `construction:Continuous` |
-| I | Notorious Throng | `expr:Count$BloodthirstAmount`, `filtre:prowled`, `kw:Prowl` |
 | P | Vault 12: The Necropolis | `expr:PlayerCountPlayers$Counters` |
 | P | Sigurd, Jarl of Ravensthorpe | `param:AddOrRemoveCounter.Boast` |
 | P | Danny Pink | `construction:Continuous` |
 | P | Wastescape Battlemage | `filtre:kicked 1`, `filtre:kicked 2`, `construction:Kicker` |
-| P | Summons of Saruman | `construction:Flashback` |
 | P | Food Chain | `expr:Exiled$CardManaCost` |
 | P | The Cruelty of Gix | `kw:Read ahead` |
 | P | Y'shtola Rhul | `expr:Count$FinishedEndOfTurnsThisTurn` |
@@ -223,8 +219,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Serra Paragon | `param:LandPlayed.ValidSA` |
 | P | Sliver Gravemother | `construction:Continuous` |
 | I | Grafted Exoskeleton | `trig:Unattached`, `param:Unattached.ValidAttachment`, `param:Unattached.ValidObject`, `defini:TriggeredObjectLKICopy` |
-| P | Collective Effort | `construction:Escalate` |
-| I | Wheel of Misfortune | `param:ChooseNumber.Secretly`, `param:ChooseNumber.Highest`, `param:ChooseNumber.NotLowest` |
 | I | Night Shift of the Living Dead | `trig:TurnBegin`, `kw:After you roll a die, you may pay 1 life. If you do, increase or decrease the result by 1. Do this only once each turn.` |
 | P | Songbirds' Blessing | `param:DigUntil.OptionalFoundMove`, `param:DigUntil.OptionalNoDestination` |
 | P | Ironwill Forger | `kwval:myriad` |
@@ -234,7 +228,7 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Leyline Tyrant | `param:ImmediateTrigger.XColor`, `param:ImmediateTrigger.XAnnounceTitle` |
 | P | Tawnos, the Toymaker | `param:CopySpellAbility.AddTypes` |
 | P | Squee, Dubious Monarch | `construction:AlternativeCost` |
-| I | Mog, Moogle Warrior | `param:Bookkeeping.NoteCards`, `param:Bookkeeping.NoteCardsFor`, `defini:Player.NotedForDiscard`, `param:Bookkeeping.ClearNotedCardsFor` |
+| I | Mog, Moogle Warrior | `defini:Player.NotedForDiscard` |
 | P | Light-Paws, Emperor's Voice | `filtre:CanEnchantSource`, `filtre:doesNotShareNameWith Aura.YouCtrl` |
 | P | Myr Superion | `stat:ManaRestriction`, `param:ManaRestriction.ValidSource`, `param:ManaRestriction.EffectZone` |
 | I | Corrupted Shapeshifter | `param:Moved.Layer` |
@@ -249,7 +243,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Faramir, Prince of Ithilien | `expr:PlayerCountDefinedTriggeredPlayer$HasPropertyattackedYouTheirCurrentTurn` |
 | P | Thousand Moons Smithy | `construction:SpellCast` |
 | P | Sower of Discord | `param:DamageDoneOnce.ActiveZones`, `param:ChoosePlayer.RememberChosen`, `filtre:NonChosenPlayer` |
-| P | Find // Finality | `param:PutCounter.ChoiceOptional` |
 | P | Gogo, Master of Mimicry | `param:CopySpellAbility.CantCopy` |
 | P | Mantle of the Ancients | `filtre:CanEnchantEquippedBy` |
 | P | Mechtitan Core | `defini:ExiledCards.Other` |
@@ -257,7 +250,6 @@ un seul élément est celle que le prochain lot rendra complète.
 | I | Hooded Hydra | `repl:TurnFaceUp`, `param:TurnFaceUp.ReplaceWith`, `param:TurnFaceUp.ActiveZones` |
 | I | Xantcha, Sleeper Agent | `param:Draw.Activator`, `defini:CardController`, `param:Moved.Layer` |
 | P | Palace Jailer | `param:BecomeMonarch.Static` |
-| P | Psionic Ritual | `construction:Replicate` |
 | I | Library of Leng | `construction:Moved` |
 | I | Forgotten Creation | `expr:Discarded$Amount` |
 | P | Fall of Cair Andros | `trig:ExcessDamage`, `param:ExcessDamage.ValidTarget`, `param:ExcessDamage.CombatDamage` |
@@ -269,4 +261,12 @@ un seul élément est celle que le prochain lot rendra complète.
 | P | Ballad of the Black Flag | `param:Mill.Imprint` |
 | P | Curator of Sun's Creation | `trig:Discover`, `param:Discover.ValidPlayer` |
 | I | Archon of Coronation | `param:LifeReduced.Monarch`, `param:LifeReduced.Layer` |
-| I | Craig Boone, Novac Guard | `param:PutCounter.RememberPut` |
+| P | Cemetery Prowler | `expr:Count$TypesSharedWith` |
+| P | Titans' Nest | `construction:Mana` |
+| P | The Apprentice's Folly | `filtre:doesNotShareNameWith Card.token` |
+| P | Aclazotz, Deepest Betrayal | `expr:PlayerCount$HasPropertyHasCardsInHand` |
+| P | Fallaji Wayfarer | `construction:Continuous` |
+| P | Sigarda's Vanguard | `param:ChooseCard.WithDifferentPowers` |
+| P | Ratchet, Field Medic | `param:SetState.RememberChanged`, `kw:More Than Meets the Eye`, `kw:Living metal` |
+| P | Thrumming Stone | `construction:Continuous` |
+| P | Enhanced Surveillance | `stat:SurveilNum`, `param:SurveilNum.Num`, `param:SurveilNum.ValidPlayer` |

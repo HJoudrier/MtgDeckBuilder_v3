@@ -94,7 +94,7 @@ function motCleForge(def, k, face, jetons) {
        reste du coût se paie avec le mana (js/jeuVariantes.js). */
     case 'Flashback': {
       const c = coutForge(reste[0]), autre = c && autresCout(c.cout);
-      if (!c || (autre && Object.keys(autre).some(k => !/^(sac|vie|defausse|engageAutres|contemple)$/.test(k)))) return false;
+      if (!c || (autre && Object.keys(autre).some(k => !/^(sac|vie|defausse|engageAutres|contemple|exileCimetiere)$/.test(k)))) return false;
       def.flashback = c.cout.mana;
       if (autre) def.flashbackAutre = autre;
       return true;

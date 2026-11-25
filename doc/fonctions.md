@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1937 fonctions**, 328 modules, 2287 Ko de JavaScript.
+**1943 fonctions**, 332 modules, 2321 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -59,7 +59,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 150 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 266 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 288 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 290 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 303 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -201,6 +201,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeRituelsB.js`](#jsforgerituelsbjs) | Les rituels d'EDHREC : boucles, votes, saisons | 1 | 189 |
 | [`forgeArtefacts.js`](#jsforgeartefactsjs) | Les artefacts d'EDHREC | 0 | 79 |
 | [`forgeArtefactsB.js`](#jsforgeartefactsbjs) | Les artefacts d'EDHREC : coûts, joueurs, mots-clés | 1 | 138 |
+| [`forgeRituelsC.js`](#jsforgerituelscjs) | Les rituels d'EDHREC : les derniers, premier lot | 0 | 61 |
+| [`forgeRituelsD.js`](#jsforgerituelsdjs) | Les rituels d'EDHREC : votes, groupes, choix secrets | 0 | 178 |
+| [`forgeRituelsE.js`](#jsforgerituelsejs) | Les rituels d'EDHREC : les mots-clés qui changent le coût | 4 | 156 |
+| [`forgeRituelsF.js`](#jsforgerituelsfjs) | Les rituels d'EDHREC : les derniers choix | 2 | 161 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
@@ -1236,7 +1240,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 266 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 288 lignes, 15 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 290 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3083,6 +3087,38 @@ Les artefacts d'EDHREC : coûts, joueurs, mots-clés. *1 fonctions, 138 lignes, 
 | Fonction | Rôle |
 |---|---|
 | `taxePhyrexienneAttaque(P, o, def)` | —— Attaquer en payant {W/P} —————————————————————————————————————————— |
+
+## js/forgeRituelsC.js
+
+Les rituels d'EDHREC : les derniers, premier lot. *0 fonctions, 61 lignes, 3.8 Ko.*
+
+## js/forgeRituelsD.js
+
+Les rituels d'EDHREC : votes, groupes, choix secrets. *0 fonctions, 178 lignes, 11 Ko.*
+
+## js/forgeRituelsE.js
+
+Les rituels d'EDHREC : les mots-clés qui changent le coût. *4 fonctions, 156 lignes, 9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `coutEngage(c)` | —— Escalate et Replicate en engageant des créatures ———————————————————— |
+| `coutEscaladeAutre(P, j, s, d, effets, autre)` | Autant de créatures de plus à engager que de modes au-delà du premier ; on lâche les derniers modes tant qu'on ne peut pas. |
+| `prowlPossible(P, j, d)` | Un joueur a-t-il blessé en combat un adversaire, ce tour, avec une créature du même type que le sort ? |
+| `aDecay(o)` | — |
+
+## js/forgeRituelsF.js
+
+Les rituels d'EDHREC : les derniers choix. *2 fonctions, 161 lignes, 9.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `typesContemplables(P, j, o, n)` | Les types de créature qu'au moins n créatures — sur le champ ou en main — portent. |
+| `defTexteChange(def, de, vers)` | La définition, recopiée, avec un mot de type remplacé partout où il s'écrit (sous-types en minuscules, filtres en majuscule initiale). |
+
+| Donnée | Rôle |
+|---|---|
+| `ETAPES_COMBAT_DIRIGE` | —— Diriger un adversaire, le temps d'un combat —————————————————————————— |
 
 ## js/iaValeur.js
 

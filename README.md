@@ -179,6 +179,10 @@ js/                 modules, chargés dans cet ordre :
   forgeRituelsB.js        les saisons (modes à pattes), animation des cartes revenues, ce qui a quitté le champ, éclair qui borne X, quantités sur les joueurs
   forgeArtefacts.js       les artefacts d'EDHREC : exil de retour, lot d'un déclencheur, initiative, marqueurs interdits, défenseurs
   forgeArtefactsB.js      taxe d'attaque {W/P}, coût plancher, joueurs désignés, exaltation accordée, défenseur qui attaque
+  forgeRituelsC.js       Beam me up, retourner face cachée, attractions et plans absents, copie d'une carte avec Amount All
+  forgeRituelsD.js       votes (EachVote, VotePlayer), nombre secret, ami ou ennemi (AssignGroup), joueurs notés, moitié de la vie
+  forgeRituelsE.js       Escalate et Replicate en engageant, Forecast, Demonstrate, Prowl, Decayed, RememberPut
+  forgeRituelsF.js       diriger un combat, type de créature choisi au coût, DigMultiple différé, ChooseEach, ChangeText
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2450,6 +2454,24 @@ et les 47 autres ne sont pas oubliés : chacun demande un mécanisme à lui seul
 Restent injouables ou partiels, faute d'un mécanisme qui ne servirait qu'à eux : le mana noté ou dépensé (Jade Orb of Dragonkind, Jeweled Amulet, Doubling Cube, Coin of Mastery, Thousand Moons Smithy), les remplacements de copie ou de jeton (Twinning Staff, Mirrormind Crown), `Moved` avec `Prevent` ou `Discard`
 (Grafdigger's Cage, Library of Leng), les changements de contrôle et de combattants (Coveted Jewel, Gustha's Scepter, Misleading Signpost, Midnight Crusader Shuttle), les mots-clés accordés qui se déclenchent à la mort (Cauldron of Souls : persist), les dés (Celebr-8000), les clones à choix (Brudiclad),
 les véhicules et leur équipage (Mechtitan Core, Luxurious Locomotive, Mighty Servant of Leuk-o, Mindlink Mech), les verrous de mana de Damping Sphere, un coût qui se lit dans une SVar (Draco) et les métamorphoses (Ratchet, The Irencrag, Skrelv).
+
+**Lot F107 : les derniers rituels d'EDHREC** (`js/forgeRituelsC.js` à `js/forgeRituelsF.js`, et des retouches de `js/forgeMotsCles.js`, `js/jeuActions.js`). Les 26 rituels qui restaient sont désormais tous lus entièrement par le moteur — avec, pour quelques-uns, une
+simplification assumée (en dernier). Ce qu'il a fallu écrire :
+- **Voter, assigner, choisir en secret** (`js/forgeRituelsD.js`). Chaque joueur répond à son tour ; le « secret » n'est qu'un affichage, car aucune réponse ne dépend d'une autre. `Vote | EachVote` (Expropriate : chaque voix joue son choix, le votant en mémoire),
+  `Vote | VotePlayer` (Mob Verdict : voter pour un autre joueur, puis `RepeatEach | AmountFromVotes` joue le nombre de voix reçues dans la SVar `Votes`), `ChooseNumber | Secretly | Highest | NotLowest` (Wheel of Misfortune), `AssignGroup`
+  (Khorvath's Fury, Pir's Whim : le lanceur dit ami ou ennemi pour chaque joueur, le premier choix de `Choices` est celui des amis), `RepeatEach | ClearRememberedBeforeLoop`, `GenericChoice | Secretly` et les joueurs « notés » (`Bookkeeping | NoteCardsFor`,
+  Prisoner's Dilemma), `DamageAll | ValidPlayers$ Remembered`, et `UnlessCost$ LifeTotalHalfUp` (Temporal Extortion : n'importe quel joueur peut payer la moitié de sa vie, arrondie au-dessus, pour la faire contrecarrer ; l'IA répond non par défaut).
+- **Des mots-clés qui changent le coût** (`js/forgeRituelsE.js`). `Escalate` et `Replicate` payés en engageant des créatures (`tapXType`), `Forecast` (une capacité qui s'active de la main, à son entretien, une fois par tour : Skyscribing), `Demonstrate` (copier le sort ; si on le fait, un adversaire
+  choisi en copie un aussi), `Prowl` (la variante n'existe que si une créature du même type a blessé un adversaire en combat ce tour) et `Count$BloodthirstAmount`, `Decayed` (ne bloque pas, se sacrifie à la fin du combat où elle a attaqué ; accordée par `Pump` ou imprimée),
+  `PutCounter | RememberPut` (Overload de Fangs of Kalonia et de Spectacular Showdown : l'Overload lui-même était déjà recompilé par `js/forgeMotsClesE.js`, il ne manquait que de retenir les créatures touchées).
+- **Les derniers choix** (`js/forgeRituelsF.js`). Secret of Bloodbending : `ControlPlayer | Combat` — diriger un adversaire pendant son prochain combat, ou tout son tour si le coût facultatif est payé (`Condition$ OptionalCost` avec `ConditionOptionalPaid`), `P.controles` portant
+  désormais un drapeau `combat` ; Celestial Reunion : « choose a creature type and behold two » comme coût facultatif (`ChooseCreatureType`, le type se lit ensuite par `ChosenType`) ; Green Sun's Twilight : `DigMultiple | ChangeLater` (révéler, choisir sans déplacer, retenir, imprimer le reste), `DestAltSVarCompare` et `RandomOrder` ;
+  Mythos of Snapdax : `ChooseCard | ChooseEach` et `ConditionManaNotSpent` ; New Blood : `ChangeText`.
+- **Petites pièces** (`js/forgeRituelsC.js`). `Beam me up` (un rappel qui renvoie une créature en main), `SetState | TurnFaceDown` (Illithid Harvester : 2/2 Horreur face cachée), `Play | CopyCard` avec `Amount$ All` (Psionic Ritual), `PutCounter | ChoiceOptional` (Finality), et — faute de pioche d'attractions ou de deck de plans —
+  `OpenAttraction`, `Planeswalk`, `ChaosEnsues` qui le disent au journal et ne font rien d'autre.
+
+Les simplifications : **New Blood** remplace le mot du type choisi partout dans la définition recopiée de la créature (types, filtres des capacités), pas dans l'oracle qu'on lit à l'écran. **Step Right Up** et **Path of the Pyromancer** jouent leur part sans attractions ni plans :
+c'est la règle quand on n'a pas de pioche d'attractions ou de deck de plans, et le moteur n'en tient aucun. **Skyscribing** : le sort lui-même et sa prévision de la main sont joués ; la révélation de la carte que la prévision demande est sans objet (la main n'est cachée à personne dans l'atelier).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

@@ -129,12 +129,14 @@ function* lanceSort(P, j, a) {
       x = opts[(yield question(P, j, 'x', opts, {defaut: max, source: nid}))] || 0;
     }
   }
-  const autre = coutResolu(v.autre, x, s);
+  let autre = coutResolu(v.autre, x, s);
   const garde = coutDeGarde(P, j, effets) - reductionParCibles(P, j, s, effets);
   const gen = Math.max(0, cout0.generique + garde);
   let cout = garde ? {...cout0, generique: gen, total: cout0.total + gen - cout0.generique} : cout0;
   /* Strive : plus cher pour chaque cible de plus (js/forgeMotsClesD.js). */
   if (d.strive) cout = coutStrive(P, j, s, d, effets, cout, x);
+  /* Escalate qui s'engage plutôt que de payer du mana (js/forgeRituelsE.js). */
+  if (d.escaladeAutre) autre = coutEscaladeAutre(P, j, s, d, effets, autre);
   /* Spree, Tiered, Escalate : le coût des modes choisis (js/forgeModes.js). */
   if (d.coutModes || d.escalade) cout = coutDesModes(P, j, s, d, effets, cout, x);
   if (!payableAvec(P, j, s, cout, x)) return annule();
