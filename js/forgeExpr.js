@@ -29,13 +29,13 @@ function forgeNombre(P, v, env) {
 }
 
 /* L'opérande est un nombre, ou le nom d'une SVar (`SVar$X/Times.Y`). */
-const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double|DivideEvenlyDown|NMinus|Abs)(?:\.(\w+))?$/;
+const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|Thrice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double|DivideEvenlyDown|NMinus|Abs)(?:\.(\w+))?$/;
 
 /* Appliquer l'opération qui suit une expression. */
 function mathForge(n, op, k) {
   switch (op) {
     case 'Plus': return n + k; case 'Minus': return n - k; case 'Times': return n * k;
-    case 'Twice': case 'Double': return n * 2; case 'HalfUp': return Math.ceil(n / 2); case 'HalfDown': return Math.floor(n / 2);
+    case 'Twice': case 'Double': return n * 2; case 'Thrice': return n * 3; case 'HalfUp': return Math.ceil(n / 2); case 'HalfDown': return Math.floor(n / 2);
     case 'DivideEvenlyDown': return k ? Math.floor(n / k) : 0;
     case 'NMinus': return k - n;
     case 'Abs': return Math.abs(n);

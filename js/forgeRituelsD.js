@@ -116,7 +116,7 @@ FORGE_API.ChangeZone.gen = (g => function* (P, t, env) {
 forgeSait('param', 'GenericChoice.Secretly', 'Bookkeeping.NoteCards', 'Bookkeeping.NoteCardsFor', 'Bookkeeping.ClearNotedCardsFor');
 /* Chaque joueur désigné choisit pour lui, le choix s'exécute avec lui en mémoire (`TempRemember$ Chooser`). */
 FORGE_API.GenericChoice.gen = (g => function* (P, t, env) {
-  if (t.Secretly !== 'True') return yield* g(P, t, env);
+  if (t.Secretly !== 'True' && !(t.TempRemember === 'Chooser' && /^Player/.test(t.Defined || ''))) return yield* g(P, t, env);
   const modes = env.op.modes, avant = env.ctx.memoJ;
   try {
     for (const j of joueursForge(P, t, env)) {

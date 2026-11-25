@@ -155,12 +155,12 @@ forgeSait('param', 'RepeatEach.RepeatTargeted');
 FORGE_API.Vote.gen = (g => function* (P, t, env) {
   if (!t.VoteCard) return yield* g(P, t, env);
   const candidats = objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.VoteCard, env.src, env.ctrl, env)).map(o => o.id);
-  if (!candidats.length) return;
+  if (!candidats.length && t.UpTo !== 'True') return;
   const votants = forgeDefinis(P, t.Defined || 'Player', env).map(x => joueurDe(x)).filter(j => j != null && !P.joueurs[j].elimine);
   votants.sort((a, b) => ((a - env.ctrl + P.nb) % P.nb) - ((b - env.ctrl + P.nb) % P.nb));
   const voix = new Map(candidats.map(id => [id, 0]));
   for (const j of votants) {
-    const [id] = yield* choisitCartes(P, j, candidats, 1, 'Voter pour un permanent', 'cartes', 1);
+    const [id] = yield* choisitCartes(P, j, candidats, 1, 'Voter pour un permanent', 'cartes', t.UpTo === 'True' ? 0 : 1);
     if (id != null) voix.set(id, voix.get(id) + 1);
   }
   const max = Math.max(...voix.values());
@@ -173,7 +173,7 @@ FORGE_API.Vote.prepare = (p => function (t, op) {
   if (!t.VoteCard) return p.call(this, t, op);
   return !!t.VoteSubAbility && sousEffets(op, [t.VoteSubAbility]);
 })(FORGE_API.Vote.prepare);
-forgeSait('param', 'Vote.VoteCard', 'Vote.VoteSubAbility');
+forgeSait('param', 'Vote.VoteCard', 'Vote.VoteSubAbility', 'Vote.UpTo');
 
 /* Deux joueurs échangent leur vie ; la différence se garde (Profane Transfusion). */
 forgeEffet('ExchangeLife', ['RememberDifference'], function* (P, t, env) {

@@ -66,6 +66,8 @@ forgeEffet('CopyPermanent', ['NumCopies', 'AddTypes', 'AddKeywords', 'PumpKeywor
       if (t.RememberCopied === 'True' || t.RememberTokens === 'True') retiensForge(env.ctx, o.id);
       /* « Tapped and attacking » : dans le combat en cours, sans être déclaré. */
       if (t.TokenAttacking === 'True') entreAttaquant(P, o, env);
+      /* Echoing Assault : le jeton attaque le même défenseur que la créature copiée. */
+      else if (t.TokenAttacking === 'TriggeredAttackedTarget') entreAttaquant(P, o, {...env, src: m});
     }
     jn(P, `${n} copie(s) de ${m.def.nom}`);
   }

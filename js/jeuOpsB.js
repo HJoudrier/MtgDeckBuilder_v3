@@ -149,7 +149,7 @@ function* metEnJeu(P, id, ctrl, opts = {}) {
   if (opts.variante) no.varianteLance = opts.variante;
   if (opts.suspendu) no.mods.push({f: 0, e: 0, mots: MOT.CELERITE, fin: 'jamais'});
   if (no.def.echo) no.echoDu = true;
-  if (no.def.chapitres) ajouteLore(P, no, 1);
+  if (no.def.chapitres) yield* chapitreInitial(P, no);
   if (opts.evoque) P.enAttente.push({src: n, ctrl, cap: CAP_EVOCATION, evt: {t: 'entre', id: n}});
   P.ver++;
   if (no.def.entree && no.def.entree.forge) yield* effetsEntree(P, no);

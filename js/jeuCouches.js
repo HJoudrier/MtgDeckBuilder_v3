@@ -21,7 +21,7 @@ function statiquesCouches(P) {
   P._couches = statiquesMode(P, 'Continuous').filter(x => {
     const t = x.s.t;
     return !t.MayPlay && !t.MayLookAt && zoneChamp(t) &&
-      !!(t.AddType || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.GainControl || t.RemoveLandTypes || t.AddAllCreatureTypes || t.RemoveType);
+      !!(t.AddType || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.GainControl || t.RemoveLandTypes || t.AddAllCreatureTypes || t.RemoveType || t.RemoveArtifactTypes);
   });
   P._couchesV = P.ver;
   return P._couches;
@@ -66,10 +66,10 @@ function couchesStatiques(P) {
       const v = voulu.get(id);
       if (t.GainControl === 'You') v.ctrl = x.src.ctrl;
       const ty = t.AddType ? typesCouche(P, x.src, t.AddType) : null;
-      if (ty || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.RemoveLandTypes || t.AddAllCreatureTypes || t.RemoveType) {
+      if (ty || t.RemoveCardTypes || t.RemoveCreatureTypes || t.RemoveAllAbilities || t.RemoveLandTypes || t.AddAllCreatureTypes || t.RemoveType || t.RemoveArtifactTypes) {
         v.anime.push({stat: true, types: ty ? ty.types : [], sousTypes: ty ? ty.sousTypes : [], changelin: !!(ty && ty.changelin) || t.AddAllCreatureTypes === 'True',
           retireTypes: t.RemoveCardTypes === 'True', retireSousTypes: t.RemoveCreatureTypes === 'True', perdTout: t.RemoveAllAbilities === 'True',
-          retireTerrains: t.RemoveLandTypes === 'True', ...(t.RemoveType ? {retireType: typesForge(t.RemoveType).types} : {})});
+          retireTerrains: t.RemoveLandTypes === 'True', retireArtefacts: t.RemoveArtifactTypes === 'True', ...(t.RemoveType ? {retireType: typesForge(t.RemoveType).types} : {})});
       }
     }
   }
@@ -95,6 +95,9 @@ function sansCapacites(o) { return !!o.anime && o.anime.some(a => a.perdTout || 
 /* Les types de terrain que les statiques retirent avec `RemoveLandTypes`. */
 const TYPES_TERRAIN = new Set(['plains', 'island', 'swamp', 'mountain', 'forest', 'desert', 'gate', 'lair', 'locus', 'mine', 'power-plant',
   'tower', "urza's", 'cave', 'sphere', 'town']);
+
+/* Les sous-types d'artefact, que `RemoveArtifactTypes` retire. */
+const SOUSTYPES_ARTEFACT = new Set(['equipment', 'vehicle', 'treasure', 'food', 'clue', 'blood', 'gold', 'powerstone', 'fortification', 'contraption', 'map', 'incubator', 'junk', 'shard', 'lander', 'role']);
 
 /* Un terrain dont une statique change les types de terrain (Urborg, Blood
    Moon, Spreading Seas) : ses capacités de mana suivent ses types, les

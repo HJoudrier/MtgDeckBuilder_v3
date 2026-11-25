@@ -44,7 +44,7 @@ function peutBloquer(P, b, a) {
 function* declareAttaquants(P) {
   const j = P.actif;
   const cands = champDe(P, j).filter(o => peutAttaquer(P, o)).map(o => o.id);
-  P.combat = {attaquants: new Map(), bloqueurs: new Map(), bloquesPar: new Map(), frappe: new Set(), bloque: new Set()};
+  P.combat = {attaquants: new Map(), bloqueurs: new Map(), bloquesPar: new Map(), blocsSup: new Map(), frappe: new Set(), bloque: new Set()};
   if (!cands.length) return 0;
   const defenseurs = adversaires(P, j).map(i => ({j: i}));
   P.champ.forEach(id => { const o = obj(P, id); if (o.ctrl !== j && estType(o, 'planeswalker')) defenseurs.push({pw: id}); });
@@ -131,9 +131,9 @@ function* declareBloqueurs(P) {
     if (!blqs.length) continue;
     const r = yield question(P, d, 'bloqueurs', blqs, {min: 0, max: blqs.length, multi: true, defaut: [], extra: {attaquants: atts}});
     const pose = (b, a) => {
-      if (b == null || a == null || cb.bloqueurs.has(b) || !peutBloquer(P, obj(P, b), obj(P, a)) || blocageRestreint(P, cb, d)) return;
+      if (b == null || a == null || (cb.bloqueurs.has(b) && !blocSupplementaire(P, cb, b, a)) || !peutBloquer(P, obj(P, b), obj(P, a)) || blocageRestreint(P, cb, d)) return;
       if ((cb.bloquesPar.get(a) || []).length >= bornesBlocage(P, obj(P, a)).max) return;
-      cb.bloqueurs.set(b, a);
+      if (cb.bloqueurs.has(b)) (cb.blocsSup.get(b) || cb.blocsSup.set(b, []).get(b)).push(a); else cb.bloqueurs.set(b, a);
       if (!cb.bloquesPar.has(a)) cb.bloquesPar.set(a, []);
       cb.bloquesPar.get(a).push(b);
     };
@@ -146,7 +146,7 @@ function* declareBloqueurs(P) {
      attaquant bloqué par trop peu de créatures ne l'est pas. */
   for (const [a, bs] of cb.bloquesPar) {
     const min = Math.max(aMot(P, obj(P, a), MOT.MENACE) ? 2 : 1, bornesBlocage(P, obj(P, a)).min);
-    if (bs.length < min) { bs.forEach(b => cb.bloqueurs.delete(b)); cb.bloquesPar.delete(a); }
+    if (bs.length < min) { bs.forEach(b => retireBloc(cb, b, a)); cb.bloquesPar.delete(a); }
   }
   for (const [a, bs] of cb.bloquesPar) {
     cb.bloque.add(a);
@@ -215,7 +215,7 @@ function* degatsCombat(P, passe) {
     if (!b || !a || !frappe(P, b, passe, avecInit)) continue;
     cb.frappe.add(bid);
     const f = forceDeCombat(P, b);
-    if (f > 0) coups.push([b, a, f]);
+    if (f > 0) repartitionBloqueur(P, b, a, f).forEach(c => coups.push(c));
   }
   coups.forEach(([src, cible, n]) => infligeDegats(P, src, cible, n, true));
   yield* priorite(P);

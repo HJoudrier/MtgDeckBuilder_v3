@@ -142,6 +142,8 @@ function animation(o) {
     if (a.endurance != null) r.endurance = a.endurance;
     if (a.retireSousTypes) r.sousTypes = [];
     if (a.retireTerrains) r.sousTypes = r.sousTypes.filter(s => !TYPES_TERRAIN.has(s));
+    /* « Loses all other card types » et les sous-types d'artefact avec : l'Aura de Swift Reconfiguration. */
+    if (a.retireArtefacts) r.sousTypes = r.sousTypes.filter(s => !SOUSTYPES_ARTEFACT.has(s));
     (a.types || []).forEach(t => { if (!r.types.includes(t)) r.types.push(t); });
     (a.sousTypes || []).forEach(t => { if (!r.sousTypes.includes(t)) r.sousTypes.push(t); });
     if (a.couleurs) r.couleurs = a.ecrase ? a.couleurs : [...new Set([...r.couleurs, ...a.couleurs])];

@@ -100,6 +100,7 @@ forgeEffet('RollDice', ['Sides', 'Amount', 'Modifier', 'ResultSVar', 'ResultSubA
   const faces = forgeNombre(P, t.Sides || 20, env), n = forgeNombre(P, t.Amount || 1, env);
   let total = forgeNombre(P, t.Modifier || 0, env);
   for (let k = 0; k < n; k++) total += 1 + entierHasard(P.rng, faces);
+  if (n === 1) total = yield* modifieJet(P, env.ctrl, total, faces);
   jn(P, `${P.joueurs[env.ctrl].nom} lance un dé : ${total}`);
   if (t.ResultSVar) varsDe(env.ctx)[t.ResultSVar] = total;
   emet(P, {t: 'de', joueur: env.ctrl, n: total});
@@ -186,28 +187,6 @@ forgeEffet('Debuff', ['Keywords', 'AllSuffixKeywords'], function* (P, t, env) {
   const marche = t.AllSuffixKeywords === 'walk';
   objetsForge(P, t, env, 'Targeted').filter(o => o.zone === 'champ' && !o.lki).forEach(o => { o.mods.push({f: 0, e: 0, mots: 0, retire: m, ...(marche ? {sansPassage: true} : {}), fin: 'tour'}); P.ver++; });
 }, (t, op) => { op.op = 'forge'; op.hostile = true; }, {prepare: t => !t.Duration && (!t.AllSuffixKeywords || t.AllSuffixKeywords === 'walk')});
-
-/* Le phasing : hors du champ sans le quitter — ni départ ni entrée — et
-   de retour au prochain dégagement de son contrôleur. */
-forgeEffet('Phases', ['AllValid'], function* (P, t, env) {
-  const l = t.AllValid ? objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, t.AllValid, env.src, env.ctrl, env)) : objetsForge(P, t, env, 'Targeted');
-  for (const o of l.filter(x => x.zone === 'champ' && !x.lki)) {
-    const avec = [o, ...P.champ.map(id => obj(P, id)).filter(a => a.att === o.id)];
-    avec.forEach(a => {
-      retireDe(P.champ, a.id);
-      P.horsPhase = P.horsPhase || [];
-      if (!P.horsPhase.some(x => x.id === a.id)) P.horsPhase.push({id: a.id, ctrl: a.ctrl});
-    });
-    P.ver++;
-  }
-}, (t, op) => { op.op = 'exile'; op.a = op.slot != null ? {cible: op.slot} : {soi: 1}; op.hostile = op.slot != null; }, {prepare: t => !t.PhaseInOrOut && !t.WontPhaseInNormal});
-function phasesEntrent(P) {
-  if (!P.horsPhase || !P.horsPhase.length) return;
-  /* Un permanent revient une fois, et seulement s'il n'est pas déjà là. */
-  P.horsPhase.filter(x => x.ctrl === P.actif).forEach(x => { if (obj(P, x.id) && !P.champ.includes(x.id)) P.champ.push(x.id); });
-  P.horsPhase = P.horsPhase.filter(x => x.ctrl !== P.actif);
-  P.ver++;
-}
 
 /* L'armée : des marqueurs sur l'armée qu'on contrôle, ou une armée 0/0
    créée pour les recevoir. */

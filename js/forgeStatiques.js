@@ -37,7 +37,7 @@ function statiqueTenable(t) {
   /* Jouer depuis une autre zone : la pioche d'impulsion, le cimetière, le
      dessus de la bibliothèque (js/jeuPermis.js). */
   if (t.MayPlay) {
-    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand|Stack)(,(Exile|Graveyard|Library|Hand|Stack))*$/.test(t.AffectedZone || '')) return false;
+    if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand|Stack|Command)(,(Exile|Graveyard|Library|Hand|Stack|Command))*$/.test(t.AffectedZone || '')) return false;
     if ((t.MayPlayAltManaCost && !/^(0|PayLife<ConvertedManaCost>)$/.test(t.MayPlayAltManaCost)) || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
     /* Depuis la main, la permission ne sert que si elle rend le sort gratuit. */
     if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True' && t.MayPlayAltManaCost !== '0') return false;

@@ -70,7 +70,7 @@ function emplacementForge(t, face) {
   const choisisseur = t.TargetingPlayer === 'Player.Opponent' ? {choisisseur: 'adversaire', controle: t.TargetingPlayerControls === 'True'} : {};
   return {desc, min, max, ...choisisseur, ...(maxExpr && !/xPaid|^X$/.test(maxExpr) ? {maxExpr, maxFace: face} : {}), ...restrB,
     /* Les restrictions entre cibles, jugées après le choix (js/jeuLancer.js). */
-    ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True' || t.TargetsWithSameCreatureType === 'True'
-      ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', type: t.TargetsWithSameCreatureType === 'True',
+    ...(t.TargetsWithSameController === 'True' || t.DifferentNames === 'True' || t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True' || t.TargetsWithSameCreatureType === 'True' || t.TargetsWithSameCardType === 'True'
+      ? {restr: {meme: t.TargetsWithSameController === 'True', noms: t.DifferentNames === 'True', type: t.TargetsWithSameCreatureType === 'True', typeCarte: t.TargetsWithSameCardType === 'True',
         parJoueur: t.TargetsForEachPlayer === 'True' || t.TargetsWithDifferentControllers === 'True'}} : {})};
 }

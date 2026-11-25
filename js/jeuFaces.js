@@ -92,6 +92,8 @@ function ajouteLore(P, o, n) {
     const i = o.marq.lore - 1;
     if (ch[i]) P.enAttente.push({src: o.id, ctrl: o.ctrl, evt: {t: 'chapitre', n: i + 1},
       cap: {genre: 'declenchee', effet: ch[i], texte: `Chapitre ${i + 1}`}});
+    /* Le dernier chapitre se déclenche : Historian's Boon l'écoute (js/forgeEnchantementsB.js). */
+    if (ch[i]) emet(P, {t: 'chapitreDeclenche', id: o.id, n: i + 1, dernier: i === ch.length - 1});
   }
   P.ver++;
 }

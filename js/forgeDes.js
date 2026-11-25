@@ -36,6 +36,7 @@ FORGE_API.RollDice.gen = (g => function* (P, t, env) {
   if (t.EvenOddResults) { vars.EvenResults = jets.filter(x => x % 2 === 0).length; vars.OddResults = jets.length - vars.EvenResults; }
   if (t.DifferentResults) vars.DifferentResults = new Set(jets).size;
   if (t.MaxRollsResults) vars.MaxRolls = jets.filter(x => x === faces).length;
+  if (jets.length === 1 && !t.ChosenSVar) total = yield* modifieJet(P, env.ctrl, total, faces);
   jn(P, `${P.joueurs[env.ctrl].nom} lance ${jets.length > 1 ? jets.length + ' dés' : 'un dé'} : ${jets.join(', ')}${gardes.length !== jets.length || t.ChosenSVar ? ' → ' + total : ''}`);
   if (t.ResultSVar) vars[t.ResultSVar] = total;
   emet(P, {t: 'de', joueur: env.ctrl, n: total});

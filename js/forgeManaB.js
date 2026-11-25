@@ -93,6 +93,8 @@ motCleLancementB = (g => function (def, face, jetons, tete, reste) {
 })(motCleLancementB);
 const foisKicke = (env) => {
   const v = (env.ctx && env.ctx.variante) || (env.src && env.src.varianteLance) || '';
+  /* Deux kickers distincts (Stronghold Arena, `Kicker:G:W`) : une lettre par kicker payé. */
+  if (/^kickD\d+$/.test(v)) return v.length - 5;
   return foisVariante(v, 'multikicker');
 };
 

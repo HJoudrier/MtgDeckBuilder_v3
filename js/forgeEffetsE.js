@@ -72,7 +72,10 @@ forgeEffet('DigUntil', ['Valid', 'Amount', 'FoundDestination', 'RevealedDestinat
        retient avec elles (Treasure Hunt, Balustrade Spy, Sanar). */
     const rd = zoneForge(t.RevealedDestination) || 'cimetiere', fd = zoneForge(t.FoundDestination) || rd;
     for (const id of trouves) {
-      const n = fd === 'bibliotheque' ? id : yield* deplaceForge(P, obj(P, id), fd, env, {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null});
+      /* « You may put that card onto the battlefield. If you don't, put it into your hand » (Songbirds' Blessing). */
+      let dest = fd;
+      if (t.OptionalFoundMove === 'True' && (yield question(P, env.ctrl, 'oui', ['non', 'oui'], {texte: `Mettre ${obj(P, id).def.nom} sur le champ de bataille ?`, source: env.ctx.source, defaut: 1})) !== 1) dest = zoneForge(t.OptionalNoDestination) || 'main';
+      const n = dest === 'bibliotheque' ? id : yield* deplaceForge(P, obj(P, id), dest, env, {engage: t.Tapped === 'True', ctrl: t.GainControl === 'True' ? env.ctrl : null});
       if (n != null && (t.RememberFound === 'True' || (t.RememberRevealed === 'True' && (!t.FoundDestination || seuil != null)))) retiensForge(env.ctx, n);
     }
     for (const id of reveles) {

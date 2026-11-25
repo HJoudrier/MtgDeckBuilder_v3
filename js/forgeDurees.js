@@ -22,7 +22,7 @@ function finForge(t, env) {
     case 'Permanent': return {fin: 'jamais'};
     case 'UntilYourNextTurn': return {fin: 'prochainTour', par: env.ctrl};
     case 'UntilEndOfCombat': return {fin: 'combat'};
-    case 'UntilHostLeavesPlay': return env.src ? {fin: 'hote', hote: env.src.id} : null;
+    case 'UntilHostLeavesPlay': case 'AsLongAsControl': return env.src ? {fin: 'hote', hote: env.src.id} : null;
   }
   return null;
 }

@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1953 fonctions**, 340 modules, 2382 Ko de JavaScript.
+**1963 fonctions**, 350 modules, 2436 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -50,7 +50,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 237 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 79 |
-| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 171 |
+| [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 173 |
 | [`jeuCibles.js`](#jsjeuciblesjs) | Juger un objet contre un descripteur | 12 | 164 |
 | [`jeuMana.js`](#jsjeumanajs) | La réserve de mana, et le paiement automatique | 13 | 285 |
 | [`jeuManaChoix.js`](#jsjeumanachoixjs) | Choisir quel mana de la réserve paie le générique | 2 | 48 |
@@ -58,7 +58,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuOpsB.js`](#jsjeuopsbjs) | Exécuter les opérations : jetons, marqueurs, pompes, | 3 | 189 |
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 150 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
-| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 266 |
+| [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 267 |
 | [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 290 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 303 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
@@ -68,7 +68,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuManaManuel.js`](#jsjeumanamanueljs) | Engager son mana soi-même, et choisir sa couleur | 9 | 113 |
 | [`jeuManaAutre.js`](#jsjeumanaautrejs) | Les capacités de mana qu'on paie autrement qu'en mana | 4 | 77 |
 | [`jeuDurees.js`](#jsjeudureesjs) | Ce qui dure : effets, déclencheurs retardés, retours | 11 | 162 |
-| [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 142 |
+| [`jeuFaces.js`](#jsjeufacesjs) | Les faces d'une carte, et les objets qui changent de | 13 | 144 |
 | [`jeuFacesB.js`](#jsjeufacesbjs) | Les faces, suite : jour et nuit, loups-garous, | 7 | 75 |
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 8 | 95 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
@@ -94,15 +94,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 258 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 215 |
 | [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 210 |
-| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 146 |
+| [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 149 |
 | [`forgeBatailles.js`](#jsforgebataillesjs) | Les batailles (Siege) : points de défense, | 4 | 63 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 184 |
-| [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 132 |
+| [`forgeCopies.js`](#jsforgecopiesjs) | Les copies de Forge : un jeton copie d'un | 4 | 134 |
 | [`forgeTraine.js`](#jsforgetrainejs) | La traîne : des mots-clés et des effets moins | 2 | 105 |
 | [`forgeEffetsF.js`](#jsforgeeffetsfjs) | Les paramètres de plus des effets courants | 4 | 219 |
 | [`forgeCopiesB.js`](#jsforgecopiesbjs) | Des copies de plus (lot F81) | 0 | 43 |
 | [`forgeCopiesC.js`](#jsforgecopiescjs) | Des copies de plus, III (lot F89) | 0 | 66 |
-| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 11 | 305 |
+| [`forgeEffetsG.js`](#jsforgeeffetsgjs) | Les mécaniques de partie de Forge | 10 | 284 |
+| [`forgeDephasage.js`](#jsforgedephasagejs) | Le phasing : hors du champ sans le quitter | 1 | 30 |
 | [`forgeEffetsH.js`](#jsforgeeffetshjs) | Les marqueurs qu'on double ou déplace, le nom | 8 | 283 |
 | [`forgeEntrees.js`](#jsforgeentreesjs) | Ce qui se passe en entrant, et qui le décide | 9 | 159 |
 | [`forgeDurees.js`](#jsforgedureesjs) | Ce qui dure sur un objet, et les attributs | 7 | 146 |
@@ -112,7 +113,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursB.js`](#jsforgedeclencheursbjs) | Les déclencheurs de Forge, suite : engager, | 6 | 127 |
 | [`forgeStatiques.js`](#jsforgestatiquesjs) | Les capacités statiques de Forge | 10 | 232 |
 | [`forgeInterdits.js`](#jsforgeinterditsjs) | Ce que les statiques de Forge interdisent, | 33 | 297 |
-| [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 113 |
+| [`jeuCouches.js`](#jsjeucouchesjs) | Ce qu'une statique fait devenir un permanent : son | 5 | 116 |
 | [`forgeStatiquesB.js`](#jsforgestatiquesbjs) | Les statiques hors du champ | 18 | 203 |
 | [`forgeRemplacements.js`](#jsforgeremplacementsjs) | Les remplacements de Forge (`R:`) | 10 | 172 |
 | [`forgeEntreesB.js`](#jsforgeentreesbjs) | « Ce sort entre avec des marqueurs de plus » | 1 | 44 |
@@ -130,7 +131,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeDeclencheursC.js`](#jsforgedeclencheurscjs) | Les déclencheurs qui butaient encore | 2 | 94 |
 | [`forgeDegagements.js`](#jsforgedegagementsjs) | Dégager et piocher « jusqu'à » | 2 | 79 |
 | [`forgeRemplacementsD.js`](#jsforgeremplacementsdjs) | Les remplacements, IV | 7 | 188 |
-| [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 171 |
+| [`forgeManaB.js`](#jsforgemanabjs) | Le mana, II | 4 | 173 |
 | [`forgeManaC.js`](#jsforgemanacjs) | Le mana qui porte quelque chose | 2 | 96 |
 | [`forgeEmpreinte.js`](#jsforgeempreintejs) | L'empreinte | 6 | 150 |
 | [`forgeTerrains.js`](#jsforgeterrainsjs) | Ce que les terrains font de plus | 4 | 210 |
@@ -175,7 +176,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeMarqueursC.js`](#jsforgemarqueurscjs) | Marqueurs et dés : des paramètres de plus | 0 | 56 |
 | [`forgeFouilles.js`](#jsforgefouillesjs) | Fouiller, chercher : ce que le moteur en dit | 0 | 46 |
 | [`jeuRevelations.js`](#jsjeurevelationsjs) | Montrer toutes les cartes révélées | 2 | 42 |
-| [`forgeDes.js`](#jsforgedesjs) | Des dés de plus | 0 | 45 |
+| [`forgeDes.js`](#jsforgedesjs) | Des dés de plus | 0 | 46 |
 | [`forgeEffetsJ.js`](#jsforgeeffetsjjs) | Des effets durables : un nombre retenu | 0 | 16 |
 | [`forgeEffetsK.js`](#jsforgeeffetskjs) | Des effets de plus (lot F80) | 1 | 21 |
 | [`forgeEffetsL.js`](#jsforgeeffetsljs) | Des effets et des conditions de plus (lot F82) | 2 | 141 |
@@ -213,6 +214,15 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeArtefactsH.js`](#jsforgeartefactshjs) | Les artefacts d'EDHREC : dés, jetons, début de tour | 0 | 97 |
 | [`forgeArtefactsI.js`](#jsforgeartefactsijs) | Les artefacts d'EDHREC : le combat | 0 | 96 |
 | [`forgeArtefactsJ.js`](#jsforgeartefactsjjs) | Les artefacts d'EDHREC : les remplacements | 3 | 175 |
+| [`forgeEnchantements.js`](#jsforgeenchantementsjs) | Les enchantements d'EDHREC : de petites pièces | 0 | 105 |
+| [`forgeEnchantementsB.js`](#jsforgeenchantementsbjs) | Les enchantements d'EDHREC : les sagas | 1 | 65 |
+| [`forgeEnchantementsC.js`](#jsforgeenchantementscjs) | Les enchantements d'EDHREC : des effets au détail | 1 | 115 |
+| [`forgeEnchantementsD.js`](#jsforgeenchantementsdjs) | Les enchantements d'EDHREC : des filtres, des déclencheurs | 0 | 122 |
+| [`forgeEnchantementsE.js`](#jsforgeenchantementsejs) | Les enchantements d'EDHREC : des effets au détail (suite) | 0 | 127 |
+| [`forgeEnchantementsF.js`](#jsforgeenchantementsfjs) | Les enchantements d'EDHREC : le hasard et la pile | 1 | 124 |
+| [`forgeEnchantementsG.js`](#jsforgeenchantementsgjs) | Les enchantements d'EDHREC : le déphasage | 1 | 83 |
+| [`forgeEnchantementsH.js`](#jsforgeenchantementshjs) | Les enchantements d'EDHREC : les types notés | 2 | 73 |
+| [`forgeBlocMultiple.js`](#jsforgeblocmultiplejs) | Un bloqueur qui arrête plusieurs attaquants | 4 | 47 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
@@ -1088,7 +1098,7 @@ Ce qui s'est passé ce tour. *5 fonctions, 79 lignes, 4.5 Ko.*
 
 ## js/jeuCaracteristiques.js
 
-Ce qu'un permanent est en ce moment. *9 fonctions, 171 lignes, 9.2 Ko.*
+Ce qu'un permanent est en ce moment. *9 fonctions, 173 lignes, 9.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1224,7 +1234,7 @@ Les actions d'état, et un joueur qui perd. *2 fonctions, 99 lignes, 4.4 Ko.*
 
 ## js/jeuLancer.js
 
-Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 266 lignes, 16 Ko.*
+Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 267 lignes, 16 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1412,7 +1422,7 @@ Ce qui dure : effets, déclencheurs retardés, retours. *11 fonctions, 162 ligne
 
 ## js/jeuFaces.js
 
-Les faces d'une carte, et les objets qui changent de. *13 fonctions, 142 lignes, 6.3 Ko.*
+Les faces d'une carte, et les objets qui changent de. *13 fonctions, 144 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1494,7 +1504,7 @@ La priorité, la pile, la résolution. *5 fonctions, 153 lignes, 8.8 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 230 lignes, 12 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 230 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1653,7 +1663,7 @@ Le langage de filtres de Forge. *13 fonctions, 309 lignes, 19 Ko.*
 
 ## js/forgeDescripteurs.js
 
-Ce que les filtres de Forge deviennent pour. *4 fonctions, 77 lignes, 5.4 Ko.*
+Ce que les filtres de Forge deviennent pour. *4 fonctions, 77 lignes, 5.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1847,7 +1857,7 @@ Les effets de Forge qui durent : régénération,. *8 fonctions, 210 lignes, 13 
 
 ## js/forgeEffetsE.js
 
-Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 146 lignes, 9.5 Ko.*
+Les effets de Forge : la bibliothèque et ce qu'on. *1 fonctions, 149 lignes, 9.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1888,7 +1898,7 @@ Les choix de Forge : une couleur, un type, une. *7 fonctions, 184 lignes, 10 Ko.
 
 ## js/forgeCopies.js
 
-Les copies de Forge : un jeton copie d'un. *4 fonctions, 132 lignes, 8.3 Ko.*
+Les copies de Forge : un jeton copie d'un. *4 fonctions, 134 lignes, 8.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1931,7 +1941,7 @@ Des copies de plus, III (lot F89). *0 fonctions, 66 lignes, 4 Ko.*
 
 ## js/forgeEffetsG.js
 
-Les mécaniques de partie de Forge. *11 fonctions, 305 lignes, 20 Ko.*
+Les mécaniques de partie de Forge. *10 fonctions, 284 lignes, 19 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1944,12 +1954,19 @@ Les mécaniques de partie de Forge. *11 fonctions, 305 lignes, 20 Ko.*
 | `typeProtege(c)` | « Protection from artifacts » (Tower of the Magistrate) : un type de carte, jugé comme un filtre sur la source. |
 | `goadActif(P, o)` | — |
 | `couleursProtection(P, t, env)` | Les couleurs d'une protection gagnée : nommées (`Gains$ Red,Blue`), ou une au choix — l'IA prend celle que l'adversaire joue le plus. |
-| `phasesEntrent(P)` | — |
 | `manifeste(P, j, id)` | Manifester : le dessus de la bibliothèque, face cachée, en 2/2. |
 
 | Donnée | Rôle |
 |---|---|
 | `PROFONDEUR_SOUS` | — |
+
+## js/forgeDephasage.js
+
+Le phasing : hors du champ sans le quitter. *1 fonctions, 30 lignes, 1.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `phasesEntrent(P)` | — |
 
 ## js/forgeEffetsH.js
 
@@ -2160,7 +2177,7 @@ Ce que les statiques de Forge interdisent,. *33 fonctions, 297 lignes, 17 Ko.*
 
 ## js/jeuCouches.js
 
-Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 113 lignes, 6.1 Ko.*
+Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 116 lignes, 6.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2173,6 +2190,7 @@ Ce qu'une statique fait devenir un permanent : son. *5 fonctions, 113 lignes, 6.
 | Donnée | Rôle |
 |---|---|
 | `TYPES_TERRAIN` | Les types de terrain que les statiques retirent avec `RemoveLandTypes`. |
+| `SOUSTYPES_ARTEFACT` | Les sous-types d'artefact, que `RemoveArtifactTypes` retire. |
 
 ## js/forgeStatiquesB.js
 
@@ -2456,7 +2474,7 @@ Les remplacements, IV. *7 fonctions, 188 lignes, 10 Ko.*
 
 ## js/forgeManaB.js
 
-Le mana, II. *4 fonctions, 171 lignes, 9.5 Ko.*
+Le mana, II. *4 fonctions, 173 lignes, 9.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2891,7 +2909,7 @@ Montrer toutes les cartes révélées. *2 fonctions, 42 lignes, 2.2 Ko.*
 
 ## js/forgeDes.js
 
-Des dés de plus. *0 fonctions, 45 lignes, 3 Ko.*
+Des dés de plus. *0 fonctions, 46 lignes, 3.1 Ko.*
 
 ## js/forgeEffetsJ.js
 
@@ -3192,6 +3210,70 @@ Les artefacts d'EDHREC : les remplacements. *3 fonctions, 175 lignes, 11 Ko.*
 | `aForme(P, forme, j)` | — |
 | `lotDeCopies(f)` | Un lot de copies : la boucle d'un mot-clé, ou l'effet d'une carte ; s'il y en a eu, une de plus. |
 | `vivifie(P, o)` | « During your turn, this Vehicle is also an artifact creature » : à l'entrée et au début de chaque tour de son contrôleur. |
+
+## js/forgeEnchantements.js
+
+Les enchantements d'EDHREC : de petites pièces. *0 fonctions, 105 lignes, 6.3 Ko.*
+
+## js/forgeEnchantementsB.js
+
+Les enchantements d'EDHREC : les sagas. *1 fonctions, 65 lignes, 3.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `chapitreInitial(P, o)` | Le premier chapitre — ou, pour une saga qui se lit à l'avance, celui qu'on choisit, seul. |
+
+## js/forgeEnchantementsC.js
+
+Les enchantements d'EDHREC : des effets au détail. *1 fonctions, 115 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `jouableExilSi(P, o)` | — |
+
+## js/forgeEnchantementsD.js
+
+Les enchantements d'EDHREC : des filtres, des déclencheurs. *0 fonctions, 122 lignes, 7.3 Ko.*
+
+## js/forgeEnchantementsE.js
+
+Les enchantements d'EDHREC : des effets au détail (suite). *0 fonctions, 127 lignes, 7.5 Ko.*
+
+## js/forgeEnchantementsF.js
+
+Les enchantements d'EDHREC : le hasard et la pile. *1 fonctions, 124 lignes, 7.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `modifieJet(P, j, total, faces)` | Un seul dé, un seul décalage par tour et par source (Night Shift of the Living Dead). |
+
+## js/forgeEnchantementsG.js
+
+Les enchantements d'EDHREC : le déphasage. *1 fonctions, 83 lignes, 4.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `phaseSelonHote(t, face)` | Les deux effets sont des marques sur les entrées déphasées. |
+
+## js/forgeEnchantementsH.js
+
+Les enchantements d'EDHREC : les types notés. *2 fonctions, 73 lignes, 5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `estTripleTriad(t, face)` | — |
+| `gratuitCeTour(P, o)` | — |
+
+## js/forgeBlocMultiple.js
+
+Un bloqueur qui arrête plusieurs attaquants. *4 fonctions, 47 lignes, 2.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `blocsSupDe(P, b)` | Combien d'attaquants de plus ce bloqueur peut arrêter. |
+| `blocSupplementaire(P, cb, b, a)` | Un deuxième blocage de `b`, contre un attaquant qu'il n'arrête pas déjà. |
+| `retireBloc(cb, b, a)` | Un bloqueur ne bloque plus cet attaquant ; il garde les autres. |
+| `repartitionBloqueur(P, b, a, force)` | Les coups d'un bloqueur : un seul attaquant, ou sa force répartie. |
 
 ## js/iaValeur.js
 
