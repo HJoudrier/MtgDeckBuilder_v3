@@ -91,7 +91,11 @@ function compteDuTour(P, q, env) {
     const m = manaDepenseDe(src) || {};
     return q === 'Converge' ? ['W', 'U', 'B', 'R', 'G'].filter(c => m[c] > 0).length : Object.values(m).reduce((s, n) => s + n, 0);
   }
-  if ((k = /^Adamant_\d+\.(\w+)\.(.+)$/.exec(q))) { const m = manaDepenseDe(src) || {}; return siAlors(P, 'x.' + k[2], (m[COULEURS_FORGE_LETTRE[k[1]]] || 0) >= 3, env); }
+  /* « Adamant » : trois mana de la couleur ; `Adamant_2` en demande deux (les Incarnations d'Évoque : « if {G}{G} was spent »). */
+  if ((k = /^Adamant(?:_(\d+))?\.(\w+)\.(.+)$/.exec(q))) {
+    const m = manaDepenseDe(src) || {}, lettre = k[2] === 'Colorless' ? 'C' : COULEURS_FORGE_LETTRE[k[2]];
+    return siAlors(P, 'x.' + k[3], (m[lettre] || 0) >= (k[1] ? +k[1] : 3), env);
+  }
   if (q === 'YouDrewThisTurn') return J.piochesTour || 0;
   /* Evolve : la créature qui entre a-t-elle plus de force ou d'endurance ? */
   if (q === 'EvolveTest') {

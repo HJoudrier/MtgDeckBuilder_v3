@@ -128,7 +128,9 @@ forgeEffet('DelayedTrigger', ['Mode', 'Phase', 'ValidPlayer', 'Execute', 'ThisTu
     const src = env.src;
     durees(P).retardes.push({t, face: env.op.face, effet: env.op.effetRetarde, src: src ? src.id : null, lki: src && src.lki ? src : null,
       ctrl: env.ctrl, memo, memoJ, ceTour: t.ThisTurn === 'True', apresTour: t.NextTurn === 'True' ? P.tour : null,
-      nom: src ? src.def.nom : '?', texte: texteForge(env.op.face, t)});
+      nom: src ? src.def.nom : '?', texte: texteForge(env.op.face, t),
+      /* Ce que le déclencheur retardé lira du contexte de son créateur (`Spawner>…`, js/forgeFiltresE.js). */
+      spawner: {evt: env.ctx.evt, sacrifies: (env.ctx.sacrifies || []).slice(), memo: (env.ctx.memo || []).slice()}});
   }, (t, op) => { op.op = 'forge'; op.hostile = false; }, {
     prepare(t, op) {
       if (!FORGE_MODES[t.Mode] || !phaseConnue(t)) return false;

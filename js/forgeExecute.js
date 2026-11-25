@@ -69,7 +69,12 @@ function* executeForge(P, op, ctx) {
     }
     /* Le X du mana se paie par `paieMana()` lui-même : le coût garde son X. */
     if (r !== 1 || !paieMana(P, ctx.ctrl, c.cout.mana, payeX ? ctx.x : 0)) { ctx.coupe = op.chaine; return; }
+    P.coutPaye = null;
     if (autre) yield* paieAutre(P, ctx.ctrl, porteur, autre);
+    /* Ce que le coût interne a sacrifié ou défaussé se lit ensuite (`Sacrificed`, `Discarded`). */
+    if (P.coutPaye && P.coutPaye.sacrifies) ctx.sacrifies = [...(ctx.sacrifies || []), ...P.coutPaye.sacrifies];
+    if (P.coutPaye) ctx.coutPaye = {...(ctx.coutPaye || {}), ...P.coutPaye};
+    P.coutPaye = null;
     if (decl) deplace(P, decl.id, 'exil');
   }
   /* Le joueur choisi décide lui-même, par sa propre question (js/forgeChoisisseur.js). */

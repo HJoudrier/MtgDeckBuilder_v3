@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1935 fonctions**, 324 modules, 2244 Ko de JavaScript.
+**1935 fonctions**, 324 modules, 2248 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -45,7 +45,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 149 |
 | [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 12 | 191 |
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
-| [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 9 | 195 |
+| [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 9 | 196 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
 | [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 237 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
@@ -59,7 +59,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuDeclencheurs.js`](#jsjeudeclencheursjs) | Des évènements aux capacités déclenchées | 7 | 150 |
 | [`jeuEtatsDeJeu.js`](#jsjeuetatsdejeujs) | Les actions d'état, et un joueur qui perd | 2 | 99 |
 | [`jeuLancer.js`](#jsjeulancerjs) | Ce qu'un joueur peut faire de sa priorité, et le faire | 13 | 266 |
-| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 282 |
+| [`jeuActions.js`](#jsjeuactionsjs) | Exécuter une action choisie à la priorité | 7 | 286 |
 | [`jeuVariantes.js`](#jsjeuvariantesjs) | Les autres façons de lancer et de payer | 18 | 303 |
 | [`jeuVariantesB.js`](#jsjeuvariantesbjs) | Les façons de lancer, suite | 6 | 74 |
 | [`jeuCoutsB.js`](#jsjeucoutsbjs) | Les morceaux de coût de plus | 4 | 78 |
@@ -84,16 +84,16 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeValide.js`](#jsforgevalidejs) | Le langage de filtres de Forge | 13 | 307 |
 | [`forgeDescripteurs.js`](#jsforgedescripteursjs) | Ce que les filtres de Forge deviennent pour | 4 | 77 |
 | [`forgeExpr.js`](#jsforgeexprjs) | Les quantités de Forge | 8 | 174 |
-| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 161 |
+| [`forgeExprB.js`](#jsforgeexprbjs) | Les expressions de Forge, suite : la mémoire, les | 7 | 165 |
 | [`forgeDefini.js`](#jsforgedefinijs) | Ce que `Defined$` désigne | 6 | 154 |
 | [`forgeDesignations.js`](#jsforgedesignationsjs) | Ce que Forge désigne encore : des joueurs | 5 | 117 |
 | [`forgeCout.js`](#jsforgecoutjs) | Lire un coût de Forge | 3 | 151 |
 | [`forgeEffetsA.js`](#jsforgeeffetsajs) | Exécuter une capacité de Forge : le registre, et les | 8 | 223 |
 | [`forgeChaque.js`](#jsforgechaquejs) | « Search for a Forest card and a Plains card » | 2 | 26 |
-| [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 122 |
+| [`forgeExecute.js`](#jsforgeexecutejs) | La porte des effets de Forge : `executeForge()` | 5 | 127 |
 | [`forgeEffetsB.js`](#jsforgeeffetsbjs) | Les effets de Forge : regarder la bibliothèque, | 7 | 258 |
 | [`forgeEffetsC.js`](#jsforgeeffetscjs) | Les effets de Forge : pompes, engagements, mana, | 6 | 215 |
-| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 208 |
+| [`forgeEffetsD.js`](#jsforgeeffetsdjs) | Les effets de Forge qui durent : régénération, | 8 | 210 |
 | [`forgeEffetsE.js`](#jsforgeeffetsejs) | Les effets de Forge : la bibliothèque et ce qu'on | 1 | 145 |
 | [`forgeBatailles.js`](#jsforgebataillesjs) | Les batailles (Siege) : points de défense, | 4 | 63 |
 | [`forgeChoix.js`](#jsforgechoixjs) | Les choix de Forge : une couleur, un type, une | 7 | 184 |
@@ -188,7 +188,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeRedemarrage.js`](#jsforgeredemarragejs) | Recommencer la partie | 0 | 52 |
 | [`forgeManaRestreint.js`](#jsforgemanarestreintjs) | Du mana en réserve qui ne paie pas n'importe quoi | 2 | 81 |
 | [`forgeInstants.js`](#jsforgeinstantsjs) | Les instants : conditions, cibles, quantités | 2 | 95 |
-| [`forgeInstantsB.js`](#jsforgeinstantsbjs) | Les instants : mémoires, tours en plus, combats | 5 | 226 |
+| [`forgeInstantsB.js`](#jsforgeinstantsbjs) | Les instants : mémoires, tours en plus, combats | 5 | 229 |
 | [`forgeInstantsC.js`](#jsforgeinstantscjs) | Les instants : la pile, les coûts facultatifs | 0 | 131 |
 | [`forgeInstantsD.js`](#jsforgeinstantsdjs) | Les instants : mots accordés, vie, déclarations | 3 | 124 |
 | [`forgeInstantsE.js`](#jsforgeinstantsejs) | Les instants : filtres, marqueurs, piles, coûts | 0 | 233 |
@@ -196,7 +196,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeInstantsG.js`](#jsforgeinstantsgjs) | Les instants : un nombre de cibles annoncé | 3 | 67 |
 | [`forgeManaRestreintB.js`](#jsforgemanarestreintbjs) | Engager à la main une source de mana restreint | 2 | 60 |
 | [`forgeClones.js`](#jsforgeclonesjs) | Un clone qui garde les marqueurs de son modèle | 0 | 34 |
-| [`forgeFiltresE.js`](#jsforgefiltresejs) | Des filtres et des désignations qui n'étaient lus de personne | 6 | 221 |
+| [`forgeFiltresE.js`](#jsforgefiltresejs) | Des filtres et des désignations qui n'étaient lus de personne | 6 | 242 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
@@ -980,7 +980,7 @@ Lire un script de carte de Forge. *8 fonctions, 126 lignes, 6 Ko.*
 
 ## js/forgeCouverture.js
 
-Ce qu'une carte de Forge demande au moteur. *9 fonctions, 195 lignes, 12 Ko.*
+Ce qu'une carte de Forge demande au moteur. *9 fonctions, 196 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1232,7 +1232,7 @@ Ce qu'un joueur peut faire de sa priorité, et le faire. *13 fonctions, 266 lign
 
 ## js/jeuActions.js
 
-Exécuter une action choisie à la priorité. *7 fonctions, 282 lignes, 15 Ko.*
+Exécuter une action choisie à la priorité. *7 fonctions, 286 lignes, 15 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1462,7 +1462,7 @@ Lancer le sort d'une créature préparée. *2 fonctions, 37 lignes, 1.7 Ko.*
 
 ## js/jeuPile.js
 
-La priorité, la pile, la résolution. *5 fonctions, 152 lignes, 8.3 Ko.*
+La priorité, la pile, la résolution. *5 fonctions, 152 lignes, 8.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1671,7 +1671,7 @@ Les quantités de Forge. *8 fonctions, 174 lignes, 11 Ko.*
 
 ## js/forgeExprB.js
 
-Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 161 lignes, 11 Ko.*
+Les expressions de Forge, suite : la mémoire, les. *7 fonctions, 165 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1762,7 +1762,7 @@ Exécuter une capacité de Forge : le registre, et les. *8 fonctions, 223 lignes
 
 ## js/forgeExecute.js
 
-La porte des effets de Forge : `executeForge()`. *5 fonctions, 122 lignes, 7.7 Ko.*
+La porte des effets de Forge : `executeForge()`. *5 fonctions, 127 lignes, 8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1811,7 +1811,7 @@ Les effets de Forge : pompes, engagements, mana,. *6 fonctions, 215 lignes, 14 K
 
 ## js/forgeEffetsD.js
 
-Les effets de Forge qui durent : régénération,. *8 fonctions, 208 lignes, 13 Ko.*
+Les effets de Forge qui durent : régénération,. *8 fonctions, 210 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2972,7 +2972,7 @@ Les instants : conditions, cibles, quantités. *2 fonctions, 95 lignes, 4.9 Ko.*
 
 ## js/forgeInstantsB.js
 
-Les instants : mémoires, tours en plus, combats. *5 fonctions, 226 lignes, 13 Ko.*
+Les instants : mémoires, tours en plus, combats. *5 fonctions, 229 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3037,7 +3037,7 @@ Un clone qui garde les marqueurs de son modèle. *0 fonctions, 34 lignes, 1.9 Ko
 
 ## js/forgeFiltresE.js
 
-Des filtres et des désignations qui n'étaient lus de personne. *6 fonctions, 221 lignes, 16 Ko.*
+Des filtres et des désignations qui n'étaient lus de personne. *6 fonctions, 242 lignes, 18 Ko.*
 
 | Fonction | Rôle |
 |---|---|

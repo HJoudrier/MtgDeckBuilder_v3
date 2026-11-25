@@ -145,8 +145,11 @@ FORGE_API.Token.gen = (g => function* (P, t, env) {
 forgeSait('param', 'Token.RememberOriginalTokens');
 
 FORGE_API.ImmediateTrigger.gen = (g => function* (P, t, env) {
-  if (t.TriggerAmount == null) return yield* g(P, t, env);
-  for (let k = forgeNombre(P, t.TriggerAmount, env); k > 0; k--) yield* g(P, t, env);
+  const n0 = P.enAttente.length;
+  if (t.TriggerAmount == null) yield* g(P, t, env);
+  else for (let k = forgeNombre(P, t.TriggerAmount, env); k > 0; k--) yield* g(P, t, env);
+  /* Le déclencheur réflexe garde le contexte de qui l'a créé : « that creature's power » (`Spawner>…`, js/forgeFiltresE.js). */
+  P.enAttente.slice(n0).forEach(x => { x.spawner = {evt: env.ctx.evt, sacrifies: (env.ctx.sacrifies || []).slice(), memo: (env.ctx.memo || []).slice(), coutPaye: env.ctx.coutPaye || null}; });
 })(FORGE_API.ImmediateTrigger.gen);
 forgeSait('param', 'ImmediateTrigger.TriggerAmount');
 

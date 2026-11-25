@@ -218,3 +218,24 @@ forgeSait('filtre', 'ManaSpent EQ0', 'CastSa Spell.OppCtrl', 'CastSa Spell.Warp'
   /* La restriction `Moved.ValidCause` ne passe que ses valeurs connues (js/forgeEntreesC.js) ; `!ManaAbility` : js/forgeStatiquesD.js. */
   'LandAbility', 'ManaAbility');
 forgeSait('defini', 'Remembered.White', 'Remembered.Blue', 'Remembered.Black', 'Remembered.Red', 'Remembered.Green');
+
+/* —— « If … was spent to cast it » —————————————————————————————————— */
+
+/* `CastSA>Count$Adamant_2.Green.2.0` (les Incarnations), `CastSA>Returned$CardManaCost`, `CastSA>Collected$Amount` : une quantité lue sur le sort qui a été
+   lancé — ici la source, qui garde son lancement (`o.lance`). */
+exprEtendue = (g => function (P, tete, q, env) {
+  /* `Spawner>Sacrificed$CardPower` : la quantité se lit dans le contexte de la capacité qui a créé ce déclencheur réflexe. */
+  if (/^Spawner>/.test(tete)) {
+    const sp = env.ctx && env.ctx.spawner;
+    return sp ? forgeExpression(P, tete.slice(8) + '$' + q, {...env, ctx: {...env.ctx, ...sp, spawner: null}}, 1) : 0;
+  }
+  if (!/^CastSA>/.test(tete)) return g(P, tete, q, env);
+  const base = tete.slice(7), L = env.src && env.src.lance;
+  if (base === 'Count') return q === 'xPaid' ? (env.src && env.src.x) || 0 : forgeExpression(P, 'Count$' + q, env, 1);
+  const ids = {Collected: L && L.collectees, Returned: L && L.coutPaye && L.coutPaye.renvoyes, Discarded: L && L.coutPaye && L.coutPaye.defausses}[base];
+  if (ids === undefined) return g(P, tete, q, env);
+  const l = objetsDeIds(P, ids || []);
+  return q === 'CardManaCost' ? l.reduce((s, o) => s + mvDe(o), 0) : l.length;
+})(exprEtendue);
+forgeSait('expr', 'Spawner>Sacrificed$CardPower', 'Spawner>TriggeredCard$CardCounters', 'CastSA>Count$Adamant_2', 'CastSA>Count$Adamant_1', 'CastSA>Count$xPaid', 'CastSA>Count$OptionalGenericCostPaid', 'CastSA>Collected$Amount',
+  'CastSA>Returned$CardManaCost', 'CastSA>Discarded$CardManaCost');

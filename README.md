@@ -2399,6 +2399,15 @@ Cet audit a retrouvé cent vingt cartes « complètes » à tort ; la plupart so
   (Ajani's Last Stand, Uphill Battle…) passaient alors pour complets. Il n'est connu que de `Counter` ; `Moved.ValidCause` reste borné à ses deux valeurs lues.
 Restent honnêtement partiels : `An Unearthly Child` (compagnon du Docteur), `Protective Sphere` (la couleur de l'activation), `Silumgar Scavenger` (exploité), `Uphill Battle`, `Jorn, God of Winter` (une cause de déplacement).
 
+**Correctif F104 : les quantités lues sur le sort lancé** (`js/forgeFiltresE.js`, `js/forgeExprB.js`, `js/forgeCouverture.js`). Wistfulness (et Vibrance, Emptiness, Catharsis, Deceit : les Incarnations d'Évoque) ne faisaient rien à l'entrée,
+bien que le mana exigé fût payé. Trois causes mêlées : la condition `CastSA>Count$Adamant_2.Green.2.0` (une quantité lue sur le *sort lancé*) n'était lue de personne — le préfixe `CastSA>` la faisait passer entre les
+mailles de la couverture, qui l'estimait sans expression ; `Adamant_2` demandait toujours trois mana au lieu de deux (`Adamant` sans nombre : trois) ; et `Adamant.Colorless` n'existait pas. Maintenant :
+- **`CastSA>Count$…`, `CastSA>Collected$Amount`, `CastSA>Returned|Discarded$CardManaCost`** se lisent sur le lancement que le permanent garde (`o.lance` : mana dépensé, cartes exilées pour collecter des indices, cartes
+  renvoyées ou défaussées par le coût). Dralnu's Pet entre ainsi avec autant de marqueurs que la valeur de mana de la créature défaussée au coût de kicker.
+- **`Spawner>Sacrificed$CardPower`, `Spawner>TriggeredCard$…`** : la quantité d'un déclencheur réflexe ou retardé se lit dans le contexte de la capacité qui l'a créé (Heart-Piercer Manticore, Bolg of the North, Nine-Lives
+  Familiar). Le coût « sacrifier une créature » garde son instantané (`P.coutPaye.sacrifies`) ; un `ImmediateTrigger` et un `DelayedTrigger` emportent `spawner`.
+- **La couverture** lit le préfixe `Préfixe>` d'une expression : trois cartes qui passaient pour complètes sans l'être sont apparues, puis sont lues pour de bon.
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

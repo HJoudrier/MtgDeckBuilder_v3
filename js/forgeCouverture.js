@@ -74,7 +74,8 @@ function morceauxCout(cout) {
    `Count$Compare X EQ0.1.0` suit la SVar `X`. */
 function expressionsDe(v, face, vus) {
   const s = String(v || '').trim();
-  const m = /^([A-Za-z]+)\$([A-Za-z]+)/.exec(s);
+  /* `CastSA>Count$Adamant_2…` : une quantité lue sur le sort lancé ; le préfixe fait partie de la famille. */
+  const m = /^([A-Za-z]+(?:>[A-Za-z]+)?)\$([A-Za-z]+)/.exec(s);
   if (!m) return [];
   const r = ['expr:' + m[1] + '$' + m[2]];
   const agg = /^Count\$Valid\w* [^$]+\$(\w+)/.exec(s);

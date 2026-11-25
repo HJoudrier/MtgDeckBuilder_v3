@@ -28,7 +28,10 @@ function* paieAutre(P, j, o, c) {
   }
   if (c.sac) {
     const ids = champDe(P, j).filter(x => correspond(P, x, c.sac.desc, o, j) && !sacrificeInterdit(P, x, true)).map(x => x.id);
-    (c.sac.tout ? ids : yield* choisitCartes(P, j, ids, c.sac.n, 'Sacrifier', 'sacrifice')).forEach(id => sacrifie(P, id));
+    const choisis = c.sac.tout ? ids : yield* choisitCartes(P, j, ids, c.sac.n, 'Sacrifier', 'sacrifice');
+    /* « Equal to that creature's power » : ce que le coût a sacrifié, par son instantané (`Spawner>Sacrificed`, js/forgeFiltresE.js). */
+    P.coutPaye = {...(P.coutPaye || {}), sacrifies: choisis.map(id => instantane(P, obj(P, id)))};
+    choisis.forEach(id => sacrifie(P, id));
   }
   if (c.defausse) {
     const ids = P.joueurs[j].main.filter(id => id !== o.id && (!c.defausse.desc || correspond(P, obj(P, id), c.defausse.desc, o, j)));
@@ -147,13 +150,14 @@ function* lanceSort(P, j, a) {
   s.kickePaiement = a.variante === 'kicker';
   yield* choisitManaPaye(P, j, cout, x);
   if (!paieMana(P, j, cout, x, {sort: s})) return annule();
+  P.coutPaye = null;
   if (autre) yield* paieAutre(P, j, s, autre);
   if (ga) yield* paieAutre(P, j, s, ga);
   /* Une façon de lancer qui annonce X (Disrupting Shoal : la variante porte la valeur, js/forgeInstantsE.js). */
   const annonce = /^altX(\d+)$/.exec(a.variante || '');
   if (annonce) x = +annonce[1];
   s.x = x;
-  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort, collectees: s.collectees || null, sneaked: a.variante === 'sneak'};
+  s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort, collectees: s.collectees || null, coutPaye: P.coutPaye || null, sneaked: a.variante === 'sneak'};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
     kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension',
     variante: a.variante || null};

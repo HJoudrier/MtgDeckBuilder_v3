@@ -1,6 +1,6 @@
 # Détail de la couverture : toutes les cartes, et celles d'EDHREC
 
-Mesure du 24 novembre 2026 (dépôt Forge au commit `3e1fa4ed`, moteur après le lot F103). Chaque carte est lue avec son script Forge
+Mesure du 24 novembre 2026 (dépôt Forge au commit `3e1fa4ed`, moteur après le lot F104). Chaque carte est lue avec son script Forge
 par `definitionForge()`, le moteur lui-même ; ce document ne compte que les cartes qui ont un script — 34 482 cartes (les jetons, eux,
 ont leurs scripts à part). Trois états :
 
@@ -76,7 +76,7 @@ Pondérées par le nombre de decks qui les jouent (additionné sur ces cent page
 
 ## Ce qui manque
 
-2 825 des 4 413 cartes non complètes n'ont **qu'un seul élément** inconnu (64,0 %) ; parmi celles d'EDHREC,
+2 822 des 4 413 cartes non complètes n'ont **qu'un seul élément** inconnu (63,9 %) ; parmi celles d'EDHREC,
 283 sur 462.
 
 ### Par famille d'élément (nombre de cartes non complètes qui en portent au moins un)
@@ -84,9 +84,9 @@ Pondérées par le nombre de decks qui les jouent (additionné sur ces cent page
 | Famille | Toutes les cartes | Cartes d'EDHREC | Ce que c'est |
 |---|---|---|---|
 | `param` | 2 336 | 268 | un paramètre d'effet ou de statique |
-| `construction` | 726 | 70 | une construction refusée |
+| `construction` | 725 | 70 | une construction refusée |
 | `trig` | 511 | 41 | un déclencheur |
-| `expr` | 475 | 53 | une quantité calculée |
+| `expr` | 478 | 53 | une quantité calculée |
 | `filtre` | 472 | 39 | une propriété de filtre |
 | `kw` | 465 | 42 | un mot-clé |
 | `api` | 382 | 27 | un effet entier |

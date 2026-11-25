@@ -1,6 +1,6 @@
 # Détail de la couverture, set par set
 
-Mesure du 24 novembre 2026 (moteur après le lot F103, scripts Forge au commit `3e1fa4ed`). Même mesure que [couverture-detail.md](couverture-detail.md),
+Mesure du 24 novembre 2026 (moteur après le lot F104, scripts Forge au commit `3e1fa4ed`). Même mesure que [couverture-detail.md](couverture-detail.md),
 rangée cette fois selon les éditions de Forge (`res/editions`) : **658 sets** ayant au moins une carte à script, dont 409 hors promotionnels.
 
 Règles de lecture :
