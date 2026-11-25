@@ -16,7 +16,7 @@
 /* À rehausser dès que le compilateur change ce qu'il comprend : la
    signature d'un lot de simulations l'inclut, et un rejeu fait avec un
    autre compilateur ne rejouerait pas la même partie. */
-const COMPILO_V = 3;
+const COMPILO_V = 4;
 
 const DEFS = new Map();
 

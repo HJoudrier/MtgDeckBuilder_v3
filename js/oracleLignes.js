@@ -93,6 +93,12 @@ function compileActivee(ligne, puces) {
   if (/^(when|whenever|at) /.test(avant)) return null;
   const cout = coutActivation(avant);
   if (!cout) return {genre: 'activee', cout: null, effet: null, rates: [ligne]};
+  /* Une condition d'activation qu'on ne sait pas juger (« activate only if
+     you have no cards in hand », « only during your upkeep ») : la capacité
+     n'est pas offerte. Offerte sans sa condition, elle rendrait la carte
+     plus forte qu'elle n'est. */
+  if (/\bactivate (this ability )?only (if|during|while|when|before|after|from|on|any time)\b/.test(ry.txt))
+    return {genre: 'activee', cout, effet: null, rates: [ligne]};
   const c = contexteOracle();
   const r = compileEffetModal(ry.txt, c, puces);
   const ops = r.effet.ops;

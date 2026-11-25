@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1963 fonctions**, 350 modules, 2436 Ko de JavaScript.
+**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -42,7 +42,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`oracleEffetsB.js`](#jsoracleeffetsbjs) | Les motifs d'effet : jetons, marqueurs, pompes, | 4 | 206 |
 | [`oracleDeclencheurs.js`](#jsoracledeclencheursjs) | Lire ce qui déclenche une capacité | 4 | 88 |
 | [`oracleStatiques.js`](#jsoraclestatiquesjs) | Lire une capacité statique, et la façon d'entrer | 4 | 85 |
-| [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 149 |
+| [`oracleLignes.js`](#jsoraclelignesjs) | Ranger chaque ligne d'une carte | 7 | 155 |
 | [`definitions.js`](#jsdefinitionsjs) | D'une carte à sa définition de jeu | 12 | 191 |
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 9 | 198 |
@@ -157,7 +157,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeFiltresD.js`](#jsforgefiltresdjs) | Des propriétés de filtre de plus, II | 2 | 102 |
 | [`forgeHideaway.js`](#jsforgehideawayjs) | Hideaway : cacher une carte, la jouer plus tard | 0 | 35 |
 | [`forgeAlias.js`](#jsforgealiasjs) | Ce que Forge a tiré de « Pump » | 0 | 53 |
-| [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 4 | 118 |
+| [`forgeActivations.js`](#jsforgeactivationsjs) | Lancer et activer autrement | 6 | 167 |
 | [`forgeCoutsC.js`](#jsforgecoutscjs) | Ce que les statiques font au coût de jouer et au | 6 | 142 |
 | [`forgeChoixC.js`](#jsforgechoixcjs) | Choisir, défausser, répéter, sacrifier : ce que les | 3 | 216 |
 | [`forgeExprC.js`](#jsforgeexprcjs) | Des quantités de plus | 1 | 102 |
@@ -946,7 +946,7 @@ Lire une capacité statique, et la façon d'entrer. *4 fonctions, 85 lignes, 4.2
 
 ## js/oracleLignes.js
 
-Ranger chaque ligne d'une carte. *7 fonctions, 149 lignes, 6.9 Ko.*
+Ranger chaque ligne d'une carte. *7 fonctions, 155 lignes, 7.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2746,7 +2746,7 @@ Ce que Forge a tiré de « Pump ». *0 fonctions, 53 lignes, 3.1 Ko.*
 
 ## js/forgeActivations.js
 
-Lancer et activer autrement. *4 fonctions, 118 lignes, 6.7 Ko.*
+Lancer et activer autrement. *6 fonctions, 167 lignes, 9.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -2754,10 +2754,13 @@ Lancer et activer autrement. *4 fonctions, 118 lignes, 6.7 Ko.*
 | `moinsMana(c, m)` | Un coût de mana moins un autre : chaque couleur ôtée de la même couleur, le reste et le générique ôtés du générique. |
 | `coutDeJeu(t)` | « You may cast the copy by paying {3} rather than paying its mana cost » : js/forgeEffetsI.js le passe à `lanceDepuisEffet()`, que la variante « permis » lit (js/jeuVariantes.js). |
 | `capaciteReduite(P, j, o, k)` | Le coût de mana d'une capacité vue par le joueur qui l'active : le générique en moins, jamais en dessous de zéro, et jamais une couleur. |
+| `restrictionActivation(t)` | — |
+| `activationPermise(P, j, o, k)` | — |
 
 | Donnée | Rôle |
 |---|---|
 | `MANA_DE` | —— Le mana venu de créatures —————————————————————————————————————————— |
+| `CLES_RESTRICTION_ACTIVATION` | « Ferocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater » (Fanatic of Rhonas) s'écrit, sur la capacité même, `IsPresent$… |
 
 ## js/forgeCoutsC.js
 

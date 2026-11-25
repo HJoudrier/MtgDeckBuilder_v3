@@ -115,3 +115,52 @@ FORGE_COMMUNS.add('ReduceCost');
 FORGE_COMMUNS.add('PowerUp');
 forgeSait('param', 'PowerUp', 'ReduceCost', 'Activation', 'Play.PlayCost');
 forgeSait('expr', 'Count$YourTurns');
+
+/* —— N'activer que si l'on contrôle… —————————————————————————————————————— */
+
+/* « Ferocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a
+   creature with power 4 or greater » (Fanatic of Rhonas) s'écrit, sur la
+   capacité même, `IsPresent$ Creature.YouCtrl+powerGE4`. Forge en fait une
+   restriction d'activation (`SpellAbilityRestriction`), comme `CheckSVar$`
+   et le total de vie (`ActivationLifeTotal$`). On ne la lisait qu'à la
+   résolution — un sort contrecarré par sa propre condition, après le coût
+   payé — et pas du tout sur une capacité de mana, qui ne se résout pas : la
+   source était proposée sans condition. La restriction se garde donc sur la
+   capacité, et se juge avant de l'offrir. */
+const CLES_RESTRICTION_ACTIVATION = ['IsPresent', 'PresentCompare', 'PresentZone', 'PresentDefined', 'PresentPlayer',
+  'IsPresent2', 'PresentCompare2', 'PresentZone2', 'PresentDefined2', 'CheckSVar', 'SVarCompare'];
+
+function restrictionActivation(t) {
+  const r = {};
+  CLES_RESTRICTION_ACTIVATION.forEach(k => { if (t[k] != null) r[k] = t[k]; });
+  if (t.ActivationLifeTotal) { r.vie = t.ActivationLifeTotal; r.vieSeuil = t.ActivationLifeAmount || 'GE1'; }
+  return r.IsPresent || r.IsPresent2 || r.CheckSVar || r.vie ? r : null;
+}
+
+capaciteForge = (g => function (def, face, t, jetons) {
+  const n = def.capacites.length, ok = g(def, face, t, jetons);
+  if (!ok || t.SP) return ok;
+  const r = restrictionActivation(t);
+  /* Une capacité de mana ne passait pas par `restrictionSort()` : « Activate only during your turn » lui manquait aussi. */
+  const moment = typeof restrictionSort === 'function' ? restrictionSort(t) : null;
+  def.capacites.slice(n).forEach(k => {
+    if (r) k.condActivation = {t: r, face};
+    if (moment && k.genre === 'mana' && !k.restr) k.restr = moment;
+  });
+  return ok;
+})(capaciteForge);
+
+function activationPermise(P, j, o, k) {
+  const {t, face} = k.condActivation, env = {face, ctx: {cibles: [], memo: [], memoJ: [], x: 0}, src: o, ctrl: j, op: {}, base: true};
+  if (t.vie && !(t.vie === 'You' ? seuilForge(P, P.joueurs[j].vie, t.vieSeuil, env) : true)) return false;
+  return conditionForge(P, t, env);
+}
+
+activationInterdite = (g => function (P, j, o, k) {
+  if (k.condActivation && !activationPermise(P, j, o, k)) return true;
+  return g(P, j, o, k);
+})(activationInterdite);
+
+FORGE_COMMUNS.add('ActivationLifeTotal');
+FORGE_COMMUNS.add('ActivationLifeAmount');
+forgeSait('param', 'ActivationLifeTotal', 'ActivationLifeAmount');
