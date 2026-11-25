@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1936 fonctions**, 326 modules, 2274 Ko de JavaScript.
+**1937 fonctions**, 328 modules, 2287 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -198,7 +198,9 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeClones.js`](#jsforgeclonesjs) | Un clone qui garde les marqueurs de son modèle | 0 | 34 |
 | [`forgeFiltresE.js`](#jsforgefiltresejs) | Des filtres et des désignations qui n'étaient lus de personne | 6 | 242 |
 | [`forgeRituels.js`](#jsforgerituelsjs) | Les rituels d'EDHREC | 0 | 187 |
-| [`forgeRituelsB.js`](#jsforgerituelsbjs) | Les rituels d'EDHREC : boucles, votes, saisons | 1 | 183 |
+| [`forgeRituelsB.js`](#jsforgerituelsbjs) | Les rituels d'EDHREC : boucles, votes, saisons | 1 | 189 |
+| [`forgeArtefacts.js`](#jsforgeartefactsjs) | Les artefacts d'EDHREC | 0 | 79 |
+| [`forgeArtefactsB.js`](#jsforgeartefactsbjs) | Les artefacts d'EDHREC : coûts, joueurs, mots-clés | 1 | 138 |
 | [`iaValeur.js`](#jsiavaleurjs) | Ce que vaut une carte, un permanent, un adversaire | 8 | 85 |
 | [`iaChoix.js`](#jsiachoixjs) | Les choix du joueur automatique hors de la priorité | 7 | 124 |
 | [`iaPriorite.js`](#jsiaprioritejs) | Ce que le joueur automatique fait de sa priorité | 12 | 228 |
@@ -3064,11 +3066,23 @@ Les rituels d'EDHREC. *0 fonctions, 187 lignes, 12 Ko.*
 
 ## js/forgeRituelsB.js
 
-Les rituels d'EDHREC : boucles, votes, saisons. *1 fonctions, 183 lignes, 12 Ko.*
+Les rituels d'EDHREC : boucles, votes, saisons. *1 fonctions, 189 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `plafondXEclair(P, j, d)` | Silver Scrutiny : « as though it had flash if X is 3 or less » — hors de la vitesse d'un rituel, X ne passe pas le plafond. |
+
+## js/forgeArtefacts.js
+
+Les artefacts d'EDHREC. *0 fonctions, 79 lignes, 4.7 Ko.*
+
+## js/forgeArtefactsB.js
+
+Les artefacts d'EDHREC : coûts, joueurs, mots-clés. *1 fonctions, 138 lignes, 8.2 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `taxePhyrexienneAttaque(P, o, def)` | —— Attaquer en payant {W/P} —————————————————————————————————————————— |
 
 ## js/iaValeur.js
 

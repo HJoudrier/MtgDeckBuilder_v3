@@ -177,6 +177,8 @@ js/                 modules, chargés dans cet ordre :
   forgeFiltresE.js        filtres et désignations qui n'étaient lus de personne : extrêmes, ce tour, lot d'un déclencheur, ce que le coût a payé, protection au choix
   forgeRituels.js         les rituels d'EDHREC : cibles qui dépendent de X, éclair payant, terrains gelés, joueurs désignés, votes, boucles
   forgeRituelsB.js        les saisons (modes à pattes), animation des cartes revenues, ce qui a quitté le champ, éclair qui borne X, quantités sur les joueurs
+  forgeArtefacts.js       les artefacts d'EDHREC : exil de retour, lot d'un déclencheur, initiative, marqueurs interdits, défenseurs
+  forgeArtefactsB.js      taxe d'attaque {W/P}, coût plancher, joueurs désignés, exaltation accordée, défenseur qui attaque
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2429,6 +2431,25 @@ aucune cible légale et est retiré de la pile, comme le veulent les règles. Le
 Restent injouables, volontairement : les Attractions (Step Right Up), Planeswalk et le chaos (Path of the Pyromancer), `Beam me up` (Federation Resupply), `Demonstrate`, `Overload`, `Replicate`, `Escalate` avec un coût d'engagement, `Forecast`, les choix secrets
 (`Secretly` : Wheel of Misfortune, Prisoner's Dilemma), `AssignGroup` (Khorvath's Fury, Pir's Whim), le vote avec plusieurs voix (Mob Verdict, Expropriate), `ChangeText` (New Blood), `Prowl` et `Bloodthirst`, le mot-clé `decayed`, le coût « payer la moitié de sa vie » payé par n'importe quel joueur
 (Temporal Extortion) et celui qui choisit un type de créature (Celestial Reunion). Aucun n'est cher à écrire seul ; aucun ne vaut ce que coûte un mécanisme de plus pour une carte.
+
+**Lot F106 : les artefacts d'EDHREC** (`js/forgeArtefacts.js`, `js/forgeArtefactsB.js`, et des retouches de `js/forgeRituelsB.js`, `js/forgeInstants.js`, `js/forgeStatiques.js`, `js/forgeInterdits.js`, `js/jeuVariantes.js`). Des 68 artefacts que le moteur ne jouait pas entièrement, 21 le sont maintenant,
+et les 47 autres ne sont pas oubliés : chacun demande un mécanisme à lui seul (voir plus bas). Ce qui a été appris, carte par carte :
+- **Whip of Erebos** : `Animate | LeaveBattlefield$ Exile` — la créature revenue s'exile si elle quitte le champ (`o.exilSiQuitte`, déjà lu par `destinationRemplacee`) ; `sVars` n'est qu'un indice pour l'IA (Vorpal Sword aussi).
+- **Teferi's Puzzle Box** : `ChangeZoneAll | DefinedPlayer` ne déplace que les cartes du joueur désigné (le joueur du déclencheur), le temps du déplacement ; la main entière part sous la bibliothèque, puis autant de cartes sont piochées.
+- **The Skullspore Nexus** : `TriggerObjectsCards$CardPower`, la force totale du lot de créatures mortes ensemble (le lot que `noteLotDeclencheur` garde, js/forgeFiltresE.js).
+- **Aligned Hedron Network** : `ChangeZoneAll | Duration$ UntilHostLeavesPlay` — ce qui est exilé revient quand la source part ; si elle est déjà partie, rien n'est exilé.
+- **Sarevok's Tome** (`Count$Initiative.2.1`), **Hope of Ghirapur** (le joueur blessé en combat par cette source), **Iron Mastiff** (`HasPropertyDefending` : les joueurs qui font face à un attaquant), **Darksteel Angel** (`CantPutCounter`, lu par `poseMarqueurs`), **Tangle Wire** (`Tap | Tapper`, sans effet de jeu).
+- **Norn's Annex** : la taxe d'attaque `{W/P}` par attaquant — du mana blanc si l'on en a, sinon deux points de vie, au choix de celui qui attaque ; sans paiement, la créature n'attaque pas.
+- **Trinisphere** : `SetCost | RaiseTo` — un sort coûte au moins trois mana tant que l'artefact est dégagé (le générique complète). Un sort à X compte X pour zéro, comme dans la règle.
+- **Darksteel Monolith** : `MayPlayAltManaCost$ 0` d'une carte de la main — elle se lance pour {0} une fois par tour ; la mécanique des permissions le tenait déjà, seule la lecture de la statique le refusait.
+- **Wedding Ring** (`controlsArtifact.namedWedding Ring`), **Blitzball Stadium** (`Count$DifferentCounterKinds`), **Bounty Board** (`Player.OpponentOf TriggeredCardController`), **Zenith Chronicler** (`NonTriggeredCardController`), **Unidentified Hovership** (`Player.HasCardsInExile_…_GE1`) : des joueurs ou des quantités désignés par rapport à une carte du déclencheur.
+- **Rammas Echor** : l'exaltation accordée pour le tour (`PumpAll | KW$ Exalted`) — le déclencheur de l'exaltation est compilé une fois, puis posé sur chaque créature visée.
+- **Weathered Sentinels** : un défenseur n'attaque que les joueurs qui nous ont attaqués à leur dernier tour (`CanAttackDefender | ValidAttacked`) ; on relève, par joueur, qui il a attaqué à son tour et à celui d'avant.
+- **`Count$ValidStack` compte le sort qui se résout** : il n'est déjà plus dans la pile, et `Card.Self` ne le trouvait plus (c'est ce qui empêchait Approach of the Second Sun de gagner la partie, lot F105).
+
+Restent injouables ou partiels, faute d'un mécanisme qui ne servirait qu'à eux : le mana noté ou dépensé (Jade Orb of Dragonkind, Jeweled Amulet, Doubling Cube, Coin of Mastery, Thousand Moons Smithy), les remplacements de copie ou de jeton (Twinning Staff, Mirrormind Crown), `Moved` avec `Prevent` ou `Discard`
+(Grafdigger's Cage, Library of Leng), les changements de contrôle et de combattants (Coveted Jewel, Gustha's Scepter, Misleading Signpost, Midnight Crusader Shuttle), les mots-clés accordés qui se déclenchent à la mort (Cauldron of Souls : persist), les dés (Celebr-8000), les clones à choix (Brudiclad),
+les véhicules et leur équipage (Mechtitan Core, Luxurious Locomotive, Mighty Servant of Leuk-o, Mindlink Mech), les verrous de mana de Damping Sphere, un coût qui se lit dans une SVar (Draco) et les métamorphoses (Ratchet, The Irencrag, Skrelv).
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

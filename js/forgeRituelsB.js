@@ -32,11 +32,17 @@ forgeSait('param', 'PutCounter.Chooser', 'PutCounter.Placer', 'PutCounter.Rememb
 
 /* « Each player shuffles their hand into their library » : `ChangeZoneAll | Defined$ Player.IsRemembered` ne prend que les cartes du joueur de la boucle. */
 FORGE_API.ChangeZoneAll.gen = (g => function* (P, t, env) {
+  const base = t.ChangeType || 'Card', filtre = base + (base.includes('.') ? '+' : '.') + 'RememberedPlayerOwn';
+  /* `DefinedPlayer$ TriggeredPlayer` (Teferi's Puzzle Box) : les cartes de ce joueur seulement, le temps du déplacement. */
+  if (t.DefinedPlayer) {
+    const avant = env.ctx.memoJ;
+    env.ctx.memoJ = forgeDefinis(P, t.DefinedPlayer, env).map(x => joueurDe(x)).filter(j => j != null);
+    try { return yield* g(P, {...t, DefinedPlayer: undefined, ChangeType: filtre}, env); } finally { env.ctx.memoJ = avant; }
+  }
   if (t.Defined !== 'Player.IsRemembered') return yield* g(P, t, env);
-  const base = t.ChangeType || 'Card';
-  return yield* g(P, {...t, ChangeType: base + (base.includes('.') ? '+' : '.') + 'RememberedPlayerOwn'}, env);
+  return yield* g(P, {...t, ChangeType: filtre}, env);
 })(FORGE_API.ChangeZoneAll.gen);
-forgeSait('param', 'ChangeZoneAll.Defined');
+forgeSait('param', 'ChangeZoneAll.Defined', 'ChangeZoneAll.DefinedPlayer');
 definisEtendus = (g => function (P, v, env) {
   /* « Its controller draws a card » : le contrôleur de la cible de l'effet d'avant (Season of the Burrow). */
   if (v === 'ParentTargetedController') return uniquesJ(ciblesForge(P, env, true).map(x => joueurDe(x)));

@@ -40,7 +40,7 @@ function statiqueTenable(t) {
     if (t.MayPlay !== 'True' || !/^(Exile|Graveyard|Library|Hand|Stack)(,(Exile|Graveyard|Library|Hand|Stack))*$/.test(t.AffectedZone || '')) return false;
     if ((t.MayPlayAltManaCost && !/^(0|PayLife<ConvertedManaCost>)$/.test(t.MayPlayAltManaCost)) || (t.MayPlayLimit && t.MayPlayLimit !== '1')) return false;
     /* Depuis la main, la permission ne sert que si elle rend le sort gratuit. */
-    if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True') return false;
+    if (/Hand/.test(t.AffectedZone) && t.MayPlayWithoutManaCost !== 'True' && t.MayPlayAltManaCost !== '0') return false;
     if (t.RaiseCost && !coutForge(t.RaiseCost)) return false;
     /* Tenue par un effet (« mill a card, you may play it this turn ») : la zone de commandement, et les cartes retenues. */
     const parEffet = t.EffectZone === 'Command' && /^Card\.IsRemembered(\+nonLand)?$/.test(t.Affected || '');
@@ -65,7 +65,7 @@ function statiqueTenable(t) {
   if (t.GainControl && t.GainControl !== 'You') return false;
   if (t.Target && /CantAttack/.test(t.Mode) && !t.Target.split(',').every(x => /^(You|Opponent|Player|Planeswalker\.YouCtrl|Player\.CardOwner|Player\.attackedBySourceThisTurn|Planeswalker\.ControlledBy Player\.CardOwner|[A-Z][a-z]+\.YouCtrl|Card\.Self\+AttachedTo Creature)$/.test(x.trim()))) return false;
   if (t.UnlessDefender && !DEFENSEUR_PROPRIETE.test(t.UnlessDefender)) return false;
-  if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z]|PayLife<\d+>)$/.test(t.Cost || '')) return false;
+  if (t.Mode === 'CantAttackUnless' && !/^(\d+|[A-Z]|PayLife<\d+>|WP)$/.test(t.Cost || '')) return false;
   if (t.Mode === 'CastWithFlash' && t.ValidSA && !flashLisible(t.ValidSA)) return false;
   /* Hors du champ, seule la réduction que la carte porte pour elle-même. */
   if (t.Mode === 'AlternativeCost') return alternativeLisible(t);

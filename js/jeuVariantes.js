@@ -116,7 +116,7 @@ function variantesSort(P, j, o, depuis) {
   /* Une permission de jouer d'ailleurs, ou de lancer gratuitement depuis
      la main (js/jeuPermis.js). */
   const px = depuis !== 'commandement' && (depuis !== 'main' || statiquesPermis(P).length) ? permisDeJouer(P, j, o) : null;
-  if (px && (depuis !== 'main' || px.s.t.MayPlayWithoutManaCost === 'True')) essaie('permis', coutPermis(P, j, o, depuis, px), autrePermis(d, px));
+  if (px && (depuis !== 'main' || px.s.t.MayPlayWithoutManaCost === 'True' || px.s.t.MayPlayAltManaCost === '0')) essaie('permis', coutPermis(P, j, o, depuis, px), autrePermis(d, px));
   const base = coutSort(P, j, o, depuis);
   /* Deux coûts additionnels au choix : l'un des deux est dû, jamais aucun. */
   if (d.coutsAuChoix) d.coutsAuChoix.forEach((c, i) => essaie(i ? 'choixB' : 'choixA', sommeMana(base, c.cout.mana), fusionAutres(d.coutSup, autresCout(c.cout))));

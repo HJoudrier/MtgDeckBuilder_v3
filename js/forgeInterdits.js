@@ -167,7 +167,7 @@ function taxeAttaque(P, o, def) {
   let n = 0;
   for (const x of statiquesMode(P, 'CantAttackUnless')) {
     const t = x.s.t, env = envStatique(x.src, x.s);
-    if (/^PayLife/.test(t.Cost || '')) continue;
+    if (/^PayLife/.test(t.Cost || '') || t.Cost === 'WP') continue;
     if (!objetOuRien(P, o, t.ValidCard, x.src, env) || !defenseurVise(P, def, t.Target, x.src, env) || !conditionForge(P, t, env)) continue;
     n += forgeNombre(P, t.Cost, env);
   }
