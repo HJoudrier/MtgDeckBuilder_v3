@@ -14,6 +14,8 @@
 
 function histoire(P) {
   if (!P.hist || P.hist.tour !== P.tour) {
+    /* « Last turn » : l'historique du tour d'avant (Command the Stage). */
+    P.histPrec = P.hist || null;
     P.hist = {tour: P.tour, perdu: {}, sacrifies: {}, defausses: {}, marqueurs: 0, quitteCimetiere: [], resolus: {}, vide: false};
   }
   return P.hist;

@@ -70,7 +70,12 @@ exprEtendue = (g => function (P, tete, q, env) {
   if (tete === 'Count') {
     /* `ValidStack Card` : les sorts (et capacités) sur la pile qui répondent au filtre. */
     if ((k = /^ValidStack (.+)$/.exec(q)))
-      return P.pile.map(it => obj(P, it.id)).filter(o => o && o.zone === 'pile' && forgeValideObjet(P, o, k[1], src, env.ctrl, env)).length;
+    {
+      /* Le sort qui se résout n'est déjà plus dans la pile : il compte tout de même (Approach of the Second Sun, `Card.Self`). */
+      const l = P.pile.map(it => obj(P, it.id));
+      if (src && src.zone === 'pile' && !l.includes(src)) l.push(src);
+      return l.filter(o => o && o.zone === 'pile' && forgeValideObjet(P, o, k[1], src, env.ctrl, env)).length;
+    }
     if ((k = /^LastStateBattlefieldWithFallback (.+)\$GreatestCardPower$/.exec(q))) {
       const f = src && src.lanceeEn && src.lanceeEn.forces;
       return f ? Math.max(0, ...f) : Math.max(0, ...objetsZone(P, 'champ').filter(o => forgeValideObjet(P, o, k[1], src, env.ctrl, env)).map(o => car(P, o).force));

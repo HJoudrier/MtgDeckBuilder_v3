@@ -77,6 +77,8 @@ function expressionsDe(v, face, vus) {
   /* `CastSA>Count$Adamant_2…` : une quantité lue sur le sort lancé ; le préfixe fait partie de la famille. */
   const m = /^([A-Za-z]+(?:>[A-Za-z]+)?)\$([A-Za-z]+)/.exec(s);
   if (!m) return [];
+  /* `SVar$Name` renvoie à une autre SVar : on la suit, son nom n'est pas une famille. */
+  if (m[1] === 'SVar') return face && face.svars[m[2] + (s.slice(m[0].length).match(/^\w*/)[0])] != null && !(vus && vus.has('s:' + m[2])) ? (vus && vus.add('s:' + m[2]), expressionsDe(face.svars[m[2] + s.slice(m[0].length).match(/^\w*/)[0]], face, vus)) : [];
   const r = ['expr:' + m[1] + '$' + m[2]];
   const agg = /^Count\$Valid\w* [^$]+\$(\w+)/.exec(s);
   if (agg) r.push('expr:$' + agg[1]);

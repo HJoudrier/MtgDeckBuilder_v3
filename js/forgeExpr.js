@@ -29,7 +29,7 @@ function forgeNombre(P, v, env) {
 }
 
 /* L'opérande est un nombre, ou le nom d'une SVar (`SVar$X/Times.Y`). */
-const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double|DivideEvenlyDown)(?:\.(\w+))?$/;
+const FORGE_MATHS = /\/(Plus|Minus|Times|Twice|HalfUp|HalfDown|Negative|LimitMax|LimitMin|Double|DivideEvenlyDown|NMinus|Abs)(?:\.(\w+))?$/;
 
 /* Appliquer l'opération qui suit une expression. */
 function mathForge(n, op, k) {
@@ -37,6 +37,8 @@ function mathForge(n, op, k) {
     case 'Plus': return n + k; case 'Minus': return n - k; case 'Times': return n * k;
     case 'Twice': case 'Double': return n * 2; case 'HalfUp': return Math.ceil(n / 2); case 'HalfDown': return Math.floor(n / 2);
     case 'DivideEvenlyDown': return k ? Math.floor(n / k) : 0;
+    case 'NMinus': return k - n;
+    case 'Abs': return Math.abs(n);
     case 'Negative': return -n; case 'LimitMax': return Math.min(n, k); case 'LimitMin': return Math.max(n, k);
   }
   return n;
@@ -126,7 +128,7 @@ function forgeExpression(P, expr, env, prof) {
   if (tete === 'PlayerCountOpponents') return adversaires(P, ctrl).length;
   if (tete !== 'Count') return 0;
   let k;
-  if (q === 'xPaid') return ctx.x || 0;
+  if (q === 'xPaid') return ctx.x || (src && src.xAnnonce) || 0;
   if ((k = /^Valid(Graveyard|Hand|Exile|Library|All)? ([^$]+)(?:\$(\w+))?$/.exec(q))) {
     const zone = {Graveyard: 'cimetiere', Hand: 'main', Exile: 'exil', Library: 'bibliotheque'}[k[1]] || 'champ';
     const l = objetsZone(P, zone).filter(o => forgeValideObjet(P, o, k[2], src, ctrl, env));

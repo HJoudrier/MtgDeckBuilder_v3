@@ -122,6 +122,7 @@ function* lanceSort(P, j, a) {
   else if (coutX || autreX) {
     let max = coutX ? maxX(P, j, cout0) : 30;
     if (autreX) max = Math.min(max, maxXAutre(P, j, s, v.autre));
+    max = Math.min(max, plafondXEclair(P, j, d));
     if (!coutX) x = yield* choisitXAutre(P, j, s, v.autre, max, nid);
     else {
       const opts = Array.from({length: max + 1}, (_, i) => i);
@@ -157,6 +158,7 @@ function* lanceSort(P, j, a) {
   const annonce = /^altX(\d+)$/.exec(a.variante || '');
   if (annonce) x = +annonce[1];
   s.x = x;
+  (J.lancesNom = J.lancesNom || {})[d.nom] = (J.lancesNom[d.nom] || 0) + 1;
   s.lance = {par: j, depuis: a.depuis, tour: P.tour, mana: s.manaSort, collectees: s.collectees || null, coutPaye: P.coutPaye || null, sneaked: a.variante === 'sneak'};
   const item = {id: nid, sort: true, ctrl: j, def: d, effets, x, depuis: a.depuis,
     kicked: a.variante === 'kicker', rachat: a.variante === 'rachat', evoque: a.variante === 'evocation', suspendu: a.variante === 'suspension',

@@ -136,6 +136,7 @@ forgeEffet('Discover', ['Num'], function* (P, t, env) {
     const e = deplace(P, id, 'exil');
     if (!estType(o, 'land') && mvDe(o) <= n) trouvee = e; else exiles.push(e);
   }
+  if (trouvee != null && t.RememberDiscovered === 'True') retiensForge(env.ctx, trouvee);
   if (trouvee != null) {
     const r = yield* choisitUn(P, j, ['Le lancer', 'En main'], `Découvrir : ${obj(P, trouvee).def.nom}`, 0, env.ctx.source);
     if (r !== 0 || !(yield* lanceDepuisEffet(P, j, obj(P, trouvee), true))) { if (obj(P, trouvee) && obj(P, trouvee).zone === 'exil') deplace(P, trouvee, 'main'); }

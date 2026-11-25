@@ -175,6 +175,8 @@ js/                 modules, chargés dans cet ordre :
   jeuRevelations.js       montrer toutes les cartes révélées, les non choisissables grisées
   tableAnnuler.js         « Annuler » : rejouer la partie sans la dernière réponse
   forgeFiltresE.js        filtres et désignations qui n'étaient lus de personne : extrêmes, ce tour, lot d'un déclencheur, ce que le coût a payé, protection au choix
+  forgeRituels.js         les rituels d'EDHREC : cibles qui dépendent de X, éclair payant, terrains gelés, joueurs désignés, votes, boucles
+  forgeRituelsB.js        les saisons (modes à pattes), animation des cartes revenues, ce qui a quitté le champ, éclair qui borne X, quantités sur les joueurs
   forgeFouilles.js  fouiller sa bibliothèque : SearchedLibrary, cartes révélées
   forgeCapacitesAccordees.js  GainsAbilitiesOf : avoir les capacités activées des autres
   forgeEffetsK.js   des effets de plus : la protection de la couleur d'une carte visée
@@ -2410,6 +2412,23 @@ mailles de la couverture, qui l'estimait sans expression ; `Adamant_2` demandait
 
 **Précision : une capacité sans cible légale se dit** (`js/jeuPile.js`). Gladiolus Amicitia, quand il va chercher un terrain à l'entrée, déclenche bien son *landfall* sur ce terrain — mais « another target creature you control » demande une autre créature : seul, le déclencheur n'a
 aucune cible légale et est retiré de la pile, comme le veulent les règles. Le moteur le faisait sans rien dire, d'où l'impression qu'il ne se déclenchait pas : le journal écrit maintenant « aucune cible légale, la capacité déclenchée est retirée ».
+
+**Lot F105 : les rituels d'EDHREC** (`js/forgeRituels.js`, `js/forgeRituelsB.js`, et des retouches de `js/forgeExpr.js`, `js/forgeValide.js`, `js/forgeEffetsE.js`, `js/jeuHistorique.js`, `js/forgeMotsCles.js`, `js/forgeInstants.js`, `js/forgeInstantsG.js`, `js/forgeCoutsC.js`, `js/jeuActions.js`, `js/forgeCouverture.js`). Des 63 rituels que le moteur ne jouait pas entièrement, 39 le sont maintenant ; d'autres cartes en profitent au passage (le banc mesure 97 cartes complètes de plus sur l'ensemble des scripts, 42 sur EDHREC). Ce qu'il a fallu apprendre :
+- **Des cibles qui dépendent de X ou les unes des autres** : `TargetsWithDifferentCMC` (Agadeem's Awakening : des valeurs toutes différentes, au plus X), `TargetsWithDifferentNames`, `MaxTotalTargetPower` (Reunion of the House : dix de force au total).
+  X est annoncé avant les cibles (`s.xAnnonce`), et le seuil `cmcLEX` le lit ; l'IA prend X au plus grand, sauf pour un nombre exact de cibles.
+- **Ce que le coût a payé** : `Discarded$Valid` (Grab the Prize), `Sacrificed$Amount` (Devouring Greed) ; un sort lancé de l'exil à son coût de présage (`Count$Foretold`, Haunting Voyage) ; `MayFlashCost` : lancer comme avec la célérité en payant un coût de plus, à la vitesse d'un éphémère seulement
+  (Tegwyll's Scouring) ; un rappel dont le coût s'engage ou montre (`Flashback` avec `tapXType`…) ; `CastWithFlash | ValidSA$ Spell.XCostLE3` (Silver Scrutiny : hors de la vitesse d'un rituel, X ne passe pas trois).
+- **Les joueurs** : désignés par ce qu'ils contrôlent (`Player.controlsA,controlsB`, Fade from History), la valeur la plus haute parmi eux (`PlayerCountPlayers$HighestCardsInHand`, `HighestValid …`), ceux qui sont adversaires parmi les contrôleurs des cartes retenues,
+  les joueurs à la moitié de leur vie de départ (Game Over), la vie et la main du joueur de la boucle (Pox Plague), l'échange de vie avec la différence retenue (Profane Transfusion), les commandants lancés depuis leur zone (Commander's Insight), `ParentTargetedController` (Season of the Burrow).
+- **Boucles et votes** : `RepeatEach | RepeatTargeted`, le vote de cartes (`VoteCard`, Council's Judgment), `ChangeZoneAll | Defined$ Player.IsRemembered` — Molten Psyche ne mélangeait la main de personne : le filtre de propriétaire n'était jamais accolé au type (`Card.RememberedPlayerOwn`, pas `Card+…`).
+- **Les saisons** : les modes à « pattes » (`Pawprint`), cinq au total, choisis l'un après l'autre jusqu'à ce que le budget soit épuisé ou que le joueur s'arrête (Season of Gathering, Season of the Burrow).
+- **Ce qui s'est passé avant** : le tour d'avant (`P.histPrec` : Command the Stage), ce qui a quitté le champ ce tour (Tale of Momo), les terrains qui ne se dégagent pas à la prochaine étape (Bontu's Last Reckoning, `terrainsGeles`), un second lancement du même nom (`J.lancesNom` : Approach of the Second Sun gagne
+  la partie au deuxième lancement depuis la main) ; le sort qui se résout compte encore parmi `ValidStack` pour lui-même.
+- **Une régression que la mesure a révélée** : `expressionsDe` ne suivait pas `SVar$Nom` (la quantité d'une autre SVar), ce qui laissait passer sans lecture six cartes tenues pour complètes ; elle le suit désormais, et ces six sont jouables (les expressions manquantes sont écrites).
+
+Restent injouables, volontairement : les Attractions (Step Right Up), Planeswalk et le chaos (Path of the Pyromancer), `Beam me up` (Federation Resupply), `Demonstrate`, `Overload`, `Replicate`, `Escalate` avec un coût d'engagement, `Forecast`, les choix secrets
+(`Secretly` : Wheel of Misfortune, Prisoner's Dilemma), `AssignGroup` (Khorvath's Fury, Pir's Whim), le vote avec plusieurs voix (Mob Verdict, Expropriate), `ChangeText` (New Blood), `Prowl` et `Bloodthirst`, le mot-clé `decayed`, le coût « payer la moitié de sa vie » payé par n'importe quel joueur
+(Temporal Extortion) et celui qui choisit un type de créature (Celestial Reunion). Aucun n'est cher à écrire seul ; aucun ne vaut ce que coûte un mécanisme de plus pour une carte.
 
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,

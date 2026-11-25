@@ -36,7 +36,9 @@ function* choisitXAvant(P, j, s, d, cout0, nid) {
   const offertes = Math.max(0, ...l.filter(sl => sl.xCibles).map(sl => ciblesLegales(P, sl, s, j, d.couleurs).length));
   const max = maxX(P, j, cout0), opts = Array.from({length: max + 1}, (_, i) => i);
   if (max === 0) return 0;
-  const r = yield question(P, j, 'x', opts, {defaut: Math.min(max, offertes), source: nid});
+  /* « Exactly X targets » : autant que les cibles en offrent ; sinon X le plus grand que le mana permet. */
+  const exact = l.some(sl => sl.xCibles && sl.minX);
+  const r = yield question(P, j, 'x', opts, {defaut: exact ? Math.min(max, offertes) : max, source: nid});
   return opts[r] || 0;
 }
 

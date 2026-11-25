@@ -119,7 +119,7 @@ capaciteReduite = (g => function (P, j, o, k) {
 /* —— Le flash ————————————————————————————————————————————————————— */
 
 /* Les formes de `ValidSA$` d'un `CastWithFlash` qu'on sait lire. */
-function flashLisible(v) { return v === 'Spell' || v === 'Activated.Loyalty' || /^Spell\.IsTargeting Valid \S+$/.test(v); }
+function flashLisible(v) { return v === 'Spell' || v === 'Activated.Loyalty' || /^Spell\.XCostLE\d+$/.test(v) || /^Spell\.IsTargeting Valid \S+$/.test(v); }
 
 flashAccorde = (g => function (P, j, o, d) {
   return !!statiqueQui(P, 'CastWithFlash', (t, src, env) => {

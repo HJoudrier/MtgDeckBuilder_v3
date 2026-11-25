@@ -236,7 +236,9 @@ function propObjet(P, o, c, p, src, ctrl, env) {
   }
   if ((m = /^(power|toughness|cmc)(GE|LE|GT|LT|EQ|NE)(.+)$/.exec(p))) {
     const v = m[1] === 'cmc' ? mvDe(o) : m[1] === 'power' ? c.force : c.endurance;
-    const n = /^-?\d+$/.test(m[3]) ? +m[3] : env ? forgeNombre(P, m[3], env) : 0;
+    /* Au choix des cibles, X vient d'être annoncé sur le sort (`xAnnonce`, js/forgeInstantsG.js) : « creature cards with mana value X or less » (Agadeem's Awakening). */
+    const xAnnonce = src && src.xAnnonce != null ? src.xAnnonce : 0;
+    const n = /^-?\d+$/.test(m[3]) ? +m[3] : env ? (m[3] === 'X' && !(env.ctx && env.ctx.x) && !(env.face && env.face.svars.X) ? xAnnonce : forgeNombre(P, m[3], env)) : m[3] === 'X' ? xAnnonce : 0;
     return compareForge(v, m[2], n);
   }
   if ((m = /^counters_(GE|LE|GT|LT|EQ|NE)(\d+)_(\w+)$/.exec(p))) return compareForge((o.marq || {})[genreMarqueur(m[3])] || 0, m[1], +m[2]);

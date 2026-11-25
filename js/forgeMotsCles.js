@@ -10,7 +10,7 @@
    ===================================================================== */
 
 const FORGE_MOTS_PARAMETRES = ['Protection', 'Ward', 'Equip', 'Enchant', 'Flashback', 'etbCounter', 'Devoid', 'Landwalk',
-  'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'Delve', 'Affinity', 'Unearth', 'Madness',
+  'Cycling', 'TypeCycling', 'Kicker', 'Buyback', 'Evoke', 'Echo', 'Foretell', 'Convoke', 'MayFlashCost', 'Delve', 'Affinity', 'Unearth', 'Madness',
   'Suspend', 'AlternateAdditionalCost', 'Partner', 'Chapter', 'Crew', 'Morph', 'Megamorph', 'Disguise', 'ETBReplacement', 'Changeling', 'Cumulative upkeep'];
 
 /* Le cycle : défausser la carte depuis la main, pour piocher — ou, pour un
@@ -94,7 +94,7 @@ function motCleForge(def, k, face, jetons) {
        reste du coût se paie avec le mana (js/jeuVariantes.js). */
     case 'Flashback': {
       const c = coutForge(reste[0]), autre = c && autresCout(c.cout);
-      if (!c || (autre && Object.keys(autre).some(k => !/^(sac|vie|defausse)$/.test(k)))) return false;
+      if (!c || (autre && Object.keys(autre).some(k => !/^(sac|vie|defausse|engageAutres|contemple)$/.test(k)))) return false;
       def.flashback = c.cout.mana;
       if (autre) def.flashbackAutre = autre;
       return true;
@@ -141,6 +141,8 @@ function motCleForge(def, k, face, jetons) {
       def.suspension = {n: +reste[0], cout: c.mana}; return true;
     }
     case 'Convoke': def.params.convocation = true; return !reste.length;
+    /* « You may cast this spell as though it had flash if you pay {2} more » : un coût de plus pour la vitesse d'un éphémère (js/forgeRituels.js). */
+    case 'MayFlashCost': { const c = reste.length === 1 ? coutForge(reste[0]) : null; if (!c) return false; def.mayFlashCost = c.cout; return true; }
     /* Deux coûts additionnels, l'un ou l'autre (js/jeuVariantes.js). */
     case 'AlternateAdditionalCost': {
       const cs = reste.slice(0, 2).map(x => coutForge(x));
