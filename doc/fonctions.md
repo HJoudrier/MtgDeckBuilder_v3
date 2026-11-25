@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
+**1968 fonctions**, 351 modules, 2442 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -236,7 +236,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`champsJeu.js`](#jschampsjeujs) | Ce que le moteur de jeu demande à une carte | 7 | 91 |
 | [`scryfallApplique.js`](#jsscryfallappliquejs) | Verser une réponse de Scryfall dans une carte | 2 | 148 |
 | [`scryfall.js`](#jsscryfalljs) | La file d'attente vers Scryfall | 7 | 181 |
-| [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 208 |
+| [`recherches.js`](#jsrecherchesjs) | Les recherches nommées chez Scryfall | 10 | 210 |
 | [`decksStockage.js`](#jsdecksstockagejs) | Les dossiers de deck, rangés et relus | 4 | 125 |
 | [`stockage.js`](#jsstockagejs) | La sauvegarde locale | 9 | 297 |
 | [`fenSauvegarde.js`](#jsfensauvegardejs) | Les sections « Sauvegarde » et « Catalogue » des paramètres | 6 | 200 |
@@ -253,7 +253,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gameChangers.js`](#jsgamechangersjs) | La liste des « Game Changers » | 4 | 77 |
 | [`archive.js`](#jsarchivejs) | Lire l'archive Scryfall | 11 | 226 |
 | [`catalogue.js`](#jscataloguejs) | Tenir le catalogue à jour | 10 | 232 |
-| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 261 |
+| [`candidats.js`](#jscandidatsjs) | Des enregistrements de l'archive aux cartes candidates | 14 | 248 |
+| [`inconnues.js`](#jsinconnuesjs) | Les cartes importées sans fiche, complétées par l'archive | 3 | 76 |
 | [`graphe.js`](#jsgraphejs) | Visualisation circulaire interactive des capacités | 4 | 169 |
 | [`stats.js`](#jsstatsjs) | Statistiques, répartitions & courbes de mana | 5 | 113 |
 | [`notation.js`](#jsnotationjs) | La note d'une carte candidate | 5 | 239 |
@@ -269,7 +270,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`wishlistSection.js`](#jswishlistsectionjs) | La section « Liste d'achats » | 5 | 122 |
 | [`acquisitionSection.js`](#jsacquisitionsectionjs) | La section « Acquisition en cours » | 2 | 48 |
 | [`collection.js`](#jscollectionjs) | La section Collection | 12 | 194 |
-| [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 223 |
+| [`fenImport.js`](#jsfenimportjs) | Importer une liste de cartes | 4 | 227 |
 | [`fenAjout.js`](#jsfenajoutjs) | Ajouter une carte à la main | 5 | 126 |
 | [`rechercheSection.js`](#jsrecherchesectionjs) | Le champ de recherche d'une section | 11 | 178 |
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
@@ -3494,7 +3495,7 @@ La file d'attente vers Scryfall. *7 fonctions, 181 lignes, 7.7 Ko.*
 
 ## js/recherches.js
 
-Les recherches nommées chez Scryfall. *10 fonctions, 208 lignes, 8.6 Ko.*
+Les recherches nommées chez Scryfall. *10 fonctions, 210 lignes, 8.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3835,7 +3836,7 @@ Tenir le catalogue à jour. *10 fonctions, 232 lignes, 11 Ko.*
 
 ## js/candidats.js
 
-Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 261 lignes, 12 Ko.*
+Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 248 lignes, 11 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3857,6 +3858,16 @@ Des enregistrements de l'archive aux cartes candidates. *14 fonctions, 261 ligne
 | Donnée | Rôle |
 |---|---|
 | `CAND` | — |
+
+## js/inconnues.js
+
+Les cartes importées sans fiche, complétées par l'archive. *3 fonctions, 76 lignes, 3.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `habilleDepuisRec(c, rec)` | Ce que l'enregistrement de l'archive dit d'une carte, posé sur une carte déjà bâtie : texte complet, identité, force, mana produit, règles de jeu, visuels. |
+| `completeInconnueDepuisRec(c, rec)` | La carte inconnue devient la carte de l'archive, en gardant son nom — les decks la désignent par lui — et ce que l'import a relevé d'elle, l'édition par exemple : seuls les champs que… |
+| `completeInconnuesDepuisArchive()` | Complète d'un seul parcours de l'archive toutes les cartes inconnues, de tous les decks. |
 
 ## js/graphe.js
 
@@ -4070,7 +4081,7 @@ La section Collection. *12 fonctions, 194 lignes, 10 Ko.*
 
 ## js/fenImport.js
 
-Importer une liste de cartes. *4 fonctions, 223 lignes, 12 Ko.*
+Importer une liste de cartes. *4 fonctions, 227 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|

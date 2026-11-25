@@ -260,6 +260,7 @@ js/                 modules, chargés dans cet ordre :
   archive.js        lire l'archive Scryfall
   catalogue.js      tenir le catalogue à jour
   candidats.js      des enregistrements de l'archive aux cartes candidates
+  inconnues.js      les cartes importées sans fiche, complétées par l'archive
 
   — les sections —
   decksSection.js   la section « Mes decks »
