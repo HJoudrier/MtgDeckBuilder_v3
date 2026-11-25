@@ -51,7 +51,7 @@ function addToDeck(name) {
   if (annexe) {
     const n = deplacerCarte(name, 'deck');
     if (!n) return;
-    if (f.commander && !S.commander && c.isLegendaryCreature) S.commander = name;
+    if (f.commander && !S.commander && peutCommander(c)) S.commander = name;
     recalculerAvecProgression(`${name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
     toast(`${name} ×${n} quitte ${ANNEXES[annexe].article} pour le deck.`);
     return;
@@ -64,7 +64,7 @@ function addToDeck(name) {
     const prix = cmEstimate(c);
     toast(`${name} n'est pas dans votre collection : ajoutée au deck et comptée à l'achat${prix?` (≈ ${eur(prix)})`:''}.`);
   }
-  if (f.commander && !S.commander && c.isLegendaryCreature) S.commander = name;
+  if (f.commander && !S.commander && peutCommander(c)) S.commander = name;
   recalculerAvecProgression(`${name} ajoutée au deck : les suggestions sont renotées d'après le deck qui vient de changer.`);
 }
 

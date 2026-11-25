@@ -203,7 +203,7 @@ function openImport(cible) {
     if (versDeck) {
       if (cmd) S.commander = cmd;
       else if (fmt().commander && !S.commander) {
-        const leg = deckEntries().find(e => e.card.isLegendaryCreature);
+        const leg = deckEntries().find(e => peutCommander(e.card));
         if (leg) S.commander = leg.card.name;
       }
     }

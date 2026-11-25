@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1968 fonctions**, 351 modules, 2442 Ko de JavaScript.
+**1968 fonctions**, 351 modules, 2443 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -20,7 +20,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 126 |
 | [`mana.js`](#jsmanajs) | Ce qu'une carte demande en mana, et ce qu'elle en produit | 11 | 211 |
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
-| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 214 |
+| [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 227 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
 | [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 210 |
 | [`collectionDates.js`](#jscollectiondatesjs) | Les dates d'ajout des cartes de la collection | 15 | 153 |
@@ -498,7 +498,7 @@ Les éditions d'une carte, et celle qu'on possède. *7 fonctions, 74 lignes, 2.9
 
 ## js/cartes.js
 
-La base de cartes et ses index. *19 fonctions, 214 lignes, 8.2 Ko.*
+La base de cartes et ses index. *19 fonctions, 227 lignes, 9.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -510,7 +510,7 @@ La base de cartes et ses index. *19 fonctions, 214 lignes, 8.2 Ko.*
 | `unindexCard(card)` | — |
 | `registerCard(card)` | — |
 | `find(name)` | — |
-| `peutCommander(c)` | — |
+| `peutCommander(c)` | Une créature légendaire, une carte qui le dit (« can be your commander »), ou — règle de 2025 — un Véhicule ou un Vaisseau légendaire qui a force et endurance. |
 | `commandantsPossibles()` | — |
 | `commandantsPrincipaux()` | Les commandants principaux du deck. Un seul se désigne aujourd'hui — l'étoile de l'onglet Deck, `S.commander` —, mais la liste en attend plusieurs : deux cartes liées par « Partner »… |
 | `commandantsSecondairesPossibles()` | Toutes les cartes du deck qui pourraient commander, les commandants principaux mis à part : la liste que l'onglet EDHREC affiche, cochées ou non. |
