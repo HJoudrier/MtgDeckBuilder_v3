@@ -2408,6 +2408,9 @@ mailles de la couverture, qui l'estimait sans expression ; `Adamant_2` demandait
   Familiar). Le coût « sacrifier une créature » garde son instantané (`P.coutPaye.sacrifies`) ; un `ImmediateTrigger` et un `DelayedTrigger` emportent `spawner`.
 - **La couverture** lit le préfixe `Préfixe>` d'une expression : trois cartes qui passaient pour complètes sans l'être sont apparues, puis sont lues pour de bon.
 
+**Précision : une capacité sans cible légale se dit** (`js/jeuPile.js`). Gladiolus Amicitia, quand il va chercher un terrain à l'entrée, déclenche bien son *landfall* sur ce terrain — mais « another target creature you control » demande une autre créature : seul, le déclencheur n'a
+aucune cible légale et est retiré de la pile, comme le veulent les règles. Le moteur le faisait sans rien dire, d'où l'impression qu'il ne se déclenchait pas : le journal écrit maintenant « aucune cible légale, la capacité déclenchée est retirée ».
+
 **Une propriété de filtre inconnue ne laisse rien passer**, une condition inconnue est fausse, un
 morceau de coût inconnu fait écarter la capacité : un script mal compris rend la carte plus faible,
 jamais plus forte.

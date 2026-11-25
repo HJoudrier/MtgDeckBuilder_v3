@@ -23,7 +23,8 @@ function retireDeLaPile(P, id) {
 function* prepareDeclencheur(P, t) {
   const src = obj(P, t.src) || t.lki || null;
   const effets = yield* prepareEffets(P, t.ctrl, src, t.cap.effet, src ? src.def.couleurs : [], {declencheur: true, evt: t.evt});
-  if (!effets) return null;
+  /* Sans cible légale, la capacité est retirée de la pile : on le dit, sinon on croit qu'elle ne s'est pas déclenchée. */
+  if (!effets) { jn(P, `${src ? src.def.nom : 'Une capacité'} : aucune cible légale, la capacité déclenchée est retirée`); return null; }
   return {id: P.prochainId++, capacite: true, source: t.src, lki: t.lki, ctrl: t.ctrl, effets, x: 0, evt: t.evt,
     nom: src ? src.def.nom : '?', memo: t.memo, memoJ: t.memoJ, nombre: t.nombre, spawner: t.spawner || null, declencheur: t.cap};
 }
