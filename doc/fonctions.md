@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
+**1968 fonctions**, 351 modules, 2441 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -275,7 +275,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`annexes.js`](#jsannexesjs) | La réserve et l'étude | 9 | 117 |
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 115 |
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 180 |
-| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 224 |
+| [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 225 |
+| [`deckInconnues.js`](#jsdeckinconnuesjs) | Les cartes du deck que l'atelier ne connaît que de nom | 3 | 42 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 169 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -4178,7 +4179,7 @@ Ce que le format exige, et l'équilibre des rôles. *13 fonctions, 180 lignes, 8
 
 ## js/deckSection.js
 
-La section Deck. *6 fonctions, 224 lignes, 14 Ko.*
+La section Deck. *6 fonctions, 225 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4192,6 +4193,16 @@ La section Deck. *6 fonctions, 224 lignes, 14 Ko.*
 | Donnée | Rôle |
 |---|---|
 | `NOTES_DECK` | — |
+
+## js/deckInconnues.js
+
+Les cartes du deck que l'atelier ne connaît que de nom. *3 fonctions, 42 lignes, 2.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `inconnuesDuDeck()` | Les cartes du deck ouvert — liste principale, annexes et commandant — dont l'atelier ne sait encore que le nom. |
+| `completeInconnuesDuDeck()` | Une seule tentative par carte et par séance : sans ce drapeau, une carte que Scryfall ignore relancerait la complétion à chaque repaint, puisque `completeUnknown()` repeint en finissant. |
+| `blocInconnues()` | L'avertissement de la section : ce que la liste ne peut pas encore ranger, avec le geste qui retente. |
 
 ## js/ficheVisuel.js
 
