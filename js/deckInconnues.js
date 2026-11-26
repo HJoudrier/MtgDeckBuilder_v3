@@ -7,8 +7,9 @@
    les range : groupes par type, par rôle ou par coût, courbe de mana, jauges
    de rôles les comptent à part ou pas du tout. Seul l'onglet Collection
    proposait de les compléter ; or c'est dans Construction qu'on lit un deck
-   externe. La section les complète donc d'elle-même, une fois par carte et par
-   séance, et dit ce qui reste quand Scryfall n'a pas répondu.
+   externe. La section les complète donc d'elle-même — d'abord avec ce que
+   l'appareil possède déjà (l'archive, les fiches de la simulation), Scryfall
+   pour le seul reste — et dit ce qui reste quand rien n'a répondu.
    ===================================================================== */
 
 /* Les cartes du deck ouvert — liste principale, annexes et commandant — dont
@@ -19,15 +20,60 @@ function inconnuesDuDeck() {
   return [...new Set(noms)].map(n => find(n)).filter(c => c && c.unknown);
 }
 
-/* Une seule tentative par carte et par séance : sans ce drapeau, une carte
-   que Scryfall ignore relancerait la complétion à chaque repaint, puisque
-   `completeUnknown()` repeint en finissant. Hors ligne, rien n'est tenté. */
-function completeInconnuesDuDeck() {
-  if (S.scryHS || S.enriching || typeof fetch !== 'function') return;
-  const neuves = inconnuesDuDeck().filter(c => !c.completionTentee);
-  if (!neuves.length) return;
-  neuves.forEach(c => { c.completionTentee = true; });
-  completeUnknown(neuves.map(c => c.name));
+/* La carte inconnue devient celle que la fiche gardée décrit : type, coût,
+   texte, force, endurance et champs de jeu. Les fiches de `SIM_CARTES` sont
+   ce que la simulation a déjà rapporté de Scryfall pour les decks adverses ;
+   elles vivent dans IndexedDB, donc disponibles sans réseau. Le nom, lui, est
+   gardé — les decks désignent la carte par lui. Pas de visuel ni de prix : la
+   file des visuels les demandera, la carte n'étant plus inconnue. */
+function completeInconnueDepuisFiche(c, f) {
+  const neuve = buildCard(c.name, f.cout || '—', f.type || 'Inconnu', c.price, f.texte || '');
+  delete neuve.name;
+  Object.assign(c, neuve);
+  if (f.force != null) c.force = f.force;
+  if (f.endurance != null) c.endurance = f.endurance;
+  if (f.manaProduit) c.manaProduit = ordonneMana(String(f.manaProduit).split(''));
+  appliqueChampsJeu(c, f);
+  c.textFull = !!f.texte;
+  reanalyser(c);
+  c.unknown = false;
+  return c;
+}
+
+/* Complète, avec les fiches gardées pour la simulation, les cartes inconnues
+   du deck. Rend leur nombre. */
+function completeInconnuesDepuisFiches() {
+  let n = 0;
+  inconnuesDuDeck().forEach(c => {
+    const f = SIM_CARTES.get(norm(c.name)) || SIM_CARTES.get(norm(frontFace(c.name)));
+    if (f && f.type) { completeInconnueDepuisFiche(c, f); n++; }
+  });
+  if (n) { MAJ_CARTES++; invaliderCandidats(); scheduleSave(); }
+  return n;
+}
+
+let INCONNUES_EN_COURS = false;
+
+/* Trois sources, de la moins chère à la plus chère : l'archive en mémoire,
+   les fiches gardées dans IndexedDB, puis Scryfall pour le seul reste. Les
+   deux premières ne demandent aucun réseau ; Scryfall n'est tenté qu'une fois
+   par carte et par séance — sans ce drapeau, une carte qu'il ignore
+   relancerait la complétion à chaque repaint, puisque `completeUnknown()`
+   repeint en finissant — et jamais hors ligne. */
+async function completeInconnuesDuDeck() {
+  if (INCONNUES_EN_COURS || !inconnuesDuDeck().length) return;
+  INCONNUES_EN_COURS = true;
+  try {
+    let n = catalogueAbsent() ? 0 : completeInconnuesDepuisArchive();
+    await chargeSimCartes();
+    n += completeInconnuesDepuisFiches();
+    if (n) renderAll();
+    if (S.scryHS || S.enriching || typeof fetch !== 'function') return;
+    const neuves = inconnuesDuDeck().filter(c => !c.completionTentee);
+    if (!neuves.length) return;
+    neuves.forEach(c => { c.completionTentee = true; });
+    completeUnknown(neuves.map(c => c.name));
+  } finally { INCONNUES_EN_COURS = false; }
 }
 
 /* L'avertissement de la section : ce que la liste ne peut pas encore ranger,
