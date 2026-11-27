@@ -196,6 +196,10 @@ function forceDeCombat(P, o) { if (sansDegatsDeCombat(P, o)) return 0; const c =
 function* degatsCombat(P, passe) {
   const cb = P.combat, avecInit = passe === 2 && cb.passeInitiative;
   if (passe === 1) cb.passeInitiative = true;
+  /* Quand personne ne peut répondre, les bloqueurs déclarés et les blessures
+     tombent dans le même souffle : à la table, on laisse d'abord voir qui
+     frappe qui — la table en fait des coups (js/tableCoups.js). */
+  if (P.montreCombat && cb.attaquants.size) yield question(P, P.actif, 'voir', ['vu'], {extra: {combat: true}});
   const coups = [];
   for (const [aid, def] of cb.attaquants) {
     const a = obj(P, aid);

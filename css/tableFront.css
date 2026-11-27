@@ -1,8 +1,8 @@
 /* =====================================================================
-   La ligne de front et le bouton de tour (js/tableFront.js), la carte
-   levée et poussée (js/tableLever.js), le calque des cartes qui s'en vont
-   et des points de vie qui jaillissent (js/tableMouvements.js,
-   js/tableRessenti.js).
+   La ligne de front et le bouton de tour (js/tableFront.js), la pile en
+   profondeur (js/tablePile.js), la carte levée et poussée
+   (js/tableLever.js), le calque des cartes qui s'en vont et des points de
+   vie qui jaillissent (js/tableMouvements.js, js/tableRessenti.js).
 
    Comme table.css : aucune couleur en dur, seulement les variables des
    deux thèmes. Le reflet du bouton se mêle de blanc, qui éclaire aussi
@@ -23,7 +23,6 @@
 .tfr-phases i.en-cours{width:16px;background:var(--brass)}
 .tfr-etape{font-size:12.5px;color:var(--txt-vif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tfr-centre{grid-area:centre;min-width:0;display:flex;align-items:center}
-.tfr-pile{flex:1;min-width:0;gap:8px;min-height:0;padding:3px 2px}
 .tfr-phrase{grid-area:phrase;font-size:12px;color:var(--dim);line-height:1.3;min-height:16px}
 .tfr-phrase.erreur{color:var(--bad-txt)}
 .tfr-cmd{grid-area:cmd;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;max-width:46vw}
@@ -61,6 +60,48 @@
 .tc.glisse .tc-corps{transform:scale(1.08);box-shadow:0 18px 30px var(--ombre),0 0 0 2px var(--brass)}
 .en-partie [data-region="moi"].depot{background:var(--brass-a2);box-shadow:inset 0 0 0 2px var(--brass)}
 
+/* La pile en profondeur (js/tablePile.js) : l'objet de devant en grand, ceux
+   du dessous qui reculent et montent, leur nom dépassant. Le tunnel prend
+   au bouton un peu de sa largeur, pour que le texte de l'objet tienne. */
+.en-partie [data-region="front"]{--pw:clamp(64px,19vw,84px)}
+.tfr.avec-pile .tfr-centre{align-items:stretch}
+.tfr.avec-pile .tfr-cmd{max-width:36vw}
+.tpi-place{flex:1;min-width:0;display:flex}
+.tpi{flex:1;min-width:0;display:grid;grid-template-columns:8px calc(var(--pw) + 16px) minmax(0,1fr);gap:7px;min-height:calc(var(--pw) * 1.396 + 40px)}
+.tpi-crans{display:flex;flex-direction:column;justify-content:center;gap:5px}
+.tpi-cran{width:8px;height:8px;padding:0;border:0;border-radius:4px;background:var(--line2);cursor:pointer;transition:height .25s,background .25s}
+.tpi-cran.vu{height:18px;background:var(--brass)}
+.tpi-scene{position:relative;perspective:480px;perspective-origin:50% 0;touch-action:none}
+.tpi-c{position:absolute;left:50%;bottom:3px;transition:transform .42s cubic-bezier(.2,.8,.2,1),opacity .42s;will-change:transform}
+.tpi.glisse .tpi-c,.tpi.glisse .tpi-c::after{transition:none}
+.tpi .tc{--w:var(--pw)}
+.tpi-c::after{content:"";position:absolute;left:0;top:0;width:var(--pw);height:calc(var(--pw) * 1.396);border-radius:calc(var(--pw) * .055);
+  background:var(--bg);opacity:var(--voile,0);pointer-events:none;transition:opacity .42s}
+.tpi-c.devant .tc-corps{box-shadow:0 8px 18px var(--ombre),0 0 0 1.5px var(--brass-d)}
+/* L'objet qu'on résout s'avance, brille, et un reflet le balaie. */
+.tpi-c.en-cours .tc-corps{box-shadow:0 0 0 2px var(--brass),0 0 22px 6px color-mix(in srgb,var(--brass) 55%,transparent)}
+.tpi-c.en-cours .tc-corps::after{content:"";position:absolute;inset:-40%;z-index:2;pointer-events:none;opacity:.6;
+  background:linear-gradient(105deg,transparent 42%,color-mix(in srgb,var(--brass) 25%,white) 50%,transparent 58%);animation:tpi-reflet 1.3s ease-in-out infinite}
+@keyframes tpi-reflet{from{transform:translateX(-45%)}to{transform:translateX(45%)}}
+.tpi-desc{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;overflow:hidden;padding:2px 0}
+.tpi-quand{display:flex;justify-content:space-between;gap:6px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brass)}
+.tpi-rang{font-family:var(--mono);color:var(--dim);letter-spacing:0}
+.tpi-nom{font:600 15px/1.15 var(--display);color:var(--txt-vif);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tpi-meta{font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpi-meta .pill{font-size:10px;padding:0 6px}
+.tpi-texte{font-size:11.5px;line-height:1.3;color:var(--txt);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.tpi-note{font-size:11px;color:var(--dim)}
+.tpi-cible{font-size:11.5px;font-weight:600;color:var(--brass);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpi-geste{align-self:flex-start;border:0;background:none;padding:0;font:inherit;font-size:11px;color:var(--dim)}
+button.tpi-geste{color:var(--brass);font-weight:600;cursor:pointer}
+
+/* Pendant une résolution, ce que l'objet ne touche pas s'assombrit ; ce qu'une
+   question attend reste allumé. */
+.en-partie .tc{transition:transform .15s ease,filter .3s ease}
+.en-partie .tj-nom,.en-partie .ar-onglet{transition:filter .3s ease}
+.table.en-resolution :is([data-region="adv"],[data-region="moi"],[data-region="main"],.tpi) .tc:not(.implique):not(.choix):not(.choisi),
+.table.en-resolution :is(.tj-nom,.ar-onglet)[data-ancre-j]:not(.implique){filter:brightness(.62) saturate(.6)}
+
 /* Le calque des cartes qui quittent la table et des points de vie qui
    jaillissent (js/tableMouvements.js, js/tableRessenti.js). */
 .tmv{position:fixed;inset:0;z-index:940;pointer-events:none}
@@ -71,16 +112,22 @@
 /* Un téléphone couché : une ligne plus basse. */
 @media (max-height:560px){
   .tfr{min-height:70px}
+  .en-partie [data-region="front"]{--pw:50px}
+  .tpi-texte{-webkit-line-clamp:2}
   .tfr-bouton{width:62px;height:62px;font-size:11px}
 }
 
 /* Un grand écran : une pile plus lisible. */
 @media (min-width:900px) and (min-height:600px){
-  .en-partie [data-region="front"]{--tw:60px}
+  .en-partie [data-region="front"]{--tw:60px;--pw:104px}
+  .tpi-nom{font-size:17px}
+  .tpi-texte{font-size:12.5px;-webkit-line-clamp:4}
   .tfr-cmd{max-width:40vw}
 }
 
 @media (prefers-reduced-motion: reduce){
   .tfr-bouton.fort{animation:none}
+  .tpi-c{transition:opacity .2s}
+  .tpi-c.en-cours .tc-corps::after{animation:none;display:none}
   .tfr-phases i{transition:none}
 }

@@ -54,16 +54,6 @@ body.table-ouverte{overflow:hidden}
 .tr-fil{animation:tb-neuf 1.2s ease-out}
 @keyframes tb-neuf{from{background:var(--brass-a3);color:var(--txt-vif)}}
 
-/* Les flèches : un calque sur toute la table, qui ne prend aucun toucher. */
-.tf{position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none;overflow:visible}
-.tf path{fill:none;stroke-width:3;stroke-linecap:round}
-.tf path.tf-fond{stroke:var(--bg);stroke-width:7;opacity:.85}
-.tf path.cible{stroke:var(--brass)} .tf path.active{stroke:var(--brass);stroke-dasharray:5 5}
-.tf path.attaque{stroke:var(--bad)} .tf path.bloque{stroke:var(--U)}
-.tf marker path,.tf circle{stroke:none}
-.tf .cible path,.tf circle.cible,.tf .active path,.tf circle.active{fill:var(--brass)}
-.tf .attaque path,.tf circle.attaque{fill:var(--bad)} .tf .bloque path,.tf circle.bloque{fill:var(--U)}
-
 /* ---------- Une carte ---------- */
 .tc{--w:var(--tw,58px);--h:calc(var(--w) * 1.396);position:relative;flex:0 0 auto;width:var(--w);height:var(--h);padding:0;margin:0;border:0;
   background:none;color:var(--txt);font:inherit;cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
@@ -122,10 +112,6 @@ body.en-blocage{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .tc.bloc-cible .tc-corps{box-shadow:0 0 0 3px var(--brass),0 0 14px 3px var(--brass);opacity:1}
 .tc.bloc-cible.bloc-survol .tc-corps{box-shadow:0 0 0 4px var(--ok),0 0 18px 5px var(--ok)}
 
-/* La carte qui s'active pulse ; celle qu'un sort vise est cernée de rouge. */
-.tc.active .tc-corps{animation:tc-active 1s ease-in-out infinite}
-@keyframes tc-active{50%{box-shadow:0 0 0 3px var(--brass),0 0 16px 4px var(--brass)}}
-.tc.ciblee .tc-corps{outline:3px dashed var(--bad);outline-offset:2px}
 
 /* Ce qui est attaché dépasse à gauche, sous la carte qui le porte. */
 .tc-groupe{display:inline-flex;align-items:flex-end;flex:0 0 auto}
@@ -292,13 +278,7 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
   .tl-carte{--w:300px}
 }
 
-/* Ce qu'est chaque élément de la pile, et à quoi se rapporte une question (js/tableDispositions.js, js/tableQuestions.js). */
-.tp-expl{display:flex;flex-direction:column;gap:6px;padding:6px 10px;border-bottom:1px solid var(--brass-d);background:var(--panel2);max-height:26vh;overflow:auto}
-.tp-sous{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);margin-bottom:2px}
-.tp-item{padding:4px 8px;border-left:3px solid var(--line2);margin-bottom:3px}
-.tp-item.courant{border-left-color:var(--brass);background:var(--panel);}
-.tp-etiq{font-size:11px;color:var(--brass);font-weight:700}
-.tp-texte{color:var(--txt);margin-top:1px}
+/* La carte dont parle une question (js/tableQuestions.js). */
 .tq-ctx{display:flex;gap:10px;align-items:flex-start;padding:4px 8px;margin-bottom:5px;border-left:3px solid var(--brass);background:var(--panel2)}
 .tq-ctx .tc{margin-bottom:2px}
 .tq-ctx-corps{min-width:0;flex:1}

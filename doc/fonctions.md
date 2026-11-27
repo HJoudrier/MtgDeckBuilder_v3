@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
+**2022 fonctions**, 353 modules, 2483 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -47,7 +47,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`forgeScript.js`](#jsforgescriptjs) | Lire un script de carte de Forge | 8 | 126 |
 | [`forgeCouverture.js`](#jsforgecouverturejs) | Ce qu'une carte de Forge demande au moteur | 9 | 198 |
 | [`jeuHasard.js`](#jsjeuhasardjs) | Le hasard semé du moteur | 5 | 52 |
-| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 237 |
+| [`jeuEtat.js`](#jsjeuetatjs) | Une partie : ses joueurs, ses objets, ses zones | 20 | 240 |
 | [`jeuGestes.js`](#jsjeugestesjs) | Les gestes qui font un évènement : engager, dégager, | 4 | 55 |
 | [`jeuHistorique.js`](#jsjeuhistoriquejs) | Ce qui s'est passé ce tour | 5 | 79 |
 | [`jeuCaracteristiques.js`](#jsjeucaracteristiquesjs) | Ce qu'un permanent est en ce moment | 9 | 173 |
@@ -73,11 +73,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`jeuPermis.js`](#jsjeupermisjs) | Jouer une carte depuis une autre zone | 8 | 95 |
 | [`jeuPrepare.js`](#jsjeupreparejs) | Lancer le sort d'une créature préparée | 2 | 37 |
 | [`jeuPile.js`](#jsjeupilejs) | La priorité, la pile, la résolution | 5 | 153 |
-| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 13 | 230 |
+| [`jeuCombat.js`](#jsjeucombatjs) | Attaquants, bloqueurs, dégâts de combat | 13 | 234 |
 | [`jeuTour.js`](#jsjeutourjs) | Les étapes d'un tour | 6 | 133 |
 | [`jeuPartie.js`](#jsjeupartiejs) | Une partie, du mélange à la fin | 4 | 78 |
 | [`jeuPilote.js`](#jsjeupilotejs) | Dérouler une partie, question après question | 6 | 99 |
-| [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 117 |
+| [`jeuCopie.js`](#jsjeucopiejs) | Copier une partie, et la reprendre | 7 | 118 |
 | [`jeuVue.js`](#jsjeuvuejs) | Ce qu'un joueur voit de la partie | 8 | 140 |
 | [`jeuPileExplique.js`](#jsjeupileexpliquejs) | Dire ce qui est sur la pile, et ce qui se résout | 7 | 96 |
 | [`jeuArrets.js`](#jsjeuarretsjs) | Quand demander à un joueur humain | 2 | 33 |
@@ -335,31 +335,34 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`liaisonCode.js`](#jsliaisoncodejs) | Ce que les deux QR codes transportent, au plus court | 10 | 127 |
 | [`liaisonSdp.js`](#jsliaisonsdpjs) | Lire une description WebRTC, en rebâtir une | 5 | 75 |
 | [`liaison.js`](#jsliaisonjs) | Deux navigateurs reliés sans serveur | 7 | 114 |
-| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 18 | 243 |
+| [`tableHote.js`](#jstablehotejs) | La partie que ce navigateur héberge | 20 | 264 |
 | [`tableImages.js`](#jstableimagesjs) | Le visuel d'une carte, à la table | 4 | 84 |
-| [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 127 |
+| [`tableCartes.js`](#jstablecartesjs) | Une carte posée sur la table | 12 | 129 |
 | [`tableJoueurs.js`](#jstablejoueursjs) | Ce qu'on sait d'un joueur, d'un coup d'œil | 4 | 62 |
-| [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 15 | 164 |
+| [`tableDispositions.js`](#jstabledispositionsjs) | Trois façons de disposer la table | 14 | 145 |
 | [`tableLoupe.js`](#jstableloupejs) | Voir une carte en grand | 13 | 150 |
 | [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 51 |
-| [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi, en flèches | 7 | 103 |
-| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 156 |
+| [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi : des liens d'or, des flèches | 13 | 190 |
+| [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 163 |
 | [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 175 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 49 |
 | [`tableBloque.js`](#jstablebloquejs) | Bloquer en glissant une créature sur son attaquant | 9 | 129 |
-| [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 9 | 135 |
+| [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 8 | 132 |
+| [`tablePile.js`](#jstablepilejs) | La pile en profondeur | 15 | 216 |
+| [`tableEclats.js`](#jstableeclatsjs) | Ce que l'œil voit d'un coup | 15 | 224 |
+| [`tableCoups.js`](#jstablecoupsjs) | Les coups qui portent | 18 | 256 |
 | [`tableLever.js`](#jstableleverjs) | Lever une carte, puis la jouer | 7 | 113 |
-| [`tableSons.js`](#jstablesonsjs) | Les sons et les vibrations de la table | 6 | 112 |
-| [`tableRessenti.js`](#jstableressentijs) | Ce qu'on entend et ce qu'on sent, d'une vue à la | 3 | 64 |
-| [`tableMouvements.js`](#jstablemouvementsjs) | Les cartes voyagent | 9 | 119 |
+| [`tableSons.js`](#jstablesonsjs) | Les sons et les vibrations de la table | 7 | 128 |
+| [`tableRessenti.js`](#jstableressentijs) | Ce qu'on entend et ce qu'on sent, d'une vue à la | 3 | 66 |
+| [`tableMouvements.js`](#jstablemouvementsjs) | Les cartes voyagent | 11 | 138 |
 | [`tableSalon.js`](#jstablesalonjs) | Le salon : qui s'assoit à la table, avec quel deck | 13 | 141 |
 | [`tableLiaison.js`](#jstableliaisonjs) | Les invités de l'hôte | 23 | 188 |
 | [`tableInvite.js`](#jstableinvitejs) | Rejoindre la table d'un autre | 14 | 135 |
 | [`tableReprise.js`](#jstablereprisejs) | Reprendre une partie après un rechargement | 4 | 70 |
 | [`tableAnnuler.js`](#jstableannulerjs) | Revenir en arrière d'une réponse | 3 | 47 |
 | [`fenArrets.js`](#jsfenarretsjs) | Les arrêts de la table | 5 | 55 |
-| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 6 | 104 |
-| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 319 |
+| [`gestesTable.js`](#jsgestestablejs) | Les gestes de la table interactive | 6 | 107 |
+| [`app.js`](#jsappjs) | L'aiguillage et le démarrage | 1 | 324 |
 | [`icones.js`](#jsiconesjs) |  | 0 | 21 |
 
 ## js/reglesEffets.js
@@ -1044,7 +1047,7 @@ Le hasard semé du moteur. *5 fonctions, 52 lignes, 1.8 Ko.*
 
 ## js/jeuEtat.js
 
-Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 237 lignes, 11 Ko.*
+Une partie : ses joueurs, ses objets, ses zones. *20 fonctions, 240 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1504,7 +1507,7 @@ La priorité, la pile, la résolution. *5 fonctions, 153 lignes, 8.8 Ko.*
 
 ## js/jeuCombat.js
 
-Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 230 lignes, 13 Ko.*
+Attaquants, bloqueurs, dégâts de combat. *13 fonctions, 234 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -1565,7 +1568,7 @@ Dérouler une partie, question après question. *6 fonctions, 99 lignes, 4.3 Ko.
 
 ## js/jeuCopie.js
 
-Copier une partie, et la reprendre. *7 fonctions, 117 lignes, 5.2 Ko.*
+Copier une partie, et la reprendre. *7 fonctions, 118 lignes, 5.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5124,12 +5127,13 @@ Deux navigateurs reliés sans serveur. *7 fonctions, 114 lignes, 5 Ko.*
 
 ## js/tableHote.js
 
-La partie que ce navigateur héberge. *18 fonctions, 243 lignes, 11 Ko.*
+La partie que ce navigateur héberge. *20 fonctions, 264 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `pauseApres(q, r, s, etapeChangee)` | Combien attendre après une réponse, pour qu'un humain suive : longtemps après le geste d'un automate (un sort lancé, une attaque), un peu à chaque étape montrée dans la barre des phases,… |
 | `montrePile(q)` | Un objet va se résoudre : on le montre, avec ses flèches, le temps qu'on le lise — plus longtemps celui d'un adversaire que le sien. |
+| `montreCombat(q)` | Les blessures de combat vont tomber : on montre d'abord qui frappe qui, un instant, puis on laisse aux coups le temps de porter avant que la partie reprenne (js/tableCoups.js). |
 | `attendreOuSuite(ms)` | Attendre, sauf si le joueur dit « Continuer » (`tSuite`). |
 | `vueTable(j)` | La vue d'un joueur, et qui la partie attend : celui qui a la priorité. |
 | `attendre(ms)` | — |
@@ -5141,6 +5145,7 @@ La partie que ce navigateur héberge. *18 fonctions, 243 lignes, 11 Ko.*
 | `boucleTable()` | La boucle d'aiguillage. Elle s'arrête quand un humain doit répondre, et reprend à sa réponse (`recoitReponse()`). |
 | `poseQuestion(q)` | Porter une question à son siège : l'interface de cet appareil, ou l'appareil de l'invité. |
 | `recoitReponse(j, n, r)` | Une réponse arrive, de cet appareil ou d'un invité. |
+| `declareCombat(q)` | Des attaquants ou des bloqueurs déclarés : peints sur-le-champ, sans attendre le repeint groupé. |
 | `diffuseVues(tout)` | Repeindre la table de cet appareil et envoyer leur vue aux invités, au plus une fois tous les cent millisecondes. |
 | `journalTable()` | Le journal de la partie hébergée, ligne par ligne. |
 | `majArretsTable()` | Les arrêts du siège local ont changé : la partie en cours les suit. |
@@ -5172,7 +5177,7 @@ Le visuel d'une carte, à la table. *4 fonctions, 84 lignes, 3.6 Ko.*
 
 ## js/tableCartes.js
 
-Une carte posée sur la table. *12 fonctions, 127 lignes, 7 Ko.*
+Une carte posée sur la table. *12 fonctions, 129 lignes, 7.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5182,7 +5187,7 @@ Une carte posée sur la table. *12 fonctions, 127 lignes, 7 Ko.*
 | `marqueursHTML(o)` | Les marqueurs d'un permanent, la loyauté à part. |
 | `etatsHTML(o)` | — |
 | `tuile(o, v, opts = {})` | Une carte de la table. `o` est un objet de la vue — permanent, carte d'une zone, élément de la pile — ou une option de question ({id, nom}). `opts` : mode ('carte' ou 'vignette'), act et… |
-| `regroupe(objs)` | Un permanent est seul quand il a quelque chose à dire : un marqueur, une blessure, un rôle au combat, une question qui le désigne. |
+| `regroupe(objs, designes)` | Un permanent est seul quand il a quelque chose à dire : un marqueur, une blessure, un rôle au combat, une question ou un objet de la pile qui le désigne (`designes`, de marquesPile()). |
 | `suiteTuiles(objs, v, opts = {})` | Une suite de permanents : chacun suivi de ce qui lui est attaché (aura, équipement), qui dépasse derrière lui. |
 | `estTerrain(o)` | — |
 | `estFront(o)` | — |
@@ -5210,7 +5215,7 @@ Ce qu'on sait d'un joueur, d'un coup d'œil. *4 fonctions, 62 lignes, 4 Ko.*
 
 ## js/tableDispositions.js
 
-Trois façons de disposer la table. *15 fonctions, 164 lignes, 9.1 Ko.*
+Trois façons de disposer la table. *14 fonctions, 145 lignes, 7.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5222,7 +5227,6 @@ Trois façons de disposer la table. *15 fonctions, 164 lignes, 9.1 Ko.*
 | `cartoucheTour(J, v)` | Un adversaire replié : ses menaces en miniatures, et ce qu'une question désigne chez lui ; le reste en nombres. |
 | `adversairesTableHTML(v)` | La région des adversaires, selon la disposition. |
 | `moiHTML(v)` | Son propre champ. |
-| `pileExpliqueHTML(v)` | Ce qu'est chaque élément de la pile, en toutes lettres : ce qu'on résout en ce moment, puis ce qui attend, du sommet — le premier à se résoudre — au fond. |
 | `mainHTML(v)` | La main, en éventail : chaque carte tourne de quelques degrés autour du centre — son corps tourne, pas elle, pour que sa mesure reste juste quand elle voyage (js/tableMouvements.js). |
 | `montrePage(k)` | Un onglet de l'Arène touché : la page de cet adversaire. |
 | `marqueOnglet(k)` | — |
@@ -5276,26 +5280,34 @@ Où en est le tour, et qui a la main. *2 fonctions, 51 lignes, 3.4 Ko.*
 
 ## js/tableFleches.js
 
-Ce qui vise quoi, en flèches. *7 fonctions, 103 lignes, 5.1 Ko.*
+Ce qui vise quoi : des liens d'or, des flèches. *13 fonctions, 190 lignes, 9.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `liensTable(v)` | Les liens à tracer, d'après la vue seule. |
-| `marquesPile(v)` | Les ids que la pile désigne, pour allumer les cartes : celles qui s'activent, celles qui sont visées. |
+| `liensTable(v)` | Les liens à tracer, d'après la vue seule, et le tunnel pour savoir lequel on regarde. |
+| `marquesPile(v)` | Les ids que la pile désigne, pour allumer les cartes : celles qui s'activent, celles qui sont visées — l'objet qu'on résout compris. |
 | `rectVisible(el)` | Le rectangle d'un élément, s'il se voit : ni hors de l'écran, ni caché par le bord d'une rangée qui défile. |
 | `ancreDe(ref, v)` | L'élément visible qui représente une référence : la carte, sinon le cartouche ou l'onglet de son joueur. |
+| `f1(x)` | — |
 | `cheminFleche(a, b)` | Une flèche courbe d'un centre à l'autre, arrêtée au bord de la cible. |
+| `tourDe(E, rr, px, py)` | Le tour d'un rectangle arrondi, dans le sens des aiguilles, en partant du point de son bord où le lien arrive et en y revenant. |
+| `cheminLien(a, b, marge, rang, pilule)` | Un lien d'or : de l'objet de la pile `a` jusqu'au bord de `b`, élargi de `marge` — un deuxième lien vers la même carte l'entoure d'un peu plus loin —, puis le tour de `b`. |
+| `cleRefTrait(r)` | — |
+| `creeTrait(svg, genre)` | — |
 | `traceFleches()` | — |
 | `planifieFleches()` | — |
+| `suisFleches(ms)` | — |
 
 | Donnée | Rôle |
 |---|---|
 | `MARQUES_FLECHES` | — |
+| `TRAITS` | Les traits tracés, par ce qu'ils relient : ils survivent aux repeints. |
 | `flechesPrevues` | Un défilement ou un changement de taille : un seul tracé par image. |
+| `flechesJusqua` | Pendant qu'une carte glisse — le tunnel qui change de cran, une carte qui voyage —, les liens la suivent image par image. |
 
 ## js/tableRendu.js
 
-La table, peinte depuis une vue. *10 fonctions, 156 lignes, 8.2 Ko.*
+La table, peinte depuis une vue. *10 fonctions, 163 lignes, 8.4 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5374,7 +5386,7 @@ Bloquer en glissant une créature sur son attaquant. *9 fonctions, 129 lignes, 5
 
 ## js/tableFront.js
 
-La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.9 Ko.*
+La ligne de front et le bouton de tour. *8 fonctions, 132 lignes, 7.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5385,13 +5397,91 @@ La ligne de front et le bouton de tour. *9 fonctions, 135 lignes, 7.9 Ko.*
 | `actionsHorsTable(q, v)` | Ce qu'aucune carte visible ne porte — un flashback depuis le cimetière, une carte en exil — se touche en puce, au-dessus du bouton. |
 | `pucesHTML(v)` | — |
 | `boutonTourHTML(a)` | Le bouton rond. Pendant la pause d'une résolution, un anneau se remplit le temps qu'elle dure : le toucher la coupe. |
-| `pileTuilesHTML(v)` | La pile en tuiles, le sommet — le prochain à se résoudre — en tête. |
-| `frontHTML(v)` | La ligne de front, et sous elle l'explication de la pile. |
+| `frontHTML(v)` | La ligne de front. Au centre, la place du tunnel de la pile : il n'est pas écrit ici, mais remis après chaque peinture (js/tablePile.js), pour que ses cartes glissent d'un cran à l'autre… |
 
 | Donnée | Rôle |
 |---|---|
 | `PASSER_VERS` | Le libellé de « passer », pile vide, pendant son propre tour : l'étape vers laquelle on part. |
 | `PHRASE_PASSER` | — |
+
+## js/tablePile.js
+
+La pile en profondeur. *15 fonctions, 216 lignes, 9.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `tunnelPile()` | L'état du tunnel, propre à cet appareil et oublié en quittant la table : le nœud, l'objet regardé (`focus`, fractionnaire pendant un glissé), le premier objet de la dernière peinture et… |
+| `elementsPile(v)` | Ce que la pile montre, de devant au fond : l'objet qu'on résout — il n'est plus sur la pile, mais c'est de lui que parlent les questions —, puis la pile du sommet au fond. |
+| `rangPile()` | L'objet qu'on regarde, en cran entier. |
+| `placeTunnel(d, enCours)` | La place d'un objet à `d` crans de celui qu'on regarde : derrière, il recule et monte ; devant — on l'a fait défiler —, il descend vers soi et s'efface. |
+| `placeCartesPile(seules)` | — |
+| `creeTunnel()` | — |
+| `posePile(v)` | Remettre le tunnel à sa place après une peinture, et l'accorder à la vue : une carte par objet, gardée d'une vue à l'autre par son identifiant. |
+| `majDescPile(v)` | Les crans à gauche, le texte à droite : ce que fait l'objet regardé, et quand il se résoudra. |
+| `descPileHTML(v, e, k, n)` | — |
+| `marqueResolution(t, it)` | Pendant une résolution, la table s'assombrit, sauf ce que l'objet touche : lui-même, sa source, ses cibles. |
+| `regardePile(k)` | L'objet regardé a changé : les cartes glissent, le texte suit, les liens aussi. |
+| `touchePile(k, id)` | Une carte du tunnel touchée : celle de derrière vient devant ; celle de devant se touche comme toute carte de la table — la choisir pour cible, ou l'ouvrir en grand. |
+| `pileDebut(ev)` | — |
+| `pileBouge(ev)` | Le doigt descend : ce qui était derrière s'avance, d'un cran tous les quarante-six pixels, et la carte suit le doigt entre deux crans. |
+| `pileFin(ev)` | Le doigt se lève : la pile se cale sur le cran le plus proche, et le clic qui suit est avalé. |
+
+## js/tableEclats.js
+
+Ce que l'œil voit d'un coup. *15 fonctions, 224 lignes, 13 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `calqueCoups()` | — |
+| `centre(r)` | — |
+| `visibleCoup(el)` | Ce qu'on voit d'une carte en ce moment : sa doublure, si elle frappe. |
+| `doublure(el)` | Une carte posée sur le calque, à la place exacte de `el`. |
+| `elan(el, cible, style, auContact, portee = 1)` | `el` frappe `cible` : élan, coup, retour. `auContact(axe)` tombe au choc ; la promesse se tient au retour. `portee` raccourcit la course d'une riposte. `el` déjà posé sur le calque (une… |
+| `secoue(el, amp, dur)` | Trembler, de moins en moins, le temps `dur`. |
+| `eclaire(el)` | Un éclair blanc sur ce qui est touché. |
+| `traitsCoups()` | Les traits des entailles, dans un SVG du calque. |
+| `entaille(r, theta)` | Une entaille à travers `r`, d'angle `theta` : un trait clair dans un halo, tracé d'un coup puis effacé. |
+| `etincelles(pt, n, a)` | Des étincelles projetées autour de l'angle `a`. |
+| `onde(r, grand)` | Une onde de choc, plus large sous une charge. |
+| `nombreCoup(r, n)` | Les blessures prises par une carte, dans une étoile qui éclate et s'élève. |
+| `ebranle(fort)` | Soi touché : toute la table tremble, et ses bords rougissent. |
+| `tranche(el, theta)` | Une créature achevée d'un coup de lame : sa carte se fend en deux le long de l'entaille, d'angle `theta`, et les deux moitiés s'écartent, tournent et tombent. |
+| `ecrase(el)` | Une créature achevée sous une charge : sa carte s'aplatit et disparaît. |
+
+| Donnée | Rôle |
+|---|---|
+| `STYLES_COUPS` | Quatre façons de frapper. `elan` et `contact` disent où tombent, dans la durée, la fin de l'élan et le choc ; chaque image clé reçoit l'axe du coup (ux, uy), la course (tx, ty) et le… |
+| `OPACITES_TRAINEE` | La traînée : deux silhouettes floues qui ne se voient que pendant la frappe. |
+| `EN_VOL` | Les cartes qui frappent en ce moment, par identifiant : leur doublure. |
+
+## js/tableCoups.js
+
+Les coups qui portent. *18 fonctions, 256 lignes, 13 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `estCombattant(o)` | — |
+| `styleCoup(o)` | La façon de frapper d'une créature : en vol, elle plonge ; avec l'initiative, elle frappe d'estoc ; de force 5 ou plus, elle charge ; sinon elle taille. |
+| `prisEntre(av, ap)` | Ce que chaque créature ou planeswalker a pris d'une vue à l'autre : des blessures, de la loyauté, ou le champ quitté. |
+| `planCoups(av, ap)` | Les coups à jouer entre deux vues, ou rien. |
+| `carteCoup(id, c)` | La carte d'un permanent sur la table, ou celle qu'on retient sur le calque. |
+| `ancreJoueurCoup(j)` | — |
+| `figeAvantCoups(c, avant)` | Jusqu'au choc, la vie d'un joueur touché et la force d'une créature blessée gardent leur valeur d'avant. |
+| `degeleVie(j)` | — |
+| `degeleBadge(id, c)` | — |
+| `choc(cible, ref, n, style, axe, c)` | Le choc : sur une carte, l'éclair, le tremblement, l'entaille, les étincelles, le nombre ; sur un joueur, son cartouche qui tremble et ses points de vie qui jaillissent — et toute la… |
+| `acheve(id, style, theta, c)` | Une créature que le coup achève, puis rendue à son cimetière. |
+| `joueEchange(e, c)` | Un échange : l'attaquant frappe, le bloqueur riposte un instant après, et les morts ne tombent qu'une fois les deux coups portés — les blessures de combat sont simultanées. |
+| `joueSort(s, c, avant)` | Un sort : une lueur de la couleur de la carte part de sa place dans le tunnel et suit la courbe de son lien jusqu'à la cible. |
+| `lueur(a, b, coul)` | La lueur d'un sort : trois boules, la première vive, le long d'une courbe. |
+| `joueCoups(c, avant)` | Jouer les coups d'une nouvelle vue, juste après sa peinture. |
+| `recacheCoups(el)` | Après un repeint en plein coup : l'original d'une carte qui frappe reste caché. |
+| `pauseCoups(n)` | Le temps que l'hôte laisse aux coups de `n` attaquants avant d'avancer (js/tableHote.js) : les blessures de combat ne doivent pas être repeintes en plein élan. |
+| `blessuresTombees(av, ap)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `ETAPES_AVANT_BLESSURES` | Les blessures de combat sont-elles tombées entre ces deux vues ? Oui après la vue qui les montrait à venir (`combatVu`, la question « voir » du combat), ou quand on passe d'une étape… |
 
 ## js/tableLever.js
 
@@ -5414,14 +5504,15 @@ Lever une carte, puis la jouer. *7 fonctions, 113 lignes, 4.2 Ko.*
 
 ## js/tableSons.js
 
-Les sons et les vibrations de la table. *6 fonctions, 112 lignes, 5.3 Ko.*
+Les sons et les vibrations de la table. *7 fonctions, 128 lignes, 7.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `audioTable()` | — |
 | `tonTable({f = 440, f2 = 0, type = 'sine', dur = .15, vol = .3, at = 0})` | Une note brève : fréquence de départ, d'arrivée, enveloppe. |
 | `souffleTable({dur = .2, vol = .3, at = 0, type = 'bandpass', f = 1200, f2 = 0, q = 1})` | Un souffle : du bruit passé dans un filtre qu'on fait glisser — le froissement d'une carte, l'air d'une attaque. |
-| `sonTable(nom)` | — |
+| `auHasard()` | — |
+| `sonTable(nom, ...args)` | — |
 | `vibreTable(nom)` | — |
 | `basculeEffet(k)` | Un effet basculé au menu de la table. Allumer le son le fait entendre : c'est aussi le geste qui autorise le navigateur à en jouer. |
 
@@ -5434,17 +5525,17 @@ Les sons et les vibrations de la table. *6 fonctions, 112 lignes, 5.3 Ko.*
 
 ## js/tableRessenti.js
 
-Ce qu'on entend et ce qu'on sent, d'une vue à la. *3 fonctions, 64 lignes, 3.6 Ko.*
+Ce qu'on entend et ce qu'on sent, d'une vue à la. *3 fonctions, 66 lignes, 3.9 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `ressens(avant, apres)` | Comparer deux vues du même joueur, et dire ce qui a changé. |
+| `ressens(avant, apres, coups)` | Comparer deux vues du même joueur, et dire ce qui a changé. |
 | `questionRessentie(v)` | Une question qui arrive : la clochette et le double coup, quand quelque chose l'a provoquée — un objet sur la pile, un combat, la main de départ. |
 | `jaillitVie(j, d)` | Les points de vie gagnés ou perdus jaillissent du cartouche du joueur. |
 
 ## js/tableMouvements.js
 
-Les cartes voyagent. *9 fonctions, 119 lignes, 6.1 Ko.*
+Les cartes voyagent. *11 fonctions, 138 lignes, 6.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5452,11 +5543,13 @@ Les cartes voyagent. *9 fonctions, 119 lignes, 6.1 Ko.*
 | `tuilesTable(el)` | Les cartes de la partie, hors des fenêtres et du bandeau qui en montrent des copies (loupe, zone dépliée, choix d'une question). |
 | `mesureTuile(t)` | — |
 | `releveTuiles(el)` | — |
-| `rejoueTrajets(el, avant, prec, v)` | Rejouer le chemin de chaque carte. `prec` et `v` sont la vue d'avant et celle d'après : elles disent où est allée une carte qui a quitté la table. |
+| `rejoueTrajets(el, avant, prec, v, coups)` | Rejouer le chemin de chaque carte. `prec` et `v` sont la vue d'avant et celle d'après : elles disent où est allée une carte qui a quitté la table. Une créature qu'un coup va achever… |
 | `vole(n, a)` | D'une place à l'autre. Une carte qui s'engage ou se dégage tourne en même temps qu'elle glisse. |
 | `arrive(n, el)` | Une carte venue de nulle part : du cartouche de son joueur, s'il est visible ; sinon elle se pose sur place. |
 | `zoneArrivee(nom, prec, v)` | Le joueur dont le cimetière (ou l'exil) a gagné une carte de ce nom. |
 | `sEnVa(p, el, prec, v)` | Une carte qui quitte la table : son ancien nœud, posé sur le calque, rejoint le compteur de sa zone d'arrivée, ou s'efface. |
+| `poseAuCalque(p, el)` | L'ancien nœud d'une carte, posé sur le calque à sa dernière place. |
+| `rejointZone(g, p, el, prec, v)` | Le nœud posé sur le calque rejoint le compteur de sa zone, ou s'efface. |
 
 | Donnée | Rôle |
 |---|---|
@@ -5539,7 +5632,7 @@ Rejoindre la table d'un autre. *14 fonctions, 135 lignes, 6.7 Ko.*
 
 ## js/tableReprise.js
 
-Reprendre une partie après un rechargement. *4 fonctions, 70 lignes, 3.1 Ko.*
+Reprendre une partie après un rechargement. *4 fonctions, 70 lignes, 3.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5556,7 +5649,7 @@ Reprendre une partie après un rechargement. *4 fonctions, 70 lignes, 3.1 Ko.*
 
 ## js/tableAnnuler.js
 
-Revenir en arrière d'une réponse. *3 fonctions, 47 lignes, 2.5 Ko.*
+Revenir en arrière d'une réponse. *3 fonctions, 47 lignes, 2.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5582,7 +5675,7 @@ Les arrêts de la table. *5 fonctions, 55 lignes, 2.7 Ko.*
 
 ## js/gestesTable.js
 
-Les gestes de la table interactive. *6 fonctions, 104 lignes, 5.3 Ko.*
+Les gestes de la table interactive. *6 fonctions, 107 lignes, 5.5 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5595,7 +5688,7 @@ Les gestes de la table interactive. *6 fonctions, 104 lignes, 5.3 Ko.*
 
 ## js/app.js
 
-L'aiguillage et le démarrage. *1 fonctions, 319 lignes, 13 Ko.*
+L'aiguillage et le démarrage. *1 fonctions, 324 lignes, 13 Ko.*
 
 | Fonction | Rôle |
 |---|---|

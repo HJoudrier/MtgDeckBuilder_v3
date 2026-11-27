@@ -64,6 +64,7 @@ function copiePartie(P) {
   const c = copie(P);
   /* Les essais d'une IA n'ont personne pour regarder. */
   c.montre = false;
+  c.montreCombat = false;
   return c;
 }
 

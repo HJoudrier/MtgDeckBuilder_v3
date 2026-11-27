@@ -34,6 +34,11 @@ document.addEventListener('pointerdown', bloqueDebut);
 document.addEventListener('pointermove', bloqueBouge, {passive: true});
 document.addEventListener('pointerup', bloqueFin);
 document.addEventListener('pointercancel', bloqueFin);
+/* Et la pile qu'on fait défiler d'un glissé vertical (js/tablePile.js). */
+document.addEventListener('pointerdown', pileDebut);
+document.addEventListener('pointermove', pileBouge, {passive: true});
+document.addEventListener('pointerup', pileFin);
+document.addEventListener('pointercancel', pileFin);
 document.addEventListener('contextmenu', ev => { if (loupeContextuelle(ev)) ev.preventDefault(); });
 document.addEventListener('scroll', defileTable, {capture: true, passive: true});
 

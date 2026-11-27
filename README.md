@@ -358,12 +358,15 @@ js/                 modules, chargés dans cet ordre :
   tableDispositions.js  Arène, Couloirs, Tour de table : trois façons de disposer la table
   tableLoupe.js     voir une carte en grand, d'un appui long
   tablePhases.js    les phases du tour en points, et qui a la priorité
-  tableFleches.js   ce qui vise quoi, en flèches : cibles, activations, combat
+  tableFleches.js   ce qui vise quoi : les liens d'or de la pile, les flèches du combat
   tableRendu.js     la table, peinte depuis une vue, région par région
   tableQuestions.js répondre à une question du moteur, à la main
   tableCombat.js    attaquer au doigt ; l'état d'une carte pendant un combat
   tableBloque.js    bloquer en glissant une créature sur son attaquant
   tableFront.js     la ligne de front : la pile et le bouton de tour
+  tablePile.js      la pile en profondeur, un tunnel qu'on fait défiler d'un glissé
+  tableEclats.js    ce que l'œil voit d'un coup : élan, entaille, éclats, carte tranchée
+  tableCoups.js     les coups qui portent, lus d'une vue à la suivante
   tableLever.js     lever une carte puis la jouer, ou la pousser vers le haut
   tableSons.js      les sons synthétisés et les vibrations de la table
   tableRessenti.js  sons, vibrations et points de vie, lus d'une vue à la suivante
@@ -629,13 +632,29 @@ honore et qu'un iPhone ignore. Trois réglages au menu de la table, propres à l
 départ), vibrations, mouvements (`S.table.son`, `.vibre`, `.mouvements`) ; « mouvements réduits » du
 système coupe les trajets.
 
+**Des coups qui portent** (`js/tableCoups.js`, `js/tableEclats.js`). Quand les blessures de combat
+tombent, chaque attaquant prend son élan et frappe ce qu'il attaque, et le bloqueur riposte : la
+créature taille, frappe d'estoc si elle a l'initiative, charge si sa force vaut 5 ou plus, plonge si elle vole.
+La cible s'éclaire, tremble, prend une entaille et un nombre en étoile ; une créature tuée d'un coup de
+lame se fend en deux le long de l'entaille, une charge l'écrase ; un joueur frappé voit son cartouche
+trembler, et si c'est soi, toute la table tremble et ses bords rougissent. Un sort qui se résout envoie
+une lueur de sa couleur vers sa cible. Comme les sons, tout se lit dans la différence entre deux vues
+(`planCoups()`) — qui attaquait qui, qui a pris des blessures, qui a quitté le champ — et se joue sur
+la table neuve : les points de vie et la force qui baissent gardent leur valeur d'avant jusqu'au choc,
+et une créature morte reste sur le calque (`rejoueTrajets()` la retient) jusqu'à ce que le coup
+l'achève. La carte qui frappe part en **doublure** sur le calque, sa rangée qui défile la rognerait ;
+l'original se cache dessous, même si la table se repeint en plein élan. Il faut pour cela qu'une vue
+montre les bloqueurs avant les blessures : quand personne ne peut répondre, le moteur les enchaînait
+dans le même souffle. À la table, il pose donc une question « voir » avant les blessures de combat
+(`cfg.montreCombat`, distincte de `cfg.montre` pour qu'une partie rangée avant elle se rejoue sans) ;
+l'hôte la montre un instant, puis laisse aux coups le temps de porter (`montreCombat()`, `pauseCoups()`).
+
 **Savoir de quoi on parle** (`js/jeuPileExplique.js`, `js/tableDispositions.js`, `js/tableQuestions.js`). La pile
 se lisait par ses tuiles — qui a lancé quoi —, sans dire ce que chaque élément *fait*, et « Le faire ? » ne disait
 pas ce qu'on s'apprêtait à faire. `descriptionPile()` décrit un élément de pile à un humain : son genre (sort,
 capacité déclenchée, activée, copie), son texte, son contrôleur, ses cibles, X et le kicker ; la vue l'emporte,
-chez l'invité comme chez l'hôte. La table l'écrit sous la ligne de front (`pileExpliqueHTML()`) : ce qui se résout en ce
-moment, puis ce qui attend, **du sommet — le premier à se résoudre — au fond**, et la priorité nomme ce à quoi on
-répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
+chez l'invité comme chez l'hôte. La table l'écrit à côté de la pile, pour l'objet qu'on regarde (ci-dessous), et la
+priorité nomme ce à quoi on répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
 `resoudre()` le retire avant de le dérouler, si bien qu'on le garde le temps de sa résolution (`RESOLVANTS`, hors
 de `P` pour que la copie d'une partie par l'IA ne l'emporte pas) et que **toute question posée pendant qu'il se
 résout dit de quoi il s'agit** : « Se résout *Geode Rager* (capacité déclenchée, la vôtre) — Landfall : goad each
@@ -677,7 +696,18 @@ les **phases** du tour en points, de l'entretien à la fin, et écrit en entier 
 **priorité** (`vueTable()`). Des **flèches** relient chaque objet de la pile à ses cibles, la
 carte qui s'active à sa capacité, l'attaquant au joueur qu'il attaque, le bloqueur à l'attaquant
 (`js/tableFleches.js`) ; pour les tracer, la vue de la pile porte ses cibles et sa source, réduites
-à ce qui est public (`refPublique()`). La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
+à ce qui est public (`refPublique()`). Ceux de la pile sont des **liens d'or** : le trait arrive puis
+s'enroule autour de la carte ou du cartouche visé, une lueur y circule. Ils se gardent d'un tracé à
+l'autre, rangés par ce qu'ils relient, et ne se dessinent qu'à leur naissance.
+
+**La pile en profondeur** (`js/tablePile.js`). Au centre de la ligne de front, un tunnel : l'objet de
+devant en grand, ceux du dessous qui reculent et montent derrière lui, leur nom dépassant ; l'objet qu'on
+résout s'avance, brille, et le reste de la table s'assombrit, sauf ce qu'il touche. Un glissé vertical
+amène devant ce qui est dessous, un toucher sur une carte du fond aussi ; à côté s'écrit ce que fait
+l'objet regardé et quand il se résoudra, et seuls ses liens brillent. Le tunnel est un nœud qui **survit
+aux repeints** — une transition ne joue que sur un élément qui demeure, et un doigt posé dessus ne doit
+pas perdre son geste — : le front ne porte qu'une place vide, où `posePile()` le remet après chaque
+peinture, et les trajets de `rejoueTrajets()` laissent ses cartes à leurs propres transitions. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
 étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
 après un rechargement.
 

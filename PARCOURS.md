@@ -1010,7 +1010,7 @@ sequenceDiagram
 
 La priorité et le combat se règlent sur la ligne de front, entre les adversaires et son champ. Une
 carte se lève d'un toucher, se joue d'un second ou du bouton de tour, ou d'une poussée vers le haut.
-Le repeint qui suit fait voyager la carte et en tire les sons et les vibrations.
+Le repeint qui suit fait voyager la carte et en tire les sons, les vibrations et les coups.
 
 ```mermaid
 sequenceDiagram
@@ -1022,6 +1022,8 @@ sequenceDiagram
     participant Q as tableQuestions.js
     participant R as tableRendu.js
     participant MV as tableMouvements.js
+    participant PI as tablePile.js
+    participant CP as tableCoups.js
     participant RS as tableRessenti.js
 
     alt toucher
@@ -1039,9 +1041,41 @@ sequenceDiagram
     end
     Note over R: la vue suivante arrive (hôte ou invité)
     R->>MV: releveTuiles() — avant peinsRegions()
-    R->>R: peinsRegions(), traceFleches()
-    R->>MV: rejoueTrajets() — appariées par nom, de la main à la pile
-    R->>RS: ressens(vue d'avant, vue d'après) — sons, vibrations, points de vie
+    R->>R: peinsRegions()
+    R->>CP: planCoups(vue d'avant, vue d'après) — qui a frappé qui, qui en meurt
+    R->>PI: posePile() — le tunnel reprend sa place, ses cartes glissent d'un cran
+    R->>R: traceFleches() — les liens d'or suivent les cartes
+    R->>MV: rejoueTrajets() — appariées par nom, de la main à la pile ; une créature qu'un coup achèvera reste sur le calque
+    R->>RS: ressens(vue d'avant, vue d'après) — sons, vibrations, points de vie, hors ce que les coups montrent
+    R->>CP: joueCoups() — élan, choc, entaille ; la carte tranchée
+```
+
+### 3.28 Les blessures de combat, à la table
+
+Quand personne ne peut répondre, le moteur enchaînait les bloqueurs et les blessures dans le même
+souffle : aucune vue ne montrait qui bloquait qui. À la table, il pose une question « voir » avant les
+blessures ; l'hôte la montre un instant, y répond seul, puis laisse aux coups le temps de porter. Chaque
+appareil, l'invité comme l'hôte, tire les coups de la différence entre ses deux dernières vues.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant H as tableHote.js
+    participant M as jeuCombat.js
+    participant R as tableRendu.js
+    participant CP as tableCoups.js
+    participant E as tableEclats.js
+
+    H->>M: repondre() — les bloqueurs déclarés
+    M-->>H: degatsCombat() : question « voir », extra.combat (cfg.montreCombat)
+    H->>R: montreCombat() → diffuseVues(true) — vue combatVu : attaquants et bloqueurs
+    Note over H: un instant (pauseEtape × 1,5)
+    H->>M: repondre(0) — les blessures tombent
+    H->>R: diffuseVues(true), puis attendre pauseCoups(n)
+    R->>CP: planCoups(vue combatVu, vue d'après) — échanges, morts retenues
+    R->>CP: joueCoups()
+    CP->>E: elan() — doublure sur le calque, traînée, choc
+    CP->>E: tranche() ou ecrase() — une fois l'attaquant et le bloqueur passés
 ```
 
 ---
