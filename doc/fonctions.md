@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
+**2019 fonctions**, 355 modules, 2503 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -15,9 +15,13 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`effets.js`](#jseffetsjs) | Qualifier un déclencheur, un effet, et les accorder | 11 | 258 |
 | [`synergies.js`](#jssynergiesjs) | Ce qu'une carte apporte à une autre | 5 | 61 |
 | [`cartesBrutes.js`](#jscartesbrutesjs) | La base livrée avec l'atelier | 0 | 141 |
-| [`analyse.js`](#jsanalysejs) | Lire une carte : coût, capacités, déclencheurs, effets | 5 | 148 |
+| [`analyse.js`](#jsanalysejs) | Lire une carte : coût, capacités, déclencheurs, effets | 9 | 190 |
+| [`grapheForgeQualif.js`](#jsgrapheforgequalifjs) | Ce que disent les filtres, les coûts et les jetons de Forge | 13 | 245 |
+| [`grapheForgeTables.js`](#jsgrapheforgetablesjs) | Le vocabulaire de Forge dans celui du graphe | 11 | 252 |
+| [`grapheForgeMotsCles.js`](#jsgrapheforgemotsclesjs) | Les mots-clés, statiques et remplacements de Forge dans le graphe | 4 | 133 |
+| [`grapheForge.js`](#jsgrapheforgejs) | Lire le graphe d'une carte dans son script de Forge | 13 | 294 |
 | [`archetypesLibelles.js`](#jsarchetypeslibellesjs) | Le nom français des thèmes EDHREC | 0 | 83 |
-| [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 126 |
+| [`categories.js`](#jscategoriesjs) | Les rôles d'une carte | 2 | 131 |
 | [`mana.js`](#jsmanajs) | Ce qu'une carte demande en mana, et ce qu'elle en produit | 11 | 211 |
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 214 |
@@ -277,7 +281,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 180 |
 | [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 224 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
-| [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 169 |
+| [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 2 | 187 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
 | [`simCartes.js`](#jssimcartesjs) | D'un nom de carte à sa fiche de jeu | 10 | 132 |
 | [`simSources.js`](#jssimsourcesjs) | Ce qui peut s'asseoir à un siège de la simulation | 9 | 48 |
@@ -288,7 +292,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`simSection.js`](#jssimsectionjs) | La section « Simulation » | 6 | 110 |
 | [`simCollection.js`](#jssimcollectionjs) | Ce que le moteur comprend de la collection | 8 | 130 |
 | [`forgeDepot.js`](#jsforgedepotjs) | Les scripts de cartes de Forge, téléchargés et gardés | 15 | 215 |
-| [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 172 |
+| [`forgeVue.js`](#jsforgevuejs) | Les cartes Forge sous les yeux | 11 | 177 |
+| [`lectureGraphe.js`](#jslecturegraphejs) | Quelle lecture pour le graphe : le script ou le texte | 8 | 115 |
 | [`simResultats.js`](#jssimresultatsjs) | Les résultats d'un lot, l'historique, le classement | 8 | 111 |
 | [`outils.js`](#jsoutilsjs) | Menue monnaie de l'atelier | 5 | 52 |
 | [`theme.js`](#jsthemejs) | Le thème clair et le thème sombre | 4 | 59 |
@@ -324,7 +329,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 152 |
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 91 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
-| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 38 |
+| [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 40 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -426,7 +431,7 @@ La base livrée avec l'atelier. *0 fonctions, 141 lignes, 19 Ko.*
 
 ## js/analyse.js
 
-Lire une carte : coût, capacités, déclencheurs, effets. *5 fonctions, 148 lignes, 7.6 Ko.*
+Lire une carte : coût, capacités, déclencheurs, effets. *9 fonctions, 190 lignes, 9.6 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -434,7 +439,109 @@ Lire une carte : coût, capacités, déclencheurs, effets. *5 fonctions, 148 lig
 | `stripReminder(t)` | — |
 | `splitAbilities(text)` | — |
 | `matchAll(rules, s)` | — |
-| `analyze(card)` | — |
+| `natureCarte(card)` | Une carte est un sort si elle est éphémère ou rituel, une permanente si elle n'est ni sort ni terrain : les deux lectures partagent ce partage-là. |
+| `analyze(card)` | La lecture que le graphe retient pour une carte : celle du script de Forge quand `lectureForgeDe()` en rend une (js/lectureGraphe.js décide si les scripts sont là et si on les veut),… |
+| `analyseTexte(card)` | — |
+| `capacitesTexte(card, texte)` | Les capacités qu'un texte décrit, chacune avec ce qui la déclenche (`from`), ce qu'elle produit (`to`) et leurs qualifications. |
+| `assembleAnalyse(card, abilities)` | Des capacités, quelle que soit leur lecture, aux arcs du graphe, aux déclencheurs qu'une autre carte peut nourrir et aux productions qui nourrissent les autres. |
+
+## js/grapheForgeQualif.js
+
+Ce que disent les filtres, les coûts et les jetons de Forge. *13 fonctions, 245 lignes, 13 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `alternativesForge(valide)` | `Creature.Other+YouCtrl,Card.Self` → [{tete, props}, …]. |
+| `estSoiForge(alt)` | — |
+| `qualifieAlternative(alt, sort)` | Ce qu'une alternative dit, dans la forme de `qualifieDeclencheur()` : `sort` vrai quand l'objet est un sort lancé, dont les types deviennent des filtres de sort plutôt qu'un sujet. |
+| `qualifieValideForge(valide, sort)` | Les alternatives réunies. Celles qui désignent la carte elle-même ne qualifient rien (« ~ ou une autre créature meurt » porte sur les autres) ; une portée ou un sujet ne tient que s'il… |
+| `porteeJoueurForge(valide)` | La portée d'un joueur désigné : `You`, `Opponent`, `Player.Opponent`… |
+| `versAdversaireForge(t)` | Un effet tourné vers l'adversaire : il le vise, le désigne, ou lui donne ce qu'il crée. |
+| `qDeclencheurForge(t)` | Ce qu'un déclencheur écoute, qualifié : quel objet (`ValidCard`, la source ou la cible des blessures), de qui, à quelles conditions. |
+| `pqForge(u, adv)` | Ce qu'une production qualifie : pour qui, jeton ou non, de quelle force, de quel type — les jetons de Forge disent ce qu'ils sont. |
+| `morceauxCoutForge(cout)` | Les morceaux d'un coût de Forge : `T`, `Sac<1/Creature.Other/another creature>`, `PayLife<2>`, `2 W`… Les chevrons peuvent porter des espaces. |
+| `coutsGrapheForge(cout)` | Les entrées de `COUTS` (js/effets.js) que le coût porte : la même table que la lecture du texte, si bien qu'un exutoire consomme les mêmes choses quelle que soit la lecture. |
+| `qualifCoutForge(cout)` | Ce qu'un coût consomme : la créature, l'artefact, le gobelin qu'on sacrifie ou qu'on engage. |
+| `jetonForge(nom, texte)` | Ce qu'un jeton est, lu dans son script quand on l'a (`texte`), sinon dans son nom — `w_1_1_spirit_flying`, `c_a_treasure_sac` : couleur, force, endurance, puis types et mots-clés. |
+| `texteGrapheForge(desc, card)` | Une description de Forge rendue comparable au texte oracle : le nom de la carte à la place de `CARDNAME`, en minuscules, le rappel retiré. |
+
+| Donnée | Rôle |
+|---|---|
+| `GF_TETES` | La tête d'une alternative, quand c'est un type de carte, ou un joueur. |
+| `GF_JOUEURS` | — |
+| `GF_TYPES_SORT` | — |
+| `GF_PAS_SOUS_TYPE` | Les mots capitalisés qui ne sont pas des sous-types : couleurs, super-types, pseudo-types. |
+| `GF_MOTS_JETON` | — |
+
+## js/grapheForgeTables.js
+
+Le vocabulaire de Forge dans celui du graphe. *11 fonctions, 252 lignes, 16 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `zonesForge(v)` | — |
+| `noeudMarqueur(type)` | — |
+| `noeudsZoneDeclencheur(t)` | Un déclencheur de changement de zone : arriver, mourir, partir, aller au cimetière. |
+| `noeudsDegatsDeclencheur(t)` | Des blessures : infligées à un joueur ou à une créature, en combat ou non, ou subies — quand le déclencheur ne dit que la cible. |
+| `noeudsDeplacement(t)` | Un effet de changement de zone, lu d'après ses zones. |
+| `estTerrainForge(type)` | — |
+| `noeudsJeton(t, ctx)` | — |
+| `noeudsPompe(t)` | — |
+| `restreintForge(t)` | Une désignation (`Defined$`) nomme des objets précis ; un filtre ne restreint que s'il le dit sans négation (`!IsRemembered` exclut, il ne restreint pas). |
+| `masseForge(api, t, r, n)` | — |
+| `rolesForge(ch)` | Ce que les rôles d'une carte lisent sur une capacité de Forge. |
+
+| Donnée | Rôle |
+|---|---|
+| `GF_PHASES` | — |
+| `GF_MARQUEURS` | — |
+| `GF_DECLENCHEURS` | — |
+| `GF_TERRAINS` | Ce qu'on va chercher est un terrain : `Land.Basic`, `Island,Swamp`, `Plains.Basic`… |
+| `GF_EFFETS` | — |
+| `GF_DESTRUCTIFS` | Ce qui balaie et sur qui porte ce qui détruit, lu dans la structure plutôt que dans « all », « each » ou « you control » : `categories()` (js/categories.js) s'y fie quand la lecture… |
+| `GF_RESTREINT` | — |
+
+## js/grapheForgeMotsCles.js
+
+Les mots-clés, statiques et remplacements de Forge dans le graphe. *4 fonctions, 133 lignes, 10 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `noeudsMotsClesDonnes(liste)` | Les mots-clés donnés par un effet ou une statique : `Flying & Trample`. |
+| `nomMotCleForge(k)` | — |
+| `contrainteAutrui(t)` | Les statiques autres que `Continuous` (lue à part : elle donne des mots-clés, des capacités, des permissions). |
+| `amplifie(noeud)` | Un remplacement : ce dont il se nourrit (`nourri`) et ce qu'il produit. |
+
+| Donnée | Rôle |
+|---|---|
+| `GF_Q_SORT_NC` | Les mots-clés : un nœud qu'ils donnent (`to`), ou un déclencheur entier — ce qui le fait partir (`from`, avec sa qualification `q`), ce qu'il produit. |
+| `GF_MOTS_CLES` | — |
+| `GF_STATIQUES` | — |
+| `GF_REMPLACEMENTS` | — |
+
+## js/grapheForge.js
+
+Lire le graphe d'une carte dans son script de Forge. *13 fonctions, 294 lignes, 16 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `analyseForge(card, script, opts)` | Le graphe d'une carte d'après son script (texte brut ou déjà lu). |
+| `listeGraphe(v, sep)` | — |
+| `uniteForge(ctx)` | Une capacité qui en accorde une qui l'accorde à son tour ne finirait pas : au-delà de six unités imbriquées, on cesse de descendre. |
+| `fermeUnite(u, ctx, out, desc, capacite)` | Fermer une unité. Si un élément est inconnu, sa description est relue dans le texte et ce qu'on en avait tiré s'efface ; sinon sa capacité et celles qu'elle accorde rejoignent la carte. |
+| `chaineForge(t0, face, ctx, u, racine)` | Une chaîne d'effets : la table, ses `SubAbility$`, et tout ce qu'elle ouvre — les modes d'un charme, ce qu'un effet retardé exécutera, les statiques et déclencheurs d'un `Effect` ou… |
+| `affineChaineForge(to)` | Un exil suivi d'un retour en jeu est un blink, quelle que soit la distance entre les deux dans la chaîne ; un exil seul reste un exil, un retour seul — celui de l'anneau d'oubli — ne… |
+| `declencheurGraphe(t, face, ctx, out, octroyee)` | Un déclencheur, ou un déclencheur accordé (`octroyee`) par une statique ou un effet. |
+| `capaciteJoueeForge(t, face, ctx, out, octroyee)` | Un sort ou une capacité activée (ou accordée). |
+| `noeudsStatique(t, face, ctx, u)` | Les nœuds d'une statique. `Continuous` donne des mots-clés, de la force, la permission de jouer depuis une zone, et des capacités entières, lues chacune comme une unité accordée. |
+| `noeudsContinue(t, face, ctx, u)` | — |
+| `statiqueGraphe(t, face, ctx, out)` | — |
+| `remplacementGraphe(t, face, ctx, out)` | Un remplacement. Ceux qui amplifient — doubler les jetons, ajouter un marqueur, augmenter des blessures — se nourrissent de ce qu'ils amplifient : la lecture du texte n'en voyait que la… |
+| `motCleGraphe(k, face, ctx, out)` | Un mot-clé. Les chapitres d'une saga et les « en entrant » renvoient à des SVars, lues comme des chaînes ; un mot-clé inconnu est relu dans le texte, comme le fait la lecture de… |
+
+| Donnée | Rôle |
+|---|---|
+| `GF_SOI` | — |
 
 ## js/archetypesLibelles.js
 
@@ -447,7 +554,7 @@ Le nom français des thèmes EDHREC. *0 fonctions, 83 lignes, 6.7 Ko.*
 
 ## js/categories.js
 
-Les rôles d'une carte. *2 fonctions, 126 lignes, 6.8 Ko.*
+Les rôles d'une carte. *2 fonctions, 131 lignes, 7.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4207,10 +4314,11 @@ Le visuel de la fiche, et ses éditions. *5 fonctions, 116 lignes, 5.6 Ko.*
 
 ## js/fiche.js
 
-La fiche détaillée d'une carte. *1 fonctions, 169 lignes, 11 Ko.*
+La fiche détaillée d'une carte. *2 fonctions, 187 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
+| `ligneLecture(card)` | D'où viennent les capacités extraites, et ce que l'autre lecture aurait dit autrement : c'est sur ses propres cartes qu'on juge celle de Forge. |
 | `ficheHTML(card)` | — |
 
 ## js/ficheParcours.js
@@ -4414,11 +4522,11 @@ Les scripts de cartes de Forge, téléchargés et gardés. *15 fonctions, 215 li
 
 ## js/forgeVue.js
 
-Les cartes Forge sous les yeux. *11 fonctions, 172 lignes, 8.7 Ko.*
+Les cartes Forge sous les yeux. *11 fonctions, 177 lignes, 9.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
-| `forgeChange()` | Les scripts ont changé : ce qu'on en avait tiré est périmé. |
+| `forgeChange()` | Les scripts ont changé : ce qu'on en avait tiré est périmé, le graphe compris, qui les lit peut-être (js/lectureGraphe.js). |
 | `etatForgeTexte()` | — |
 | `corpsForge()` | La section de la fenêtre des paramètres. |
 | `majForgeUI(change)` | Repeindre sur place ce qui montre Forge. `change` : les scripts ont changé, le tableau des manques aussi. |
@@ -4434,6 +4542,25 @@ Les cartes Forge sous les yeux. *11 fonctions, 172 lignes, 8.7 Ko.*
 |---|---|
 | `MANQUES` | — |
 | `GENRES_FORGE` | — |
+
+## js/lectureGraphe.js
+
+Quelle lecture pour le graphe : le script ou le texte. *8 fonctions, 115 lignes, 5.4 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `scriptsGraphePrets()` | Presque tous les scripts de cartes sont là : 95 % de ce que Forge publie. |
+| `lectureForgeVoulue()` | — |
+| `lectureForgeActive()` | — |
+| `lectureForgeDe(card)` | La lecture de Forge d'une carte, ou `null` : `analyze()` (js/analyse.js) prend alors celle du texte. |
+| `ecartLectures(card)` | Ce que la lecture retenue doit à son choix, pour la fiche : la source, et les nœuds sur lesquels l'autre lecture aurait dit autre chose. |
+| `cartesAnalysees()` | Toutes les cartes que l'atelier a bâties : la base, et celles que le catalogue a analysées pour ses listes sans les ranger dans la base. |
+| `relisGraphe()` | Relire toutes les cartes si le choix de la lecture a changé. |
+| `etatLectureGraphe()` | La ligne de la section « Cartes Forge » qui dit ce que lit le graphe. |
+
+| Donnée | Rôle |
+|---|---|
+| `LECTURE` | — |
 
 ## js/simResultats.js
 
@@ -4944,7 +5071,7 @@ Les gestes du graphe et des listes. *1 fonctions, 108 lignes, 3.4 Ko.*
 
 ## js/gestesSimulation.js
 
-Les gestes de la section « Simulation ». *2 fonctions, 38 lignes, 1.7 Ko.*
+Les gestes de la section « Simulation ». *2 fonctions, 40 lignes, 1.8 Ko.*
 
 | Fonction | Rôle |
 |---|---|

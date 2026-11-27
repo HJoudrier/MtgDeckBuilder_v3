@@ -82,7 +82,7 @@ function corpsParametres() {
       "L'archive de toutes les cartes existantes, et ce que les suggestions y puisent.",
       corpsCatalogue())}
     ${sectionParametres('Cartes Forge',
-      "Ce que chaque carte fait, écrit par le projet Forge : le moteur de jeu le lit pour jouer vos cartes.",
+      "Ce que chaque carte fait, écrit par le projet Forge : le moteur de jeu le lit pour jouer vos cartes, le graphe pour les relier.",
       corpsForge())}
   </div>`;
 }

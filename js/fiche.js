@@ -6,6 +6,23 @@
    le deck et avec la collection, son prix.
    ===================================================================== */
 
+/* D'où viennent les capacités extraites, et ce que l'autre lecture aurait
+   dit autrement : c'est sur ses propres cartes qu'on juge celle de Forge.
+   Tant que le graphe lit le texte de toutes les cartes, rien n'est à dire. */
+function ligneLecture(card) {
+  const an = card.an || {};
+  if (an.source !== 'forge') {
+    return typeof lectureForgeActive === 'function' && lectureForgeActive()
+      ? '<div class="small muted" style="margin-top:6px">Lu dans le texte : Forge ne connaît pas cette carte.</div>' : '';
+  }
+  const e = ecartLectures(card);
+  const noms = l => l.map(n => esc(NODE[n] ? NODE[n].label : n)).join(', ');
+  const plus = e.forgeSeul.length ? ` Le texte n'y voyait pas : ${noms(e.forgeSeul)}.` : '';
+  const moins = e.texteSeul.length ? ` Le texte y voyait en plus : ${noms(e.texteSeul)}.` : '';
+  const repli = e.replis ? ` ${e.replis} morceau(x) du script relu(s) dans le texte.` : '';
+  return `<div class="small muted" style="margin-top:6px">Lu dans le script de Forge.${plus}${moins}${repli}</div>`;
+}
+
 function ficheHTML(card) {
   const deck = cartesDuDeck();
   const dansDeck = S.deck.get(card.name) || 0;
@@ -159,7 +176,8 @@ function ficheHTML(card) {
           const ql = libelleQual(a.q);
           return `<div class="arc">${a.from.map(f=>esc(NODE[f].label)).join(' + ')}${ql?` <span class="muted">[${esc(ql)}]</span>`:''} → <b>${a.to.map(t=>esc(NODE[t].label)).join(', ')}</b> <span class="muted">(${a.kind}${a.scopeTrig==='adv'?', côté adverse':''})</span></div>`;
         }).join('')
-        : '<div class="arc muted">aucune capacité reconnue dans le texte</div>'}
+        : `<div class="arc muted">aucune capacité reconnue${card.an.source === 'forge' ? ' dans le script' : ' dans le texte'}</div>`}
+      ${ligneLecture(card)}
       ${noeuds.length ? `<div class="chips" style="margin-top:7px">${noeuds.map(n=>`<button type="button" class="chip" data-act="focusNodeFrom" data-node2="${n}">${esc(NODE[n].label)}</button>`).join('')}</div>
         <div class="small muted">Touchez un nœud pour l'isoler dans le graphe.</div>` : ''}</div>
     <div class="bloc"><h4>Branchements possibles avec la collection</h4>

@@ -19,11 +19,13 @@ let MANQUES = {cle: null, val: null, base: null, mesure: false};
 const GENRES_FORGE = {api: 'effet', trig: 'déclencheur', stat: 'statique', repl: 'remplacement', kw: 'mot-clé',
   param: 'paramètre', cout: 'coût', expr: 'expression', filtre: 'filtre', defini: 'désignation', construction: 'forme non jouée'};
 
-/* Les scripts ont changé : ce qu'on en avait tiré est périmé. */
+/* Les scripts ont changé : ce qu'on en avait tiré est périmé, le graphe
+   compris, qui les lit peut-être (js/lectureGraphe.js). */
 function forgeChange() {
   MANQUES.cle = null; MANQUES.base = null;
   if (typeof COUV_TABLE !== 'undefined') COUV_TABLE.cle = null;
   majForgeUI(true);
+  if (typeof relisGraphe === 'function') relisGraphe();
 }
 
 function etatForgeTexte() {
@@ -53,6 +55,9 @@ function corpsForge() {
     </div>
     <label class="choix"><input type="checkbox" data-sim="forgeAuto" ${S.simulation.forgeAuto !== false ? 'checked' : ''}>
       Reprendre et tenir à jour au démarrage</label>
+    <label class="choix"><input type="checkbox" data-sim="grapheForge" ${S.simulation.grapheForge !== false ? 'checked' : ''}>
+      Lire le graphe et les rôles dans les scripts</label>
+    <div class="small muted" id="forgeLecture">${esc(typeof etatLectureGraphe === 'function' ? etatLectureGraphe() : '')}</div>
     <div class="small muted">Scripts : projet Forge (Card-Forge/forge sur GitHub), sous licence GPL-3.0. Environ
       trente-quatre mille fichiers, une quinzaine de mégaoctets, téléchargés sur cet appareil seulement — l'atelier n'en
       contient aucun. Ensuite, seuls les fichiers modifiés sont relus, une fois par semaine.</div>
