@@ -6,6 +6,10 @@
   "synergies.js",
   "cartesBrutes.js",
   "analyse.js",
+  "grapheForgeQualif.js",
+  "grapheForgeTables.js",
+  "grapheForgeMotsCles.js",
+  "grapheForge.js",
   "archetypesLibelles.js",
   "categories.js",
   "mana.js",
@@ -244,6 +248,7 @@
   "archive.js",
   "catalogue.js",
   "candidats.js",
+  "inconnues.js",
   "graphe.js",
   "stats.js",
   "notation.js",
@@ -266,6 +271,7 @@
   "deck.js",
   "legalite.js",
   "deckSection.js",
+  "deckInconnues.js",
   "ficheVisuel.js",
   "fiche.js",
   "ficheParcours.js",
@@ -279,6 +285,7 @@
   "simCollection.js",
   "forgeDepot.js",
   "forgeVue.js",
+  "lectureGraphe.js",
   "simResultats.js",
   "outils.js",
   "theme.js",
@@ -391,7 +398,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
    ]
   },
   {
@@ -403,7 +410,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
    ]
   },
   {
@@ -415,7 +422,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze",
+    "assembleAnalyse",
     "croise",
     "ficheHTML",
     "noteCarte"
@@ -445,7 +452,8 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte",
+    "declencheurGraphe"
    ]
   },
   {
@@ -457,7 +465,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
    ]
   },
   {
@@ -469,7 +477,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
    ]
   },
   {
@@ -481,7 +489,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
    ]
   },
   {
@@ -493,7 +501,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
    ]
   },
   {
@@ -571,7 +579,7 @@
   {
    "nom": "parseCost",
    "fichier": "analyse.js",
-   "ligne": 11,
+   "ligne": 15,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -583,29 +591,18 @@
   {
    "nom": "stripReminder",
    "fichier": "analyse.js",
-   "ligne": 25,
+   "ligne": 29,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte",
+    "texteGrapheForge"
    ]
   },
   {
    "nom": "splitAbilities",
-   "fichier": "analyse.js",
-   "ligne": 27,
-   "chargement": false,
-   "appelle": [],
-   "appelleDiffere": [],
-   "appelleParHtml": [],
-   "appeleePar": [
-    "analyze"
-   ]
-  },
-  {
-   "nom": "matchAll",
    "fichier": "analyse.js",
    "ligne": 31,
    "chargement": false,
@@ -613,19 +610,75 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "analyze"
+    "capacitesTexte"
+   ]
+  },
+  {
+   "nom": "matchAll",
+   "fichier": "analyse.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capacitesTexte"
+   ]
+  },
+  {
+   "nom": "natureCarte",
+   "fichier": "analyse.js",
+   "ligne": 46,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "assembleAnalyse",
+    "capacitesTexte"
    ]
   },
   {
    "nom": "analyze",
    "fichier": "analyse.js",
-   "ligne": 40,
+   "ligne": 57,
+   "chargement": false,
+   "appelle": [
+    "analyseTexte",
+    "lectureForgeDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "reanalyser"
+   ]
+  },
+  {
+   "nom": "analyseTexte",
+   "fichier": "analyse.js",
+   "ligne": 63,
+   "chargement": false,
+   "appelle": [
+    "assembleAnalyse",
+    "capacitesTexte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyze",
+    "ecartLectures"
+   ]
+  },
+  {
+   "nom": "capacitesTexte",
+   "fichier": "analyse.js",
+   "ligne": 73,
    "chargement": false,
    "appelle": [
     "coupeDeclencheur",
     "coutsDe",
-    "libelleQual",
     "matchAll",
+    "natureCarte",
     "qualifieDeclencheur",
     "qualifieProduction",
     "refineEffects",
@@ -637,7 +690,725 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "reanalyser"
+    "analyseTexte",
+    "fermeUnite",
+    "motCleGraphe"
+   ]
+  },
+  {
+   "nom": "assembleAnalyse",
+   "fichier": "analyse.js",
+   "ligne": 144,
+   "chargement": false,
+   "appelle": [
+    "libelleQual",
+    "natureCarte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyseForge",
+    "analyseTexte"
+   ]
+  },
+  {
+   "nom": "alternativesForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "contrainteAutrui",
+    "estTerrainForge",
+    "masseForge",
+    "noeudsDegatsDeclencheur",
+    "noeudsZoneDeclencheur",
+    "porteeJoueurForge",
+    "qDeclencheurForge",
+    "qualifieValideForge"
+   ]
+  },
+  {
+   "nom": "estSoiForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 42,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "contrainteAutrui",
+    "masseForge",
+    "qualifieAlternative"
+   ]
+  },
+  {
+   "nom": "qualifieAlternative",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 49,
+   "chargement": false,
+   "appelle": [
+    "estSoiForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qualifieValideForge"
+   ]
+  },
+  {
+   "nom": "qualifieValideForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 87,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge",
+    "qualifieAlternative"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qDeclencheurForge",
+    "qualifCoutForge",
+    "remplacementGraphe"
+   ]
+  },
+  {
+   "nom": "porteeJoueurForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 113,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "qDeclencheurForge"
+   ]
+  },
+  {
+   "nom": "versAdversaireForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 124,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chaineForge"
+   ]
+  },
+  {
+   "nom": "qDeclencheurForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 133,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge",
+    "porteeJoueurForge",
+    "qualifieValideForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "declencheurGraphe"
+   ]
+  },
+  {
+   "nom": "pqForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 153,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "motCleGraphe",
+    "remplacementGraphe",
+    "statiqueGraphe"
+   ]
+  },
+  {
+   "nom": "morceauxCoutForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 163,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "coutsGrapheForge",
+    "qualifCoutForge"
+   ]
+  },
+  {
+   "nom": "coutsGrapheForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 174,
+   "chargement": false,
+   "appelle": [
+    "morceauxCoutForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "chaineForge"
+   ]
+  },
+  {
+   "nom": "qualifCoutForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 199,
+   "chargement": false,
+   "appelle": [
+    "morceauxCoutForge",
+    "qualifieValideForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe"
+   ]
+  },
+  {
+   "nom": "jetonForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 213,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "noeudsJeton"
+   ]
+  },
+  {
+   "nom": "texteGrapheForge",
+   "fichier": "grapheForgeQualif.js",
+   "ligne": 240,
+   "chargement": false,
+   "appelle": [
+    "stripReminder"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "remplacementGraphe",
+    "statiqueGraphe"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "grapheForgeTables.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "noeudMarqueur",
+    "noeudsMotsClesDonnes"
+   ],
+   "appelleDiffere": [
+    "noeudsDegatsDeclencheur",
+    "noeudsDeplacement",
+    "noeudsJeton",
+    "noeudsPompe",
+    "noeudsZoneDeclencheur"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "zonesForge",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 14,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chaineForge",
+    "masseForge",
+    "noeudsDeplacement",
+    "noeudsZoneDeclencheur"
+   ]
+  },
+  {
+   "nom": "noeudMarqueur",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 23,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeMotsCles.js (chargement)",
+    "grapheForgeTables.js (chargement)",
+    "motCleGraphe"
+   ]
+  },
+  {
+   "nom": "noeudsZoneDeclencheur",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 30,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge",
+    "zonesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeTables.js (chargement)"
+   ]
+  },
+  {
+   "nom": "noeudsDegatsDeclencheur",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 50,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeTables.js (chargement)"
+   ]
+  },
+  {
+   "nom": "noeudsDeplacement",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 104,
+   "chargement": false,
+   "appelle": [
+    "estTerrainForge",
+    "zonesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeTables.js (chargement)"
+   ]
+  },
+  {
+   "nom": "estTerrainForge",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 138,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "noeudsDeplacement"
+   ]
+  },
+  {
+   "nom": "noeudsJeton",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 143,
+   "chargement": false,
+   "appelle": [
+    "jetonForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeTables.js (chargement)"
+   ]
+  },
+  {
+   "nom": "noeudsPompe",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 151,
+   "chargement": false,
+   "appelle": [
+    "noeudsMotsClesDonnes"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeTables.js (chargement)"
+   ]
+  },
+  {
+   "nom": "restreintForge",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 220,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "masseForge"
+   ]
+  },
+  {
+   "nom": "masseForge",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 225,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge",
+    "estSoiForge",
+    "restreintForge",
+    "zonesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chaineForge"
+   ]
+  },
+  {
+   "nom": "rolesForge",
+   "fichier": "grapheForgeTables.js",
+   "ligne": 249,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe"
+   ]
+  },
+  {
+   "nom": "chargement du module",
+   "fichier": "grapheForgeMotsCles.js",
+   "ligne": null,
+   "chargement": true,
+   "appelle": [
+    "amplifie",
+    "contrainteAutrui",
+    "forgeApi",
+    "noeudMarqueur"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": []
+  },
+  {
+   "nom": "noeudsMotsClesDonnes",
+   "fichier": "grapheForgeMotsCles.js",
+   "ligne": 11,
+   "chargement": false,
+   "appelle": [
+    "nomMotCleForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeTables.js (chargement)",
+    "noeudsContinue",
+    "noeudsPompe"
+   ]
+  },
+  {
+   "nom": "nomMotCleForge",
+   "fichier": "grapheForgeMotsCles.js",
+   "ligne": 16,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "motCleGraphe",
+    "noeudsMotsClesDonnes"
+   ]
+  },
+  {
+   "nom": "contrainteAutrui",
+   "fichier": "grapheForgeMotsCles.js",
+   "ligne": 77,
+   "chargement": false,
+   "appelle": [
+    "alternativesForge"
+   ],
+   "appelleDiffere": [
+    "estSoiForge"
+   ],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeMotsCles.js (chargement)"
+   ]
+  },
+  {
+   "nom": "amplifie",
+   "fichier": "grapheForgeMotsCles.js",
+   "ligne": 105,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "grapheForgeMotsCles.js (chargement)"
+   ]
+  },
+  {
+   "nom": "analyseForge",
+   "fichier": "grapheForge.js",
+   "ligne": 20,
+   "chargement": false,
+   "appelle": [
+    "assembleAnalyse",
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "lisScriptForge",
+    "motCleGraphe",
+    "remplacementGraphe",
+    "statiqueGraphe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lectureForgeDe"
+   ]
+  },
+  {
+   "nom": "listeGraphe",
+   "fichier": "grapheForge.js",
+   "ligne": 35,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chaineForge",
+    "motCleGraphe",
+    "noeudsContinue",
+    "noeudsStatique"
+   ]
+  },
+  {
+   "nom": "uniteForge",
+   "fichier": "grapheForge.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "motCleGraphe",
+    "remplacementGraphe",
+    "statiqueGraphe"
+   ]
+  },
+  {
+   "nom": "fermeUnite",
+   "fichier": "grapheForge.js",
+   "ligne": 52,
+   "chargement": false,
+   "appelle": [
+    "capacitesTexte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "motCleGraphe",
+    "remplacementGraphe",
+    "statiqueGraphe"
+   ]
+  },
+  {
+   "nom": "chaineForge",
+   "fichier": "grapheForge.js",
+   "ligne": 71,
+   "chargement": false,
+   "appelle": [
+    "affineChaineForge",
+    "capaciteJoueeForge",
+    "coutsGrapheForge",
+    "declencheurGraphe",
+    "forgeApi",
+    "forgeSousCapacite",
+    "forgeTable",
+    "listeGraphe",
+    "masseForge",
+    "noeudsStatique",
+    "versAdversaireForge",
+    "zonesForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "motCleGraphe",
+    "remplacementGraphe"
+   ]
+  },
+  {
+   "nom": "affineChaineForge",
+   "fichier": "grapheForge.js",
+   "ligne": 120,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chaineForge"
+   ]
+  },
+  {
+   "nom": "declencheurGraphe",
+   "fichier": "grapheForge.js",
+   "ligne": 135,
+   "chargement": false,
+   "appelle": [
+    "chaineForge",
+    "coupeDeclencheur",
+    "fermeUnite",
+    "forgeSousCapacite",
+    "pqForge",
+    "qDeclencheurForge",
+    "qualifCoutForge",
+    "rolesForge",
+    "texteGrapheForge",
+    "uniteForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyseForge",
+    "chaineForge",
+    "noeudsContinue"
+   ]
+  },
+  {
+   "nom": "capaciteJoueeForge",
+   "fichier": "grapheForge.js",
+   "ligne": 165,
+   "chargement": false,
+   "appelle": [
+    "chaineForge",
+    "coutsGrapheForge",
+    "fermeUnite",
+    "forgeApi",
+    "pqForge",
+    "qualifCoutForge",
+    "rolesForge",
+    "texteGrapheForge",
+    "uniteForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyseForge",
+    "chaineForge",
+    "noeudsContinue"
+   ]
+  },
+  {
+   "nom": "noeudsStatique",
+   "fichier": "grapheForge.js",
+   "ligne": 198,
+   "chargement": false,
+   "appelle": [
+    "listeGraphe",
+    "noeudsContinue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "chaineForge",
+    "statiqueGraphe"
+   ]
+  },
+  {
+   "nom": "noeudsContinue",
+   "fichier": "grapheForge.js",
+   "ligne": 209,
+   "chargement": false,
+   "appelle": [
+    "capaciteJoueeForge",
+    "declencheurGraphe",
+    "forgeTable",
+    "listeGraphe",
+    "noeudsMotsClesDonnes",
+    "statiqueGraphe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "noeudsStatique"
+   ]
+  },
+  {
+   "nom": "statiqueGraphe",
+   "fichier": "grapheForge.js",
+   "ligne": 224,
+   "chargement": false,
+   "appelle": [
+    "fermeUnite",
+    "noeudsStatique",
+    "pqForge",
+    "texteGrapheForge",
+    "uniteForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyseForge",
+    "motCleGraphe",
+    "noeudsContinue"
+   ]
+  },
+  {
+   "nom": "remplacementGraphe",
+   "fichier": "grapheForge.js",
+   "ligne": 239,
+   "chargement": false,
+   "appelle": [
+    "chaineForge",
+    "fermeUnite",
+    "forgeSousCapacite",
+    "pqForge",
+    "qualifieValideForge",
+    "texteGrapheForge",
+    "uniteForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyseForge"
+   ]
+  },
+  {
+   "nom": "motCleGraphe",
+   "fichier": "grapheForge.js",
+   "ligne": 259,
+   "chargement": false,
+   "appelle": [
+    "capacitesTexte",
+    "chaineForge",
+    "fermeUnite",
+    "forgeSousCapacite",
+    "forgeTable",
+    "listeGraphe",
+    "noeudMarqueur",
+    "nomMotCleForge",
+    "pqForge",
+    "statiqueGraphe",
+    "uniteForge"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyseForge"
    ]
   },
   {
@@ -655,7 +1426,7 @@
   {
    "nom": "reanalyser",
    "fichier": "categories.js",
-   "ligne": 115,
+   "ligne": 120,
    "chargement": false,
    "appelle": [
     "analyze",
@@ -666,10 +1437,12 @@
    "appeleePar": [
     "applyScryfall",
     "buildCard",
-    "carteDuCatalogue",
     "carteLivree",
     "completeDepuisRec",
+    "completeInconnueDepuisFiche",
+    "habilleDepuisRec",
     "majTexteOracle",
+    "relisGraphe",
     "restore"
    ]
   },
@@ -683,8 +1456,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "applyScryfall",
-    "carteDuCatalogue",
+    "completeInconnueDepuisFiche",
     "getCardOrAnalyzedRec",
+    "habilleDepuisRec",
     "manaProduitTexte"
    ]
   },
@@ -980,6 +1754,8 @@
     "chercheFichesScryfall",
     "chercheImagesTable",
     "chercheScryfall",
+    "completeInconnuesDepuisArchive",
+    "completeInconnuesDepuisFiches",
     "completeUnknown",
     "demandeImage",
     "edhrecAllFor",
@@ -1029,6 +1805,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "applyScryfall",
+    "completeInconnuesDepuisArchive",
     "completeUnknown",
     "edhrecAllFor",
     "edhrecFor",
@@ -1058,6 +1835,8 @@
     "carteDepuisScryfall",
     "carteDuCatalogue",
     "carteLivree",
+    "completeInconnueDepuisFiche",
+    "completeInconnueDepuisRec",
     "gestesGraphe",
     "getCardOrAnalyzedRec",
     "migreAdversaires",
@@ -1068,7 +1847,7 @@
   {
    "nom": "majTexteOracle",
    "fichier": "cartes.js",
-   "ligne": 46,
+   "ligne": 51,
    "chargement": false,
    "appelle": [
     "reanalyser"
@@ -1084,7 +1863,7 @@
   {
    "nom": "indexCard",
    "fichier": "cartes.js",
-   "ligne": 64,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "loose",
@@ -1100,7 +1879,7 @@
   {
    "nom": "unindexCard",
    "fichier": "cartes.js",
-   "ligne": 73,
+   "ligne": 78,
    "chargement": false,
    "appelle": [
     "loose",
@@ -1116,7 +1895,7 @@
   {
    "nom": "registerCard",
    "fichier": "cartes.js",
-   "ligne": 82,
+   "ligne": 87,
    "chargement": false,
    "appelle": [
     "indexCard",
@@ -1137,7 +1916,7 @@
   {
    "nom": "find",
    "fichier": "cartes.js",
-   "ligne": 90,
+   "ligne": 95,
    "chargement": false,
    "appelle": [
     "loose",
@@ -1174,6 +1953,7 @@
     "gestesGraphe",
     "getCardOrAnalyzedRec",
     "imageConnue",
+    "inconnuesDuDeck",
     "legality",
     "loadEdhrec",
     "majApercu",
@@ -1203,20 +1983,24 @@
   {
    "nom": "peutCommander",
    "fichier": "cartes.js",
-   "ligne": 98,
+   "ligne": 107,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "addToDeck",
+    "cardRow",
+    "cardTile",
     "commandantsPossibles",
-    "commandantsSecondairesPossibles"
+    "commandantsSecondairesPossibles",
+    "openImport"
    ]
   },
   {
    "nom": "commandantsPossibles",
    "fichier": "cartes.js",
-   "ligne": 102,
+   "ligne": 115,
    "chargement": false,
    "appelle": [
     "deckEntries"
@@ -1232,7 +2016,7 @@
   {
    "nom": "commandantsPrincipaux",
    "fichier": "cartes.js",
-   "ligne": 111,
+   "ligne": 124,
    "chargement": false,
    "appelle": [
     "find"
@@ -1246,7 +2030,7 @@
   {
    "nom": "commandantsSecondairesPossibles",
    "fichier": "cartes.js",
-   "ligne": 119,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "deckEntries",
@@ -1262,7 +2046,7 @@
   {
    "nom": "commandantsSecondaires",
    "fichier": "cartes.js",
-   "ligne": 127,
+   "ligne": 140,
    "chargement": false,
    "appelle": [
     "commandantsSecondairesPossibles"
@@ -1281,7 +2065,7 @@
   {
    "nom": "mainType",
    "fichier": "cartes.js",
-   "ligne": 131,
+   "ligne": 144,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1298,7 +2082,7 @@
   {
    "nom": "carteLivree",
    "fichier": "cartes.js",
-   "ligne": 151,
+   "ligne": 164,
    "chargement": false,
    "appelle": [
     "buildCard",
@@ -1315,7 +2099,7 @@
   {
    "nom": "initBuiltin",
    "fichier": "cartes.js",
-   "ligne": 165,
+   "ligne": 178,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [
@@ -1329,7 +2113,7 @@
   {
    "nom": "frontFace",
    "fichier": "cartes.js",
-   "ligne": 171,
+   "ligne": 184,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -1340,6 +2124,8 @@
     "chargerSetScryfall",
     "chercheTexte",
     "chercheVerso",
+    "completeInconnuesDepuisArchive",
+    "completeInconnuesDepuisFiches",
     "completeUnknown",
     "edhrecAllFor",
     "edhrecFor",
@@ -1355,7 +2141,7 @@
   {
    "nom": "mergeInto",
    "fichier": "cartes.js",
-   "ligne": 175,
+   "ligne": 188,
    "chargement": false,
    "appelle": [
     "annexeListe",
@@ -1371,7 +2157,7 @@
   {
    "nom": "renameCard",
    "fichier": "cartes.js",
-   "ligne": 197,
+   "ligne": 210,
    "chargement": false,
    "appelle": [
     "indexCard",
@@ -2691,6 +3477,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "completeInconnuesDuDeck",
     "demarrerCatalogue",
     "indexArchive",
     "majCatalogue"
@@ -4207,6 +4994,7 @@
    "appeleePar": [
     "accordeAnimation",
     "animeRevenus",
+    "chaineForge",
     "elementsTable",
     "forgeArtefactsC.js (chargement)",
     "forgeArtefactsE.js (chargement)",
@@ -4219,8 +5007,10 @@
     "forgeSousCapacite",
     "lisScriptForge",
     "motCleForge",
+    "motCleGraphe",
     "motifStoryweave",
     "niveauForge",
+    "noeudsContinue",
     "statiqueForge",
     "unitesForge"
    ]
@@ -4235,7 +5025,9 @@
    "appelleParHtml": [],
    "appeleePar": [
     "capaciteForge",
+    "capaciteJoueeForge",
     "chaineDegats",
+    "chaineForge",
     "definitionDepuisScript",
     "effetForge",
     "elementsTable",
@@ -4256,6 +5048,7 @@
     "forgeTerrains.js (chargement)",
     "formeRemplacementC",
     "formeRemplacementD",
+    "grapheForgeMotsCles.js (chargement)",
     "motifStoryweave",
     "payeAvantForge",
     "sortPermanentForge",
@@ -4315,9 +5108,11 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "analyseForge",
     "capacitesAnneau",
     "definitionForge",
     "jetonsForge",
+    "lectureForgeDe",
     "manquesDecks",
     "mesureBaseForge"
    ]
@@ -4335,8 +5130,10 @@
    "appeleePar": [
     "accordeAnimation",
     "chaineDegats",
+    "chaineForge",
     "chainePioche",
     "declencheurForge",
+    "declencheurGraphe",
     "effetForge",
     "entreAvecPrevu",
     "entreeForge",
@@ -4367,12 +5164,14 @@
     "formeRemplacementC",
     "formeRemplacementD",
     "motCleForge",
+    "motCleGraphe",
     "motCleLancementB",
     "motClePermanent",
     "motifStoryweave",
     "nombreRemplace",
     "payeAvantForge",
     "quantiteRemplacee",
+    "remplacementGraphe",
     "sousEffets",
     "statiqueForge",
     "surchargeForge",
@@ -24236,10 +25035,10 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
-    "carteDuCatalogue",
     "completeDepuisRec",
     "ficheDeRec",
-    "getCardOrAnalyzedRec"
+    "getCardOrAnalyzedRec",
+    "habilleDepuisRec"
    ]
   },
   {
@@ -24252,9 +25051,10 @@
    "appelleParHtml": [],
    "appeleePar": [
     "applyScryfall",
-    "carteDuCatalogue",
     "completeDepuisRec",
+    "completeInconnueDepuisFiche",
     "getCardOrAnalyzedRec",
+    "habilleDepuisRec",
     "jeuRestore"
    ]
   },
@@ -24457,6 +25257,7 @@
    "appelleDiffere": [],
    "appelleParHtml": [],
    "appeleePar": [
+    "completeInconnuesDuDeck",
     "enrichAllUnknown",
     "openImport"
    ]
@@ -24605,7 +25406,9 @@
    "ligne": 200,
    "chargement": false,
    "appelle": [
+    "completeInconnuesDepuisArchive",
     "completeUnknown",
+    "recalculerAvecProgression",
     "toast"
    ],
    "appelleDiffere": [],
@@ -24776,6 +25579,8 @@
     "choisirVersion",
     "choisitDisposition",
     "choisitPaiementMana",
+    "completeInconnuesDepuisArchive",
+    "completeInconnuesDepuisFiches",
     "effaceComportement",
     "entete.js (chargement)",
     "gestesDeck",
@@ -26693,8 +27498,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliqueCatalogueAuxCartes",
-    "carteDuCatalogue",
-    "completeDepuisRec"
+    "completeDepuisRec",
+    "habilleDepuisRec"
    ]
   },
   {
@@ -26707,7 +27512,8 @@
    "appelleParHtml": [],
    "appeleePar": [
     "appliqueCatalogueAuxCartes",
-    "completeDepuisRec"
+    "completeDepuisRec",
+    "completeInconnueDepuisRec"
    ]
   },
   {
@@ -26716,14 +27522,11 @@
    "ligne": 55,
    "chargement": false,
    "appelle": [
-    "appliqueChampsJeu",
     "buildCard",
-    "champsJeuRec",
     "completeDepuisRec",
+    "completeInconnueDepuisRec",
     "find",
-    "noterLegalArchive",
-    "ordonneMana",
-    "reanalyser",
+    "habilleDepuisRec",
     "registerCard"
    ],
    "appelleDiffere": [],
@@ -26736,7 +27539,7 @@
   {
    "nom": "invaliderCandidats",
    "fichier": "candidats.js",
-   "ligne": 85,
+   "ligne": 71,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -26747,11 +27550,14 @@
     "apresReglage",
     "brancherCatalogue",
     "chargerCatalogueComplet",
+    "completeInconnuesDepuisArchive",
+    "completeInconnuesDepuisFiches",
     "gestesDeck",
     "gestesDonnees",
     "gestesGraphe",
     "gestesVue",
     "lireCatalogueFichier",
+    "relisGraphe",
     "saisieBudget",
     "supprimerDeck",
     "verseBrouillon"
@@ -26760,7 +27566,7 @@
   {
    "nom": "signatureCandidats",
    "fichier": "candidats.js",
-   "ligne": 89,
+   "ligne": 75,
    "chargement": false,
    "appelle": [
     "noeudsActifs",
@@ -26778,11 +27584,12 @@
   {
    "nom": "appliqueCatalogueAuxCartes",
    "fichier": "candidats.js",
-   "ligne": 100,
+   "ligne": 86,
    "chargement": false,
    "appelle": [
     "annexeListe",
     "completeDepuisRec",
+    "completeInconnuesDepuisArchive",
     "find",
     "norm",
     "noterLegalArchive",
@@ -26799,7 +27606,7 @@
   {
    "nom": "selectionCandidats",
    "fichier": "candidats.js",
-   "ligne": 130,
+   "ligne": 117,
    "chargement": false,
    "appelle": [
     "colorOK",
@@ -26821,7 +27628,7 @@
   {
    "nom": "candidatsCatalogue",
    "fichier": "candidats.js",
-   "ligne": 173,
+   "ligne": 160,
    "chargement": false,
    "appelle": [
     "selectionCandidats",
@@ -26839,7 +27646,7 @@
   {
    "nom": "prechauffeCandidats",
    "fichier": "candidats.js",
-   "ligne": 186,
+   "ligne": 173,
    "chargement": false,
    "appelle": [
     "carteDuCatalogue",
@@ -26856,7 +27663,7 @@
   {
    "nom": "statsCandidats",
    "fichier": "candidats.js",
-   "ligne": 209,
+   "ligne": 196,
    "chargement": false,
    "appelle": [
     "candidatsCatalogue"
@@ -26870,7 +27677,7 @@
   {
    "nom": "requeteCatalogue",
    "fichier": "candidats.js",
-   "ligne": 215,
+   "ligne": 202,
    "chargement": false,
    "appelle": [
     "find",
@@ -26886,7 +27693,7 @@
   {
    "nom": "signatureCatalogue",
    "fichier": "candidats.js",
-   "ligne": 224,
+   "ligne": 211,
    "chargement": false,
    "appelle": [
     "requeteCatalogue"
@@ -26900,7 +27707,7 @@
   {
    "nom": "chargerCatalogue",
    "fichier": "candidats.js",
-   "ligne": 226,
+   "ligne": 213,
    "chargement": false,
    "appelle": [
     "applyScryfall",
@@ -26914,6 +27721,64 @@
    "appelleParHtml": [],
    "appeleePar": [
     "gestesDonnees"
+   ]
+  },
+  {
+   "nom": "habilleDepuisRec",
+   "fichier": "inconnues.js",
+   "ligne": 16,
+   "chargement": false,
+   "appelle": [
+    "appliqueChampsJeu",
+    "champsJeuRec",
+    "noterLegalArchive",
+    "ordonneMana",
+    "reanalyser"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "carteDuCatalogue",
+    "completeInconnueDepuisRec"
+   ]
+  },
+  {
+   "nom": "completeInconnueDepuisRec",
+   "fichier": "inconnues.js",
+   "ligne": 44,
+   "chargement": false,
+   "appelle": [
+    "buildCard",
+    "habilleDepuisRec",
+    "noterSetsArchive"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "carteDuCatalogue",
+    "completeInconnuesDepuisArchive"
+   ]
+  },
+  {
+   "nom": "completeInconnuesDepuisArchive",
+   "fichier": "inconnues.js",
+   "ligne": 57,
+   "chargement": false,
+   "appelle": [
+    "completeInconnueDepuisRec",
+    "frontFace",
+    "invaliderCandidats",
+    "loose",
+    "norm",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "appliqueCatalogueAuxCartes",
+    "completeInconnuesDuDeck",
+    "enrichAllUnknown",
+    "openImport"
    ]
   },
   {
@@ -28445,6 +29310,7 @@
     "annexeListe",
     "buildCard",
     "closeDialog",
+    "completeInconnuesDepuisArchive",
     "completeUnknown",
     "deckAdd",
     "deckEntries",
@@ -28454,6 +29320,7 @@
     "noterImpression",
     "openDialog",
     "parseMtgoList",
+    "peutCommander",
     "recalculerAvecProgression",
     "registerCard",
     "spent",
@@ -28750,6 +29617,7 @@
     "deplacerCarte",
     "ficheHTML",
     "gestesDonnees",
+    "inconnuesDuDeck",
     "majPrix",
     "mergeInto",
     "openImport",
@@ -29006,6 +29874,7 @@
     "eur",
     "find",
     "fmt",
+    "peutCommander",
     "recalculerAvecProgression",
     "toast"
    ],
@@ -29377,12 +30246,14 @@
     "aAcheter",
     "annexeSize",
     "blocAchats",
+    "blocInconnues",
     "blocMana",
     "boutonCibles",
     "cardRow",
     "cardTile",
     "carteFiltree",
     "champRecherche",
+    "completeInconnuesDuDeck",
     "deckCounts",
     "deckEntries",
     "deckSize",
@@ -29419,6 +30290,93 @@
     "appliquerAffichage",
     "renderAll",
     "runScryQueue"
+   ]
+  },
+  {
+   "nom": "inconnuesDuDeck",
+   "fichier": "deckInconnues.js",
+   "ligne": 17,
+   "chargement": false,
+   "appelle": [
+    "annexeListe",
+    "find"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "blocInconnues",
+    "completeInconnuesDepuisFiches",
+    "completeInconnuesDuDeck"
+   ]
+  },
+  {
+   "nom": "completeInconnueDepuisFiche",
+   "fichier": "deckInconnues.js",
+   "ligne": 29,
+   "chargement": false,
+   "appelle": [
+    "appliqueChampsJeu",
+    "buildCard",
+    "ordonneMana",
+    "reanalyser"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "completeInconnuesDepuisFiches"
+   ]
+  },
+  {
+   "nom": "completeInconnuesDepuisFiches",
+   "fichier": "deckInconnues.js",
+   "ligne": 45,
+   "chargement": false,
+   "appelle": [
+    "completeInconnueDepuisFiche",
+    "frontFace",
+    "inconnuesDuDeck",
+    "invaliderCandidats",
+    "norm",
+    "scheduleSave"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "completeInconnuesDuDeck"
+   ]
+  },
+  {
+   "nom": "completeInconnuesDuDeck",
+   "fichier": "deckInconnues.js",
+   "ligne": 63,
+   "chargement": false,
+   "appelle": [
+    "catalogueAbsent",
+    "chargeSimCartes",
+    "completeInconnuesDepuisArchive",
+    "completeInconnuesDepuisFiches",
+    "completeUnknown",
+    "inconnuesDuDeck",
+    "renderAll"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderE"
+   ]
+  },
+  {
+   "nom": "blocInconnues",
+   "fichier": "deckInconnues.js",
+   "ligne": 81,
+   "chargement": false,
+   "appelle": [
+    "inconnuesDuDeck"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "renderE"
    ]
   },
   {
@@ -29501,9 +30459,25 @@
    ]
   },
   {
+   "nom": "ligneLecture",
+   "fichier": "fiche.js",
+   "ligne": 12,
+   "chargement": false,
+   "appelle": [
+    "ecartLectures",
+    "esc",
+    "lectureForgeActive"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ficheHTML"
+   ]
+  },
+  {
    "nom": "ficheHTML",
    "fichier": "fiche.js",
-   "ligne": 9,
+   "ligne": 26,
    "chargement": false,
    "appelle": [
     "aDeuxFaces",
@@ -29532,6 +30506,7 @@
     "libelleFamillesLarges",
     "libelleImpression",
     "libelleQual",
+    "ligneLecture",
     "listeVersions",
     "norm",
     "partnersFor",
@@ -29747,6 +30722,7 @@
    "appelleParHtml": [],
    "appeleePar": [
     "commenceTable",
+    "completeInconnuesDuDeck",
     "joueLot",
     "pret",
     "renderK"
@@ -30903,16 +31879,18 @@
    "appeleePar": [
     "avecForge",
     "defNommee",
+    "lectureForgeDe",
     "manquesDecks"
    ]
   },
   {
    "nom": "forgeChange",
    "fichier": "forgeVue.js",
-   "ligne": 23,
+   "ligne": 24,
    "chargement": false,
    "appelle": [
-    "majForgeUI"
+    "majForgeUI",
+    "relisGraphe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -30925,7 +31903,7 @@
   {
    "nom": "etatForgeTexte",
    "fichier": "forgeVue.js",
-   "ligne": 29,
+   "ligne": 31,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -30938,11 +31916,12 @@
   {
    "nom": "corpsForge",
    "fichier": "forgeVue.js",
-   "ligne": 43,
+   "ligne": 45,
    "chargement": false,
    "appelle": [
     "esc",
-    "etatForgeTexte"
+    "etatForgeTexte",
+    "etatLectureGraphe"
    ],
    "appelleDiffere": [],
    "appelleParHtml": [],
@@ -30954,7 +31933,7 @@
   {
    "nom": "majForgeUI",
    "fichier": "forgeVue.js",
-   "ligne": 64,
+   "ligne": 69,
    "chargement": false,
    "appelle": [
     "corpsForge",
@@ -30967,13 +31946,14 @@
    "appeleePar": [
     "forgeChange",
     "mesureBaseForge",
+    "reglageSimulation",
     "telechargeForge"
    ]
   },
   {
    "nom": "poidsPrioritaires",
    "fichier": "forgeVue.js",
-   "ligne": 77,
+   "ligne": 82,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -30985,7 +31965,7 @@
   {
    "nom": "manquesDecks",
    "fichier": "forgeVue.js",
-   "ligne": 86,
+   "ligne": 91,
    "chargement": false,
    "appelle": [
     "couvertureForge",
@@ -31005,7 +31985,7 @@
   {
    "nom": "mesureBaseForge",
    "fichier": "forgeVue.js",
-   "ligne": 107,
+   "ligne": 112,
    "chargement": false,
    "appelle": [
     "attendre",
@@ -31023,7 +32003,7 @@
   {
    "nom": "libelleElement",
    "fichier": "forgeVue.js",
-   "ligne": 126,
+   "ligne": 131,
    "chargement": false,
    "appelle": [
     "esc"
@@ -31037,7 +32017,7 @@
   {
    "nom": "listeManques",
    "fichier": "forgeVue.js",
-   "ligne": 131,
+   "ligne": 136,
    "chargement": false,
    "appelle": [
     "esc",
@@ -31052,7 +32032,7 @@
   {
    "nom": "manquesHTML",
    "fichier": "forgeVue.js",
-   "ligne": 139,
+   "ligne": 144,
    "chargement": false,
    "appelle": [
     "esc",
@@ -31070,7 +32050,7 @@
   {
    "nom": "gestesForge",
    "fichier": "forgeVue.js",
-   "ligne": 163,
+   "ligne": 168,
    "chargement": false,
    "appelle": [
     "mesureBaseForge",
@@ -31081,6 +32061,126 @@
    "appelleParHtml": [],
    "appeleePar": [
     "app.js (chargement)"
+   ]
+  },
+  {
+   "nom": "scriptsGraphePrets",
+   "fichier": "lectureGraphe.js",
+   "ligne": 26,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "lectureForgeActive"
+   ]
+  },
+  {
+   "nom": "lectureForgeVoulue",
+   "fichier": "lectureGraphe.js",
+   "ligne": 37,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etatLectureGraphe",
+    "lectureForgeActive"
+   ]
+  },
+  {
+   "nom": "lectureForgeActive",
+   "fichier": "lectureGraphe.js",
+   "ligne": 41,
+   "chargement": false,
+   "appelle": [
+    "lectureForgeVoulue",
+    "scriptsGraphePrets"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "etatLectureGraphe",
+    "lectureForgeDe",
+    "ligneLecture",
+    "relisGraphe"
+   ]
+  },
+  {
+   "nom": "lectureForgeDe",
+   "fichier": "lectureGraphe.js",
+   "ligne": 49,
+   "chargement": false,
+   "appelle": [
+    "analyseForge",
+    "lectureForgeActive",
+    "lisScriptForge",
+    "scriptForgeDe"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "analyze"
+   ]
+  },
+  {
+   "nom": "ecartLectures",
+   "fichier": "lectureGraphe.js",
+   "ligne": 63,
+   "chargement": false,
+   "appelle": [
+    "analyseTexte"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "ligneLecture"
+   ]
+  },
+  {
+   "nom": "cartesAnalysees",
+   "fichier": "lectureGraphe.js",
+   "ligne": 73,
+   "chargement": false,
+   "appelle": [],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "relisGraphe"
+   ]
+  },
+  {
+   "nom": "relisGraphe",
+   "fichier": "lectureGraphe.js",
+   "ligne": 86,
+   "chargement": false,
+   "appelle": [
+    "cartesAnalysees",
+    "invaliderCandidats",
+    "lectureForgeActive",
+    "reanalyser",
+    "recalculerAvecProgression"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "forgeChange",
+    "reglageSimulation"
+   ]
+  },
+  {
+   "nom": "etatLectureGraphe",
+   "fichier": "lectureGraphe.js",
+   "ligne": 110,
+   "chargement": false,
+   "appelle": [
+    "lectureForgeActive",
+    "lectureForgeVoulue"
+   ],
+   "appelleDiffere": [],
+   "appelleParHtml": [],
+   "appeleePar": [
+    "corpsForge"
    ]
   },
   {
@@ -31254,6 +32354,7 @@
     "ligneEnLigne",
     "ligneFiltre",
     "ligneGameChangers",
+    "ligneLecture",
     "ligneMana",
     "ligneProposition",
     "ligneRestriction",
@@ -32274,6 +33375,7 @@
     "nbCartesLarges",
     "nbInteractions",
     "nbLiens",
+    "peutCommander",
     "tagAnnexe",
     "tagDeck",
     "tagGameChanger",
@@ -32301,6 +33403,7 @@
     "fmt",
     "ligneDatesAjout",
     "manaHTML",
+    "peutCommander",
     "tagDeck",
     "tagGameChanger",
     "tagIllegal"
@@ -32654,6 +33757,7 @@
     "apresReglage",
     "buyCard",
     "chargerCatalogueComplet",
+    "enrichAllUnknown",
     "filetSuggestions",
     "gestesAcquisition",
     "gestesDeck",
@@ -32665,6 +33769,7 @@
     "openSupprCarteModal",
     "openWipeModal",
     "rattraperSuggestions",
+    "relisGraphe",
     "removeFromDeck",
     "retirerAnnexe",
     "retraitCollection",
@@ -32809,6 +33914,7 @@
     "chargerCatalogue",
     "chargerGameChangers",
     "choisirVersion",
+    "completeInconnuesDuDeck",
     "completeUnknown",
     "demarrer",
     "filtrerAvecProgression",
@@ -34594,6 +35700,8 @@
    "ligne": 26,
    "chargement": false,
    "appelle": [
+    "majForgeUI",
+    "relisGraphe",
     "renderK",
     "scheduleSave"
    ],

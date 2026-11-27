@@ -203,11 +203,14 @@ function openImport(cible) {
     if (versDeck) {
       if (cmd) S.commander = cmd;
       else if (fmt().commander && !S.commander) {
-        const leg = deckEntries().find(e => e.card.isLegendaryCreature);
+        const leg = deckEntries().find(e => peutCommander(e.card));
         if (leg) S.commander = leg.card.name;
       }
     }
 
+    /* L'archive locale complète sans réseau ce qu'elle porte ; Scryfall ne
+       reçoit que le reste. */
+    completeInconnuesDepuisArchive();
     setTimeout(() => {
       S.limitB = PAGE;
       recalculerAvecProgression(versDeck
@@ -216,7 +219,8 @@ function openImport(cible) {
       toast(versDeck
         ? `${qty} carte(s) placées dans le deck${CLES_ANNEXES.filter(cle => annexes[cle]).map(cle => ` · ${annexes[cle]} en ${ANNEXES[cle].titre.toLowerCase()}`).join('')}${jetons ? ` · ${jetons} jeton(s) ignorés` : ''}${doublons ? ` · ${doublons} déjà dans la liste principale` : ''}${cmd ? ` · commandant : ${cmd}` : ''}${manquants ? ` · ${manquants} à acheter pour ${eur(spent())}` : ''}${created ? ` · ${created} carte(s) créées` : ''}${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`
         : `${entries.length} ligne(s) lues · ${qty} exemplaires · ${known} carte(s) déjà connues · ${created} créée(s)${avecEdition ? ` · ${avecEdition} ligne(s) avec édition` : ''}.`);
-      if (wantEnrich && fresh.length) completeUnknown(fresh);
+      const restantes = fresh.filter(n => { const c = find(n); return c && c.unknown; });
+      if (wantEnrich && restantes.length) completeUnknown(restantes);
     }, 10);
   };
 }

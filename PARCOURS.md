@@ -900,6 +900,7 @@ sequenceDiagram
         end
     end
     DEP->>VUE: forgeChange() — couverture et manques périmés
+    Note over VUE: relisGraphe() — si la lecture du graphe change (§3.28)
 ```
 
 ### 3.24 Résoudre une capacité Forge
@@ -1080,6 +1081,41 @@ sequenceDiagram
 
 ---
 
+### 3.28 Le graphe change de lecture
+
+Les scripts de Forge arrivent (ou s'effacent), ou l'on bascule le réglage « Lire le graphe et les
+rôles dans les scripts » : toutes les cartes connues sont relues, puis la notation est refaite en
+arrière-plan. Une carte analysée ensuite — Scryfall qui la complète, l'archive qui la bâtit — passe
+par le même aiguillage.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant VUE as forgeVue.js
+    participant LECT as lectureGraphe.js
+    participant AN as analyse.js
+    participant GF as grapheForge.js
+    participant CAT as categories.js
+    participant UI as interface
+
+    VUE->>LECT: relisGraphe() — forgeChange(), ou le réglage
+    LECT->>LECT: lectureForgeActive() — le réglage, et 95 % des scripts là
+    Note over LECT: même signature qu'avant : rien à faire
+    loop par tranches de 15 ms, toutes les cartes (DB et catalogue)
+        LECT->>CAT: reanalyser(carte)
+        CAT->>AN: analyze(carte)
+        AN->>LECT: lectureForgeDe(carte) — le script, s'il est là
+        alt un script
+            LECT->>GF: analyseForge() — chaque unité ; une inconnue est relue dans le texte
+        else aucun
+            AN->>AN: analyseTexte()
+        end
+        AN->>AN: assembleAnalyse() — arcs, déclencheurs, productions
+        CAT->>CAT: categories() — les rôles
+    end
+    LECT->>UI: MAJ_CARTES++, invaliderCandidats(), recalculerAvecProgression(…, {fond})
+```
+
 ## 4. Ce qui périme quoi
 
 Un même clic coûte parfois rien, parfois la notation de vingt mille cartes. Trois mémos l'expliquent,
@@ -1094,6 +1130,7 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, script Forge et jetons, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, un script Forge téléchargé ou mis à jour, le compilateur |
 | `MANQUES` (`js/forgeVue.js`) | Ce qu'il manque au moteur pour vos cartes, et pour toute la base | les scripts, le commit, la taille de `FORGE_SAIT`, les decks et les adversaires | Un téléchargement, un deck ou un adversaire modifié, un élément ajouté au moteur |
 | `BASES_EVAL` (`js/iaEvaluation.js`) | Le plateau de chaque joueur, pour la note d'une position | la partie et `P.ver` | Tout changement de l'état ; une copie a le sien |
+| `LECTURE` (`js/lectureGraphe.js`) | La lecture que le graphe retient, et les scripts déjà lus | `lectureForgeActive()`, le commit, le nombre de scripts | Un téléchargement achevé, des scripts effacés, le réglage « Lire le graphe… » — qui relit toutes les cartes et augmente `MAJ_CARTES` |
 | `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un autre deck de la table, un comportement, l'archive, les fiches venues de Scryfall, les scripts Forge |
 
 Deux conséquences pratiques :

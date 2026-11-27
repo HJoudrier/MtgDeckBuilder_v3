@@ -35,7 +35,12 @@ function buildCard(name, cost, type, price, text) {
     .filter(t => new RegExp(t,'i').test(tf));
   card.isCreature = /creature/i.test(tf) && !card.isToken;
   card.isLand = /land/i.test(tf) && !card.isToken;
-  card.isLegendaryCreature = /legendary creature/i.test(tf) && !card.isToken;
+  /* « Legendary Enchantment Creature » (The Mindskinner, les dieux de Théros),
+     « Legendary Artifact Creature », « Legendary Snow Creature » : un mot
+     s'intercale entre les deux, donc pas de recherche d'un seul bloc. Les
+     sous-types, après le tiret, ne comptent pas. */
+  const types = tf.split('—')[0];
+  card.isLegendaryCreature = /\blegendary\b/i.test(types) && /\bcreature\b/i.test(types) && !card.isToken;
   return reanalyser(card);
 }
 
@@ -95,8 +100,16 @@ function find(name) {
       || FRONT[loose(n)] || FRONT[loose(avant)] || null;
 }
 
+/* Une créature légendaire, une carte qui le dit (« can be your commander »), ou
+   — règle de 2025 — un Véhicule ou un Vaisseau légendaire qui a force et
+   endurance. La force se lit à l'appel : l'archive la pose après la création
+   de la carte. */
 function peutCommander(c) {
-  return !!c && (c.isLegendaryCreature || /can be your commander/i.test(c.text||''));
+  if (!c) return false;
+  if (c.isLegendaryCreature || /can be your commander/i.test(c.text || '')) return true;
+  const tf = String(c.type || '').split(' // ')[0];
+  return !c.isToken && /\blegendary\b/i.test(tf.split('—')[0]) && /\b(?:vehicle|spacecraft)\b/i.test(tf)
+    && c.force != null && c.endurance != null;
 }
 
 function commandantsPossibles() {

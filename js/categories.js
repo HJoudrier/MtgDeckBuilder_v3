@@ -30,6 +30,7 @@ function categories(card) {
   const nomCourt = (card.name || '').toLowerCase().split(',')[0].trim();
   const surLuiMeme = e => (nomCourt && e.includes(nomCourt)) || /\bthis (?:creature|permanent|card)\b/.test(e);
   const surSoi = x => {
+    if (x.surSoi !== undefined) return x.surSoi;
     const e = effet(x);
     if (/target opponent|each opponent|opponents|target player/.test(e)) return false;
     // une carte qui se replace elle-même n'interagit avec personne
@@ -40,7 +41,10 @@ function categories(card) {
      joueurs. « Inflige 2 blessures à chaque adversaire » frappe tout le monde
      sans rien retirer du champ de bataille — c'est du dégât de masse, et
      Purphoros n'est pas un board wipe. */
+  /* La lecture de Forge sait si l'effet balaie (`masse`, js/grapheForge.js) :
+     on la croit plutôt que de chercher « all » ou « each » dans sa phrase. */
   const enMasse = x => {
+    if (x.masse !== undefined) return x.masse;
     const e = effet(x);
     // « le dessus de la bibliothèque de chaque joueur » ne balaie rien
     if (/(?:player|opponent)['\u2019]s (?:library|hand|graveyard)/.test(e)) return false;
@@ -49,11 +53,12 @@ function categories(card) {
   /* Le sacrifice imposé à la table vide le champ de bataille aussi sûrement
      qu'une destruction : « chaque joueur sacrifie une créature ». C'est le
      seul balayage qui passe par les joueurs, et il nomme sa cible. */
-  const sacrificeGeneral = x =>
+  const sacrificeGeneral = x => x.sacTable !== undefined ? x.sacTable :
     /\b(?:all|each|every)\s+(?:other\s+)?(?:player|opponent)s?\b[^.]*\bsacrifices?\b[^.]*\b(?:creature|permanent|artifact|enchantment|land)/.test(effet(x));
   /* Une force retirée en masse tue comme une destruction : « toutes les
      créatures gagnent -X/-X ». Un bonus, lui, ne balaie rien. */
-  const affaiblitEnMasse = x => enMasse(x) && /-\s*[\dx]+\s*\/\s*-\s*[\dx]+/.test(effet(x));
+  const affaiblitEnMasse = x => x.affaiblit !== undefined ? x.affaiblit
+    : enMasse(x) && /-\s*[\dx]+\s*\/\s*-\s*[\dx]+/.test(effet(x));
 
   if (/creature/.test(t)) c.add('creatures');
   if (/land/.test(t)) c.add('terrains');

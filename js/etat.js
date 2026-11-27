@@ -195,7 +195,7 @@ const S = {
      La configuration d'un lot — quel deck, contre qui, combien de parties —
      est de la vue : elle se sauvegarde, mais reste sur l'appareil. */
   comportements: {},
-  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, forgeAuto: true, niveauIA: 'rapide'},
+  simulation: {deck: '', nbJoueurs: 2, sieges: [], parties: 100, graine: 1, plafond: 25, forgeAuto: true, niveauIA: 'rapide', grapheForge: true},
   /* La table interactive : la dernière table dressée (nom, deck, sièges,
      adresse publique de l'atelier) et les arrêts du joueur de cet appareil.
      De la vue, propre à l'appareil : ni l'une ni les autres ne voyagent.

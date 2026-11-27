@@ -14,6 +14,7 @@ index.html          page et structure des sept sections
 css/atelier.css     styles
 css/table.css       styles de la table interactive
 outils/genDoc.js    écrit doc/fonctions.md à partir des sources
+outils/compareLectures.js  confronte les deux lectures du graphe sur un dépôt de Forge cloné
 js/                 modules, chargés dans cet ordre :
 
   — le fond —
@@ -22,6 +23,10 @@ js/                 modules, chargés dans cet ordre :
   synergies.js      ce qu'une carte apporte à une autre
   cartesBrutes.js   la base livrée avec l'atelier
   analyse.js        lire une carte : coût, capacités, déclencheurs, effets
+  grapheForgeQualif.js  ce que disent les filtres, les coûts et les jetons de Forge
+  grapheForgeTables.js  le vocabulaire de Forge dans celui du graphe : déclencheurs, effets
+  grapheForgeMotsCles.js  les mots-clés, statiques et remplacements de Forge dans le graphe
+  grapheForge.js    lire le graphe d'une carte dans son script de Forge
   archetypesLibelles.js  le nom français des thèmes EDHREC
   categories.js     les rôles d'une carte
   mana.js           ce qu'une carte demande en mana, et ce qu'elle en produit
@@ -260,6 +265,7 @@ js/                 modules, chargés dans cet ordre :
   archive.js        lire l'archive Scryfall
   catalogue.js      tenir le catalogue à jour
   candidats.js      des enregistrements de l'archive aux cartes candidates
+  inconnues.js      les cartes importées sans fiche, complétées par l'archive
 
   — les sections —
   decksSection.js   la section « Mes decks »
@@ -286,6 +292,7 @@ js/                 modules, chargés dans cet ordre :
   deck.js           ce qu'il y a dans le deck, et les gestes qui l'y mettent
   legalite.js       ce que le format exige, et l'équilibre des rôles
   deckSection.js    la section Deck
+  deckInconnues.js  les cartes connues de nom seulement : complétées d'elles-mêmes (archive, fiches de simulation, puis Scryfall), annoncées sinon
   ficheVisuel.js    le visuel de la fiche, et ses éditions
   fiche.js          la fiche détaillée d'une carte
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
@@ -298,6 +305,7 @@ js/                 modules, chargés dans cet ordre :
   simResultats.js   les résultats d'un lot, l'historique, le classement
   forgeDepot.js     les scripts de Forge, téléchargés de GitHub et gardés
   forgeVue.js       la section « Cartes Forge » et « Ce qu'il manque au moteur »
+  lectureGraphe.js  quelle lecture pour le graphe : le script ou le texte
 
   — l'interface commune —
   outils.js         échapper, formater un prix, souffler un mot
@@ -446,6 +454,48 @@ compte est un sous-type, sans liste à tenir. Le lien devient alors strict, car 
 ses sous-types sur sa ligne de type — sa production de lancement est marquée `intrinseque`
 (`js/analyse.js`) — tandis qu'une production d'effet, qui ne dit pas ce qui sera lancé, garde son
 demi-crédit.
+
+**Deux lectures pour le graphe.** La lecture du texte (`analyseTexte()`, `js/analyse.js`) cherche ses
+motifs dans l'anglais, et se trompe de façon prévisible : un mot de capacité devant le déclencheur (« Landfall — Whenever… ») le cachait
+entier, « whenever you attack » n'était pas « attacks », « if you didn't cast a spell » devenait un
+déclencheur, un jeton « with flying » donnait le vol à la carte, « sacrifice a land » faisait un
+exutoire à créatures. Les scripts de Forge, déjà téléchargés pour le moteur, écrivent tout cela
+rangé : la lecture de Forge (`analyseForge()`, `js/grapheForge.js`) en tire les **mêmes capacités**
+que celle du texte (`capacitesTexte()`) — un `from`, un `to`, une qualification —, et
+`assembleAnalyse()` en fait les arcs, les déclencheurs et les productions quelle que soit leur
+source. Le croisement, la notation, les rôles et le graphe ne savent pas d'où vient une capacité.
+Forge ne relie pas les cartes entre elles : il donne des extrémités de lien précises, le
+croisement reste le nôtre.
+
+- **Les tables brutes, non les définitions du moteur.** Le moteur écarte une unité entière dès qu'un
+  élément lui manque ; le graphe n'exécute rien. Une unité dont un élément est absent des tables
+  (`js/grapheForgeTables.js`, `js/grapheForgeMotsCles.js`) est relue dans sa description par la
+  lecture du texte (`fermeUnite()`) : une carte ne perd jamais ce que le texte y voyait.
+- **Ce que seule la structure dit.** Un exil suivi d'un retour en jeu est un blink où qu'il soit dans
+  la chaîne ; un remplacement qui double (jetons, marqueurs, blessures, vie) se nourrit de ce qu'il
+  double ; un coût payé à la résolution (« you may sacrifice an artifact. If you do… ») fait un
+  exutoire avec son propre sujet (`qCout`) ; un coût consomme ce qu'il nomme — un artefact, un
+  gobelin — et non « une créature » ; `masse`, `affaiblit`, `sacTable` et `surSoi` disent aux rôles
+  (`categories()`) ce qui balaie et sur qui porte ce qui détruit, sans chercher « all » ni « you
+  control » dans une phrase.
+- **Pas de mélange pendant un téléchargement** (`js/lectureGraphe.js`). Le catalogue note des
+  milliers de cartes avec une même notation ; une carte lue dans Forge, qui a moins de faux liens,
+  n'y serait pas jugée comme sa voisine lue dans le texte. Le graphe passe donc à Forge quand 95 %
+  des scripts sont sur l'appareil, puis relit toutes les cartes connues par tranches et renote en
+  arrière-plan. Une carte que Forge ne connaît pas reste lue dans son texte, et la fiche dit, carte
+  par carte, la lecture retenue et ce que l'autre aurait vu de plus ou de moins. Le réglage « Lire le
+  graphe et les rôles dans les scripts » (section Cartes Forge, `S.simulation.grapheForge`) ramène
+  tout au texte.
+- **Piège : la portée globale est partagée avec le moteur.** `declencheurForge`, `statiqueForge`,
+  `coutsForge`, `texteForge`, `listeForge` y existaient déjà : les fonctions du graphe portent
+  « Graphe » dans leur nom (`declencheurGraphe()`…). `node outils/genDoc.js --verifie` refuse un nom
+  déclaré deux fois — c'est lui qui a vu le dernier.
+
+La mesure est dans [doc/graphe-deux-lectures.md](doc/graphe-deux-lectures.md) : chaque carte de Forge
+lue des deux façons, nœud par nœud, rôle par rôle, et les liens tracés entre les cartes d'un
+échantillon. `node outils/compareLectures.js <forge-gui/res> --sortie=doc/graphe-deux-lectures.md`
+la refait sur un dépôt de Forge cloné ; c'est le banc des tables, et la liste des éléments qu'elles
+ne lisent pas encore.
 
 Les trois dernières lisent une **même sélection notée** : la notation ne connaît qu'une liste, et
 `selectionSuggestions()` (`js/sugListes.js`) la partitionne une fois — ce qui touche les nœuds
