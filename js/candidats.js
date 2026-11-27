@@ -56,26 +56,12 @@ function carteDuCatalogue(rec) {
   const nom = rec[CH.NOM];
   let c = find(nom);
   if (c && !c.unknown) return completeDepuisRec(c, rec);
-  c = registerCard(buildCard(nom, rec[CH.COUT] || '—', rec[CH.TYPE], rec[CH.PRIX], rec[CH.TEXTE]));
-  c.textFull = !!rec[CH.TEXTE];
-  if (rec[CH.ID_COUL] !== undefined) c.identity = rec[CH.ID_COUL] ? rec[CH.ID_COUL].split('') : [];
-  c.cmc = rec[CH.CMC];
-  if (rec[CH.FORCE] != null) c.force = rec[CH.FORCE];
-  if (rec[CH.ENDURANCE] != null) c.endurance = rec[CH.ENDURANCE];
-  if (rec[CH.ARTISTE]) c.artist = rec[CH.ARTISTE];
-  if (rec[CH.MANA_PROD]) c.manaProduit = ordonneMana(String(rec[CH.MANA_PROD]).split(''));
-  appliqueChampsJeu(c, champsJeuRec(rec));
-  noterLegalArchive(c, rec);
-  reanalyser(c);
-  if (rec[CH.IMG]) {
-    c.img = CDN + 'small/' + rec[CH.IMG];
-    c.imgN = CDN + 'normal/' + rec[CH.IMG];
-    c.imgL = CDN + 'large/' + rec[CH.IMG];
-    if (rec[CH.VERSO]) { c.imgB = CDN + 'normal/' + rec[CH.VERSO]; c.imgBL = CDN + 'large/' + rec[CH.VERSO]; }
-    c.imgTried = true;
-  } else if (rec[CH.ID]) {
-    const base = 'https://api.scryfall.com/cards/' + rec[CH.ID] + '?format=image&version=';
-    c.img = base + 'small'; c.imgN = base + 'normal'; c.imgL = base + 'large'; c.imgTried = true;
+  /* Une carte importée sans fiche prend ici son type et son coût, ce que
+     `registerCard()` seul ne lui donnerait pas : il rend la carte existante. */
+  if (c) completeInconnueDepuisRec(c, rec);
+  else {
+    c = registerCard(buildCard(nom, rec[CH.COUT] || '—', rec[CH.TYPE], rec[CH.PRIX], rec[CH.TEXTE]));
+    habilleDepuisRec(c, rec);
   }
   c.externe = true; c.unknown = false;
   return c;
@@ -99,6 +85,7 @@ function signatureCandidats() {
    intégrée et les prix des cartes possédées ou jouées. */
 function appliqueCatalogueAuxCartes() {
   if (!CAT.cartes.length) return;
+  completeInconnuesDepuisArchive();
   const utiles = new Set([...S.collection.keys(), ...S.deck.keys(),
     ...CLES_ANNEXES.flatMap(cle => [...annexeListe(cle).keys()])].map(norm));
   const aCompleter = new Map();

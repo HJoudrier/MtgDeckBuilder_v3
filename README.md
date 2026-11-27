@@ -265,6 +265,7 @@ js/                 modules, chargés dans cet ordre :
   archive.js        lire l'archive Scryfall
   catalogue.js      tenir le catalogue à jour
   candidats.js      des enregistrements de l'archive aux cartes candidates
+  inconnues.js      les cartes importées sans fiche, complétées par l'archive
 
   — les sections —
   decksSection.js   la section « Mes decks »
@@ -291,6 +292,7 @@ js/                 modules, chargés dans cet ordre :
   deck.js           ce qu'il y a dans le deck, et les gestes qui l'y mettent
   legalite.js       ce que le format exige, et l'équilibre des rôles
   deckSection.js    la section Deck
+  deckInconnues.js  les cartes connues de nom seulement : complétées d'elles-mêmes (archive, fiches de simulation, puis Scryfall), annoncées sinon
   ficheVisuel.js    le visuel de la fiche, et ses éditions
   fiche.js          la fiche détaillée d'une carte
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
