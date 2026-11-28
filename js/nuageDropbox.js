@@ -94,7 +94,10 @@ function dbxErreur(reponse, corps, ou) {
     .filter(Boolean).join('\n');
   e.conflit = /conflict/.test(resume);
   e.absent = /not_found/.test(resume);
-  e.jetonMort = reponse.status === 401 || /invalid_access_token|expired_access_token/.test(resume);
+  /* Une permission que le jeton n'a pas reçue répond aussi en 401, mais le jeton
+     est bon : l'effacer ferait reconnecter pour rien, et sans dire pourquoi. */
+  e.portee = /missing_scope/.test(resume) || /missing_scope/.test(brut);
+  e.jetonMort = !e.portee && (reponse.status === 401 || /invalid_access_token|expired_access_token/.test(resume));
   return e;
 }
 
@@ -236,4 +239,26 @@ async function dbxCompte() {
   const j = await dbxJson(r);
   if (!r.ok) throw dbxErreur(r, j, 'compte');
   return (j.name && j.name.display_name) || j.email || '';
+}
+
+/* L'historique du fichier, du plus récent au plus ancien. Dropbox garde chaque
+   écriture comme une révision, pour trente jours (cent quatre-vingts sur une
+   offre professionnelle) : c'est la seule mémoire d'hier dont l'atelier dispose,
+   et il n'en tient aucune copie de son côté. `limit` vaut dix par défaut, et
+   cent au plus. Cet appel demande la permission `files.metadata.read`, que
+   la synchronisation seule n'exige pas : un jeton accordé avant qu'on la
+   coche ne l'a pas. */
+async function dbxVersions(chemin) {
+  const r = await dbxAppel(`${DBX_API}/files/list_revisions`, {'Content-Type': 'application/json'},
+    JSON.stringify({path: chemin, mode: 'path', limit: 100}));
+  const j = await dbxJson(r);
+  if (!r.ok) {
+    const e = dbxErreur(r, j, 'historique des versions');
+    if (e.absent) return [];
+    throw e;
+  }
+  return (j.entries || [])
+    .map(o => ({rev: o.rev, taille: o.size || 0, date: Date.parse(o.server_modified) || 0}))
+    .filter(o => o.rev)
+    .sort((a, b) => b.date - a.date);
 }

@@ -37,6 +37,14 @@ function gestesNuage(act, b) {
     return true;
   }
 
+  /* L'historique : la fenêtre des versions, et ses quatre gestes. */
+  if (act === 'nuageVersions') { openVersionsModal(); return true; }
+  if (act === 'nuageVersionVoir') { nuageVersionVoir(b.dataset.rev); return true; }
+  if (act === 'nuageVersionRestaurer') { nuageVersionRestaure(b.dataset.rev); return true; }
+  if (act === 'nuageVersionsRetour') { nuageVersionsRetour(); return true; }
+  if (act === 'nuageVersionsActualiser') { nuageVersionsCharge(); return true; }
+  if (act === 'nuageVersionsParametres') { openParametresModal(); return true; }
+
   if (act === 'nuageDeconnecter') {
     openDialog('Déconnecter la synchronisation',
       `<p class="small">Cet appareil cessera de suivre le dossier Dropbox. <b>Rien n'est effacé</b> :

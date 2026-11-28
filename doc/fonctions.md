@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
+**1982 fonctions**, 352 modules, 2456 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -243,9 +243,10 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`idb.js`](#jsidbjs) | Le magasin IndexedDB | 6 | 75 |
 | [`nuagePaquet.js`](#jsnuagepaquetjs) | Ce qui voyage d'un appareil à l'autre | 7 | 126 |
 | [`nuageFusion.js`](#jsnuagefusionjs) | Fusionner deux appareils sans rien perdre | 11 | 238 |
-| [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 17 | 240 |
+| [`nuageDropbox.js`](#jsnuagedropboxjs) | L'adaptateur Dropbox | 18 | 265 |
 | [`nuage.js`](#jsnuagejs) | La synchronisation : sa configuration, et son calendrier | 11 | 245 |
-| [`nuageDiagnostic.js`](#jsnuagediagnosticjs) | Éprouver la connexion, étape par étape | 3 | 86 |
+| [`nuageDiagnostic.js`](#jsnuagediagnosticjs) | Éprouver la connexion, étape par étape | 3 | 94 |
+| [`nuageVersions.js`](#jsnuageversionsjs) | Revenir à une version d'hier | 6 | 186 |
 | [`edhrec.js`](#jsedhrecjs) | Les statistiques d'EDHREC pour un commandant | 6 | 242 |
 | [`edhrecForme.js`](#jsedhrecformejs) | Deviner la forme des pages de thèmes d'EDHREC | 7 | 142 |
 | [`edhrecThemes.js`](#jsedhrecthemesjs) | L'index des thèmes EDHREC | 10 | 179 |
@@ -304,7 +305,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 255 |
 | [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 38 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
-| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
+| [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 164 |
+| [`fenVersions.js`](#jsfenversionsjs) | La fenêtre des versions synchronisées | 10 | 129 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 133 |
 | [`fenBudget.js`](#jsfenbudgetjs) | Fenêtre « Budget » | 6 | 107 |
 | [`fenDeck.js`](#jsfendeckjs) | Fenêtre « Configuration du deck » | 9 | 215 |
@@ -322,7 +324,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesReglages.js`](#jsgestesreglagesjs) | Les fenêtres de réglage et leurs boutons | 1 | 140 |
 | [`gestesDeck.js`](#jsgestesdeckjs) | Les gestes du deck, de ses annexes et de la fiche | 1 | 198 |
 | [`gestesDonnees.js`](#jsgestesdonneesjs) | Les gestes qui touchent aux données | 1 | 152 |
-| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 91 |
+| [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 99 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 38 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
@@ -3627,7 +3629,7 @@ Fusionner deux appareils sans rien perdre. *11 fonctions, 238 lignes, 11 Ko.*
 
 ## js/nuageDropbox.js
 
-L'adaptateur Dropbox. *17 fonctions, 240 lignes, 10 Ko.*
+L'adaptateur Dropbox. *18 fonctions, 265 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3648,6 +3650,7 @@ L'adaptateur Dropbox. *17 fonctions, 240 lignes, 10 Ko.*
 | `dbxLire(chemin)` | Lire le paquet. Un fichier absent n'est pas une erreur : c'est le premier accord, et l'on part alors de ce que cet appareil connaît. |
 | `dbxEcrire(chemin, octets, rev)` | Écrire le paquet. Un `rev` vide veut dire « ce fichier n'existait pas » et l'écriture est alors un ajout qui refuse d'écraser ; sinon c'est une mise à jour conditionnée au `rev` lu, que… |
 | `dbxCompte()` | De quoi nommer le compte connecté dans la fenêtre : on ne synchronise pas à l'aveugle vers un compte dont on n'est pas sûr. |
+| `dbxVersions(chemin)` | L'historique du fichier, du plus récent au plus ancien. |
 
 | Donnée | Rôle |
 |---|---|
@@ -3683,7 +3686,7 @@ La synchronisation : sa configuration, et son calendrier. *11 fonctions, 245 lig
 
 ## js/nuageDiagnostic.js
 
-Éprouver la connexion, étape par étape. *3 fonctions, 86 lignes, 3.9 Ko.*
+Éprouver la connexion, étape par étape. *3 fonctions, 94 lignes, 4.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -3694,6 +3697,24 @@ La synchronisation : sa configuration, et son calendrier. *11 fonctions, 245 lig
 | Donnée | Rôle |
 |---|---|
 | `NUAGE_TEMOIN` | — |
+
+## js/nuageVersions.js
+
+Revenir à une version d'hier. *6 fonctions, 186 lignes, 7.1 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuageVersMsg(err)` | — |
+| `nuageVersionsCharge()` | La liste, du plus récent au plus ancien. |
+| `nuageResume(paquet)` | Ce qu'un paquet contient, en quelques nombres qu'on puisse comparer à l'état d'ici : sans eux, « restaurer » demande de choisir sur une date seule. |
+| `nuageVersionVoir(rev)` | Lire une version pour la montrer. Elle est gardée en mémoire : c'est exactement ce qui sera restauré si l'on confirme, et non une seconde lecture qu'une écriture venue entre-temps aurait… |
+| `nuageVersionsRetour()` | — |
+| `nuageVersionRestaure(rev)` | Restaurer la version montrée : rattraper, verser, pousser — dans cet ordre, comme tout tour. |
+
+| Donnée | Rôle |
+|---|---|
+| `NUAGE_VERS` | — |
+| `NUAGE_VERS_PORTEE` | La permission qu'un jeton accordé avant qu'on la coche ne porte pas : on le dit en toutes lettres, avec le remède, plutôt qu'un « 401 » sans issue. |
 
 ## js/edhrec.js
 
@@ -4682,7 +4703,7 @@ Fenêtre « Format ». *5 fonctions, 63 lignes, 3.2 Ko.*
 
 ## js/fenNuage.js
 
-La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 159 lignes, 8.9 Ko.*
+La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 164 lignes, 9.3 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4700,6 +4721,23 @@ La section « Synchronisation » de la fenêtre des paramètres. *9 fonctions, 1
 |---|---|
 | `NUAGE_LISTES` | — |
 | `NUAGE_CHAMPS` | — |
+
+## js/fenVersions.js
+
+La fenêtre des versions synchronisées. *10 fonctions, 129 lignes, 6.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nuageVersionDate(t)` | Une date qu'on lit d'un coup d'œil : « samedi 28 novembre 2026 à 14:03 ». |
+| `nuageVersionsEtat()` | — |
+| `nuageVersionLigne(v, i)` | Une ligne : la date, le poids, et ce qui la distingue — la plus récente est celle que l'autre appareil lira, celle de notre dernier accord est celle qu'on a soi-même vue passer. |
+| `nuageVersionsListe()` | — |
+| `nuageVersionComparaison(ap)` | Les nombres d'une version face à ceux d'ici. |
+| `nuageVersionsApercu()` | — |
+| `corpsVersions()` | — |
+| `piedVersions()` | — |
+| `majFenetreVersions()` | Réécrit la fenêtre sur place si c'est bien elle qui est ouverte : une lecture qui aboutit après qu'on a fermé la fenêtre, ou ouvert une autre, n'a rien à repeindre. |
+| `openVersionsModal()` | — |
 
 ## js/fenParametres.js
 
@@ -4927,7 +4965,7 @@ Les gestes qui touchent aux données. *1 fonctions, 152 lignes, 5 Ko.*
 
 ## js/gestesNuage.js
 
-Les gestes de la synchronisation. *2 fonctions, 91 lignes, 3.1 Ko.*
+Les gestes de la synchronisation. *2 fonctions, 99 lignes, 3.7 Ko.*
 
 | Fonction | Rôle |
 |---|---|

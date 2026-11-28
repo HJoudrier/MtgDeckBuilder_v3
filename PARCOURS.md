@@ -630,6 +630,12 @@ sequenceDiagram
     NU->>UI: majFenetreParametres() — état, dernier accord, désaccords
 ```
 
+Revenir à une ancienne version est un parcours à part, qui ne part que sur un bouton :
+`openVersionsModal()` liste les révisions (`dbxVersions()`), « Voir… » lit l'une d'elles sans rien
+changer (`nuageVersionVoir()`), et « Restaurer cette version » rattrape d'abord un tour ordinaire, verse
+la version choisie par `restore()`, puis la pousse comme la plus récente (`nuageVersionRestaure()`). Ce
+que la restauration remplace reste dans la liste.
+
 La connexion, elle, ne passe qu'une fois par appareil : `dbxConnexion()` quitte la page vers
 Dropbox avec l'empreinte du code de preuve, et `dbxRetourConnexion()` échange le code contre les
 deux jetons au rechargement, puis nettoie l'adresse. Le jeton de rafraîchissement ne meurt pas ;

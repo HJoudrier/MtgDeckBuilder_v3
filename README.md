@@ -252,6 +252,7 @@ js/                 modules, chargés dans cet ordre :
   nuageDropbox.js   l'adaptateur Dropbox : PKCE, et le `rev` comme verrou
   nuage.js          la synchronisation : sa configuration, et son calendrier (à l'ouverture, puis sur demande)
   nuageDiagnostic.js  éprouver la connexion, étape par étape
+  nuageVersions.js  revenir à une version antérieure du fichier, lue dans l'historique de Dropbox
   edhrec.js         les statistiques d'EDHREC pour un commandant
   edhrecForme.js    deviner la forme des pages de thèmes d'EDHREC
   edhrecThemes.js   l'index des thèmes EDHREC
@@ -318,6 +319,7 @@ js/                 modules, chargés dans cet ordre :
   fenFormat.js      format de jeu
   fenParametres.js  sauvegarde locale, synchronisation, apparence, catalogue
   fenNuage.js       la section « Synchronisation » de cette fenêtre
+  fenVersions.js    la fenêtre des versions synchronisées : la liste, l'aperçu, la restauration
   fenBudget.js      budget du deck et préférences d'achat
   fenDeck.js        la configuration d'un deck : nom, règles, budget, restrictions
   fenFiltres.js     filtres de la collection
@@ -2570,6 +2572,18 @@ croit remplacer, refusant en 409 si l'autre appareil a écrit entre-temps. L'API
 pas d'équivalent depuis qu'elle a retiré les `ETag`, et son jeton ne vit qu'une heure. Un tour se
 fait toujours dans le même ordre — **tirer, fusionner, verser, pousser** — et un conflit de `rev` se
 rejoue une fois sur le nouveau distant.
+
+**Revenir en arrière** (`js/nuageVersions.js`, `js/fenVersions.js`). Dropbox garde chaque écriture du fichier
+comme une révision — trente jours, cent quatre-vingts sur une offre professionnelle — et l'atelier n'en tient
+aucune copie : `dbxVersions()` lit la liste (`files/list_revisions`), `dbxLire('rev:…')` une version. Choisir
+une ligne ne fait que **lire** ; seul « Restaurer cette version » agit. Restaurer **ajoute une page à
+l'histoire, il ne la réécrit pas** : la version choisie est versée, puis poussée comme la plus récente,
+et celle qu'elle remplace reste dans la liste. Un tour ordinaire passe d'abord, pour que ce que cet appareil
+avait de non envoyé figure dans la révision remplacée. L'autre appareil la reçoit comme n'importe quel
+accord, par la fusion à trois côtés. Lister demande la permission `files.metadata.read`, que la
+synchronisation seule n'exige pas : un jeton accordé avant qu'on la coche ne l'a pas, et il faut
+reconnecter l'appareil. Une réponse `missing_scope` est donc distinguée d'un jeton mort (`err.portee`) — elle
+ne doit pas effacer les jetons.
 
 La sauvegarde locale, elle, garde son marqueur `v: 1`. Le passer à 2 ferait qu'un atelier resté sur
 le code d'hier rejetterait la sauvegarde — `restore()` refuse `d.v !== 1` — puis l'écraserait par un
