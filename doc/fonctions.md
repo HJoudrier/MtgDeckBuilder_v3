@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**2084 fonctions**, 360 modules, 2556 Ko de JavaScript.
+**2084 fonctions**, 360 modules, 2557 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -351,11 +351,11 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`tablePhases.js`](#jstablephasesjs) | Où en est le tour, et qui a la main | 2 | 51 |
 | [`tableFleches.js`](#jstableflechesjs) | Ce qui vise quoi : des liens d'or, des flèches | 13 | 190 |
 | [`tableRendu.js`](#jstablerendujs) | La table, peinte depuis une vue | 10 | 163 |
-| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 175 |
+| [`tableQuestions.js`](#jstablequestionsjs) | Répondre à une question du moteur, à la main | 14 | 179 |
 | [`tableCombat.js`](#jstablecombatjs) | Attaquer et bloquer, au doigt | 4 | 49 |
 | [`tableBloque.js`](#jstablebloquejs) | Bloquer en glissant une créature sur son attaquant | 9 | 129 |
-| [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 8 | 132 |
-| [`tablePile.js`](#jstablepilejs) | La pile en profondeur | 15 | 216 |
+| [`tableFront.js`](#jstablefrontjs) | La ligne de front et le bouton de tour | 8 | 134 |
+| [`tablePile.js`](#jstablepilejs) | La pile en profondeur | 15 | 219 |
 | [`tableEclats.js`](#jstableeclatsjs) | Ce que l'œil voit d'un coup | 15 | 224 |
 | [`tableCoups.js`](#jstablecoupsjs) | Les coups qui portent | 18 | 256 |
 | [`tableLever.js`](#jstableleverjs) | Lever une carte, puis la jouer | 7 | 113 |
@@ -5483,7 +5483,7 @@ La table, peinte depuis une vue. *10 fonctions, 163 lignes, 8.4 Ko.*
 
 ## js/tableQuestions.js
 
-Répondre à une question du moteur, à la main. *14 fonctions, 175 lignes, 9.7 Ko.*
+Répondre à une question du moteur, à la main. *14 fonctions, 179 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5541,7 +5541,7 @@ Bloquer en glissant une créature sur son attaquant. *9 fonctions, 129 lignes, 5
 
 ## js/tableFront.js
 
-La ligne de front et le bouton de tour. *8 fonctions, 132 lignes, 7.9 Ko.*
+La ligne de front et le bouton de tour. *8 fonctions, 134 lignes, 8.1 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -5561,14 +5561,14 @@ La ligne de front et le bouton de tour. *8 fonctions, 132 lignes, 7.9 Ko.*
 
 ## js/tablePile.js
 
-La pile en profondeur. *15 fonctions, 216 lignes, 9.9 Ko.*
+La pile en profondeur. *15 fonctions, 219 lignes, 10 Ko.*
 
 | Fonction | Rôle |
 |---|---|
 | `tunnelPile()` | L'état du tunnel, propre à cet appareil et oublié en quittant la table : le nœud, l'objet regardé (`focus`, fractionnaire pendant un glissé), le premier objet de la dernière peinture et… |
 | `elementsPile(v)` | Ce que la pile montre, de devant au fond : l'objet qu'on résout — il n'est plus sur la pile, mais c'est de lui que parlent les questions —, puis la pile du sommet au fond. |
 | `rangPile()` | L'objet qu'on regarde, en cran entier. |
-| `placeTunnel(d, enCours)` | La place d'un objet à `d` crans de celui qu'on regarde : derrière, il recule et monte ; devant — on l'a fait défiler —, il descend vers soi et s'efface. |
+| `placeTunnel(d, enCours, w)` | La place d'un objet à `d` crans de celui qu'on regarde : derrière, il recule et monte ; devant — on l'a fait défiler —, il descend vers soi et s'efface. |
 | `placeCartesPile(seules)` | — |
 | `creeTunnel()` | — |
 | `posePile(v)` | Remettre le tunnel à sa place après une peinture, et l'accorder à la vue : une carte par objet, gardée d'une vue à l'autre par son identifiant. |

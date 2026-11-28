@@ -206,6 +206,10 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 /* Le bandeau des questions : au milieu de la table, entre les adversaires et son propre champ, là où l'œil est. */
 .tq{background:var(--panel2);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:6px 8px;display:flex;flex-direction:column;gap:6px;max-height:40vh;max-height:40dvh;overflow-y:auto}
 .tq.a-vous{border-top:2px solid var(--brass);border-bottom:2px solid var(--brass);box-shadow:0 0 14px var(--brass-a2)}
+/* Trop plein, le bandeau défile. Sans cela la colonne rabotait ses enfants, et la rangée des cartes à
+   choisir — qui ne défile qu'à l'horizontale — se voyait rognée par le haut : de Sanar, Innovative
+   First-Year, on ne voyait des cartes révélées que leur ligne de type. */
+.tq > *{flex-shrink:0}
 .tq-titre{font-size:13px;line-height:1.3}
 .tq-actions{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
 .tq-actions .btn{flex:0 0 auto;max-width:72vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -283,6 +287,10 @@ button.tj-zone{border:1px solid var(--line);border-radius:6px;background:var(--p
 .tq-ctx .tc{margin-bottom:2px}
 .tq-ctx-corps{min-width:0;flex:1}
 .tq-ctx-texte{color:var(--txt);margin-top:2px}
+.tq-ctx-ligne{display:flex;align-items:baseline;gap:5px;width:100%;min-width:0;padding:4px 8px;border:0;border-left:3px solid var(--brass);background:var(--panel);
+  color:var(--txt);font:inherit;font-size:13px;text-align:left;cursor:pointer;white-space:nowrap;overflow:hidden}
+.tq-ctx-ligne b{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.tq-ctx-voir{margin-left:auto;padding-left:8px;flex:0 0 auto;color:var(--brass);font-weight:600;font-size:12px}
 /* Un écran bas : la carte du contexte rapetisse, pour laisser voir le plateau. */
 @media (max-height:700px){.tq-ctx .tc{--tw:38px !important}.tq-ctx-texte{max-height:4.6em;overflow-y:auto}}
 

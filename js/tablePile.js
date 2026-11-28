@@ -45,20 +45,23 @@ function rangPile() {
 
 /* La place d'un objet à `d` crans de celui qu'on regarde : derrière, il
    recule et monte ; devant — on l'a fait défiler —, il descend vers soi et
-   s'efface. L'objet qu'on résout s'avance. `voile` assombrit ce qui est loin. */
-function placeTunnel(d, enCours) {
+   s'efface. L'objet qu'on résout s'avance. `voile` assombrit ce qui est loin.
+   Les cartes montent d'un quart de leur largeur `w` par cran : repliées
+   (js/tableFront.js), elles ne débordent pas sur le bandeau des questions. */
+function placeTunnel(d, enCours, w) {
   if (enCours && Math.abs(d) < .5) return {t: 'translate3d(-50%,-4px,34px)', o: 1, voile: 0};
-  if (d >= 0) return {t: `translate3d(-50%,${(-d * 22).toFixed(1)}px,${(-d * 60).toFixed(1)}px)`, o: d > 3.5 ? 0 : Math.max(0, 1 - d * .2), voile: Math.min(.6, d * .18)};
-  return {t: `translate3d(-50%,${(-d * 40).toFixed(1)}px,${(-d * 100).toFixed(1)}px)`, o: Math.max(0, 1 + d * 1.5), voile: 0};
+  if (d >= 0) return {t: `translate3d(-50%,${(-d * w * .26).toFixed(1)}px,${(-d * 60).toFixed(1)}px)`, o: d > 3.5 ? 0 : Math.max(0, 1 - d * .2), voile: Math.min(.6, d * .18)};
+  return {t: `translate3d(-50%,${(-d * w * .5).toFixed(1)}px,${(-d * 100).toFixed(1)}px)`, o: Math.max(0, 1 + d * 1.5), voile: 0};
 }
 
 function placeCartesPile(seules) {
   const T = TABLE.tunnel;
-  if (!T) return;
+  if (!T || !T.el) return;
+  const carte = T.el.querySelector('.tpi-c .tc'), largeur = (carte && carte.offsetWidth) || 80;
   T.els.forEach((e, k) => {
     const w = T.cartes.get(String(e.it.id));
     if (!w || (seules && !seules.has(w))) return;
-    const d = k - T.focus, p = placeTunnel(d, e.enCours);
+    const d = k - T.focus, p = placeTunnel(d, e.enCours, largeur);
     w.style.transform = p.t;
     w.style.opacity = p.o.toFixed(2);
     w.style.zIndex = String(100 - Math.round(d * 10));

@@ -122,7 +122,9 @@ function frontHTML(v) {
   const a = actionTour(v), err = TABLE.erreur && TABLE.question && /^(priorite|attaquants|bloqueurs)$/.test(TABLE.question.q) ? TABLE.erreur : '';
   const q = TABLE.question, autre = q && !a ? (q.q === 'cibles' ? 'Touchez une cible qui brille, ou choisissez dans le bandeau.' : 'Répondez dans le bandeau ci-dessus.') : '';
   const phrase = err || (a && a.sous) || autre, alerte = err || (a && a.alerte), pile = v.pile.length || v.resolvant;
-  return `<div class="tfr${a && a.fort ? ' fort' : ''}${TABLE.question ? ' a-vous' : ''}${pile ? ' avec-pile' : ''}">
+  /* Une question de choix occupe le bandeau : le tunnel se replie pour lui laisser la place. */
+  const replie = pile && q && !/^(priorite|attaquants|bloqueurs)$/.test(q.q);
+  return `<div class="tfr${a && a.fort ? ' fort' : ''}${TABLE.question ? ' a-vous' : ''}${pile ? ' avec-pile' : ''}${replie ? ' pile-repliee' : ''}">
       <div class="tfr-gauche">${phasesPointsHTML(v)}</div>
       <div class="tfr-centre">${pile ? '<div class="tpi-place"></div>' : ''}</div>
       <div class="tfr-cmd"><div class="tfr-puces">${pucesHTML(v)}</div>${a ? boutonTourHTML(a) : ''}</div>

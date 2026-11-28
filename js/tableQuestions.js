@@ -111,11 +111,15 @@ const TITRES_Q = {cibles: 'Choisissez la cible', cartes: 'Choisissez', defausse:
 
 /* À quoi se rapporte une question de choix : la carte, en image, et ce qu'elle fait. Sans cela la
    carte a déjà quitté la pile quand on répond, et le joueur répond à une question qu'il ne connaît
-   pas. Un toucher sur l'image l'ouvre en grand ; elle reste lisible même si la carte a quitté la table. */
+   pas. Un toucher sur l'image l'ouvre en grand ; elle reste lisible même si la carte a quitté la table.
+   L'objet qu'on résout est déjà devant, dans le tunnel de la pile, avec son texte (js/tablePile.js) :
+   le redire ici prenait au bandeau la place de ses choix. Une ligne le nomme, et l'ouvre en grand. */
 function contexteQuestionHTML(q, v) {
   const c = q.contexte;
   if (!c) return '';
   const qui = c.ctrl === v.moi ? 'la vôtre' : esc(v.joueurs[c.ctrl].nom);
+  if (c.resout && v.resolvant) return `<button type="button" class="tq-ctx-ligne" data-act="tCarte" data-id="${ID_CONTEXTE}" data-loupe="${ID_CONTEXTE}">
+    <span class="muted">Se résout</span> <b>${esc(c.nom)}</b> <span class="muted">· ${qui}</span><span class="tq-ctx-voir">Lire</span></button>`;
   const quand = c.resout ? 'Se résout' : c.genreLibelle === 'Carte' ? 'À propos de' : c.genreLibelle === 'Sort' ? 'Vous lancez' : 'Vous activez';
   return `<div class="tq-ctx">${tuile({id: ID_CONTEXTE, nom: c.nom}, v, {fiches: {[c.nom]: c.fiche}, etat: '', style: '--tw:54px'})}
     <div class="tq-ctx-corps small"><span class="muted">${quand}</span> <b>${esc(c.nom)}</b>

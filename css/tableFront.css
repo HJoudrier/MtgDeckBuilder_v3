@@ -95,6 +95,16 @@
 .tpi-geste{align-self:flex-start;border:0;background:none;padding:0;font:inherit;font-size:11px;color:var(--dim)}
 button.tpi-geste{color:var(--brass);font-weight:600;cursor:pointer}
 
+/* Une question de choix occupe le bandeau (js/tableFront.js) : sur un téléphone, le tunnel se replie
+   — petites cartes, le nom, deux lignes de texte —, et le bandeau garde la place de ses choix. */
+@media (max-width:899px),(max-height:599px){
+  .tfr.pile-repliee{--pw:44px}
+  .tfr.pile-repliee .tpi{min-height:calc(var(--pw) * 1.396 + 22px)}
+  .tfr.pile-repliee :is(.tpi-meta,.tpi-note,.tpi-geste){display:none}
+  .tfr.pile-repliee .tpi-nom{-webkit-line-clamp:1;font-size:14px}
+  .tfr.pile-repliee .tpi-texte{-webkit-line-clamp:2}
+}
+
 /* Pendant une résolution, ce que l'objet ne touche pas s'assombrit ; ce qu'une
    question attend reste allumé. */
 .en-partie .tc{transition:transform .15s ease,filter .3s ease}

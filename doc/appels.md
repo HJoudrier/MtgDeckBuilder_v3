@@ -12383,25 +12383,25 @@ Appelle : `esc()` *(outils.js)*, `rangee()` *(tableCartes.js)*, `tuile()` *(tabl
 
 Appelée par : `questionCorpsHTML`
 
-### `contexteQuestionHTML()` — ligne 115
+### `contexteQuestionHTML()` — ligne 117
 
 Appelle : `esc()` *(outils.js)*, `tuile()` *(tableCartes.js)*
 
 Appelée par : `questionHTML`
 
-### `titreOui()` — ligne 128
+### `titreOui()` — ligne 132
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `questionCorpsHTML`
 
-### `questionHTML()` — ligne 134
+### `questionHTML()` — ligne 138
 
 Appelle : `contexteQuestionHTML()` *(tableQuestions.js)*, `questionCorpsHTML()` *(tableQuestions.js)*
 
 Appelée par : `regionsPartie`
 
-### `questionCorpsHTML()` — ligne 142
+### `questionCorpsHTML()` — ligne 146
 
 Appelle : `chipsChoix()` *(tableQuestions.js)*, `esc()` *(outils.js)*, `rangee()` *(tableCartes.js)*, `selDe()` *(tableQuestions.js)*, `symIcon()` *(symboles.js)*, `titreOui()` *(tableQuestions.js)*, `tuile()` *(tableCartes.js)*
 
@@ -12553,73 +12553,73 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `liensTable`, `majDescPile`, `pileBouge`, `pileDebut`, `regardePile`, `touchePile`
 
-### `placeTunnel()` — ligne 49
+### `placeTunnel()` — ligne 51
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `placeCartesPile`
 
-### `placeCartesPile()` — ligne 55
+### `placeCartesPile()` — ligne 57
 
 Appelle : `placeTunnel()` *(tablePile.js)*
 
 Appelée par : `pileBouge`, `posePile`, `regardePile`
 
-### `creeTunnel()` — ligne 71
+### `creeTunnel()` — ligne 74
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `posePile`
 
-### `posePile()` — ligne 83
+### `posePile()` — ligne 86
 
 Appelle : `creeTunnel()` *(tablePile.js)*, `elementsPile()` *(tablePile.js)*, `majDescPile()` *(tablePile.js)*, `marqueResolution()` *(tablePile.js)*, `placeCartesPile()` *(tablePile.js)*, `suisFleches()` *(tableFleches.js)*, `tuile()` *(tableCartes.js)*, `tunnelPile()` *(tablePile.js)*
 
 Appelée par : `renduTable`
 
-### `majDescPile()` — ligne 121
+### `majDescPile()` — ligne 124
 
 Appelle : `descPileHTML()` *(tablePile.js)*, `esc()` *(outils.js)*, `rangPile()` *(tablePile.js)*
 
 Appelée par : `pileBouge`, `posePile`, `regardePile`
 
-### `descPileHTML()` — ligne 132
+### `descPileHTML()` — ligne 135
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `majDescPile`
 
-### `marqueResolution()` — ligne 148
+### `marqueResolution()` — ligne 151
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `posePile`
 
-### `regardePile()` — ligne 158
+### `regardePile()` — ligne 161
 
 Appelle : `majDescPile()` *(tablePile.js)*, `placeCartesPile()` *(tablePile.js)*, `rangPile()` *(tablePile.js)*, `sonTable()` *(tableSons.js)*, `suisFleches()` *(tableFleches.js)*, `vibreTable()` *(tableSons.js)*
 
 Appelée par : `gestesTable`, `pileFin`, `touchePile`
 
-### `touchePile()` — ligne 172
+### `touchePile()` — ligne 175
 
 Appelle : `clicCarte()` *(tableQuestions.js)*, `rangPile()` *(tablePile.js)*, `regardePile()` *(tablePile.js)*
 
 Appelée par : `gestesTable`
 
-### `pileDebut()` — ligne 179
+### `pileDebut()` — ligne 182
 
 Appelle : `rangPile()` *(tablePile.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `pileBouge()` — ligne 188
+### `pileBouge()` — ligne 191
 
 Appelle : `appuiAnnule()` *(tableLoupe.js)*, `majDescPile()` *(tablePile.js)*, `placeCartesPile()` *(tablePile.js)*, `planifieFleches()` *(tableFleches.js)*, `rangPile()` *(tablePile.js)*, `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `pileFin()` — ligne 207
+### `pileFin()` — ligne 210
 
 Appelle : `regardePile()` *(tablePile.js)*
 

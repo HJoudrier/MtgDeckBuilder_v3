@@ -38235,7 +38235,7 @@
   {
    "nom": "contexteQuestionHTML",
    "fichier": "tableQuestions.js",
-   "ligne": 115,
+   "ligne": 117,
    "chargement": false,
    "appelle": [
     "esc",
@@ -38250,7 +38250,7 @@
   {
    "nom": "titreOui",
    "fichier": "tableQuestions.js",
-   "ligne": 128,
+   "ligne": 132,
    "chargement": false,
    "appelle": [
     "esc"
@@ -38264,7 +38264,7 @@
   {
    "nom": "questionHTML",
    "fichier": "tableQuestions.js",
-   "ligne": 134,
+   "ligne": 138,
    "chargement": false,
    "appelle": [
     "contexteQuestionHTML",
@@ -38279,7 +38279,7 @@
   {
    "nom": "questionCorpsHTML",
    "fichier": "tableQuestions.js",
-   "ligne": 142,
+   "ligne": 146,
    "chargement": false,
    "appelle": [
     "chipsChoix",
@@ -38633,7 +38633,7 @@
   {
    "nom": "placeTunnel",
    "fichier": "tablePile.js",
-   "ligne": 49,
+   "ligne": 51,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -38645,7 +38645,7 @@
   {
    "nom": "placeCartesPile",
    "fichier": "tablePile.js",
-   "ligne": 55,
+   "ligne": 57,
    "chargement": false,
    "appelle": [
     "placeTunnel"
@@ -38661,7 +38661,7 @@
   {
    "nom": "creeTunnel",
    "fichier": "tablePile.js",
-   "ligne": 71,
+   "ligne": 74,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -38673,7 +38673,7 @@
   {
    "nom": "posePile",
    "fichier": "tablePile.js",
-   "ligne": 83,
+   "ligne": 86,
    "chargement": false,
    "appelle": [
     "creeTunnel",
@@ -38694,7 +38694,7 @@
   {
    "nom": "majDescPile",
    "fichier": "tablePile.js",
-   "ligne": 121,
+   "ligne": 124,
    "chargement": false,
    "appelle": [
     "descPileHTML",
@@ -38712,7 +38712,7 @@
   {
    "nom": "descPileHTML",
    "fichier": "tablePile.js",
-   "ligne": 132,
+   "ligne": 135,
    "chargement": false,
    "appelle": [
     "esc"
@@ -38726,7 +38726,7 @@
   {
    "nom": "marqueResolution",
    "fichier": "tablePile.js",
-   "ligne": 148,
+   "ligne": 151,
    "chargement": false,
    "appelle": [],
    "appelleDiffere": [],
@@ -38738,7 +38738,7 @@
   {
    "nom": "regardePile",
    "fichier": "tablePile.js",
-   "ligne": 158,
+   "ligne": 161,
    "chargement": false,
    "appelle": [
     "majDescPile",
@@ -38759,7 +38759,7 @@
   {
    "nom": "touchePile",
    "fichier": "tablePile.js",
-   "ligne": 172,
+   "ligne": 175,
    "chargement": false,
    "appelle": [
     "clicCarte",
@@ -38775,7 +38775,7 @@
   {
    "nom": "pileDebut",
    "fichier": "tablePile.js",
-   "ligne": 179,
+   "ligne": 182,
    "chargement": false,
    "appelle": [
     "rangPile"
@@ -38789,7 +38789,7 @@
   {
    "nom": "pileBouge",
    "fichier": "tablePile.js",
-   "ligne": 188,
+   "ligne": 191,
    "chargement": false,
    "appelle": [
     "appuiAnnule",
@@ -38809,7 +38809,7 @@
   {
    "nom": "pileFin",
    "fichier": "tablePile.js",
-   "ligne": 207,
+   "ligne": 210,
    "chargement": false,
    "appelle": [
     "regardePile"

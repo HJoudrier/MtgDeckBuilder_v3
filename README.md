@@ -728,7 +728,10 @@ chaque question de choix (hors priorité, combat, mulligan) un `contexte` : le s
 lance ou qu'on active, à défaut la carte que la question nomme (`source`), avec sa fiche. La table
 (`contexteQuestionHTML()`) la montre **en image**, avec son texte, au-dessus de la question — l'image reste là même si
 la carte a quitté le champ, et un toucher l'ouvre en grand (la loupe, identifiant `ID_CONTEXTE`, qui n'est celui
-d'aucun objet de la partie). La **pause de
+d'aucun objet de la partie). L'objet **qu'on résout**, lui, est déjà devant dans le tunnel de la pile avec son texte :
+le bandeau le nomme d'une ligne, qu'un toucher ouvre en grand. Le redire prenait au bandeau la place de ses choix —
+de Sanar, Innovative First-Year, on ne voyait des cartes révélées que leur ligne de type. Le bandeau, trop plein,
+défile ; il ne rabote plus ses enfants. La **pause de
 résolution** — l'objet reste visible, « résolution : X » dans la barre du haut — dure maintenant le temps de
 lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; le bouton de
 tour, qui dit alors « Continuer », la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.
@@ -757,7 +760,10 @@ amène devant ce qui est dessous, un toucher sur une carte du fond aussi ; à c�
 l'objet regardé et quand il se résoudra, et seuls ses liens brillent. Le tunnel est un nœud qui **survit
 aux repeints** — une transition ne joue que sur un élément qui demeure, et un doigt posé dessus ne doit
 pas perdre son geste — : le front ne porte qu'une place vide, où `posePile()` le remet après chaque
-peinture, et les trajets de `rejoueTrajets()` laissent ses cartes à leurs propres transitions. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
+peinture, et les trajets de `rejoueTrajets()` laissent ses cartes à leurs propres transitions. Pendant une
+question de choix, sur un téléphone, il se **replie** — petites cartes, le nom, deux lignes de texte — pour laisser
+au bandeau la place de ses choix ; ses cartes montent d'un quart de leur largeur par cran, et ne débordent donc
+pas sur le bandeau. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
 étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
 après un rechargement.
 
