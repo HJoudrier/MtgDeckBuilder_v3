@@ -77,12 +77,14 @@ function tuile(o, v, opts = {}) {
 }
 
 /* Un permanent est seul quand il a quelque chose à dire : un marqueur, une
-   blessure, un rôle au combat, une question qui le désigne. Les autres —
+   blessure, un rôle au combat, une question ou un objet de la pile qui le
+   désigne (`designes`, de marquesPile()). Les autres —
    six Forêts dégagées, douze jetons Gobelin — n'occupent qu'une place. */
-function regroupe(objs) {
+function regroupe(objs, designes) {
   const out = [], par = new Map();
   for (const o of objs) {
-    const seul = etatChoix(o.id) || Object.keys(o.marq || {}).some(k => o.marq[k]) || o.attaque || o.bloque != null || o.cmd || o.bless;
+    const seul = etatChoix(o.id) || Object.keys(o.marq || {}).some(k => o.marq[k]) || o.attaque || o.bloque != null || o.cmd || o.bless ||
+      (designes && (designes.sources.has(o.id) || designes.visees.has(o.id)));
     if (seul) { out.push({o, n: 1}); continue; }
     const cle = [o.nom, o.engage, o.malade, o.f, o.e, o.jeton].join('|');
     const g = par.get(cle);
@@ -99,7 +101,7 @@ function suiteTuiles(objs, v, opts = {}) {
   const attaches = new Map();
   v.champ.forEach(o => { if (o.att != null && ids.has(o.att)) attaches.set(o.att, [...(attaches.get(o.att) || []), o]); });
   const libres = objs.filter(o => !(o.att != null && ids.has(o.att)));
-  const grp = opts.regroupe === false ? libres.map(o => ({o, n: 1})) : regroupe(libres);
+  const grp = opts.regroupe === false ? libres.map(o => ({o, n: 1})) : regroupe(libres, v.pile ? marquesPile(v) : null);
   return grp.map(({o, n}) => {
     const a = attaches.get(o.id);
     const t = tuile(o, v, {...opts, n});

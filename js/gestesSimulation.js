@@ -34,4 +34,6 @@ function reglageSimulation(t) {
   else c[cle] = +t.value;
   renderK();
   scheduleSave();
+  /* Le graphe change de lecture : toutes les cartes sont relues. */
+  if (cle === 'grapheForge') { relisGraphe(); majForgeUI(); }
 }

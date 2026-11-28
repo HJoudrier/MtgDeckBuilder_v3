@@ -1,11 +1,15 @@
 /* =====================================================================
    js/analyse.js — Lire une carte : coût, capacités, déclencheurs, effets
 
-   `analyze()` découpe le texte en capacités, y reconnaît ce qui déclenche et
-   ce qui est produit (les règles sont dans js/effets.js), et pose en fin de
-   course les deux productions larges que toute carte porte du seul fait
-   d'exister — « lancement de sort » pour un sort, « arrivée en jeu » pour une
-   permanente.
+   Deux lectures donnent les capacités d'une carte : celle du texte, ici —
+   découper l'anglais en capacités et y reconnaître ce qui déclenche et ce qui
+   est produit (les règles sont dans js/effets.js) —, et celle du script de
+   Forge (js/grapheForge.js), qui lit les mêmes choses déjà rangées.
+   `analyze()` choisit, puis `assembleAnalyse()` tire des capacités, quelle
+   que soit leur lecture, les arcs, les déclencheurs et les productions, et
+   pose en fin de course les deux productions larges que toute carte porte du
+   seul fait d'exister — « lancement de sort » pour un sort, « arrivée en
+   jeu » pour une permanente.
    ===================================================================== */
 
 function parseCost(cost) {
@@ -37,11 +41,39 @@ function matchAll(rules, s) {
   return out;
 }
 
+/* Une carte est un sort si elle est éphémère ou rituel, une permanente si elle
+   n'est ni sort ni terrain : les deux lectures partagent ce partage-là. */
+function natureCarte(card) {
+  const t = String(card.type || '').toLowerCase();
+  const isSpell = /instant|sorcery/.test(t);
+  return {isSpell, isPermanent: !isSpell && !/^basic land|^land/.test(t.trim())};
+}
+
+/* La lecture que le graphe retient pour une carte : celle du script de Forge
+   quand `lectureForgeDe()` en rend une (js/lectureGraphe.js décide si les
+   scripts sont là et si on les veut), celle du texte sinon. La base livrée
+   s'analyse avant que ce module soit chargé : elle est lue dans le texte, puis
+   relue quand les scripts arrivent. */
 function analyze(card) {
-  const text = stripReminder(card.text||'').toLowerCase();
+  const f = typeof lectureForgeDe === 'function' ? lectureForgeDe(card) : null;
+  if (f) return f;
+  return analyseTexte(card);
+}
+
+function analyseTexte(card) {
+  const an = assembleAnalyse(card, capacitesTexte(card, card.text || ''));
+  an.source = 'texte';
+  return an;
+}
+
+/* Les capacités qu'un texte décrit, chacune avec ce qui la déclenche (`from`),
+   ce qu'elle produit (`to`) et leurs qualifications. La lecture de Forge s'en
+   sert aussi, pour un morceau de script qu'elle ne sait pas lire : elle relit
+   alors sa description. */
+function capacitesTexte(card, texte) {
+  const text = stripReminder(texte || '').toLowerCase();
   const selfNames = [card.name.toLowerCase(), card.name.toLowerCase().split(',')[0].trim()];
-  const isSpell = /instant|sorcery/.test(card.type.toLowerCase());
-  const isPermanent = !isSpell && !/^basic land|^land/.test(card.type.toLowerCase().trim());
+  const {isSpell} = natureCarte(card);
   const abilities = [];
 
   splitAbilities(text).forEach(raw => {
@@ -103,7 +135,14 @@ function analyze(card) {
       });
     });
   });
+  return abilities;
+}
 
+/* Des capacités, quelle que soit leur lecture, aux arcs du graphe, aux
+   déclencheurs qu'une autre carte peut nourrir et aux productions qui
+   nourrissent les autres. */
+function assembleAnalyse(card, abilities) {
+  const {isSpell, isPermanent} = natureCarte(card);
   const edges = [];
   abilities.forEach(a => a.from.forEach(f => a.to.forEach(t => {
     if (f === t) return;
@@ -123,7 +162,10 @@ function analyze(card) {
       ? a.from
       : a.from.filter(f => a.kind === 'activee' && (a.couts||[]).some(c => c.exutoire && c.source === f));
     hooks.forEach(f => ajouteT(f, a.scopeTrig, a.q, a.kind === 'activee' ? 'cout' : 'declencheur'));
-    (a.couts||[]).forEach(c => { if (c.exutoire) c.consomme.forEach(x => ajouteT(x, 'self', a.q, 'cout')); });
+    /* `qCout` : ce que consomme un coût payé à la résolution d'un déclencheur
+       (« vous pouvez sacrifier un artefact »), qui n'est pas ce que le
+       déclencheur écoute. Seule la lecture de Forge le distingue. */
+    (a.couts||[]).forEach(c => { if (c.exutoire) c.consomme.forEach(x => ajouteT(x, 'self', a.qCout || a.q, 'cout')); });
     a.to.forEach(t => ajouteP(t, a.scopeEff, a.pq));
     (a.couts||[]).forEach(c => {
       if (c.id === 'SAC_SOI' && !/creature/i.test(card.type)) return;

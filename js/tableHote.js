@@ -24,8 +24,9 @@ const TABLE = {ouverte: false, phase: '', role: '', h: null, sieges: [], agents:
   pauseIA: 1300, pauseEtape: 350, pauseResolution: 1100, suite: null,
   /* La pause d'une résolution en cours (son début, sa durée), que l'anneau
      du bouton de tour montre ; la carte levée, prête à jouer ; la dernière
-     vue peinte, dont la suivante se compare pour les sons et les mouvements. */
-  pause: null, leve: null, vuePeinte: null};
+     vue peinte, dont la suivante se compare pour les sons et les mouvements ;
+     le tunnel de la pile et l'objet qu'on y regarde (js/tablePile.js). */
+  pause: null, leve: null, vuePeinte: null, tunnel: null};
 
 /* Les vitesses de la table, réglées au menu (`S.table.vitesse`). */
 const VITESSES = {lente: {nom: 'Lente', k: 1.8}, normale: {nom: 'Normale', k: 1}, rapide: {nom: 'Rapide', k: 0.35}};
@@ -58,6 +59,19 @@ async function montrePile(q) {
   if (TABLE.h && TABLE.h.attente === q) repondre(TABLE.h, TABLE.agents, 0, Infinity, null);
 }
 
+/* Les blessures de combat vont tomber : on montre d'abord qui frappe qui,
+   un instant, puis on laisse aux coups le temps de porter avant que la
+   partie reprenne (js/tableCoups.js). */
+async function montreCombat(q) {
+  const k = (VITESSES[S.table.vitesse] || VITESSES.normale).k, P = TABLE.h.P, n = P.combat ? P.combat.attaquants.size : 0;
+  diffuseVues(true);
+  await attendre(k * TABLE.pauseEtape * 1.5);
+  if (!TABLE.h || TABLE.h.attente !== q) return;
+  repondre(TABLE.h, TABLE.agents, 0, Infinity, null);
+  diffuseVues(true);
+  await attendre(k * pauseCoups(n));
+}
+
 /* Attendre, sauf si le joueur dit « Continuer » (`tSuite`). */
 function attendreOuSuite(ms) {
   return new Promise(ok => {
@@ -70,8 +84,9 @@ function attendreOuSuite(ms) {
 /* La vue d'un joueur, et qui la partie attend : celui qui a la priorité. */
 function vueTable(j) {
   const q = TABLE.h.attente;
+  const combat = !!(q && q.q === 'voir' && q.extra && q.extra.combat);
   return {...vue(TABLE.h.P, j), prio: q && q.q === 'priorite' ? q.joueur : null, attend: q && q.q !== 'voir' ? q.joueur : null,
-    resout: !!(q && q.q === 'voir')};
+    resout: !!(q && q.q === 'voir') && !combat, combatVu: combat};
 }
 
 function attendre(ms) { return new Promise(ok => setTimeout(ok, ms)); }
@@ -109,8 +124,8 @@ async function commenceTable() {
   const graine = (Date.now() ^ (Math.random() * 4294967296)) >>> 0;
   /* Le paiement du mana de chaque siège, rangé avec la partie : la reprise le rejoue à l'identique. */
   const mana = sources.map(s => reglageMana(s.mode));
-  TABLE.config = {graine, premier: graine % sieges.length, montre: true, mana};
-  TABLE.h = creePartie({graine, premier: graine % sieges.length, plafondTours: 60, journal: true, consigne: true, montre: true,
+  TABLE.config = {graine, premier: graine % sieges.length, montre: true, montreCombat: true, mana};
+  TABLE.h = creePartie({graine, premier: graine % sieges.length, plafondTours: 60, journal: true, consigne: true, montre: true, montreCombat: true,
     sieges: sieges.map((x, i) => ({...x, nom: sources[i].nom, ...mana[i]}))});
   TABLE.agents = sieges.map(() => ({humain: true}));
   sources.forEach((s, i) => {
@@ -144,15 +159,15 @@ async function boucleTable() {
       const q = TABLE.h.attente;
       if (!q) { avance(TABLE.h, TABLE.agents, Infinity, null); continue; }
       const s = TABLE.sieges[q.joueur];
-      if (q.q === 'voir') { await montrePile(q); continue; }
+      if (q.q === 'voir') { await (q.extra && q.extra.combat ? montreCombat(q) : montrePile(q)); continue; }
       let r;
       if (s.mode === 'ia' || s.confie) r = valideReponse(q, reponseAutomate(TABLE.h.P, q, s));
       else if (q.q === 'priorite' && !doitDemander(TABLE.h.P, q.joueur, q, s.arrets)) r = q.options.length - 1;
       else { poseQuestion(q); return; }
       const avant = signePublic(TABLE.h.P), etape = TABLE.h.P.etape;
       repondre(TABLE.h, TABLE.agents, r, Infinity, null);
-      if (signePublic(TABLE.h.P) !== avant) {
-        diffuseVues();
+      if (signePublic(TABLE.h.P) !== avant || declareCombat(q)) {
+        diffuseVues(declareCombat(q));
         const ms = pauseApres(q, r, s, TABLE.h.P.etape !== etape);
         await (ms ? attendre(ms) : rendMain());
       }
@@ -194,9 +209,15 @@ function recoitReponse(j, n, r) {
     (TABLE.points = TABLE.points || []).push(TABLE.h.P.reponses.length);
   }
   repondre(TABLE.h, TABLE.agents, r, Infinity, null);
-  diffuseVues();
+  diffuseVues(declareCombat(q));
   boucleTable();
 }
+
+/* Des attaquants ou des bloqueurs déclarés : peints sur-le-champ, sans
+   attendre le repeint groupé. Sans cela, la vue suivante — les blessures —
+   arriverait seule, et les coups ne sauraient pas qui frappait qui
+   (js/tableCoups.js). */
+const declareCombat = q => q.q === 'attaquants' || q.q === 'bloqueurs';
 
 /* Repeindre la table de cet appareil et envoyer leur vue aux invités, au
    plus une fois tous les cent millisecondes. */
@@ -237,6 +258,6 @@ function quitteTable() {
   if (TABLE.role === 'hote' && TABLE.h) oublieTableSauvee();
   if (typeof fermeLiaisons === 'function') fermeLiaisons();
   Object.assign(TABLE, {ouverte: false, phase: '', h: null, question: null, vue: null, role: '',
-    loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '', pause: null, leve: null, vuePeinte: null});
+    loupe: null, zone: null, menu: null, page: 0, deplie: null, suivi: '', pause: null, leve: null, vuePeinte: null, tunnel: null});
   renduTable();
 }

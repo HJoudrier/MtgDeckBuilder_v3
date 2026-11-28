@@ -189,6 +189,7 @@ function renderE() {
       </div>
       ${champRecherche('deck')}
       ${msgs.length ? `<div class="warnbox"><b>À corriger</b><ul style="margin:5px 0 0 16px;padding:0">${msgs.slice(0,6).map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>` : `<div class="warnbox" style="border-color:var(--ok-d);background:var(--ok-bg)">Le deck respecte les contraintes du format.</div>`}
+      ${blocInconnues()}
       ${ligneGameChangers()}
       ${f.commander ? zoneCommandant() : ''}
       ${blocAchats()}
@@ -219,5 +220,5 @@ function renderE() {
   const hintEl = document.getElementById('hintE');
   const horsListe = CLES_ANNEXES.map(cle => [ANNEXES[cle].titre.toLowerCase(), annexeSize(cle)]).filter(([, q]) => q);
   if (hintEl) hintEl.textContent = `${n}/${f.size}${horsListe.length ? ` · ${horsListe.map(([t, q]) => `${t} ${q}`).join(' · ')}` : ''}`;
-  setTimeout(() => queueScryfall(entries.concat(...CLES_ANNEXES.map(annexeEntries)).map(e => e.card)), 0);
+  setTimeout(() => { queueScryfall(entries.concat(...CLES_ANNEXES.map(annexeEntries)).map(e => e.card)); completeInconnuesDuDeck(); }, 0);
 }

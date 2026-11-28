@@ -8,7 +8,7 @@ direct sans marque, un appel **différé** (une fonction passée en rappel) pré
 un appel depuis un **gestionnaire HTML** produit par l'atelier précédé de « ⌘ ». Les graphes
 correspondants sont dans `doc/graphe-fonctions.dot` et `doc/graphe-modules.dot`.
 
-**1896 fonctions** dans 350 modules, **7277 appels** relevés.
+**2006 fonctions** dans 360 modules, **7561 appels** relevés.
 
 ## Fonctions que personne n'appelle
 
@@ -39,19 +39,19 @@ Appelée par : `compat`
 
 Appelle : `sousTypesDeSort()` *(effets.js)*
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
 ### `qualifieProduction()` — ligne 92
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
 ### `libelleQual()` — ligne 105
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`, `croise`, `ficheHTML`, `noteCarte`
+Appelée par : `assembleAnalyse`, `croise`, `ficheHTML`, `noteCarte`
 
 ### `compat()` — ligne 117
 
@@ -63,31 +63,31 @@ Appelée par : `croise`, `noteCarte`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`, `declencheurGraphe`
 
 ### `coutsDe()` — ligne 191
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
 ### `refineTriggers()` — ligne 202
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
 ### `scopeOf()` — ligne 216
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
 ### `refineEffects()` — ligne 221
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
 ## js/synergies.js
 
@@ -123,35 +123,321 @@ Appelée par : `ficheHTML`
 
 ## js/analyse.js
 
-### `parseCost()` — ligne 11
+### `parseCost()` — ligne 15
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `buildCard`
 
-### `stripReminder()` — ligne 25
+### `stripReminder()` — ligne 29
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`, `texteGrapheForge`
 
-### `splitAbilities()` — ligne 27
-
-N'appelle aucune fonction du projet.
-
-Appelée par : `analyze`
-
-### `matchAll()` — ligne 31
+### `splitAbilities()` — ligne 31
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `analyze`
+Appelée par : `capacitesTexte`
 
-### `analyze()` — ligne 40
+### `matchAll()` — ligne 35
 
-Appelle : `coupeDeclencheur()` *(effets.js)*, `coutsDe()` *(effets.js)*, `libelleQual()` *(effets.js)*, `matchAll()` *(analyse.js)*, `qualifieDeclencheur()` *(effets.js)*, `qualifieProduction()` *(effets.js)*, `refineEffects()` *(effets.js)*, `refineTriggers()` *(effets.js)*, `scopeOf()` *(effets.js)*, `splitAbilities()` *(analyse.js)*, `stripReminder()` *(analyse.js)*
+N'appelle aucune fonction du projet.
+
+Appelée par : `capacitesTexte`
+
+### `natureCarte()` — ligne 46
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `assembleAnalyse`, `capacitesTexte`
+
+### `analyze()` — ligne 57
+
+Appelle : `analyseTexte()` *(analyse.js)*, `lectureForgeDe()` *(lectureGraphe.js)*
 
 Appelée par : `reanalyser`
+
+### `analyseTexte()` — ligne 63
+
+Appelle : `assembleAnalyse()` *(analyse.js)*, `capacitesTexte()` *(analyse.js)*
+
+Appelée par : `analyze`, `ecartLectures`
+
+### `capacitesTexte()` — ligne 73
+
+Appelle : `coupeDeclencheur()` *(effets.js)*, `coutsDe()` *(effets.js)*, `matchAll()` *(analyse.js)*, `natureCarte()` *(analyse.js)*, `qualifieDeclencheur()` *(effets.js)*, `qualifieProduction()` *(effets.js)*, `refineEffects()` *(effets.js)*, `refineTriggers()` *(effets.js)*, `scopeOf()` *(effets.js)*, `splitAbilities()` *(analyse.js)*, `stripReminder()` *(analyse.js)*
+
+Appelée par : `analyseTexte`, `fermeUnite`, `motCleGraphe`
+
+### `assembleAnalyse()` — ligne 144
+
+Appelle : `libelleQual()` *(effets.js)*, `natureCarte()` *(analyse.js)*
+
+Appelée par : `analyseForge`, `analyseTexte`
+
+## js/grapheForgeQualif.js
+
+### `alternativesForge()` — ligne 35
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `contrainteAutrui`, `estTerrainForge`, `masseForge`, `noeudsDegatsDeclencheur`, `noeudsZoneDeclencheur`, `porteeJoueurForge`, `qDeclencheurForge`, `qualifieValideForge`
+
+### `estSoiForge()` — ligne 42
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `contrainteAutrui`, `masseForge`, `qualifieAlternative`
+
+### `qualifieAlternative()` — ligne 49
+
+Appelle : `estSoiForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `qualifieValideForge`
+
+### `qualifieValideForge()` — ligne 87
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*, `qualifieAlternative()` *(grapheForgeQualif.js)*
+
+Appelée par : `qDeclencheurForge`, `qualifCoutForge`, `remplacementGraphe`
+
+### `porteeJoueurForge()` — ligne 113
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `qDeclencheurForge`
+
+### `versAdversaireForge()` — ligne 124
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `chaineForge`
+
+### `qDeclencheurForge()` — ligne 133
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*, `porteeJoueurForge()` *(grapheForgeQualif.js)*, `qualifieValideForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `declencheurGraphe`
+
+### `pqForge()` — ligne 153
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`, `motCleGraphe`, `remplacementGraphe`, `statiqueGraphe`
+
+### `morceauxCoutForge()` — ligne 163
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `coutsGrapheForge`, `qualifCoutForge`
+
+### `coutsGrapheForge()` — ligne 174
+
+Appelle : `morceauxCoutForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `capaciteJoueeForge`, `chaineForge`
+
+### `qualifCoutForge()` — ligne 199
+
+Appelle : `morceauxCoutForge()` *(grapheForgeQualif.js)*, `qualifieValideForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`
+
+### `jetonForge()` — ligne 213
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `noeudsJeton`
+
+### `texteGrapheForge()` — ligne 240
+
+Appelle : `stripReminder()` *(analyse.js)*
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`, `remplacementGraphe`, `statiqueGraphe`
+
+## js/grapheForgeTables.js
+
+### `chargement du module`
+
+Appelle : `noeudMarqueur()` *(grapheForgeTables.js)*, `noeudsMotsClesDonnes()` *(grapheForgeMotsCles.js)*, → `noeudsDegatsDeclencheur()` *(grapheForgeTables.js)*, → `noeudsDeplacement()` *(grapheForgeTables.js)*, → `noeudsJeton()` *(grapheForgeTables.js)*, → `noeudsPompe()` *(grapheForgeTables.js)*, → `noeudsZoneDeclencheur()` *(grapheForgeTables.js)*
+
+### `zonesForge()` — ligne 14
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `chaineForge`, `masseForge`, `noeudsDeplacement`, `noeudsZoneDeclencheur`
+
+### `noeudMarqueur()` — ligne 23
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `grapheForgeMotsCles.js (chargement)`, `grapheForgeTables.js (chargement)`, `motCleGraphe`
+
+### `noeudsZoneDeclencheur()` — ligne 30
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*, `zonesForge()` *(grapheForgeTables.js)*
+
+Appelée par : `grapheForgeTables.js (chargement)`
+
+### `noeudsDegatsDeclencheur()` — ligne 50
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `grapheForgeTables.js (chargement)`
+
+### `noeudsDeplacement()` — ligne 104
+
+Appelle : `estTerrainForge()` *(grapheForgeTables.js)*, `zonesForge()` *(grapheForgeTables.js)*
+
+Appelée par : `grapheForgeTables.js (chargement)`
+
+### `estTerrainForge()` — ligne 138
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `noeudsDeplacement`
+
+### `noeudsJeton()` — ligne 143
+
+Appelle : `jetonForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `grapheForgeTables.js (chargement)`
+
+### `noeudsPompe()` — ligne 151
+
+Appelle : `noeudsMotsClesDonnes()` *(grapheForgeMotsCles.js)*
+
+Appelée par : `grapheForgeTables.js (chargement)`
+
+### `restreintForge()` — ligne 220
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `masseForge`
+
+### `masseForge()` — ligne 225
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*, `estSoiForge()` *(grapheForgeQualif.js)*, `restreintForge()` *(grapheForgeTables.js)*, `zonesForge()` *(grapheForgeTables.js)*
+
+Appelée par : `chaineForge`
+
+### `rolesForge()` — ligne 249
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`
+
+## js/grapheForgeMotsCles.js
+
+### `chargement du module`
+
+Appelle : `amplifie()` *(grapheForgeMotsCles.js)*, `contrainteAutrui()` *(grapheForgeMotsCles.js)*, `forgeApi()` *(forgeScript.js)*, `noeudMarqueur()` *(grapheForgeTables.js)*
+
+### `noeudsMotsClesDonnes()` — ligne 11
+
+Appelle : `nomMotCleForge()` *(grapheForgeMotsCles.js)*
+
+Appelée par : `grapheForgeTables.js (chargement)`, `noeudsContinue`, `noeudsPompe`
+
+### `nomMotCleForge()` — ligne 16
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `motCleGraphe`, `noeudsMotsClesDonnes`
+
+### `contrainteAutrui()` — ligne 77
+
+Appelle : `alternativesForge()` *(grapheForgeQualif.js)*, → `estSoiForge()` *(grapheForgeQualif.js)*
+
+Appelée par : `grapheForgeMotsCles.js (chargement)`
+
+### `amplifie()` — ligne 105
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `grapheForgeMotsCles.js (chargement)`
+
+## js/grapheForge.js
+
+### `analyseForge()` — ligne 20
+
+Appelle : `assembleAnalyse()` *(analyse.js)*, `capaciteJoueeForge()` *(grapheForge.js)*, `declencheurGraphe()` *(grapheForge.js)*, `lisScriptForge()` *(forgeScript.js)*, `motCleGraphe()` *(grapheForge.js)*, `remplacementGraphe()` *(grapheForge.js)*, `statiqueGraphe()` *(grapheForge.js)*
+
+Appelée par : `lectureForgeDe`
+
+### `listeGraphe()` — ligne 35
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `chaineForge`, `motCleGraphe`, `noeudsContinue`, `noeudsStatique`
+
+### `uniteForge()` — ligne 44
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`, `motCleGraphe`, `remplacementGraphe`, `statiqueGraphe`
+
+### `fermeUnite()` — ligne 52
+
+Appelle : `capacitesTexte()` *(analyse.js)*
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`, `motCleGraphe`, `remplacementGraphe`, `statiqueGraphe`
+
+### `chaineForge()` — ligne 71
+
+Appelle : `affineChaineForge()` *(grapheForge.js)*, `capaciteJoueeForge()` *(grapheForge.js)*, `coutsGrapheForge()` *(grapheForgeQualif.js)*, `declencheurGraphe()` *(grapheForge.js)*, `forgeApi()` *(forgeScript.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `listeGraphe()` *(grapheForge.js)*, `masseForge()` *(grapheForgeTables.js)*, `noeudsStatique()` *(grapheForge.js)*, `versAdversaireForge()` *(grapheForgeQualif.js)*, `zonesForge()` *(grapheForgeTables.js)*
+
+Appelée par : `capaciteJoueeForge`, `declencheurGraphe`, `motCleGraphe`, `remplacementGraphe`
+
+### `affineChaineForge()` — ligne 120
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `chaineForge`
+
+### `declencheurGraphe()` — ligne 135
+
+Appelle : `chaineForge()` *(grapheForge.js)*, `coupeDeclencheur()` *(effets.js)*, `fermeUnite()` *(grapheForge.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `pqForge()` *(grapheForgeQualif.js)*, `qDeclencheurForge()` *(grapheForgeQualif.js)*, `qualifCoutForge()` *(grapheForgeQualif.js)*, `rolesForge()` *(grapheForgeTables.js)*, `texteGrapheForge()` *(grapheForgeQualif.js)*, `uniteForge()` *(grapheForge.js)*
+
+Appelée par : `analyseForge`, `chaineForge`, `noeudsContinue`
+
+### `capaciteJoueeForge()` — ligne 165
+
+Appelle : `chaineForge()` *(grapheForge.js)*, `coutsGrapheForge()` *(grapheForgeQualif.js)*, `fermeUnite()` *(grapheForge.js)*, `forgeApi()` *(forgeScript.js)*, `pqForge()` *(grapheForgeQualif.js)*, `qualifCoutForge()` *(grapheForgeQualif.js)*, `rolesForge()` *(grapheForgeTables.js)*, `texteGrapheForge()` *(grapheForgeQualif.js)*, `uniteForge()` *(grapheForge.js)*
+
+Appelée par : `analyseForge`, `chaineForge`, `noeudsContinue`
+
+### `noeudsStatique()` — ligne 198
+
+Appelle : `listeGraphe()` *(grapheForge.js)*, `noeudsContinue()` *(grapheForge.js)*
+
+Appelée par : `chaineForge`, `statiqueGraphe`
+
+### `noeudsContinue()` — ligne 209
+
+Appelle : `capaciteJoueeForge()` *(grapheForge.js)*, `declencheurGraphe()` *(grapheForge.js)*, `forgeTable()` *(forgeScript.js)*, `listeGraphe()` *(grapheForge.js)*, `noeudsMotsClesDonnes()` *(grapheForgeMotsCles.js)*, `statiqueGraphe()` *(grapheForge.js)*
+
+Appelée par : `noeudsStatique`
+
+### `statiqueGraphe()` — ligne 224
+
+Appelle : `fermeUnite()` *(grapheForge.js)*, `noeudsStatique()` *(grapheForge.js)*, `pqForge()` *(grapheForgeQualif.js)*, `texteGrapheForge()` *(grapheForgeQualif.js)*, `uniteForge()` *(grapheForge.js)*
+
+Appelée par : `analyseForge`, `motCleGraphe`, `noeudsContinue`
+
+### `remplacementGraphe()` — ligne 239
+
+Appelle : `chaineForge()` *(grapheForge.js)*, `fermeUnite()` *(grapheForge.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `pqForge()` *(grapheForgeQualif.js)*, `qualifieValideForge()` *(grapheForgeQualif.js)*, `texteGrapheForge()` *(grapheForgeQualif.js)*, `uniteForge()` *(grapheForge.js)*
+
+Appelée par : `analyseForge`
+
+### `motCleGraphe()` — ligne 259
+
+Appelle : `capacitesTexte()` *(analyse.js)*, `chaineForge()` *(grapheForge.js)*, `fermeUnite()` *(grapheForge.js)*, `forgeSousCapacite()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*, `listeGraphe()` *(grapheForge.js)*, `noeudMarqueur()` *(grapheForgeTables.js)*, `nomMotCleForge()` *(grapheForgeMotsCles.js)*, `pqForge()` *(grapheForgeQualif.js)*, `statiqueGraphe()` *(grapheForge.js)*, `uniteForge()` *(grapheForge.js)*
+
+Appelée par : `analyseForge`
 
 ## js/categories.js
 
@@ -161,11 +447,11 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `reanalyser`
 
-### `reanalyser()` — ligne 115
+### `reanalyser()` — ligne 120
 
 Appelle : `analyze()` *(analyse.js)*, `categories()` *(categories.js)*
 
-Appelée par : `applyScryfall`, `buildCard`, `carteDuCatalogue`, `carteLivree`, `completeDepuisRec`, `majTexteOracle`, `restore`
+Appelée par : `applyScryfall`, `buildCard`, `carteLivree`, `completeDepuisRec`, `completeInconnueDepuisFiche`, `habilleDepuisRec`, `majTexteOracle`, `relisGraphe`, `restore`
 
 ## js/mana.js
 
@@ -173,7 +459,7 @@ Appelée par : `applyScryfall`, `buildCard`, `carteDuCatalogue`, `carteLivree`, 
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `applyScryfall`, `carteDuCatalogue`, `getCardOrAnalyzedRec`, `manaProduitTexte`
+Appelée par : `applyScryfall`, `completeInconnueDepuisFiche`, `getCardOrAnalyzedRec`, `habilleDepuisRec`, `manaProduitTexte`
 
 ### `manaVide()` — ligne 33
 
@@ -289,111 +575,111 @@ Appelle : `norm()` *(cartes.js)*, → `carteLivree()` *(cartes.js)*
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `appliqueCatalogueAuxCartes`, `applyScryfall`, `archetypesCarte`, `cartes.js (chargement)`, `chargeSimCartes`, `chargerGameChangers`, `chercheCartes`, `chercheFichesScryfall`, `chercheImagesTable`, `chercheScryfall`, `completeUnknown`, `demandeImage`, `edhrecAllFor`, `edhrecFor`, `estGameChanger`, `fetchEdhrecCommander`, `ficheHTML`, `ficheSansForge`, `filtresValeursOK`, `find`, `gestesGraphe`, `imageConnue`, `indexArchive`, `indexCard`, `indexeForge`, `loose`, `majResultats`, `nbInteractions`, `nomsPageEdhrec`, `noteCarte`, `noteSetIndex`, `parseMtgoList`, `propositionsHTML`, `registerCard`, `renameCard`, `resultatsAjoutHTML`, `retiens`, `saisieRecherche`, `scriptForgeDe`, `scryTarget`, `setsCarte`, `setsRec`, `snapshot`, `unindexCard`, `valeursRec`
+Appelée par : `appliqueCatalogueAuxCartes`, `applyScryfall`, `archetypesCarte`, `cartes.js (chargement)`, `chargeSimCartes`, `chargerGameChangers`, `chercheCartes`, `chercheFichesScryfall`, `chercheImagesTable`, `chercheScryfall`, `completeInconnuesDepuisArchive`, `completeInconnuesDepuisFiches`, `completeUnknown`, `demandeImage`, `edhrecAllFor`, `edhrecFor`, `estGameChanger`, `fetchEdhrecCommander`, `ficheHTML`, `ficheSansForge`, `filtresValeursOK`, `find`, `gestesGraphe`, `imageConnue`, `indexArchive`, `indexCard`, `indexeForge`, `loose`, `majResultats`, `nbInteractions`, `nomsPageEdhrec`, `noteCarte`, `noteSetIndex`, `parseMtgoList`, `propositionsHTML`, `registerCard`, `renameCard`, `resultatsAjoutHTML`, `retiens`, `saisieRecherche`, `scriptForgeDe`, `scryTarget`, `setsCarte`, `setsRec`, `snapshot`, `unindexCard`, `valeursRec`
 
 ### `loose()` — ligne 18
 
 Appelle : `norm()` *(cartes.js)*
 
-Appelée par : `applyScryfall`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, `fetchEdhrecCommander`, `filtresValeursOK`, `find`, `indexCard`, `listeArchetypesHTML`, `listeSetsHTML`, `scryTarget`, `unindexCard`
+Appelée par : `applyScryfall`, `completeInconnuesDepuisArchive`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, `fetchEdhrecCommander`, `filtresValeursOK`, `find`, `indexCard`, `listeArchetypesHTML`, `listeSetsHTML`, `scryTarget`, `unindexCard`
 
 ### `buildCard()` — ligne 20
 
 Appelle : `parseCost()` *(analyse.js)*, `reanalyser()` *(categories.js)*
 
-Appelée par : `applyScryfall`, `carteDepuisScryfall`, `carteDuCatalogue`, `carteLivree`, `gestesGraphe`, `getCardOrAnalyzedRec`, `migreAdversaires`, `openImport`, `restore`
+Appelée par : `applyScryfall`, `carteDepuisScryfall`, `carteDuCatalogue`, `carteLivree`, `completeInconnueDepuisFiche`, `completeInconnueDepuisRec`, `gestesGraphe`, `getCardOrAnalyzedRec`, `migreAdversaires`, `openImport`, `restore`
 
-### `majTexteOracle()` — ligne 46
+### `majTexteOracle()` — ligne 51
 
 Appelle : `reanalyser()` *(categories.js)*
 
 Appelée par : `applyScryfall`, `completeDepuisRec`, `restore`
 
-### `indexCard()` — ligne 64
+### `indexCard()` — ligne 69
 
 Appelle : `loose()` *(cartes.js)*, `norm()` *(cartes.js)*
 
 Appelée par : `registerCard`, `renameCard`
 
-### `unindexCard()` — ligne 73
+### `unindexCard()` — ligne 78
 
 Appelle : `loose()` *(cartes.js)*, `norm()` *(cartes.js)*
 
 Appelée par : `mergeInto`, `renameCard`
 
-### `registerCard()` — ligne 82
+### `registerCard()` — ligne 87
 
 Appelle : `indexCard()` *(cartes.js)*, `norm()` *(cartes.js)*
 
 Appelée par : `applyScryfall`, `carteDuCatalogue`, `carteLivree`, `gestesGraphe`, `migreAdversaires`, `openImport`, `restore`
 
-### `find()` — ligne 90
+### `find()` — ligne 95
 
 Appelle : `loose()` *(cartes.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `aAcheter`, `acquisitionsEnCours`, `addToDeck`, `ajoutCollection`, `annexeEntries`, `appliqueCatalogueAuxCartes`, `applyScryfall`, `basculerSourceVersions`, `buyCard`, `carteDuCatalogue`, `chargerCatalogue`, `choisirVersion`, `collectionCards`, `commandantsPrincipaux`, `completeUnknown`, `contexteEvaluation`, `couleursRestriction`, `coutDeck`, `deckEntries`, `demandesTousDecks`, `deplacerCarte`, `faireDefilerVersion`, `ficheImageKO`, `ficheSansForge`, `gestesDeck`, `gestesGraphe`, `getCardOrAnalyzedRec`, `imageConnue`, `legality`, `loadEdhrec`, `majApercu`, `majPrix`, `migreAdversaires`, `montrerApercu`, `nomCanonique`, `openCardModal`, `openImport`, `panneauEdhrec`, `poseCouleursCommandant`, `propositionsHTML`, `quantiteCollection`, `quantiteEnCours`, `requeteCatalogue`, `restaureDecks`, `restore`, `resultatsAjoutHTML`, `selectionCandidats`, `signatureCommandants`, `versAnnexe`, `vivierSuggestions`, `wishlist`, `zoneCommandant`
+Appelée par : `aAcheter`, `acquisitionsEnCours`, `addToDeck`, `ajoutCollection`, `annexeEntries`, `appliqueCatalogueAuxCartes`, `applyScryfall`, `basculerSourceVersions`, `buyCard`, `carteDuCatalogue`, `chargerCatalogue`, `choisirVersion`, `collectionCards`, `commandantsPrincipaux`, `completeUnknown`, `contexteEvaluation`, `couleursRestriction`, `coutDeck`, `deckEntries`, `demandesTousDecks`, `deplacerCarte`, `faireDefilerVersion`, `ficheImageKO`, `ficheSansForge`, `gestesDeck`, `gestesGraphe`, `getCardOrAnalyzedRec`, `imageConnue`, `inconnuesDuDeck`, `legality`, `loadEdhrec`, `majApercu`, `majPrix`, `migreAdversaires`, `montrerApercu`, `nomCanonique`, `openCardModal`, `openImport`, `panneauEdhrec`, `poseCouleursCommandant`, `propositionsHTML`, `quantiteCollection`, `quantiteEnCours`, `requeteCatalogue`, `restaureDecks`, `restore`, `resultatsAjoutHTML`, `selectionCandidats`, `signatureCommandants`, `versAnnexe`, `vivierSuggestions`, `wishlist`, `zoneCommandant`
 
-### `peutCommander()` — ligne 98
+### `peutCommander()` — ligne 107
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `commandantsPossibles`, `commandantsSecondairesPossibles`
+Appelée par : `addToDeck`, `cardRow`, `cardTile`, `commandantsPossibles`, `commandantsSecondairesPossibles`, `openImport`
 
-### `commandantsPossibles()` — ligne 102
+### `commandantsPossibles()` — ligne 115
 
 Appelle : `deckEntries()` *(deck.js)*, → `peutCommander()` *(cartes.js)*
 
 Appelée par : `zoneCommandant`
 
-### `commandantsPrincipaux()` — ligne 111
+### `commandantsPrincipaux()` — ligne 124
 
 Appelle : `find()` *(cartes.js)*
 
 Appelée par : `panneauEdhrec`
 
-### `commandantsSecondairesPossibles()` — ligne 119
+### `commandantsSecondairesPossibles()` — ligne 132
 
 Appelle : `deckEntries()` *(deck.js)*, `peutCommander()` *(cartes.js)*
 
 Appelée par : `commandantsSecondaires`, `panneauEdhrec`
 
-### `commandantsSecondaires()` — ligne 127
+### `commandantsSecondaires()` — ligne 140
 
 Appelle : `commandantsSecondairesPossibles()` *(cartes.js)*
 
 Appelée par : `blocEdhrec`, `edhrecAllFor`, `lanceEdhrecSiBesoin`, `loadEdhrec`, `panneauEdhrec`, `signatureCommandants`
 
-### `mainType()` — ligne 131
+### `mainType()` — ligne 144
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `annexeEntries`, `deckEntries`, `groupes.js (chargement)`, `statsOf`, `valeursCarte`, `valeursRec`
 
-### `carteLivree()` — ligne 151
+### `carteLivree()` — ligne 164
 
 Appelle : `buildCard()` *(cartes.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*
 
 Appelée par : `cartes.js (chargement)`, `initBuiltin`
 
-### `initBuiltin()` — ligne 165
+### `initBuiltin()` — ligne 178
 
 Appelle : → `carteLivree()` *(cartes.js)*
 
 Appelée par : `demarrer`
 
-### `frontFace()` — ligne 171
+### `frontFace()` — ligne 184
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `archetypesCarte`, `chargerGameChangers`, `chargerSetScryfall`, `chercheTexte`, `chercheVerso`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, `edhrecSlug`, `estGameChanger`, `fetchEdhrecCommander`, `scryTarget`, `setsCarte`, `setsRec`, `valeursRec`
+Appelée par : `archetypesCarte`, `chargerGameChangers`, `chargerSetScryfall`, `chercheTexte`, `chercheVerso`, `completeInconnuesDepuisArchive`, `completeInconnuesDepuisFiches`, `completeUnknown`, `edhrecAllFor`, `edhrecFor`, `edhrecSlug`, `estGameChanger`, `fetchEdhrecCommander`, `scryTarget`, `setsCarte`, `setsRec`, `valeursRec`
 
-### `mergeInto()` — ligne 175
+### `mergeInto()` — ligne 188
 
 Appelle : `annexeListe()` *(annexes.js)*, `deplaceDates()` *(collectionDates.js)*, `unindexCard()` *(cartes.js)*
 
 Appelée par : `renameCard`
 
-### `renameCard()` — ligne 197
+### `renameCard()` — ligne 210
 
 Appelle : `indexCard()` *(cartes.js)*, `mergeInto()` *(cartes.js)*, `norm()` *(cartes.js)*, `unindexCard()` *(cartes.js)*, → `annexeListe()` *(annexes.js)*
 
@@ -917,7 +1203,7 @@ Appelée par : `filtreOKRec`, `restrictionOKRec`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `demarrerCatalogue`, `indexArchive`, `majCatalogue`
+Appelée par : `completeInconnuesDuDeck`, `demarrerCatalogue`, `indexArchive`, `majCatalogue`
 
 ### `noeudsActifs()` — ligne 30
 
@@ -1517,13 +1803,13 @@ Appelée par : `jeuOpsB.js (chargement)`, `scoreEffet`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `accordeAnimation`, `animeRevenus`, `elementsTable`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeCopiesC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeInstantsB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeManaRestreint.js (chargement)`, `forgeSousCapacite`, `lisScriptForge`, `motCleForge`, `motifStoryweave`, `niveauForge`, `statiqueForge`, `unitesForge`
+Appelée par : `accordeAnimation`, `animeRevenus`, `chaineForge`, `elementsTable`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeCopiesC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeInstantsB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeManaRestreint.js (chargement)`, `forgeSousCapacite`, `lisScriptForge`, `motCleForge`, `motCleGraphe`, `motifStoryweave`, `niveauForge`, `noeudsContinue`, `statiqueForge`, `unitesForge`
 
 ### `forgeApi()` — ligne 33
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `capaciteForge`, `chaineDegats`, `definitionDepuisScript`, `effetForge`, `elementsTable`, `emplacementForge`, `entreeSoiForge`, `forgeArtefactsE.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeEnchantementsC.js (chargement)`, `forgeEnchantementsE.js (chargement)`, `forgeEntreesC.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeManaCompteurs.js (chargement)`, `forgeManaRestreint.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeTerrains.js (chargement)`, `formeRemplacementC`, `formeRemplacementD`, `motifStoryweave`, `payeAvantForge`, `sortPermanentForge`, `tableJouable`
+Appelée par : `capaciteForge`, `capaciteJoueeForge`, `chaineDegats`, `chaineForge`, `definitionDepuisScript`, `effetForge`, `elementsTable`, `emplacementForge`, `entreeSoiForge`, `forgeArtefactsE.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeEnchantementsC.js (chargement)`, `forgeEnchantementsE.js (chargement)`, `forgeEntreesC.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgeManaCompteurs.js (chargement)`, `forgeManaRestreint.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeTerrains.js (chargement)`, `formeRemplacementC`, `formeRemplacementD`, `grapheForgeMotsCles.js (chargement)`, `motifStoryweave`, `payeAvantForge`, `sortPermanentForge`, `tableJouable`
 
 ### `forgeLigneType()` — ligne 41
 
@@ -1547,13 +1833,13 @@ Appelée par : `defAvecMots`, `forgeCopiesC.js (chargement)`, `lisScriptForge`, 
 
 Appelle : `faceVide()` *(forgeScript.js)*, `forgeCoutMana()` *(forgeScript.js)*, `forgeTable()` *(forgeScript.js)*
 
-Appelée par : `capacitesAnneau`, `definitionForge`, `jetonsForge`, `manquesDecks`, `mesureBaseForge`
+Appelée par : `analyseForge`, `capacitesAnneau`, `definitionForge`, `jetonsForge`, `lectureForgeDe`, `manquesDecks`, `mesureBaseForge`
 
 ### `forgeSousCapacite()` — ligne 106
 
 Appelle : `forgeTable()` *(forgeScript.js)*
 
-Appelée par : `accordeAnimation`, `chaineDegats`, `chainePioche`, `declencheurForge`, `effetForge`, `entreAvecPrevu`, `entreeForge`, `entreeForgeMotCle`, `entreeSoiForge`, `eveilForge`, `exilsApplicables`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeArtefactsI.js (chargement)`, `forgeChoix.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeCopiesC.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntreesB.js (chargement)`, `forgeEntreesC.js (chargement)`, `forgeInstantsB.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgePlaneswalkersC.js (chargement)`, `forgeRituelsB.js (chargement)`, `formeRemplacement`, `formeRemplacementC`, `formeRemplacementD`, `motCleForge`, `motCleLancementB`, `motClePermanent`, `motifStoryweave`, `nombreRemplace`, `payeAvantForge`, `quantiteRemplacee`, `sousEffets`, `statiqueForge`, `surchargeForge`, `vieReduite`
+Appelée par : `accordeAnimation`, `chaineDegats`, `chaineForge`, `chainePioche`, `declencheurForge`, `declencheurGraphe`, `effetForge`, `entreAvecPrevu`, `entreeForge`, `entreeForgeMotCle`, `entreeSoiForge`, `eveilForge`, `exilsApplicables`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeArtefactsI.js (chargement)`, `forgeChoix.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeCopiesC.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeDegagements.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsD.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEntreesB.js (chargement)`, `forgeEntreesC.js (chargement)`, `forgeInstantsB.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaC.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgePlaneswalkersC.js (chargement)`, `forgeRituelsB.js (chargement)`, `formeRemplacement`, `formeRemplacementC`, `formeRemplacementD`, `motCleForge`, `motCleGraphe`, `motCleLancementB`, `motClePermanent`, `motifStoryweave`, `nombreRemplace`, `payeAvantForge`, `quantiteRemplacee`, `remplacementGraphe`, `sousEffets`, `statiqueForge`, `surchargeForge`, `vieReduite`
 
 ### `ficheDeScriptForge()` — ligne 115
 
@@ -1655,119 +1941,119 @@ Appelle : `creeObjet()` *(jeuEtat.js)*, `etatHasard()` *(jeuHasard.js)*, `nouvel
 
 Appelée par : `creePartie`
 
-### `nouvelleCarte()` — ligne 54
+### `nouvelleCarte()` — ligne 57
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `conjure`, `creeJetonsForge`, `forgeAlchemie.js (chargement)`, `forgeCopies.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeInstantsC.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgePlaneswalkersC.js (chargement)`, `jetonSimple`, `jeuOpsB.js (chargement)`, `lancePrepare`, `nouvellePartie`, `paradigmesDebutPrincipale`
 
-### `creeObjet()` — ligne 59
+### `creeObjet()` — ligne 62
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `conjure`, `creeJetonsForge`, `deplace`, `forgeAlchemie.js (chargement)`, `forgeCopies.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeInstantsC.js (chargement)`, `forgeMeld.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgePlaneswalkersC.js (chargement)`, `forgeRedemarrage.js (chargement)`, `jetonSimple`, `jeuOpsB.js (chargement)`, `lancePrepare`, `nouvellePartie`, `paradigmesDebutPrincipale`
 
-### `obj()` — ligne 68
+### `obj()` — ligne 71
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `aCopier`, `aProprieteJoueur`, `accordeJourNuit`, `actionsComplot`, `actionsLegales`, `actionsManaAutre`, `actionsManaFiltre`, `actionsManaRestreint`, `actionsPossibles`, `actionsPrepare`, `activeCapacite`, `activeFiltre`, `activeManaAutre`, `activeManaFiltre`, `activeSource`, `appliqueSBA`, `assezDeControleurs`, `attaquantImpose`, `attaquantsDeclares`, `attaqueCalculee`, `attaqueParRegles`, `auraOrpheline`, `blocSupplementaire`, `blocageCalcule`, `blocageParRegles`, `blocageRestreint`, `bloqueursImposes`, `bloqueursUtiles`, `candidatsDuControleur`, `candidatsRecherche`, `carteLanceeValide`, `carteVue`, `cartesPermises`, `champDe`, `chercheBlocs`, `choisitChacun`, `choisitCibles`, `cibleDetournee`, `cibleEncoreLegale`, `ciblesDuSort`, `ciblesForge`, `ciblesLegales`, `collecteDeclencheurs`, `collecteRetardes`, `complote`, `compteDuTour`, `compteObjets`, `contexteQuestion`, `contreElement`, `copiesFin`, `couchesHorsChamp`, `couchesStatiques`, `couleursDeLaCible`, `couleursProtection`, `coutAutrePossible`, `coutAutrePossibleB`, `coutAutrePossibleX`, `coutDeGarde`, `declareAttaquants`, `declareBloqueurs`, `declencheurEntreeCoupe`, `declencheursDeLancement`, `declencheursEtat`, `defausseCarte`, `defenseurDe`, `defenseurDeclare`, `defenseurRestreint`, `defenseurVise`, `definisEtendus`, `degageAussi`, `degagement`, `degatsCombat`, `deplace`, `deplaceForge`, `descriptionPile`, `detruitObjet`, `doitEtreBloque`, `donneCadeau`, `dragage`, `ecouteRepond`, `effetsOuverture`, `elementDePileValide`, `elimine`, `emetCibles`, `enTournante`, `encodeChiffre`, `entreesAutres`, `epissures`, `equipe`, `estAMoi`, `etatApres`, `etendEffet`, `executeForge`, `exertsAttaque`, `exhumeesFin`, `exprDesignations`, `filtresMana`, `finCombat`, `finDuTour`, `flashPossible`, `forgeActivations.js (chargement)`, `forgeActivationsB.js (chargement)`, `forgeAlchemie.js (chargement)`, `forgeArtefactsB.js (chargement)`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsD.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeArtefactsF.js (chargement)`, `forgeArtefactsG.js (chargement)`, `forgeArtefactsH.js (chargement)`, `forgeArtefactsI.js (chargement)`, `forgeArtefactsJ.js (chargement)`, `forgeAuras.js (chargement)`, `forgeBatailles.js (chargement)`, `forgeBloqueurs.js (chargement)`, `forgeChoix.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeCopiesAbilite.js (chargement)`, `forgeCopiesC.js (chargement)`, `forgeCoutsC.js (chargement)`, `forgeDeclenche`, `forgeDeclencheurs.js (chargement)`, `forgeDeclencheursB.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeDeclencheursE.js (chargement)`, `forgeDeclencheursF.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeDefiniC.js (chargement)`, `forgeDefinis`, `forgeDegagements.js (chargement)`, `forgeDephasage.js (chargement)`, `forgeDesignes.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsC.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsL.js (chargement)`, `forgeEffetsM.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeEnchantements.js (chargement)`, `forgeEnchantementsB.js (chargement)`, `forgeEnchantementsC.js (chargement)`, `forgeEnchantementsD.js (chargement)`, `forgeEnchantementsE.js (chargement)`, `forgeEnchantementsG.js (chargement)`, `forgeEnchantementsH.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExprD.js (chargement)`, `forgeFiltresC.js (chargement)`, `forgeFiltresD.js (chargement)`, `forgeFiltresE.js (chargement)`, `forgeFouilles.js (chargement)`, `forgeInstants.js (chargement)`, `forgeInstantsB.js (chargement)`, `forgeInstantsC.js (chargement)`, `forgeInstantsD.js (chargement)`, `forgeInstantsE.js (chargement)`, `forgeInstantsF.js (chargement)`, `forgeInstantsG.js (chargement)`, `forgeManaB.js (chargement)`, `forgeManaD.js (chargement)`, `forgeManaRestreintB.js (chargement)`, `forgeMeld.js (chargement)`, `forgeMemoire.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgeMotsClesG.js (chargement)`, `forgePaliers.js (chargement)`, `forgePlaneswalkers.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRedemarrage.js (chargement)`, `forgeRemplacementsB.js (chargement)`, `forgeRemplacementsC.js (chargement)`, `forgeRituels.js (chargement)`, `forgeRituelsB.js (chargement)`, `forgeRituelsE.js (chargement)`, `forgeRituelsF.js (chargement)`, `forgeSeek.js (chargement)`, `forgeStatiquesD.js (chargement)`, `forgeTerrains.js (chargement)`, `forgeTraine.js (chargement)`, `forgeValideJoueur`, `forgeZonesC.js (chargement)`, `fouilleForge`, `gardeAutre`, `hotePart`, `hotePartObjets`, `iaCartes`, `iaCibles`, `iaMulligan`, `iaReponse`, `iaScrute`, `initiativeEnJeu`, `initiativeVolee`, `jeuFacesB.js (chargement)`, `jeuManaFiltres.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuPileExplique.js (chargement)`, `jeuVariantes.js (chargement)`, `joueTerrain`, `joueurAttaque`, `lanceDepuisEffet`, `lancePrepare`, `lanceSort`, `leveDureesObjets`, `libelleAction`, `libelleRef`, `lotDeCopies`, `manaDePileUtile`, `manaReflete`, `marqueurPose`, `meilleureCibleHostile`, `metEnJeu`, `metsHorsPhase`, `miracle`, `modesPayables`, `modifieJet`, `mouvementEvt`, `mulligans`, `nettoyage`, `nomObj`, `noteHistorique`, `notesPriorite`, `objetEvt`, `objetZone`, `objetsZone`, `paieAutre`, `paieAutreB`, `paieAutreX`, `paieEquipage`, `paieMana`, `paieReductions`, `paieTaxesAttaque`, `paireDe`, `paradigmesDebutPrincipale`, `passeOuPresent`, `payeAvantEntree`, `phasesEntrent`, `piocheN`, `prepareDeclencheur`, `presage`, `propObjet`, `questionPourUI`, `rebondsEntretien`, `reductionParCibles`, `reductionPossible`, `refObjetFiltre`, `refPublique`, `remplacementsEnJeu`, `repartitCompteurs`, `repartitionBloqueur`, `resoudre`, `resous`, `restaureClones`, `restreintCibles`, `restreintValeurTotale`, `retiensPartis`, `retourne`, `revelationPour`, `saValide`, `sacrifie`, `sagasFinies`, `scoreEffet`, `scoreLancer`, `scoreTerrain`, `sourceCiblante`, `sourceCtx`, `sourcesHorsChamp`, `sourcesMana`, `stabilise`, `statiquesEnJeu`, `suspend`, `suspensionsEntretien`, `terrainsEnMain`, `typesContemplables`, `utiliteEnMain`, `vaincBataille`, `vue`
 
-### `suit()` — ligne 72
+### `suit()` — ligne 75
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `ciblesForge`, `forgeDefiniC.js (chargement)`, `forgeDefinis`, `forgeEffetsI.js (chargement)`, `forgeEmpreinte.js (chargement)`, `forgeFiltresD.js (chargement)`, `forgeFiltresE.js (chargement)`, `forgeFouilles.js (chargement)`, `forgeMemoire.js (chargement)`, `forgeValideObjet`, `objetEvt`, `oublieObjets`, `parmiDesignes`, `passeOuPresent`, `propObjet`, `resous`, `revelationPour`, `sourceCtx`
 
-### `tableauZone()` — ligne 80
+### `tableauZone()` — ligne 83
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `deplace`, `forgeMeld.js (chargement)`
 
-### `retireDe()` — ligne 86
+### `retireDe()` — ligne 89
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `deplace`, `elimine`, `forgeArtefactsE.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDephasage.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeMeld.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeTerrains.js (chargement)`, `fouilleForge`, `jeuOpsB.js (chargement)`, `lancePrepare`, `metsHorsPhase`, `mulligans`, `paradigmesDebutPrincipale`, `regardeForge`
 
-### `instantane()` — ligne 93
+### `instantane()` — ligne 96
 
 Appelle : `capacitesDe()` *(jeuDurees.js)*, `car()` *(jeuCaracteristiques.js)*
 
 Appelée par : `copieSort`, `deplace`, `equipe`, `forgeEffetsB.js (chargement)`, `forgeEffetsM.js (chargement)`, `forgeEnchantementsC.js (chargement)`, `forgeEnchantementsD.js (chargement)`, `forgeInstantsC.js (chargement)`, `paieAutre`, `sacrifie`
 
-### `deplace()` — ligne 104
+### `deplace()` — ligne 107
 
 Appelle : `creeObjet()` *(jeuEtat.js)*, `destinationRemplacee()` *(forgeRemplacements.js)*, `emet()` *(jeuEtat.js)*, `hotePart()` *(jeuDurees.js)*, `hotePartObjets()` *(forgeDurees.js)*, `instantane()` *(jeuEtat.js)*, `noteEntree()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `retireDe()` *(jeuEtat.js)*, `suiviPart()` *(jeuDurees.js)*, `tableauZone()` *(jeuEtat.js)*
 
 Appelée par : `activeFiltre`, `activeSource`, `appliqueSBA`, `complote`, `contreElement`, `copiesFin`, `defausseCarte`, `deplaceForge`, `detruitObjet`, `dragage`, `elimine`, `encodeChiffre`, `executeForge`, `exhumeesFin`, `finCombat`, `forgeAlchemie.js (chargement)`, `forgeArtefactsJ.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsL.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeInstantsE.js (chargement)`, `forgeMeld.js (chargement)`, `forgeMotsClesB.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRemplacementsD.js (chargement)`, `forgeSeek.js (chargement)`, `forgeTerrains.js (chargement)`, `forgeTraine.js (chargement)`, `hotePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `metEnJeu`, `paieAutre`, `paieAutreB`, `paieAutreX`, `paieReductions`, `payeVie`, `presage`, `regardeForge`, `resoudre`, `sacrifie`, `suspend`, `vaincBataille`
 
-### `noteEntree()` — ligne 161
+### `noteEntree()` — ligne 164
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `creeJetonsForge`, `deplace`, `forgeAlchemie.js (chargement)`, `forgeCopies.js (chargement)`, `forgeInstantsC.js (chargement)`, `jeuOpsB.js (chargement)`
 
-### `emet()` — ligne 166
+### `emet()` — ligne 169
 
 Appelle : `noteHistorique()` *(jeuHistorique.js)*
 
 Appelée par : `activeCapacite`, `ajouteLore`, `contreElement`, `creeJetonsForge`, `declareAttaquants`, `declareBloqueurs`, `defausseCarte`, `degageObjet`, `deplace`, `elimine`, `emetCibles`, `engageObjet`, `equipe`, `etape`, `forgeAlchemie.js (chargement)`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsD.js (chargement)`, `forgeArtefactsG.js (chargement)`, `forgeArtefactsH.js (chargement)`, `forgeArtefactsI.js (chargement)`, `forgeCopies.js (chargement)`, `forgeDes.js (chargement)`, `forgeDurees.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsM.js (chargement)`, `forgeEffetsN.js (chargement)`, `forgeEnchantementsC.js (chargement)`, `forgeEnchantementsD.js (chargement)`, `forgeFouilles.js (chargement)`, `forgeInstantsC.js (chargement)`, `forgeInstantsD.js (chargement)`, `forgeInstantsE.js (chargement)`, `forgeManaD.js (chargement)`, `forgeMarqueursC.js (chargement)`, `forgePaliers.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRituels.js (chargement)`, `forgeTraine.js (chargement)`, `gagneVie`, `infligeUnePart`, `jetonSimple`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `lanceSort`, `modifieJet`, `noteHistorique`, `paieAutre`, `paieEquipage`, `payeVie`, `piocheN`, `poseMarqueurs`, `retourneFace`, `sacrifie`, `transforme`
 
-### `jn()` — ligne 170
+### `jn()` — ligne 173
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `activeCapacite`, `activeManaAutre`, `activeManaFiltre`, `ajoutePhase`, `auraOrpheline`, `basculeReglage`, `cloturePartie`, `complote`, `contreElement`, `copieSort`, `creeJetonsForge`, `declareAttaquants`, `detruitForge`, `detruitObjet`, `donneCadeau`, `dragage`, `elimine`, `encodeChiffre`, `epissures`, `exertsAttaque`, `forgeAlchemie.js (chargement)`, `forgeArtefactsC.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeArtefactsH.js (chargement)`, `forgeArtefactsI.js (chargement)`, `forgeArtefactsJ.js (chargement)`, `forgeBloqueurs.js (chargement)`, `forgeControle.js (chargement)`, `forgeCopies.js (chargement)`, `forgeCopiesAbilite.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeDes.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsL.js (chargement)`, `forgeEnchantements.js (chargement)`, `forgeEnchantementsC.js (chargement)`, `forgeEnchantementsF.js (chargement)`, `forgeEnchantementsH.js (chargement)`, `forgeEntrees.js (chargement)`, `forgeHideaway.js (chargement)`, `forgeInstantsC.js (chargement)`, `forgeMarqueursC.js (chargement)`, `forgeMeld.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePaliers.js (chargement)`, `forgePlaneswalkers.js (chargement)`, `forgePlaneswalkersC.js (chargement)`, `forgeRadiation.js (chargement)`, `forgeRedemarrage.js (chargement)`, `forgeRituels.js (chargement)`, `forgeRituelsC.js (chargement)`, `forgeRituelsD.js (chargement)`, `forgeRituelsE.js (chargement)`, `forgeRituelsF.js (chargement)`, `forgeTerrains.js (chargement)`, `infligeUnePart`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `joueTerrain`, `jourNuitDebut`, `lanceSort`, `lotDeCopies`, `miracle`, `modifieJet`, `mulligans`, `payeVie`, `piocheRemplacee`, `prendInitiative`, `prepareDeclencheur`, `presage`, `resoudre`, `retourneFace`, `suivantNonSaute`, `suspend`, `tour`, `tourEnPlusSaute`, `transforme`, `vaincBataille`, `vitesseMonte`
 
-### `nomObj()` — ligne 172
+### `nomObj()` — ligne 175
 
 Appelle : `obj()` *(jeuEtat.js)*
 
 Appelée par : `declareAttaquants`, `forgeArtefactsB.js (chargement)`, `forgeRituels.js (chargement)`, `joueTerrain`
 
-### `vivants()` — ligne 177
+### `vivants()` — ligne 180
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `adversaires`, `compteJoueurs`, `defenseurLePlusRiche`, `elimine`, `forgeArtefactsB.js (chargement)`, `forgeArtefactsI.js (chargement)`, `forgeChoix.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDeclencheursD.js (chargement)`, `forgeDefiniC.js (chargement)`, `forgeDefinis`, `forgeEffetsB.js (chargement)`, `forgeEnchantementsE.js (chargement)`, `forgeFiltresE.js (chargement)`, `forgeMemoire.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeRituels.js (chargement)`, `forgeRituelsB.js (chargement)`, `forgeRituelsD.js (chargement)`, `groupeJoueurs`, `joueursAPartirDe`, `priorite`
 
-### `suivantVivant()` — ligne 180
+### `suivantVivant()` — ligne 183
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `iaReponse`, `priorite`, `suivantNonSaute`
 
-### `ordreApnap()` — ligne 189
+### `ordreApnap()` — ligne 192
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `declareBloqueurs`, `effetsOuverture`, `mulligans`, `stabilise`
 
-### `adversaires()` — ligne 198
+### `adversaires()` — ligne 201
 
 Appelle : `vivants()` *(jeuEtat.js)*
 
 Appelée par : `adversaireChoisisseur`, `attaqueParRegles`, `compteDuTour`, `compteJoueurs`, `cumulEffet`, `declareAttaquants`, `donneCadeau`, `entreAttaquant`, `evalue`, `forgeChoix.js (chargement)`, `forgeChoixMultiples.js (chargement)`, `forgeDeclencheursC.js (chargement)`, `forgeDefinis`, `forgeEffetsG.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExprD.js (chargement)`, `forgeExpression`, `forgeInstantsC.js (chargement)`, `forgeMotsClesC.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesG.js (chargement)`, `forgePlaneswalkers.js (chargement)`, `forgeRituelsE.js (chargement)`, `groupeJoueurs`, `preparationRiposte`, `prowlPossible`, `recherchesAdversaires`, `variantesEtendues`, `variantesMotsClesE`
 
-### `champDe()` — ligne 201
+### `champDe()` — ligne 204
 
 Appelle : `obj()` *(jeuEtat.js)*
 
 Appelée par : `aProprieteJoueur`, `actionsLegales`, `actionsPossibles`, `attaqueParRegles`, `baseEval`, `benediction`, `bloqueursUtiles`, `compteDuTour`, `convocables`, `couleursParmi`, `coutAutrePossible`, `coutAutrePossibleB`, `coutAutrePossibleX`, `coutSort`, `declareAttaquants`, `declareBloqueurs`, `devotion`, `encodeChiffre`, `equipiers`, `exprDesignations`, `forceDeFrappe`, `forcesAuLancement`, `forgeAlchemie.js (chargement)`, `forgeArtefactsB.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeDefiniC.js (chargement)`, `forgeEffetsA.js (chargement)`, `forgeEffetsB.js (chargement)`, `forgeEffetsF.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsM.js (chargement)`, `forgeEnchantements.js (chargement)`, `forgeExprC.js (chargement)`, `forgeExpression`, `forgeFiltresD.js (chargement)`, `forgeInstantsC.js (chargement)`, `forgeInstantsE.js (chargement)`, `forgeMarqueursC.js (chargement)`, `forgeMeld.js (chargement)`, `forgeMotsClesD.js (chargement)`, `forgeMotsClesE.js (chargement)`, `forgeMotsClesF.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgePlaneswalkersC.js (chargement)`, `forgeRituels.js (chargement)`, `forgeTerrains.js (chargement)`, `iaCartes`, `iaReponse`, `iaScrute`, `impactSort`, `jeuOpsA.js (chargement)`, `jeuOpsB.js (chargement)`, `loreDebutPrincipale`, `marqueursRetirables`, `menace`, `metEnJeu`, `notePrincipale`, `paieAutre`, `paieAutreB`, `paieAutreX`, `payeAvantEntree`, `peutBloquer`, `preparationRiposte`, `proprieteDefenseur`, `proprieteJoueurEtendue`, `typesContemplables`, `utiliteEnMain`, `variantesMotsClesE`
 
-### `piocheN()` — ligne 205
+### `piocheN()` — ligne 208
 
 Appelle : `emet()` *(jeuEtat.js)*, `obj()` *(jeuEtat.js)*, `piocheInterdite()` *(forgeStatiquesC.js)*
 
 Appelée par : `mulligans`, `pioche`
 
-### `question()` — ligne 231
+### `question()` — ligne 234
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `activeCapacite`, `choisitCartes`, `choisitCibles`, `choisitManaPaye`, `choisitUn`, `choisitXAutre`, `choisitXAvant`, `cumulAutre`, `cumulEffet`, `declareAttaquants`, `declareBloqueurs`, `effetsEntree`, `effetsOuverture`, `entreesAutres`, `executeForge`, `exertsAttaque`, `forgeArtefactsB.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeArtefactsJ.js (chargement)`, `forgeChoisisseur.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeControle.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsM.js (chargement)`, `forgeEffetsN.js (chargement)`, `forgeInstantsD.js (chargement)`, `forgeInstantsF.js (chargement)`, `forgePlaneswalkers.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeRituelsB.js (chargement)`, `forgeRituelsD.js (chargement)`, `forgeRituelsE.js (chargement)`, `forgeTraine.js (chargement)`, `forgeZonesC.js (chargement)`, `fouilleForge`, `jeuOpsA.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `metEnJeu`, `modifieJet`, `mulligans`, `paieTaxesAttaque`, `paieUnlessForge`, `paradigmesDebutPrincipale`, `piocheRemplacee`, `prepareEffets`, `priorite`, `proposePaiement`, `remplacementsOptionnels`
+Appelée par : `activeCapacite`, `choisitCartes`, `choisitCibles`, `choisitManaPaye`, `choisitUn`, `choisitXAutre`, `choisitXAvant`, `cumulAutre`, `cumulEffet`, `declareAttaquants`, `declareBloqueurs`, `degatsCombat`, `effetsEntree`, `effetsOuverture`, `entreesAutres`, `executeForge`, `exertsAttaque`, `forgeArtefactsB.js (chargement)`, `forgeArtefactsE.js (chargement)`, `forgeArtefactsJ.js (chargement)`, `forgeChoisisseur.js (chargement)`, `forgeChoixC.js (chargement)`, `forgeControle.js (chargement)`, `forgeDefausseDessus.js (chargement)`, `forgeEffetsE.js (chargement)`, `forgeEffetsG.js (chargement)`, `forgeEffetsH.js (chargement)`, `forgeEffetsI.js (chargement)`, `forgeEffetsM.js (chargement)`, `forgeEffetsN.js (chargement)`, `forgeInstantsD.js (chargement)`, `forgeInstantsF.js (chargement)`, `forgePlaneswalkers.js (chargement)`, `forgePlaneswalkersB.js (chargement)`, `forgeRituelsB.js (chargement)`, `forgeRituelsD.js (chargement)`, `forgeRituelsE.js (chargement)`, `forgeTraine.js (chargement)`, `forgeZonesC.js (chargement)`, `fouilleForge`, `jeuOpsA.js (chargement)`, `jeuVariantes.js (chargement)`, `lanceSort`, `metEnJeu`, `modifieJet`, `mulligans`, `paieTaxesAttaque`, `paieUnlessForge`, `paradigmesDebutPrincipale`, `piocheRemplacee`, `prepareEffets`, `priorite`, `proposePaiement`, `remplacementsOptionnels`
 
 ## js/jeuGestes.js
 
@@ -3057,11 +3343,11 @@ Appelée par : `degatsCombat`
 
 ### `degatsCombat()` — ligne 196
 
-Appelle : `aMot()` *(jeuCaracteristiques.js)*, `commeNonBloque()` *(forgeInterdits.js)*, `forceDeCombat()` *(jeuCombat.js)*, `frappe()` *(jeuCombat.js)*, `infligeDegats()` *(jeuOpsA.js)*, `obj()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `repartition()` *(jeuCombat.js)*, `repartitionBloqueur()` *(forgeBlocMultiple.js)*
+Appelle : `aMot()` *(jeuCaracteristiques.js)*, `commeNonBloque()` *(forgeInterdits.js)*, `forceDeCombat()` *(jeuCombat.js)*, `frappe()` *(jeuCombat.js)*, `infligeDegats()` *(jeuOpsA.js)*, `obj()` *(jeuEtat.js)*, `priorite()` *(jeuPile.js)*, `question()` *(jeuEtat.js)*, `repartition()` *(jeuCombat.js)*, `repartitionBloqueur()` *(forgeBlocMultiple.js)*
 
 Appelée par : `etape`
 
-### `finCombat()` — ligne 225
+### `finCombat()` — ligne 229
 
 Appelle : `deplace()` *(jeuEtat.js)*, `leveDureesObjets()` *(forgeDurees.js)*, `obj()` *(jeuEtat.js)*
 
@@ -3161,7 +3447,7 @@ Appelée par : `annuleTable`, `boucleTable`, `joueJusquauBout`, `joueLot`, `nouv
 
 Appelle : `avance()` *(jeuPilote.js)*, `valideReponse()` *(jeuPilote.js)*
 
-Appelée par : `annuleTable`, `boucleTable`, `montrePile`, `recoitReponse`, `reprendTable`
+Appelée par : `annuleTable`, `boucleTable`, `montreCombat`, `montrePile`, `recoitReponse`, `reprendTable`
 
 ### `joueJusquauBout()` — ligne 94
 
@@ -3189,25 +3475,25 @@ Appelle : `estDefinition()` *(jeuCopie.js)*, `marqueDefinition()` *(jeuCopie.js)
 
 Appelée par : `essaieCoup`
 
-### `pointDeReprise()` — ligne 71
+### `pointDeReprise()` — ligne 72
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `agentRecherche`, `essaieCoup`
 
-### `reprise()` — ligne 79
+### `reprise()` — ligne 80
 
 Appelle : `cloturePartie()` *(jeuPartie.js)*, `etape()` *(jeuTour.js)*, `priorite()` *(jeuPile.js)*, `suiteDesTours()` *(jeuPartie.js)*, `suiteDuTour()` *(jeuTour.js)*, `videReserves()` *(jeuMana.js)*
 
 Appelée par : `essaieCoup`
 
-### `memeQuestion()` — ligne 90
+### `memeQuestion()` — ligne 91
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `essaieCoup`
 
-### `essaieCoup()` — ligne 99
+### `essaieCoup()` — ligne 100
 
 Appelle : `copiePartie()` *(jeuCopie.js)*, `memeQuestion()` *(jeuCopie.js)*, `pointDeReprise()` *(jeuCopie.js)*, `reprise()` *(jeuCopie.js)*, `valideReponse()` *(jeuPilote.js)*
 
@@ -7223,13 +7509,13 @@ Appelée par : `compacte`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `carteDuCatalogue`, `completeDepuisRec`, `ficheDeRec`, `getCardOrAnalyzedRec`
+Appelée par : `completeDepuisRec`, `ficheDeRec`, `getCardOrAnalyzedRec`, `habilleDepuisRec`
 
 ### `appliqueChampsJeu()` — ligne 64
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `applyScryfall`, `carteDuCatalogue`, `completeDepuisRec`, `getCardOrAnalyzedRec`, `jeuRestore`
+Appelée par : `applyScryfall`, `completeDepuisRec`, `completeInconnueDepuisFiche`, `getCardOrAnalyzedRec`, `habilleDepuisRec`, `jeuRestore`
 
 ### `jeuSnap()` — ligne 76
 
@@ -7299,7 +7585,7 @@ Appelée par : `queueScryfall`
 
 Appelle : `applyScryfall()` *(scryfallApplique.js)*, `cibleImpression()` *(scryfall.js)*, `find()` *(cartes.js)*, `frontFace()` *(cartes.js)*, `identScryfall()` *(scryfall.js)*, `indexImpressions()` *(scryfall.js)*, `loose()` *(cartes.js)*, `norm()` *(cartes.js)*, `renderAll()` *(rendu.js)*, `scryTarget()` *(scryfallApplique.js)*, `toast()` *(outils.js)*
 
-Appelée par : `enrichAllUnknown`, `openImport`
+Appelée par : `completeInconnuesDuDeck`, `enrichAllUnknown`, `openImport`
 
 ## js/recherches.js
 
@@ -7359,7 +7645,7 @@ Appelée par : `gestesGraphe`
 
 ### `enrichAllUnknown()` — ligne 200
 
-Appelle : `completeUnknown()` *(scryfall.js)*, `toast()` *(outils.js)*
+Appelle : `completeInconnuesDepuisArchive()` *(inconnues.js)*, `completeUnknown()` *(scryfall.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesDonnees`
 
@@ -7425,7 +7711,7 @@ Appelée par : `brancherRestauration`, `brancherSauvegarde`, `gestesDonnees`, `g
 
 Appelle : → `save()` *(stockage.js)*
 
-Appelée par : `ajouteSiegeIA`, `appliqueArrets`, `appliqueCatalogueAuxCartes`, `appliqueComportement`, `appliquerAffichage`, `basculeEffet`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `choisitDisposition`, `choisitPaiementMana`, `effaceComportement`, `entete.js (chargement)`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesTable`, `reglageInvite`, `reglageSalon`, `reglageSimulation`, `renderAll`, `retireSiege`, `runScryQueue`
+Appelée par : `ajouteSiegeIA`, `appliqueArrets`, `appliqueCatalogueAuxCartes`, `appliqueComportement`, `appliquerAffichage`, `basculeEffet`, `basculeTheme`, `brancherCatalogue`, `chercheTexte`, `chercheVerso`, `choisirVersion`, `choisitDisposition`, `choisitPaiementMana`, `completeInconnuesDepuisArchive`, `completeInconnuesDepuisFiches`, `effaceComportement`, `entete.js (chargement)`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesTable`, `reglageInvite`, `reglageSalon`, `reglageSimulation`, `renderAll`, `retireSiege`, `runScryQueue`
 
 ### `restore()` — ligne 162
 
@@ -8179,79 +8465,99 @@ Appelée par : `appliqueCatalogueAuxCartes`, `carteDuCatalogue`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `appliqueCatalogueAuxCartes`, `carteDuCatalogue`, `completeDepuisRec`
+Appelée par : `appliqueCatalogueAuxCartes`, `completeDepuisRec`, `habilleDepuisRec`
 
 ### `noterSetsArchive()` — ligne 50
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `appliqueCatalogueAuxCartes`, `completeDepuisRec`
+Appelée par : `appliqueCatalogueAuxCartes`, `completeDepuisRec`, `completeInconnueDepuisRec`
 
 ### `carteDuCatalogue()` — ligne 55
 
-Appelle : `appliqueChampsJeu()` *(champsJeu.js)*, `buildCard()` *(cartes.js)*, `champsJeuRec()` *(champsJeu.js)*, `completeDepuisRec()` *(candidats.js)*, `find()` *(cartes.js)*, `noterLegalArchive()` *(candidats.js)*, `ordonneMana()` *(mana.js)*, `reanalyser()` *(categories.js)*, `registerCard()` *(cartes.js)*
+Appelle : `buildCard()` *(cartes.js)*, `completeDepuisRec()` *(candidats.js)*, `completeInconnueDepuisRec()` *(inconnues.js)*, `find()` *(cartes.js)*, `habilleDepuisRec()` *(inconnues.js)*, `registerCard()` *(cartes.js)*
 
 Appelée par : `candidatsCatalogue`, `prechauffeCandidats`
 
-### `invaliderCandidats()` — ligne 85
+### `invaliderCandidats()` — ligne 71
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `activerDeck`, `app.js (chargement)`, `apresReglage`, `brancherCatalogue`, `chargerCatalogueComplet`, `gestesDeck`, `gestesDonnees`, `gestesGraphe`, `gestesVue`, `lireCatalogueFichier`, `saisieBudget`, `supprimerDeck`, `verseBrouillon`
+Appelée par : `activerDeck`, `app.js (chargement)`, `apresReglage`, `brancherCatalogue`, `chargerCatalogueComplet`, `completeInconnuesDepuisArchive`, `completeInconnuesDepuisFiches`, `gestesDeck`, `gestesDonnees`, `gestesGraphe`, `gestesVue`, `lireCatalogueFichier`, `relisGraphe`, `saisieBudget`, `supprimerDeck`, `verseBrouillon`
 
-### `signatureCandidats()` — ligne 89
+### `signatureCandidats()` — ligne 75
 
 Appelle : `noeudsActifs()` *(catalogueEtat.js)*, `restrictionsDuDeck()` *(restrictions.js)*
 
 Appelée par : `candidatsCatalogue`, `prechauffeCandidats`, `recalculLong`, `signatureSuggestions`
 
-### `appliqueCatalogueAuxCartes()` — ligne 100
+### `appliqueCatalogueAuxCartes()` — ligne 86
 
-Appelle : `annexeListe()` *(annexes.js)*, `completeDepuisRec()` *(candidats.js)*, `find()` *(cartes.js)*, `norm()` *(cartes.js)*, `noterLegalArchive()` *(candidats.js)*, `noterSetsArchive()` *(candidats.js)*, `scheduleSave()` *(stockage.js)*
+Appelle : `annexeListe()` *(annexes.js)*, `completeDepuisRec()` *(candidats.js)*, `completeInconnuesDepuisArchive()` *(inconnues.js)*, `find()` *(cartes.js)*, `norm()` *(cartes.js)*, `noterLegalArchive()` *(candidats.js)*, `noterSetsArchive()` *(candidats.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `chargerCatalogueComplet`, `lireCatalogueFichier`
 
-### `selectionCandidats()` — ligne 130
+### `selectionCandidats()` — ligne 117
 
 Appelle : `colorOK()` *(collection.js)*, `filtreOKRec()` *(retenue.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `noeudsActifs()` *(catalogueEtat.js)*, `prixBrutMax()` *(marche.js)*, `recToucheNoeuds()` *(catalogueEtat.js)*, `restrictionOKRec()` *(restrictions.js)*
 
 Appelée par : `candidatsCatalogue`, `prechauffeCandidats`
 
-### `candidatsCatalogue()` — ligne 173
+### `candidatsCatalogue()` — ligne 160
 
 Appelle : `selectionCandidats()` *(candidats.js)*, `signatureCandidats()` *(candidats.js)*, → `carteDuCatalogue()` *(candidats.js)*
 
 Appelée par : `statsCandidats`, `vivierSuggestions`
 
-### `prechauffeCandidats()` — ligne 186
+### `prechauffeCandidats()` — ligne 173
 
 Appelle : `carteDuCatalogue()` *(candidats.js)*, `selectionCandidats()` *(candidats.js)*, `signatureCandidats()` *(candidats.js)*
 
 Appelée par : `filtrerAvecProgression`, `recalculerAvecProgression`
 
-### `statsCandidats()` — ligne 209
+### `statsCandidats()` — ligne 196
 
 Appelle : `candidatsCatalogue()` *(candidats.js)*
 
 Appelée par : `ligneCatalogue`
 
-### `requeteCatalogue()` — ligne 215
+### `requeteCatalogue()` — ligne 202
 
 Appelle : `find()` *(cartes.js)*, `fmt()` *(outils.js)*
 
 Appelée par : `chargerCatalogue`, `signatureCatalogue`
 
-### `signatureCatalogue()` — ligne 224
+### `signatureCatalogue()` — ligne 211
 
 Appelle : `requeteCatalogue()` *(candidats.js)*
 
 Appelée par : `chargerCatalogue`
 
-### `chargerCatalogue()` — ligne 226
+### `chargerCatalogue()` — ligne 213
 
 Appelle : `applyScryfall()` *(scryfallApplique.js)*, `find()` *(cartes.js)*, `renderAll()` *(rendu.js)*, `renderSuggestions()` *(suggestions.js)*, `requeteCatalogue()` *(candidats.js)*, `signatureCatalogue()` *(candidats.js)*
 
 Appelée par : `gestesDonnees`
+
+## js/inconnues.js
+
+### `habilleDepuisRec()` — ligne 16
+
+Appelle : `appliqueChampsJeu()` *(champsJeu.js)*, `champsJeuRec()` *(champsJeu.js)*, `noterLegalArchive()` *(candidats.js)*, `ordonneMana()` *(mana.js)*, `reanalyser()` *(categories.js)*
+
+Appelée par : `carteDuCatalogue`, `completeInconnueDepuisRec`
+
+### `completeInconnueDepuisRec()` — ligne 44
+
+Appelle : `buildCard()` *(cartes.js)*, `habilleDepuisRec()` *(inconnues.js)*, `noterSetsArchive()` *(candidats.js)*
+
+Appelée par : `carteDuCatalogue`, `completeInconnuesDepuisArchive`
+
+### `completeInconnuesDepuisArchive()` — ligne 57
+
+Appelle : `completeInconnueDepuisRec()` *(inconnues.js)*, `frontFace()` *(cartes.js)*, `invaliderCandidats()` *(candidats.js)*, `loose()` *(cartes.js)*, `norm()` *(cartes.js)*, `scheduleSave()` *(stockage.js)*
+
+Appelée par : `appliqueCatalogueAuxCartes`, `completeInconnuesDuDeck`, `enrichAllUnknown`, `openImport`
 
 ## js/graphe.js
 
@@ -8811,7 +9117,7 @@ Appelée par : `openImport`
 
 ### `openImport()` — ligne 93
 
-Appelle : `ajouteACollection()` *(collectionDates.js)*, `annexeListe()` *(annexes.js)*, `buildCard()` *(cartes.js)*, `closeDialog()` *(dialogue.js)*, `completeUnknown()` *(scryfall.js)*, `deckAdd()` *(deck.js)*, `deckEntries()` *(deck.js)*, `eur()` *(outils.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `noterImpression()` *(impressions.js)*, `openDialog()` *(dialogue.js)*, `parseMtgoList()` *(fenImport.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `registerCard()` *(cartes.js)*, `spent()` *(achats.js)*, `toast()` *(outils.js)*
+Appelle : `ajouteACollection()` *(collectionDates.js)*, `annexeListe()` *(annexes.js)*, `buildCard()` *(cartes.js)*, `closeDialog()` *(dialogue.js)*, `completeInconnuesDepuisArchive()` *(inconnues.js)*, `completeUnknown()` *(scryfall.js)*, `deckAdd()` *(deck.js)*, `deckEntries()` *(deck.js)*, `eur()` *(outils.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `noterImpression()` *(impressions.js)*, `openDialog()` *(dialogue.js)*, `parseMtgoList()` *(fenImport.js)*, `peutCommander()` *(cartes.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `registerCard()` *(cartes.js)*, `spent()` *(achats.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesDonnees`
 
@@ -8921,7 +9227,7 @@ Appelée par : `renderB`, `renderE`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `annexeDe`, `annexeEntries`, `annexeSize`, `appliqueCatalogueAuxCartes`, `deckAdd`, `deplacerCarte`, `ficheHTML`, `gestesDonnees`, `majPrix`, `mergeInto`, `openImport`, `renameCard`, `retirerAnnexe`, `tagAnnexe`, `versAnnexe`, `viderAnnexe`
+Appelée par : `annexeDe`, `annexeEntries`, `annexeSize`, `appliqueCatalogueAuxCartes`, `deckAdd`, `deplacerCarte`, `ficheHTML`, `gestesDonnees`, `inconnuesDuDeck`, `majPrix`, `mergeInto`, `openImport`, `renameCard`, `retirerAnnexe`, `tagAnnexe`, `versAnnexe`, `viderAnnexe`
 
 ### `annexeEntries()` — ligne 16
 
@@ -9005,7 +9311,7 @@ Appelée par : `addToDeck`, `cardRow`, `cardTile`, `deckAdd`, `ficheHTML`, `open
 
 ### `addToDeck()` — ligne 45
 
-Appelle : `annexeDe()` *(annexes.js)*, `availableFor()` *(deck.js)*, `cmEstimate()` *(marche.js)*, `deplacerCarte()` *(annexes.js)*, `eur()` *(outils.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `toast()` *(outils.js)*
+Appelle : `annexeDe()` *(annexes.js)*, `availableFor()` *(deck.js)*, `cmEstimate()` *(marche.js)*, `deplacerCarte()` *(annexes.js)*, `eur()` *(outils.js)*, `find()` *(cartes.js)*, `fmt()` *(outils.js)*, `peutCommander()` *(cartes.js)*, `recalculerAvecProgression()` *(recalcul.js)*, `toast()` *(outils.js)*
 
 Appelée par : `gestesDeck`, `pasRecherche`
 
@@ -9141,9 +9447,41 @@ Appelée par : `renderE`
 
 ### `renderE()` — ligne 146
 
-Appelle : `aAcheter()` *(achats.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `blocMana()` *(mana.js)*, `boutonCibles()` *(legalite.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `repartitionCmc()` *(stats.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(achats.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
+Appelle : `aAcheter()` *(achats.js)*, `annexeSize()` *(annexes.js)*, `blocAchats()` *(deckSection.js)*, `blocInconnues()` *(deckInconnues.js)*, `blocMana()` *(mana.js)*, `boutonCibles()` *(legalite.js)*, `cardRow()` *(tuiles.js)*, `cardTile()` *(tuiles.js)*, `carteFiltree()` *(filtres.js)*, `champRecherche()` *(rechercheSection.js)*, `completeInconnuesDuDeck()` *(deckInconnues.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `deckSize()` *(deck.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `evalueDeck()` *(deckSection.js)*, `fmt()` *(outils.js)*, `gameChangersConnus()` *(retenue.js)*, `gameChangersDuDeck()` *(legalite.js)*, `gauge()` *(legalite.js)*, `groupeCartes()` *(groupes.js)*, `histogram()` *(stats.js)*, `legality()` *(legalite.js)*, `ligneGameChangers()` *(legalite.js)*, `noteMultiple()` *(barreGroupes.js)*, `ouvreGrille()` *(barreGroupes.js)*, `partieDeck()` *(deckSection.js)*, `queueScryfall()` *(scryfall.js)*, `rendGroupes()` *(barreGroupes.js)*, `repartitionCmc()` *(stats.js)*, `restaureRecherche()` *(rechercheSection.js)*, `spent()` *(achats.js)*, `targets()` *(legalite.js)*, `vueDe()` *(barreGroupes.js)*, `zoneCommandant()` *(deckSection.js)*, → `annexeEntries()` *(annexes.js)*, → `blocAnnexe()` *(deckSection.js)*
 
 Appelée par : `app.js (chargement)`, `appliquerAffichage`, `renderAll`, `runScryQueue`
+
+## js/deckInconnues.js
+
+### `inconnuesDuDeck()` — ligne 17
+
+Appelle : `annexeListe()` *(annexes.js)*, `find()` *(cartes.js)*
+
+Appelée par : `blocInconnues`, `completeInconnuesDepuisFiches`, `completeInconnuesDuDeck`
+
+### `completeInconnueDepuisFiche()` — ligne 29
+
+Appelle : `appliqueChampsJeu()` *(champsJeu.js)*, `buildCard()` *(cartes.js)*, `ordonneMana()` *(mana.js)*, `reanalyser()` *(categories.js)*
+
+Appelée par : `completeInconnuesDepuisFiches`
+
+### `completeInconnuesDepuisFiches()` — ligne 45
+
+Appelle : `completeInconnueDepuisFiche()` *(deckInconnues.js)*, `frontFace()` *(cartes.js)*, `inconnuesDuDeck()` *(deckInconnues.js)*, `invaliderCandidats()` *(candidats.js)*, `norm()` *(cartes.js)*, `scheduleSave()` *(stockage.js)*
+
+Appelée par : `completeInconnuesDuDeck`
+
+### `completeInconnuesDuDeck()` — ligne 63
+
+Appelle : `catalogueAbsent()` *(catalogueEtat.js)*, `chargeSimCartes()` *(simCartes.js)*, `completeInconnuesDepuisArchive()` *(inconnues.js)*, `completeInconnuesDepuisFiches()` *(deckInconnues.js)*, `completeUnknown()` *(scryfall.js)*, `inconnuesDuDeck()` *(deckInconnues.js)*, `renderAll()` *(rendu.js)*
+
+Appelée par : `renderE`
+
+### `blocInconnues()` — ligne 81
+
+Appelle : `inconnuesDuDeck()` *(deckInconnues.js)*
+
+Appelée par : `renderE`
 
 ## js/ficheVisuel.js
 
@@ -9179,9 +9517,15 @@ Appelée par : `ficheHTML`
 
 ## js/fiche.js
 
-### `ficheHTML()` — ligne 9
+### `ligneLecture()` — ligne 12
 
-Appelle : `aDeuxFaces()` *(versions.js)*, `annexeDe()` *(annexes.js)*, `annexeListe()` *(annexes.js)*, `archetypesCarte()` *(archetypesSets.js)*, `autreFace()` *(versions.js)*, `availableFor()` *(deck.js)*, `bestOffer()` *(marche.js)*, `blocVersions()` *(ficheVisuel.js)*, `cartesDuDeck()` *(deck.js)*, `classeLiens()` *(liens.js)*, `cleImpression()` *(impressions.js)*, `cleVersion()` *(impressions.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `detailDates()` *(collectionDates.js)*, `edhrecAllFor()` *(edhrec.js)*, `esc()` *(outils.js)*, `estGameChanger()` *(retenue.js)*, `eur()` *(outils.js)*, `faceVisible()` *(versions.js)*, `ficheTexteHTML()` *(ficheVisuel.js)*, `filtered()` *(collection.js)*, `libelleArchetype()` *(archetypesSets.js)*, `libelleFamillesLarges()` *(liens.js)*, `libelleImpression()` *(impressions.js)*, `libelleQual()` *(effets.js)*, `listeVersions()` *(versions.js)*, `norm()` *(cartes.js)*, `partnersFor()` *(synergies.js)*, `refCarte()` *(outils.js)*, `resumeArchetype()` *(archetypesSets.js)*, `targets()` *(legalite.js)*, `versionCourante()` *(versions.js)*, `visuelAttenteHTML()` *(ficheVisuel.js)*, `visuelEnRecherche()` *(versions.js)*, `visuelVersion()` *(versions.js)*, ⌘ `ficheImageKO()` *(ficheVisuel.js)*
+Appelle : `ecartLectures()` *(lectureGraphe.js)*, `esc()` *(outils.js)*, `lectureForgeActive()` *(lectureGraphe.js)*
+
+Appelée par : `ficheHTML`
+
+### `ficheHTML()` — ligne 26
+
+Appelle : `aDeuxFaces()` *(versions.js)*, `annexeDe()` *(annexes.js)*, `annexeListe()` *(annexes.js)*, `archetypesCarte()` *(archetypesSets.js)*, `autreFace()` *(versions.js)*, `availableFor()` *(deck.js)*, `bestOffer()` *(marche.js)*, `blocVersions()` *(ficheVisuel.js)*, `cartesDuDeck()` *(deck.js)*, `classeLiens()` *(liens.js)*, `cleImpression()` *(impressions.js)*, `cleVersion()` *(impressions.js)*, `deckCounts()` *(legalite.js)*, `deckEntries()` *(deck.js)*, `detailDates()` *(collectionDates.js)*, `edhrecAllFor()` *(edhrec.js)*, `esc()` *(outils.js)*, `estGameChanger()` *(retenue.js)*, `eur()` *(outils.js)*, `faceVisible()` *(versions.js)*, `ficheTexteHTML()` *(ficheVisuel.js)*, `filtered()` *(collection.js)*, `libelleArchetype()` *(archetypesSets.js)*, `libelleFamillesLarges()` *(liens.js)*, `libelleImpression()` *(impressions.js)*, `libelleQual()` *(effets.js)*, `ligneLecture()` *(fiche.js)*, `listeVersions()` *(versions.js)*, `norm()` *(cartes.js)*, `partnersFor()` *(synergies.js)*, `refCarte()` *(outils.js)*, `resumeArchetype()` *(archetypesSets.js)*, `targets()` *(legalite.js)*, `versionCourante()` *(versions.js)*, `visuelAttenteHTML()` *(ficheVisuel.js)*, `visuelEnRecherche()` *(versions.js)*, `visuelVersion()` *(versions.js)*, ⌘ `ficheImageKO()` *(ficheVisuel.js)*
 
 Appelée par : `openCardModal`
 
@@ -9259,7 +9603,7 @@ Appelée par : `ficheParNom`
 
 Appelle : `idbLire()` *(idb.js)*, `norm()` *(cartes.js)*
 
-Appelée par : `commenceTable`, `joueLot`, `pret`, `renderK`
+Appelée par : `commenceTable`, `completeInconnuesDuDeck`, `joueLot`, `pret`, `renderK`
 
 ### `rangeSimCartes()` — ligne 105
 
@@ -9725,75 +10069,125 @@ Appelée par : `gestesForge`
 
 Appelle : `norm()` *(cartes.js)*
 
-Appelée par : `avecForge`, `defNommee`, `manquesDecks`
+Appelée par : `avecForge`, `defNommee`, `lectureForgeDe`, `manquesDecks`
 
 ## js/forgeVue.js
 
-### `forgeChange()` — ligne 23
+### `forgeChange()` — ligne 24
 
-Appelle : `majForgeUI()` *(forgeVue.js)*
+Appelle : `majForgeUI()` *(forgeVue.js)*, `relisGraphe()` *(lectureGraphe.js)*
 
 Appelée par : `demarreForge`, `oublieForge`, `telechargeForge`
 
-### `etatForgeTexte()` — ligne 29
+### `etatForgeTexte()` — ligne 31
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `corpsForge`, `manquesHTML`
 
-### `corpsForge()` — ligne 43
+### `corpsForge()` — ligne 45
 
-Appelle : `esc()` *(outils.js)*, `etatForgeTexte()` *(forgeVue.js)*
+Appelle : `esc()` *(outils.js)*, `etatForgeTexte()` *(forgeVue.js)*, `etatLectureGraphe()` *(lectureGraphe.js)*
 
 Appelée par : `corpsParametres`, `majForgeUI`
 
-### `majForgeUI()` — ligne 64
+### `majForgeUI()` — ligne 69
 
 Appelle : `corpsForge()` *(forgeVue.js)*, `manquesHTML()` *(forgeVue.js)*, `releveAncre()` *(ancre.js)*, `restaureAncre()` *(ancre.js)*
 
-Appelée par : `forgeChange`, `mesureBaseForge`, `telechargeForge`
+Appelée par : `forgeChange`, `mesureBaseForge`, `reglageSimulation`, `telechargeForge`
 
-### `poidsPrioritaires()` — ligne 77
+### `poidsPrioritaires()` — ligne 82
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `manquesDecks`
 
-### `manquesDecks()` — ligne 86
+### `manquesDecks()` — ligne 91
 
 Appelle : `couvertureForge()` *(forgeCouverture.js)*, `lisScriptForge()` *(forgeScript.js)*, `manquesForge()` *(forgeCouverture.js)*, `poidsPrioritaires()` *(forgeVue.js)*, `scriptForgeDe()` *(forgeDepot.js)*, → `signatureDeck()` *(simSources.js)*
 
 Appelée par : `manquesHTML`
 
-### `mesureBaseForge()` — ligne 107
+### `mesureBaseForge()` — ligne 112
 
 Appelle : `attendre()` *(tableHote.js)*, `couvertureForge()` *(forgeCouverture.js)*, `lisScriptForge()` *(forgeScript.js)*, `majForgeUI()` *(forgeVue.js)*, `manquesForge()` *(forgeCouverture.js)*
 
 Appelée par : `gestesForge`
 
-### `libelleElement()` — ligne 126
+### `libelleElement()` — ligne 131
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `listeManques`
 
-### `listeManques()` — ligne 131
+### `listeManques()` — ligne 136
 
 Appelle : `esc()` *(outils.js)*, `libelleElement()` *(forgeVue.js)*
 
 Appelée par : `manquesHTML`
 
-### `manquesHTML()` — ligne 139
+### `manquesHTML()` — ligne 144
 
 Appelle : `esc()` *(outils.js)*, `etatForgeTexte()` *(forgeVue.js)*, `listeManques()` *(forgeVue.js)*, `manquesDecks()` *(forgeVue.js)*
 
 Appelée par : `majForgeUI`, `renderK`
 
-### `gestesForge()` — ligne 163
+### `gestesForge()` — ligne 168
 
 Appelle : `mesureBaseForge()` *(forgeVue.js)*, `oublieForge()` *(forgeDepot.js)*, `telechargeForge()` *(forgeDepot.js)*
 
 Appelée par : `app.js (chargement)`
+
+## js/lectureGraphe.js
+
+### `scriptsGraphePrets()` — ligne 26
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `lectureForgeActive`
+
+### `lectureForgeVoulue()` — ligne 37
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `etatLectureGraphe`, `lectureForgeActive`
+
+### `lectureForgeActive()` — ligne 41
+
+Appelle : `lectureForgeVoulue()` *(lectureGraphe.js)*, `scriptsGraphePrets()` *(lectureGraphe.js)*
+
+Appelée par : `etatLectureGraphe`, `lectureForgeDe`, `ligneLecture`, `relisGraphe`
+
+### `lectureForgeDe()` — ligne 49
+
+Appelle : `analyseForge()` *(grapheForge.js)*, `lectureForgeActive()` *(lectureGraphe.js)*, `lisScriptForge()` *(forgeScript.js)*, `scriptForgeDe()` *(forgeDepot.js)*
+
+Appelée par : `analyze`
+
+### `ecartLectures()` — ligne 63
+
+Appelle : `analyseTexte()` *(analyse.js)*
+
+Appelée par : `ligneLecture`
+
+### `cartesAnalysees()` — ligne 73
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `relisGraphe`
+
+### `relisGraphe()` — ligne 86
+
+Appelle : `cartesAnalysees()` *(lectureGraphe.js)*, `invaliderCandidats()` *(candidats.js)*, `lectureForgeActive()` *(lectureGraphe.js)*, `reanalyser()` *(categories.js)*, `recalculerAvecProgression()` *(recalcul.js)*
+
+Appelée par : `forgeChange`, `reglageSimulation`
+
+### `etatLectureGraphe()` — ligne 110
+
+Appelle : `lectureForgeActive()` *(lectureGraphe.js)*, `lectureForgeVoulue()` *(lectureGraphe.js)*
+
+Appelée par : `corpsForge`
 
 ## js/simResultats.js
 
@@ -9839,7 +10233,7 @@ Appelée par : `renderK`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `acteSuggestion`, `actesAnnexe`, `actionsLoupe`, `aideFormules`, `alertesInvitesHTML`, `areneAdversaires`, `badgeCouverture`, `barreCatalogue`, `barresHTML`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `blocagesLoupe`, `boutonSupprCollection`, `boutonTourHTML`, `cardRow`, `cardTile`, `cartesHTML`, `cartouche`, `champBudget`, `champDeck`, `champRecherche`, `chipsChoix`, `contexteQuestionHTML`, `corpsAffichage`, `corpsArrets`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsForge`, `corpsFormat`, `corpsSauvegarde`, `couvertureHTML`, `decksDemandeurs`, `enteteFiche`, `enveloppeGroupe`, `etapeHTML`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `filHTML`, `finHTML`, `frontHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `historiqueHTML`, `lectureHTML`, `libelleElement`, `lienDecksEdhrec`, `ligneAchats`, `ligneAcquisition`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneCouvertureCollection`, `ligneDatesAjout`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeManques`, `listeSetsHTML`, `lotHTML`, `loupeHTML`, `majApercu`, `majBoutonAffichage`, `manquesHTML`, `marqueursHTML`, `menuHTML`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openSupprCarteModal`, `openWantsModal`, `optionsHTML`, `ouvreComportement`, `ouvreJournal`, `ouvreJournalTable`, `paginationListe`, `panneauEdhrec`, `partiesHTML`, `phasesPointsHTML`, `pileExpliqueHTML`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `pucesHTML`, `questionCorpsHTML`, `refCarte`, `rejoindreHTML`, `renderD`, `renderE`, `renderTop`, `reserveHTML`, `resultatsAjoutHTML`, `resumeDeckConfig`, `resumeFiltres`, `salonHTML`, `sectionParametres`, `siegeDistantHTML`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tableLoupe.js (chargement)`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `titreOui`, `tuile`, `tuileWishlist`, `vignetteDeck`, `wishlistSection.js (chargement)`, `zoneCommandant`, `zoneHTML`
+Appelée par : `acteSuggestion`, `actesAnnexe`, `actionsLoupe`, `aideFormules`, `alertesInvitesHTML`, `areneAdversaires`, `badgeCouverture`, `barreCatalogue`, `barresHTML`, `blocAchats`, `blocAnnexe`, `blocCatalogue`, `blocEdhrec`, `blocGraphe`, `blocVersions`, `blocagesLoupe`, `boutonSupprCollection`, `boutonTourHTML`, `cardRow`, `cardTile`, `cartesHTML`, `cartouche`, `champBudget`, `champDeck`, `champRecherche`, `chipsChoix`, `contexteQuestionHTML`, `corpsAffichage`, `corpsArrets`, `corpsBoiteRecalcul`, `corpsBudget`, `corpsCibles`, `corpsDeck`, `corpsFiltres`, `corpsForge`, `corpsFormat`, `corpsSauvegarde`, `couvertureHTML`, `decksDemandeurs`, `descPileHTML`, `enteteFiche`, `enveloppeGroupe`, `etapeHTML`, `etatArchetypes`, `etatSets`, `exportModal`, `ficheHTML`, `ficheTexteHTML`, `filHTML`, `finHTML`, `frontHTML`, `gauge`, `gestesDeck`, `gestesDecks`, `historiqueHTML`, `lectureHTML`, `libelleElement`, `lienDecksEdhrec`, `ligneAchats`, `ligneAcquisition`, `ligneCatalogue`, `ligneCausesCollection`, `ligneCible`, `ligneCommandant`, `ligneCouvertureCollection`, `ligneDatesAjout`, `ligneEnLigne`, `ligneFiltre`, `ligneGameChangers`, `ligneLecture`, `ligneMana`, `ligneProposition`, `ligneRestriction`, `ligneWishlist`, `listeArchetypesHTML`, `listeManques`, `listeSetsHTML`, `lotHTML`, `loupeHTML`, `majApercu`, `majBoutonAffichage`, `majDescPile`, `manquesHTML`, `marqueursHTML`, `menuHTML`, `montrerApercu`, `nuageConflits`, `nuageCorpsConnecte`, `nuageCorpsDeconnecte`, `nuageDetail`, `nuageEtatLigne`, `nuageOu`, `openAdd`, `openCardModal`, `openDialog`, `openSupprCarteModal`, `openWantsModal`, `optionsHTML`, `ouvreComportement`, `ouvreJournal`, `ouvreJournalTable`, `paginationListe`, `panneauEdhrec`, `partiesHTML`, `phasesPointsHTML`, `proposerMajCatalogue`, `propositionsHTML`, `puceStatut`, `pucesHTML`, `questionCorpsHTML`, `refCarte`, `rejoindreHTML`, `renderD`, `renderE`, `renderTop`, `reserveHTML`, `resultatsAjoutHTML`, `resumeDeckConfig`, `resumeFiltres`, `salonHTML`, `sectionParametres`, `siegeDistantHTML`, `sugLigne`, `sugRow`, `svgGraph`, `symBg`, `symIcon`, `tableLoupe.js (chargement)`, `tagAnnexe`, `tagDeck`, `tagEdhrec`, `tagIllegal`, `titreOui`, `tuile`, `tuileWishlist`, `vignetteDeck`, `wishlistSection.js (chargement)`, `zoneCommandant`, `zoneHTML`
 
 ### `eur()` — ligne 14
 
@@ -10151,13 +10545,13 @@ Appelée par : `cardRow`, `cardTile`
 
 ### `cardTile()` — ligne 64
 
-Appelle : `aDeuxFaces()` *(versions.js)*, `actesAnnexe()` *(tuiles.js)*, `availableFor()` *(deck.js)*, `boutonSupprCollection()` *(collection.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `faceVisible()` *(versions.js)*, `fmt()` *(outils.js)*, `libelleFamillesLarges()` *(liens.js)*, `ligneDatesAjout()` *(collection.js)*, `nbCartesLarges()` *(notation.js)*, `nbInteractions()` *(notation.js)*, `nbLiens()` *(notation.js)*, `tagAnnexe()` *(annexes.js)*, `tagDeck()` *(tuiles.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
+Appelle : `aDeuxFaces()` *(versions.js)*, `actesAnnexe()` *(tuiles.js)*, `availableFor()` *(deck.js)*, `boutonSupprCollection()` *(collection.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `faceVisible()` *(versions.js)*, `fmt()` *(outils.js)*, `libelleFamillesLarges()` *(liens.js)*, `ligneDatesAjout()` *(collection.js)*, `nbCartesLarges()` *(notation.js)*, `nbInteractions()` *(notation.js)*, `nbLiens()` *(notation.js)*, `peutCommander()` *(cartes.js)*, `tagAnnexe()` *(annexes.js)*, `tagDeck()` *(tuiles.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
 
 Appelée par : `blocAnnexe`, `renderB`, `renderE`
 
 ### `cardRow()` — ligne 116
 
-Appelle : `actesAnnexe()` *(tuiles.js)*, `availableFor()` *(deck.js)*, `boutonSupprCollection()` *(collection.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `fmt()` *(outils.js)*, `ligneDatesAjout()` *(collection.js)*, `manaHTML()` *(symboles.js)*, `tagDeck()` *(tuiles.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
+Appelle : `actesAnnexe()` *(tuiles.js)*, `availableFor()` *(deck.js)*, `boutonSupprCollection()` *(collection.js)*, `esc()` *(outils.js)*, `eur()` *(outils.js)*, `fmt()` *(outils.js)*, `ligneDatesAjout()` *(collection.js)*, `manaHTML()` *(symboles.js)*, `peutCommander()` *(cartes.js)*, `tagDeck()` *(tuiles.js)*, `tagGameChanger()` *(tuiles.js)*, `tagIllegal()` *(tuiles.js)*
 
 Appelée par : `blocAnnexe`, `renderB`, `renderE`
 
@@ -10291,7 +10685,7 @@ Appelée par : `recalculerAvecProgression`
 
 Appelle : `annonceRecalcul()` *(recalcul.js)*, `finProgresSection()` *(recalcul.js)*, `finRecalcul()` *(recalcul.js)*, `geleSuggestions()` *(sugOrdre.js)*, `majProgression()` *(fenFiltres.js)*, `pause()` *(recalcul.js)*, `prechauffeCandidats()` *(candidats.js)*, `prepareSuggestions()` *(vivier.js)*, `progresSection()` *(recalcul.js)*, `recalculLong()` *(recalcul.js)*, `releveAncre()` *(ancre.js)*, `renderAll()` *(rendu.js)*, `restaureAncre()` *(ancre.js)*
 
-Appelée par : `activerDeck`, `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `filetSuggestions`, `gestesAcquisition`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `openSupprCarteModal`, `openWipeModal`, `rattraperSuggestions`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
+Appelée par : `activerDeck`, `addToDeck`, `ajoutCollection`, `ajouterCarte`, `apresReglage`, `buyCard`, `chargerCatalogueComplet`, `enrichAllUnknown`, `filetSuggestions`, `gestesAcquisition`, `gestesDeck`, `gestesDecks`, `gestesDonnees`, `gestesVue`, `lireCatalogueFichier`, `openImport`, `openSupprCarteModal`, `openWipeModal`, `rattraperSuggestions`, `relisGraphe`, `removeFromDeck`, `retirerAnnexe`, `retraitCollection`, `versAnnexe`, `viderAnnexe`
 
 ## js/entete.js
 
@@ -10335,7 +10729,7 @@ Appelée par : `finProgresSection`, `joueLot`, `lanceSimulation`, `progresSectio
 
 Appelle : `renderB()` *(collection.js)*, `renderC()` *(stats.js)*, `renderD()` *(graphe.js)*, `renderE()` *(deckSection.js)*, `renderI()` *(decksSection.js)*, `renderJ()` *(wishlistSection.js)*, `renderK()` *(simSection.js)*, `renderL()` *(acquisitionSection.js)*, `renderSuggestions()` *(suggestions.js)*, `renderTop()` *(entete.js)*, `renduTable()` *(tableRendu.js)*, `scheduleSave()` *(stockage.js)*
 
-Appelée par : `activerDeck`, `app.js (chargement)`, `appliquerAffichage`, `brancherCatalogue`, `brancherRestauration`, `chargerCatalogue`, `chargerGameChangers`, `choisirVersion`, `completeUnknown`, `demarrer`, `filtrerAvecProgression`, `gestesDecks`, `gestesDonnees`, `loadSymbology`, `majCatalogue`, `majPrix`, `nuageTour`, `recalculerAvecProgression`, `renderAllSiApplique`
+Appelée par : `activerDeck`, `app.js (chargement)`, `appliquerAffichage`, `brancherCatalogue`, `brancherRestauration`, `chargerCatalogue`, `chargerGameChangers`, `choisirVersion`, `completeInconnuesDuDeck`, `completeUnknown`, `demarrer`, `filtrerAvecProgression`, `gestesDecks`, `gestesDonnees`, `loadSymbology`, `majCatalogue`, `majPrix`, `nuageTour`, `recalculerAvecProgression`, `renderAllSiApplique`
 
 ## js/fenFormat.js
 
@@ -10965,7 +11359,7 @@ Appelée par : `app.js (chargement)`
 
 ### `reglageSimulation()` — ligne 26
 
-Appelle : `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*
+Appelle : `majForgeUI()` *(forgeVue.js)*, `relisGraphe()` *(lectureGraphe.js)*, `renderK()` *(simSection.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `app.js (chargement)`
 
@@ -11403,109 +11797,115 @@ Appelée par : `ajouteInvite`
 
 Appelle : → `pause()` *(recalcul.js)*
 
-### `pauseApres()` — ligne 36
+### `pauseApres()` — ligne 37
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `boucleTable`
 
-### `montrePile()` — ligne 45
+### `montrePile()` — ligne 46
 
 Appelle : `attendreOuSuite()` *(tableHote.js)*, `descriptionPile()` *(jeuPileExplique.js)*, `diffuseVues()` *(tableHote.js)*, `repondre()` *(jeuPilote.js)*
 
 Appelée par : `boucleTable`
 
-### `attendreOuSuite()` — ligne 62
+### `montreCombat()` — ligne 65
+
+Appelle : `attendre()` *(tableHote.js)*, `diffuseVues()` *(tableHote.js)*, `repondre()` *(jeuPilote.js)*
+
+Appelée par : `boucleTable`
+
+### `attendreOuSuite()` — ligne 76
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `montrePile`
 
-### `vueTable()` — ligne 71
+### `vueTable()` — ligne 85
 
 Appelle : `vue()` *(jeuVue.js)*
 
 Appelée par : `diffuseVues`, `envoieQuestion`, `envoieVue`, `poseQuestion`
 
-### `attendre()` — ligne 77
+### `attendre()` — ligne 92
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `boucleTable`, `mesureBaseForge`
+Appelée par : `boucleTable`, `joueCoups`, `joueEchange`, `mesureBaseForge`, `montreCombat`
 
-### `signePublic()` — ligne 80
+### `signePublic()` — ligne 95
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `boucleTable`
 
-### `siegeDeSource()` — ligne 85
+### `siegeDeSource()` — ligne 100
 
 Appelle : `siegeDeck()` *(simPreparation.js)*, `siegeDepuisFiches()` *(simPreparation.js)*
 
 Appelée par : `commenceTable`
 
-### `reglageMana()` — ligne 95
+### `reglageMana()` — ligne 110
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `commenceTable`
 
-### `commenceTable()` — ligne 101
+### `commenceTable()` — ligne 116
 
 Appelle : `agentIA()` *(iaAgent.js)*, `arretsParDefaut()` *(jeuArrets.js)*, `boucleTable()` *(tableHote.js)*, `chargeSimCartes()` *(simCartes.js)*, `chercheFichesScryfall()` *(simCartes.js)*, `creePartie()` *(jeuPilote.js)*, `envoieDebut()` *(tableLiaison.js)*, `fichesDeSource()` *(simPreparation.js)*, `reglageMana()` *(tableHote.js)*, `toast()` *(outils.js)*, → `siegeDeSource()` *(tableHote.js)*
 
 Appelée par : `commenceDepuisSalon`
 
-### `reponseAutomate()` — ligne 129
+### `reponseAutomate()` — ligne 144
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `boucleTable`
 
-### `boucleTable()` — ligne 139
+### `boucleTable()` — ligne 154
 
-Appelle : `attendre()` *(tableHote.js)*, `avance()` *(jeuPilote.js)*, `diffuseVues()` *(tableHote.js)*, `doitDemander()` *(jeuArrets.js)*, `montrePile()` *(tableHote.js)*, `oublieTableSauvee()` *(tableReprise.js)*, `pauseApres()` *(tableHote.js)*, `poseQuestion()` *(tableHote.js)*, `rendMain()` *(simulation.js)*, `repondre()` *(jeuPilote.js)*, `reponseAutomate()` *(tableHote.js)*, `sauveTable()` *(tableReprise.js)*, `signePublic()` *(tableHote.js)*, `valideReponse()` *(jeuPilote.js)*, → `etape()` *(jeuTour.js)*
+Appelle : `attendre()` *(tableHote.js)*, `avance()` *(jeuPilote.js)*, `diffuseVues()` *(tableHote.js)*, `doitDemander()` *(jeuArrets.js)*, `montreCombat()` *(tableHote.js)*, `montrePile()` *(tableHote.js)*, `oublieTableSauvee()` *(tableReprise.js)*, `pauseApres()` *(tableHote.js)*, `poseQuestion()` *(tableHote.js)*, `rendMain()` *(simulation.js)*, `repondre()` *(jeuPilote.js)*, `reponseAutomate()` *(tableHote.js)*, `sauveTable()` *(tableReprise.js)*, `signePublic()` *(tableHote.js)*, `valideReponse()` *(jeuPilote.js)*, → `etape()` *(jeuTour.js)*
 
 Appelée par : `annuleTable`, `commenceTable`, `confieInvite`, `recoitReponse`, `reprendTable`
 
-### `poseQuestion()` — ligne 166
+### `poseQuestion()` — ligne 181
 
 Appelle : `diffuseVues()` *(tableHote.js)*, `envoieQuestion()` *(tableLiaison.js)*, `questionPourUI()` *(jeuVue.js)*, `renduTable()` *(tableRendu.js)*, `vueTable()` *(tableHote.js)*
 
 Appelée par : `boucleTable`
 
-### `recoitReponse()` — ligne 182
+### `recoitReponse()` — ligne 197
 
 Appelle : `boucleTable()` *(tableHote.js)*, `diffuseVues()` *(tableHote.js)*, `envoieErreur()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `repondre()` *(jeuPilote.js)*, `reponseRecevable()` *(jeuPilote.js)*
 
 Appelée par : `passeJusquaMonTour`, `recoitDistant`, `repondsTable`
 
-### `diffuseVues()` — ligne 203
+### `diffuseVues()` — ligne 224
 
 Appelle : `envoieVue()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `vueTable()` *(tableHote.js)*
 
-Appelée par : `annuleTable`, `boucleTable`, `montrePile`, `poseQuestion`, `recoitReponse`, `reprendTable`
+Appelée par : `annuleTable`, `boucleTable`, `montreCombat`, `montrePile`, `poseQuestion`, `recoitReponse`, `reprendTable`
 
-### `journalTable()` — ligne 218
+### `journalTable()` — ligne 239
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `annuleTable`, `journalTableLignes`, `nouvellesLignes`
 
-### `majArretsTable()` — ligne 221
+### `majArretsTable()` — ligne 242
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `appliqueArrets`
 
-### `passeJusquaMonTour()` — ligne 228
+### `passeJusquaMonTour()` — ligne 249
 
 Appelle : `recoitReponse()` *(tableHote.js)*
 
 Appelée par : `passeTour`, `recoitDistant`
 
-### `quitteTable()` — ligne 236
+### `quitteTable()` — ligne 257
 
 Appelle : `fermeLiaisons()` *(tableLiaison.js)*, `oublieTableSauvee()` *(tableReprise.js)*, `renduTable()` *(tableRendu.js)*
 
@@ -11567,31 +11967,31 @@ Appelée par : `tuile`
 
 Appelle : `esc()` *(outils.js)*, `etatChoix()` *(tableQuestions.js)*, `etatsHTML()` *(tableCartes.js)*, `forceHTML()` *(tableCartes.js)*, `imageCarte()` *(tableImages.js)*, `leveValide()` *(tableLever.js)*, `marquesPile()` *(tableFleches.js)*, `marqueursHTML()` *(tableCartes.js)*, `teinteCarte()` *(tableCartes.js)*
 
-Appelée par : `cartoucheTour`, `champDeuxRangs`, `chipsChoix`, `contexteQuestionHTML`, `couloir`, `mainHTML`, `pileTuilesHTML`, `questionCorpsHTML`, `suiteTuiles`, `zoneHTML`
+Appelée par : `cartoucheTour`, `champDeuxRangs`, `chipsChoix`, `contexteQuestionHTML`, `couloir`, `mainHTML`, `posePile`, `questionCorpsHTML`, `suiteTuiles`, `zoneHTML`
 
-### `regroupe()` — ligne 82
+### `regroupe()` — ligne 83
 
 Appelle : `etatChoix()` *(tableQuestions.js)*
 
 Appelée par : `suiteTuiles`
 
-### `suiteTuiles()` — ligne 97
+### `suiteTuiles()` — ligne 99
 
-Appelle : `regroupe()` *(tableCartes.js)*, `tuile()` *(tableCartes.js)*
+Appelle : `marquesPile()` *(tableFleches.js)*, `regroupe()` *(tableCartes.js)*, `tuile()` *(tableCartes.js)*
 
 Appelée par : `cartoucheTour`, `champDeuxRangs`, `couloir`
 
-### `rangsDe()` — ligne 116
+### `rangsDe()` — ligne 118
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `cartoucheTour`, `champDeuxRangs`, `couloir`
 
-### `rangee()` — ligne 124
+### `rangee()` — ligne 126
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `champDeuxRangs`, `chipsChoix`, `couloir`, `mainHTML`, `pileTuilesHTML`, `questionCorpsHTML`
+Appelée par : `champDeuxRangs`, `chipsChoix`, `couloir`, `mainHTML`, `questionCorpsHTML`
 
 ## js/tableJoueurs.js
 
@@ -11669,43 +12069,37 @@ Appelle : `cartouche()` *(tableJoueurs.js)*, `champDeuxRangs()` *(tableDispositi
 
 Appelée par : `regionsPartie`
 
-### `pileExpliqueHTML()` — ligne 95
-
-Appelle : `esc()` *(outils.js)*
-
-Appelée par : `frontHTML`
-
-### `mainHTML()` — ligne 115
+### `mainHTML()` — ligne 96
 
 Appelle : `rangee()` *(tableCartes.js)*, `tuile()` *(tableCartes.js)*
 
 Appelée par : `regionsPartie`
 
-### `montrePage()` — ligne 124
+### `montrePage()` — ligne 105
 
 Appelle : `marqueOnglet()` *(tableDispositions.js)*
 
 Appelée par : `gestesTable`
 
-### `marqueOnglet()` — ligne 131
+### `marqueOnglet()` — ligne 112
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `defileTable`, `montrePage`
 
-### `suisActif()` — ligne 137
+### `suisActif()` — ligne 118
 
 Appelle : `adversairesDe()` *(tableDispositions.js)*
 
 Appelée par : `renduTable`
 
-### `appliquePage()` — ligne 147
+### `appliquePage()` — ligne 128
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `renduTable`
 
-### `defileTable()` — ligne 157
+### `defileTable()` — ligne 138
 
 Appelle : `marqueOnglet()` *(tableDispositions.js)*, `planifieFleches()` *(tableFleches.js)*
 
@@ -11733,7 +12127,7 @@ Appelée par : `app.js (chargement)`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `app.js (chargement)`, `appuiBouge`, `appuiDebut`, `appuiFin`, `bloqueCommence`, `glisseBouge`, `loupeContextuelle`
+Appelée par : `app.js (chargement)`, `appuiBouge`, `appuiDebut`, `appuiFin`, `bloqueCommence`, `glisseBouge`, `loupeContextuelle`, `pileBouge`
 
 ### `appuiFin()` — ligne 39
 
@@ -11805,47 +12199,71 @@ Appelée par : `regionsPartie`
 
 ## js/tableFleches.js
 
-### `liensTable()` — ligne 18
+### `liensTable()` — ligne 24
+
+Appelle : `elementsPile()` *(tablePile.js)*, `rangPile()` *(tablePile.js)*
+
+Appelée par : `traceFleches`
+
+### `marquesPile()` — ligne 40
+
+Appelle : `elementsPile()` *(tablePile.js)*
+
+Appelée par : `suiteTuiles`, `tuile`
+
+### `rectVisible()` — ligne 53
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `ancreDe`, `ancreJoueurCoup`, `carteCoup`
+
+### `ancreDe()` — ligne 69
+
+Appelle : `elementsPile()` *(tablePile.js)*, `rectVisible()` *(tableFleches.js)*
+
+Appelée par : `traceFleches`
+
+### `cheminFleche()` — ligne 82
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `traceFleches`
 
-### `marquesPile()` — ligne 33
+### `tourDe()` — ligne 94
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `tuile`
+Appelée par : `cheminLien`
 
-### `rectVisible()` — ligne 43
+### `cheminLien()` — ligne 112
 
-N'appelle aucune fonction du projet.
-
-Appelée par : `ancreDe`
-
-### `ancreDe()` — ligne 59
-
-Appelle : `rectVisible()` *(tableFleches.js)*
+Appelle : `tourDe()` *(tableFleches.js)*
 
 Appelée par : `traceFleches`
 
-### `cheminFleche()` — ligne 70
+### `creeTrait()` — ligne 134
 
-N'appelle aucune fonction du projet.
+Appelle : `mouvementsActifs()` *(tableMouvements.js)*
 
 Appelée par : `traceFleches`
 
-### `traceFleches()` — ligne 83
+### `traceFleches()` — ligne 144
 
-Appelle : `ancreDe()` *(tableFleches.js)*, `cheminFleche()` *(tableFleches.js)*, `liensTable()` *(tableFleches.js)*
+Appelle : `ancreDe()` *(tableFleches.js)*, `cheminFleche()` *(tableFleches.js)*, `cheminLien()` *(tableFleches.js)*, `creeTrait()` *(tableFleches.js)*, `liensTable()` *(tableFleches.js)*
 
-Appelée par : `planifieFleches`, `renduTable`
+Appelée par : `planifieFleches`, `renduTable`, `suisFleches`
 
-### `planifieFleches()` — ligne 98
+### `planifieFleches()` — ligne 170
 
 Appelle : `traceFleches()` *(tableFleches.js)*
 
-Appelée par : `app.js (chargement)`, `defileTable`
+Appelée par : `app.js (chargement)`, `defileTable`, `pileBouge`
+
+### `suisFleches()` — ligne 179
+
+Appelle : `traceFleches()` *(tableFleches.js)*
+
+Appelée par : `posePile`, `regardePile`
 
 ## js/tableRendu.js
 
@@ -11905,7 +12323,7 @@ Appelée par : `renduTable`
 
 ### `renduTable()` — ligne 132
 
-Appelle : `appliquePage()` *(tableDispositions.js)*, `charpentePartie()` *(tableRendu.js)*, `dispositionTable()` *(tableDispositions.js)*, `peinsRegions()` *(tableRendu.js)*, `regionsPartie()` *(tableRendu.js)*, `rejoindreHTML()` *(tableInvite.js)*, `rejoueTrajets()` *(tableMouvements.js)*, `releveTuiles()` *(tableMouvements.js)*, `ressens()` *(tableRessenti.js)*, `salonHTML()` *(tableSalon.js)*, `suisActif()` *(tableDispositions.js)*, `traceFleches()` *(tableFleches.js)*
+Appelle : `appliquePage()` *(tableDispositions.js)*, `charpentePartie()` *(tableRendu.js)*, `dispositionTable()` *(tableDispositions.js)*, `joueCoups()` *(tableCoups.js)*, `peinsRegions()` *(tableRendu.js)*, `planCoups()` *(tableCoups.js)*, `posePile()` *(tablePile.js)*, `recacheCoups()` *(tableCoups.js)*, `regionsPartie()` *(tableRendu.js)*, `rejoindreHTML()` *(tableInvite.js)*, `rejoueTrajets()` *(tableMouvements.js)*, `releveTuiles()` *(tableMouvements.js)*, `ressens()` *(tableRessenti.js)*, `salonHTML()` *(tableSalon.js)*, `suisActif()` *(tableDispositions.js)*, `traceFleches()` *(tableFleches.js)*
 
 Appelée par : `ajouteInvite`, `ajouteSiegeIA`, `attaqueTous`, `basculeChoix`, `basculeEffet`, `bloqueFin`, `chercheImagesTable`, `choisitDisposition`, `choisitPaiementMana`, `clicCarte`, `confieInvite`, `diffuseVues`, `etatDistant`, `etatHote`, `gestesTable`, `ouvreLoupe`, `ouvreRejoindre`, `ouvreSalon`, `passeTour`, `posePaire`, `poseQuestion`, `prepareOffre`, `pret`, `quitteTable`, `recoitDistant`, `recoitHote`, `recoitReponse`, `reglageSalon`, `relie`, `renderAll`, `repondsTable`, `reposeCarte`, `retireSiege`, `scanneOffre`, `toucheCarteJouable`
 
@@ -11945,7 +12363,7 @@ Appelée par : `clicCarte`, `clicJoueur`, `gestesTable`
 
 Appelle : `basculeChoix()` *(tableQuestions.js)*, `clicCombat()` *(tableCombat.js)*, `ouvreLoupe()` *(tableLoupe.js)*, `renduTable()` *(tableRendu.js)*, `selDe()` *(tableQuestions.js)*, `toucheCarteJouable()` *(tableLever.js)*
 
-Appelée par : `gestesTable`
+Appelée par : `gestesTable`, `touchePile`
 
 ### `clicJoueur()` — ligne 72
 
@@ -11965,25 +12383,25 @@ Appelle : `esc()` *(outils.js)*, `rangee()` *(tableCartes.js)*, `tuile()` *(tabl
 
 Appelée par : `questionCorpsHTML`
 
-### `contexteQuestionHTML()` — ligne 115
+### `contexteQuestionHTML()` — ligne 117
 
 Appelle : `esc()` *(outils.js)*, `tuile()` *(tableCartes.js)*
 
 Appelée par : `questionHTML`
 
-### `titreOui()` — ligne 128
+### `titreOui()` — ligne 132
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `questionCorpsHTML`
 
-### `questionHTML()` — ligne 134
+### `questionHTML()` — ligne 138
 
 Appelle : `contexteQuestionHTML()` *(tableQuestions.js)*, `questionCorpsHTML()` *(tableQuestions.js)*
 
 Appelée par : `regionsPartie`
 
-### `questionCorpsHTML()` — ligne 142
+### `questionCorpsHTML()` — ligne 146
 
 Appelle : `chipsChoix()` *(tableQuestions.js)*, `esc()` *(outils.js)*, `rangee()` *(tableCartes.js)*, `selDe()` *(tableQuestions.js)*, `symIcon()` *(symboles.js)*, `titreOui()` *(tableQuestions.js)*, `tuile()` *(tableCartes.js)*
 
@@ -12073,53 +12491,311 @@ Appelée par : `bloqueFin`, `gestesTable`
 
 ## js/tableFront.js
 
-### `verbeAction()` — ligne 23
+### `verbeAction()` — ligne 24
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `actionTour`
 
-### `actionTour()` — ligne 33
+### `actionTour()` — ligne 34
 
 Appelle : `leveValide()` *(tableLever.js)*, `menacesSeules()` *(tableCombat.js)*, `selDe()` *(tableQuestions.js)*, `verbeAction()` *(tableFront.js)*
 
 Appelée par : `faitTour`, `frontHTML`
 
-### `faitTour()` — ligne 73
+### `faitTour()` — ligne 74
 
 Appelle : `actionTour()` *(tableFront.js)*, `leveValide()` *(tableLever.js)*, `repondsTable()` *(tableQuestions.js)*, `sonTable()` *(tableSons.js)*, `valideTable()` *(tableQuestions.js)*
 
 Appelée par : `gestesTable`
 
-### `actionsHorsTable()` — ligne 86
+### `actionsHorsTable()` — ligne 87
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `pucesHTML`
 
-### `pucesHTML()` — ligne 93
+### `pucesHTML()` — ligne 94
 
 Appelle : `actionsHorsTable()` *(tableFront.js)*, `esc()` *(outils.js)*, `leveValide()` *(tableLever.js)*, `selDe()` *(tableQuestions.js)*
 
 Appelée par : `frontHTML`
 
-### `boutonTourHTML()` — ligne 109
+### `boutonTourHTML()` — ligne 110
 
 Appelle : `esc()` *(outils.js)*
 
 Appelée par : `frontHTML`
 
-### `pileTuilesHTML()` — ligne 118
+### `frontHTML()` — ligne 121
 
-Appelle : `rangee()` *(tableCartes.js)*, `tuile()` *(tableCartes.js)*
-
-Appelée par : `frontHTML`
-
-### `frontHTML()` — ligne 124
-
-Appelle : `actionTour()` *(tableFront.js)*, `boutonTourHTML()` *(tableFront.js)*, `esc()` *(outils.js)*, `phasesPointsHTML()` *(tablePhases.js)*, `pileExpliqueHTML()` *(tableDispositions.js)*, `pileTuilesHTML()` *(tableFront.js)*, `pucesHTML()` *(tableFront.js)*
+Appelle : `actionTour()` *(tableFront.js)*, `boutonTourHTML()` *(tableFront.js)*, `esc()` *(outils.js)*, `phasesPointsHTML()` *(tablePhases.js)*, `pucesHTML()` *(tableFront.js)*
 
 Appelée par : `regionsPartie`
+
+## js/tablePile.js
+
+### `tunnelPile()` — ligne 24
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `posePile`
+
+### `elementsPile()` — ligne 32
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `ancreDe`, `liensTable`, `marquesPile`, `planCoups`, `posePile`
+
+### `rangPile()` — ligne 40
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `liensTable`, `majDescPile`, `pileBouge`, `pileDebut`, `regardePile`, `touchePile`
+
+### `placeTunnel()` — ligne 51
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `placeCartesPile`
+
+### `placeCartesPile()` — ligne 57
+
+Appelle : `placeTunnel()` *(tablePile.js)*
+
+Appelée par : `pileBouge`, `posePile`, `regardePile`
+
+### `creeTunnel()` — ligne 74
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `posePile`
+
+### `posePile()` — ligne 86
+
+Appelle : `creeTunnel()` *(tablePile.js)*, `elementsPile()` *(tablePile.js)*, `majDescPile()` *(tablePile.js)*, `marqueResolution()` *(tablePile.js)*, `placeCartesPile()` *(tablePile.js)*, `suisFleches()` *(tableFleches.js)*, `tuile()` *(tableCartes.js)*, `tunnelPile()` *(tablePile.js)*
+
+Appelée par : `renduTable`
+
+### `majDescPile()` — ligne 124
+
+Appelle : `descPileHTML()` *(tablePile.js)*, `esc()` *(outils.js)*, `rangPile()` *(tablePile.js)*
+
+Appelée par : `pileBouge`, `posePile`, `regardePile`
+
+### `descPileHTML()` — ligne 135
+
+Appelle : `esc()` *(outils.js)*
+
+Appelée par : `majDescPile`
+
+### `marqueResolution()` — ligne 151
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `posePile`
+
+### `regardePile()` — ligne 161
+
+Appelle : `majDescPile()` *(tablePile.js)*, `placeCartesPile()` *(tablePile.js)*, `rangPile()` *(tablePile.js)*, `sonTable()` *(tableSons.js)*, `suisFleches()` *(tableFleches.js)*, `vibreTable()` *(tableSons.js)*
+
+Appelée par : `gestesTable`, `pileFin`, `touchePile`
+
+### `touchePile()` — ligne 175
+
+Appelle : `clicCarte()` *(tableQuestions.js)*, `rangPile()` *(tablePile.js)*, `regardePile()` *(tablePile.js)*
+
+Appelée par : `gestesTable`
+
+### `pileDebut()` — ligne 182
+
+Appelle : `rangPile()` *(tablePile.js)*
+
+Appelée par : `app.js (chargement)`
+
+### `pileBouge()` — ligne 191
+
+Appelle : `appuiAnnule()` *(tableLoupe.js)*, `majDescPile()` *(tablePile.js)*, `placeCartesPile()` *(tablePile.js)*, `planifieFleches()` *(tableFleches.js)*, `rangPile()` *(tablePile.js)*, `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
+
+Appelée par : `app.js (chargement)`
+
+### `pileFin()` — ligne 210
+
+Appelle : `regardePile()` *(tablePile.js)*
+
+Appelée par : `app.js (chargement)`
+
+## js/tableEclats.js
+
+### `doublure()` — ligne 59
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `elan`
+
+### `elan()` — ligne 74
+
+Appelle : `doublure()` *(tableEclats.js)*, `mouvementsActifs()` *(tableMouvements.js)*, `sonTable()` *(tableSons.js)*
+
+Appelée par : `joueEchange`
+
+### `secoue()` — ligne 103
+
+Appelle : `mouvementsActifs()` *(tableMouvements.js)*
+
+Appelée par : `choc`, `ebranle`
+
+### `eclaire()` — ligne 115
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `choc`
+
+### `traitsCoups()` — ligne 121
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `entaille`
+
+### `entaille()` — ligne 130
+
+Appelle : `traitsCoups()` *(tableEclats.js)*
+
+Appelée par : `choc`
+
+### `etincelles()` — ligne 144
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `choc`
+
+### `onde()` — ligne 157
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `choc`
+
+### `nombreCoup()` — ligne 167
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `choc`
+
+### `ebranle()` — ligne 180
+
+Appelle : `mouvementsActifs()` *(tableMouvements.js)*, `secoue()` *(tableEclats.js)*
+
+Appelée par : `choc`, `ressens`
+
+### `tranche()` — ligne 195
+
+Appelle : `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
+
+Appelée par : `acheve`
+
+### `ecrase()` — ligne 217
+
+Appelle : `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
+
+Appelée par : `acheve`
+
+## js/tableCoups.js
+
+### `styleCoup()` — ligne 27
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `planCoups`
+
+### `prisEntre()` — ligne 36
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `planCoups`
+
+### `planCoups()` — ligne 52
+
+Appelle : `blessuresTombees()` *(tableCoups.js)*, `elementsPile()` *(tablePile.js)*, `mouvementsActifs()` *(tableMouvements.js)*, `prisEntre()` *(tableCoups.js)*, `styleCoup()` *(tableCoups.js)*
+
+Appelée par : `renduTable`
+
+### `carteCoup()` — ligne 94
+
+Appelle : `rectVisible()` *(tableFleches.js)*
+
+Appelée par : `joueEchange`, `joueSort`
+
+### `ancreJoueurCoup()` — ligne 100
+
+Appelle : `rectVisible()` *(tableFleches.js)*
+
+Appelée par : `joueEchange`, `joueSort`
+
+### `figeAvantCoups()` — ligne 106
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `joueCoups`
+
+### `degeleVie()` — ligne 116
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `choc`, `joueCoups`, `joueEchange`, `joueSort`
+
+### `degeleBadge()` — ligne 121
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `choc`, `joueCoups`
+
+### `choc()` — ligne 130
+
+Appelle : `degeleBadge()` *(tableCoups.js)*, `degeleVie()` *(tableCoups.js)*, `ebranle()` *(tableEclats.js)*, `eclaire()` *(tableEclats.js)*, `entaille()` *(tableEclats.js)*, `etincelles()` *(tableEclats.js)*, `jaillitVie()` *(tableRessenti.js)*, `nombreCoup()` *(tableEclats.js)*, `onde()` *(tableEclats.js)*, `secoue()` *(tableEclats.js)*, `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
+
+Appelée par : `joueEchange`, `joueSort`
+
+### `acheve()` — ligne 155
+
+Appelle : `rejointZone()` *(tableMouvements.js)*, → `ecrase()` *(tableEclats.js)*, → `tranche()` *(tableEclats.js)*
+
+Appelée par : `joueCoups`, `joueEchange`, `joueSort`
+
+### `joueEchange()` — ligne 166
+
+Appelle : `acheve()` *(tableCoups.js)*, `ancreJoueurCoup()` *(tableCoups.js)*, `attendre()` *(tableHote.js)*, `carteCoup()` *(tableCoups.js)*, `choc()` *(tableCoups.js)*, `degeleVie()` *(tableCoups.js)*, `elan()` *(tableEclats.js)*
+
+Appelée par : `joueCoups`
+
+### `joueSort()` — ligne 191
+
+Appelle : `acheve()` *(tableCoups.js)*, `ancreJoueurCoup()` *(tableCoups.js)*, `carteCoup()` *(tableCoups.js)*, `choc()` *(tableCoups.js)*, `degeleVie()` *(tableCoups.js)*, `lueur()` *(tableCoups.js)*, `sonTable()` *(tableSons.js)*
+
+Appelée par : `joueCoups`
+
+### `lueur()` — ligne 204
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `joueSort`
+
+### `joueCoups()` — ligne 225
+
+Appelle : `acheve()` *(tableCoups.js)*, `attendre()` *(tableHote.js)*, `degeleBadge()` *(tableCoups.js)*, `figeAvantCoups()` *(tableCoups.js)*, `joueEchange()` *(tableCoups.js)*, `joueSort()` *(tableCoups.js)*, → `degeleVie()` *(tableCoups.js)*
+
+Appelée par : `renduTable`
+
+### `recacheCoups()` — ligne 238
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `renduTable`
+
+### `blessuresTombees()` — ligne 252
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `planCoups`
 
 ## js/tableLever.js
 
@@ -12189,19 +12865,19 @@ N'appelle aucune fonction du projet.
 
 Appelée par : `tableSons.js (chargement)`
 
-### `sonTable()` — ligne 88
+### `sonTable()` — ligne 104
 
 Appelle : `audioTable()` *(tableSons.js)*
 
-Appelée par : `basculeEffet`, `faitTour`, `glisseBouge`, `questionRessentie`, `ressens`, `toucheCarteJouable`
+Appelée par : `basculeEffet`, `choc`, `ecrase`, `elan`, `faitTour`, `glisseBouge`, `joueSort`, `pileBouge`, `questionRessentie`, `regardePile`, `ressens`, `toucheCarteJouable`, `tranche`
 
-### `vibreTable()` — ligne 97
+### `vibreTable()` — ligne 113
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `basculeEffet`, `glisseBouge`, `glisseFin`, `questionRessentie`, `ressens`, `toucheCarteJouable`
+Appelée par : `basculeEffet`, `choc`, `ecrase`, `glisseBouge`, `glisseFin`, `pileBouge`, `questionRessentie`, `regardePile`, `ressens`, `toucheCarteJouable`, `tranche`
 
-### `basculeEffet()` — ligne 104
+### `basculeEffet()` — ligne 120
 
 Appelle : `renduTable()` *(tableRendu.js)*, `scheduleSave()` *(stockage.js)*, `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
 
@@ -12209,23 +12885,23 @@ Appelée par : `gestesTable`
 
 ## js/tableRessenti.js
 
-### `ressens()` — ligne 13
+### `ressens()` — ligne 15
 
-Appelle : `jaillitVie()` *(tableRessenti.js)*, `questionRessentie()` *(tableRessenti.js)*, `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
+Appelle : `ebranle()` *(tableEclats.js)*, `jaillitVie()` *(tableRessenti.js)*, `questionRessentie()` *(tableRessenti.js)*, `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
 
 Appelée par : `renduTable`
 
-### `questionRessentie()` — ligne 43
+### `questionRessentie()` — ligne 45
 
 Appelle : `sonTable()` *(tableSons.js)*, `vibreTable()` *(tableSons.js)*
 
 Appelée par : `ressens`
 
-### `jaillitVie()` — ligne 51
+### `jaillitVie()` — ligne 53
 
 Appelle : `mouvementsActifs()` *(tableMouvements.js)*
 
-Appelée par : `ressens`
+Appelée par : `choc`, `ressens`
 
 ## js/tableMouvements.js
 
@@ -12233,7 +12909,7 @@ Appelée par : `ressens`
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `jaillitVie`, `rejoueTrajets`, `releveTuiles`
+Appelée par : `creeTrait`, `ebranle`, `elan`, `jaillitVie`, `planCoups`, `rejoueTrajets`, `releveTuiles`, `secoue`
 
 ### `tuilesTable()` — ligne 28
 
@@ -12253,35 +12929,47 @@ Appelle : `mesureTuile()` *(tableMouvements.js)*, `mouvementsActifs()` *(tableMo
 
 Appelée par : `renduTable`
 
-### `rejoueTrajets()` — ligne 47
+### `rejoueTrajets()` — ligne 49
 
-Appelle : `arrive()` *(tableMouvements.js)*, `mesureTuile()` *(tableMouvements.js)*, `mouvementsActifs()` *(tableMouvements.js)*, `sEnVa()` *(tableMouvements.js)*, `tuilesTable()` *(tableMouvements.js)*, `vole()` *(tableMouvements.js)*
+Appelle : `arrive()` *(tableMouvements.js)*, `mesureTuile()` *(tableMouvements.js)*, `mouvementsActifs()` *(tableMouvements.js)*, `poseAuCalque()` *(tableMouvements.js)*, `sEnVa()` *(tableMouvements.js)*, `tuilesTable()` *(tableMouvements.js)*, `vole()` *(tableMouvements.js)*
 
 Appelée par : `renduTable`
 
-### `vole()` — ligne 66
+### `vole()` — ligne 74
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `rejoueTrajets`
 
-### `arrive()` — ligne 80
+### `arrive()` — ligne 88
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `rejoueTrajets`
 
-### `zoneArrivee()` — ligne 91
+### `zoneArrivee()` — ligne 99
 
 N'appelle aucune fonction du projet.
 
-Appelée par : `sEnVa`
+Appelée par : `rejointZone`
 
-### `sEnVa()` — ligne 101
+### `sEnVa()` — ligne 109
+
+Appelle : `poseAuCalque()` *(tableMouvements.js)*, `rejointZone()` *(tableMouvements.js)*
+
+Appelée par : `rejoueTrajets`
+
+### `poseAuCalque()` — ligne 115
+
+N'appelle aucune fonction du projet.
+
+Appelée par : `rejoueTrajets`, `sEnVa`
+
+### `rejointZone()` — ligne 128
 
 Appelle : `zoneArrivee()` *(tableMouvements.js)*
 
-Appelée par : `rejoueTrajets`
+Appelée par : `acheve`, `sEnVa`
 
 ## js/tableSalon.js
 
@@ -12671,35 +13359,35 @@ Appelée par : `gestesTable`
 
 ### `gestesTable()` — ligne 8
 
-Appelle : `ajouteInvite()` *(tableLiaison.js)*, `ajouteSiegeIA()` *(tableSalon.js)*, `annuleTable()` *(tableAnnuler.js)*, `appliqueArrets()` *(fenArrets.js)*, `arretsDefaut()` *(fenArrets.js)*, `attaqueTous()` *(tableCombat.js)*, `basculeChoix()` *(tableQuestions.js)*, `basculeEffet()` *(tableSons.js)*, `choisitDisposition()` *(gestesTable.js)*, `choisitPaiementMana()` *(gestesTable.js)*, `clicCarte()` *(tableQuestions.js)*, `clicJoueur()` *(tableQuestions.js)*, `commenceDepuisSalon()` *(tableSalon.js)*, `confieInvite()` *(tableLiaison.js)*, `faitTour()` *(tableFront.js)*, `lienOffreColle()` *(tableInvite.js)*, `montrePage()` *(tableDispositions.js)*, `ouvreArrets()` *(fenArrets.js)*, `ouvreJournalTable()` *(gestesTable.js)*, `ouvreRejoindre()` *(tableInvite.js)*, `ouvreSalon()` *(tableSalon.js)*, `passeTour()` *(gestesTable.js)*, `posePaire()` *(tableBloque.js)*, `pret()` *(tableInvite.js)*, `quitteTable()` *(tableHote.js)*, `relieCode()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `repondsTable()` *(tableQuestions.js)*, `reposeCarte()` *(tableLever.js)*, `reprendTable()` *(tableReprise.js)*, `repriseInvite()` *(tableLiaison.js)*, `retireSiege()` *(tableSalon.js)*, `scheduleSave()` *(stockage.js)*, `selDe()` *(tableQuestions.js)*, `valideTable()` *(tableQuestions.js)*
+Appelle : `ajouteInvite()` *(tableLiaison.js)*, `ajouteSiegeIA()` *(tableSalon.js)*, `annuleTable()` *(tableAnnuler.js)*, `appliqueArrets()` *(fenArrets.js)*, `arretsDefaut()` *(fenArrets.js)*, `attaqueTous()` *(tableCombat.js)*, `basculeChoix()` *(tableQuestions.js)*, `basculeEffet()` *(tableSons.js)*, `choisitDisposition()` *(gestesTable.js)*, `choisitPaiementMana()` *(gestesTable.js)*, `clicCarte()` *(tableQuestions.js)*, `clicJoueur()` *(tableQuestions.js)*, `commenceDepuisSalon()` *(tableSalon.js)*, `confieInvite()` *(tableLiaison.js)*, `faitTour()` *(tableFront.js)*, `lienOffreColle()` *(tableInvite.js)*, `montrePage()` *(tableDispositions.js)*, `ouvreArrets()` *(fenArrets.js)*, `ouvreJournalTable()` *(gestesTable.js)*, `ouvreRejoindre()` *(tableInvite.js)*, `ouvreSalon()` *(tableSalon.js)*, `passeTour()` *(gestesTable.js)*, `posePaire()` *(tableBloque.js)*, `pret()` *(tableInvite.js)*, `quitteTable()` *(tableHote.js)*, `regardePile()` *(tablePile.js)*, `relieCode()` *(tableLiaison.js)*, `renduTable()` *(tableRendu.js)*, `repondsTable()` *(tableQuestions.js)*, `reposeCarte()` *(tableLever.js)*, `reprendTable()` *(tableReprise.js)*, `repriseInvite()` *(tableLiaison.js)*, `retireSiege()` *(tableSalon.js)*, `scheduleSave()` *(stockage.js)*, `selDe()` *(tableQuestions.js)*, `touchePile()` *(tablePile.js)*, `valideTable()` *(tableQuestions.js)*
 
 Appelée par : `app.js (chargement)`
 
-### `choisitDisposition()` — ligne 62
+### `choisitDisposition()` — ligne 65
 
 Appelle : `renduTable()` *(tableRendu.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `gestesTable`
 
-### `manuelMoi()` — ligne 71
+### `manuelMoi()` — ligne 74
 
 N'appelle aucune fonction du projet.
 
 Appelée par : `menuHTML`
 
-### `choisitPaiementMana()` — ligne 79
+### `choisitPaiementMana()` — ligne 82
 
 Appelle : `renduTable()` *(tableRendu.js)*, `repondsTable()` *(tableQuestions.js)*, `scheduleSave()` *(stockage.js)*
 
 Appelée par : `gestesTable`
 
-### `passeTour()` — ligne 89
+### `passeTour()` — ligne 92
 
 Appelle : `envoiePasseTour()` *(tableInvite.js)*, `passeJusquaMonTour()` *(tableHote.js)*, `renduTable()` *(tableRendu.js)*
 
 Appelée par : `gestesTable`
 
-### `ouvreJournalTable()` — ligne 96
+### `ouvreJournalTable()` — ligne 99
 
 Appelle : `esc()` *(outils.js)*, `journalTableLignes()` *(tableRendu.js)*, `openDialog()` *(dialogue.js)*
 
@@ -12709,9 +13397,9 @@ Appelée par : `gestesTable`
 
 ### `chargement du module`
 
-Appelle : `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `bloqueAvale()` *(tableBloque.js)*, `cacherApercu()` *(apercu.js)*, `caseArret()` *(fenArrets.js)*, `clicAvale()` *(tableLoupe.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesNuageChange()` *(gestesNuage.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `loupeContextuelle()` *(tableLoupe.js)*, `majApercuComportement()` *(fenComportement.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `reglageSalon()` *(tableSalon.js)*, `reglageSimulation()` *(gestesSimulation.js)*, `reglerCible()` *(legalite.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieBudget()` *(fenBudget.js)*, `saisieDeck()` *(gestesDecks.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `appuiAnnule()` *(tableLoupe.js)*, → `appuiBouge()` *(tableLoupe.js)*, → `appuiDebut()` *(tableLoupe.js)*, → `appuiFin()` *(tableLoupe.js)*, → `bloqueBouge()` *(tableBloque.js)*, → `bloqueDebut()` *(tableBloque.js)*, → `bloqueFin()` *(tableBloque.js)*, → `defileTable()` *(tableDispositions.js)*, → `gestesAcquisition()` *(gestesAcquisition.js)*, → `gestesDeck()` *(gestesDeck.js)*, → `gestesDeckConfig()` *(gestesDecks.js)*, → `gestesDecks()` *(gestesDecks.js)*, → `gestesDonnees()` *(gestesDonnees.js)*, → `gestesForge()` *(forgeVue.js)*, → `gestesGraphe()` *(gestesGraphe.js)*, → `gestesNuage()` *(gestesNuage.js)*, → `gestesReglages()` *(gestesReglages.js)*, → `gestesSimulation()` *(gestesSimulation.js)*, → `gestesTable()` *(gestesTable.js)*, → `gestesVue()` *(gestesVue.js)*, → `glisseBouge()` *(tableLever.js)*, → `glisseDebut()` *(tableLever.js)*, → `glisseFin()` *(tableLever.js)*, → `majHauteurEntete()` *(entete.js)*, → `planifieFleches()` *(tableFleches.js)*
+Appelle : `appliquerBudget()` *(fenBudget.js)*, `appliquerFiltres()` *(fenFiltres.js)*, `apresReglage()` *(brouillon.js)*, `basculeTheme()` *(theme.js)*, `bloqueAvale()` *(tableBloque.js)*, `cacherApercu()` *(apercu.js)*, `caseArret()` *(fenArrets.js)*, `clicAvale()` *(tableLoupe.js)*, `closeDialog()` *(dialogue.js)*, `demarrer()` *(app.js)*, `fermetureBrouillon()` *(brouillon.js)*, `ficheVoisine()` *(ficheParcours.js)*, `fmt()` *(outils.js)*, `gestesNuageChange()` *(gestesNuage.js)*, `glisseColonnes()` *(fenAffichage.js)*, `invaliderCandidats()` *(candidats.js)*, `loupeContextuelle()` *(tableLoupe.js)*, `majApercuComportement()` *(fenComportement.js)*, `majFiltre()` *(filtres.js)*, `majListeArchetypes()` *(fenListes.js)*, `majListeSets()` *(fenListes.js)*, `majResultats()` *(fenAjout.js)*, `majResumeFiltres()` *(fenFiltres.js)*, `majResumeFormat()` *(fenFormat.js)*, `modifieBrouillon()` *(brouillon.js)*, `molletteRecherche()` *(rechercheSection.js)*, `montrerApercu()` *(apercu.js)*, `placerApercu()` *(apercu.js)*, `refreshSuggestions()` *(suggestions.js)*, `reglageAffichage()` *(fenAffichage.js)*, `reglageSalon()` *(tableSalon.js)*, `reglageSimulation()` *(gestesSimulation.js)*, `reglerCible()` *(legalite.js)*, `renderAll()` *(rendu.js)*, `renderE()` *(deckSection.js)*, `saisieBudget()` *(fenBudget.js)*, `saisieDeck()` *(gestesDecks.js)*, `saisieRecherche()` *(rechercheSection.js)*, `toast()` *(outils.js)*, → `appuiAnnule()` *(tableLoupe.js)*, → `appuiBouge()` *(tableLoupe.js)*, → `appuiDebut()` *(tableLoupe.js)*, → `appuiFin()` *(tableLoupe.js)*, → `bloqueBouge()` *(tableBloque.js)*, → `bloqueDebut()` *(tableBloque.js)*, → `bloqueFin()` *(tableBloque.js)*, → `defileTable()` *(tableDispositions.js)*, → `gestesAcquisition()` *(gestesAcquisition.js)*, → `gestesDeck()` *(gestesDeck.js)*, → `gestesDeckConfig()` *(gestesDecks.js)*, → `gestesDecks()` *(gestesDecks.js)*, → `gestesDonnees()` *(gestesDonnees.js)*, → `gestesForge()` *(forgeVue.js)*, → `gestesGraphe()` *(gestesGraphe.js)*, → `gestesNuage()` *(gestesNuage.js)*, → `gestesReglages()` *(gestesReglages.js)*, → `gestesSimulation()` *(gestesSimulation.js)*, → `gestesTable()` *(gestesTable.js)*, → `gestesVue()` *(gestesVue.js)*, → `glisseBouge()` *(tableLever.js)*, → `glisseDebut()` *(tableLever.js)*, → `glisseFin()` *(tableLever.js)*, → `majHauteurEntete()` *(entete.js)*, → `pileBouge()` *(tablePile.js)*, → `pileDebut()` *(tablePile.js)*, → `pileFin()` *(tablePile.js)*, → `planifieFleches()` *(tableFleches.js)*
 
-### `demarrer()` — ligne 281
+### `demarrer()` — ligne 286
 
 Appelle : `archetypesARevoir()` *(edhrecThemes.js)*, `chargerArchetypesEdhrec()` *(edhrecThemes.js)*, `chargerGameChangers()` *(gameChangers.js)*, `chargerSauvegarde()` *(stockage.js)*, `chercheTableSauvee()` *(tableReprise.js)*, `demarreForge()` *(forgeDepot.js)*, `demarrerCatalogue()` *(catalogue.js)*, `gameChangersARevoir()` *(gameChangers.js)*, `initBuiltin()` *(cartes.js)*, `loadSymbology()` *(symboles.js)*, `nuageDemarrer()` *(nuage.js)*, `rejoindreDepuisAdresse()` *(tableInvite.js)*, `renderAll()` *(rendu.js)*, `reprendTheme()` *(theme.js)*, `reprendreArchetypesEdhrec()` *(edhrecThemes.js)*, `reprendreGameChangers()` *(gameChangers.js)*, `reprendreSets()` *(sets.js)*, `restore()` *(stockage.js)*
 

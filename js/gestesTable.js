@@ -24,6 +24,9 @@ function gestesTable(act, b) {
     case 'tAnnuler': annuleTable(); return true;
     case 'tSuite': if (TABLE.suite) TABLE.suite(); return true;
     case 'tTour': faitTour(); return true;
+    case 'tPileCarte': touchePile(i, +b.dataset.id); return true;
+    case 'tPileCran': regardePile(i); return true;
+    case 'tPileSommet': regardePile(0); return true;
     case 'tReposer': reposeCarte(); return true;
     case 'tEffet': basculeEffet(b.dataset.d); return true;
     case 'tDef': if (TABLE.question) { selDe(TABLE.question).def = i; renduTable(); } return true;

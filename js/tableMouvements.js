@@ -43,14 +43,18 @@ function releveTuiles(el) {
 }
 
 /* Rejouer le chemin de chaque carte. `prec` et `v` sont la vue d'avant et
-   celle d'après : elles disent où est allée une carte qui a quitté la table. */
-function rejoueTrajets(el, avant, prec, v) {
+   celle d'après : elles disent où est allée une carte qui a quitté la table.
+   Une créature qu'un coup va achever (`coups.retenus`, js/tableCoups.js)
+   reste à sa place sur le calque : le coup la tranchera. */
+function rejoueTrajets(el, avant, prec, v, coups) {
   if (!avant.size || !mouvementsActifs()) return;
   const apres = new Map();
   tuilesTable(el).forEach(t => { const x = mesureTuile(t); if (x.r.width) apres.set(t.dataset.id, x); });
   const partis = [...avant].filter(([id]) => !apres.has(id)).map(([, a]) => a);
   for (const [id, n] of apres) {
     let a = avant.get(id);
+    /* Une carte du tunnel qui était déjà là glisse d'elle-même (js/tablePile.js). */
+    if (a && n.el.closest('.tpi')) continue;
     if (!a) {
       a = partis.find(p => !p.pris && p.nom === n.nom);
       if (a) a.pris = true;
@@ -58,7 +62,11 @@ function rejoueTrajets(el, avant, prec, v) {
     if (a) vole(n, a);
     else arrive(n, el);
   }
-  partis.filter(p => !p.pris).forEach(p => sEnVa(p, el, prec, v));
+  partis.filter(p => !p.pris).forEach(p => {
+    const id = p.el.dataset.id;
+    if (coups && coups.retenus.has(id)) { const g = poseAuCalque(p, el); if (g) coups.noeuds.set(id, {el: g, p, table: el, prec, v}); }
+    else sEnVa(p, el, prec, v);
+  });
 }
 
 /* D'une place à l'autre. Une carte qui s'engage ou se dégage tourne en
@@ -99,14 +107,25 @@ function zoneArrivee(nom, prec, v) {
 /* Une carte qui quitte la table : son ancien nœud, posé sur le calque,
    rejoint le compteur de sa zone d'arrivée, ou s'efface. */
 function sEnVa(p, el, prec, v) {
+  const g = poseAuCalque(p, el);
+  if (g) rejointZone(g, p, el, prec, v);
+}
+
+/* L'ancien nœud d'une carte, posé sur le calque à sa dernière place. */
+function poseAuCalque(p, el) {
   const calque = el.querySelector('.tmv');
-  if (!calque) return;
+  if (!calque) return null;
   const g = p.el;
   g.removeAttribute('data-id');
-  g.classList.remove('leve', 'glisse');
-  Object.assign(g.style, {position: 'fixed', left: p.r.left + 'px', top: p.r.top + 'px', margin: '0', transform: ''});
+  g.classList.remove('leve', 'glisse', 'en-coup');
+  Object.assign(g.style, {position: 'fixed', left: p.r.left + 'px', top: p.r.top + 'px', margin: '0', transform: '', visibility: ''});
   if (p.w) g.style.setProperty('--w', p.w);
   calque.appendChild(g);
+  return g;
+}
+
+/* Le nœud posé sur le calque rejoint le compteur de sa zone, ou s'efface. */
+function rejointZone(g, p, el, prec, v) {
   const dest = zoneArrivee(p.nom, prec, v);
   const cible = dest && [...el.querySelectorAll(`[data-act="tZone"][data-j="${dest.j}"][data-z="${dest.z}"]`)].find(x => x.getBoundingClientRect().width);
   let kf = [{opacity: 1}, {opacity: 0, transform: 'scale(.85)'}];

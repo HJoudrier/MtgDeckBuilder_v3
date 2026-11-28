@@ -23,8 +23,11 @@ function nouvellePartie(cfg) {
     reponses: cfg.consigne ? [] : null, nq: 0, plafondTours: cfg.plafondTours || 25, actionsTour: 0,
     nb: cfg.sieges.length, combat: null, sansCombat: false, finTour: false,
     /* À la table interactive, un temps pour voir chaque objet de la pile
-       avant qu'il se résolve (question « voir », js/jeuPile.js). */
-    montre: !!cfg.montre
+       avant qu'il se résolve (question « voir », js/jeuPile.js), et les
+       attaquants et leurs bloqueurs avant que les blessures tombent
+       (js/jeuCombat.js) — une option à part, qu'une partie rangée avant
+       elle n'a pas. */
+    montre: !!cfg.montre, montreCombat: !!cfg.montreCombat
   };
   cfg.sieges.forEach((s, i) => {
     const J = {i, nom: s.nom || ('Joueur ' + (i + 1)), format: s.format || 'perso', vie: s.vie || 20, vieDepart: s.vie || 20, poison: 0, energie: 0,
