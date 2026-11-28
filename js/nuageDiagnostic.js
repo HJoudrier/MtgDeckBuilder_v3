@@ -75,6 +75,14 @@ async function nuageDiagnostic() {
       etapes.push(await nuageEtape('Suppression du témoin', nuageEffaceTemoin));
   }
 
+  /* L'historique est une permission à part (`files.metadata.read`) : qu'elle
+     manque ne gêne pas la synchronisation, mais empêche de revenir en arrière. */
+  if (etapes[0].ok) etapes.push(await nuageEtape('Historique des versions', async () => {
+    const l = await dbxVersions(NUAGE.chemin);
+    return l.length ? `${l.length} version${l.length > 1 ? 's' : ''} gardée${l.length > 1 ? 's' : ''}`
+                    : 'aucune version encore';
+  }));
+
   const rate = etapes.find(e => !e.ok);
   NUAGE.etat = rate ? 'erreur' : 'ok';
   NUAGE.msg = rate ? `${rate.nom} : ${rate.dit}` : 'Connexion éprouvée de bout en bout.';

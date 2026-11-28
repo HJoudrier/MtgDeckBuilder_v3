@@ -90,25 +90,6 @@ function moiHTML(v) {
   return `<section class="ar-moi">${cartouche(J, v, 'moi')}${champDeuxRangs(J, v, 'moi')}</section>`;
 }
 
-/* Ce qu'est chaque élément de la pile, en toutes lettres : ce qu'on résout en ce moment, puis ce qui
-   attend, du sommet — le premier à se résoudre — au fond. Les tuiles disent qui ; ceci dit quoi. */
-function pileExpliqueHTML(v) {
-  const qui = it => it.ctrl === v.moi ? 'à vous' : esc(v.joueurs[it.ctrl].nom);
-  const ligne = (it, etiquette, classe) => `<div class="tp-item ${classe || ''}">
-    <div class="tp-tete">${etiquette ? `<span class="tp-etiq">${esc(etiquette)}</span> ` : ''}<b>${esc(it.nom)}</b>
-      <span class="pill">${esc(it.genreLibelle)}</span> <span class="muted small">${qui(it)}${it.kicked ? ' · kicker' : ''}${it.x ? ' · X = ' + it.x : ''}</span></div>
-    ${it.texte ? `<div class="small tp-texte">${esc(it.texte)}</div>` : ''}
-    ${it.permanent ? '<div class="small muted">Se résout en entrant sur le champ de bataille.</div>' : ''}
-    ${it.cibles.length ? `<div class="small">Cible${it.cibles.length > 1 ? 's' : ''} : <b>${esc(it.cibles.join(', '))}</b></div>` : ''}</div>`;
-  const pile = v.pile.slice().reverse();
-  const sommet = v.resout ? 'Se résout maintenant' : v.resolvant ? 'Ensuite' : 'Sommet : se résout si tout le monde passe';
-  return `<div class="tp-expl" aria-live="polite">
-    ${v.resolvant ? `<div class="tp-bloc"><div class="tp-sous">En cours de résolution</div>${ligne(v.resolvant, '', 'courant')}</div>` : ''}
-    ${pile.length ? `<div class="tp-bloc"><div class="tp-sous">Sur la pile${pile.length > 1 ? ' — du sommet au fond' : ''}</div>${pile.map((it, i) =>
-      ligne(it, i === 0 ? sommet : 'En dessous', i === 0 && v.resout ? 'courant' : '')).join('')}</div>` : ''}
-  </div>`;
-}
-
 /* La main, en éventail : chaque carte tourne de quelques degrés autour du
    centre — son corps tourne, pas elle, pour que sa mesure reste juste
    quand elle voyage (js/tableMouvements.js). */

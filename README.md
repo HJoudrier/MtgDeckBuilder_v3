@@ -15,6 +15,7 @@ css/atelier.css     styles
 css/table.css       styles de la table interactive
 css/analyse.css     styles de l'onglet Analyse
 outils/genDoc.js    écrit doc/fonctions.md à partir des sources
+outils/compareLectures.js  confronte les deux lectures du graphe sur un dépôt de Forge cloné
 js/                 modules, chargés dans cet ordre :
 
   — le fond —
@@ -23,6 +24,10 @@ js/                 modules, chargés dans cet ordre :
   synergies.js      ce qu'une carte apporte à une autre
   cartesBrutes.js   la base livrée avec l'atelier
   analyse.js        lire une carte : coût, capacités, déclencheurs, effets
+  grapheForgeQualif.js  ce que disent les filtres, les coûts et les jetons de Forge
+  grapheForgeTables.js  le vocabulaire de Forge dans celui du graphe : déclencheurs, effets
+  grapheForgeMotsCles.js  les mots-clés, statiques et remplacements de Forge dans le graphe
+  grapheForge.js    lire le graphe d'une carte dans son script de Forge
   archetypesLibelles.js  le nom français des thèmes EDHREC
   categories.js     les rôles d'une carte
   mana.js           ce qu'une carte demande en mana, et ce qu'elle en produit
@@ -253,6 +258,7 @@ js/                 modules, chargés dans cet ordre :
   nuageDropbox.js   l'adaptateur Dropbox : PKCE, et le `rev` comme verrou
   nuage.js          la synchronisation : sa configuration, et son calendrier (à l'ouverture, puis sur demande)
   nuageDiagnostic.js  éprouver la connexion, étape par étape
+  nuageVersions.js  revenir à une version antérieure du fichier, lue dans l'historique de Dropbox
   edhrec.js         les statistiques d'EDHREC pour un commandant
   edhrecForme.js    deviner la forme des pages de thèmes d'EDHREC
   edhrecThemes.js   l'index des thèmes EDHREC
@@ -261,6 +267,7 @@ js/                 modules, chargés dans cet ordre :
   archive.js        lire l'archive Scryfall
   catalogue.js      tenir le catalogue à jour
   candidats.js      des enregistrements de l'archive aux cartes candidates
+  inconnues.js      les cartes importées sans fiche, complétées par l'archive
 
   — les sections —
   decksSection.js   la section « Mes decks »
@@ -287,6 +294,7 @@ js/                 modules, chargés dans cet ordre :
   deck.js           ce qu'il y a dans le deck, et les gestes qui l'y mettent
   legalite.js       ce que le format exige, et l'équilibre des rôles
   deckSection.js    la section Deck
+  deckInconnues.js  les cartes connues de nom seulement : complétées d'elles-mêmes (archive, fiches de simulation, puis Scryfall), annoncées sinon
   ficheVisuel.js    le visuel de la fiche, et ses éditions
   fiche.js          la fiche détaillée d'une carte
   ficheParcours.js  ouvrir une fiche, et feuilleter la liste d'où elle vient
@@ -312,6 +320,7 @@ js/                 modules, chargés dans cet ordre :
   anaSection.js     l'onglet « Analyse »
   forgeDepot.js     les scripts de Forge, téléchargés de GitHub et gardés
   forgeVue.js       la section « Cartes Forge » et « Ce qu'il manque au moteur »
+  lectureGraphe.js  quelle lecture pour le graphe : le script ou le texte
 
   — l'interface commune —
   outils.js         échapper, formater un prix, souffler un mot
@@ -332,6 +341,7 @@ js/                 modules, chargés dans cet ordre :
   fenFormat.js      format de jeu
   fenParametres.js  sauvegarde locale, synchronisation, apparence, catalogue
   fenNuage.js       la section « Synchronisation » de cette fenêtre
+  fenVersions.js    la fenêtre des versions synchronisées : la liste, l'aperçu, la restauration
   fenBudget.js      budget du deck et préférences d'achat
   fenDeck.js        la configuration d'un deck : nom, règles, budget, restrictions
   fenFiltres.js     filtres de la collection
@@ -373,12 +383,15 @@ js/                 modules, chargés dans cet ordre :
   tableDispositions.js  Arène, Couloirs, Tour de table : trois façons de disposer la table
   tableLoupe.js     voir une carte en grand, d'un appui long
   tablePhases.js    les phases du tour en points, et qui a la priorité
-  tableFleches.js   ce qui vise quoi, en flèches : cibles, activations, combat
+  tableFleches.js   ce qui vise quoi : les liens d'or de la pile, les flèches du combat
   tableRendu.js     la table, peinte depuis une vue, région par région
   tableQuestions.js répondre à une question du moteur, à la main
   tableCombat.js    attaquer au doigt ; l'état d'une carte pendant un combat
   tableBloque.js    bloquer en glissant une créature sur son attaquant
   tableFront.js     la ligne de front : la pile et le bouton de tour
+  tablePile.js      la pile en profondeur, un tunnel qu'on fait défiler d'un glissé
+  tableEclats.js    ce que l'œil voit d'un coup : élan, entaille, éclats, carte tranchée
+  tableCoups.js     les coups qui portent, lus d'une vue à la suivante
   tableLever.js     lever une carte puis la jouer, ou la pousser vers le haut
   tableSons.js      les sons synthétisés et les vibrations de la table
   tableRessenti.js  sons, vibrations et points de vie, lus d'une vue à la suivante
@@ -458,6 +471,48 @@ compte est un sous-type, sans liste à tenir. Le lien devient alors strict, car 
 ses sous-types sur sa ligne de type — sa production de lancement est marquée `intrinseque`
 (`js/analyse.js`) — tandis qu'une production d'effet, qui ne dit pas ce qui sera lancé, garde son
 demi-crédit.
+
+**Deux lectures pour le graphe.** La lecture du texte (`analyseTexte()`, `js/analyse.js`) cherche ses
+motifs dans l'anglais, et se trompe de façon prévisible : un mot de capacité devant le déclencheur (« Landfall — Whenever… ») le cachait
+entier, « whenever you attack » n'était pas « attacks », « if you didn't cast a spell » devenait un
+déclencheur, un jeton « with flying » donnait le vol à la carte, « sacrifice a land » faisait un
+exutoire à créatures. Les scripts de Forge, déjà téléchargés pour le moteur, écrivent tout cela
+rangé : la lecture de Forge (`analyseForge()`, `js/grapheForge.js`) en tire les **mêmes capacités**
+que celle du texte (`capacitesTexte()`) — un `from`, un `to`, une qualification —, et
+`assembleAnalyse()` en fait les arcs, les déclencheurs et les productions quelle que soit leur
+source. Le croisement, la notation, les rôles et le graphe ne savent pas d'où vient une capacité.
+Forge ne relie pas les cartes entre elles : il donne des extrémités de lien précises, le
+croisement reste le nôtre.
+
+- **Les tables brutes, non les définitions du moteur.** Le moteur écarte une unité entière dès qu'un
+  élément lui manque ; le graphe n'exécute rien. Une unité dont un élément est absent des tables
+  (`js/grapheForgeTables.js`, `js/grapheForgeMotsCles.js`) est relue dans sa description par la
+  lecture du texte (`fermeUnite()`) : une carte ne perd jamais ce que le texte y voyait.
+- **Ce que seule la structure dit.** Un exil suivi d'un retour en jeu est un blink où qu'il soit dans
+  la chaîne ; un remplacement qui double (jetons, marqueurs, blessures, vie) se nourrit de ce qu'il
+  double ; un coût payé à la résolution (« you may sacrifice an artifact. If you do… ») fait un
+  exutoire avec son propre sujet (`qCout`) ; un coût consomme ce qu'il nomme — un artefact, un
+  gobelin — et non « une créature » ; `masse`, `affaiblit`, `sacTable` et `surSoi` disent aux rôles
+  (`categories()`) ce qui balaie et sur qui porte ce qui détruit, sans chercher « all » ni « you
+  control » dans une phrase.
+- **Pas de mélange pendant un téléchargement** (`js/lectureGraphe.js`). Le catalogue note des
+  milliers de cartes avec une même notation ; une carte lue dans Forge, qui a moins de faux liens,
+  n'y serait pas jugée comme sa voisine lue dans le texte. Le graphe passe donc à Forge quand 95 %
+  des scripts sont sur l'appareil, puis relit toutes les cartes connues par tranches et renote en
+  arrière-plan. Une carte que Forge ne connaît pas reste lue dans son texte, et la fiche dit, carte
+  par carte, la lecture retenue et ce que l'autre aurait vu de plus ou de moins. Le réglage « Lire le
+  graphe et les rôles dans les scripts » (section Cartes Forge, `S.simulation.grapheForge`) ramène
+  tout au texte.
+- **Piège : la portée globale est partagée avec le moteur.** `declencheurForge`, `statiqueForge`,
+  `coutsForge`, `texteForge`, `listeForge` y existaient déjà : les fonctions du graphe portent
+  « Graphe » dans leur nom (`declencheurGraphe()`…). `node outils/genDoc.js --verifie` refuse un nom
+  déclaré deux fois — c'est lui qui a vu le dernier.
+
+La mesure est dans [doc/graphe-deux-lectures.md](doc/graphe-deux-lectures.md) : chaque carte de Forge
+lue des deux façons, nœud par nœud, rôle par rôle, et les liens tracés entre les cartes d'un
+échantillon. `node outils/compareLectures.js <forge-gui/res> --sortie=doc/graphe-deux-lectures.md`
+la refait sur un dépôt de Forge cloné ; c'est le banc des tables, et la liste des éléments qu'elles
+ne lisent pas encore.
 
 Les trois dernières lisent une **même sélection notée** : la notation ne connaît qu'une liste, et
 `selectionSuggestions()` (`js/sugListes.js`) la partitionne une fois — ce qui touche les nœuds
@@ -662,13 +717,29 @@ honore et qu'un iPhone ignore. Trois réglages au menu de la table, propres à l
 départ), vibrations, mouvements (`S.table.son`, `.vibre`, `.mouvements`) ; « mouvements réduits » du
 système coupe les trajets.
 
+**Des coups qui portent** (`js/tableCoups.js`, `js/tableEclats.js`). Quand les blessures de combat
+tombent, chaque attaquant prend son élan et frappe ce qu'il attaque, et le bloqueur riposte : la
+créature taille, frappe d'estoc si elle a l'initiative, charge si sa force vaut 5 ou plus, plonge si elle vole.
+La cible s'éclaire, tremble, prend une entaille et un nombre en étoile ; une créature tuée d'un coup de
+lame se fend en deux le long de l'entaille, une charge l'écrase ; un joueur frappé voit son cartouche
+trembler, et si c'est soi, toute la table tremble et ses bords rougissent. Un sort qui se résout envoie
+une lueur de sa couleur vers sa cible. Comme les sons, tout se lit dans la différence entre deux vues
+(`planCoups()`) — qui attaquait qui, qui a pris des blessures, qui a quitté le champ — et se joue sur
+la table neuve : les points de vie et la force qui baissent gardent leur valeur d'avant jusqu'au choc,
+et une créature morte reste sur le calque (`rejoueTrajets()` la retient) jusqu'à ce que le coup
+l'achève. La carte qui frappe part en **doublure** sur le calque, sa rangée qui défile la rognerait ;
+l'original se cache dessous, même si la table se repeint en plein élan. Il faut pour cela qu'une vue
+montre les bloqueurs avant les blessures : quand personne ne peut répondre, le moteur les enchaînait
+dans le même souffle. À la table, il pose donc une question « voir » avant les blessures de combat
+(`cfg.montreCombat`, distincte de `cfg.montre` pour qu'une partie rangée avant elle se rejoue sans) ;
+l'hôte la montre un instant, puis laisse aux coups le temps de porter (`montreCombat()`, `pauseCoups()`).
+
 **Savoir de quoi on parle** (`js/jeuPileExplique.js`, `js/tableDispositions.js`, `js/tableQuestions.js`). La pile
 se lisait par ses tuiles — qui a lancé quoi —, sans dire ce que chaque élément *fait*, et « Le faire ? » ne disait
 pas ce qu'on s'apprêtait à faire. `descriptionPile()` décrit un élément de pile à un humain : son genre (sort,
 capacité déclenchée, activée, copie), son texte, son contrôleur, ses cibles, X et le kicker ; la vue l'emporte,
-chez l'invité comme chez l'hôte. La table l'écrit sous la ligne de front (`pileExpliqueHTML()`) : ce qui se résout en ce
-moment, puis ce qui attend, **du sommet — le premier à se résoudre — au fond**, et la priorité nomme ce à quoi on
-répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
+chez l'invité comme chez l'hôte. La table l'écrit à côté de la pile, pour l'objet qu'on regarde (ci-dessous), et la
+priorité nomme ce à quoi on répond (« en réponse à *Geode Rager* — passez : il se résout »). L'élément qu'on résout n'est plus sur la pile :
 `resoudre()` le retire avant de le dérouler, si bien qu'on le garde le temps de sa résolution (`RESOLVANTS`, hors
 de `P` pour que la copie d'une partie par l'IA ne l'emporte pas) et que **toute question posée pendant qu'il se
 résout dit de quoi il s'agit** : « Se résout *Geode Rager* (capacité déclenchée, la vôtre) — Landfall : goad each
@@ -692,7 +763,10 @@ chaque question de choix (hors priorité, combat, mulligan) un `contexte` : le s
 lance ou qu'on active, à défaut la carte que la question nomme (`source`), avec sa fiche. La table
 (`contexteQuestionHTML()`) la montre **en image**, avec son texte, au-dessus de la question — l'image reste là même si
 la carte a quitté le champ, et un toucher l'ouvre en grand (la loupe, identifiant `ID_CONTEXTE`, qui n'est celui
-d'aucun objet de la partie). La **pause de
+d'aucun objet de la partie). L'objet **qu'on résout**, lui, est déjà devant dans le tunnel de la pile avec son texte :
+le bandeau le nomme d'une ligne, qu'un toucher ouvre en grand. Le redire prenait au bandeau la place de ses choix —
+de Sanar, Innovative First-Year, on ne voyait des cartes révélées que leur ligne de type. Le bandeau, trop plein,
+défile ; il ne rabote plus ses enfants. La **pause de
 résolution** — l'objet reste visible, « résolution : X » dans la barre du haut — dure maintenant le temps de
 lire : une base, plus neuf millisecondes par caractère du texte, jusqu'à deux secondes de plus ; le bouton de
 tour, qui dit alors « Continuer », la coupe (`attendreOuSuite()`, hôte seulement). Les textes sont ceux des cartes, en anglais.
@@ -710,7 +784,21 @@ les **phases** du tour en points, de l'entretien à la fin, et écrit en entier 
 **priorité** (`vueTable()`). Des **flèches** relient chaque objet de la pile à ses cibles, la
 carte qui s'active à sa capacité, l'attaquant au joueur qu'il attaque, le bloqueur à l'attaquant
 (`js/tableFleches.js`) ; pour les tracer, la vue de la pile porte ses cibles et sa source, réduites
-à ce qui est public (`refPublique()`). La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
+à ce qui est public (`refPublique()`). Ceux de la pile sont des **liens d'or** : le trait arrive puis
+s'enroule autour de la carte ou du cartouche visé, une lueur y circule. Ils se gardent d'un tracé à
+l'autre, rangés par ce qu'ils relient, et ne se dessinent qu'à leur naissance.
+
+**La pile en profondeur** (`js/tablePile.js`). Au centre de la ligne de front, un tunnel : l'objet de
+devant en grand, ceux du dessous qui reculent et montent derrière lui, leur nom dépassant ; l'objet qu'on
+résout s'avance, brille, et le reste de la table s'assombrit, sauf ce qu'il touche. Un glissé vertical
+amène devant ce qui est dessous, un toucher sur une carte du fond aussi ; à côté s'écrit ce que fait
+l'objet regardé et quand il se résoudra, et seuls ses liens brillent. Le tunnel est un nœud qui **survit
+aux repeints** — une transition ne joue que sur un élément qui demeure, et un doigt posé dessus ne doit
+pas perdre son geste — : le front ne porte qu'une place vide, où `posePile()` le remet après chaque
+peinture, et les trajets de `rejoueTrajets()` laissent ses cartes à leurs propres transitions. Pendant une
+question de choix, sur un téléphone, il se **replie** — petites cartes, le nom, deux lignes de texte — pour laisser
+au bandeau la place de ses choix ; ses cartes montent d'un quart de leur largeur par cran, et ne débordent donc
+pas sur le bandeau. La partie hébergée est rangée à chaque réponse dans IndexedDB (`table-partie`) : le moteur
 étant déterministe, la graine, les fiches et les réponses suffisent à la **rejouer à l'identique**
 après un rechargement.
 
@@ -2603,6 +2691,18 @@ croit remplacer, refusant en 409 si l'autre appareil a écrit entre-temps. L'API
 pas d'équivalent depuis qu'elle a retiré les `ETag`, et son jeton ne vit qu'une heure. Un tour se
 fait toujours dans le même ordre — **tirer, fusionner, verser, pousser** — et un conflit de `rev` se
 rejoue une fois sur le nouveau distant.
+
+**Revenir en arrière** (`js/nuageVersions.js`, `js/fenVersions.js`). Dropbox garde chaque écriture du fichier
+comme une révision — trente jours, cent quatre-vingts sur une offre professionnelle — et l'atelier n'en tient
+aucune copie : `dbxVersions()` lit la liste (`files/list_revisions`), `dbxLire('rev:…')` une version. Choisir
+une ligne ne fait que **lire** ; seul « Restaurer cette version » agit. Restaurer **ajoute une page à
+l'histoire, il ne la réécrit pas** : la version choisie est versée, puis poussée comme la plus récente,
+et celle qu'elle remplace reste dans la liste. Un tour ordinaire passe d'abord, pour que ce que cet appareil
+avait de non envoyé figure dans la révision remplacée. L'autre appareil la reçoit comme n'importe quel
+accord, par la fusion à trois côtés. Lister demande la permission `files.metadata.read`, que la
+synchronisation seule n'exige pas : un jeton accordé avant qu'on la coche ne l'a pas, et il faut
+reconnecter l'appareil. Une réponse `missing_scope` est donc distinguée d'un jeton mort (`err.portee`) — elle
+ne doit pas effacer les jetons.
 
 La sauvegarde locale, elle, garde son marqueur `v: 1`. Le passer à 2 ferait qu'un atelier resté sur
 le code d'hier rejetterait la sauvegarde — `restore()` refuse `d.v !== 1` — puis l'écraserait par un

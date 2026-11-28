@@ -135,7 +135,7 @@ function renduTable() {
   el.hidden = !TABLE.ouverte;
   document.body.classList.toggle('table-ouverte', TABLE.ouverte);
   document.body.classList.toggle('table-bloquer', !!(TABLE.ouverte && TABLE.question && TABLE.question.q === 'bloqueurs'));
-  const pleine = html => { el.className = 'table'; el.innerHTML = html; REPEINT.charpente = ''; TABLE.vuePeinte = null; };
+  const pleine = html => { el.className = 'table'; el.innerHTML = html; REPEINT.charpente = ''; TABLE.vuePeinte = null; posePile(null); };
   if (!TABLE.ouverte) return pleine('');
   if (TABLE.phase === 'salon') return pleine(salonHTML());
   if (TABLE.phase === 'rejoindre' && typeof rejoindreHTML === 'function') return pleine(rejoindreHTML());
@@ -143,13 +143,20 @@ function renduTable() {
   if (!v) return pleine('<div class="tb-attente">Préparation de la partie…</div>');
   el.className = 'table en-partie disp-' + dispositionTable() + (v.joueurs.length > 2 ? ' multi' : '');
   suisActif(v);
-  /* Les cartes sont mesurées avant le repeint, pour voyager après ; les
-     flèches se tracent avant le départ, aux places d'arrivée. */
+  /* Les cartes sont mesurées avant le repeint, pour voyager après ; le
+     tunnel de la pile reprend sa place, et les flèches se tracent avant le
+     départ, aux places d'arrivée. */
   const avant = releveTuiles(el), prec = TABLE.vuePeinte;
   const neuve = peinsRegions(el, regionsPartie(v), charpentePartie());
+  /* Les coups se lisent d'une vue à l'autre, et se jouent sur la table
+     neuve (js/tableCoups.js). */
+  const coups = neuve ? null : planCoups(prec, v);
   appliquePage();
+  posePile(v);
+  recacheCoups(el);
   traceFleches();
-  if (!neuve) rejoueTrajets(el, avant, prec, v);
-  ressens(prec, v);
+  if (!neuve) rejoueTrajets(el, avant, prec, v, coups);
+  ressens(prec, v, coups);
+  joueCoups(coups, avant);
   TABLE.vuePeinte = v;
 }

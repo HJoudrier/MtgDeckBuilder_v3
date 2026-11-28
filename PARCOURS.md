@@ -630,6 +630,12 @@ sequenceDiagram
     NU->>UI: majFenetreParametres() — état, dernier accord, désaccords
 ```
 
+Revenir à une ancienne version est un parcours à part, qui ne part que sur un bouton :
+`openVersionsModal()` liste les révisions (`dbxVersions()`), « Voir… » lit l'une d'elles sans rien
+changer (`nuageVersionVoir()`), et « Restaurer cette version » rattrape d'abord un tour ordinaire, verse
+la version choisie par `restore()`, puis la pousse comme la plus récente (`nuageVersionRestaure()`). Ce
+que la restauration remplace reste dans la liste.
+
 La connexion, elle, ne passe qu'une fois par appareil : `dbxConnexion()` quitte la page vers
 Dropbox avec l'empreinte du code de preuve, et `dbxRetourConnexion()` échange le code contre les
 deux jetons au rechargement, puis nettoie l'adresse. Le jeton de rafraîchissement ne meurt pas ;
@@ -909,6 +915,7 @@ sequenceDiagram
         end
     end
     DEP->>VUE: forgeChange() — couverture et manques périmés
+    Note over VUE: relisGraphe() — si la lecture du graphe change (§3.28)
 ```
 
 ### 3.24 Résoudre une capacité Forge
@@ -1019,7 +1026,7 @@ sequenceDiagram
 
 La priorité et le combat se règlent sur la ligne de front, entre les adversaires et son champ. Une
 carte se lève d'un toucher, se joue d'un second ou du bouton de tour, ou d'une poussée vers le haut.
-Le repeint qui suit fait voyager la carte et en tire les sons et les vibrations.
+Le repeint qui suit fait voyager la carte et en tire les sons, les vibrations et les coups.
 
 ```mermaid
 sequenceDiagram
@@ -1031,6 +1038,8 @@ sequenceDiagram
     participant Q as tableQuestions.js
     participant R as tableRendu.js
     participant MV as tableMouvements.js
+    participant PI as tablePile.js
+    participant CP as tableCoups.js
     participant RS as tableRessenti.js
 
     alt toucher
@@ -1048,12 +1057,79 @@ sequenceDiagram
     end
     Note over R: la vue suivante arrive (hôte ou invité)
     R->>MV: releveTuiles() — avant peinsRegions()
-    R->>R: peinsRegions(), traceFleches()
-    R->>MV: rejoueTrajets() — appariées par nom, de la main à la pile
-    R->>RS: ressens(vue d'avant, vue d'après) — sons, vibrations, points de vie
+    R->>R: peinsRegions()
+    R->>CP: planCoups(vue d'avant, vue d'après) — qui a frappé qui, qui en meurt
+    R->>PI: posePile() — le tunnel reprend sa place, ses cartes glissent d'un cran
+    R->>R: traceFleches() — les liens d'or suivent les cartes
+    R->>MV: rejoueTrajets() — appariées par nom, de la main à la pile ; une créature qu'un coup achèvera reste sur le calque
+    R->>RS: ressens(vue d'avant, vue d'après) — sons, vibrations, points de vie, hors ce que les coups montrent
+    R->>CP: joueCoups() — élan, choc, entaille ; la carte tranchée
+```
+
+### 3.28 Les blessures de combat, à la table
+
+Quand personne ne peut répondre, le moteur enchaînait les bloqueurs et les blessures dans le même
+souffle : aucune vue ne montrait qui bloquait qui. À la table, il pose une question « voir » avant les
+blessures ; l'hôte la montre un instant, y répond seul, puis laisse aux coups le temps de porter. Chaque
+appareil, l'invité comme l'hôte, tire les coups de la différence entre ses deux dernières vues.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant H as tableHote.js
+    participant M as jeuCombat.js
+    participant R as tableRendu.js
+    participant CP as tableCoups.js
+    participant E as tableEclats.js
+
+    H->>M: repondre() — les bloqueurs déclarés
+    M-->>H: degatsCombat() : question « voir », extra.combat (cfg.montreCombat)
+    H->>R: montreCombat() → diffuseVues(true) — vue combatVu : attaquants et bloqueurs
+    Note over H: un instant (pauseEtape × 1,5)
+    H->>M: repondre(0) — les blessures tombent
+    H->>R: diffuseVues(true), puis attendre pauseCoups(n)
+    R->>CP: planCoups(vue combatVu, vue d'après) — échanges, morts retenues
+    R->>CP: joueCoups()
+    CP->>E: elan() — doublure sur le calque, traînée, choc
+    CP->>E: tranche() ou ecrase() — une fois l'attaquant et le bloqueur passés
 ```
 
 ---
+
+### 3.28 Le graphe change de lecture
+
+Les scripts de Forge arrivent (ou s'effacent), ou l'on bascule le réglage « Lire le graphe et les
+rôles dans les scripts » : toutes les cartes connues sont relues, puis la notation est refaite en
+arrière-plan. Une carte analysée ensuite — Scryfall qui la complète, l'archive qui la bâtit — passe
+par le même aiguillage.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant VUE as forgeVue.js
+    participant LECT as lectureGraphe.js
+    participant AN as analyse.js
+    participant GF as grapheForge.js
+    participant CAT as categories.js
+    participant UI as interface
+
+    VUE->>LECT: relisGraphe() — forgeChange(), ou le réglage
+    LECT->>LECT: lectureForgeActive() — le réglage, et 95 % des scripts là
+    Note over LECT: même signature qu'avant : rien à faire
+    loop par tranches de 15 ms, toutes les cartes (DB et catalogue)
+        LECT->>CAT: reanalyser(carte)
+        CAT->>AN: analyze(carte)
+        AN->>LECT: lectureForgeDe(carte) — le script, s'il est là
+        alt un script
+            LECT->>GF: analyseForge() — chaque unité ; une inconnue est relue dans le texte
+        else aucun
+            AN->>AN: analyseTexte()
+        end
+        AN->>AN: assembleAnalyse() — arcs, déclencheurs, productions
+        CAT->>CAT: categories() — les rôles
+    end
+    LECT->>UI: MAJ_CARTES++, invaliderCandidats(), recalculerAvecProgression(…, {fond})
+```
 
 ## 4. Ce qui périme quoi
 
@@ -1069,6 +1145,7 @@ chacun gardé sous une empreinte : tant que l'empreinte est la même, le travail
 | `DEFS` (`js/definitions.js`) | La définition de jeu de chaque carte | nom, empreinte du texte, comportement manuel, script Forge et jetons, `COMPILO_V` | Le texte oracle, un comportement écrit à la main, un script Forge téléchargé ou mis à jour, le compilateur |
 | `MANQUES` (`js/forgeVue.js`) | Ce qu'il manque au moteur pour vos cartes, et pour toute la base | les scripts, le commit, la taille de `FORGE_SAIT`, les decks et les adversaires | Un téléchargement, un deck ou un adversaire modifié, un élément ajouté au moteur |
 | `BASES_EVAL` (`js/iaEvaluation.js`) | Le plateau de chaque joueur, pour la note d'une position | la partie et `P.ver` | Tout changement de l'état ; une copie a le sien |
+| `LECTURE` (`js/lectureGraphe.js`) | La lecture que le graphe retient, et les scripts déjà lus | `lectureForgeActive()`, le commit, le nombre de scripts | Un téléchargement achevé, des scripts effacés, le réglage « Lire le graphe… » — qui relit toutes les cartes et augmente `MAJ_CARTES` |
 | `COUV_TABLE` (`js/simSection.js`) | La couverture des decks de la table | `couvertureTable()` | Le deck testé, un autre deck de la table, un comportement, l'archive, les fiches venues de Scryfall, les scripts Forge |
 
 Deux conséquences pratiques :

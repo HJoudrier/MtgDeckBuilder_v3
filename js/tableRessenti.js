@@ -9,8 +9,10 @@
    l'hôte, sans que rien d'autre ne voyage que la vue.
    ===================================================================== */
 
-/* Comparer deux vues du même joueur, et dire ce qui a changé. */
-function ressens(avant, apres) {
+/* Comparer deux vues du même joueur, et dire ce qui a changé. Ce que les
+   coups montrent (js/tableCoups.js) — un joueur frappé, une créature
+   achevée — se fait entendre au choc, pas ici. */
+function ressens(avant, apres, coups) {
   if (!avant || !apres || avant === apres || avant.moi !== apres.moi || avant.joueurs.length !== apres.joueurs.length) return;
   questionRessentie(apres);
   const moi = apres.moi;
@@ -21,7 +23,7 @@ function ressens(avant, apres) {
   const champAvant = new Map(avant.champ.map(o => [o.id, o])), champApres = new Set(apres.champ.map(o => o.id));
   const poses = apres.champ.filter(o => !champAvant.has(o.id));
   if (poses.length) { sonTable('pose'); if (poses.some(o => o.ctrl === moi)) vibreTable('pose'); }
-  const morts = avant.champ.filter(o => !champApres.has(o.id) && o.types && o.types.includes('creature'));
+  const morts = avant.champ.filter(o => !champApres.has(o.id) && o.types && o.types.includes('creature') && !(coups && coups.retenus.has(String(o.id))));
   if (morts.length) { sonTable('mort'); if (morts.some(o => o.ctrl === moi)) vibreTable('mort'); }
   const attaquants = apres.champ.filter(o => o.attaque && !(champAvant.get(o.id) || {}).attaque);
   if (attaquants.length) {
@@ -30,9 +32,9 @@ function ressens(avant, apres) {
   }
   apres.joueurs.forEach((J, i) => {
     const d = J.vie - avant.joueurs[i].vie;
-    if (!d) return;
+    if (!d || (coups && coups.joueurs.has(i))) return;
     jaillitVie(i, d);
-    if (i === moi && d < 0) { sonTable('blesse'); vibreTable('blesse'); }
+    if (i === moi && d < 0) { sonTable('blesse'); vibreTable('blesse'); ebranle(d <= -3); }
   });
   if (apres.fin && !avant.fin) { sonTable(apres.fin.gagnant === moi ? 'victoire' : 'defaite'); vibreTable('victoire'); }
 }

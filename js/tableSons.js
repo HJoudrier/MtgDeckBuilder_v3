@@ -82,17 +82,33 @@ const SONS_TABLE = {
   blesse: () => tonTable({f: 80, f2: 45, dur: .4, vol: .6}),
   tour: () => [196, 392, 588].forEach((f, i) => tonTable({f, dur: 1.6, vol: .13 / (i + 1)})),
   victoire: () => [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tonTable({f, type: 'triangle', dur: .8, vol: .1, at: i * .12})),
-  defaite: () => [392, 349.23, 311.13, 261.63].forEach((f, i) => tonTable({f, type: 'triangle', dur: .7, vol: .09, at: i * .16}))
+  defaite: () => [392, 349.23, 311.13, 261.63].forEach((f, i) => tonTable({f, type: 'triangle', dur: .7, vol: .09, at: i * .16})),
+  /* Les coups (js/tableCoups.js). La hauteur varie d'un coup à l'autre pour
+     qu'une rafale ne sonne pas mécanique ; `i` dit la force du coup. */
+  fendre: (i = 1) => souffleTable({dur: .17, vol: .34 * i, f: 500 * auHasard(), f2: 4200, q: 1.1}),
+  tranche: (i = 1) => { const p = auHasard(); [2350, 3530, 4790, 6260].forEach((f, k) => tonTable({f: f * p, dur: .55 - k * .1, vol: .05 * i / (k * .6 + 1)}));
+    souffleTable({dur: .06, vol: .25 * i, type: 'highpass', f: 5000, q: .7}); },
+  impact: (i = 1) => { const v = Math.min(i, 1.5); tonTable({f: 150 * auHasard(), f2: 45, dur: .24, vol: .8 * v});
+    souffleTable({dur: .14, vol: .5 * v, type: 'lowpass', f: 1400, f2: 180, q: .8}); tonTable({f: 1100, f2: 180, type: 'square', dur: .025, vol: .08}); },
+  lourd: () => { tonTable({f: 95, f2: 28, dur: .6, vol: 1}); tonTable({f: 60, f2: 30, dur: .5, vol: .7, at: .05});
+    souffleTable({dur: .45, vol: .6, type: 'lowpass', f: 700, f2: 90, q: .6}); souffleTable({dur: .3, vol: .2, f: 2500, f2: 600, q: .8, at: .02}); },
+  zap: () => { tonTable({f: 1600 * auHasard(), f2: 160, type: 'sawtooth', dur: .22, vol: .09}); souffleTable({dur: .25, vol: .18, f: 3200, f2: 900, q: 2.5});
+    for (let k = 0; k < 6; k++) souffleTable({dur: .02, vol: .12, type: 'highpass', f: 4000, at: .03 + Math.random() * .2}); },
+  brise: () => { souffleTable({dur: .45, vol: .35, f: 2800, f2: 500, q: 1.4}); tonTable({f: 320, f2: 70, type: 'sawtooth', dur: .45, vol: .05});
+    for (let k = 0; k < 5; k++) souffleTable({dur: .03, vol: .2, f: 1500 + Math.random() * 2000, q: 3, at: .05 + k * .05}); },
+  ecrase: () => { tonTable({f: 120, f2: 40, dur: .3, vol: .6}); for (let k = 0; k < 8; k++) souffleTable({dur: .025, vol: .22, type: 'lowpass', f: 900 + Math.random() * 900, at: k * .03}); }
 };
 
-function sonTable(nom) {
+const auHasard = () => 1 + (Math.random() - .5) * .1;
+
+function sonTable(nom, ...args) {
   if (!S.table.son || !SONS_TABLE[nom] || !audioTable()) return;
-  try { SONS_TABLE[nom](); } catch (e) { /* un son manqué ne doit rien casser */ }
+  try { SONS_TABLE[nom](...args); } catch (e) { /* un son manqué ne doit rien casser */ }
 }
 
 /* Les motifs, en millisecondes : vibrer, se taire, vibrer… */
-const VIBRATIONS_TABLE = {tic: 8, cran: 5, pose: 14, prio: [20, 70, 20], alerte: [45, 35, 45], blesse: 70, mort: [12, 30, 24],
-  tour: 25, valide: [10, 30, 25], victoire: [30, 60, 30, 60, 90]};
+const VIBRATIONS_TABLE = {tic: 8, cran: 5, pose: 14, prio: [20, 70, 20], alerte: [45, 35, 45], blesse: [60, 40, 140], mort: [12, 30, 24],
+  tour: 25, valide: [10, 30, 25], victoire: [30, 60, 30, 60, 90], taille: [12, 22, 40], estoc: 25, charge: 90};
 
 function vibreTable(nom) {
   if (!S.table.vibre || VIBRATIONS_TABLE[nom] == null) return;

@@ -198,9 +198,11 @@ function carteDepuisScryfall(sc) {
 }
 
 function enrichAllUnknown() {
+  const depuisArchive = completeInconnuesDepuisArchive();
+  if (depuisArchive) recalculerAvecProgression(`${depuisArchive} carte(s) complétées depuis l'archive : les suggestions sont renotées.`);
   const unknowns = DB.filter(c => c.unknown).map(c => c.name);
   if (!unknowns.length) {
-    toast('Toutes les cartes sont déjà complétées.');
+    if (!depuisArchive) toast('Toutes les cartes sont déjà complétées.');
     return;
   }
   completeUnknown(unknowns);

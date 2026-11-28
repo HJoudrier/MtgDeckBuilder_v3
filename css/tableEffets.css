@@ -1,0 +1,69 @@
+/* =====================================================================
+   Ce qui vise et ce qui frappe : les liens d'or de la pile et les flèches
+   du combat (js/tableFleches.js), les coups, les éclats, la carte tranchée
+   (js/tableCoups.js).
+
+   Comme table.css : aucune couleur en dur, seulement les variables des deux
+   thèmes. L'or se mêle de blanc pour sa lueur — le laiton sombre du thème
+   clair et le laiton clair du sombre s'en éclairent tous deux.
+   ===================================================================== */
+
+/* Le calque des traits, sur toute la table, qui ne prend aucun toucher. */
+.tf{position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none;overflow:visible}
+
+/* Les liens d'or : le trait arrive, s'enroule autour de ce qu'il vise, et
+   une lueur y circule. Ceux d'un objet qu'on ne regarde pas pâlissent. */
+.tf .tf-lien{transition:opacity .3s ease}
+.tf .tf-lien path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tf .lien-fond{stroke:var(--bg);stroke-width:7;opacity:.8}
+.tf .lien-trait{stroke:var(--brass);stroke-width:2.6}
+.tf .lien-flux{stroke:color-mix(in srgb,var(--brass) 30%,white);stroke-width:1.5;stroke-dasharray:3 15;animation:lien-coule .9s linear infinite}
+.tf .tf-lien.active .lien-trait{stroke-width:1.8}
+.tf .tf-lien.faible{opacity:.22}
+.tf .tf-lien.neuf .lien-fond,.tf .tf-lien.neuf .lien-trait{stroke-dasharray:1;stroke-dashoffset:1;animation:lien-trace .7s cubic-bezier(.3,.7,.2,1) forwards}
+.tf .tf-lien.neuf .lien-flux{opacity:0;animation:lien-apparait .3s .6s forwards,lien-coule .9s linear infinite}
+@keyframes lien-trace{to{stroke-dashoffset:0}}
+@keyframes lien-coule{to{stroke-dashoffset:-18}}
+@keyframes lien-apparait{to{opacity:1}}
+
+/* Les flèches du combat. */
+.tf path.tf-fond{fill:none;stroke:var(--bg);stroke-width:7;opacity:.85;stroke-linecap:round}
+.tf .fl path{fill:none;stroke-width:3;stroke-linecap:round}
+.tf path.attaque{stroke:var(--bad)} .tf path.bloque{stroke:var(--U)}
+.tf marker path,.tf circle{stroke:none}
+.tf .attaque path,.tf circle.attaque{fill:var(--bad)} .tf .bloque path,.tf circle.bloque{fill:var(--U)}
+.tf .fl.neuf{animation:lien-apparait .25s ease-out backwards}
+
+/* Ce que la pile désigne brille d'or : la carte qui s'active, celle qu'on vise. */
+.tc.active .tc-corps{animation:tc-active 1.1s ease-in-out infinite}
+@keyframes tc-active{50%{box-shadow:0 0 0 3px var(--brass),0 0 16px 4px var(--brass)}}
+.tc.ciblee .tc-corps{animation:tc-ciblee 1.4s ease-in-out infinite}
+@keyframes tc-ciblee{0%,100%{box-shadow:0 0 0 2px var(--brass),0 0 8px 2px color-mix(in srgb,var(--brass) 50%,transparent)}
+  50%{box-shadow:0 0 0 2px var(--brass),0 0 18px 6px color-mix(in srgb,var(--brass) 60%,transparent)}}
+
+/* Les coups (js/tableEclats.js, js/tableCoups.js) : la carte qui frappe part
+   en doublure sur le calque, l'original se cache dessous. */
+.tc.en-coup{visibility:hidden}
+.tmv .doublure,.tmv .moitie{pointer-events:none}
+.tmv .tc.en-vol{z-index:2}
+.tmv .tc.en-vol .tc-corps{box-shadow:0 14px 26px var(--ombre),0 0 0 2px var(--bad)}
+.tmv .tc.trainee{z-index:1;filter:blur(1.2px)}
+.tmv-traits{position:fixed;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.tmv-halo,.tmv-coeur{fill:none;stroke-linecap:round;stroke-dasharray:1}
+.tmv-halo{stroke:var(--bad);stroke-width:10;opacity:.7}
+.tmv-coeur{stroke:color-mix(in srgb,var(--bad) 12%,white);stroke-width:2.6}
+.tmv-eclat{position:fixed;left:0;top:0;width:13px;height:2.5px;border-radius:2px;transform-origin:0 50%;
+  background:color-mix(in srgb,var(--brass) 20%,white);box-shadow:0 0 6px 1px var(--bad)}
+.tmv-onde{position:fixed;border-radius:50%;border:3px solid var(--bad)}
+.tmv-onde.grande{border-color:var(--brass);border-width:4px}
+.tmv-lueur{position:fixed;left:0;top:0;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--c) 15%,white) 0 28%,var(--c) 58%,transparent 72%);box-shadow:0 0 14px 5px var(--c)}
+.tmv-coup{position:fixed;left:0;top:0;width:46px;height:46px;display:grid;place-items:center;font:800 17px/1 var(--mono);
+  color:color-mix(in srgb,var(--bad) 5%,white);background:var(--bad);clip-path:polygon(100.0% 50.0%,85.7% 59.6%,93.3% 75.0%,76.2% 76.2%,75.0% 93.3%,59.6% 85.7%,50.0% 100.0%,40.4% 85.7%,25.0% 93.3%,23.8% 76.2%,6.7% 75.0%,14.3% 59.6%,0.0% 50.0%,14.3% 40.4%,6.7% 25.0%,23.8% 23.8%,25.0% 6.7%,40.4% 14.3%,50.0% 0.0%,59.6% 14.3%,75.0% 6.7%,76.2% 23.8%,93.3% 25.0%,85.7% 40.4%)}
+.tmv-rougeur{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 42%,var(--bad) 135%)}
+
+@media (prefers-reduced-motion: reduce){
+  .tf .lien-flux,.tf .tf-lien.neuf .lien-flux{animation:none;opacity:.9}
+  .tf .tf-lien.neuf .lien-fond,.tf .tf-lien.neuf .lien-trait{animation:none;stroke-dashoffset:0}
+  .tc.active .tc-corps,.tc.ciblee .tc-corps{animation:none;box-shadow:0 0 0 2px var(--brass),0 0 12px 3px color-mix(in srgb,var(--brass) 55%,transparent)}
+}

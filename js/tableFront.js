@@ -2,7 +2,8 @@
    js/tableFront.js — La ligne de front et le bouton de tour
 
    Entre les adversaires et son propre champ court une ligne : l'étape à
-   gauche, la pile au centre, et à droite, sous le pouce, un bouton rond
+   gauche, la pile au centre (en tunnel, js/tablePile.js), et à droite,
+   sous le pouce, un bouton rond
    dont le libellé dit ce qui va se passer — « Combat », « Attaquer (2) »,
    « Laisser résoudre », « Fin du tour ». Une phrase dessous le précise.
    On décide là où la partie se joue, plus au pied de l'écran.
@@ -114,21 +115,19 @@ function boutonTourHTML(a) {
   return `<button type="button" class="${cls}" data-act="tTour"${a.act ? '' : ' aria-disabled="true"'}>${anneau}<span>${esc(a.lib)}</span></button>`;
 }
 
-/* La pile en tuiles, le sommet — le prochain à se résoudre — en tête. */
-function pileTuilesHTML(v) {
-  if (!v.pile.length) return '';
-  return rangee('pile', v.pile.slice().reverse().map(it => tuile(it, v)).join(''), 'tfr-pile');
-}
-
-/* La ligne de front, et sous elle l'explication de la pile. */
+/* La ligne de front. Au centre, la place du tunnel de la pile : il n'est
+   pas écrit ici, mais remis après chaque peinture (js/tablePile.js), pour
+   que ses cartes glissent d'un cran à l'autre au lieu d'être recréées. */
 function frontHTML(v) {
   const a = actionTour(v), err = TABLE.erreur && TABLE.question && /^(priorite|attaquants|bloqueurs)$/.test(TABLE.question.q) ? TABLE.erreur : '';
   const q = TABLE.question, autre = q && !a ? (q.q === 'cibles' ? 'Touchez une cible qui brille, ou choisissez dans le bandeau.' : 'Répondez dans le bandeau ci-dessus.') : '';
-  const phrase = err || (a && a.sous) || autre, alerte = err || (a && a.alerte);
-  return `<div class="tfr${a && a.fort ? ' fort' : ''}${TABLE.question ? ' a-vous' : ''}">
+  const phrase = err || (a && a.sous) || autre, alerte = err || (a && a.alerte), pile = v.pile.length || v.resolvant;
+  /* Une question de choix occupe le bandeau : le tunnel se replie pour lui laisser la place. */
+  const replie = pile && q && !/^(priorite|attaquants|bloqueurs)$/.test(q.q);
+  return `<div class="tfr${a && a.fort ? ' fort' : ''}${TABLE.question ? ' a-vous' : ''}${pile ? ' avec-pile' : ''}${replie ? ' pile-repliee' : ''}">
       <div class="tfr-gauche">${phasesPointsHTML(v)}</div>
-      <div class="tfr-centre">${pileTuilesHTML(v)}</div>
+      <div class="tfr-centre">${pile ? '<div class="tpi-place"></div>' : ''}</div>
       <div class="tfr-cmd"><div class="tfr-puces">${pucesHTML(v)}</div>${a ? boutonTourHTML(a) : ''}</div>
       <div class="tfr-phrase${alerte ? ' erreur' : ''}">${esc(phrase)}</div>
-    </div>${v.pile.length || v.resolvant ? pileExpliqueHTML(v) : ''}`;
+    </div>`;
 }

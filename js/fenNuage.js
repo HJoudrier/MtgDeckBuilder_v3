@@ -105,7 +105,8 @@ function nuageCorpsDeconnecte() {
              placeholder="abcdef1234567890" autocomplete="off" spellcheck="false">
       <div class="small muted">À créer une fois sur <code>dropbox.com/developers/apps</code> :
         « Create app » → API « Scoped access » → accès « App folder » → un nom. Dans l'onglet
-        « Permissions », cocher <code>files.content.read</code> et <code>files.content.write</code>.
+        « Permissions », cocher <code>files.content.read</code>, <code>files.content.write</code> et
+        <code>files.metadata.read</code> (cette dernière pour lister les versions antérieures).
         Dans « Settings », ajouter comme <i>Redirect URI</i> exactement :
         <code>${esc(location.origin + location.pathname.replace(/index\.html$/, ''))}</code>.
         La clé (« App key ») n'est pas un secret : le flux employé n'en utilise aucun.</div>
@@ -142,10 +143,14 @@ function nuageCorpsConnecte() {
     <div class="row" style="gap:6px;margin-top:6px">
       <button type="button" class="btn sm pri" data-act="nuageMaintenant"
         ${NUAGE.enCours ? 'disabled' : ''}>Synchroniser maintenant</button>
+      <button type="button" class="btn sm" data-act="nuageVersions"
+        ${NUAGE.enCours ? 'disabled' : ''}>Versions antérieures…</button>
       <button type="button" class="btn sm" data-act="nuageTester"
         ${NUAGE.enCours ? 'disabled' : ''}>Tester la connexion</button>
       <button type="button" class="btn sm danger" data-act="nuageDeconnecter">Déconnecter</button>
     </div>
+    <div class="small muted">« Versions antérieures » liste les dates auxquelles Dropbox a gardé le fichier, et
+      permet de revenir à l'une d'elles.</div>
     <div class="small muted">« Tester » éprouve le jeton, le compte, la lecture puis l'écriture, et
       s'arrête au premier refus en rendant la réponse entière de Dropbox — un échec de synchronisation
       ne dit pas, à lui seul, laquelle des quatre a cédé.</div>

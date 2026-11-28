@@ -29,7 +29,7 @@ function annuleTable() {
   const k = TABLE.points.pop(), reps = TABLE.h.P.reponses.slice(0, k), cfg = TABLE.config;
   const sieges = TABLE.sieges.map(s => ({...siegeDepuisFiches(s.nom, s.fiches.format, s.fiches.cartes, s.fiches.commandants, s.fiches.comportements), nom: s.nom}));
   const mana = cfg.mana || sieges.map(() => ({}));
-  TABLE.h = creePartie({graine: cfg.graine, premier: cfg.premier, plafondTours: 60, journal: true, consigne: true, montre: !!cfg.montre,
+  TABLE.h = creePartie({graine: cfg.graine, premier: cfg.premier, plafondTours: 60, journal: true, consigne: true, montre: !!cfg.montre, montreCombat: !!cfg.montreCombat,
     sieges: sieges.map((x, i) => ({...x, ...mana[i]}))});
   TABLE.agents = sieges.map(() => ({humain: true}));
   TABLE.sieges.forEach((s, i) => { s.ia = agentIA(cfg.graine, i); });
