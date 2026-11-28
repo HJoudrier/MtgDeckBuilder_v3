@@ -62,6 +62,7 @@ const ONGLETS = {
   wishlist:   {label:'Wishlist',   sections:['secL','secJ'], liste:'achats'},
   collection: {label:'Collection', sections:['secC','secB'], liste:'collection'},
   deck:       {label:'Deck',       sections:['secE'],        liste:'deck'},
+  analyse:    {label:'Analyse',    sections:['secN'],        liste:null},
   graphe:     {label:'Graphe',     sections:['secD','secG'], liste:'graphe'},
   edhrec:     {label:'EDHREC',     sections:['secH'],        liste:'edhrec'},
   catalogue:  {label:'Catalogue',  sections:['secF'],        liste:'suggestions'},

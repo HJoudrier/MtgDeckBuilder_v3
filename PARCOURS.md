@@ -711,8 +711,9 @@ dessiner, et le texte mène à cette fenêtre plutôt qu'à celle des filtres.
 ### 3.18 Basculer d'un onglet à l'autre
 
 Changer d'onglet ne demande aucun rendu — les sections sont déjà peintes, un attribut les
-découvre. Sauf les trois listes de propositions, qu'on n'a pas notées faute de regard : c'est ici
-qu'elles se rattrapent.
+découvre. Sauf les trois listes de propositions, qu'on n'a pas notées faute de regard, et l'analyse,
+qu'on n'a pas calculée : c'est ici qu'elles se rattrapent. L'analyse passe **avant** que la page se
+découvre, pour que le défilement retrouvé tombe sur la page finale.
 
 ```mermaid
 sequenceDiagram
@@ -723,10 +724,18 @@ sequenceDiagram
     participant DIF as differe.js
     participant UI as interface
     participant SUG as suggestions.js
+    participant ANA as anaSection.js
 
     U->>APP: clic sur un onglet (ou flèche du clavier)
     APP->>ENT: activerOnglet(cle)
     ENT->>ENT: POS_ONGLETS[ancien] = window.scrollY
+    ENT->>ANA: rattraperAnalyse()
+    alt l'onglet Analyse s'ouvre et sa page a vieilli (ANA_PERIME)
+        ANA->>ANA: renderN() : contexteAnalyse(), puis la page entière
+        Note over ANA: les parties d'essai ne se rejouent que si<br/>deckSignature() a changé (miseEnPlaceDuDeck)
+    else
+        ANA-->>ENT: rien
+    end
     ENT->>ENT: renderOnglets()
     Note over ENT: les pages changent d'attribut `hidden` ;<br/>l'onglet ouvert perd ses points « travaille » et « perime »
     ENT->>ENT: window.scrollTo(POS_ONGLETS[cle])

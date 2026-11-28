@@ -14,7 +14,7 @@ document.addEventListener('click', ev => {
 
   const act = b.dataset.act;
   [gestesDeckConfig, gestesDecks, gestesAcquisition, gestesVue, gestesReglages, gestesDeck, gestesDonnees, gestesNuage,
-    gestesSimulation, gestesTable, gestesForge, gestesGraphe].some(g => g(act, b));
+    gestesSimulation, gestesAnalyse, gestesTable, gestesForge, gestesGraphe].some(g => g(act, b));
 });
 
 /* L'appui long sur une carte de la table l'ouvre en grand, et le clic qui

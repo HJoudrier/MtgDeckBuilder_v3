@@ -29,6 +29,7 @@ function renderAll() {
   renderC();
   renderD();
   renderE();
+  renderN();
   renderSuggestions();
   renderK();
   renduTable();

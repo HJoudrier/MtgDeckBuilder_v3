@@ -7,7 +7,7 @@ fichier est un index, la source reste la référence. Pour l'ordre dans lequel c
 fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 [README.md](../README.md).
 
-**1965 fonctions**, 350 modules, 2439 Ko de JavaScript.
+**2040 fonctions**, 364 modules, 2518 Ko de JavaScript.
 
 | Module | Rôle | Fonctions | Lignes |
 |---|---|--:|--:|
@@ -22,7 +22,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`impressions.js`](#jsimpressionsjs) | Les éditions d'une carte, et celle qu'on possède | 7 | 74 |
 | [`cartes.js`](#jscartesjs) | La base de cartes et ses index | 19 | 214 |
 | [`liens.js`](#jsliensjs) | Le tri des liens : interaction précise ou déclencheur large | 6 | 74 |
-| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 210 |
+| [`etat.js`](#jsetatjs) | État global de l'application & utilitaires | 1 | 211 |
 | [`collectionDates.js`](#jscollectiondatesjs) | Les dates d'ajout des cartes de la collection | 15 | 153 |
 | [`decks.js`](#jsdecksjs) | Les decks, et celui sur lequel on travaille | 12 | 200 |
 | [`archetypesSets.js`](#jsarchetypessetsjs) | Deux vocabulaires venus du dehors | 12 | 173 |
@@ -276,6 +276,19 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`deck.js`](#jsdeckjs) | Ce qu'il y a dans le deck, et les gestes qui l'y mettent | 9 | 115 |
 | [`legalite.js`](#jslegalitejs) | Ce que le format exige, et l'équilibre des rôles | 13 | 180 |
 | [`deckSection.js`](#jsdecksectionjs) | La section Deck | 6 | 224 |
+| [`anaTirages.js`](#jsanatiragesjs) | Ce que le hasard réserve au deck : mains, pioches, mana | 16 | 244 |
+| [`anaCombos.js`](#jsanacombosjs) | Les combos infinis à deux cartes les plus connus | 1 | 92 |
+| [`anaPalier.js`](#jsanapalierjs) | Le palier du Commander qu'un deck peut revendiquer | 7 | 129 |
+| [`anaFamilles.js`](#jsanafamillesjs) | Ce que le deck fait : familles, mots-clés, interaction, terrains | 7 | 138 |
+| [`anaSynergie.js`](#jsanasynergiejs) | À quel point les cartes du deck se parlent | 5 | 111 |
+| [`anaGraphiques.js`](#jsanagraphiquesjs) | Les pièces dont l'onglet Analyse est fait | 9 | 97 |
+| [`anaVueDeck.js`](#jsanavuedeckjs) | La synthèse, la courbe et les types, le prix | 3 | 106 |
+| [`anaVuePalier.js`](#jsanavuepalierjs) | Le bloc du palier : l'échelle, les critères, les combos | 3 | 59 |
+| [`anaVueMana.js`](#jsanavuemanajs) | Couleurs, mains de départ, mise en place | 5 | 143 |
+| [`anaVueFamilles.js`](#jsanavuefamillesjs) | Les blocs des familles de capacités et des rôles | 4 | 61 |
+| [`anaVueSynergie.js`](#jsanavuesynergiejs) | Le bloc de la synergie | 3 | 66 |
+| [`anaMain.js`](#jsanamainjs) | La main d'essai | 5 | 59 |
+| [`anaSection.js`](#jsanasectionjs) | L'onglet Analyse | 6 | 105 |
 | [`ficheVisuel.js`](#jsfichevisueljs) | Le visuel de la fiche, et ses éditions | 5 | 116 |
 | [`fiche.js`](#jsfichejs) | La fiche détaillée d'une carte | 1 | 169 |
 | [`ficheParcours.js`](#jsficheparcoursjs) | Ouvrir une fiche, et feuilleter la liste d'où elle vient | 4 | 110 |
@@ -301,8 +314,8 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`ancre.js`](#jsancrejs) | L'ancre de défilement | 3 | 57 |
 | [`differe.js`](#jsdifferejs) | Les propositions ne se notent que sous les yeux | 4 | 74 |
 | [`recalcul.js`](#jsrecalculjs) | Les recalculs annoncés | 8 | 200 |
-| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 255 |
-| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 38 |
+| [`entete.js`](#jsentetejs) | L'en-tête et la barre des onglets | 8 | 259 |
+| [`rendu.js`](#jsrendujs) | Le rendu d'ensemble | 2 | 39 |
 | [`fenFormat.js`](#jsfenformatjs) | Fenêtre « Format » | 5 | 63 |
 | [`fenNuage.js`](#jsfennuagejs) | La section « Synchronisation » de la fenêtre des paramètres | 9 | 159 |
 | [`fenParametres.js`](#jsfenparametresjs) | Fenêtre « Paramètres » | 9 | 133 |
@@ -325,6 +338,7 @@ fonctions s'appellent, voir [PARCOURS.md](../PARCOURS.md) ; pour l'architecture,
 | [`gestesNuage.js`](#jsgestesnuagejs) | Les gestes de la synchronisation | 2 | 91 |
 | [`gestesGraphe.js`](#jsgestesgraphejs) | Les gestes du graphe et des listes | 1 | 108 |
 | [`gestesSimulation.js`](#jsgestessimulationjs) | Les gestes de la section « Simulation » | 2 | 38 |
+| [`gestesAnalyse.js`](#jsgestesanalysejs) | Les gestes de l'onglet Analyse | 1 | 26 |
 | [`qrCorps.js`](#jsqrcorpsjs) | Le corps fini du QR code, et Reed–Solomon | 8 | 118 |
 | [`qrMatrice.js`](#jsqrmatricejs) | La grille d'un QR code | 8 | 111 |
 | [`qrEcrit.js`](#jsqrecritjs) | Écrire un QR code | 6 | 110 |
@@ -545,7 +559,7 @@ Le tri des liens : interaction précise ou déclencheur large. *6 fonctions, 74 
 
 ## js/etat.js
 
-État global de l'application & utilitaires. *1 fonctions, 210 lignes, 12 Ko.*
+État global de l'application & utilitaires. *1 fonctions, 211 lignes, 12 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4193,6 +4207,209 @@ La section Deck. *6 fonctions, 224 lignes, 14 Ko.*
 |---|---|
 | `NOTES_DECK` | — |
 
+## js/anaTirages.js
+
+Ce que le hasard réserve au deck : mains, pioches, mana. *16 fonctions, 244 lignes, 10 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `lnFact(n)` | — |
+| `lnComb(n, k)` | — |
+| `hyperP(N, K, n, k)` | La probabilité de tirer exactement k cartes d'une sorte qui en compte K, en n cartes prises dans N. |
+| `hyperAuMoins(N, K, n, k)` | — |
+| `piocheSautee()` | La pioche du premier tour est sautée hors du Commander : on joue alors en premier, ce qui rend chaque chiffre un peu plus sévère. |
+| `cartesVuesAuTour(t)` | — |
+| `bibliothequeAnalyse()` | La bibliothèque telle qu'on la mélange : une entrée par exemplaire, le commandant mis à part. |
+| `pipsPleins(card)` | Les symboles pleins d'une couleur : un hybride se paie d'une autre façon et un symbole phyrexian de points de vie, ni l'un ni l'autre n'oblige à avoir la couleur. |
+| `graineDe(texte)` | Une graine tirée d'un texte, puis le générateur mulberry32 : court, rapide, et assez uniforme pour mélanger un deck. |
+| `hasardGraine(graine)` | — |
+| `melanger(liste, hasard)` | — |
+| `apportRampe(card)` | Ce qu'un accélérateur ajoute aux tours suivants, une fois lancé. |
+| `simuleMiseEnPlace(lib, cmd, cartesJugees)` | Le profil de mise en place, joué ANA_PARTIES fois sans adversaire : chaque tour on pioche, on pose un terrain si la main en a, puis on lance les accélérateurs que le mana du tour paie,… |
+| `miseEnPlaceDuDeck(lib, cmd)` | — |
+| `sourcesRecommandees(N, L, pips, tour)` | Le nombre de sources qu'il faudrait pour lancer à temps, neuf fois sur dix, la carte la plus exigeante d'une couleur — la méthode que Frank Karsten a popularisée, recalculée pour ce deck. |
+| `partAtteinteAuTour(premiers, tour, parties)` | La part des parties qui ont atteint un seuil au plus tard au tour dit. |
+
+| Donnée | Rôle |
+|---|---|
+| `ANA_PARTIES` | — |
+| `ANA_TOURS` | — |
+| `LN_FACT` | Les factorielles en logarithme : C(99, 7) déborde déjà la précision d'un entier, son logarithme jamais. |
+| `ANA_CACHE_SIM` | La simulation ne se refait que si le deck a changé : un filtre, un pli, un changement d'onglet repeignent l'analyse sans rien rejouer. |
+
+## js/anaCombos.js
+
+Les combos infinis à deux cartes les plus connus. *1 fonctions, 92 lignes, 5.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `combosDuDeck(noms)` | Les combos de la liste que le deck porte entièrement, sans doublon : une paire écrite deux fois dans la liste ne se compte qu'une fois. |
+
+| Donnée | Rôle |
+|---|---|
+| `COMBOS_DEUX_CARTES` | — |
+
+## js/anaPalier.js
+
+Le palier du Commander qu'un deck peut revendiquer. *7 fonctions, 129 lignes, 7.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `estDestructionTerrains(card)` | — |
+| `estTourSupplementaire(card)` | — |
+| `estTuteurPalier(card)` | Un tuteur, au sens des paliers, va chercher autre chose qu'un terrain : un Cultivate fait du ramp, il n'assure aucun plan. |
+| `estManaRapide(card)` | L'accélération des decks compétitifs : de quoi produire du mana pour zéro ou un mana, hors terrains. |
+| `estSortGratuit(card)` | Un sort qu'on lance sans payer son coût de mana : la protection des decks compétitifs, qui répond au premier tour sans rien engager. |
+| `criteresPalier()` | Chaque critère, ce qu'il compte, les cartes qui le font compter et le palier plancher qu'il impose. |
+| `estimePalier()` | Le verdict : le plus haut des planchers, la raison qui l'impose, et le signal d'un profil compétitif quand le deck en a tous les traits. |
+
+| Donnée | Rôle |
+|---|---|
+| `PALIERS` | — |
+| `DESTRUCTION_TERRAINS_NOMS` | Les cartes qui détruisent, renvoient ou gèlent les terrains de toute la table, ou changent le mana qu'ils produisent. |
+
+## js/anaFamilles.js
+
+Ce que le deck fait : familles, mots-clés, interaction, terrains. *7 fonctions, 138 lignes, 6.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `noeudsDeCarte(card)` | Le profil de famille d'une carte : les nœuds qu'elle produit par un effet, ceux sur lesquels une de ses capacités se déclenche. |
+| `familles()` | — |
+| `motsClesDe(card)` | — |
+| `motsClesDuDeck()` | — |
+| `profilInteraction()` | — |
+| `profilTerrains()` | La base de terrains, comme la détaillent les sites de deckbuilding : les bases et les autres, ceux qui arrivent engagés — toujours, ou sauf condition —, ceux qui donnent plusieurs… |
+| `sousTypesDuDeck(max)` | Les types de créatures les plus représentés : de quoi voir le tribal qu'un deck porte, ou qu'il pourrait porter. |
+
+| Donnée | Rôle |
+|---|---|
+| `MOTS_CLES_ANALYSE` | Les mots-clés qui se lisent sur une ligne à eux : « Flying, haste », « Ward {2} », « Protection from red ». |
+| `MOYENS_INTERACTION` | Le profil d'interaction : par quel moyen le deck répond, à quelle vitesse, et s'il vise une carte ou toute la table. |
+
+## js/anaSynergie.js
+
+À quel point les cartes du deck se parlent. *5 fonctions, 111 lignes, 5.3 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `notesDuDeck()` | — |
+| `plusGrandBloc(noms, voisins)` | Le plus grand bloc d'un seul tenant, par union-find sur les liens précis. |
+| `analyseSynergie()` | — |
+| `verdictSynergie(score)` | — |
+| `synergieEdhrec()` | Ce qu'EDHREC dit des cartes du deck, pour le commandant chargé : l'inclusion moyenne — sont-ce les cartes que les autres jouent ? — et la synergie moyenne — leur sont-elles propres, ou… |
+
+## js/anaGraphiques.js
+
+Les pièces dont l'onglet Analyse est fait. *9 fonctions, 97 lignes, 4.5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `pctAna(x, decimales)` | — |
+| `nombreAna(x, decimales)` | — |
+| `anaTuile(valeur, cle, opts)` | Une tuile : la valeur en grand, sa clé dessous, et une ligne de contexte. |
+| `anaBarre(label, v, max, opts)` | Une barre horizontale : le libellé, la piste, la valeur. |
+| `anaColonnes(items, opts)` | Une rangée de colonnes : chaque élément porte sa valeur, son étiquette, le texte écrit au-dessus et l'infobulle qui le détaille. |
+| `anaNom(card)` | Un nom de carte qui ouvre sa fiche ; l'aperçu volant le suit au survol. |
+| `anaNoms(cartes, max)` | Une liste de noms, coupée à `max` avec le compte de ce qui reste. |
+| `anaBloc(id, titre, aide, corps)` | Un bloc de l'onglet : son ancre pour le sommaire, son titre, son aide. |
+| `medianePonderee(paires)` | La médiane d'une liste pondérée par les exemplaires. |
+
+## js/anaVueDeck.js
+
+La synthèse, la courbe et les types, le prix. *3 fonctions, 106 lignes, 6.6 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `anaSynthese(A)` | La synthèse : les chiffres qu'on vient chercher, chacun renvoyant au bloc qui le détaille plus bas. |
+| `anaCourbe(A)` | La courbe, coupée entre créatures et autres sorts — la part qui tient la table et celle qui répond —, puis les types et leur coût moyen. |
+| `anaPrix(A)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `TRANCHES_PRIX` | Le prix : la valeur, sa répartition par tranche, les cartes qui la font, et la part qui reste à acheter. |
+
+## js/anaVuePalier.js
+
+Le bloc du palier : l'échelle, les critères, les combos. *3 fonctions, 59 lignes, 3.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `anaEchellePaliers(P)` | — |
+| `anaLignePlancher(c)` | — |
+| `anaPalierVue(P)` | — |
+
+## js/anaVueMana.js
+
+Couleurs, mains de départ, mise en place. *5 fonctions, 143 lignes, 9.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `analyseMains(lib)` | Les mains, en loi exacte : la distribution des terrains, la part gardable, ce que les mulligans y ajoutent, la chance de poser un terrain par tour et celle de voir chaque rôle tôt. |
+| `lignesCouleurs(A)` | Une ligne par couleur : ce qu'elle demande, ce qu'elle a, la carte la plus exigeante et la chance de la lancer au tour de son coût. |
+| `anaCouleurs(A)` | — |
+| `anaMains(A)` | — |
+| `anaMiseEnPlace(A)` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `ROLES_EN_MAIN` | — |
+
+## js/anaVueFamilles.js
+
+Les blocs des familles de capacités et des rôles. *4 fonctions, 61 lignes, 3.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `anaFamillesVue()` | — |
+| `anaRolesVue()` | — |
+| `anaMotsClesVue()` | — |
+| `anaInteractionVue()` | — |
+
+## js/anaVueSynergie.js
+
+Le bloc de la synergie. *3 fonctions, 66 lignes, 5 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `anaJauge(label, v, aide)` | — |
+| `anaSynergieVue(Y)` | — |
+| `anaEdhrecVue(E)` | — |
+
+## js/anaMain.js
+
+La main d'essai. *5 fonctions, 59 lignes, 2.9 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `nouvelleMainEssai()` | — |
+| `piocheMainEssai()` | — |
+| `majMainEssai()` | Le bloc se réécrit seul, en place : la page autour ne bouge pas, et le lecteur garde sous les yeux la main qu'il vient de tirer. |
+| `anaVignetteMain(c)` | — |
+| `anaMainVue()` | — |
+
+| Donnée | Rôle |
+|---|---|
+| `MAIN_ESSAI` | — |
+
+## js/anaSection.js
+
+L'onglet Analyse. *6 fonctions, 105 lignes, 5.8 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `contexteAnalyse()` | Le contexte de l'analyse, bâti une fois par rendu : chaque bloc y lit ce qu'il lui faut, et rien n'est compté deux fois. |
+| `anaSommaire()` | — |
+| `anaPage(A)` | — |
+| `renderN()` | — |
+| `rattraperAnalyse()` | La page a vieilli pendant qu'on regardait ailleurs : on la repeint avant de la montrer, pour que le défilement retrouvé tombe sur la page finale. |
+| `allerVersBlocAnalyse(id)` | Le sommaire mène à un bloc ; l'entête collante ne doit pas le couvrir. |
+
+| Donnée | Rôle |
+|---|---|
+| `ANA_PERIME` | — |
+| `ANA_BLOCS` | — |
+
 ## js/ficheVisuel.js
 
 Le visuel de la fiche, et ses éditions. *5 fonctions, 116 lignes, 5.6 Ko.*
@@ -4639,7 +4856,7 @@ Les recalculs annoncés. *8 fonctions, 200 lignes, 8.7 Ko.*
 
 ## js/entete.js
 
-L'en-tête et la barre des onglets. *8 fonctions, 255 lignes, 14 Ko.*
+L'en-tête et la barre des onglets. *8 fonctions, 259 lignes, 14 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4661,7 +4878,7 @@ L'en-tête et la barre des onglets. *8 fonctions, 255 lignes, 14 Ko.*
 
 ## js/rendu.js
 
-Le rendu d'ensemble. *2 fonctions, 38 lignes, 1.2 Ko.*
+Le rendu d'ensemble. *2 fonctions, 39 lignes, 1.2 Ko.*
 
 | Fonction | Rôle |
 |---|---|
@@ -4950,6 +5167,14 @@ Les gestes de la section « Simulation ». *2 fonctions, 38 lignes, 1.7 Ko.*
 |---|---|
 | `gestesSimulation(act, b)` | — |
 | `reglageSimulation(t)` | Un réglage de la table : il agit sur-le-champ — rien n'est calculé avant « Lancer », il n'y a donc rien à différer. |
+
+## js/gestesAnalyse.js
+
+Les gestes de l'onglet Analyse. *1 fonctions, 26 lignes, 0.7 Ko.*
+
+| Fonction | Rôle |
+|---|---|
+| `gestesAnalyse(act, b)` | — |
 
 ## js/qrCorps.js
 

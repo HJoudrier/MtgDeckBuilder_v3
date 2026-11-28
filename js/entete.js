@@ -225,6 +225,10 @@ function activerOnglet(cle, opts) {
   const change = S.onglet !== cle;
   if (change && typeof window !== 'undefined') POS_ONGLETS[S.onglet] = window.scrollY;
   S.onglet = cle;
+  /* L'analyse ne se calcule que sous les yeux : vieillie, elle est repeinte
+     avant d'être montrée, pour que le défilement retrouvé tombe sur la page
+     finale et non sur celle d'avant. */
+  if (typeof rattraperAnalyse === 'function') rattraperAnalyse();
   renderOnglets();
   if (change) {
     if (!(opts && opts.sansDefiler) && typeof window !== 'undefined')

@@ -1,0 +1,95 @@
+/* =====================================================================
+   css/analyse.css — L'onglet Analyse
+
+   Des barres fines aux bouts arrondis, un écart de deux pixels entre les
+   segments empilés, des chiffres dans l'encre du texte : la couleur dit
+   l'identité (une couleur de mana, une famille) ou le verdict, et chaque
+   verdict s'écrit aussi en mots. Les jetons de couleur sont ceux de
+   l'atelier : le thème sombre suit sans une ligne de plus.
+   ===================================================================== */
+
+.ana-sommaire{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.ana-sommaire .pill{cursor:pointer}
+.ana-sommaire .pill:hover{border-color:var(--brass-d);color:var(--brass)}
+
+.ana-bloc{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);scroll-margin-top:calc(var(--h-entete, 70px) + 8px)}
+.ana-bloc > h3{margin:0 0 4px;font-family:var(--display);font-size:17px}
+.ana-aide{margin:0 0 10px}
+.ana-h4{margin:14px 0 6px;font-family:var(--display);font-size:14px;font-weight:600}
+
+.ana-synthese{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.ana-mini{margin:8px 0}
+.ana-tuile .v{font-variant-numeric:tabular-nums}
+.ana-sur{font-size:13px;color:var(--dim2);margin-left:2px}
+.ana-sous{font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.3}
+.ana-sous[style*="--ana-verdict"]::before,
+.ana-badge::before{content:"";display:inline-block;width:7px;height:7px;border-radius:99px;background:var(--ana-verdict);margin-right:5px;vertical-align:1px}
+.ana-badge{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:99px;border:1px solid var(--line2);color:var(--txt);white-space:nowrap;font-family:var(--body)}
+
+/* Les barres horizontales : libellé, piste, valeur. */
+.ana-barres{display:flex;flex-direction:column;gap:5px}
+.ana-barre{display:grid;grid-template-columns:minmax(110px,32%) 1fr auto;gap:8px;align-items:center;min-width:0}
+.ana-barre-l{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ana-barre .track{height:8px;display:block}
+.ana-barre .fill{border-radius:99px}
+.ana-barre-v{font-size:11.5px;color:var(--dim);text-align:right;white-space:nowrap;min-width:3em}
+
+/* Les colonnes : une distribution, les segments empilés de bas en haut. */
+.ana-cols{display:flex;align-items:flex-end;gap:4px;padding:4px 2px 0;border-bottom:1px solid var(--line)}
+.ana-col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-width:0;height:100%}
+.ana-col-n{font-size:10px;text-align:center;color:var(--dim);white-space:nowrap;overflow:hidden}
+.ana-seg{display:block;width:100%;border-radius:2px}
+.ana-col .ana-seg:nth-child(2){border-radius:4px 4px 2px 2px}
+.ana-cols-l{display:flex;gap:4px;padding:3px 2px 0}
+.ana-cols-l span{flex:1;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--dim2);min-width:0}
+.ana-legende{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 4px;color:var(--dim)}
+.ana-legende i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+.ana-puces{display:flex;flex-wrap:wrap;gap:6px}
+
+/* L'échelle des paliers. */
+.ana-echelle{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.ana-palier{border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;display:flex;flex-direction:column;gap:1px;
+  font-size:11.5px;color:var(--dim);background:var(--bg2)}
+.ana-palier b{font-family:var(--display);font-size:20px;color:var(--dim)}
+.ana-palier.actif{border-color:var(--brass);background:var(--brass-a2);color:var(--txt)}
+.ana-palier.actif b{color:var(--brass)}
+.ana-verdict{margin:10px 0;padding:8px 10px;border-left:3px solid var(--brass);background:var(--brass-a1);border-radius:6px;font-size:13.5px}
+
+.ana-tbl td{vertical-align:top}
+.ana-tbl td.ana-cartes{text-align:left;font-size:12px;line-height:1.55}
+.ana-deux{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-width:0}
+.ana-deux > div{min-width:0}
+
+/* Les familles de capacités. */
+.ana-familles{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px}
+.ana-famille{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg2);display:flex;flex-direction:column;gap:4px;min-width:0}
+.ana-famille-t{display:flex;gap:7px;align-items:center;font-size:13px}
+.ana-famille .ana-barre{grid-template-columns:110px 1fr auto}
+.ana-famille-n{line-height:1.35}
+
+/* Le score de synergie. */
+.ana-score{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ana-score-v{font-family:var(--display);border-left:4px solid var(--ana-verdict);padding:2px 0 2px 12px;line-height:1}
+.ana-score-v b{font-size:46px;font-weight:600}
+.ana-score-v span{font-size:15px;color:var(--dim2);margin-left:2px}
+.ana-score-d{flex:1;min-width:240px;display:flex;flex-direction:column;gap:7px;font-size:13px}
+.ana-jauge .top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+
+/* La main d'essai. */
+.ana-main-barre{margin-bottom:8px}
+.ana-main{display:flex;flex-wrap:wrap;gap:6px}
+.ana-carte{width:96px;aspect-ratio:63/88;border:1px solid var(--line);border-radius:6px;padding:0;overflow:hidden;background:var(--vide-img);cursor:pointer}
+.ana-carte img{width:100%;height:100%;object-fit:cover;display:block}
+.ana-carte-nom{display:flex;flex-direction:column;gap:4px;padding:6px;font-size:11px;text-align:left;color:var(--txt);font-family:var(--display)}
+.ana-carte:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+@media (max-width:640px){
+  .ana-deux{grid-template-columns:1fr}
+  .ana-barre{grid-template-columns:minmax(84px,38%) 1fr auto;gap:6px}
+  .ana-famille .ana-barre{grid-template-columns:96px 1fr auto}
+  .ana-palier{font-size:10px}
+  .ana-palier span.muted{display:none}
+  .ana-carte{width:calc((100% - 18px) / 4)}
+  .ana-synthese{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

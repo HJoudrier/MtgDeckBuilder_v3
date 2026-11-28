@@ -13,6 +13,7 @@ présent document dit ce que fait chaque fonction ; celui-là, l'ordre où elles
 index.html          page et structure des sept sections
 css/atelier.css     styles
 css/table.css       styles de la table interactive
+css/analyse.css     styles de l'onglet Analyse
 outils/genDoc.js    écrit doc/fonctions.md à partir des sources
 js/                 modules, chargés dans cet ordre :
 
@@ -296,6 +297,19 @@ js/                 modules, chargés dans cet ordre :
   simulation.js     un lot de parties, par tranches
   simSection.js     la section « Simulation »
   simResultats.js   les résultats d'un lot, l'historique, le classement
+  anaTirages.js     ce que le hasard réserve au deck : loi hypergéométrique, parties d'essai à graine
+  anaCombos.js      les combos infinis à deux cartes les plus connus
+  anaPalier.js      le palier du Commander qu'un deck peut revendiquer
+  anaFamilles.js    ce que le deck fait : familles de capacités, mots-clés, interaction, terrains
+  anaSynergie.js    à quel point les cartes du deck se parlent : le score, les pivots, les isolées
+  anaGraphiques.js  tuiles, barres et colonnes de l'onglet Analyse
+  anaVueDeck.js     la synthèse, la courbe et les types, le prix
+  anaVuePalier.js   l'échelle des paliers, les critères, les combos
+  anaVueMana.js     couleurs, mains de départ, mise en place
+  anaVueFamilles.js familles de capacités, rôles, mots-clés, interaction
+  anaVueSynergie.js le score de synergie, et ce qu'en dit EDHREC
+  anaMain.js        la main d'essai
+  anaSection.js     l'onglet « Analyse »
   forgeDepot.js     les scripts de Forge, téléchargés de GitHub et gardés
   forgeVue.js       la section « Cartes Forge » et « Ce qu'il manque au moteur »
 
@@ -339,6 +353,7 @@ js/                 modules, chargés dans cet ordre :
   gestesNuage.js    connecter, synchroniser, déconnecter
   gestesGraphe.js   isoler un nœud, allonger une liste, ouvrir une vignette
   gestesSimulation.js  lancer un lot, décrire une carte, revoir une partie
+  gestesAnalyse.js  le sommaire de l'analyse, la main d'essai
 
   — la table interactive et sa liaison —
   qrCorps.js        le corps fini du QR code, et Reed–Solomon
@@ -378,14 +393,14 @@ js/                 modules, chargés dans cet ordre :
   app.js            l'aiguillage et le démarrage
 ```
 
-Les dix sections de la page se répartissent en huit onglets, rangés dans une barre fixe au bas de la
+Les onze sections de la page se répartissent en neuf onglets, rangés dans une barre fixe au bas de la
 fenêtre — l'en-tête, seul en haut, reste collant, et rien d'autre ne se superpose au contenu. Sa
 hauteur est une constante CSS (`--h-barre`), dont le bas de la page et le toast tiennent compte.
-Sur un téléphone les huit onglets ne tiennent pas : la barre défile latéralement, alignée au début
+Sur un téléphone les neuf onglets ne tiennent pas : la barre défile latéralement, alignée au début
 (`justify-content:center` sur un contenu qui déborde coupe la gauche, hors de portée du défilement) et
 `renderOnglets()` ramène l'onglet ouvert au milieu. **Decks** porte la liste des decks, **Wishlist** l'acquisition en cours puis la liste d'achats commune,
 **Collection** porte les statistiques puis la collection, **Deck** porte le
-deck, **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
+deck, **Analyse** l'analyse du deck ouvert (plus bas), **Graphe** porte le graphe des capacités puis les pistes branchées sur les nœuds qu'on y
 isole, **EDHREC** porte les statistiques du commandant et les cartes que les decks recensés
 recommandent — groupées et triées à part, avec deux tris qui n'existent que là : le taux
 d'inclusion et la synergie —, **Catalogue** porte le classement complet, groupé et paginé,
@@ -396,7 +411,7 @@ conserve d'une séance à l'autre — un nom qu'un onglet d'hier portait est tra
 regarde pas comprises : une page masquée n'est pas mise en page, et changer d'onglet ne demande
 alors aucun rendu. **Trois font exception** — les pistes du graphe, EDHREC, le catalogue : elles
 lisent une même notation qui coûte des secondes, et ne se calculent que sous les yeux
-(`js/differe.js`, plus bas). L'en-tête garde quatre pastilles — le deck ouvert, la barre de mana et le nom de la
+(`js/differe.js`, plus bas). L'analyse et la simulation suivent la même règle, chacune pour son compte. L'en-tête garde quatre pastilles — le deck ouvert, la barre de mana et le nom de la
 combinaison, le format, le budget — et trois commandes au coin haut-droit : le bouton de l'**affichage**, celui
 des **filtres** et l'**engrenage**, qui ouvre en une fenêtre la sauvegarde locale, l'apparence et le
 catalogue. Les trois voisinent parce qu'elles règlent la vue, non ce qu'elle montre ; le conteneur
@@ -539,6 +554,24 @@ travail autant de fois, d'où le mémo `ACHATS` sous `signatureAchats()`. Seule 
 demande, si bien que l'en-tête ne paie rien de plus qu'avant.
 
 ## Le mode de jeu
+
+L'onglet **Analyse** dit tout ce qu'on peut dire du deck ouvert, sur une page à sommaire : synthèse,
+palier du Commander, courbe et types, couleurs et base de mana, mains de départ, mise en place,
+familles de capacités, rôles et mots-clés, synergie, prix. Il porte sur la **liste principale
+entière** — ni la réserve, ni l'étude, ni les filtres de l'en-tête, qui rendraient absurde chaque
+probabilité de main. Deux outils s'y partagent le hasard : la loi hypergéométrique, exacte, pour
+ce qui ne compte qu'une sorte de carte (les terrains en sept cartes, voir un rôle tôt, les sources
+conseillées à la manière de Frank Karsten, conditionnées sur les terrains posés) ; et trois mille
+parties jouées seul pour le reste (le mana disponible tour par tour, chaque carte lancée au tour de
+son coût). Ces parties partent d'une graine tirée de `deckSignature()` : deux rendus du même deck
+donnent les mêmes chiffres, et elles ne se rejouent que si le deck change. Le palier estimé est le
+plus haut des planchers que chaque critère publié par Wizards impose — Game Changers, destruction
+massive de terrains, tours supplémentaires, tuteurs, combos à deux cartes d'une liste de paires
+connues (`js/anaCombos.js`) ; il n'annonce jamais mieux que « 1 ou 2 », la différence tenant à
+l'intention. Le score de synergie reprend les liens que la notation tire déjà pour le deck
+(`NOTES_DECK`) et n'en note aucun de plus : couverture, densité et cohésion du plus grand bloc d'un
+seul tenant. La page ne se calcule que sous les yeux : hors de vue `renderN()` pose `ANA_PERIME`,
+et `activerOnglet()` la repeint avant de la découvrir.
 
 L'onglet **Simulation** fait jouer le deck ouvert — ou n'importe lequel de « Mes decks » — par un
 joueur automatique, contre un à cinq decks menés par des joueurs automatiques, des centaines de fois, et en tire de
